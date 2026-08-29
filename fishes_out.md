@@ -1,0 +1,30 @@
+- bai_bien | COMMON | Cá Chỉ Vàng | Skills: 0
+- bai_bien | COMMON | Cá Đục | Skills: 0
+- bai_bien | COMMON | Cá Cơm | Skills: 0
+- bai_bien | COMMON | Cá Mòi | Skills: 1
+- bai_bien | COMMON | Cá Lẹp | Skills: 0
+- bai_bien | COMMON | Cá Bạc Má | Skills: 1
+- bai_bien | UNCOMMON | Cá Nục | Skills: 0
+- bai_bien | UNCOMMON | Cá Đối | Skills: 1
+- bai_bien | UNCOMMON | Cá Trích | Skills: 0
+- bai_bien | UNCOMMON | Cá Chim Biển | Skills: 0
+- bai_bien | RARE | Cá Mú | Skills: 2
+- bai_bien | RARE | Cá Bóp | Skills: 2
+- bai_bien | EPIC | Cá Thu Hoàng Kim | Skills: 2
+- bai_bien | EPIC | Cá Ngừ Đại Dương | Skills: 2
+- bai_bien | BOSS | Bạch Tuộc Khổng Lồ | Skills: 3
+- dao_xa | COMMON | Cá Ngựa Vằn | Skills: 0
+- dao_xa | COMMON | Cá Hề | Skills: 0
+- dao_xa | COMMON | Cá Đuối Nhỏ | Skills: 1
+- dao_xa | COMMON | Mực Ống | Skills: 1
+- dao_xa | COMMON | Cá Nóc | Skills: 0
+- dao_xa | COMMON | Cá Phèn | Skills: 0
+- dao_xa | UNCOMMON | Cá Mặt Trăng | Skills: 1
+- dao_xa | UNCOMMON | Cá Cờ | Skills: 1
+- dao_xa | UNCOMMON | Rùa Biển | Skills: 2
+- dao_xa | UNCOMMON | Cá Chuồn | Skills: 1
+- dao_xa | RARE | Cá Mập Cáo | Skills: 2
+- dao_xa | RARE | Cá Kiếm | Skills: 2
+- dao_xa | EPIC | Cá Voi Lưng Gù | Skills: 2
+- dao_xa | EPIC | Mực Khổng Lồ | Skills: 2
+- dao_xa | BOSS | Thần Biển Leviathan | Skills: 4

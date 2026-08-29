@@ -1,0 +1,25 @@
+{
+  "trash": [
+    { "name": "Ủng Cao Su Cũ", "type": "TRASH", "goldValue": 1, "xpValue": 0, "description": "Một chiếc ủng cao su cũ kỹ." },
+    { "name": "Chai Nhựa", "type": "TRASH", "goldValue": 1, "xpValue": 0, "description": "Bao nhiêu chai nhựa?" },
+    { "name": "Lốp Xe", "type": "TRASH", "goldValue": 2, "xpValue": 0, "description": "To thật, nặng thật." },
+    { "name": "Túi Rác", "type": "TRASH", "goldValue": 1, "xpValue": 0, "description": "Ai ném xuống sông vậy?" }
+  ],
+  "consumable": [
+    { "name": "Mồi Thơm", "type": "CONSUMABLE", "goldValue": 5, "xpValue": 0, "description": "Tăng tỷ lệ cá hiếm." },
+    { "name": "Thuốc Hồi Stamina", "type": "CONSUMABLE", "goldValue": 5, "xpValue": 0, "description": "Hồi phục 50 Thể Lực." },
+    { "name": "Dây Câu Tốt", "type": "CONSUMABLE", "goldValue": 5, "xpValue": 0, "description": "Tăng max Tension +20." }
+  ],
+  "treasure": [
+    { "name": "Bình Cổ", "type": "TREASURE", "goldValue": 30, "xpValue": 80, "description": "Bình gốm cổ xưa." },
+    { "name": "Nhẫn Vàng", "type": "TREASURE", "goldValue": 40, "xpValue": 150, "description": "Nhẫn vàng sáng bóng." },
+    { "name": "Rương Chìm", "type": "TREASURE", "goldValue": 60, "xpValue": 300, "description": "Rương gỗ dưới lòng sông." },
+    { "name": "Kiếm Cổ", "type": "TREASURE", "goldValue": 50, "xpValue": 200, "description": "Lưỡi kiếm cũ." },
+    { "name": "Sách: Dưỡng Sức", "type": "CONSUMABLE", "goldValue": 20, "xpValue": 50, "description": "Bí kíp Dưỡng Sức." },
+    { "name": "Sách: Giật Kép", "type": "CONSUMABLE", "goldValue": 20, "xpValue": 50, "description": "Bí kíp Giật Kép." },
+    { "name": "Sách: Mắt Đại Bàng", "type": "CONSUMABLE", "goldValue": 20, "xpValue": 50, "description": "Bí kíp Mắt Đại Bàng." },
+    { "name": "Sách: Thuần Hóa", "type": "CONSUMABLE", "goldValue": 40, "xpValue": 100, "description": "Bí kíp Thuần Hóa." },
+    { "name": "Sách: Trói Buộc", "type": "CONSUMABLE", "goldValue": 40, "xpValue": 100, "description": "Bí kíp Lời Nguyền Trói Buộc." },
+    { "name": "Sách: Trái Tim ĐD", "type": "CONSUMABLE", "goldValue": 40, "xpValue": 100, "description": "Bí kíp Trái Tim Đại Dương." }
+  ]
+}
