@@ -16,6 +16,8 @@ import com.fishingrpg.game.screens.MainMenuScreen;
 import com.fishingrpg.game.systems.FishingManager;
 import com.fishingrpg.game.ui.GameHUD;
 import java.util.Map;
+import com.fishingrpg.game.ui.FloatingTextManager;
+import com.fishingrpg.game.systems.AudioManager;
 
 public class PlayScreen implements Screen {
 
@@ -36,6 +38,10 @@ public class PlayScreen implements Screen {
     private float timer = 0f;
     // Cached Vector3 để tránh allocate mời frame
     private final com.badlogic.gdx.math.Vector3 mousePos = new com.badlogic.gdx.math.Vector3();
+    
+    private FloatingTextManager floatingTextManager;
+    private float shakeTimer = 0f;
+    private float shakeIntensity = 0f;
 
     public PlayScreen(FishingRPG game) {
         this.game = game;
@@ -46,10 +52,13 @@ public class PlayScreen implements Screen {
         this.player = game.player;
         this.fishingManager = new FishingManager(player);
         this.hud = new GameHUD(shapeRenderer, font, this);
+        this.floatingTextManager = new FloatingTextManager();
+        this.fishingManager.setFloatingTextManager(this.floatingTextManager);
     }
 
     @Override
     public void show() {
+        AudioManager.getInstance().playBGM(player.getCurrentMap());
         if (player.getQuestManager() != null) {
             player.getQuestManager().callback = new com.fishingrpg.game.systems.QuestManager.QuestCallback() {
                 @Override
@@ -68,6 +77,25 @@ public class PlayScreen implements Screen {
         }
         update(delta);
         if (game.getScreen() != this) return;
+        
+        if (fishingManager.bossSkillJustUsed) {
+            fishingManager.bossSkillJustUsed = false;
+            shakeTimer = 1.0f;
+            shakeIntensity = 15f;
+        }
+        if (fishingManager.state == FishingManager.State.COMBAT && player.getCurrentLineTension() / player.getMaxLineTension() > 0.85f) {
+            if (shakeTimer <= 0.1f) {
+                shakeTimer = 0.1f;
+                shakeIntensity = 5f;
+            }
+        }
+        float origX = camera.position.x;
+        float origY = camera.position.y;
+        if (shakeTimer > 0) {
+            shakeTimer -= delta;
+            camera.position.x += com.badlogic.gdx.math.MathUtils.random(-shakeIntensity, shakeIntensity);
+            camera.position.y += com.badlogic.gdx.math.MathUtils.random(-shakeIntensity, shakeIntensity);
+        }
 
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
@@ -161,7 +189,10 @@ public class PlayScreen implements Screen {
 
             game.batch.begin();
             hud.drawText(game.batch, player, fishingManager.currentCatch, fishingManager.combatMessage, fishingManager.resultLine);
+            floatingTextManager.updateAndRender(delta, game.batch, font);
             game.batch.end();
+            
+            camera.position.set(origX, origY, 0); // Restore camera after rendering
         }
 
         if (messageTimer > 0 && message != null) {

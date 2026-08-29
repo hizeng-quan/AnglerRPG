@@ -9,6 +9,9 @@ import com.fishingrpg.game.entities.Player;
 import com.fishingrpg.game.loot.Catchable;
 import com.fishingrpg.game.loot.CatchableType;
 import com.fishingrpg.game.loot.LootTable;
+import com.fishingrpg.game.ui.FloatingTextManager;
+import com.badlogic.gdx.graphics.Color;
+import com.fishingrpg.game.systems.AudioManager;
 
 public class FishingManager {
 
@@ -64,12 +67,20 @@ public class FishingManager {
 
     public String castResultText = "";
     public float castResultTimer = 0f;
+    
+    public boolean bossSkillJustUsed = false;
+    private FloatingTextManager ftm;
 
     public FishingManager(Player player) {
         this.player = player;
     }
+    
+    public void setFloatingTextManager(FloatingTextManager ftm) {
+        this.ftm = ftm;
+    }
 
     public void startCasting() {
+        AudioManager.getInstance().playSFX("sfx_cast");
         state = State.CASTING;
         castCursorX = 0f;
         castDirection = 1;
@@ -97,6 +108,8 @@ public class FishingManager {
         if (bonus >= 2f) {
             castResultText = "PERFECT!";
             player.getQuestManager().addProgress("perfect", 1);
+            if (ftm != null) ftm.addText("PERFECT!", 640f, 500f, Color.GOLD);
+            AudioManager.getInstance().playSFX("sfx_success");
         } else if (bonus > 0f) {
             castResultText = "GOOD";
         } else {
@@ -106,6 +119,7 @@ public class FishingManager {
     }
 
     public void triggerBite() {
+        AudioManager.getInstance().playSFX("sfx_bite");
         state = State.BITE;
         float pBonus = 0f;
         if (player.isSkillEquipped("nhanh_tay")) {
@@ -360,6 +374,8 @@ public class FishingManager {
                         float recovery = player.getSkillTree().getDuongSucHeal();
                         player.consumeStamina(-recovery);
                         combatMessage = "DƯỠNG SỨC! (+" + (int)recovery + " Thể lực)";
+                        if (ftm != null) ftm.addText("+" + (int)recovery, 640f, 400f, Color.GREEN);
+                        AudioManager.getInstance().playSFX("sfx_skill");
                     }
                     isSpaceDown = false; // Block pulling while channeling
                 }
@@ -388,6 +404,8 @@ public class FishingManager {
             for (com.fishingrpg.game.entities.FishSkill s : currentFish.getSkills()) {
                 if (s.isActive && !s.triggered && hpPct <= s.triggerHpPercent) {
                     s.triggered = true;
+                    bossSkillJustUsed = true;
+                    AudioManager.getInstance().playSFX("sfx_skill");
                     if (s.id.equals("but_toc")) {
                         fishButTocTimer = 3f;
                         combatMessage = "CÁ BỨT TỐC! Lực kéo x2!";
@@ -638,10 +656,13 @@ public class FishingManager {
                 float fishDef = 1f;
                 if (currentFish.getPassiveSkill("vo_cung") != null) fishDef -= 0.3f;
                 if (currentFish.getPassiveSkill("vay_cung") != null) fishDef -= 0.5f;
-                currentFish.takeDamage(dmg * dmgMult * fishDef);
+                float finalDmg = dmg * dmgMult * fishDef;
+                currentFish.takeDamage(finalDmg);
+                if (ftm != null) ftm.addText("-" + (int)finalDmg, 640f + MathUtils.random(-50, 50), 360f + MathUtils.random(-50, 50), Color.RED);
 
                 player.increaseTension(15f);
                 combatMessage = crit ? "BẠO KÍCH! (-" + (int)cost + " Thể lực)" : "KÉO MẠNH! (-" + (int)cost + " Thể lực)";
+                AudioManager.getInstance().playSFX("sfx_skill");
                 keoManhCooldown = 3f * cdMult;
             }
         } else if (skillId.equals("giat_kep") && giatKepCooldown <= 0) {
@@ -652,10 +673,13 @@ public class FishingManager {
                 float fishDef = 1f;
                 if (currentFish.getPassiveSkill("vo_cung") != null) fishDef -= 0.3f;
                 if (currentFish.getPassiveSkill("vay_cung") != null) fishDef -= 0.5f;
-                currentFish.takeDamage(dmg * dmgMult * fishDef);
+                float finalDmg = dmg * dmgMult * fishDef;
+                currentFish.takeDamage(finalDmg);
+                if (ftm != null) ftm.addText("-" + (int)finalDmg, 640f + MathUtils.random(-50, 50), 360f + MathUtils.random(-50, 50), Color.RED);
 
                 player.increaseTension(30f);
                 combatMessage = "GIẬT KÉP! (-40 Thể lực)";
+                AudioManager.getInstance().playSFX("sfx_skill");
                 giatKepCooldown = 5f * cdMult;
             }
         } else if (skillId.equals("duong_suc") && duongSucCooldown <= 0 && duongSucChannelTimer <= 0) {
@@ -669,11 +693,14 @@ public class FishingManager {
                 float fishDef = 1f;
                 if (currentFish.getPassiveSkill("vo_cung") != null) fishDef -= 0.3f;
                 if (currentFish.getPassiveSkill("vay_cung") != null) fishDef -= 0.5f;
-                currentFish.takeDamage(hpDmg * fishDef);
+                float finalDmg = hpDmg * fishDef;
+                currentFish.takeDamage(finalDmg);
+                if (ftm != null) ftm.addText("-" + (int)finalDmg, 640f + MathUtils.random(-50, 50), 360f + MathUtils.random(-50, 50), Color.RED);
 
                 phaGiapTimer = 10f;
                 phaGiapDebuff = player.getSkillTree().getPhaGiapDebuff() / 100f;
                 combatMessage = "PHÁ GIÁP! (-" + (int)stamCost + " Thể lực)";
+                AudioManager.getInstance().playSFX("sfx_skill");
                 phaGiapCooldown = 20f * cdMult;
             }
         } else if (skillId.equals("luot_day") && luotDayCooldown <= 0) {
