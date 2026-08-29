@@ -28,23 +28,45 @@ public class AudioManager {
         return instance;
     }
 
-    public void playBGM(String mapId) {
-        if (isMuted) return;
-        
-        String bgmName = "bgm_" + mapId;
-        if (currentBGM != null && currentBGM.equals(bgmName)) {
-            return; // Already playing
-        }
+    private String targetBGM;
 
-        // Stop current BGM
-        if (currentBGM != null && bgmMap.containsKey(currentBGM)) {
+    public void playBGM(String bgmName) {
+        if (isMuted) return;
+        targetBGM = bgmName;
+
+        if (currentBGM == null) {
+            startMusic(targetBGM);
+        } else {
+            Music currentMusic = bgmMap.get(currentBGM);
+            if (currentMusic != null && !currentMusic.isPlaying()) {
+                startMusic(targetBGM);
+            }
+            // If it is playing, we just do nothing. onCompletion will handle the transition.
+        }
+    }
+
+    private void startMusic(String bgmName) {
+        if (currentBGM != null && bgmMap.containsKey(currentBGM) && !currentBGM.equals(bgmName)) {
             bgmMap.get(currentBGM).stop();
         }
 
         if (!bgmMap.containsKey(bgmName)) {
             try {
-                Music music = Gdx.audio.newMusic(Gdx.files.internal("audio/bgm/" + bgmName + ".wav"));
-                music.setLooping(true);
+                Music music = Gdx.audio.newMusic(Gdx.files.internal("audio/bgm/" + bgmName + ".mp3"));
+                music.setLooping(false); // Must be false to trigger onCompletion
+                music.setOnCompletionListener(new Music.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(Music m) {
+                        Gdx.app.postRunnable(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (targetBGM != null && !isMuted) {
+                                    startMusic(targetBGM);
+                                }
+                            }
+                        });
+                    }
+                });
                 bgmMap.put(bgmName, music);
             } catch (Exception e) {
                 Gdx.app.error("AudioManager", "Could not load BGM: " + bgmName, e);

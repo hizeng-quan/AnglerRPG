@@ -58,7 +58,6 @@ public class PlayScreen implements Screen {
 
     @Override
     public void show() {
-        AudioManager.getInstance().playBGM(player.getCurrentMap());
         if (player.getQuestManager() != null) {
             player.getQuestManager().callback = new com.fishingrpg.game.systems.QuestManager.QuestCallback() {
                 @Override
@@ -77,6 +76,16 @@ public class PlayScreen implements Screen {
         }
         update(delta);
         if (game.getScreen() != this) return;
+        
+        if (fishingManager.state == FishingManager.State.IDLE || fishingManager.state == FishingManager.State.RESULT) {
+            AudioManager.getInstance().playBGM("bgm_menu");
+        } else {
+            String mapId = player.getCurrentMap();
+            String bgmName = "bgm_pond";
+            if (mapId.equals("bai_bien")) bgmName = "bgm_beach";
+            else if (mapId.equals("dao_xa")) bgmName = "bgm_island";
+            AudioManager.getInstance().playBGM(bgmName);
+        }
         
         if (fishingManager.bossSkillJustUsed) {
             fishingManager.bossSkillJustUsed = false;

@@ -304,7 +304,7 @@
   {
     "name": "Cá Lẹp",
     "maxHp": 50.0,
-    "pullStrength": 16.0,
+    "pullStrength": 15.8,
     "rarity": "COMMON",
     "baseWeightKg": 0.2,
     "baseLengthCm": 16.0,
@@ -321,7 +321,7 @@
   {
     "name": "Cá Bạc Má",
     "maxHp": 60.0,
-    "pullStrength": 18.0,
+    "pullStrength": 17.3,
     "rarity": "COMMON",
     "baseWeightKg": 0.3,
     "baseLengthCm": 20.0,
@@ -338,7 +338,7 @@
   {
     "name": "Cá Nục",
     "maxHp": 90.0,
-    "pullStrength": 25.0,
+    "pullStrength": 22.8,
     "rarity": "UNCOMMON",
     "baseWeightKg": 0.6,
     "baseLengthCm": 35.0,
@@ -355,7 +355,7 @@
   {
     "name": "Cá Đối",
     "maxHp": 85.0,
-    "pullStrength": 22.0,
+    "pullStrength": 20.4,
     "rarity": "UNCOMMON",
     "baseWeightKg": 0.5,
     "baseLengthCm": 30.0,
@@ -372,7 +372,7 @@
   {
     "name": "Cá Trích",
     "maxHp": 75.0,
-    "pullStrength": 20.0,
+    "pullStrength": 18.9,
     "rarity": "UNCOMMON",
     "baseWeightKg": 0.4,
     "baseLengthCm": 25.0,
@@ -389,7 +389,7 @@
   {
     "name": "Cá Chim Biển",
     "maxHp": 110.0,
-    "pullStrength": 28.0,
+    "pullStrength": 25.1,
     "rarity": "UNCOMMON",
     "baseWeightKg": 1.0,
     "baseLengthCm": 40.0,
@@ -406,7 +406,7 @@
   {
     "name": "Cá Mú",
     "maxHp": 200.0,
-    "pullStrength": 45.0,
+    "pullStrength": 38.3,
     "rarity": "RARE",
     "baseWeightKg": 4.5,
     "baseLengthCm": 65.0,
@@ -427,7 +427,7 @@
   {
     "name": "Cá Bóp",
     "maxHp": 250.0,
-    "pullStrength": 50.0,
+    "pullStrength": 42.2,
     "rarity": "RARE",
     "baseWeightKg": 6.0,
     "baseLengthCm": 80.0,
@@ -448,7 +448,7 @@
   {
     "name": "Cá Thu Hoàng Kim",
     "maxHp": 400.0,
-    "pullStrength": 80.0,
+    "pullStrength": 65.6,
     "rarity": "EPIC",
     "baseWeightKg": 15.0,
     "baseLengthCm": 120.0,
@@ -469,7 +469,7 @@
   {
     "name": "Cá Ngừ Đại Dương",
     "maxHp": 500.0,
-    "pullStrength": 95.0,
+    "pullStrength": 77.2,
     "rarity": "EPIC",
     "baseWeightKg": 25.0,
     "baseLengthCm": 150.0,
@@ -490,7 +490,7 @@
   {
     "name": "Bạch Tuộc Khổng Lồ",
     "maxHp": 1200.0,
-    "pullStrength": 150.0,
+    "pullStrength": 120.0,
     "rarity": "BOSS",
     "baseWeightKg": 100.0,
     "baseLengthCm": 300.0,
@@ -539,7 +539,7 @@
   {
     "name": "Cá Đuối Nhỏ",
     "maxHp": 200.0,
-    "pullStrength": 50.0,
+    "pullStrength": 43.9,
     "rarity": "COMMON",
     "baseWeightKg": 3.0,
     "baseLengthCm": 50.0,
@@ -556,7 +556,7 @@
   {
     "name": "Mực Ống",
     "maxHp": 180.0,
-    "pullStrength": 45.0,
+    "pullStrength": 42.0,
     "rarity": "COMMON",
     "baseWeightKg": 2.0,
     "baseLengthCm": 45.0,
@@ -590,7 +590,7 @@
   {
     "name": "Cá Phèn",
     "maxHp": 140.0,
-    "pullStrength": 42.0,
+    "pullStrength": 40.8,
     "rarity": "COMMON",
     "baseWeightKg": 1.0,
     "baseLengthCm": 32.0,
@@ -602,7 +602,7 @@
   {
     "name": "Cá Mặt Trăng",
     "maxHp": 300.0,
-    "pullStrength": 70.0,
+    "pullStrength": 51.7,
     "rarity": "UNCOMMON",
     "baseWeightKg": 8.0,
     "baseLengthCm": 80.0,
@@ -619,7 +619,7 @@
   {
     "name": "Cá Cờ",
     "maxHp": 280.0,
-    "pullStrength": 85.0,
+    "pullStrength": 57.6,
     "rarity": "UNCOMMON",
     "baseWeightKg": 6.0,
     "baseLengthCm": 90.0,
@@ -636,7 +636,7 @@
   {
     "name": "Rùa Biển",
     "maxHp": 350.0,
-    "pullStrength": 65.0,
+    "pullStrength": 49.8,
     "rarity": "UNCOMMON",
     "baseWeightKg": 12.0,
     "baseLengthCm": 100.0,
@@ -657,7 +657,7 @@
   {
     "name": "Cá Chuồn",
     "maxHp": 250.0,
-    "pullStrength": 80.0,
+    "pullStrength": 55.6,
     "rarity": "UNCOMMON",
     "baseWeightKg": 4.0,
     "baseLengthCm": 70.0,
@@ -674,7 +674,7 @@
   {
     "name": "Cá Mập Cáo",
     "maxHp": 600.0,
-    "pullStrength": 140.0,
+    "pullStrength": 79.0,
     "rarity": "RARE",
     "baseWeightKg": 35.0,
     "baseLengthCm": 180.0,
@@ -695,7 +695,7 @@
   {
     "name": "Cá Kiếm",
     "maxHp": 550.0,
-    "pullStrength": 160.0,
+    "pullStrength": 86.8,
     "rarity": "RARE",
     "baseWeightKg": 28.0,
     "baseLengthCm": 200.0,
@@ -716,7 +716,7 @@
   {
     "name": "Cá Voi Lưng Gù",
     "maxHp": 1500.0,
-    "pullStrength": 250.0,
+    "pullStrength": 122.0,
     "rarity": "EPIC",
     "baseWeightKg": 200.0,
     "baseLengthCm": 800.0,
@@ -737,7 +737,7 @@
   {
     "name": "Mực Khổng Lồ",
     "maxHp": 1200.0,
-    "pullStrength": 300.0,
+    "pullStrength": 141.5,
     "rarity": "EPIC",
     "baseWeightKg": 150.0,
     "baseLengthCm": 500.0,
@@ -758,7 +758,7 @@
   {
     "name": "Thần Biển Leviathan",
     "maxHp": 3500.0,
-    "pullStrength": 450.0,
+    "pullStrength": 200.0,
     "rarity": "BOSS",
     "baseWeightKg": 500.0,
     "baseLengthCm": 1500.0,

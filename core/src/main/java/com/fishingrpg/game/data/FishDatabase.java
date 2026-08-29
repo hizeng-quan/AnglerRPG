@@ -79,10 +79,22 @@ public class FishDatabase {
     }
 
     private static Fish buildFish(FishTemplate t) {
+        java.util.ArrayList<com.fishingrpg.game.entities.FishSkill> copiedSkills = new java.util.ArrayList<>();
+        if (t.skills != null) {
+            for (com.fishingrpg.game.entities.FishSkill s : t.skills) {
+                com.fishingrpg.game.entities.FishSkill copy = new com.fishingrpg.game.entities.FishSkill();
+                copy.id = s.id;
+                copy.isActive = s.isActive;
+                copy.triggerHpPercent = s.triggerHpPercent;
+                copy.triggered = false;
+                copiedSkills.add(copy);
+            }
+        }
+        
         return new Fish(
             t.name, t.maxHp, t.pullStrength,
             t.rarity, t.baseWeightKg, t.baseLengthCm,
-            t.baseXp, t.baseGold, t.skills
+            t.baseXp, t.baseGold, copiedSkills
         );
     }
 

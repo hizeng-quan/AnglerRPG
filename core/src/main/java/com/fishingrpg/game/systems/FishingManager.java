@@ -166,6 +166,9 @@ public class FishingManager {
         fishSongThanTimer = 0f;
         fishCuongNoTimer = 0f;
         combatMessage = "";
+        
+        accumDamage = 0f;
+        accumTimer = 0f;
     }
 
     public void finishEncounter(boolean success) {
@@ -448,6 +451,7 @@ public class FishingManager {
                         player.increaseTension(player.getMaxLineTension() * 0.4f);
                         combatMessage = "BÃO TỐ! Sấm sét giáng xuống!";
                     }
+                    if (ftm != null) ftm.addText(s.id.replace("_", " ").toUpperCase() + "!", 640f, 450f, Color.YELLOW);
                 }
             }
         }
@@ -521,7 +525,7 @@ public class FishingManager {
 
         // Fish Pulling
         if (currentFish.getState() == com.fishingrpg.game.entities.Fish.State.PULLING) {
-            float pull = currentFish.getCurrentPull() * 1.5f;
+            float pull = currentFish.getCurrentPull() * (isSpaceDown ? 1.5f : 0.4f);
             if (currentFish.getPassiveSkill("xuc_tu") != null) {
                 pull *= (1f + (combatDuration / 10f) * 0.1f);
             }
@@ -561,7 +565,9 @@ public class FishingManager {
         // Player Action
         if (isSpaceDown) {
             if (troiBuocTimer <= 0) {
-                tensionIncrease += 35f * delta; // Reel in
+                if (currentFish.getState() == com.fishingrpg.game.entities.Fish.State.PULLING) {
+                    tensionIncrease += (20f + player.getMaxLineTension() * 0.05f) * delta; // Reel in
+                }
             }
             
             // Deal damage
@@ -574,11 +580,12 @@ public class FishingManager {
                 dmg *= 0.8f;
             }
             currentFish.takeDamage(dmg);
+            accumDamage += dmg;
             
             slackTimer = 0f;
         } else {
             // Slack: không giữ dây → tension tự giảm
-            player.decreaseTension(17.5f * delta);
+            player.decreaseTension((20f + player.getMaxLineTension() * 0.1f) * delta);
             
             if (player.getCurrentLineTension() <= 0f) {
                 slackTimer += delta;
@@ -605,11 +612,23 @@ public class FishingManager {
         if (player.isSkillEquipped("hoi_phuc_nhanh")) {
             player.consumeStamina(-player.getSkillTree().getHoiPhucNhanhBonus() * delta);
         }
+        
+        accumTimer += delta;
+        if (accumTimer >= 0.5f) {
+            if (accumDamage > 0) {
+                if (ftm != null) ftm.addText("-" + (int)accumDamage, 640f + com.badlogic.gdx.math.MathUtils.random(-30, 30), 380f + com.badlogic.gdx.math.MathUtils.random(-30, 30), Color.RED);
+                accumDamage = 0f;
+            }
+            accumTimer = 0f;
+        }
     }
 
     public float giatKepCooldown = 0f;
     public float duongSucCooldown = 0f;
     public float duongSucChannelTimer = 0f;
+    
+    private float accumDamage = 0f;
+    private float accumTimer = 0f;
 
     private void handleSkills(boolean[] activeInputs, boolean isSpaceDown, float delta) {
         for (int i = 0; i < 4; i++) {

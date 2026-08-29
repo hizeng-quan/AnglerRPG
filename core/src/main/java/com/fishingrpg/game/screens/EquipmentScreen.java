@@ -1,4 +1,5 @@
 package com.fishingrpg.game.screens;
+import com.fishingrpg.game.systems.AudioManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -416,6 +417,7 @@ public class EquipmentScreen implements Screen {
     }
 
     @Override public void show() {
+        AudioManager.getInstance().playBGM("bgm_menu");
         Gdx.input.setInputProcessor(new com.badlogic.gdx.InputAdapter() {
             @Override
             public boolean scrolled(float amountX, float amountY) {
@@ -527,3 +529,4 @@ public class EquipmentScreen implements Screen {
     }
 
 }
+

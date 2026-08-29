@@ -25,24 +25,21 @@ public class CollectionDatabase {
     private static final List<Collection> collections = new ArrayList<>();
 
     static {
-        // --- AO LÀNG (CŨ) ---
+        // --- AO LÀNG ---
         collections.add(new Collection("al_dan_da", "Dân Dã Ao Làng", 200, 100, 
-            "Cá Rô Đồng", "Cá Diếc", "Cá Chép", "Cá Mè"));
+            "Cá Rô Đồng", "Cá Diếc", "Cá Mương", "Cá Lóc Nhí"));
             
-        collections.add(new Collection("al_san_moi", "Kẻ Săn Mồi Bùn Lầy", 500, 250, 
-            "Cá Trê", "Cá Chạch", "Cá Lóc"));
+        collections.add(new Collection("al_quen_thuoc", "Gương Mặt Quen Thuộc", 500, 250, 
+            "Cá Chép", "Cá Mè", "Cá Trê"));
             
         collections.add(new Collection("al_kinh_ngu", "Kình Ngư Nước Ngọt", 800, 400, 
-            "Cá Trôi", "Cá Trắm Cỏ", "Cá Lăng"));
+            "Cá Trôi", "Cá Trắm Cỏ", "Cá Chim Trắng"));
             
-        collections.add(new Collection("al_dac_san", "Đặc Sản Sông Sâu", 1500, 800, 
-            "Cá Thát Lát", "Cá Hô", "Cá Tầm"));
-            
-        collections.add(new Collection("al_di_dang", "Dị Dạng Đột Biến", 3000, 1500, 
-            "Cá Chép Đột Biến", "Cá Trê Khổng Lồ"));
+        collections.add(new Collection("al_san_moi", "Sát Thủ Đầm Lầy", 3000, 1500, 
+            "Cá Lóc Bông", "Cá Trê Lai", "Cá Chép Vàng"));
             
         collections.add(new Collection("al_truyen_thuyet", "Truyền Thuyết Vực Thẳm", 10000, 5000, 
-            "Cá Kình", "Thủy Quái Sông Đà"));
+            "Cá Lăng Khổng Lồ", "Thủy Quái Sông Trà"));
             
         // --- BÃI BIỂN ---
         collections.add(new Collection("bb_ven_bo", "Ven Bờ", 500, 300, 

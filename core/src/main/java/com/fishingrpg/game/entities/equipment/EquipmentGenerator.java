@@ -77,7 +77,7 @@ public class EquipmentGenerator {
             case LINE:
                 eq.id = "line_" + set.setName.replaceAll(" ", "_").toLowerCase() + "_" + MathUtils.random(10000);
                 eq.name = set.lineName;
-                eq.mainStat1 = 50f + mult * 20f; // Max tension
+                eq.mainStat1 = 100f + mult * 25f; // Max tension
                 eq.mainStat2 = 2f + mult * 0.4f; // Kháng đứt dây
                 break;
             case HOOK:

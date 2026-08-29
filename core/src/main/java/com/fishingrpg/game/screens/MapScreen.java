@@ -1,4 +1,5 @@
 package com.fishingrpg.game.screens;
+import com.fishingrpg.game.systems.AudioManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -295,7 +296,8 @@ public class MapScreen implements Screen {
         game.batch.end();
     }
 
-    @Override public void show() {}
+    @Override public void show() {
+        AudioManager.getInstance().playBGM("bgm_menu");}
     @Override public void resize(int w, int h) { viewport.update(w, h, true); }
     @Override public void pause() {}
     @Override public void resume() {}
@@ -310,3 +312,4 @@ public class MapScreen implements Screen {
         sr.dispose();
     }
 }
+

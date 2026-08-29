@@ -1,4 +1,5 @@
 package com.fishingrpg.game.screens;
+import com.fishingrpg.game.systems.AudioManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -419,6 +420,7 @@ public class CatalogScreen implements Screen, InputProcessor {
     }
 
     @Override public void show() {
+        AudioManager.getInstance().playBGM("bgm_menu");
         Gdx.input.setInputProcessor(this);
     }
     @Override public void resize(int w, int h) { viewport.update(w, h, true); }
@@ -453,3 +455,4 @@ public class CatalogScreen implements Screen, InputProcessor {
         return true;
     }
 }
+

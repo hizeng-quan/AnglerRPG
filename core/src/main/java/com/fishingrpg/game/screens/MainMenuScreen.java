@@ -1,4 +1,5 @@
 package com.fishingrpg.game.screens;
+import com.fishingrpg.game.systems.AudioManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -375,7 +376,8 @@ public class MainMenuScreen implements Screen {
         subFont.draw(game.batch, "v0.4 Beta", W - layout.width - 12f, 22f);
     }
 
-    @Override public void show()   {}
+    @Override public void show()   {
+        AudioManager.getInstance().playBGM("bgm_menu");}
     @Override public void resize(int w, int h) { viewport.update(w, h, true); }
     @Override public void pause()  {}
     @Override public void resume() {}
@@ -387,3 +389,4 @@ public class MainMenuScreen implements Screen {
         logo.dispose();
     }
 }
+

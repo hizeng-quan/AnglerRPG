@@ -1,4 +1,5 @@
 package com.fishingrpg.game.screens;
+import com.fishingrpg.game.systems.AudioManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -414,7 +415,8 @@ public class GachaScreen implements Screen {
         }
     }
 
-    @Override public void show() {}
+    @Override public void show() {
+        AudioManager.getInstance().playBGM("bgm_menu");}
     @Override public void resize(int width, int height) {}
     @Override public void pause() {}
     @Override public void resume() {}
@@ -423,3 +425,4 @@ public class GachaScreen implements Screen {
         sr.dispose();
     }
 }
+

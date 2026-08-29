@@ -97,6 +97,41 @@ public class Fish implements Catchable {
         this.weightKg = baseWeightKg * sizeMultiplier;
         // Chieu dai tang cham hon can nang (quan he the tich ~ chieu dai^3)
         this.lengthCm = baseLengthCm * (float) Math.pow(sizeMultiplier, 0.333);
+        
+        // Fix up skills from JSON (JSON might have missing HP triggers or wrong isActive flags)
+        int totalActive = 0;
+        for (FishSkill s : this.skills) {
+            if (isActiveSkill(s.id)) {
+                s.isActive = true;
+                totalActive++;
+            } else {
+                s.isActive = false;
+            }
+        }
+        
+        float[] hpTriggers;
+        if (totalActive == 1) {
+            hpTriggers = new float[]{ 0.5f }; // Trigger at 50%
+        } else if (totalActive == 2) {
+            hpTriggers = new float[]{ 0.6f, 0.3f }; // Trigger at 60% and 30%
+        } else {
+            hpTriggers = new float[]{ 0.8f, 0.5f, 0.2f }; // Trigger at 80%, 50%, 20%
+        }
+        
+        int activeIdx = 0;
+        for (FishSkill s : this.skills) {
+            if (s.isActive && s.triggerHpPercent <= 0f) {
+                s.triggerHpPercent = hpTriggers[Math.min(activeIdx, hpTriggers.length - 1)];
+                activeIdx++;
+            }
+        }
+    }
+    
+    private boolean isActiveSkill(String id) {
+        return id.equals("quay_bun") || id.equals("but_toc") || id.equals("lan_sau") ||
+               id.equals("song_than") || id.equals("cuong_no") || id.equals("phun_muc") ||
+               id.equals("giat_dien") || id.equals("nhay_vot") || id.equals("song_am") ||
+               id.equals("phun_muc_mu") || id.equals("hut_mau") || id.equals("bao_to");
     }
 
     // =========================================================================
