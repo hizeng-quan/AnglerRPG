@@ -637,10 +637,15 @@ public class SkillTreeScreen implements Screen {
             float pW = W - pX;
             float pH = H - 74f;
 
-            // Name
+            // Name (Auto-scale to fit available panel width)
             titleFont.setColor(0.95f, 0.85f, 0.4f, 1f);
             layout.setText(titleFont, selectedSkill.name);
-            titleFont.draw(game.batch, layout, pX + 115f, pH - 45f);
+            float maxSkillNameW = pW - 135f;
+            if (layout.width > maxSkillNameW) {
+                titleFont.getData().setScale(maxSkillNameW / layout.width);
+            }
+            titleFont.draw(game.batch, selectedSkill.name, pX + 115f, pH - 45f);
+            titleFont.getData().setScale(1f);
 
             // Level & Type Tag
             font.setColor(selectedSkill.type == Skill.SkillType.ACTIVE ? new Color(1f, 0.6f, 0.3f, 1f) : new Color(0.35f, 0.85f, 1f, 1f));
@@ -686,8 +691,10 @@ public class SkillTreeScreen implements Screen {
                 boolean isEq = player.isSkillEquipped(selectedSkill.id);
                 font.setColor(Color.WHITE);
                 String eqText = isEq ? "THÁO KHỎI THANH KỸ NĂNG" : "GÁN VÀO THANH KỸ NĂNG";
+                font.getData().setScale(0.88f);
                 layout.setText(font, eqText);
                 font.draw(game.batch, layout, equipBtn.x + (equipBtn.width - layout.width) / 2f, equipBtn.y + 30f);
+                font.getData().setScale(1f);
             }
         } else {
             font.setColor(0.5f, 0.6f, 0.7f, 0.8f);

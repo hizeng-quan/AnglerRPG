@@ -662,7 +662,7 @@ public class EventScreen implements Screen {
     private void drawHeaderTexts() {
         // Back Button
         font.setColor(Color.WHITE);
-        drawCenteredText(font, "◀ QUAY LẠI", 25f, H - 58f, 115f, 42f);
+        drawCenteredText(font, "← QUAY LẠI", 25f, H - 58f, 115f, 42f);
 
         // Center Title
         titleFont.setColor(0f, 0f, 0f, 0.6f);
@@ -677,11 +677,13 @@ public class EventScreen implements Screen {
         // Countdown Timer Badge
         font.setColor(1f, 0.9f, 0.35f, 1f);
         String eventTime = eventManager.getEventTimeRemaining();
-        drawCenteredText(font, "🕒 " + eventTime, W - 470f, H - 56f, 230f, 38f);
+        font.getData().setScale(0.88f);
+        drawCenteredText(font, "Thời gian: " + eventTime, W - 470f, H - 56f, 230f, 38f);
+        font.getData().setScale(1f);
 
         // Event Points Badge
         font.setColor(1f, 0.95f, 0.4f, 1f);
-        font.draw(game.batch, "Điểm Sự Kiện: " + player.getEventPoints(), W - 190f, H - 32f);
+        font.draw(game.batch, "Điểm Sự Kiện: " + player.getEventPoints(), W - 210f, H - 32f);
     }
 
     private void drawTabTexts() {
@@ -727,10 +729,14 @@ public class EventScreen implements Screen {
 
         if (eventManager.allMissionsClaimedToday || doneCount == 3) {
             font.setColor(0.35f, 1f, 0.5f, 1f);
+            font.getData().setScale(0.85f);
             drawCenteredText(font, "✔ ĐÃ NHẬN THƯỞNG TỔNG KẾT (+1 ĐIỂM SK)!", startX + cardW - 380f, bannerY, 360f, bannerH);
+            font.getData().setScale(1f);
         } else {
             font.setColor(1f, 0.85f, 0.35f, 1f);
+            font.getData().setScale(0.9f);
             drawCenteredText(font, "Tiến độ hôm nay: " + doneCount + " / 3 hoàn thành", startX + cardW - 360f, bannerY, 340f, bannerH);
+            font.getData().setScale(1f);
         }
 
         // Mission Cards Text
@@ -820,7 +826,7 @@ public class EventScreen implements Screen {
 
         if (!claimedToday && daysLogged < 25) {
             font.setColor(0.12f, 0.1f, 0.05f, 1f); // Dark bold text on glowing button
-            drawCenteredText(font, "🎁 ĐIỂM DANH HÔM NAY", claimBtnX, claimBtnY, claimBtnW, claimBtnH);
+            drawCenteredText(font, "ĐIỂM DANH HÔM NAY", claimBtnX, claimBtnY, claimBtnW, claimBtnH);
         } else {
             font.setColor(0.4f, 1f, 0.6f, 1f);
             drawCenteredText(font, "✔ HÔM NAY ĐÃ NHẬN", claimBtnX, claimBtnY, claimBtnW, claimBtnH);

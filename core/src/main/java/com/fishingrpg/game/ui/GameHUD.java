@@ -465,19 +465,21 @@ public class GameHUD {
     public void drawIdleText(SpriteBatch batch, Player player) {
         // Primary Action Button text
         font.setColor(Color.WHITE);
-        drawCenteredText(font, "🎣 RA KHƠI CÂU CÁ", BTN_CAST_X, BTN_CAST_Y, BTN_CAST_W, BTN_CAST_H);
+        drawCenteredText(font, "RA KHƠI CÂU CÁ", BTN_CAST_X, BTN_CAST_Y, BTN_CAST_W, BTN_CAST_H);
 
         // Menu Back Button
-        drawCenteredText(font, "◀ MENU", BTN_MENU_X, BTN_MENU_Y, BTN_MENU_W, BTN_MENU_H);
+        drawCenteredText(font, "MENU", BTN_MENU_X, BTN_MENU_Y, BTN_MENU_W, BTN_MENU_H);
 
         // 7 Top Buttons Text
         String[] topNames = {"NHIỆM VỤ", "TRANG BỊ", "KỸ NĂNG", "GACHA", "CỬA HÀNG", "SỔ TAY", "SỰ KIỆN"};
         float[] topXs = {230f, 370f, 510f, 650f, 790f, 930f, 1070f};
 
+        font.getData().setScale(0.85f);
         for (int i = 0; i < 7; i++) {
             layout.setText(font, topNames[i]);
-            font.draw(batch, topNames[i], topXs[i] + (TOP_BTN_W - layout.width) / 2f, TOP_BTN_Y + 22f);
+            font.draw(batch, topNames[i], topXs[i] + (TOP_BTN_W - layout.width) / 2f, TOP_BTN_Y + 18f);
         }
+        font.getData().setScale(1f);
 
         // Player Dashboard text
         if (player != null) {
@@ -489,10 +491,15 @@ public class GameHUD {
             layout.setText(font, "Lv." + player.getLevel());
             font.draw(batch, "Lv." + player.getLevel(), panelX + 38f - layout.width / 2f, panelY + 49f);
 
-            // Current Map Name
+            // Current Map Name (with overflow guard)
             font.setColor(0.4f, 0.85f, 1f, 1f);
-            String mapName = "📍 " + getMapDisplayName(player.getCurrentMap());
+            String mapName = "Khu vực: " + getMapDisplayName(player.getCurrentMap());
+            layout.setText(font, mapName);
+            if (layout.width > 220f) {
+                font.getData().setScale(220f / layout.width);
+            }
             font.draw(batch, mapName, panelX + 78f, panelY + 70f);
+            font.getData().setScale(1f);
 
             // XP String
             font.setColor(Color.WHITE);
@@ -501,19 +508,31 @@ public class GameHUD {
             font.draw(batch, xpText, panelX + 82f, panelY + 28f);
             font.getData().setScale(1f);
 
-            // Gold & Diamonds amounts
+            // Gold & Diamonds amounts (with overflow guard)
             float goldX = panelX + 315f;
             float resW = 155f;
             font.setColor(1f, 0.88f, 0.25f, 1f);
-            font.draw(batch, player.getGold() + " Vàng", goldX + 32f, panelY + 67f);
+            String goldText = player.getGold() + " Vàng";
+            layout.setText(font, goldText);
+            if (layout.width > resW - 40f) {
+                font.getData().setScale((resW - 40f) / layout.width);
+            }
+            font.draw(batch, goldText, goldX + 32f, panelY + 67f);
+            font.getData().setScale(1f);
 
             font.setColor(0.85f, 0.75f, 1f, 1f);
-            font.draw(batch, player.getDiamonds() + " KC", goldX + 32f, panelY + 33f);
+            String diaText = player.getDiamonds() + " KC";
+            layout.setText(font, diaText);
+            if (layout.width > resW - 40f) {
+                font.getData().setScale((resW - 40f) / layout.width);
+            }
+            font.draw(batch, diaText, goldX + 32f, panelY + 33f);
+            font.getData().setScale(1f);
 
             // Bait Buff string
             if (player.isBaitBuffActive()) {
                 font.setColor(0.4f, 1f, 0.5f, 1f);
-                font.draw(batch, "⚡ BUFF: MỒI THƠM (+TỐC ĐỘ CẮN)", panelX + 12f, panelY + 88f + 25f);
+                font.draw(batch, "BUFF: MỒI THƠM (+TỐC ĐỘ CẮN)", panelX + 12f, panelY + 88f + 25f);
             }
         }
     }
@@ -589,7 +608,7 @@ public class GameHUD {
         float invY = 20f;
 
         font.setColor(1f, 0.85f, 0.3f, 1f);
-        drawCenteredText(font, "⚡ PHÍM TẮT (1-9)", invX, invY + panelH - 32f, panelW, 32f);
+        drawCenteredText(font, "PHÍM TẮT (1-9)", invX, invY + panelH - 32f, panelW, 32f);
 
         int i = 0;
         for (Map.Entry<String, Integer> entry : player.getInventory().entrySet()) {
@@ -919,18 +938,31 @@ public class GameHUD {
             font.setColor(nameColor);
             String fishTitle = item.getName();
             if (item instanceof Fish && ((Fish) item).getRarity() == Fish.Rarity.BOSS) {
-                fishTitle = "👑 BOSS: " + fishTitle;
+                fishTitle = "[BOSS] " + fishTitle;
             }
-            font.draw(batch, fishTitle, hpBarX + 12f, hpBarY + HP_H - 10f);
 
             // Fish HP Value
+            String hpString = "";
             if (item instanceof Fish) {
                 Fish f = (Fish) item;
-                font.setColor(Color.WHITE);
-                String hpString = (int) f.getCurrentHp() + " / " + (int) f.getMaxHp() + " HP (" +
+                hpString = (int) f.getCurrentHp() + " / " + (int) f.getMaxHp() + " HP (" +
                                   (int) (MathUtils.clamp(f.getCurrentHp() / f.getMaxHp(), 0f, 1f) * 100) + "%)";
-                layout.setText(font, hpString);
-                font.draw(batch, hpString, hpBarX + HP_W - layout.width - 12f, hpBarY + HP_H - 10f);
+            }
+            layout.setText(font, hpString);
+            float hpTextW = layout.width;
+
+            // Auto-scale fish title if it would collide with HP string
+            float maxTitleW = HP_W - hpTextW - 35f;
+            layout.setText(font, fishTitle);
+            if (layout.width > maxTitleW) {
+                font.getData().setScale(maxTitleW / layout.width);
+            }
+            font.draw(batch, fishTitle, hpBarX + 12f, hpBarY + HP_H - 10f);
+            font.getData().setScale(1f);
+
+            if (!hpString.isEmpty()) {
+                font.setColor(Color.WHITE);
+                font.draw(batch, hpString, hpBarX + HP_W - hpTextW - 12f, hpBarY + HP_H - 10f);
             }
         }
 
@@ -953,7 +985,7 @@ public class GameHUD {
 
             if (tRatio > 0.85f) {
                 font.setColor(1f, 0.2f, 0.2f, 1f);
-                font.draw(batch, "⚠️ CẢNH BÁO!", tensionX - 10f, tensionY - 12f);
+                font.draw(batch, "[!] CẢNH BÁO!", tensionX - 10f, tensionY - 12f);
             }
         }
 
@@ -961,14 +993,14 @@ public class GameHUD {
         float stmX = 35f;
         float stmY = H / 2f - PANEL_H / 2f - 40f;
         font.setColor(Color.WHITE);
-        font.draw(batch, "⚡ THỂ LỰC: " + (int) player.getCurrentStamina() + " / " + (int) player.getMaxStamina(),
+        font.draw(batch, "THỂ LỰC: " + (int) player.getCurrentStamina() + " / " + (int) player.getMaxStamina(),
                   stmX, stmY + 40f);
 
         // 4. Combat Guidance Banner (Center Screen)
         if (screen.fishingManager.state == State.COMBAT && item instanceof Fish) {
             Fish f = (Fish) item;
             boolean isPulling = (f.getState() == Fish.State.PULLING);
-            String bannerText = isPulling ? "◀◀ CÁ ĐANG GIÃY MẠNH! THẢ DÂY! ◀◀" : "▶▶ CÁ ĐANG MỆT! GIỮ SPACE ĐỂ KÉO! ▶▶";
+            String bannerText = isPulling ? "◄◄ CÁ ĐANG GIÃY MẠNH! THẢ DÂY! ◄◄" : "►► CÁ ĐANG MỆT! GIỮ SPACE ĐỂ KÉO! ►►";
 
             batch.end();
             Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -1048,14 +1080,14 @@ public class GameHUD {
         if (screen.fishingManager.state == State.RESULT) {
             drawResultModalText(batch, msg, res);
             font.setColor(Color.WHITE);
-            drawCenteredText(font, "🎣 TIẾP TỤC CÂU", BTN_CAST_X, BTN_CAST_Y, BTN_CAST_W, BTN_CAST_H);
+            drawCenteredText(font, "TIẾP TỤC CÂU", BTN_CAST_X, BTN_CAST_Y, BTN_CAST_W, BTN_CAST_H);
         } else if (screen.fishingManager.state == State.PRE_CAST) {
             font.setColor(Color.WHITE);
-            drawCenteredText(font, "🎯 QUĂNG CẦN", BTN_CAST_X, BTN_CAST_Y, BTN_CAST_W, BTN_CAST_H);
+            drawCenteredText(font, "QUĂNG CẦN", BTN_CAST_X, BTN_CAST_Y, BTN_CAST_W, BTN_CAST_H);
         }
 
         // Menu Back button
-        drawCenteredText(font, "◀ MENU", BTN_MENU_X, BTN_MENU_Y, BTN_MENU_W, BTN_MENU_H);
+        drawCenteredText(font, "MENU", BTN_MENU_X, BTN_MENU_Y, BTN_MENU_W, BTN_MENU_H);
         drawInventoryText(batch, player);
     }
 

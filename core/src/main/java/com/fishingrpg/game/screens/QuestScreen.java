@@ -550,11 +550,6 @@ public class QuestScreen implements Screen {
 
             if (qy - cardH > H || qy < -50f) continue;
 
-            // Quest Title
-            font.setColor(q.claimed ? new Color(0.6f, 0.7f, 0.8f, 0.8f) : new Color(1f, 0.9f, 0.5f, 1f));
-            font.getData().setScale(0.95f);
-            font.draw(game.batch, q.title, qx + 18f, qy - 18f);
-
             // Rewards pill on top right of card
             String rewardText = "";
             if (q.rewardPoints > 0) rewardText += "+" + q.rewardPoints + " Điểm  ";
@@ -562,7 +557,18 @@ public class QuestScreen implements Screen {
             font.setColor(1f, 0.85f, 0.3f, 1f);
             font.getData().setScale(0.82f);
             layout.setText(font, rewardText);
-            font.draw(game.batch, layout, qx + cardW - layout.width - 18f, qy - 18f);
+            float rewardW = layout.width;
+            font.draw(game.batch, layout, qx + cardW - rewardW - 18f, qy - 18f);
+
+            // Quest Title (with collision guard against reward pill)
+            font.setColor(q.claimed ? new Color(0.6f, 0.7f, 0.8f, 0.8f) : new Color(1f, 0.9f, 0.5f, 1f));
+            font.getData().setScale(0.95f);
+            layout.setText(font, q.title);
+            float maxTitleW = cardW - rewardW - 55f;
+            if (layout.width > maxTitleW) {
+                font.getData().setScale(0.95f * (maxTitleW / layout.width));
+            }
+            font.draw(game.batch, q.title, qx + 18f, qy - 18f);
 
             // Description
             font.setColor(0.75f, 0.82f, 0.9f, 0.85f);

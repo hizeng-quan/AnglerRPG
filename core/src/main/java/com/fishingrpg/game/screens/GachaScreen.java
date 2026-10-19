@@ -199,7 +199,7 @@ public class GachaScreen implements Screen {
         drawRectOutline(sr, 155, H - 62, 110, 42, 1.5f);
 
         // Top Right Resource Dock (Diamonds, Tickets, Premium Tickets)
-        float resW = 420f;
+        float resW = 440f;
         float resH = 46f;
         float resX = W - resW - 25f;
         float resY = H - 64f;
@@ -492,22 +492,24 @@ public class GachaScreen implements Screen {
         font.draw(game.batch, layout, 25f + (120f - layout.width) / 2f, H - 36f);
 
         font.setColor(hoverHelp ? Color.WHITE : new Color(0.8f, 0.9f, 1f, 0.9f));
-        layout.setText(font, "ⓘ TỶ LỆ");
+        layout.setText(font, "TỶ LỆ");
         font.draw(game.batch, layout, 155f + (110f - layout.width) / 2f, H - 36f);
 
         // Resource Dock Text (Diamonds, Regular Tickets, Premium Tickets)
-        float resW = 420f;
+        float resW = 440f;
         float resX = W - resW - 25f;
         float resY = H - 64f;
 
+        font.getData().setScale(0.85f);
         font.setColor(0.3f, 0.9f, 1f, 1f);
-        font.draw(game.batch, "💎 " + player.getDiamonds(), resX + 18f, resY + 30f);
+        font.draw(game.batch, "KC: " + player.getDiamonds(), resX + 15f, resY + 30f);
 
         font.setColor(0.95f, 0.85f, 0.3f, 1f);
-        font.draw(game.batch, "🎫 " + player.getGachaTickets(), resX + 145f, resY + 30f);
+        font.draw(game.batch, "Vé Thường: " + player.getGachaTickets(), resX + 130f, resY + 30f);
 
         font.setColor(1f, 0.5f, 0.35f, 1f);
-        font.draw(game.batch, "🎟️ " + player.getPremiumTickets(), resX + 275f, resY + 30f);
+        font.draw(game.batch, "Vé Cao Cấp: " + player.getPremiumTickets(), resX + 270f, resY + 30f);
+        font.getData().setScale(1f);
 
         // Banner selector tabs text
         float tabW = 260f;
@@ -682,8 +684,10 @@ public class GachaScreen implements Screen {
             font.draw(game.batch, layout, b2X + (b2W - layout.width) / 2f, btnY + 42f);
             font.setColor(0.7f, 1f, 0.8f, 1f);
             String p1Cost = isEventBanner ? "(1 Vé Cao Cấp)" : "(1 Vé Quay)";
+            font.getData().setScale(0.82f);
             layout.setText(font, p1Cost);
             font.draw(game.batch, layout, b2X + (b2W - layout.width) / 2f, btnY + 20f);
+            font.getData().setScale(1f);
 
             // Button 3: Pull 10x
             float b3X = 760f;
@@ -693,8 +697,10 @@ public class GachaScreen implements Screen {
             font.draw(game.batch, layout, b3X + (b3W - layout.width) / 2f, btnY + 42f);
             font.setColor(1f, 0.85f, 0.4f, 1f);
             String p10Cost = isEventBanner ? "(10 Vé Cao Cấp • Chắc chắn 4★+)" : "(10 Vé Quay • Chắc chắn 4★+)";
+            font.getData().setScale(0.82f);
             layout.setText(font, p10Cost);
             font.draw(game.batch, layout, b3X + (b3W - layout.width) / 2f, btnY + 20f);
+            font.getData().setScale(1f);
         }
 
         // Tooltip rates popup text

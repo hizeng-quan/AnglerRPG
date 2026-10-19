@@ -91,6 +91,7 @@ public class MapScreen implements Screen {
                     MapArea map = MapArea.MAPS[hoveredMapIndex];
                     if (player.getCurrentMap().equals(map.id)) {
                         AudioManager.getInstance().playSFX("sfx_button");
+                        playScreen.getFishingManager().state = com.fishingrpg.game.systems.FishingManager.State.PRE_CAST;
                         game.setScreen(playScreen);
                         return true;
                     }
@@ -98,8 +99,8 @@ public class MapScreen implements Screen {
                     if (canUnlockMap(map)) {
                         AudioManager.getInstance().playSFX("sfx_button");
                         player.setCurrentMap(map.id);
-                        game.setScreen(playScreen);
                         playScreen.getFishingManager().state = com.fishingrpg.game.systems.FishingManager.State.PRE_CAST;
+                        game.setScreen(playScreen);
                     } else {
                         AudioManager.getInstance().playSFX("sfx_button");
                         String reason = "Cần đạt Cấp " + map.requiredLevel;
@@ -391,16 +392,20 @@ public class MapScreen implements Screen {
             // Descriptive Subtitle
             game.font.setColor(0.6f, 0.75f, 0.85f, unlocked ? 0.9f : 0.5f);
             String desc = (i == 0) ? "Ao hồ yên ả, nguồn nước trù phú" : (i == 1) ? "Sóng vỗ rì rào, đa dạng cá ven bờ" : "Vực sâu thăm thẳm, ngự trị thủy quái";
+            game.font.getData().setScale(0.85f);
             layout.setText(game.font, desc);
             game.font.draw(game.batch, layout, cx + cardWidth / 2f - layout.width / 2f, drawY + cardHeight - 290f);
+            game.font.getData().setScale(1f);
 
             // Fish count badge
             int totalFish = getTotalFishCountForMap(map.id);
             int caughtFish = getCaughtFishCountForMap(map.id);
             game.font.setColor(0.4f, 0.85f, 0.95f, unlocked ? 1f : 0.6f);
             String fishStat = "Hệ sinh thái: " + caughtFish + "/" + totalFish + " loài cá";
+            game.font.getData().setScale(0.88f);
             layout.setText(game.font, fishStat);
             game.font.draw(game.batch, layout, cx + cardWidth / 2f - layout.width / 2f, drawY + cardHeight - 315f);
+            game.font.getData().setScale(1f);
 
             // Requirements Section
             float tx = cx + 24f;
@@ -430,15 +435,15 @@ public class MapScreen implements Screen {
 
             if (isCurrent) {
                 game.font.setColor(0.5f, 1f, 0.7f, 1f);
-                layout.setText(game.font, "✓ ĐANG CÂU Ở ĐÂY");
+                layout.setText(game.font, "✓ ĐI CÂU NGAY");
                 game.font.draw(game.batch, layout, btnX + (btnW - layout.width) / 2f, btnY + 26f);
             } else if (unlocked) {
                 game.font.setColor(Color.WHITE);
-                layout.setText(game.font, "RA KHƠI NGAY  ➔");
+                layout.setText(game.font, "RA KHƠI NGAY  →");
                 game.font.draw(game.batch, layout, btnX + (btnW - layout.width) / 2f, btnY + 26f);
             } else {
                 game.font.setColor(0.6f, 0.6f, 0.65f, 1f);
-                layout.setText(game.font, "🔒 CHƯA MỞ KHÓA");
+                layout.setText(game.font, "CHƯA MỞ KHÓA");
                 game.font.draw(game.batch, layout, btnX + (btnW - layout.width) / 2f, btnY + 26f);
             }
         }

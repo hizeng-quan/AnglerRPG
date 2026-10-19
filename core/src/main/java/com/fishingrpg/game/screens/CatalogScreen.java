@@ -395,7 +395,7 @@ public class CatalogScreen implements Screen, InputProcessor {
                     font.getData().setScale(0.8f);
                     layout.setText(font, fishName);
                     if (layout.width > slotW - 8f) {
-                        font.getData().setScale(0.7f);
+                        font.getData().setScale(0.8f * ((slotW - 8f) / layout.width));
                         layout.setText(font, fishName);
                     }
                     font.draw(game.batch, layout, fx + (slotW - layout.width) / 2f, slotY + 54f);
