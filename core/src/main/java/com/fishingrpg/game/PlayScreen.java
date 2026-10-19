@@ -471,6 +471,7 @@ public class PlayScreen implements Screen {
     @Override public void dispose() { shapeRenderer.dispose(); }
 
     public Viewport getViewport() { return viewport; }
+    public OrthographicCamera getCamera() { return camera; }
     public FishingManager getFishingManager() { return fishingManager; }
     public Player getPlayer() { return player; }
     public FishingRPG getGame() { return game; }
