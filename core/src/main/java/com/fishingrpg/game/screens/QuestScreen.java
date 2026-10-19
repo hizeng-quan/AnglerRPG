@@ -384,17 +384,26 @@ public class QuestScreen implements Screen {
             boolean claimed = currentTab == 0 ? qm.dailyChestClaimed : qm.weeklyChestClaimed;
 
             font.setColor(0.85f, 0.9f, 0.95f, 1f);
-            font.getData().setScale(0.9f);
+            font.getData().setScale(0.85f);
             String ptsText = "ĐIỂM NĂNG ĐỘNG: " + pts + " / " + maxPts + " ĐIỂM";
+            layout.setText(font, ptsText);
+            float ptsW = layout.width;
             font.draw(game.batch, ptsText, panelX + 25f, barY + 68f);
+
+            float chestBtnX = panelX + panelW - 185f;
+            float previewX = panelX + 25f + ptsW + 18f;
+            float maxPreviewW = chestBtnX - previewX - 15f;
 
             font.setColor(1f, 0.85f, 0.3f, 1f);
             font.getData().setScale(0.75f);
             String chestRewardPreview = currentTab == 0 ? "(Rương Ngày: +20 KC, +200 Vàng, +200 XP)" : "(Rương Tuần: +100 KC, +1000 Vàng, +1000 XP)";
-            font.draw(game.batch, chestRewardPreview, panelX + 280f, barY + 67f);
+            layout.setText(font, chestRewardPreview);
+            if (layout.width > maxPreviewW) {
+                font.getData().setScale(0.75f * (maxPreviewW / layout.width));
+            }
+            font.draw(game.batch, chestRewardPreview, previewX, barY + 68f);
 
             // Chest Button Text
-            float chestBtnX = panelX + panelW - 185f;
             float chestBtnY = barY + 16f;
 
             if (claimed) {

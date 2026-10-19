@@ -401,15 +401,32 @@ public class GameHUD {
         sr.setColor(0.85f, 0.65f, 0.25f, 0.65f);
         drawBoxBorder(panelX, panelY, panelW, panelH, 1.8f);
 
-        // Level Badge Shield (Left side)
+        // Level Badge Medallion (Left side)
         float shieldX = panelX + 38f;
         float shieldY = panelY + panelH / 2f;
-        sr.setColor(0.18f, 0.24f, 0.36f, 1f);
+        
+        // Outer soft glow aura
+        sr.setColor(1f, 0.85f, 0.3f, 0.25f);
+        sr.circle(shieldX, shieldY, 32f);
+
+        // Outer Gold Ring
+        sr.setColor(0.95f, 0.75f, 0.2f, 1f);
         sr.circle(shieldX, shieldY, 28f);
-        sr.setColor(1f, 0.85f, 0.3f, 1f);
+
+        // Outer Inset Dark Ring
+        sr.setColor(0.12f, 0.16f, 0.26f, 1f);
         sr.circle(shieldX, shieldY, 25f);
-        sr.setColor(0.12f, 0.16f, 0.25f, 1f);
+
+        // Inner Medallion Core
+        sr.setColor(0.06f, 0.09f, 0.16f, 1f);
         sr.circle(shieldX, shieldY, 22f);
+
+        // 4 Cardinal Star Pips on the rim
+        sr.setColor(1f, 0.9f, 0.45f, 1f);
+        sr.circle(shieldX, shieldY + 26f, 2.5f);
+        sr.circle(shieldX, shieldY - 26f, 2.5f);
+        sr.circle(shieldX + 26f, shieldY, 2.5f);
+        sr.circle(shieldX - 26f, shieldY, 2.5f);
 
         // XP Progress Bar (Center)
         float barX = panelX + 78f;
@@ -452,13 +469,22 @@ public class GameHUD {
         sr.setColor(0.6f, 0.9f, 1f, 1f);
         sr.rect(goldX + 16f - 5f, diaY + resH / 2f - 5f, 5f, 5f, 10f, 10f, 1f, 1f, 45f);
 
-        // Active Bait Buff Banner if active
+        // Active Bait Buff Banner if active (Expanded window to 340px)
         if (player.isBaitBuffActive()) {
             float buffY = panelY + panelH + 8f;
-            sr.setColor(0.12f, 0.26f, 0.16f, 0.95f);
-            sr.rect(panelX, buffY, 240f, 26f);
-            sr.setColor(0.35f, 0.9f, 0.45f, 0.85f);
-            drawBoxBorder(panelX, buffY, 240f, 26f, 1.2f);
+            float buffW = 340f;
+            float buffH = 28f;
+            sr.setColor(0.08f, 0.22f, 0.12f, 0.95f);
+            sr.rect(panelX, buffY, buffW, buffH);
+            sr.setColor(0.35f, 0.95f, 0.45f, 0.9f);
+            drawBoxBorder(panelX, buffY, buffW, buffH, 1.4f);
+
+            // Animated green status indicator
+            float pulse = 0.6f + 0.4f * MathUtils.sin(timer * 5f);
+            sr.setColor(0.2f, 1f, 0.4f, pulse);
+            sr.circle(panelX + 14f, buffY + buffH / 2f, 4.5f);
+            sr.setColor(1f, 1f, 1f, 0.8f);
+            sr.circle(panelX + 14f, buffY + buffH / 2f, 2f);
         }
     }
 
@@ -485,11 +511,26 @@ public class GameHUD {
         if (player != null) {
             float panelX = 20f;
             float panelY = 15f;
+            float panelH = 88f;
 
-            // Level text inside Shield
-            font.setColor(1f, 0.92f, 0.4f, 1f);
-            layout.setText(font, "Lv." + player.getLevel());
-            font.draw(batch, "Lv." + player.getLevel(), panelX + 38f - layout.width / 2f, panelY + 49f);
+            // Level Medallion Text (Left side)
+            float shieldX = panelX + 38f;
+            float shieldY = panelY + panelH / 2f;
+
+            // Mini header "CẤP"
+            font.setColor(1f, 0.82f, 0.35f, 1f);
+            font.getData().setScale(0.58f);
+            layout.setText(font, "CẤP");
+            font.draw(batch, "CẤP", shieldX - layout.width / 2f, shieldY + 16f);
+
+            // Bold prominent Level number
+            titleFont.setColor(Color.WHITE);
+            titleFont.getData().setScale(0.92f);
+            String lvlNum = String.valueOf(player.getLevel());
+            layout.setText(titleFont, lvlNum);
+            titleFont.draw(batch, lvlNum, shieldX - layout.width / 2f, shieldY - 2f);
+            titleFont.getData().setScale(1f);
+            font.getData().setScale(1f);
 
             // Current Map Name (with overflow guard)
             font.setColor(0.4f, 0.85f, 1f, 1f);
@@ -529,11 +570,17 @@ public class GameHUD {
             font.draw(batch, diaText, goldX + 32f, panelY + 33f);
             font.getData().setScale(1f);
 
-            // Bait Buff string
+            // Bait Buff string inside widened 340px box
             if (player.isBaitBuffActive()) {
+                float buffY = panelY + panelH + 8f;
                 font.setColor(0.4f, 1f, 0.5f, 1f);
-                font.draw(batch, "BUFF: MỒI THƠM (+TỐC ĐỘ CẮN)", panelX + 12f, panelY + 88f + 25f);
+                font.getData().setScale(0.82f);
+                font.draw(batch, "BUFF: MỒI THƠM (+TỐC ĐỘ CẮN)", panelX + 28f, buffY + 20f);
+                font.getData().setScale(1f);
             }
+
+            // Quick Slots Inventory Text
+            drawInventoryText(batch, player);
         }
     }
 
@@ -619,19 +666,35 @@ public class GameHUD {
             float x = invX + padding + col * (slotSize + padding);
             float y = invY + panelH - 40f - padding - (row + 1) * slotSize - row * padding;
 
+            // Formatted item name with clean scaling and centering
             font.setColor(Color.WHITE);
-            String dispName = name;
-            if (dispName.length() > 6) dispName = dispName.substring(0, 5) + ".";
-            font.getData().setScale(0.75f);
-            font.draw(batch, dispName, x + 3f, y + 55f);
+            font.getData().setScale(0.68f);
+            layout.setText(font, name);
+            if (layout.width > slotSize - 6f) {
+                font.getData().setScale(0.68f * ((slotSize - 6f) / layout.width));
+                layout.setText(font, name);
+            }
+            font.draw(batch, name, x + (slotSize - layout.width) / 2f, y + 54f);
+            font.getData().setScale(1f);
 
+            // Item quantity
             font.setColor(1f, 0.9f, 0.2f, 1f);
-            font.draw(batch, "x" + entry.getValue(), x + 5f, y + 20f);
+            font.getData().setScale(0.75f);
+            font.draw(batch, "x" + entry.getValue(), x + 4f, y + 18f);
 
-            font.setColor(0.5f, 0.85f, 1f, 1f);
-            font.draw(batch, "[" + (i + 1) + "]", x + 40f, y + 20f);
+            // Hotkey [1-9]
+            font.setColor(0.4f, 0.85f, 1f, 1f);
+            font.draw(batch, "[" + (i + 1) + "]", x + slotSize - 22f, y + 18f);
             font.getData().setScale(1f);
             i++;
+        }
+
+        // Empty state indicator
+        if (i == 0) {
+            font.setColor(0.55f, 0.65f, 0.8f, 0.7f);
+            font.getData().setScale(0.78f);
+            drawCenteredText(font, "Túi rỗng\n(Mua ở Cửa Hàng)", invX, invY + 80f, panelW, 40f);
+            font.getData().setScale(1f);
         }
 
         // Tooltip for hovered inventory item

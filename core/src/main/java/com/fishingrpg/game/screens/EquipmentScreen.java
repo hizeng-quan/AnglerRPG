@@ -42,10 +42,20 @@ public class EquipmentScreen implements Screen {
     private static final float H = 720f;
 
     private int scrollOffset = 0;
-    private static final int MAX_VISIBLE = 5;
+    private static final int MAX_VISIBLE = 6;
 
     private enum Tab { ALL, ROD, LINE, HOOK }
     private Tab currentTab = Tab.ALL;
+
+    public enum SortMode {
+        TIME("Thời Gian"),
+        RARITY("Độ Hiếm"),
+        POWER("Sức Mạnh");
+
+        public final String label;
+        SortMode(String label) { this.label = label; }
+    }
+    private SortMode currentSort = SortMode.TIME;
     
     private Equipment hoveredEq = null;
     private float hoverX = 0, hoverY = 0;
@@ -132,9 +142,9 @@ public class EquipmentScreen implements Screen {
 
         // Header Bar
         sr.setColor(0.06f, 0.09f, 0.14f, 0.95f);
-        sr.rect(0, H - 72f, W, 72f);
+        sr.rect(0, H - 76f, W, 76f);
         sr.setColor(0.25f, 0.65f, 0.85f, 0.7f);
-        sr.rect(0, H - 74f, W, 2f);
+        sr.rect(0, H - 78f, W, 2f);
 
         // Back Button
         hoverBack = (m.x >= 25f && m.x <= 155f && m.y >= H - 62f && m.y <= H - 20f);
@@ -144,7 +154,7 @@ public class EquipmentScreen implements Screen {
         drawRectOutline(sr, 25, H - 62, 130, 42, 1.5f);
 
         // Top Right Player Level & Gear Power Dock
-        float gearDockW = 280f;
+        float gearDockW = 320f;
         float gearDockH = 42f;
         float gearDockX = W - gearDockW - 25f;
         float gearDockY = H - 62f;
@@ -200,15 +210,16 @@ public class EquipmentScreen implements Screen {
         sr.setColor(0.22f, 0.35f, 0.50f, 0.7f);
         drawRectOutline(sr, rightX, rightY, rightW, rightH, 1.5f);
 
-        // Filter Tabs
-        float tabW = 125f;
-        float tabH = 36f;
+        // Row 1: Filter Tabs
+        float tabW = 105f;
+        float tabH = 34f;
+        float tabGap = 8f;
         float tabStartX = rightX + 15f;
-        float tabY = rightY + rightH - 50f;
+        float tabY = rightY + rightH - 44f;
 
         Tab[] tabs = Tab.values();
         for (int t = 0; t < tabs.length; t++) {
-            float tx = tabStartX + t * (tabW + 10f);
+            float tx = tabStartX + t * (tabW + tabGap);
             boolean isCur = (currentTab == tabs[t]);
             boolean hoverTab = (m.x >= tx && m.x <= tx + tabW && m.y >= tabY && m.y <= tabY + tabH);
 
@@ -218,12 +229,42 @@ public class EquipmentScreen implements Screen {
             drawRectOutline(sr, tx, tabY, tabW, tabH, isCur ? 2f : 1f);
         }
 
-        // Inventory Items List
+        // Row 2: Sort Bar Buttons
+        float sortY = tabY - 36f;
+        float sortH = 26f;
+        float sortStartX = rightX + 85f;
+        float sortBtnW = 105f;
+        float sortGap = 8f;
+
+        SortMode[] sortModes = SortMode.values();
+        for (int s = 0; s < sortModes.length; s++) {
+            float sx = sortStartX + s * (sortBtnW + sortGap);
+            boolean isCurSort = (currentSort == sortModes[s]);
+            boolean hoverSort = (m.x >= sx && m.x <= sx + sortBtnW && m.y >= sortY && m.y <= sortY + sortH);
+
+            if (isCurSort) {
+                sr.setColor(0.18f, 0.42f, 0.55f, 0.95f);
+                drawRoundedRect(sr, sx, sortY, sortBtnW, sortH, 5);
+                sr.setColor(0.4f, 0.9f, 1f, 1f);
+                drawRectOutline(sr, sx, sortY, sortBtnW, sortH, 1.5f);
+            } else {
+                sr.setColor(hoverSort ? new Color(0.14f, 0.22f, 0.32f, 0.9f) : new Color(0.09f, 0.13f, 0.20f, 0.8f));
+                drawRoundedRect(sr, sx, sortY, sortBtnW, sortH, 5);
+                sr.setColor(hoverSort ? new Color(0.35f, 0.55f, 0.75f, 0.7f) : new Color(0.2f, 0.28f, 0.38f, 0.5f));
+                drawRectOutline(sr, sx, sortY, sortBtnW, sortH, 1f);
+            }
+        }
+
+        // Separator line under sort bar
+        sr.setColor(0.2f, 0.3f, 0.45f, 0.45f);
+        sr.rect(rightX + 15f, 544f, rightW - 30f, 1f);
+
+        // Row 3: Inventory Items List (6 visible cards)
         List<Equipment> filteredInv = cachedFilteredInventory;
-        float invStartY = rightY + rightH - 120f;
         float rowW = rightW - 40f;
-        float rowH = 80f;
-        float rowSpacing = 90f;
+        float rowH = 72f;
+        float rowSpacing = 80f;
+        float invStartY = 538f - rowH;
 
         for (int i = 0; i < MAX_VISIBLE; i++) {
             int idx = scrollOffset + i;
@@ -247,8 +288,8 @@ public class EquipmentScreen implements Screen {
                 drawRectOutline(sr, rightX + 15f, ry, rowW, rowH, 1.2f);
 
                 // Equip / Unequip button
-                float btnW = 95f;
-                float btnH = 38f;
+                float btnW = 92f;
+                float btnH = 36f;
                 float btnX = rightX + 15f + rowW - btnW - 12f;
                 float btnY = ry + (rowH - btnH) / 2f;
 
@@ -267,21 +308,21 @@ public class EquipmentScreen implements Screen {
             }
         }
 
-        // Scrollbar
+        // Scrollbar - properly bounded to the card list height (538f down to 66f)
         if (filteredInv.size() > MAX_VISIBLE) {
-            float scrollBarX = rightX + rightW - 18f;
-            float scrollBarY = rightY + 20f;
-            float scrollBarH = rightH - 140f;
+            float scrollTrackY = 66f;
+            float scrollTrackH = 472f;
+            float scrollBarX = rightX + rightW - 14f;
 
-            sr.setColor(0.10f, 0.14f, 0.20f, 0.8f);
-            drawRoundedRect(sr, scrollBarX, scrollBarY, 8f, scrollBarH, 4f);
+            sr.setColor(0.08f, 0.12f, 0.18f, 0.85f);
+            drawRoundedRect(sr, scrollBarX, scrollTrackY, 6f, scrollTrackH, 3f);
 
             float scrollRatio = (float)scrollOffset / (filteredInv.size() - MAX_VISIBLE);
-            float barHeight = Math.max(35f, scrollBarH * (MAX_VISIBLE / (float)filteredInv.size()));
-            float barY = scrollBarY + (scrollBarH - barHeight) * (1f - scrollRatio);
+            float barHeight = Math.max(35f, scrollTrackH * ((float)MAX_VISIBLE / filteredInv.size()));
+            float barY = scrollTrackY + (scrollTrackH - barHeight) * (1f - scrollRatio);
 
-            sr.setColor(0.35f, 0.65f, 0.9f, 0.9f);
-            drawRoundedRect(sr, scrollBarX, barY, 8f, barHeight, 4f);
+            sr.setColor(0.35f, 0.68f, 0.95f, 0.95f);
+            drawRoundedRect(sr, scrollBarX, barY, 6f, barHeight, 3f);
         }
 
         sr.end();
@@ -292,12 +333,16 @@ public class EquipmentScreen implements Screen {
 
         // Header Title
         titleFont.setColor(0.95f, 0.85f, 0.45f, 1f);
+        titleFont.getData().setScale(0.92f);
         layout.setText(titleFont, "KHO TRANG BỊ CÂU CÁ");
-        titleFont.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 22f);
+        titleFont.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 18f);
+        titleFont.getData().setScale(1f);
 
         font.setColor(0.65f, 0.8f, 0.95f, 0.85f);
+        font.getData().setScale(0.78f);
         layout.setText(font, "Quản lý Cần Câu, Dây Cước, Lưỡi Câu và kích hoạt hiệu ứng Thần Khí");
-        font.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 48f);
+        font.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 52f);
+        font.getData().setScale(1f);
 
         // Back button text
         font.setColor(hoverBack ? Color.WHITE : new Color(0.8f, 0.9f, 1f, 0.9f));
@@ -306,8 +351,11 @@ public class EquipmentScreen implements Screen {
 
         // Top Right Gear Power Dock Text
         font.setColor(0.4f, 1f, 0.7f, 1f);
-        String pStr = "Cấp " + player.getLevel() + " • Lực Kéo: " + (int)player.getBasePullDamage();
-        font.draw(game.batch, pStr, gearDockX + 16f, gearDockY + 26f);
+        font.getData().setScale(0.85f);
+        String pStr = "Cấp " + player.getLevel() + "  •  Sát Thương Kéo: " + (int)player.getBasePullDamage();
+        layout.setText(font, pStr);
+        font.draw(game.batch, layout, gearDockX + (gearDockW - layout.width) / 2f, gearDockY + 26f);
+        font.getData().setScale(1f);
 
         // Left Panel Header
         font.setColor(0.8f, 0.9f, 1f, 0.9f);
@@ -345,20 +393,44 @@ public class EquipmentScreen implements Screen {
 
         // Right Panel Tab Texts
         String[] tabNames = {"TẤT CẢ", "CẦN CÂU", "DÂY CƯỚC", "LƯỠI CÂU"};
+
+        font.getData().setScale(0.85f);
         for (int t = 0; t < tabNames.length; t++) {
-            float tx = tabStartX + t * (tabW + 10f);
+            float tx = tabStartX + t * (tabW + tabGap);
             boolean isCur = (currentTab == tabs[t]);
             font.setColor(isCur ? Color.WHITE : new Color(0.7f, 0.8f, 0.9f, 0.8f));
             layout.setText(font, tabNames[t]);
-            font.draw(game.batch, layout, tx + (tabW - layout.width) / 2f, tabY + 24f);
+            font.draw(game.batch, layout, tx + (tabW - layout.width) / 2f, tabY + 23f);
         }
+        font.getData().setScale(1f);
 
         // Inventory Counter
         font.setColor(0.6f, 0.8f, 0.95f, 0.85f);
+        font.getData().setScale(0.82f);
         String invCountStr = "Túi đồ: " + filteredInv.size() + " món";
-        font.draw(game.batch, invCountStr, rightX + rightW - 140f, tabY + 24f);
+        layout.setText(font, invCountStr);
+        font.draw(game.batch, layout, rightX + rightW - layout.width - 20f, tabY + 23f);
+        font.getData().setScale(1f);
 
-        // Inventory List Items Text
+        // Sort Bar Texts
+        font.setColor(0.65f, 0.75f, 0.88f, 0.85f);
+        font.getData().setScale(0.78f);
+        font.draw(game.batch, "Sắp xếp:", rightX + 15f, sortY + 18f);
+
+        for (int s = 0; s < sortModes.length; s++) {
+            float sx = sortStartX + s * (sortBtnW + sortGap);
+            boolean isCurSort = (currentSort == sortModes[s]);
+            boolean hoverSort = (m.x >= sx && m.x <= sx + sortBtnW && m.y >= sortY && m.y <= sortY + 26f);
+
+            font.setColor(isCurSort ? new Color(1f, 0.9f, 0.4f, 1f) : (hoverSort ? Color.WHITE : new Color(0.7f, 0.8f, 0.9f, 0.8f)));
+            font.getData().setScale(0.76f);
+            String sortLabel = (isCurSort ? "● " : "") + sortModes[s].label;
+            layout.setText(font, sortLabel);
+            font.draw(game.batch, layout, sx + (sortBtnW - layout.width) / 2f, sortY + 18f);
+        }
+        font.getData().setScale(1f);
+
+        // Inventory List Items Text (6 items)
         for (int i = 0; i < MAX_VISIBLE; i++) {
             int idx = scrollOffset + i;
             if (idx < filteredInv.size()) {
@@ -369,25 +441,26 @@ public class EquipmentScreen implements Screen {
                 // Name & Rarity
                 titleFont.setColor(eq.rarity.color);
                 layout.setText(titleFont, eq.name);
-                float maxTitleW = 340f;
+                float maxTitleW = 320f;
                 if (layout.width > maxTitleW) {
-                    titleFont.getData().setScale(0.8f * (maxTitleW / layout.width));
+                    titleFont.getData().setScale(0.72f * (maxTitleW / layout.width));
                 } else {
-                    titleFont.getData().setScale(0.8f);
+                    titleFont.getData().setScale(0.72f);
                 }
-                titleFont.draw(game.batch, eq.name, rightX + 35f, ry + rowH - 18f);
+                titleFont.draw(game.batch, eq.name, rightX + 35f, ry + rowH - 12f);
                 titleFont.getData().setScale(1f);
 
                 // Type & Set Tag
                 font.setColor(0.75f, 0.8f, 0.9f, 0.85f);
-                font.getData().setScale(0.85f);
+                font.getData().setScale(0.72f);
                 String typeStr = (eq.type == EquipmentType.ROD ? "Cần" : eq.type == EquipmentType.LINE ? "Cước" : "Lưỡi") + " • Bộ: " + eq.setName;
-                font.draw(game.batch, typeStr, rightX + 35f, ry + rowH - 45f);
+                font.draw(game.batch, typeStr, rightX + 35f, ry + rowH - 32f);
 
                 // Main Stats & Comparative Stat Diff
                 String stats = getEqMainStats(eq);
                 font.setColor(0.4f, 1f, 0.6f, 1f);
-                font.draw(game.batch, stats, rightX + 35f, ry + 22f);
+                font.getData().setScale(0.72f);
+                font.draw(game.batch, stats, rightX + 35f, ry + rowH - 52f);
 
                 // Diff indicator if not equipped
                 if (!isEq) {
@@ -397,21 +470,23 @@ public class EquipmentScreen implements Screen {
                         if (Math.abs(diff) >= 0.5f) {
                             String diffStr = (diff > 0 ? "▲ +" : "▼ ") + (int)diff;
                             font.setColor(diff > 0 ? new Color(0.3f, 1f, 0.5f, 1f) : new Color(1f, 0.35f, 0.35f, 1f));
-                            font.draw(game.batch, diffStr, rightX + 380f, ry + 22f);
+                            font.draw(game.batch, diffStr, rightX + 380f, ry + rowH - 52f);
                         }
                     }
                 }
                 font.getData().setScale(1f);
 
                 // Button Text
-                float btnW = 95f;
+                float btnW = 92f;
                 float btnX = rightX + 15f + rowW - btnW - 12f;
-                float btnY = ry + (rowH - 38f) / 2f;
+                float btnY = ry + (rowH - 36f) / 2f;
 
                 font.setColor(Color.WHITE);
+                font.getData().setScale(0.82f);
                 String btnText = isEq ? "Tháo Ra" : "Mặc Vào";
                 layout.setText(font, btnText);
-                font.draw(game.batch, layout, btnX + (btnW - layout.width) / 2f, btnY + 25f);
+                font.draw(game.batch, layout, btnX + (btnW - layout.width) / 2f, btnY + 24f);
+                font.getData().setScale(1f);
             }
         }
 
@@ -509,12 +584,18 @@ public class EquipmentScreen implements Screen {
 
             font.setColor(0.4f, 1f, 0.6f, 1f);
             String stats = getEqMainStats(eq);
+            font.getData().setScale(0.78f);
+            layout.setText(font, stats);
+            float uBtnW = 80f;
+            float uBtnX = x + w - uBtnW - 15f;
+            float maxStatsW = uBtnX - (x + 115f) - 12f;
+            if (layout.width > maxStatsW) {
+                font.getData().setScale(0.78f * (maxStatsW / layout.width));
+            }
             font.draw(game.batch, stats, x + 115f, y + 42f);
             font.getData().setScale(1f);
 
             // Unequip button text
-            float uBtnW = 80f;
-            float uBtnX = x + w - uBtnW - 15f;
             font.setColor(Color.WHITE);
             layout.setText(font, "Tháo");
             font.draw(game.batch, layout, uBtnX + (uBtnW - layout.width) / 2f, y + 36f);
@@ -552,14 +633,16 @@ public class EquipmentScreen implements Screen {
         float rightX = 515f;
         float rightY = 25f;
         float rightH = H - 110f;
-        float invStartY = rightY + rightH - 120f;
         float rowW = W - rightX - 65f;
+        float rowH = 72f;
+        float rowSpacing = 80f;
+        float invStartY = 538f - rowH;
 
         if (m.x >= rightX + 15f && m.x <= rightX + 15f + rowW - 110f) {
             for (int i = 0; i < MAX_VISIBLE; i++) {
                 if (scrollOffset + i < cachedFilteredInventory.size()) {
-                    float ry = invStartY - i * 90f;
-                    if (m.y >= ry && m.y <= ry + 80f) {
+                    float ry = invStartY - i * rowSpacing;
+                    if (m.y >= ry && m.y <= ry + rowH) {
                         hoveredEq = cachedFilteredInventory.get(scrollOffset + i);
                     }
                 }
@@ -572,20 +655,54 @@ public class EquipmentScreen implements Screen {
             return;
         }
 
+        // Scrollbar click & drag
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            float scrollTrackY = 66f;
+            float scrollTrackH = 472f;
+            float scrollBarX = rightX + (W - rightX - 25f) - 14f;
+            if (m.x >= scrollBarX - 12f && m.x <= scrollBarX + 18f && m.y >= scrollTrackY && m.y <= scrollTrackY + scrollTrackH) {
+                float relY = (scrollTrackY + scrollTrackH) - m.y;
+                float pct = MathUtils.clamp(relY / scrollTrackH, 0f, 1f);
+                int maxScroll = Math.max(0, cachedFilteredInventory.size() - MAX_VISIBLE);
+                scrollOffset = Math.round(pct * maxScroll);
+            }
+        }
+
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             // Tabs
-            float tabW = 125f;
-            float tabH = 36f;
+            float tabW = 105f;
+            float tabH = 34f;
+            float tabGap = 8f;
             float tabStartX = rightX + 15f;
-            float tabY = rightY + rightH - 50f;
+            float tabY = rightY + rightH - 44f;
 
             Tab[] tabs = Tab.values();
             for (int t = 0; t < tabs.length; t++) {
-                float tx = tabStartX + t * (tabW + 10f);
+                float tx = tabStartX + t * (tabW + tabGap);
                 if (m.x >= tx && m.x <= tx + tabW && m.y >= tabY && m.y <= tabY + tabH) {
                     if (currentTab != tabs[t]) {
                         AudioManager.getInstance().playSFX("sfx_button");
                         currentTab = tabs[t];
+                        scrollOffset = 0;
+                        return;
+                    }
+                }
+            }
+
+            // Sort Buttons
+            float sortY = tabY - 36f;
+            float sortH = 26f;
+            float sortStartX = rightX + 85f;
+            float sortBtnW = 105f;
+            float sortGap = 8f;
+
+            SortMode[] sortModes = SortMode.values();
+            for (int s = 0; s < sortModes.length; s++) {
+                float sx = sortStartX + s * (sortBtnW + sortGap);
+                if (m.x >= sx && m.x <= sx + sortBtnW && m.y >= sortY && m.y <= sortY + sortH) {
+                    if (currentSort != sortModes[s]) {
+                        AudioManager.getInstance().playSFX("sfx_button");
+                        currentSort = sortModes[s];
                         scrollOffset = 0;
                         return;
                     }
@@ -617,15 +734,15 @@ public class EquipmentScreen implements Screen {
             }
 
             // Equip / Unequip buttons in inventory
-            float btnW = 95f;
-            float btnH = 38f;
+            float btnW = 92f;
+            float btnH = 36f;
             float btnX = rightX + 15f + rowW - btnW - 12f;
 
             for (int i = 0; i < MAX_VISIBLE; i++) {
                 if (scrollOffset + i < cachedFilteredInventory.size()) {
                     Equipment eq = cachedFilteredInventory.get(scrollOffset + i);
-                    float ry = invStartY - i * 90f;
-                    float btnY = ry + (80f - btnH) / 2f;
+                    float ry = invStartY - i * rowSpacing;
+                    float btnY = ry + (rowH - btnH) / 2f;
 
                     if (m.x >= btnX && m.x <= btnX + btnW && m.y >= btnY && m.y <= btnY + btnH) {
                         AudioManager.getInstance().playSFX("sfx_button");
@@ -710,13 +827,66 @@ public class EquipmentScreen implements Screen {
 
     private List<Equipment> getFilteredInventory() {
         List<Equipment> all = player.getEquipmentInventory();
-        if (currentTab == Tab.ALL) return all;
         List<Equipment> filtered = new ArrayList<>();
-        EquipmentType t = currentTab == Tab.ROD ? EquipmentType.ROD : (currentTab == Tab.LINE ? EquipmentType.LINE : EquipmentType.HOOK);
-        for (Equipment eq : all) {
-            if (eq.type == t) filtered.add(eq);
+        if (currentTab == Tab.ALL) {
+            filtered.addAll(all);
+        } else {
+            EquipmentType t = currentTab == Tab.ROD ? EquipmentType.ROD : (currentTab == Tab.LINE ? EquipmentType.LINE : EquipmentType.HOOK);
+            for (Equipment eq : all) {
+                if (eq.type == t) filtered.add(eq);
+            }
         }
+
+        // Apply sorting
+        if (currentSort == SortMode.TIME) {
+            // Newest acquired first (reverse of original list order)
+            java.util.Collections.reverse(filtered);
+        } else if (currentSort == SortMode.RARITY) {
+            filtered.sort((a, b) -> {
+                int rA = getRarityRank(a.rarity);
+                int rB = getRarityRank(b.rarity);
+                if (rA != rB) return Integer.compare(rB, rA);
+                float pA = getEquipmentPower(a);
+                float pB = getEquipmentPower(b);
+                return Float.compare(pB, pA);
+            });
+        } else if (currentSort == SortMode.POWER) {
+            filtered.sort((a, b) -> {
+                float pA = getEquipmentPower(a);
+                float pB = getEquipmentPower(b);
+                if (pA != pB) return Float.compare(pB, pA);
+                int rA = getRarityRank(a.rarity);
+                int rB = getRarityRank(b.rarity);
+                return Integer.compare(rB, rA);
+            });
+        }
+
         return filtered;
+    }
+
+    private int getRarityRank(Rarity r) {
+        if (r == null) return 0;
+        switch (r) {
+            case LIMITED_PREMIUM: return 6;
+            case LEGENDARY: return 5;
+            case EPIC: return 4;
+            case LIMITED_EVENT: return 3;
+            case RARE: return 2;
+            case UNCOMMON: return 1;
+            case COMMON: default: return 0;
+        }
+    }
+
+    private float getEquipmentPower(Equipment eq) {
+        if (eq == null) return 0f;
+        float base = eq.mainStat1 + eq.mainStat2;
+        float subTotal = 0f;
+        if (eq.substats != null) {
+            for (Substat s : eq.substats) {
+                subTotal += s.value;
+            }
+        }
+        return base + subTotal * 1.5f + getRarityRank(eq.rarity) * 20f;
     }
 
     private void drawRoundedRect(ShapeRenderer sr, float x, float y, float w, float h, float r) {

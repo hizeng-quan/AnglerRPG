@@ -195,21 +195,25 @@ public class EventScreen implements Screen {
         drawBoxBorder(25f, H - 58f, 115f, 42f, 2f);
 
         // Countdown pill badge shape
+        float timePillW = 215f;
+        float timePillX = W - timePillW - 190f - 20f; // 855f
         sr.setColor(0.15f, 0.12f, 0.2f, 0.9f);
-        sr.rect(W - 470f, H - 56f, 230f, 38f);
+        sr.rect(timePillX, H - 56f, timePillW, 38f);
         sr.setColor(0.85f, 0.65f, 0.25f, 0.6f);
-        drawBoxBorder(W - 470f, H - 56f, 230f, 38f, 1.5f);
+        drawBoxBorder(timePillX, H - 56f, timePillW, 38f, 1.5f);
 
         // Event points badge shape
+        float ptsPillW = 185f;
+        float ptsPillX = W - ptsPillW - 25f; // 1070f
         sr.setColor(0.22f, 0.16f, 0.08f, 0.95f);
-        sr.rect(W - 225f, H - 56f, 200f, 38f);
+        sr.rect(ptsPillX, H - 56f, ptsPillW, 38f);
         sr.setColor(1f, 0.85f, 0.3f, 0.9f);
-        drawBoxBorder(W - 225f, H - 56f, 200f, 38f, 1.5f);
+        drawBoxBorder(ptsPillX, H - 56f, ptsPillW, 38f, 1.5f);
         // Star badge accent
         sr.setColor(1f, 0.85f, 0.25f, 1f);
-        sr.circle(W - 208f, H - 37f, 9f);
+        sr.circle(ptsPillX + 18f, H - 37f, 8f);
         sr.setColor(0.9f, 0.4f, 0.1f, 1f);
-        sr.circle(W - 208f, H - 37f, 4f);
+        sr.circle(ptsPillX + 18f, H - 37f, 4f);
     }
 
     private void drawTabShapes() {
@@ -311,8 +315,8 @@ public class EventScreen implements Screen {
         sr.rect(startX, bannerY, 6f, bannerH);
 
         // 3 Mission Cards
-        float[] cardY = { H - 330f, H - 435f, H - 540f };
-        float cardH = 92f;
+        float[] cardY = { H - 332f, H - 440f, H - 548f };
+        float cardH = 96f;
 
         for (int i = 0; i < 3; i++) {
             float cy = cardY[i];
@@ -336,7 +340,7 @@ public class EventScreen implements Screen {
             sr.rect(startX, cy, 6f, cardH);
 
             // Icon Badge Circle
-            float iconX = startX + 45f;
+            float iconX = startX + 44f;
             float iconY = cy + cardH / 2f;
             sr.setColor(done ? new Color(0.18f, 0.4f, 0.25f, 1f) : new Color(0.2f, 0.26f, 0.38f, 1f));
             sr.circle(iconX, iconY, 26f);
@@ -365,14 +369,44 @@ public class EventScreen implements Screen {
                 sr.rect(iconX - 2f, iconY - 8f, 4f, 16f);
             }
 
-            // Progress Bar
-            float barX = startX + 500f;
-            float barY = cy + 24f;
-            float barW = 380f;
-            float barH = 18f;
+            // Action Button (centered vertically on card)
+            float btnW = 145f;
+            float btnH = 42f;
+            float btnX = startX + cardW - btnW - 18f;
+            float btnY = cy + (cardH - btnH) / 2f;
+
+            if (done) {
+                sr.setColor(0.12f, 0.35f, 0.22f, 0.95f);
+                sr.rect(btnX, btnY, btnW, btnH);
+                sr.setColor(0.35f, 0.95f, 0.5f, 1f);
+                drawBoxBorder(btnX, btnY, btnW, btnH, 1.5f);
+            } else {
+                sr.setColor(0.12f, 0.17f, 0.26f, 0.9f);
+                sr.rect(btnX, btnY, btnW, btnH);
+                sr.setColor(0.3f, 0.42f, 0.58f, 0.75f);
+                drawBoxBorder(btnX, btnY, btnW, btnH, 1.2f);
+            }
+
+            // Reward Pill (top right, left of button)
+            float pillW = 210f;
+            float pillH = 26f;
+            float pillX = btnX - pillW - 16f;
+            float pillY = cy + cardH - 33f;
+
+            sr.setColor(0.20f, 0.15f, 0.08f, 0.92f);
+            sr.rect(pillX, pillY, pillW, pillH);
+            sr.setColor(0.85f, 0.65f, 0.22f, 0.75f);
+            drawBoxBorder(pillX, pillY, pillW, pillH, 1.2f);
+
+            // Progress Bar (bottom row spanning full content width)
+            float contentX = startX + 85f;
+            float barX = contentX;
+            float barY = cy + 15f;
+            float barW = btnX - 16f - barX;
+            float barH = 12f;
 
             // Bar background
-            sr.setColor(0.08f, 0.1f, 0.15f, 0.95f);
+            sr.setColor(0.06f, 0.08f, 0.13f, 0.95f);
             sr.rect(barX, barY, barW, barH);
 
             // Bar fill
@@ -382,33 +416,11 @@ public class EventScreen implements Screen {
             else if (i == 2) progress = MathUtils.clamp((float) eventManager.eventGachaPulledToday / 1f, 0f, 1f);
 
             if (progress > 0) {
-                if (done) {
-                    sr.setColor(0.25f, 0.85f, 0.4f, 0.95f);
-                } else {
-                    sr.setColor(0.95f, 0.65f, 0.2f, 0.95f);
-                }
-                sr.rect(barX, barY, barW * progress, barH);
+                sr.setColor(done ? new Color(0.25f, 0.85f, 0.45f, 1f) : new Color(0.25f, 0.65f, 1f, 1f));
+                sr.rect(barX, barY, Math.max(8f, barW * progress), barH);
             }
-            sr.setColor(0.3f, 0.4f, 0.55f, 0.7f);
-            drawBoxBorder(barX, barY, barW, barH, 1.2f);
-
-            // Status Badge Button
-            float btnX = startX + cardW - 190f;
-            float btnY = cy + 26f;
-            float btnW = 160f;
-            float btnH = 40f;
-
-            if (done) {
-                sr.setColor(0.18f, 0.45f, 0.25f, 0.95f);
-                sr.rect(btnX, btnY, btnW, btnH);
-                sr.setColor(0.35f, 0.9f, 0.5f, 0.9f);
-                drawBoxBorder(btnX, btnY, btnW, btnH, 1.5f);
-            } else {
-                sr.setColor(0.18f, 0.24f, 0.35f, 0.9f);
-                sr.rect(btnX, btnY, btnW, btnH);
-                sr.setColor(0.45f, 0.55f, 0.75f, 0.7f);
-                drawBoxBorder(btnX, btnY, btnW, btnH, 1.5f);
-            }
+            sr.setColor(0.25f, 0.35f, 0.48f, 0.65f);
+            drawBoxBorder(barX, barY, barW, barH, 1f);
         }
     }
 
@@ -664,26 +676,37 @@ public class EventScreen implements Screen {
         font.setColor(Color.WHITE);
         drawCenteredText(font, "← QUAY LẠI", 25f, H - 58f, 115f, 42f);
 
-        // Center Title
+        // Center Title & Subtitle within available center space (between Back btn at 140f and timePill at 855f)
+        float centerAreaX = 145f;
+        float centerAreaW = (W - 215f - 190f - 20f) - centerAreaX - 10f; // 700px
+
         titleFont.setColor(0f, 0f, 0f, 0.6f);
-        drawCenteredText(titleFont, "HÀO KHÍ LẠC HỒNG", 2f, H - 42f, W, 30f); // shadow
+        drawCenteredText(titleFont, "HÀO KHÍ LẠC HỒNG", centerAreaX + 2f, H - 42f, centerAreaW, 30f); // shadow
         titleFont.setColor(1f, 0.88f, 0.35f, 1f);
-        drawCenteredText(titleFont, "HÀO KHÍ LẠC HỒNG", 0f, H - 40f, W, 30f);
+        drawCenteredText(titleFont, "HÀO KHÍ LẠC HỒNG", centerAreaX, H - 40f, centerAreaW, 30f);
 
-        // Subtitle
+        // Subtitle (concise & centered in center area, never touches right badges)
         font.setColor(0.85f, 0.85f, 0.85f, 0.9f);
-        drawCenteredText(font, "★ SỰ KIỆN GIỚI HẠN MÙA LỄ HỘI • THẦN KHÍ & VỆ QUỐC VANG DANH ★", 0f, H - 65f, W, 20f);
-
-        // Countdown Timer Badge
-        font.setColor(1f, 0.9f, 0.35f, 1f);
-        String eventTime = eventManager.getEventTimeRemaining();
-        font.getData().setScale(0.88f);
-        drawCenteredText(font, "Thời gian: " + eventTime, W - 470f, H - 56f, 230f, 38f);
+        font.getData().setScale(0.82f);
+        drawCenteredText(font, "★ SỰ KIỆN GIỚI HẠN MÙA LỄ HỘI ★", centerAreaX, H - 65f, centerAreaW, 20f);
         font.getData().setScale(1f);
 
-        // Event Points Badge
+        // Countdown Timer Badge Text
+        float timePillW = 215f;
+        float timePillX = W - timePillW - 190f - 20f;
+        font.setColor(1f, 0.9f, 0.35f, 1f);
+        String eventTime = eventManager.getEventTimeRemaining().replace("Còn lại: ", "");
+        font.getData().setScale(0.82f);
+        drawCenteredText(font, "Thời gian: " + eventTime, timePillX, H - 56f, timePillW, 38f);
+        font.getData().setScale(1f);
+
+        // Event Points Badge Text
+        float ptsPillW = 185f;
+        float ptsPillX = W - ptsPillW - 25f;
         font.setColor(1f, 0.95f, 0.4f, 1f);
-        font.draw(game.batch, "Điểm Sự Kiện: " + player.getEventPoints(), W - 210f, H - 32f);
+        font.getData().setScale(0.85f);
+        font.draw(game.batch, "Điểm: " + player.getEventPoints() + " SK", ptsPillX + 34f, H - 32f);
+        font.getData().setScale(1f);
     }
 
     private void drawTabTexts() {
@@ -761,42 +784,73 @@ public class EventScreen implements Screen {
             "Phần thưởng: +1 Vé Quay Thường"
         };
 
-        float[] cardY = { H - 330f, H - 435f, H - 540f };
-        float cardH = 92f;
+        float[] cardY = { H - 332f, H - 440f, H - 548f };
+        float cardH = 96f;
 
         for (int i = 0; i < 3; i++) {
             float cy = cardY[i];
             boolean done = eventManager.dailyMissionsCompleted[i];
 
-            // Title
-            font.setColor(done ? new Color(0.4f, 1f, 0.6f, 1f) : new Color(1f, 0.88f, 0.35f, 1f));
-            font.draw(game.batch, titles[i], startX + 90f, cy + cardH - 22f);
+            float contentX = startX + 85f;
+            float btnW = 145f;
+            float btnH = 42f;
+            float btnX = startX + cardW - btnW - 18f;
+            float btnY = cy + (cardH - btnH) / 2f;
 
-            // Description
-            font.setColor(0.85f, 0.88f, 0.95f, 0.85f);
-            font.draw(game.batch, descs[i], startX + 90f, cy + cardH - 52f);
+            float pillW = 210f;
+            float pillH = 26f;
+            float pillX = btnX - pillW - 16f;
+            float pillY = cy + cardH - 33f;
 
-            // Reward callout
-            font.setColor(0.95f, 0.75f, 0.25f, 0.95f);
-            font.draw(game.batch, rewards[i], startX + 500f, cy + cardH - 22f);
+            float barX = contentX;
+            float barY = cy + 15f;
+            float barW = btnX - 16f - barX;
 
-            // Progress text inside/above bar
-            font.setColor(Color.WHITE);
-            font.draw(game.batch, progressTexts[i], startX + 500f, cy + 38f);
+            // 1. Mission Title (Auto-fit so it never touches the reward pill)
+            font.setColor(done ? new Color(0.35f, 0.95f, 0.55f, 1f) : new Color(1f, 0.88f, 0.4f, 1f));
+            font.getData().setScale(0.92f);
+            layout.setText(font, titles[i]);
+            float maxTitleW = pillX - contentX - 15f;
+            if (layout.width > maxTitleW) {
+                font.getData().setScale(0.92f * (maxTitleW / layout.width));
+            }
+            font.draw(game.batch, titles[i], contentX, cy + cardH - 16f);
 
-            // Button status label
-            float btnX = startX + cardW - 190f;
-            float btnY = cy + 26f;
-            float btnW = 160f;
-            float btnH = 40f;
+            // 2. Reward Pill Text
+            font.setColor(1f, 0.85f, 0.3f, 1f);
+            font.getData().setScale(0.78f);
+            drawCenteredText(font, rewards[i], pillX, pillY, pillW, pillH);
 
+            // 3. Description (Single line with full width, completely separated vertically)
+            font.setColor(0.78f, 0.85f, 0.92f, 0.9f);
+            font.getData().setScale(0.80f);
+            layout.setText(font, descs[i]);
+            float maxDescW = btnX - 16f - contentX;
+            if (layout.width > maxDescW) {
+                font.getData().setScale(0.80f * (maxDescW / layout.width));
+            }
+            font.draw(game.batch, descs[i], contentX, cy + cardH - 45f);
+
+            // 4. Progress Text & Track Labels (above the progress bar)
+            font.setColor(0.55f, 0.65f, 0.78f, 0.85f);
+            font.getData().setScale(0.72f);
+            font.draw(game.batch, "Tiến độ mục tiêu", barX, barY + 22f);
+
+            font.setColor(0.88f, 0.93f, 1f, 0.95f);
+            font.getData().setScale(0.74f);
+            layout.setText(font, progressTexts[i]);
+            font.draw(game.batch, layout, barX + barW - layout.width, barY + 22f);
+
+            // 5. Button Status Label
+            font.getData().setScale(0.85f);
             if (done) {
-                font.setColor(0.4f, 1f, 0.6f, 1f);
+                font.setColor(0.35f, 0.95f, 0.55f, 1f);
                 drawCenteredText(font, "✔ HOÀN THÀNH", btnX, btnY, btnW, btnH);
             } else {
-                font.setColor(0.85f, 0.92f, 1f, 0.9f);
+                font.setColor(0.7f, 0.82f, 0.95f, 0.85f);
                 drawCenteredText(font, "ĐANG LÀM", btnX, btnY, btnW, btnH);
             }
+            font.getData().setScale(1f);
         }
     }
 
@@ -852,20 +906,34 @@ public class EventScreen implements Screen {
             DailyReward reward = eventManager.getDailyReward(dayNum);
 
             // Day Title
+            font.getData().setScale(0.82f);
+            String dayTitle = isClaimed ? ("Ngày " + dayNum + " (Đã nhận)") :
+                              (isToday ? ("Ngày " + dayNum + " [HÔM NAY]") :
+                              ("Ngày " + dayNum + (reward.isMilestone ? " ★" : "")));
             if (isClaimed) {
                 font.setColor(0.4f, 0.85f, 0.55f, 1f);
-                font.draw(game.batch, "Ngày " + dayNum + " (Đã nhận)", bx + 10f, by + boxH - 12f);
             } else if (isToday) {
                 font.setColor(1f, 0.9f, 0.35f, 1f);
-                font.draw(game.batch, "Ngày " + dayNum + " [HÔM NAY]", bx + 10f, by + boxH - 12f);
             } else {
                 font.setColor(reward.isMilestone ? new Color(1f, 0.85f, 0.35f, 1f) : new Color(0.85f, 0.9f, 0.98f, 0.85f));
-                font.draw(game.batch, "Ngày " + dayNum + (reward.isMilestone ? " ★" : ""), bx + 10f, by + boxH - 12f);
             }
+            layout.setText(font, dayTitle);
+            float maxTitleW = boxW - 20f;
+            if (layout.width > maxTitleW) {
+                font.getData().setScale(0.82f * (maxTitleW / layout.width));
+            }
+            font.draw(game.batch, dayTitle, bx + 10f, by + boxH - 14f);
 
-            // Reward description
+            // Reward description (Auto-scaled so Day 5, 10, 15, 20, 25 milestones never overflow box)
             font.setColor(isClaimed ? new Color(0.6f, 0.75f, 0.65f, 0.85f) : (isToday ? Color.WHITE : new Color(0.95f, 0.8f, 0.3f, 0.95f)));
-            font.draw(game.batch, reward.rewardSummary, bx + 10f, by + 30f);
+            font.getData().setScale(0.78f);
+            layout.setText(font, reward.rewardSummary);
+            float maxRewardW = boxW - 20f;
+            if (layout.width > maxRewardW) {
+                font.getData().setScale(0.78f * (maxRewardW / layout.width));
+            }
+            font.draw(game.batch, reward.rewardSummary, bx + 10f, by + 28f);
+            font.getData().setScale(1f);
         }
     }
 
@@ -914,7 +982,7 @@ public class EventScreen implements Screen {
         };
         String[] itemStats = {
             "Sát thương +20 • Thể lực +125",
-            "Sức căng +225 • Kháng đứt +4",
+            "Sức căng +225 • Kháng đứt +4%",
             "Cá hiếm +10% • Giữ mồi +20%",
             "Chiêu mộ trang bị siêu phẩm",
             "Chiêu mộ trang bị tiêu chuẩn",
@@ -929,19 +997,36 @@ public class EventScreen implements Screen {
 
             int price = getShopItemPrice(i);
             boolean canAfford = player.getEventPoints() >= price;
+            float maxItemTextW = itemW - 110f;
 
             // Name
             Color nameColor = getShopItemBorderColor(i);
             font.setColor(nameColor);
+            font.getData().setScale(0.88f);
+            layout.setText(font, itemNames[i]);
+            if (layout.width > maxItemTextW) {
+                font.getData().setScale(0.88f * (maxItemTextW / layout.width));
+            }
             font.draw(game.batch, itemNames[i], ix + 95f, iy + itemH - 22f);
 
             // Subtitle
             font.setColor(0.75f, 0.8f, 0.9f, 0.85f);
+            font.getData().setScale(0.76f);
+            layout.setText(font, itemSubtitles[i]);
+            if (layout.width > maxItemTextW) {
+                font.getData().setScale(0.76f * (maxItemTextW / layout.width));
+            }
             font.draw(game.batch, itemSubtitles[i], ix + 95f, iy + itemH - 46f);
 
             // Stats preview
             font.setColor(1f, 0.9f, 0.45f, 0.95f);
+            font.getData().setScale(0.76f);
+            layout.setText(font, itemStats[i]);
+            if (layout.width > maxItemTextW) {
+                font.getData().setScale(0.76f * (maxItemTextW / layout.width));
+            }
             font.draw(game.batch, itemStats[i], ix + 95f, iy + itemH - 70f);
+            font.getData().setScale(1f);
 
             // Price / Exchange button text
             float btnX = ix + 14f;
@@ -964,50 +1049,81 @@ public class EventScreen implements Screen {
     // =========================================================================
 
     private void drawShopTooltip(int itemIndex) {
-        float tipW = 340f;
-        float tipH = 150f;
+        float tipW = 410f;
+        float tipH = 165f;
         float tipX = mousePos.x + 18f;
         float tipY = mousePos.y - tipH - 10f;
 
-        if (tipX + tipW > W - 15f) tipX = mousePos.x - tipW - 15f;
-        if (tipY < 15f) tipY = 15f;
+        if (tipX + tipW > W - 20f) tipX = mousePos.x - tipW - 18f;
+        if (tipX < 20f) tipX = 20f;
+        if (tipY < 20f) tipY = 20f;
+        if (tipY + tipH > H - 20f) tipY = H - tipH - 20f;
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
         sr.begin(ShapeRenderer.ShapeType.Filled);
-        sr.setColor(0.08f, 0.10f, 0.16f, 0.96f);
+        sr.setColor(0.07f, 0.09f, 0.15f, 0.97f);
         sr.rect(tipX, tipY, tipW, tipH);
         sr.setColor(0.92f, 0.25f, 0.28f, 0.9f);
         drawBoxBorder(tipX, tipY, tipW, tipH, 1.8f);
+
+        // Divider line above set bonus
+        sr.setColor(0.6f, 0.25f, 0.28f, 0.5f);
+        sr.rect(tipX + 15f, tipY + 45f, tipW - 30f, 1.2f);
         sr.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
 
         game.batch.begin();
-        font.setColor(0.95f, 0.3f, 0.35f, 1f);
+        float maxTipTextW = tipW - 30f;
+
+        String tipTitle = "";
+        String line1 = "";
+        String line2 = "";
+        String line3 = "";
+        String setBonus = "Set Vệ Quốc: +29% Cá hiếm, Kháng đứt +10%";
+
         if (itemIndex == 0) {
-            font.draw(game.batch, "Cần Câu Vệ Quốc (LIMITED EVENT)", tipX + 15f, tipY + tipH - 18f);
-            font.setColor(Color.WHITE);
-            font.draw(game.batch, "• Loại: Cần Câu (Rod) | Cấp độ: Lv.1", tipX + 15f, tipY + tipH - 42f);
-            font.draw(game.batch, "• Sát thương kéo: +20 Sức kéo", tipX + 15f, tipY + tipH - 64f);
-            font.draw(game.batch, "• Thể lực tăng thêm: +125 Điểm", tipX + 15f, tipY + tipH - 86f);
-            font.setColor(1f, 0.85f, 0.35f, 1f);
-            font.draw(game.batch, "Set Vệ Quốc: +29% Cá hiếm, Kháng đứt +10%", tipX + 15f, tipY + tipH - 114f);
+            tipTitle = "Cần Câu Vệ Quốc (LIMITED EVENT)";
+            line1 = "• Loại: Cần Câu (Rod) | Cấp độ: Lv.1";
+            line2 = "• Sát thương kéo: +20 Sức kéo";
+            line3 = "• Thể lực tăng thêm: +125 Điểm";
         } else if (itemIndex == 1) {
-            font.draw(game.batch, "Dây Cước Vệ Quốc (LIMITED EVENT)", tipX + 15f, tipY + tipH - 18f);
-            font.setColor(Color.WHITE);
-            font.draw(game.batch, "• Loại: Dây Cước (Line) | Cấp độ: Lv.1", tipX + 15f, tipY + tipH - 42f);
-            font.draw(game.batch, "• Sức căng dây: +225 Điểm", tipX + 15f, tipY + tipH - 64f);
-            font.draw(game.batch, "• Kháng đứt dây: +4.0%", tipX + 15f, tipY + tipH - 86f);
-            font.setColor(1f, 0.85f, 0.35f, 1f);
-            font.draw(game.batch, "Set Vệ Quốc: +29% Cá hiếm, Kháng đứt +10%", tipX + 15f, tipY + tipH - 114f);
+            tipTitle = "Dây Cước Vệ Quốc (LIMITED EVENT)";
+            line1 = "• Loại: Dây Cước (Line) | Cấp độ: Lv.1";
+            line2 = "• Sức căng dây: +225 Điểm";
+            line3 = "• Kháng đứt dây: +4.0%";
         } else if (itemIndex == 2) {
-            font.draw(game.batch, "Lưỡi Câu Vệ Quốc (LIMITED EVENT)", tipX + 15f, tipY + tipH - 18f);
-            font.setColor(Color.WHITE);
-            font.draw(game.batch, "• Loại: Lưỡi Câu (Hook) | Cấp độ: Lv.1", tipX + 15f, tipY + tipH - 42f);
-            font.draw(game.batch, "• Tỉ lệ cá hiếm: +10.0%", tipX + 15f, tipY + tipH - 64f);
-            font.draw(game.batch, "• Tỉ lệ giữ mồi: +20.0%", tipX + 15f, tipY + tipH - 86f);
-            font.setColor(1f, 0.85f, 0.35f, 1f);
-            font.draw(game.batch, "Set Vệ Quốc: +29% Cá hiếm, Kháng đứt +10%", tipX + 15f, tipY + tipH - 114f);
+            tipTitle = "Lưỡi Câu Vệ Quốc (LIMITED EVENT)";
+            line1 = "• Loại: Lưỡi Câu (Hook) | Cấp độ: Lv.1";
+            line2 = "• Tỉ lệ cá hiếm: +10.0%";
+            line3 = "• Tỉ lệ giữ mồi: +20.0%";
         }
+
+        // Title
+        font.setColor(0.95f, 0.35f, 0.38f, 1f);
+        font.getData().setScale(0.88f);
+        layout.setText(font, tipTitle);
+        if (layout.width > maxTipTextW) {
+            font.getData().setScale(0.88f * (maxTipTextW / layout.width));
+        }
+        font.draw(game.batch, tipTitle, tipX + 15f, tipY + tipH - 18f);
+
+        // Details
+        font.setColor(Color.WHITE);
+        font.getData().setScale(0.80f);
+        font.draw(game.batch, line1, tipX + 15f, tipY + tipH - 44f);
+        font.draw(game.batch, line2, tipX + 15f, tipY + tipH - 68f);
+        font.draw(game.batch, line3, tipX + 15f, tipY + tipH - 92f);
+
+        // Set Bonus
+        font.setColor(1f, 0.88f, 0.35f, 1f);
+        font.getData().setScale(0.80f);
+        layout.setText(font, setBonus);
+        if (layout.width > maxTipTextW) {
+            font.getData().setScale(0.80f * (maxTipTextW / layout.width));
+        }
+        font.draw(game.batch, setBonus, tipX + 15f, tipY + 28f);
+
+        font.getData().setScale(1f);
         game.batch.end();
     }
 

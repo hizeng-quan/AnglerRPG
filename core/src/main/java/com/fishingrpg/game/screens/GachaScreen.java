@@ -80,6 +80,63 @@ public class GachaScreen implements Screen {
     private boolean hoverPull10 = false;
     private boolean hoverResultDone = false;
 
+    public static class StandardSetTheme {
+        public String setName;
+        public String rodName;
+        public String lineName;
+        public String hookName;
+        public int points;
+        public Color primaryColor;
+        public Color secondaryColor;
+        public Color glowColor;
+        public String designType;
+
+        public StandardSetTheme(String setName, String rodName, String lineName, String hookName, int points,
+                                Color primaryColor, Color secondaryColor, Color glowColor, String designType) {
+            this.setName = setName;
+            this.rodName = rodName;
+            this.lineName = lineName;
+            this.hookName = hookName;
+            this.points = points;
+            this.primaryColor = primaryColor;
+            this.secondaryColor = secondaryColor;
+            this.glowColor = glowColor;
+            this.designType = designType;
+        }
+    }
+
+    private static final StandardSetTheme[] STANDARD_SETS = {
+        new StandardSetTheme("Đại Dương", "Trượng Biển Khơi", "Sợi Thủy Tinh", "Nanh Thủy Quái", 3,
+            new Color(0.25f, 0.75f, 1f, 1f), new Color(0.08f, 0.35f, 0.65f, 1f), new Color(0.3f, 0.9f, 1f, 0.4f), "OCEAN"),
+        new StandardSetTheme("Băng Giá", "Cần Câu Băng", "Dây Lạnh Cóng", "Móc Câu Tuyết", 2,
+            new Color(0.6f, 0.95f, 1f, 1f), new Color(0.2f, 0.5f, 0.85f, 1f), new Color(0.7f, 1f, 1f, 0.4f), "FROST"),
+        new StandardSetTheme("Hải Tặc", "Trụ Cột Buồm", "Xích Neo Nhỏ", "Lưỡi Hái Thép", 4,
+            new Color(0.95f, 0.45f, 0.2f, 1f), new Color(0.65f, 0.22f, 0.15f, 1f), new Color(1f, 0.55f, 0.2f, 0.4f), "PIRATE"),
+        new StandardSetTheme("Hoàng Gia", "Cần Câu Bạch Kim", "Tơ Tằm Thượng Hạng", "Móc Cẩm Thạch", 6,
+            new Color(1f, 0.85f, 0.3f, 1f), new Color(0.55f, 0.25f, 0.75f, 1f), new Color(1f, 0.9f, 0.4f, 0.4f), "ROYAL"),
+        new StandardSetTheme("Thời Không", "Trượng Thời Gian", "Sợi Dây Xuyên Thấu", "Lưỡi Câu Hư Không", 6,
+            new Color(0.3f, 0.95f, 0.85f, 1f), new Color(0.5f, 0.2f, 0.85f, 1f), new Color(0.4f, 0.9f, 1f, 0.4f), "CHRONO"),
+        new StandardSetTheme("Thần Thoại", "Trượng Ánh Sáng", "Dây Chỉ Vàng", "Lưỡi Câu Thần", 7,
+            new Color(1f, 0.92f, 0.5f, 1f), new Color(0.95f, 0.65f, 0.15f, 1f), new Color(1f, 0.85f, 0.3f, 0.5f), "MYTHIC"),
+        new StandardSetTheme("Vực Thẳm", "Trượng Hắc Ám", "Sợi Hắc Mạch", "Móng Vuốt Vực Sâu", 5,
+            new Color(0.75f, 0.35f, 0.95f, 1f), new Color(0.18f, 0.08f, 0.28f, 1f), new Color(0.6f, 0.2f, 0.8f, 0.4f), "ABYSS"),
+        new StandardSetTheme("Thợ Săn", "Gậy Phục Kích", "Sợi Tơ Kẽm", "Móng Vuốt Biển", 1,
+            new Color(0.4f, 0.9f, 0.45f, 1f), new Color(0.2f, 0.5f, 0.25f, 1f), new Color(0.4f, 1f, 0.5f, 0.35f), "HUNTER"),
+        new StandardSetTheme("Tập Sự", "Cần Câu Tre", "Dây Cước Thường", "Lưỡi Câu Chì", 0,
+            new Color(0.85f, 0.72f, 0.45f, 1f), new Color(0.45f, 0.65f, 0.3f, 1f), new Color(0.9f, 0.8f, 0.5f, 0.35f), "APPRENTICE")
+    };
+
+    private int currentStandardSetIndex = 0;
+
+    public void randomizeStandardSet() {
+        if (STANDARD_SETS.length <= 1) return;
+        int next;
+        do {
+            next = MathUtils.random(0, STANDARD_SETS.length - 1);
+        } while (next == currentStandardSetIndex);
+        currentStandardSetIndex = next;
+    }
+
     public GachaScreen(FishingRPG game, Screen previousScreen) {
         this.game = game;
         this.player = game.player;
@@ -102,6 +159,8 @@ public class GachaScreen implements Screen {
             starSpeed[i] = MathUtils.random(10f, 30f);
             starAlpha[i] = MathUtils.random(0.3f, 0.8f);
         }
+
+        randomizeStandardSet();
     }
 
     private void showMessage(String msg) {
@@ -146,6 +205,9 @@ public class GachaScreen implements Screen {
 
         drawShapes();
         drawBatch();
+
+        // Draw Rate Tooltip Overlay (guaranteed on top and offset to avoid tab overlap)
+        drawRateTooltipOverlay();
 
         // Draw notification toast if active
         NotificationUI.drawNotification(sr, game.batch, font, message, messageTimer, 2.5f, W, H);
@@ -208,11 +270,13 @@ public class GachaScreen implements Screen {
         sr.setColor(0.25f, 0.45f, 0.65f, 0.8f);
         drawRectOutline(sr, resX, resY, resW, resH, 1.5f);
 
-        // Banner selector tabs (Under header)
+        // Banner selector tabs (Centered)
         float tabW = 260f;
         float tabH = 44f;
-        float tab1X = 280f;
-        float tab2X = 560f;
+        float gap = 20f;
+        float startTabX = (W - (2 * tabW + gap)) / 2f; // 370f
+        float tab1X = startTabX;
+        float tab2X = startTabX + tabW + gap;
         float tabY = H - 128f;
 
         // Tab 1: Normal Banner
@@ -261,40 +325,28 @@ public class GachaScreen implements Screen {
             float showcaseCX = cardX + 240f;
             float showcaseCY = cardY + 230f;
 
-            // Rotating Light rays
+            StandardSetTheme curTheme = STANDARD_SETS[currentStandardSetIndex];
+
+            // Rotating Light rays matching current set theme
             for (int r = 0; r < 8; r++) {
                 float angle = animTimer * 25f + r * 45f;
                 float rad = angle * MathUtils.degreesToRadians;
                 float rx = showcaseCX + MathUtils.cos(rad) * 160f;
                 float ry = showcaseCY + MathUtils.sin(rad) * 160f;
-                sr.setColor(isEventBanner ? new Color(1f, 0.8f, 0.3f, 0.10f) : new Color(0.4f, 0.8f, 1f, 0.10f));
+                Color rayCol = isEventBanner ? new Color(1f, 0.8f, 0.3f, 0.10f) :
+                    new Color(curTheme.primaryColor.r, curTheme.primaryColor.g, curTheme.primaryColor.b, 0.12f);
+                sr.setColor(rayCol);
                 sr.triangle(showcaseCX, showcaseCY, rx - 20, ry, rx + 20, ry);
             }
 
             // Pedestal platform
             sr.setColor(0.12f, 0.16f, 0.24f, 0.95f);
             drawRoundedRect(sr, showcaseCX - 120f, showcaseCY - 130f, 240f, 30f, 6);
-            sr.setColor(isEventBanner ? new Color(0.95f, 0.75f, 0.25f, 0.9f) : new Color(0.4f, 0.8f, 1f, 0.9f));
+            sr.setColor(isEventBanner ? new Color(0.95f, 0.75f, 0.25f, 0.9f) : curTheme.primaryColor);
             drawRectOutline(sr, showcaseCX - 120f, showcaseCY - 130f, 240f, 30f, 1.5f);
 
-            // Divine weapon shape (Rod + Sacred Ring)
-            float bob = MathUtils.sin(animTimer * 2.5f) * 8f;
-            float wy = showcaseCY + bob;
-
-            // Sacred Ring
-            sr.setColor(isEventBanner ? new Color(0.95f, 0.6f, 0.2f, 0.4f) : new Color(0.3f, 0.7f, 1f, 0.4f));
-            sr.circle(showcaseCX, wy, 70f);
-            sr.setColor(isEventBanner ? new Color(0.18f, 0.08f, 0.10f, 1f) : new Color(0.08f, 0.14f, 0.22f, 1f));
-            sr.circle(showcaseCX, wy, 60f);
-
-            // Rod Staff (Diagonal golden lance)
-            sr.setColor(isEventBanner ? new Color(1f, 0.85f, 0.35f, 1f) : new Color(0.6f, 0.9f, 1f, 1f));
-            sr.rectLine(showcaseCX - 65, wy - 65, showcaseCX + 65, wy + 65, 6f);
-            // Crystal headpiece
-            sr.setColor(isEventBanner ? new Color(1f, 0.25f, 0.25f, 1f) : new Color(0.2f, 0.95f, 1f, 1f));
-            sr.circle(showcaseCX + 65, wy + 65, 12f);
-            sr.setColor(Color.WHITE);
-            sr.circle(showcaseCX + 65, wy + 65, 5f);
+            // Animated weapon emblem for current set
+            drawShowcaseEmblem(showcaseCX, showcaseCY);
 
             // Right Info Section Background Box
             float infoX = cardX + 460f;
@@ -310,7 +362,7 @@ public class GachaScreen implements Screen {
             // Pity progress bars
             float barX = infoX + 25f;
             float barW = infoW - 50f;
-            float barH = 10f;
+            float barH = 12f;
 
             if (!isEventBanner) {
                 // Rare Pity Bar (10)
@@ -323,23 +375,23 @@ public class GachaScreen implements Screen {
                 // Epic Pity Bar (50)
                 float eP = MathUtils.clamp((float)player.pityEpic / 50f, 0f, 1f);
                 sr.setColor(0.08f, 0.12f, 0.18f, 1f);
-                drawRoundedRect(sr, barX, infoY + 65f, barW, barH, 4);
+                drawRoundedRect(sr, barX, infoY + 72f, barW, barH, 4);
                 sr.setColor(0.7f, 0.4f, 1f, 1f);
-                if (eP > 0) drawRoundedRect(sr, barX + 1, infoY + 66f, (barW - 2) * eP, barH - 2, 3);
+                if (eP > 0) drawRoundedRect(sr, barX + 1, infoY + 73f, (barW - 2) * eP, barH - 2, 3);
 
                 // Legendary Pity Bar (100)
                 float lP = MathUtils.clamp((float)player.pityLegendary / 100f, 0f, 1f);
                 sr.setColor(0.08f, 0.12f, 0.18f, 1f);
-                drawRoundedRect(sr, barX, infoY + 15f, barW, barH, 4);
+                drawRoundedRect(sr, barX, infoY + 28f, barW, barH, 4);
                 sr.setColor(0.95f, 0.75f, 0.25f, 1f);
-                if (lP > 0) drawRoundedRect(sr, barX + 1, infoY + 16f, (barW - 2) * lP, barH - 2, 3);
+                if (lP > 0) drawRoundedRect(sr, barX + 1, infoY + 29f, (barW - 2) * lP, barH - 2, 3);
             } else {
                 // Limited Pity Bar (80)
                 float limP = MathUtils.clamp((float)player.pityLimited / 80f, 0f, 1f);
                 sr.setColor(0.08f, 0.12f, 0.18f, 1f);
-                drawRoundedRect(sr, barX, infoY + 65f, barW, barH, 4);
+                drawRoundedRect(sr, barX, infoY + 74f, barW, barH, 4);
                 sr.setColor(1f, 0.35f, 0.25f, 1f);
-                if (limP > 0) drawRoundedRect(sr, barX + 1, infoY + 66f, (barW - 2) * limP, barH - 2, 3);
+                if (limP > 0) drawRoundedRect(sr, barX + 1, infoY + 75f, (barW - 2) * limP, barH - 2, 3);
             }
         }
 
@@ -457,34 +509,12 @@ public class GachaScreen implements Screen {
             drawRectOutline(sr, b3X, btnY, b3W, btnH, 2.5f);
         }
 
-        // Tooltip rates popup
-        if (showTooltip) {
-            float tipX = 155f;
-            float tipY = H - 290f;
-            float tipW = 260f;
-            float tipH = 210f;
-            sr.setColor(0.06f, 0.08f, 0.14f, 0.98f);
-            drawRoundedRect(sr, tipX, tipY, tipW, tipH, 10);
-            sr.setColor(0.35f, 0.6f, 0.85f, 0.9f);
-            drawRectOutline(sr, tipX, tipY, tipW, tipH, 2f);
-        }
-
         sr.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
     private void drawBatch() {
         game.batch.begin();
-
-        // Title
-        titleFont.setColor(isEventBanner ? new Color(1f, 0.85f, 0.4f, 1f) : new Color(0.95f, 0.85f, 0.45f, 1f));
-        layout.setText(titleFont, isEventBanner ? "ĐÀI QUAY SỰ KIỆN: LẠC HỒNG" : "ĐÀI QUAY TRANG BỊ HOÀNG GIA");
-        titleFont.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 22f);
-
-        // Subtitle
-        font.setColor(0.6f, 0.8f, 0.95f, 0.85f);
-        layout.setText(font, isEventBanner ? "Săn tìm Thần Khí Lạc Hồng và các trang bị giới hạn Quốc Khánh" : "Thu thập trang bị câu cá huyền thoại và gia tăng lực kéo vượt bậc");
-        font.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 48f);
 
         // Back & Help Buttons Text
         font.setColor(hoverBack ? Color.WHITE : new Color(0.8f, 0.9f, 1f, 0.9f));
@@ -511,10 +541,37 @@ public class GachaScreen implements Screen {
         font.draw(game.batch, "Vé Cao Cấp: " + player.getPremiumTickets(), resX + 270f, resY + 30f);
         font.getData().setScale(1f);
 
-        // Banner selector tabs text
+        // Center Title & Subtitle strictly inside available space (between Rate btn at 265f and Resource Dock at resX)
+        float centerAreaX = 275f;
+        float centerAreaW = resX - centerAreaX - 15f; // ~525px
+
+        titleFont.setColor(isEventBanner ? new Color(1f, 0.85f, 0.4f, 1f) : new Color(0.95f, 0.85f, 0.45f, 1f));
+        titleFont.getData().setScale(0.82f);
+        String bannerTitle = isEventBanner ? "ĐÀI QUAY SỰ KIỆN: LẠC HỒNG" : "ĐÀI QUAY TRANG BỊ HOÀNG GIA";
+        layout.setText(titleFont, bannerTitle);
+        if (layout.width > centerAreaW) {
+            titleFont.getData().setScale(0.82f * (centerAreaW / layout.width));
+        }
+        titleFont.draw(game.batch, bannerTitle, centerAreaX + (centerAreaW - layout.width) / 2f, H - 20f);
+        titleFont.getData().setScale(1f);
+
+        // Subtitle
+        font.setColor(0.6f, 0.8f, 0.95f, 0.85f);
+        font.getData().setScale(0.75f);
+        String subTitle = isEventBanner ? "Săn tìm Thần Khí Lạc Hồng và trang bị giới hạn Quốc Khánh" : "Thu thập trang bị câu cá huyền thoại và gia tăng lực kéo vượt bậc";
+        layout.setText(font, subTitle);
+        if (layout.width > centerAreaW) {
+            font.getData().setScale(0.75f * (centerAreaW / layout.width));
+        }
+        font.draw(game.batch, subTitle, centerAreaX + (centerAreaW - layout.width) / 2f, H - 48f);
+        font.getData().setScale(1f);
+
+        // Banner selector tabs text (Centered)
         float tabW = 260f;
-        float tab1X = 280f;
-        float tab2X = 560f;
+        float gap = 20f;
+        float startTabX = (W - (2 * tabW + gap)) / 2f;
+        float tab1X = startTabX;
+        float tab2X = startTabX + tabW + gap;
         float tabY = H - 128f;
 
         font.setColor(!isEventBanner ? Color.WHITE : new Color(0.6f, 0.75f, 0.9f, 0.75f));
@@ -533,52 +590,98 @@ public class GachaScreen implements Screen {
             float infoY = cardY + 30f;
             float infoW = 1000f - 490f;
 
-            // Weapon Title & Set Name
-            titleFont.setColor(isEventBanner ? new Color(1f, 0.4f, 0.3f, 1f) : new Color(0.4f, 0.85f, 1f, 1f));
-            String setName = isEventBanner ? "BỘ THẦN KHÍ LẠC HỒNG" : "BỘ HOÀNG GIA ĐẠI DƯƠNG";
-            layout.setText(titleFont, setName);
-            titleFont.draw(game.batch, layout, infoX + 25f, infoY + 335f);
-
-            // Rarity Tag
-            font.setColor(isEventBanner ? new Color(1f, 0.85f, 0.35f, 1f) : new Color(0.95f, 0.45f, 0.95f, 1f));
-            String rarTag = isEventBanner ? "✦ PHẨM CHẤT: THẦN THOẠI (GIỚI HẠN)" : "✦ PHẨM CHẤT: TRUYỀN THUYẾT (LEGENDARY)";
-            font.draw(game.batch, rarTag, infoX + 25f, infoY + 300f);
-
-            // Set Perk Description
-            font.setColor(Color.WHITE);
-            String perk1 = isEventBanner ? "• Hiệu ứng 3 Món: [Ý Chí Bất Diệt] Vô hiệu hóa Kỹ Năng Boss" : "• Hiệu ứng 3 Món: +30% Lực Kéo, +20% Tỷ Lệ Bạo Kích";
-            String perk2 = isEventBanner ? "• Tăng 50% Lực kéo đối với Boss Thủy Quái & Cá Khổng Lồ" : "• Giảm 25% Tốc độ tăng lực căng dây cước khi cá kéo mạnh";
-            font.draw(game.batch, perk1, infoX + 25f, infoY + 265f);
-            font.draw(game.batch, perk2, infoX + 25f, infoY + 235f);
-
-            // Pity Header
-            font.setColor(0.7f, 0.85f, 1f, 0.9f);
-            font.draw(game.batch, "TIẾN TRÌNH BẢO HIỂM MAY MẮN (PITY):", infoX + 25f, infoY + 195f);
-
             if (!isEventBanner) {
+                StandardSetTheme curSet = STANDARD_SETS[currentStandardSetIndex];
+
+                // Weapon Title & Set Name
+                titleFont.setColor(curSet.primaryColor);
+                String setName = "BỘ " + curSet.setName.toUpperCase();
+                layout.setText(titleFont, setName);
+                titleFont.draw(game.batch, layout, infoX + 25f, infoY + 340f);
+
+                // Set Tag (NO FIXED RARITY)
+                font.setColor(new Color(0.85f, 0.9f, 1f, 0.95f));
+                font.getData().setScale(0.82f);
+                String setTag = "✦ THIẾT KẾ ĐẶC QUYỀN • BỘ 3 MÓN ĐỒNG BỘ";
+                font.draw(game.batch, setTag, infoX + 25f, infoY + 308f);
+
+                // Equipment Items in Set
+                font.setColor(0.7f, 0.85f, 1f, 1f);
+                font.getData().setScale(0.78f);
+                String itemsStr = "• Gồm: " + curSet.rodName + "  |  " + curSet.lineName + "  |  " + curSet.hookName;
+                font.draw(game.batch, itemsStr, infoX + 25f, infoY + 280f);
+
+                // Set Bonus Effect
+                font.setColor(Color.WHITE);
+                font.getData().setScale(0.82f);
+                String bonusDesc = "• Hiệu ứng: " + EquipmentGenerator.getSetBonusDesc(curSet.setName);
+                font.draw(game.batch, bonusDesc, infoX + 25f, infoY + 252f);
+
+                // Multiplier / Set Points
+                font.setColor(1f, 0.85f, 0.35f, 1f);
+                float multVal = 1f + curSet.points * 0.15f;
+                String multDesc = "• Hệ số Bộ (Multiplier): +" + curSet.points + " Cấp Điểm (x" + String.format(java.util.Locale.US, "%.2f", multVal) + " Sức mạnh cơ bản)";
+                font.draw(game.batch, multDesc, infoX + 25f, infoY + 224f);
+
+                font.setColor(0.5f, 0.9f, 0.65f, 1f);
+                font.getData().setScale(0.74f);
+                font.draw(game.batch, "(Phẩm chất trang bị khi quay là ngẫu nhiên, chỉ số nhân theo phẩm chất và hệ số bộ này)", infoX + 25f, infoY + 196f);
+                font.getData().setScale(1f);
+
+                // Pity Header
+                font.setColor(0.7f, 0.85f, 1f, 0.9f);
+                font.getData().setScale(0.85f);
+                font.draw(game.batch, "TIẾN TRÌNH BẢO HIỂM MAY MẮN (PITY):", infoX + 25f, infoY + 168f);
+
                 // Rare Pity
                 int remRare = Math.max(0, 10 - player.pityRare);
                 font.setColor(0.3f, 0.7f, 1f, 1f);
-                font.draw(game.batch, "Bảo hiểm Rare+: Còn " + remRare + " lượt (" + player.pityRare + "/10)", infoX + 25f, infoY + 140f);
+                font.draw(game.batch, "Bảo hiểm Rare+: Còn " + remRare + " lượt (" + player.pityRare + "/10)", infoX + 25f, infoY + 138f);
 
                 // Epic Pity
                 int remEpic = Math.max(0, 50 - player.pityEpic);
                 font.setColor(0.7f, 0.4f, 1f, 1f);
-                font.draw(game.batch, "Bảo hiểm Epic+: Còn " + remEpic + " lượt (" + player.pityEpic + "/50)", infoX + 25f, infoY + 90f);
+                font.draw(game.batch, "Bảo hiểm Epic+: Còn " + remEpic + " lượt (" + player.pityEpic + "/50)", infoX + 25f, infoY + 95f);
 
                 // Legendary Pity
                 int remLeg = Math.max(0, 100 - player.pityLegendary);
                 font.setColor(0.95f, 0.75f, 0.25f, 1f);
-                font.draw(game.batch, "Bảo hiểm Legendary: Còn " + remLeg + " lượt (" + player.pityLegendary + "/100)", infoX + 25f, infoY + 40f);
+                font.draw(game.batch, "Bảo hiểm Legendary: Còn " + remLeg + " lượt (" + player.pityLegendary + "/100)", infoX + 25f, infoY + 52f);
             } else {
+                // Weapon Title & Set Name
+                titleFont.setColor(new Color(1f, 0.4f, 0.3f, 1f));
+                String setName = "BỘ THẦN KHÍ LẠC HỒNG";
+                layout.setText(titleFont, setName);
+                titleFont.draw(game.batch, layout, infoX + 25f, infoY + 335f);
+
+                // Rarity Tag
+                font.setColor(new Color(1f, 0.85f, 0.35f, 1f));
+                String rarTag = "✦ PHẨM CHẤT: THẦN THOẠI (GIỚI HẠN)";
+                font.draw(game.batch, rarTag, infoX + 25f, infoY + 300f);
+
+                // Set Perk Description
+                font.setColor(Color.WHITE);
+                font.getData().setScale(0.80f);
+                String perk1 = "• Hiệu ứng 3 Món: [Ý Chí Bất Diệt] Vô hiệu hóa Kỹ Năng Boss";
+                String perk2 = "• Tăng 50% Lực kéo đối với Boss Thủy Quái & Cá Khổng Lồ";
+                font.draw(game.batch, perk1, infoX + 25f, infoY + 265f);
+                font.draw(game.batch, perk2, infoX + 25f, infoY + 235f);
+                font.getData().setScale(1f);
+
+                // Pity Header
+                font.setColor(0.7f, 0.85f, 1f, 0.9f);
+                font.getData().setScale(0.85f);
+                font.draw(game.batch, "TIẾN TRÌNH BẢO HIỂM MAY MẮN (PITY):", infoX + 25f, infoY + 195f);
+
                 int remLim = Math.max(0, 80 - player.pityLimited);
                 font.setColor(1f, 0.45f, 0.35f, 1f);
-                font.draw(game.batch, "Bảo hiểm Thần Khí Lạc Hồng: Còn " + remLim + " lượt (" + player.pityLimited + "/80)", infoX + 25f, infoY + 90f);
+                font.draw(game.batch, "Bảo hiểm Thần Khí Lạc Hồng: Còn " + remLim + " lượt (" + player.pityLimited + "/80)", infoX + 25f, infoY + 100f);
 
                 String eventTime = player.getEventManager().getEventTimeRemaining();
                 font.setColor(0.95f, 0.85f, 0.4f, 1f);
-                font.draw(game.batch, "Thời gian sự kiện còn lại: " + eventTime, infoX + 25f, infoY + 40f);
+                font.draw(game.batch, "Thời gian sự kiện còn lại: " + eventTime, infoX + 25f, infoY + 52f);
             }
+            font.getData().setScale(1f);
         }
 
         // --- RESULT STATE TEXTS ---
@@ -703,28 +806,7 @@ public class GachaScreen implements Screen {
             font.getData().setScale(1f);
         }
 
-        // Tooltip rates popup text
-        if (showTooltip) {
-            float tipX = 155f;
-            float tipY = H - 290f;
-            float tipW = 260f;
-            float tipH = 210f;
 
-            font.setColor(0.95f, 0.85f, 0.45f, 1f);
-            layout.setText(font, "XÁC SUẤT QUAY");
-            font.draw(game.batch, layout, tipX + (tipW - layout.width) / 2f, tipY + tipH - 18f);
-
-            font.setColor(Rarity.COMMON.color);
-            font.draw(game.batch, "• Common (1★): 50%", tipX + 20f, tipY + tipH - 52f);
-            font.setColor(Rarity.UNCOMMON.color);
-            font.draw(game.batch, "• Uncommon (2★): 30%", tipX + 20f, tipY + tipH - 82f);
-            font.setColor(Rarity.RARE.color);
-            font.draw(game.batch, "• Rare (3★): 15%", tipX + 20f, tipY + tipH - 112f);
-            font.setColor(Rarity.EPIC.color);
-            font.draw(game.batch, "• Epic (4★): 4%", tipX + 20f, tipY + tipH - 142f);
-            font.setColor(Rarity.LEGENDARY.color);
-            font.draw(game.batch, "• Legendary (5★): 1%", tipX + 20f, tipY + tipH - 172f);
-        }
 
         game.batch.end();
 
@@ -777,8 +859,8 @@ public class GachaScreen implements Screen {
         hoverHelp = (mx >= 155f && mx <= 265f && my >= H - 62f && my <= H - 20f);
         showTooltip = hoverHelp;
 
-        hoverTabNormal = (mx >= 280f && mx <= 540f && my >= H - 128f && my <= H - 84f);
-        hoverTabEvent = (mx >= 560f && mx <= 820f && my >= H - 128f && my <= H - 84f);
+        hoverTabNormal = (mx >= 370f && mx <= 630f && my >= H - 128f && my <= H - 84f);
+        hoverTabEvent = (mx >= 650f && mx <= 910f && my >= H - 128f && my <= H - 84f);
 
         hoverBuyTicket = (mx >= 220f && mx <= 460f && my >= 32f && my <= 86f);
         hoverPull1 = (mx >= 490f && mx <= 730f && my >= 32f && my <= 86f);
@@ -809,10 +891,11 @@ public class GachaScreen implements Screen {
             }
 
             if (state == State.IDLE || state == State.RESULT) {
-                if (hoverTabNormal && isEventBanner) {
+                if (hoverTabNormal) {
                     AudioManager.getInstance().playSFX("sfx_button");
                     isEventBanner = false;
                     state = State.IDLE;
+                    randomizeStandardSet();
                     return;
                 }
                 if (hoverTabEvent && !isEventBanner) {
@@ -917,6 +1000,209 @@ public class GachaScreen implements Screen {
                 spinItems.add(fake);
             }
         }
+    }
+
+    private void drawShowcaseEmblem(float cx, float cy) {
+        float bob = MathUtils.sin(animTimer * 2.5f) * 8f;
+        float wy = cy + bob;
+
+        if (isEventBanner) {
+            // Sacred Ring
+            sr.setColor(0.95f, 0.6f, 0.2f, 0.4f);
+            sr.circle(cx, wy, 70f);
+            sr.setColor(0.18f, 0.08f, 0.10f, 1f);
+            sr.circle(cx, wy, 60f);
+
+            // Rod Staff (Diagonal golden lance)
+            sr.setColor(1f, 0.85f, 0.35f, 1f);
+            sr.rectLine(cx - 65, wy - 65, cx + 65, wy + 65, 6f);
+            // Crystal headpiece
+            sr.setColor(1f, 0.25f, 0.25f, 1f);
+            sr.circle(cx + 65, wy + 65, 12f);
+            sr.setColor(Color.WHITE);
+            sr.circle(cx + 65, wy + 65, 5f);
+            return;
+        }
+
+        StandardSetTheme theme = STANDARD_SETS[currentStandardSetIndex];
+        
+        // Aura / Halo Ring
+        sr.setColor(theme.glowColor);
+        sr.circle(cx, wy, 72f);
+        sr.setColor(0.08f, 0.12f, 0.18f, 1f);
+        sr.circle(cx, wy, 60f);
+
+        // Core Weapon Geometry based on designType
+        switch (theme.designType) {
+            case "OCEAN": // Oceanic Trident
+                sr.setColor(theme.primaryColor);
+                sr.rectLine(cx - 60f, wy - 60f, cx + 55f, wy + 55f, 5.5f);
+                // Trident prongs
+                sr.rectLine(cx + 35f, wy + 65f, cx + 65f, wy + 35f, 4f);
+                sr.rectLine(cx + 45f, wy + 75f, cx + 75f, wy + 45f, 3.5f);
+                sr.circle(cx + 65f, wy + 65f, 9f);
+                sr.setColor(theme.secondaryColor);
+                sr.circle(cx + 65f, wy + 65f, 4.5f);
+                break;
+
+            case "FROST": // Glacial Ice Spear
+                sr.setColor(theme.primaryColor);
+                sr.rectLine(cx - 65f, wy - 65f, cx + 65f, wy + 65f, 6f);
+                // Hexagonal Ice crystal flakes
+                for (int f = 0; f < 6; f++) {
+                    float fAng = animTimer * 20f + f * 60f;
+                    float fx = cx + MathUtils.cosDeg(fAng) * 45f;
+                    float fy = wy + MathUtils.sinDeg(fAng) * 45f;
+                    sr.setColor(theme.glowColor);
+                    sr.circle(fx, fy, 6f);
+                }
+                sr.setColor(Color.WHITE);
+                sr.circle(cx + 65f, wy + 65f, 10f);
+                sr.setColor(theme.primaryColor);
+                sr.circle(cx + 65f, wy + 65f, 5f);
+                break;
+
+            case "PIRATE": // Anchor & Cutlass
+                sr.setColor(theme.secondaryColor);
+                sr.circle(cx - 30f, wy - 30f, 22f);
+                sr.setColor(0.08f, 0.12f, 0.18f, 1f);
+                sr.circle(cx - 30f, wy - 30f, 15f);
+                sr.setColor(theme.primaryColor);
+                sr.rectLine(cx - 50f, wy - 50f, cx + 70f, wy + 70f, 7f);
+                sr.setColor(1f, 0.85f, 0.3f, 1f);
+                sr.rectLine(cx + 25f, wy + 45f, cx + 45f, wy + 25f, 6f);
+                sr.setColor(theme.primaryColor);
+                sr.circle(cx + 70f, wy + 70f, 11f);
+                break;
+
+            case "ROYAL": // Platinum Crown Scepter
+                sr.setColor(theme.secondaryColor);
+                sr.rectLine(cx - 65f, wy - 65f, cx + 60f, wy + 60f, 6.5f);
+                // Golden Crown Head
+                sr.setColor(theme.primaryColor);
+                sr.circle(cx + 60f, wy + 60f, 16f);
+                sr.setColor(theme.secondaryColor);
+                sr.circle(cx + 60f, wy + 60f, 10f);
+                sr.setColor(Color.WHITE);
+                sr.circle(cx + 60f, wy + 60f, 5f);
+                // Filigree Gems
+                sr.setColor(1f, 0.9f, 0.4f, 1f);
+                sr.circle(cx + 45f, wy + 75f, 4f);
+                sr.circle(cx + 75f, wy + 45f, 4f);
+                break;
+
+            case "CHRONO": // Orbital Chrono Dial
+                sr.setColor(theme.primaryColor);
+                float rot = animTimer * 45f;
+                // Double dial ring
+                sr.setColor(theme.secondaryColor);
+                sr.circle(cx, wy, 45f);
+                sr.setColor(0.08f, 0.12f, 0.18f, 1f);
+                sr.circle(cx, wy, 38f);
+                // Clock hands
+                sr.setColor(theme.primaryColor);
+                sr.rectLine(cx, wy, cx + MathUtils.cosDeg(rot) * 35f, wy + MathUtils.sinDeg(rot) * 35f, 4f);
+                sr.rectLine(cx, wy, cx - MathUtils.sinDeg(rot * 0.5f) * 25f, wy + MathUtils.cosDeg(rot * 0.5f) * 25f, 3.5f);
+                sr.circle(cx, wy, 7f);
+                break;
+
+            case "MYTHIC": // Solar Sunburst Staff
+                sr.setColor(theme.primaryColor);
+                for (int s = 0; s < 8; s++) {
+                    float sAng = animTimer * 30f + s * 45f;
+                    float sx = cx + MathUtils.cosDeg(sAng) * 50f;
+                    float sy = wy + MathUtils.sinDeg(sAng) * 50f;
+                    sr.triangle(cx, wy, sx - 8, sy - 8, sx + 8, sy + 8);
+                }
+                sr.rectLine(cx - 65f, wy - 65f, cx + 60f, wy + 60f, 6.5f);
+                sr.setColor(Color.WHITE);
+                sr.circle(cx + 60f, wy + 60f, 12f);
+                sr.setColor(theme.secondaryColor);
+                sr.circle(cx + 60f, wy + 60f, 6f);
+                break;
+
+            case "ABYSS": // Abyssal Scythe
+                sr.setColor(theme.primaryColor);
+                sr.rectLine(cx - 50f, wy - 70f, cx + 45f, wy + 55f, 6f);
+                // Scythe Curved Blade
+                sr.triangle(cx + 45f, wy + 55f, cx + 75f, wy + 70f, cx + 25f, wy + 75f);
+                sr.triangle(cx + 75f, wy + 70f, cx + 85f, wy + 50f, cx + 45f, wy + 55f);
+                sr.setColor(1f, 0.2f, 0.3f, 1f);
+                sr.circle(cx + 45f, wy + 55f, 6f);
+                break;
+
+            case "HUNTER": // Hunter Javelin & Barbs
+                sr.setColor(theme.secondaryColor);
+                sr.rectLine(cx - 70f, wy - 70f, cx + 65f, wy + 65f, 6f);
+                sr.setColor(theme.primaryColor);
+                // Harpoon head
+                sr.triangle(cx + 65f, wy + 65f, cx + 50f, wy + 80f, cx + 80f, wy + 50f);
+                sr.setColor(0.2f, 0.9f, 0.4f, 1f);
+                sr.circle(cx + 65f, wy + 65f, 5f);
+                break;
+
+            case "APPRENTICE": // Bamboo Sage Rod
+            default:
+                sr.setColor(theme.primaryColor);
+                sr.rectLine(cx - 65f, wy - 65f, cx + 60f, wy + 60f, 5f);
+                // Rings on bamboo
+                sr.setColor(theme.secondaryColor);
+                sr.circle(cx - 20f, wy - 20f, 6f);
+                sr.circle(cx + 20f, wy + 20f, 6f);
+                // Red & White float bobber
+                sr.setColor(1f, 0.25f, 0.25f, 1f);
+                sr.circle(cx + 60f, wy + 60f, 10f);
+                sr.setColor(Color.WHITE);
+                sr.circle(cx + 60f, wy + 60f, 5f);
+                break;
+        }
+    }
+
+    private void drawRateTooltipOverlay() {
+        if (!showTooltip) return;
+
+        // Positioned at X: 55px (Width 270px -> ends at 325px, safely away from tab button at 370px!)
+        float tipX = 55f;
+        float tipY = H - 295f;
+        float tipW = 270f;
+        float tipH = 215f;
+
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        sr.begin(ShapeRenderer.ShapeType.Filled);
+        
+        // Shadow
+        sr.setColor(0f, 0f, 0f, 0.65f);
+        drawRoundedRect(sr, tipX + 5f, tipY - 5f, tipW, tipH, 10);
+
+        // Background
+        sr.setColor(0.06f, 0.09f, 0.16f, 0.98f);
+        drawRoundedRect(sr, tipX, tipY, tipW, tipH, 10);
+
+        // Header accent bar
+        sr.setColor(0.12f, 0.18f, 0.28f, 0.9f);
+        sr.rect(tipX + 2, tipY + tipH - 32f, tipW - 4, 30f);
+
+        // Border
+        sr.setColor(0.4f, 0.75f, 1f, 0.9f);
+        drawRectOutline(sr, tipX, tipY, tipW, tipH, 2f);
+        sr.end();
+
+        game.batch.begin();
+        font.setColor(0.95f, 0.85f, 0.45f, 1f);
+        layout.setText(font, "XÁC SUẤT QUAY");
+        font.draw(game.batch, layout, tipX + (tipW - layout.width) / 2f, tipY + tipH - 10f);
+
+        font.setColor(Rarity.COMMON.color);
+        font.draw(game.batch, "• Common (1★): 50%", tipX + 20f, tipY + tipH - 46f);
+        font.setColor(Rarity.UNCOMMON.color);
+        font.draw(game.batch, "• Uncommon (2★): 30%", tipX + 20f, tipY + tipH - 76f);
+        font.setColor(Rarity.RARE.color);
+        font.draw(game.batch, "• Rare (3★): 15%", tipX + 20f, tipY + tipH - 106f);
+        font.setColor(Rarity.EPIC.color);
+        font.draw(game.batch, "• Epic (4★): 4%", tipX + 20f, tipY + tipH - 136f);
+        font.setColor(Rarity.LEGENDARY.color);
+        font.draw(game.batch, "• Legendary (5★): 1%", tipX + 20f, tipY + tipH - 166f);
+        game.batch.end();
     }
 
     private void drawRoundedRect(ShapeRenderer sr, float x, float y, float w, float h, float r) {
