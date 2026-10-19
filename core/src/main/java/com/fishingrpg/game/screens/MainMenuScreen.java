@@ -83,7 +83,7 @@ public class MainMenuScreen implements Screen {
         int hovered = -1;
 
         for (int i = 0; i < ITEMS.length; i++) {
-            float btnY = 250f - i * 110f;
+            float btnY = 210f - i * 110f;
             if (mousePos.x >= btnX && mousePos.x <= btnX + btnW &&
                 mousePos.y >= btnY && mousePos.y <= btnY + btnH) {
                 hovered = i;
@@ -271,7 +271,7 @@ public class MainMenuScreen implements Screen {
         float btnW = 400f, btnH = 80f;
         float btnX = (W - btnW) / 2f;
         for (int i = 0; i < ITEMS.length; i++) {
-            float btnY = 250f - i * 110f;
+            float btnY = 210f - i * 110f;
             if (i == selected) {
                 sr.setColor(0.2f, 0.6f, 1f, 0.35f);
                 sr.rect(btnX - 8, btnY - 8, btnW + 16, btnH + 16);
@@ -361,14 +361,12 @@ public class MainMenuScreen implements Screen {
         float btnW = 400f, btnH = 80f;
         float btnX = (W - btnW) / 2f;
         for (int i = 0; i < ITEMS.length; i++) {
-            float btnY = 250f - i * 110f;
+            float btnY = 210f - i * 110f;
             menuFont.setColor(i == selected ? Color.WHITE : new Color(0.85f, 0.60f, 0.45f, 1f));
-            menuFont.getData().setScale(1.2f); // Make text larger to fit new btn size
             layout.setText(menuFont, ITEMS[i]);
             menuFont.draw(game.batch, ITEMS[i],
                 btnX + (btnW - layout.width) / 2f,
-                btnY + btnH - 22f);
-            menuFont.getData().setScale(1f);
+                btnY + (btnH + layout.height) / 2f);
         }
 
         subFont.setColor(0.80f, 0.88f, 0.96f, 1f);

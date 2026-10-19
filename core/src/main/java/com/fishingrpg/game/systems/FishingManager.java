@@ -408,6 +408,17 @@ public class FishingManager {
                 if (s.isActive && !s.triggered && hpPct <= s.triggerHpPercent) {
                     s.triggered = true;
                     bossSkillJustUsed = true;
+                    
+                    // Thần Khí Lạc Hồng Set Bonus: Vô hiệu hóa kỹ năng chủ động
+                    if (player.isSetBonusActive() && player.getEquippedRod() != null 
+                            && player.getEquippedRod().setName.equals("Thần Khí Lạc Hồng")) {
+                        AudioManager.getInstance().playSFX("sfx_skill");
+                        combatMessage = "Ý CHÍ BẤT DIỆT! Vô hiệu hóa " + s.id.replace("_", " ").toUpperCase() + "!";
+                        player.addStaminaRegen(player.getMaxStamina() * 0.25f, player.getMaxStamina());
+                        if (ftm != null) ftm.addText("MIỄN NHIỄM!", 640f, 450f, Color.CYAN);
+                        continue;
+                    }
+
                     AudioManager.getInstance().playSFX("sfx_skill");
                     if (s.id.equals("but_toc")) {
                         fishButTocTimer = 3f;

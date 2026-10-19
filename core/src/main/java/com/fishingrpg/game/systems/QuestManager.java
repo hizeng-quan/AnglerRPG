@@ -176,4 +176,19 @@ public class QuestManager {
             }
         }
     }
+
+    public boolean hasAnyClaimable() {
+        for (Quest q : dailyQuests) {
+            if (q.isCompleted() && !q.claimed) return true;
+        }
+        for (Quest q : weeklyQuests) {
+            if (q.isCompleted() && !q.claimed) return true;
+        }
+        for (Quest q : achievements) {
+            if (q.isCompleted() && !q.claimed) return true;
+        }
+        if (dailyPoints >= 100 && !dailyChestClaimed) return true;
+        if (weeklyPoints >= 100 && !weeklyChestClaimed) return true;
+        return false;
+    }
 }

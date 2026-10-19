@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import com.fishingrpg.game.systems.EventManager;
 
 /**
  * Player -- exists throughout the entire session.
@@ -27,6 +28,7 @@ public class Player {
     private final PlayerEconomy economy;
     private final SkillTree skillTree;
     private final Inventory inventory;
+    private final EventManager eventManager;
     
     private QuestManager questManager;
     private String currentMap = "ao_lang";
@@ -41,6 +43,7 @@ public class Player {
     public int pityRare = 0;
     public int pityEpic = 0;
     public int pityLegendary = 0;
+    public int pityLimited = 0;
 
     public Player() { this(100f); }
 
@@ -52,6 +55,7 @@ public class Player {
         this.economy = new PlayerEconomy();
         this.skillTree = new SkillTree();
         this.inventory = new Inventory();
+        this.eventManager = new EventManager(this);
         
         inventory.addItem("Mồi Thơm", 1);
         inventory.addItem("Bánh Mì", 3);
@@ -69,6 +73,7 @@ public class Player {
     public PlayerEquipment getEquipment()     { return equipment; }
     public PlayerBuffs getBuffs()             { return buffs; }
     public PlayerEconomy getEconomy()         { return economy; }
+    public EventManager getEventManager()     { return eventManager; }
 
     // =========================================================================
     // PlayerCombat Delegation
@@ -100,7 +105,18 @@ public class Player {
         return progression.gainXp(xp, equipment.getTotalSubstat(Substat.Type.EXP_BONUS), equipment.getActiveSetName(), questManager, () -> applySkillBonuses()); 
     }
     public void gainGold(int amount) { progression.gainGold(amount, equipment.getTotalSubstat(Substat.Type.GOLD_BONUS), questManager); }
-    public void incrementFishCaught() { progression.incrementFishCaught(); }
+    public boolean consumeGold(int amount) { 
+        if (progression.getGold() >= amount) {
+            progression.setGold(progression.getGold() - amount);
+            eventManager.onGoldSpent(amount);
+            return true;
+        }
+        return false;
+    }
+    public void incrementFishCaught() { 
+        progression.incrementFishCaught();
+        eventManager.onFishCaught();
+    }
 
     public int getLevel()              { return progression.getLevel(); }
     public void setLevel(int l)        { progression.setLevel(l); }
@@ -119,6 +135,23 @@ public class Player {
     public int getGachaTickets()       { return progression.getGachaTickets(); }
     public void setGachaTickets(int t) { progression.setGachaTickets(t); }
     public void addGachaTickets(int t) { progression.addGachaTickets(t); }
+
+    public int getPremiumTickets()       { return progression.getPremiumTickets(); }
+    public void setPremiumTickets(int t) { progression.setPremiumTickets(t); }
+    public void addPremiumTickets(int t) { progression.addPremiumTickets(t); }
+
+    public int getEventPoints()          { return progression.getEventPoints(); }
+    public void setEventPoints(int p)    { progression.setEventPoints(p); }
+    public void addEventPoints(int p)    { progression.addEventPoints(p); }
+
+    public int getTotalLoginDaysThisMonth() { return progression.getTotalLoginDaysThisMonth(); }
+    public void setTotalLoginDaysThisMonth(int days) { progression.setTotalLoginDaysThisMonth(days); }
+
+    public long getLastLoginTimestamp() { return progression.getLastLoginTimestamp(); }
+    public void setLastLoginTimestamp(long ts) { progression.setLastLoginTimestamp(ts); }
+
+    public long getLastEventMissionResetTimestamp() { return progression.getLastEventMissionResetTimestamp(); }
+    public void setLastEventMissionResetTimestamp(long ts) { progression.setLastEventMissionResetTimestamp(ts); }
 
     public int getXpToNextLevel()      { return progression.getXpToNextLevel(); }
     public int getXpForCurrentLevel()  { return progression.getXpForCurrentLevel(); }
@@ -173,6 +206,7 @@ public class Player {
     public Inventory getInventoryObject() { return inventory; }
     public void addItem(String name, int count) { inventory.addItem(name, count); }
     public boolean hasItem(String name) { return inventory.hasItem(name); }
+    public int getItemCount(String name) { return inventory.getCount(name); }
     public void consumeItem(String name) { inventory.consumeItem(name); }
 
     public String[] getEquippedActives()   { return equippedActives;    }

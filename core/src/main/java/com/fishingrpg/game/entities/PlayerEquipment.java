@@ -105,7 +105,11 @@ public class PlayerEquipment {
     /** Line mainStat1: Max Tension bonus */
     public float getLineTensionBonus()  { return equippedLine != null ? equippedLine.mainStat1 : 0f; }
     /** Line mainStat2: Line break resistance */
-    public float getLineBreakResist()   { return equippedLine != null ? equippedLine.mainStat2 : 0f; }
+    public float getLineBreakResist()   { 
+        float resist = equippedLine != null ? equippedLine.mainStat2 : 0f;
+        if (isSetBonusActive() && "Vệ Quốc Vang Danh".equals(getActiveSetName())) resist += 10f;
+        return resist;
+    }
     /** Hook mainStat1: Rare fish chance bonus */
     public float getHookRarityBonus()   { return equippedHook != null ? equippedHook.mainStat1 : 0f; }
     /** Hook mainStat2: Bait retention chance */
@@ -116,7 +120,10 @@ public class PlayerEquipment {
      */
     public float getRarityBoost() {
         float b = getHookRarityBonus();
-        if (isSetBonusActive() && "Hải Tặc".equals(getActiveSetName())) b += 15f;
+        if (isSetBonusActive()) {
+            if ("Hải Tặc".equals(getActiveSetName())) b += 15f;
+            else if ("Vệ Quốc Vang Danh".equals(getActiveSetName())) b += 29f;
+        }
         return b;
     }
 }

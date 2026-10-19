@@ -228,6 +228,8 @@ public class Fish implements Catchable {
     public float   getBaseWeightKg(){ return baseWeightKg; }
     public float   getWeightKg()    { return weightKg;     }
     public float   getLengthCm()    { return lengthCm;     }
+    public int     getBaseGold()    { return baseGold;     }
+    public int     getBaseXp()      { return baseXp;       }
     public boolean isFirstCatch()   { return firstCatch;   }
     public void    setFirstCatch(boolean v) { firstCatch = v; }
     public State   getState()       { return state;        }

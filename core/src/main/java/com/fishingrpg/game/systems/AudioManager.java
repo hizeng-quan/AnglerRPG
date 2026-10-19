@@ -101,6 +101,10 @@ public class AudioManager {
         }
     }
 
+    public void playSound(String soundName) {
+        playSFX(soundName);
+    }
+
     public void stopBGM() {
         if (currentBGM != null && bgmMap.containsKey(currentBGM)) {
             bgmMap.get(currentBGM).stop();

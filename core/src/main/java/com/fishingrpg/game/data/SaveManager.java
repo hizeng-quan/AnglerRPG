@@ -35,6 +35,20 @@ public class SaveManager {
         prefs.putInteger("gold",         player.getGold());
         prefs.putInteger("diamonds",     player.getDiamonds());
         prefs.putInteger("gachaTickets", player.getGachaTickets());
+        prefs.putInteger("premiumTickets", player.getPremiumTickets());
+        prefs.putInteger("eventPoints",  player.getEventPoints());
+        prefs.putInteger("totalLoginDaysThisMonth", player.getTotalLoginDaysThisMonth());
+        prefs.putLong("lastLoginTimestamp", player.getLastLoginTimestamp());
+        prefs.putLong("lastEventMissionResetTimestamp", player.getLastEventMissionResetTimestamp());
+        if (player.getEventManager() != null) {
+            prefs.putInteger("eventFishCaughtToday", player.getEventManager().fishCaughtToday);
+            prefs.putInteger("eventGoldSpentToday", player.getEventManager().goldSpentToday);
+            prefs.putInteger("eventGachaPulledToday", player.getEventManager().eventGachaPulledToday);
+            prefs.putBoolean("eventMission0", player.getEventManager().dailyMissionsCompleted[0]);
+            prefs.putBoolean("eventMission1", player.getEventManager().dailyMissionsCompleted[1]);
+            prefs.putBoolean("eventMission2", player.getEventManager().dailyMissionsCompleted[2]);
+            prefs.putBoolean("eventAllMissionsClaimed", player.getEventManager().allMissionsClaimedToday);
+        }
         prefs.putInteger("fishCaught",   player.getFishCaught());
         prefs.putInteger("skillPoints",  player.getSkillPoints());
 
@@ -67,6 +81,7 @@ public class SaveManager {
         prefs.putInteger("pityRare",      player.pityRare);
         prefs.putInteger("pityEpic",      player.pityEpic);
         prefs.putInteger("pityLegendary", player.pityLegendary);
+        prefs.putInteger("pityLimited",   player.pityLimited);
         
         // Buffs
         prefs.putString("playerBuffs", json.toJson(player.getBuffs()));
@@ -96,6 +111,21 @@ public class SaveManager {
         player.setGold(prefs.getInteger("gold"));
         player.setDiamonds(prefs.getInteger("diamonds", 0));
         player.setGachaTickets(prefs.getInteger("gachaTickets", 0));
+        player.setPremiumTickets(prefs.getInteger("premiumTickets", 0));
+        player.setEventPoints(prefs.getInteger("eventPoints", 0));
+        player.setTotalLoginDaysThisMonth(prefs.getInteger("totalLoginDaysThisMonth", 0));
+        player.setLastLoginTimestamp(prefs.getLong("lastLoginTimestamp", 0L));
+        player.setLastEventMissionResetTimestamp(prefs.getLong("lastEventMissionResetTimestamp", 0L));
+        if (player.getEventManager() != null) {
+            player.getEventManager().fishCaughtToday = prefs.getInteger("eventFishCaughtToday", 0);
+            player.getEventManager().goldSpentToday = prefs.getInteger("eventGoldSpentToday", 0);
+            player.getEventManager().eventGachaPulledToday = prefs.getInteger("eventGachaPulledToday", 0);
+            player.getEventManager().dailyMissionsCompleted[0] = prefs.getBoolean("eventMission0", false);
+            player.getEventManager().dailyMissionsCompleted[1] = prefs.getBoolean("eventMission1", false);
+            player.getEventManager().dailyMissionsCompleted[2] = prefs.getBoolean("eventMission2", false);
+            player.getEventManager().allMissionsClaimedToday = prefs.getBoolean("eventAllMissionsClaimed", false);
+            player.getEventManager().checkAndResetDailyMissions();
+        }
         player.setFishCaught(prefs.getInteger("fishCaught"));
         player.setCurrentMap(prefs.getString("currentMap", "ao_lang"));
         player.setSkillPoints(prefs.getInteger("skillPoints", 0));
@@ -216,9 +246,10 @@ public class SaveManager {
             Gdx.app.error(TAG, "Error parsing equipment — keeping empty.", e);
         }
 
-        player.pityRare      = prefs.getInteger("pityRare",      0);
-        player.pityEpic      = prefs.getInteger("pityEpic",      0);
+        player.pityRare      = prefs.getInteger("pityRare", 0);
+        player.pityEpic      = prefs.getInteger("pityEpic", 0);
         player.pityLegendary = prefs.getInteger("pityLegendary", 0);
+        player.pityLimited   = prefs.getInteger("pityLimited", 0);
 
         // --- Buffs ---
         try {

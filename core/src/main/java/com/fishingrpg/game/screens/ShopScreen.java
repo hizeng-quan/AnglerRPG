@@ -1,5 +1,4 @@
 package com.fishingrpg.game.screens;
-import com.fishingrpg.game.systems.AudioManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -11,13 +10,20 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.fishingrpg.game.FishingRPG;
+import com.fishingrpg.game.entities.ItemData;
 import com.fishingrpg.game.entities.Player;
+import com.fishingrpg.game.systems.AudioManager;
+import com.fishingrpg.game.ui.NotificationUI;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class ShopScreen implements Screen {
@@ -36,30 +42,77 @@ public class ShopScreen implements Screen {
     private static final float W = 1280f;
     private static final float H = 720f;
 
+    // Filter categories: 0: ALL, 1: BAIT & RESTORE, 2: SKILL BOOKS, 3: SPECIAL GEAR
+    private int currentCategory = 0;
+    private final String[] CATEGORY_NAMES = {"TẤT CẢ", "MỒI & HỒI PHỤC", "BÍ KÍP KỸ NĂNG", "ĐẠO CỤ ĐẶC BIỆT"};
+
     private int scrollOffset = 0;
-    private int maxVisibleRows = 5;
-    private java.util.List<com.fishingrpg.game.entities.ItemData> shopItems;
+    private int maxVisibleRows = 4;
+    private List<ItemData> allShopItems;
+    private List<ItemData> filteredItems = new ArrayList<>();
 
     private boolean hoverBack = false;
     private String message = "";
     private float messageTimer = 0f;
 
     private boolean isDraggingScroll = false;
+    private float animTimer = 0f;
+
+    // Ambient floating warm shop dust particles
+    private static final int MOTE_COUNT = 25;
+    private float[] moteX = new float[MOTE_COUNT];
+    private float[] moteY = new float[MOTE_COUNT];
+    private float[] moteSpeed = new float[MOTE_COUNT];
+    private float[] moteRadius = new float[MOTE_COUNT];
+    private float[] moteAlpha = new float[MOTE_COUNT];
 
     public ShopScreen(FishingRPG game, Player player, Screen previousScreen) {
         this.game = game;
         this.player = player;
         this.previousScreen = previousScreen;
-        this.shopItems = com.fishingrpg.game.data.ItemDatabase.getShopItems();
+        this.allShopItems = com.fishingrpg.game.data.ItemDatabase.getShopItems();
 
         sr = new ShapeRenderer();
         font = game.font;
-        titleFont = game.titleFont;
+        titleFont = game.titleFont != null ? game.titleFont : game.font;
         layout = new GlyphLayout();
 
         camera = new OrthographicCamera();
         viewport = new FitViewport(W, H, camera);
-        camera.update();
+        camera.position.set(W / 2f, H / 2f, 0);
+
+        // Initialize motes
+        for (int i = 0; i < MOTE_COUNT; i++) {
+            moteX[i] = MathUtils.random(0, W);
+            moteY[i] = MathUtils.random(0, H);
+            moteSpeed[i] = MathUtils.random(10f, 25f);
+            moteRadius[i] = MathUtils.random(1.5f, 3.5f);
+            moteAlpha[i] = MathUtils.random(0.2f, 0.6f);
+        }
+
+        filterItems();
+    }
+
+    private void filterItems() {
+        filteredItems.clear();
+        for (ItemData item : allShopItems) {
+            if (currentCategory == 0) {
+                filteredItems.add(item);
+            } else if (currentCategory == 1) {
+                if (item.name.contains("Mồi") || item.name.contains("Nước") || item.name.contains("Bánh") || item.name.contains("Trà")) {
+                    filteredItems.add(item);
+                }
+            } else if (currentCategory == 2) {
+                if (item.name.startsWith("Sách: ")) {
+                    filteredItems.add(item);
+                }
+            } else if (currentCategory == 3) {
+                if (!item.name.contains("Mồi") && !item.name.contains("Nước") && !item.name.contains("Bánh") && !item.name.contains("Trà") && !item.name.startsWith("Sách: ")) {
+                    filteredItems.add(item);
+                }
+            }
+        }
+        scrollOffset = 0;
     }
 
     @Override
@@ -68,7 +121,7 @@ public class ShopScreen implements Screen {
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean scrolled(float amountX, float amountY) {
-                int totalRows = (shopItems.size() + 2) / 3;
+                int totalRows = (filteredItems.size() + 2) / 3;
                 int maxScroll = Math.max(0, totalRows - maxVisibleRows);
                 scrollOffset += (int)Math.signum(amountY);
                 if (scrollOffset < 0) scrollOffset = 0;
@@ -80,6 +133,7 @@ public class ShopScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        animTimer += delta;
         player.update(delta);
         if (player.justFilledStamina) {
             player.justFilledStamina = false;
@@ -89,7 +143,17 @@ public class ShopScreen implements Screen {
         update(delta);
         if (game.getScreen() != this) return;
 
-        ScreenUtils.clear(new Color(0.2f, 0.15f, 0.1f, 1f));
+        // Update motes
+        for (int i = 0; i < MOTE_COUNT; i++) {
+            moteY[i] += moteSpeed[i] * delta;
+            moteX[i] += MathUtils.sin(animTimer + i) * 6f * delta;
+            if (moteY[i] > H + 10f) {
+                moteY[i] = -10f;
+                moteX[i] = MathUtils.random(0, W);
+            }
+        }
+
+        ScreenUtils.clear(new Color(0.12f, 0.08f, 0.05f, 1f));
         camera.update();
         sr.setProjectionMatrix(camera.combined);
         game.batch.setProjectionMatrix(camera.combined);
@@ -102,124 +166,82 @@ public class ShopScreen implements Screen {
 
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
-        // Wooden wall background
-        sr.setColor(new Color(0.25f, 0.16f, 0.11f, 1f));
-        sr.rect(0, 0, W, H - 80);
-        
-        // Wooden shelves lines and decorations
-        float startX = 35f;
-        float startY = 520f;
-        float gapY = 100f;
-        
-        for (int r = 0; r < maxVisibleRows; r++) {
-            float shelfY = startY - r * gapY - 15;
-            
-            // Draw specific shop items as decorations
-            if (r == 0) {
-                // Sách Thông Thái, Sách: Dưỡng Sức (Books)
-                // Book 1 (Red)
-                sr.setColor(new Color(0.7f, 0.2f, 0.2f, 1f));
-                sr.rect(150, shelfY + 15, 20, 35);
-                sr.setColor(new Color(0.9f, 0.9f, 0.8f, 1f));
-                sr.rect(152, shelfY + 15, 16, 33);
-                // Book 2 (Blue)
-                sr.setColor(new Color(0.2f, 0.3f, 0.7f, 1f));
-                sr.rect(172, shelfY + 15, 25, 40);
-                sr.setColor(new Color(0.9f, 0.9f, 0.8f, 1f));
-                sr.rect(174, shelfY + 15, 21, 38);
-                // Book 3 (Brown - Leaning)
-                sr.setColor(new Color(0.5f, 0.3f, 0.2f, 1f));
-                sr.rectLine(205, shelfY + 15, 220, shelfY + 45, 18);
-            } else if (r == 1) {
-                // Nước Tăng Lực & Nước Bứt Phá (Potions)
-                // Blue Potion
-                sr.setColor(new Color(0.2f, 0.6f, 0.9f, 0.8f));
-                sr.rect(350, shelfY + 15, 15, 25);
-                sr.rect(355, shelfY + 40, 5, 10);
-                // Red Potion
-                sr.setColor(new Color(0.9f, 0.2f, 0.2f, 0.8f));
-                sr.rect(380, shelfY + 15, 15, 25);
-                sr.rect(385, shelfY + 40, 5, 10);
-                
-                // Mồi Thơm / Hộp mồi câu (Bait box)
-                sr.setColor(new Color(0.4f, 0.6f, 0.4f, 1f));
-                sr.rect(700, shelfY + 15, 40, 20);
-                sr.setColor(new Color(0.3f, 0.5f, 0.3f, 1f));
-                sr.rect(700, shelfY + 35, 40, 5);
-            } else if (r == 2) {
-                // Mũ câu (Fishing hat)
-                sr.setColor(new Color(0.7f, 0.6f, 0.4f, 1f));
-                sr.rect(500, shelfY + 15, 60, 10); // brim
-                sr.rect(515, shelfY + 25, 30, 20); // crown
-                sr.setColor(new Color(0.3f, 0.2f, 0.1f, 1f));
-                sr.rect(515, shelfY + 25, 30, 5); // band
-                
-                // Lưới Đánh Cá (Fishing Net - Folded)
-                sr.setColor(new Color(0.8f, 0.8f, 0.8f, 0.6f));
-                for(int i=0; i<4; i++) {
-                    sr.rectLine(800 + i*10, shelfY + 15, 830 - i*5, shelfY + 40, 2);
-                    sr.rectLine(800, shelfY + 15 + i*8, 840, shelfY + 20 + i*5, 2);
-                }
-            } else if (r == 3) {
-                // Móc câu (Hooks) - hanging from the shelf above
-                sr.setColor(new Color(0.8f, 0.8f, 0.9f, 1f));
-                // Hook 1
-                sr.rect(250, shelfY + gapY - 20, 2, 20);
-                sr.rect(250, shelfY + gapY - 20, 8, 2);
-                sr.rect(258, shelfY + gapY - 20, 2, 8);
-                // Hook 2
-                sr.rect(280, shelfY + gapY - 25, 2, 25);
-                sr.rect(280, shelfY + gapY - 25, 10, 2);
-                sr.rect(290, shelfY + gapY - 25, 2, 10);
-                
-                // Bánh Mì (Bread)
-                sr.setColor(new Color(0.8f, 0.6f, 0.3f, 1f));
-                sr.rect(650, shelfY + 15, 35, 15);
-                sr.setColor(new Color(0.9f, 0.7f, 0.4f, 1f));
-                sr.rect(655, shelfY + 17, 25, 10);
-            } else if (r == 4) {
-                // Cần câu (Fishing rod) leaning on the shelf
-                sr.setColor(new Color(0.2f, 0.2f, 0.2f, 1f));
-                sr.rectLine(100, shelfY + 15, 250, shelfY + 350, 6); // Rod body
-                sr.setColor(new Color(0.6f, 0.6f, 0.6f, 1f));
-                sr.rectLine(120, shelfY + 50, 130, shelfY + 55, 10); // Reel
-                sr.rectLine(100, shelfY + 15, 115, shelfY + 45, 8); // Handle
-                
-                // Bùa Hoàng Kim (Golden Amulet)
-                sr.setColor(new Color(0.9f, 0.8f, 0.2f, 1f));
-                sr.rect(900, shelfY + 15, 20, 30);
-                sr.setColor(new Color(0.8f, 0.2f, 0.2f, 1f));
-                sr.rect(905, shelfY + 20, 10, 10); // red gem inside
-            }
-            
-            // The shelf board
-            sr.setColor(new Color(0.18f, 0.1f, 0.05f, 1f));
-            sr.rect(0, shelfY, W, 15);
-            // Shadow under shelf
-            sr.setColor(new Color(0.1f, 0.05f, 0.02f, 0.5f));
-            sr.rect(0, shelfY - 5, W, 5);
+        // Warm Wooden Store Backdrop
+        sr.rect(0, 0, W, H,
+            new Color(0.14f, 0.09f, 0.06f, 1f), new Color(0.14f, 0.09f, 0.06f, 1f),
+            new Color(0.24f, 0.16f, 0.10f, 1f), new Color(0.24f, 0.16f, 0.10f, 1f)
+        );
+
+        // Wood plank divider lines
+        sr.setColor(0.08f, 0.05f, 0.03f, 0.7f);
+        for (float py = 0; py < H - 80; py += 65f) {
+            sr.rect(0, py, W, 2f);
         }
 
-        // Draw Header
-        sr.setColor(0.15f, 0.2f, 0.25f, 1f);
-        sr.rect(0, H - 80, W, 80);
-        sr.setColor(1f, 0.8f, 0.2f, 1f);
-        sr.rect(0, H - 82, W, 2);
+        // Floating cozy dust motes
+        for (int i = 0; i < MOTE_COUNT; i++) {
+            float pulse = 0.5f + 0.5f * MathUtils.sin(animTimer * 2f + i);
+            sr.setColor(1f, 0.85f, 0.45f, moteAlpha[i] * pulse);
+            sr.circle(moteX[i], moteY[i], moteRadius[i]);
+        }
+
+        // Header Glass Dock
+        sr.setColor(0.10f, 0.07f, 0.05f, 0.95f);
+        sr.rect(0, H - 74, W, 74);
+        sr.setColor(0.85f, 0.65f, 0.25f, 0.85f);
+        sr.rect(0, H - 76, W, 2);
 
         // Back Button
-        hoverBack = (m.x >= 20 && m.x <= 120 && m.y >= H - 60 && m.y <= H - 20);
-        sr.setColor(hoverBack ? new Color(0.4f, 0.3f, 0.3f, 1f) : new Color(0.3f, 0.2f, 0.2f, 1f));
-        sr.rect(20, H - 60, 100, 40);
+        hoverBack = (m.x >= 25 && m.x <= 155 && m.y >= H - 64 && m.y <= H - 20);
+        sr.setColor(hoverBack ? new Color(0.35f, 0.22f, 0.15f, 0.95f) : new Color(0.20f, 0.13f, 0.08f, 0.9f));
+        drawRoundedRect(sr, 25, H - 64, 130, 44, 8);
+        sr.setColor(hoverBack ? new Color(1f, 0.85f, 0.4f, 1f) : new Color(0.7f, 0.5f, 0.25f, 0.7f));
+        drawRectOutline(sr, 25, H - 64, 130, 44, 1.5f);
+
+        // Player Gold Dock (Top Right)
+        float goldDockW = 260f;
+        float goldDockH = 44f;
+        float goldDockX = W - goldDockW - 25f;
+        float goldDockY = H - 64f;
+        sr.setColor(0.18f, 0.12f, 0.08f, 0.95f);
+        drawRoundedRect(sr, goldDockX, goldDockY, goldDockW, goldDockH, 8);
+        sr.setColor(0.95f, 0.75f, 0.25f, 0.9f);
+        drawRectOutline(sr, goldDockX, goldDockY, goldDockW, goldDockH, 1.5f);
+        // Golden Coin circle icon
+        sr.setColor(1f, 0.85f, 0.2f, 1f);
+        sr.circle(goldDockX + 24, goldDockY + goldDockH / 2f, 12);
+        sr.setColor(0.85f, 0.65f, 0.1f, 1f);
+        sr.circle(goldDockX + 24, goldDockY + goldDockH / 2f, 9);
+
+        // Category Filter Tabs
+        float tabW = 260f;
+        float tabH = 36f;
+        float tabStartX = (W - (4 * tabW + 3 * 15f)) / 2f;
+        float tabY = H - 122f;
+
+        for (int c = 0; c < CATEGORY_NAMES.length; c++) {
+            float tx = tabStartX + c * (tabW + 15f);
+            boolean isCur = (currentCategory == c);
+            boolean hoverTab = (m.x >= tx && m.x <= tx + tabW && m.y >= tabY && m.y <= tabY + tabH);
+
+            sr.setColor(isCur ? new Color(0.45f, 0.28f, 0.12f, 0.95f) : (hoverTab ? new Color(0.28f, 0.18f, 0.10f, 0.9f) : new Color(0.16f, 0.10f, 0.06f, 0.85f)));
+            drawRoundedRect(sr, tx, tabY, tabW, tabH, 6);
+            sr.setColor(isCur ? new Color(1f, 0.82f, 0.35f, 1f) : (hoverTab ? new Color(0.7f, 0.5f, 0.25f, 0.8f) : new Color(0.4f, 0.28f, 0.16f, 0.6f)));
+            drawRectOutline(sr, tx, tabY, tabW, tabH, isCur ? 2f : 1f);
+        }
 
         // Shop items dynamic rendering
-        float itemW = 380f;
-        float itemH = 90f;
-        float gapX = 410f;
-        
+        float startX = 35f;
+        float startY = 445f;
+        float itemW = 385f;
+        float itemH = 105f;
+        float gapX = 405f;
+        float gapY = 120f;
+
         int startIndex = scrollOffset * 3;
-        int endIndex = Math.min(startIndex + maxVisibleRows * 3, shopItems.size());
-        
-        com.fishingrpg.game.entities.ItemData hoveredItem = null;
+        int endIndex = Math.min(startIndex + maxVisibleRows * 3, filteredItems.size());
+
+        ItemData hoveredItem = null;
         float hoverX = 0, hoverY = 0;
 
         Map<String, Integer> discounts = player.getShopDiscounts();
@@ -230,106 +252,164 @@ public class ShopScreen implements Screen {
             int col = displayIdx % 3;
             float x = startX + col * gapX;
             float y = startY - row * gapY;
-            
-            com.fishingrpg.game.entities.ItemData item = shopItems.get(i);
+
+            ItemData item = filteredItems.get(i);
             int discount = discounts.getOrDefault(item.name, 0);
-            
+
             boolean isSoldOut = false;
             if (item.name.startsWith("Sách: ")) {
                 String skillId = "";
                 if (item.name.equals("Sách: Dưỡng Sức")) skillId = "duong_suc";
                 else if (item.name.equals("Sách: Giật Kép")) skillId = "giat_kep";
                 else if (item.name.equals("Sách: Mắt Đại Bàng")) skillId = "mat_dai_bang";
-                
+
                 com.fishingrpg.game.skills.Skill s = player.getSkillTree().getSkill(skillId);
                 if (s != null && s.getLevel() > 0) isSoldOut = true;
             }
 
-            boolean hoverBox = (m.x >= x && m.x <= x + itemW - 80 && m.y >= y && m.y <= y + itemH);
-            if (hoverBox) {
+            boolean hoverCard = (m.x >= x && m.x <= x + itemW && m.y >= y && m.y <= y + itemH);
+            if (hoverCard) {
                 hoveredItem = item;
                 hoverX = m.x;
                 hoverY = m.y;
             }
 
+            // Shelf wooden bracket under card
+            sr.setColor(0.12f, 0.07f, 0.04f, 0.9f);
+            sr.rect(x - 5, y - 6, itemW + 10, 6);
+            sr.setColor(0.6f, 0.45f, 0.2f, 0.8f);
+            sr.rect(x - 5, y, itemW + 10, 2);
+
+            // Card Base
+            sr.setColor(isSoldOut ? new Color(0.12f, 0.10f, 0.08f, 0.85f) : (hoverCard ? new Color(0.24f, 0.16f, 0.11f, 0.95f) : new Color(0.18f, 0.12f, 0.08f, 0.92f)));
+            drawRoundedRect(sr, x, y, itemW, itemH, 10);
+            sr.setColor(isSoldOut ? new Color(0.25f, 0.22f, 0.20f, 0.6f) : (hoverCard ? new Color(0.95f, 0.75f, 0.35f, 0.9f) : new Color(0.55f, 0.38f, 0.20f, 0.7f)));
+            drawRectOutline(sr, x, y, itemW, itemH, hoverCard ? 2f : 1.2f);
+
+            // Item Icon Frame (Left portion)
+            float iconX = x + 10f;
+            float iconY = y + 10f;
+            float iconW = 85f;
+            float iconH = 85f;
+            sr.setColor(0.10f, 0.07f, 0.05f, 0.9f);
+            drawRoundedRect(sr, iconX, iconY, iconW, iconH, 8);
+            sr.setColor(0.45f, 0.32f, 0.18f, 0.8f);
+            drawRectOutline(sr, iconX, iconY, iconW, iconH, 1f);
+
+            // Draw Category Icon
+            drawItemCategoryIcon(sr, item.name, iconX + iconW / 2f, iconY + iconH / 2f, isSoldOut);
+
+            // Buy Button Box
+            float buyBtnW = player.hasItem(item.name) ? 120f : 150f;
+            float buyBtnH = 34f;
+            float buyBtnX = x + itemW - buyBtnW - 12f;
+            float buyBtnY = y + 12f;
+
             if (!isSoldOut) {
-                boolean hoverBuy = (m.x >= x && m.x <= x + itemW - 80 && m.y >= y && m.y <= y + itemH);
-                sr.setColor(hoverBuy ? new Color(0.25f, 0.35f, 0.45f, 1f) : new Color(0.15f, 0.25f, 0.35f, 1f));
-                sr.rect(x, y, itemW - 80, itemH);
-                sr.setColor(0.35f, 0.45f, 0.55f, 1f);
-                sr.rect(x, y, itemW - 80, 2);
+                boolean hoverBuy = (m.x >= buyBtnX && m.x <= buyBtnX + buyBtnW && m.y >= buyBtnY && m.y <= buyBtnY + buyBtnH);
+                sr.setColor(hoverBuy ? new Color(0.22f, 0.55f, 0.35f, 1f) : new Color(0.15f, 0.38f, 0.24f, 0.95f));
+                drawRoundedRect(sr, buyBtnX, buyBtnY, buyBtnW, buyBtnH, 6);
+                sr.setColor(hoverBuy ? new Color(0.6f, 1f, 0.7f, 1f) : new Color(0.35f, 0.8f, 0.5f, 0.8f));
+                drawRectOutline(sr, buyBtnX, buyBtnY, buyBtnW, buyBtnH, 1.5f);
             } else {
-                sr.setColor(new Color(0.15f, 0.15f, 0.15f, 0.8f));
-                sr.rect(x, y, itemW - 80, itemH);
-                sr.setColor(new Color(0.25f, 0.25f, 0.25f, 1f));
-                sr.rect(x, y, itemW - 80, 2);
+                sr.setColor(0.15f, 0.12f, 0.12f, 0.9f);
+                drawRoundedRect(sr, buyBtnX, buyBtnY, buyBtnW, buyBtnH, 6);
+                sr.setColor(0.35f, 0.3f, 0.3f, 0.6f);
+                drawRectOutline(sr, buyBtnX, buyBtnY, buyBtnW, buyBtnH, 1f);
             }
-            
-            if (discount > 0) {
-                // Red discount tag
-                sr.setColor(0.8f, 0.1f, 0.1f, 1f);
-                sr.rect(x - 5, y + itemH - 25, 60, 30);
-            }
-            
+
+            // Sell Button Box (if owned)
             if (player.hasItem(item.name)) {
-                boolean hoverSell = (m.x >= x + itemW - 70 && m.x <= x + itemW && m.y >= y && m.y <= y + itemH);
-                sr.setColor(hoverSell ? new Color(0.6f, 0.2f, 0.2f, 1f) : new Color(0.5f, 0.15f, 0.15f, 1f));
-                sr.rect(x + itemW - 70, y, 70, itemH);
-                sr.setColor(0.7f, 0.3f, 0.3f, 1f);
-                sr.rect(x + itemW - 70, y, 70, 2);
+                float sellBtnW = 100f;
+                float sellBtnH = 34f;
+                float sellBtnX = buyBtnX - sellBtnW - 8f;
+                float sellBtnY = y + 12f;
+
+                boolean hoverSell = (m.x >= sellBtnX && m.x <= sellBtnX + sellBtnW && m.y >= sellBtnY && m.y <= sellBtnY + sellBtnH);
+                sr.setColor(hoverSell ? new Color(0.65f, 0.22f, 0.22f, 1f) : new Color(0.45f, 0.15f, 0.15f, 0.95f));
+                drawRoundedRect(sr, sellBtnX, sellBtnY, sellBtnW, sellBtnH, 6);
+                sr.setColor(hoverSell ? new Color(1f, 0.6f, 0.6f, 1f) : new Color(0.8f, 0.35f, 0.35f, 0.8f));
+                drawRectOutline(sr, sellBtnX, sellBtnY, sellBtnW, sellBtnH, 1.5f);
+            }
+
+            // Flash sale discount ribbon
+            if (discount > 0 && !isSoldOut) {
+                sr.setColor(0.85f, 0.18f, 0.18f, 0.95f);
+                drawRoundedRect(sr, x + 8, y + itemH - 24, 75, 20, 4);
             }
         }
-        
-        // Draw Scrollbar
-        int totalRows = (shopItems.size() + 2) / 3;
+
+        // Scrollbar
+        int totalRows = (filteredItems.size() + 2) / 3;
         int maxScroll = Math.max(0, totalRows - maxVisibleRows);
-        
-        float scrollBarX = W - 25;
-        float scrollBarY = 30;
-        float scrollBarH = 590; 
-        
+
+        float scrollBarX = W - 22;
+        float scrollBarY = 25;
+        float scrollBarH = H - 170;
+
         if (maxScroll > 0) {
-            // Track
-            sr.setColor(0.1f, 0.15f, 0.2f, 1f);
-            sr.rect(scrollBarX, scrollBarY, 15, scrollBarH);
-            
-            // Thumb
+            sr.setColor(0.12f, 0.08f, 0.05f, 0.8f);
+            drawRoundedRect(sr, scrollBarX, scrollBarY, 12, scrollBarH, 4);
+
             float thumbH = Math.max(40f, scrollBarH * ((float)maxVisibleRows / totalRows));
-            float availableScrollHeight = scrollBarH - thumbH;
+            float availableH = scrollBarH - thumbH;
             float scrollPercent = (float)scrollOffset / maxScroll;
-            float thumbY = scrollBarY + availableScrollHeight * (1f - scrollPercent);
-            
-            boolean hoverThumb = (m.x >= scrollBarX - 5 && m.x <= scrollBarX + 20 && m.y >= thumbY && m.y <= thumbY + thumbH);
-            sr.setColor(hoverThumb || isDraggingScroll ? new Color(0.5f, 0.6f, 0.7f, 1f) : new Color(0.3f, 0.4f, 0.5f, 1f));
-            sr.rect(scrollBarX, thumbY, 15, thumbH);
+            float thumbY = scrollBarY + availableH * (1f - scrollPercent);
+
+            boolean hoverThumb = (m.x >= scrollBarX - 5 && m.x <= scrollBarX + 18 && m.y >= thumbY && m.y <= thumbY + thumbH);
+            sr.setColor(hoverThumb || isDraggingScroll ? new Color(0.95f, 0.75f, 0.35f, 1f) : new Color(0.65f, 0.45f, 0.22f, 0.9f));
+            drawRoundedRect(sr, scrollBarX, thumbY, 12, thumbH, 4);
         }
 
         sr.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
 
+        // --- DRAW BATCH TEXTS ---
         game.batch.begin();
-        titleFont.setColor(Color.WHITE);
-        titleFont.draw(game.batch, "CỬA HÀNG", W / 2f, H - 30, 0, Align.center, false);
-        font.setColor(Color.WHITE);
-        layout.setText(font, "QUAY LẠI");
-        font.draw(game.batch, "QUAY LẠI", 20f + (100f - layout.width)/2f + 3f, H - 40f + layout.height/2f);
-        font.setColor(1f, 0.9f, 0.2f, 1f);
-        font.draw(game.batch, "VÀNG HIỆN CÓ: " + player.getGold() + "g", W - 300, H - 35, 280, Align.right, false);
 
+        // Title
+        titleFont.setColor(0.95f, 0.85f, 0.45f, 1f);
+        layout.setText(titleFont, "TIỆM TẠP HÓA NGƯ ÔNG");
+        titleFont.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 22f);
+
+        font.setColor(0.8f, 0.7f, 0.55f, 0.9f);
+        layout.setText(font, "Ngư cụ chuyên dụng, mồi nhử thượng hạng và bí kíp câu cá cổ truyền");
+        font.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 48f);
+
+        // Back button text
+        font.setColor(hoverBack ? Color.WHITE : new Color(0.9f, 0.8f, 0.65f, 0.9f));
+        layout.setText(font, "← QUAY LẠI");
+        font.draw(game.batch, layout, 25f + (130f - layout.width) / 2f, H - 36f);
+
+        // Gold Dock Text
+        font.setColor(1f, 0.9f, 0.35f, 1f);
+        String goldStr = player.getGold() + " Vàng";
+        font.draw(game.batch, goldStr, goldDockX + 46f, goldDockY + 28f);
+
+        // Category filter tab texts
+        for (int c = 0; c < CATEGORY_NAMES.length; c++) {
+            float tx = tabStartX + c * (tabW + 15f);
+            boolean isCur = (currentCategory == c);
+            font.setColor(isCur ? new Color(1f, 0.95f, 0.8f, 1f) : new Color(0.8f, 0.7f, 0.55f, 0.8f));
+            layout.setText(font, CATEGORY_NAMES[c]);
+            font.draw(game.batch, layout, tx + (tabW - layout.width) / 2f, tabY + 24f);
+        }
+
+        // Item Cards Text
         for (int i = startIndex; i < endIndex; i++) {
             int displayIdx = i - startIndex;
             int row = displayIdx / 3;
             int col = displayIdx % 3;
             float x = startX + col * gapX;
             float y = startY - row * gapY;
-            
-            com.fishingrpg.game.entities.ItemData item = shopItems.get(i);
+
+            ItemData item = filteredItems.get(i);
             int discount = discounts.getOrDefault(item.name, 0);
             int currentPrice = item.buyPrice * (100 - discount) / 100;
-            
+
             boolean isSoldOut = false;
-            String skillId = "";
             if (item.name.startsWith("Sách: ")) {
+                String skillId = "";
                 if (item.name.equals("Sách: Dưỡng Sức")) skillId = "duong_suc";
                 else if (item.name.equals("Sách: Giật Kép")) skillId = "giat_kep";
                 else if (item.name.equals("Sách: Mắt Đại Bàng")) skillId = "mat_dai_bang";
@@ -337,121 +417,144 @@ public class ShopScreen implements Screen {
                 if (s != null && s.getLevel() > 0) isSoldOut = true;
             }
 
+            // Item Name
             font.setColor(isSoldOut ? Color.GRAY : Color.WHITE);
-            // Scale name if too long
             float origScale = font.getData().scaleX;
             font.getData().setScale(1f);
             layout.setText(font, item.name);
-            if (layout.width > itemW - 140) {
-                font.getData().setScale((itemW - 140) / layout.width);
+            if (layout.width > itemW - 120) {
+                font.getData().setScale((itemW - 120) / layout.width);
             }
-            font.draw(game.batch, item.name, x + 10, y + 65);
+            font.draw(game.batch, item.name, x + 105f, y + itemH - 18f);
             font.getData().setScale(origScale);
-            
+
+            // Owned count tag
+            int ownedCount = player.getItemCount(item.name);
+            font.setColor(0.6f, 0.8f, 0.7f, 0.85f);
+            font.getData().setScale(0.85f);
+            font.draw(game.batch, "Đang có: " + ownedCount, x + 105f, y + itemH - 42f);
+            font.getData().setScale(1f);
+
+            // Buy Button Text
+            float buyBtnW = player.hasItem(item.name) ? 120f : 150f;
+            float buyBtnH = 34f;
+            float buyBtnX = x + itemW - buyBtnW - 12f;
+            float buyBtnY = y + 12f;
+
             if (isSoldOut) {
-                font.setColor(0.5f, 0.5f, 0.5f, 1f);
-                layout.setText(font, "ĐÃ BÁN HẾT");
-                font.draw(game.batch, "ĐÃ BÁN HẾT", x + itemW - 130f - layout.width / 2f, y + itemH / 2f + layout.height / 2f);
+                font.setColor(0.6f, 0.6f, 0.6f, 1f);
+                layout.setText(font, "ĐÃ HỌC");
+                font.draw(game.batch, layout, buyBtnX + (buyBtnW - layout.width) / 2f, buyBtnY + 22f);
             } else {
-                if (discount > 0) {
-                    font.setColor(Color.WHITE);
-                    font.getData().setScale(0.85f);
-                    font.draw(game.batch, "-" + discount + "%", x, y + itemH - 3);
-                    font.getData().setScale(origScale);
-                    
-                    font.setColor(0.6f, 0.6f, 0.6f, 1f);
-                    font.draw(game.batch, item.buyPrice + "g", x + itemW - 140, y + 75);
-                    font.setColor(1f, 0.3f, 0.3f, 1f); // red highlighted price
-                    font.draw(game.batch, currentPrice + "g", x + itemW - 140, y + 45);
-                } else {
-                    font.setColor(1f, 0.8f, 0.2f, 1f);
-                    font.draw(game.batch, currentPrice + "g", x + itemW - 140, y + 65);
-                }
+                font.setColor(Color.WHITE);
+                String buyTxt = "MUA: " + currentPrice + "g";
+                layout.setText(font, buyTxt);
+                font.draw(game.batch, layout, buyBtnX + (buyBtnW - layout.width) / 2f, buyBtnY + 22f);
             }
-            
+
+            // Sell Button Text (if owned)
             if (player.hasItem(item.name)) {
-                font.setColor(1f, 0.8f, 0.8f, 1f);
-                font.draw(game.batch, "BÁN", x + itemW - 55, y + 65);
-                font.setColor(0.8f, 1f, 0.5f, 1f);
-                font.draw(game.batch, "+" + item.sellPrice + "g", x + itemW - 65, y + 35);
+                float sellBtnW = 100f;
+                float sellBtnX = buyBtnX - sellBtnW - 8f;
+                float sellBtnY = y + 12f;
+
+                font.setColor(1f, 0.85f, 0.85f, 1f);
+                String sellTxt = "BÁN: +" + item.sellPrice + "g";
+                layout.setText(font, sellTxt);
+                font.draw(game.batch, layout, sellBtnX + (sellBtnW - layout.width) / 2f, sellBtnY + 22f);
+            }
+
+            // Discount ribbon tag text
+            if (discount > 0 && !isSoldOut) {
+                font.setColor(Color.WHITE);
+                font.getData().setScale(0.8f);
+                layout.setText(font, "-" + discount + "%");
+                font.draw(game.batch, layout, x + 8 + (75 - layout.width) / 2f, y + itemH - 8);
+                font.getData().setScale(1f);
             }
         }
-        
+
         game.batch.end();
 
-        // Draw hover tooltip on top
+        // Tooltip
         if (hoveredItem != null && !isDraggingScroll) {
             drawTooltip(hoveredItem, hoverX, hoverY);
         }
-        
-        // Success Message rendering (Toast style)
-        if (messageTimer > 0) {
-            Gdx.gl.glEnable(GL20.GL_BLEND);
-            com.fishingrpg.game.ui.NotificationUI.drawNotification(sr, game.batch, font, message, messageTimer, 2f, W, H);
-            Gdx.gl.glDisable(GL20.GL_BLEND);
+
+        // Notification Toast
+        NotificationUI.drawNotification(sr, game.batch, font, message, messageTimer, 2f, W, H);
+    }
+
+    private void drawItemCategoryIcon(ShapeRenderer sr, String itemName, float cx, float cy, boolean isSoldOut) {
+        if (itemName.startsWith("Sách: ")) {
+            // Book Icon
+            sr.setColor(isSoldOut ? Color.DARK_GRAY : new Color(0.75f, 0.25f, 0.25f, 1f));
+            drawRoundedRect(sr, cx - 18, cy - 22, 36, 44, 4);
+            sr.setColor(isSoldOut ? Color.GRAY : new Color(0.95f, 0.85f, 0.45f, 1f));
+            sr.rect(cx - 14, cy - 18, 6, 36);
+            sr.circle(cx + 4, cy, 6);
+        } else if (itemName.contains("Nước") || itemName.contains("Trà")) {
+            // Potion Vial
+            sr.setColor(isSoldOut ? Color.DARK_GRAY : new Color(0.2f, 0.65f, 0.95f, 0.9f));
+            sr.circle(cx, cy - 8, 18);
+            sr.rect(cx - 6, cy - 8, 12, 24);
+            // Cork
+            sr.setColor(0.55f, 0.35f, 0.15f, 1f);
+            drawRoundedRect(sr, cx - 8, cy + 14, 16, 8, 2);
+        } else if (itemName.contains("Mồi") || itemName.contains("Bánh")) {
+            // Bait Pouch / Food
+            sr.setColor(isSoldOut ? Color.DARK_GRAY : new Color(0.85f, 0.65f, 0.35f, 1f));
+            sr.circle(cx, cy - 4, 20);
+            sr.setColor(0.6f, 0.4f, 0.2f, 1f);
+            sr.rectLine(cx - 15, cy + 12, cx + 15, cy + 12, 4);
+        } else {
+            // Gear / Talisman
+            sr.setColor(isSoldOut ? Color.DARK_GRAY : new Color(0.95f, 0.75f, 0.25f, 1f));
+            sr.circle(cx, cy, 18);
+            sr.setColor(0.12f, 0.08f, 0.05f, 1f);
+            sr.circle(cx, cy, 10);
+            sr.setColor(0.95f, 0.35f, 0.25f, 1f);
+            sr.circle(cx, cy, 5);
         }
     }
 
-    private void drawTooltip(com.fishingrpg.game.entities.ItemData item, float mX, float mY) {
+    private void drawTooltip(ItemData item, float mX, float mY) {
         float tipW = 320f;
-        float tipH = 120f;
+        float tipH = 135f;
         float tipX = mX + 15f;
         float tipY = mY - tipH - 15f;
-        
+
         if (tipX + tipW > W) tipX = mX - tipW - 15f;
         if (tipY < 0) tipY = mY + 15f;
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
         sr.begin(ShapeRenderer.ShapeType.Filled);
-        sr.setColor(0.1f, 0.1f, 0.15f, 0.95f);
-        sr.rect(tipX, tipY, tipW, tipH);
-        sr.setColor(0.4f, 0.5f, 0.6f, 1f);
-        sr.rect(tipX, tipY, tipW, 2);
+        sr.setColor(0.08f, 0.06f, 0.04f, 0.98f);
+        drawRoundedRect(sr, tipX, tipY, tipW, tipH, 8);
+        sr.setColor(0.85f, 0.65f, 0.25f, 0.9f);
+        drawRectOutline(sr, tipX, tipY, tipW, tipH, 1.5f);
         sr.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
 
         game.batch.begin();
-        
-        font.setColor(1f, 0.9f, 0.2f, 1f);
+
+        font.setColor(1f, 0.85f, 0.35f, 1f);
         float origScaleX = font.getData().scaleX;
         float origScaleY = font.getData().scaleY;
         font.getData().setScale(1f);
         layout.setText(font, item.name);
-        if (layout.width > tipW - 20) {
-            font.getData().setScale((tipW - 20) / layout.width);
-        }
-        font.draw(game.batch, item.name, tipX + 10, tipY + tipH - 15);
-        font.getData().setScale(origScaleX, origScaleY);
-        
-        // Description auto-scale
-        font.setColor(0.8f, 0.8f, 0.8f, 1f);
+        font.draw(game.batch, item.name, tipX + 14, tipY + tipH - 15);
+
+        // Description
+        font.setColor(0.85f, 0.85f, 0.85f, 1f);
         font.getData().setScale(0.85f);
-        
-        float descMaxWidth = tipW - 20;
-        float currentScale = 0.85f;
-        boolean fits = false;
-        
-        while (!fits && currentScale > 0.4f) {
-            layout.setText(font, item.description, Color.WHITE, descMaxWidth, Align.left, true);
-            if (layout.height <= tipH - 50) {
-                fits = true;
-            } else {
-                currentScale -= 0.05f;
-                font.getData().setScale(currentScale);
-            }
-        }
-        
-        font.draw(game.batch, item.description, tipX + 10, tipY + tipH - 45, descMaxWidth, Align.left, true);
-        
-        // Usage type
-        String usageText = "";
-        if (item.usageType == com.fishingrpg.game.entities.ItemUsageType.IN_COMBAT) usageText = "Chỉ dùng lúc câu";
-        else if (item.usageType == com.fishingrpg.game.entities.ItemUsageType.PRE_COMBAT) usageText = "Dùng trước khi câu";
-        else usageText = "Dùng bất kỳ lúc nào";
-        
+        font.draw(game.batch, item.description, tipX + 14, tipY + tipH - 42, tipW - 28, Align.left, true);
+
+        // Usage tag
+        String usageText = (item.usageType == com.fishingrpg.game.entities.ItemUsageType.IN_COMBAT) ? "• Chỉ dùng lúc giằng co" : (item.usageType == com.fishingrpg.game.entities.ItemUsageType.PRE_COMBAT) ? "• Dùng trước khi quăng cần" : "• Dùng bất kỳ lúc nào";
         font.getData().setScale(0.8f);
-        font.setColor(0.5f, 0.8f, 0.5f, 1f);
-        font.draw(game.batch, usageText, tipX + 10, tipY + 25);
+        font.setColor(0.4f, 0.9f, 0.6f, 1f);
+        font.draw(game.batch, usageText, tipX + 14, tipY + 25);
 
         font.getData().setScale(origScaleX, origScaleY);
         game.batch.end();
@@ -464,34 +567,55 @@ public class ShopScreen implements Screen {
         viewport.unproject(m);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hoverBack)) {
+            AudioManager.getInstance().playSFX("sfx_button");
             game.setScreen(previousScreen);
             dispose();
             return;
         }
 
-        int totalRows = (shopItems.size() + 2) / 3;
+        // Category Filter Tabs Click
+        float tabW = 260f;
+        float tabH = 36f;
+        float tabStartX = (W - (4 * tabW + 3 * 15f)) / 2f;
+        float tabY = H - 122f;
+
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            for (int c = 0; c < CATEGORY_NAMES.length; c++) {
+                float tx = tabStartX + c * (tabW + 15f);
+                if (m.x >= tx && m.x <= tx + tabW && m.y >= tabY && m.y <= tabY + tabH) {
+                    if (currentCategory != c) {
+                        AudioManager.getInstance().playSFX("sfx_button");
+                        currentCategory = c;
+                        filterItems();
+                        return;
+                    }
+                }
+            }
+        }
+
+        int totalRows = (filteredItems.size() + 2) / 3;
         int maxScroll = Math.max(0, totalRows - maxVisibleRows);
-        
+
         // Drag scrollbar logic
         if (maxScroll > 0) {
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
                 if (!isDraggingScroll && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-                    float scrollBarX = W - 30;
-                    if (m.x >= scrollBarX - 10 && m.x <= scrollBarX + 20 && m.y >= 30 && m.y <= 620) {
+                    float scrollBarX = W - 25;
+                    if (m.x >= scrollBarX - 10 && m.x <= scrollBarX + 20 && m.y >= 25 && m.y <= H - 145) {
                         isDraggingScroll = true;
                     }
                 }
-                
+
                 if (isDraggingScroll) {
-                    float scrollBarY = 30;
-                    float scrollBarH = 590;
+                    float scrollBarY = 25;
+                    float scrollBarH = H - 170;
                     float thumbH = Math.max(40f, scrollBarH * ((float)maxVisibleRows / totalRows));
                     float availableH = scrollBarH - thumbH;
-                    
+
                     float relativeY = m.y - scrollBarY - thumbH / 2f;
                     float percent = 1f - (relativeY / availableH);
                     percent = Math.max(0f, Math.min(1f, percent));
-                    
+
                     scrollOffset = Math.round(percent * maxScroll);
                 }
             } else {
@@ -501,28 +625,28 @@ public class ShopScreen implements Screen {
 
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !isDraggingScroll) {
             float startX = 35f;
-            float startY = 520f;
-            float itemW = 380f;
-            float itemH = 90f;
-            float gapY = 100f;
-            float gapX = 410f;
-            
+            float startY = 445f;
+            float itemW = 385f;
+            float itemH = 105f;
+            float gapX = 405f;
+            float gapY = 120f;
+
             int startIndex = scrollOffset * 3;
-            int endIndex = Math.min(startIndex + maxVisibleRows * 3, shopItems.size());
-            
+            int endIndex = Math.min(startIndex + maxVisibleRows * 3, filteredItems.size());
+
             Map<String, Integer> discounts = player.getShopDiscounts();
-            
+
             for (int i = startIndex; i < endIndex; i++) {
                 int displayIdx = i - startIndex;
                 int row = displayIdx / 3;
                 int col = displayIdx % 3;
                 float x = startX + col * gapX;
                 float y = startY - row * gapY;
-                
-                com.fishingrpg.game.entities.ItemData item = shopItems.get(i);
+
+                ItemData item = filteredItems.get(i);
                 int discount = discounts.getOrDefault(item.name, 0);
                 int currentPrice = item.buyPrice * (100 - discount) / 100;
-                
+
                 boolean isSoldOut = false;
                 String skillId = "";
                 if (item.name.startsWith("Sách: ")) {
@@ -532,11 +656,16 @@ public class ShopScreen implements Screen {
                     com.fishingrpg.game.skills.Skill s = player.getSkillTree().getSkill(skillId);
                     if (s != null && s.getLevel() > 0) isSoldOut = true;
                 }
-                
-                boolean clickBuy = (m.x >= x && m.x <= x + itemW - 80 && m.y >= y && m.y <= y + itemH);
+
+                float buyBtnW = player.hasItem(item.name) ? 120f : 150f;
+                float buyBtnH = 34f;
+                float buyBtnX = x + itemW - buyBtnW - 12f;
+                float buyBtnY = y + 12f;
+
+                boolean clickBuy = (m.x >= buyBtnX && m.x <= buyBtnX + buyBtnW && m.y >= buyBtnY && m.y <= buyBtnY + buyBtnH);
                 if (clickBuy && !isSoldOut) {
-                    if (player.getGold() >= currentPrice) {
-                        player.gainGold(-currentPrice);
+                    if (player.consumeGold(currentPrice)) {
+                        AudioManager.getInstance().playSFX("sfx_button");
                         player.getQuestManager().addProgress("spend", currentPrice);
                         if (!skillId.isEmpty()) {
                             com.fishingrpg.game.skills.Skill s = player.getSkillTree().getSkill(skillId);
@@ -549,16 +678,22 @@ public class ShopScreen implements Screen {
                     } else {
                         showMessage("Bạn không đủ Vàng để mua!");
                     }
-                    return; // one click per frame
+                    return;
                 }
-                
+
                 if (player.hasItem(item.name)) {
-                    boolean clickSell = (m.x >= x + itemW - 70 && m.x <= x + itemW && m.y >= y && m.y <= y + itemH);
+                    float sellBtnW = 100f;
+                    float sellBtnH = 34f;
+                    float sellBtnX = buyBtnX - sellBtnW - 8f;
+                    float sellBtnY = y + 12f;
+
+                    boolean clickSell = (m.x >= sellBtnX && m.x <= sellBtnX + sellBtnW && m.y >= sellBtnY && m.y <= sellBtnY + sellBtnH);
                     if (clickSell) {
+                        AudioManager.getInstance().playSFX("sfx_button");
                         player.consumeItem(item.name);
                         player.gainGold(item.sellPrice);
                         showMessage("Đã bán " + item.name + " (+" + item.sellPrice + "g)!");
-                        return; // one click per frame
+                        return;
                     }
                 }
             }
@@ -568,6 +703,23 @@ public class ShopScreen implements Screen {
     private void showMessage(String msg) {
         this.message = msg;
         this.messageTimer = 2f;
+    }
+
+    private void drawRoundedRect(ShapeRenderer sr, float x, float y, float w, float h, float r) {
+        sr.rect(x + r, y, w - 2 * r, h);
+        sr.rect(x, y + r, r, h - 2 * r);
+        sr.rect(x + w - r, y + r, r, h - 2 * r);
+        sr.circle(x + r, y + r, r);
+        sr.circle(x + w - r, y + r, r);
+        sr.circle(x + r, y + h - r, r);
+        sr.circle(x + w - r, y + h - r, r);
+    }
+
+    private void drawRectOutline(ShapeRenderer sr, float x, float y, float w, float h, float thickness) {
+        sr.rect(x, y, w, thickness);
+        sr.rect(x, y + h - thickness, w, thickness);
+        sr.rect(x, y, thickness, h);
+        sr.rect(x + w - thickness, y, thickness, h);
     }
 
     @Override public void resize(int w, int h) { viewport.update(w, h, true); }

@@ -29,7 +29,9 @@ public class EquipmentGenerator {
         new EqSet("Vực Thẳm", "Trượng Hắc Ám", "Sợi Hắc Mạch", "Móng Vuốt Vực Sâu", 5),
         new EqSet("Hoàng Gia", "Cần Câu Bạch Kim", "Tơ Tằm Thượng Hạng", "Móc Cẩm Thạch", 6),
         new EqSet("Thời Không", "Trượng Thời Gian", "Sợi Dây Xuyên Thấu", "Lưỡi Câu Hư Không", 6),
-        new EqSet("Thần Thoại", "Trượng Ánh Sáng", "Dây Chỉ Vàng", "Lưỡi Câu Thần", 7)
+        new EqSet("Thần Thoại", "Trượng Ánh Sáng", "Dây Chỉ Vàng", "Lưỡi Câu Thần", 7),
+        new EqSet("Vệ Quốc Vang Danh", "Cần Câu Khởi Nghĩa", "Cước Vệ Quốc", "Lưỡi Sao Vàng", 5), // Same as RARE
+        new EqSet("Thần Khí Lạc Hồng", "Trượng Lạc Hồng", "Dây Rồng Thiêng", "Móc Âu Cơ", 15) // HIGHER than Legendary
     };
 
     public static int getSetPoints(String setName) {
@@ -46,6 +48,8 @@ public class EquipmentGenerator {
             case RARE: return 5;
             case EPIC: return 9;
             case LEGENDARY: return 15;
+            case LIMITED_EVENT: return 5;
+            case LIMITED_PREMIUM: return 15;
             default: return 0;
         }
     }
@@ -134,6 +138,126 @@ public class EquipmentGenerator {
         return rarity;
     }
 
+    private static Rarity rollRarityLimited(com.fishingrpg.game.entities.Player player) {
+        if (player.pityLimited >= 80) return Rarity.LIMITED_PREMIUM;
+        float roll = MathUtils.random();
+        if (roll < 0.015f) return Rarity.LIMITED_PREMIUM; // 1.5% chance
+        if (roll < 0.10f) return Rarity.EPIC;
+        if (roll < 0.40f) return Rarity.RARE;
+        if (roll < 0.80f) return Rarity.UNCOMMON;
+        return Rarity.COMMON;
+    }
+
+    public static Equipment rollGachaLimited(com.fishingrpg.game.entities.Player player) {
+        player.pityLimited++;
+        Rarity rarity = rollRarityLimited(player);
+        
+        if (rarity == Rarity.LIMITED_PREMIUM) {
+            player.pityLimited = 0;
+        }
+        
+        EquipmentType type = EquipmentType.values()[MathUtils.random(0, 2)];
+        EqSet set = null;
+        
+        if (rarity == Rarity.LIMITED_PREMIUM) {
+            for (EqSet s : SETS) {
+                if (s.setName.equals("Thần Khí Lạc Hồng")) {
+                    set = s; break;
+                }
+            }
+        } else {
+            // normal set (exclude limited ones)
+            do {
+                set = SETS[MathUtils.random(0, SETS.length - 1)];
+            } while (set.setName.equals("Thần Khí Lạc Hồng") || set.setName.equals("Vệ Quốc Vang Danh"));
+        }
+        
+        Equipment eq = new Equipment();
+        eq.type = type;
+        eq.rarity = rarity;
+        eq.setName = set.setName;
+        eq.level = 1;
+        
+        int mult = set.points + getRarityPoints(eq.rarity);
+        
+        switch (type) {
+            case ROD:
+                eq.id = "rod_" + set.setName.replaceAll(" ", "_").toLowerCase() + "_" + MathUtils.random(10000);
+                eq.name = set.rodName;
+                eq.mainStat1 = 10f + mult * 2f; // Base damage
+                eq.mainStat2 = 50f + mult * 15f; // Max stamina
+                break;
+            case LINE:
+                eq.id = "line_" + set.setName.replaceAll(" ", "_").toLowerCase() + "_" + MathUtils.random(10000);
+                eq.name = set.lineName;
+                eq.mainStat1 = 100f + mult * 25f; // Max tension
+                eq.mainStat2 = 2f + mult * 0.4f; // Kháng đứt dây
+                break;
+            case HOOK:
+                eq.id = "hook_" + set.setName.replaceAll(" ", "_").toLowerCase() + "_" + MathUtils.random(10000);
+                eq.name = set.hookName;
+                eq.mainStat1 = 5f + mult * 1.0f; // Tỷ lệ cá xịn (%)
+                eq.mainStat2 = 10f + mult * 2.0f; // Tỷ lệ giữ mồi (%)
+                break;
+        }
+
+        // Substats
+        for (int i = 0; i < eq.rarity.substatCount; i++) {
+            Substat.Type subType = Substat.Type.values()[MathUtils.random(0, Substat.Type.values().length - 1)];
+            float subVal = (MathUtils.random(1f, 3f) + (mult / 2f));
+            eq.substats.add(new Substat(subType, Math.round(subVal)));
+        }
+
+        return eq;
+    }
+
+    public static Equipment createFreeEventEquipment(EquipmentType type) {
+        EqSet set = null;
+        for (EqSet s : SETS) {
+            if (s.setName.equals("Vệ Quốc Vang Danh")) {
+                set = s;
+                break;
+            }
+        }
+        
+        Equipment eq = new Equipment();
+        eq.type = type;
+        eq.rarity = Rarity.LIMITED_EVENT;
+        eq.setName = set.setName;
+        eq.level = 1;
+        
+        int mult = set.points + getRarityPoints(eq.rarity);
+        
+        switch (type) {
+            case ROD:
+                eq.id = "rod_" + set.setName.replaceAll(" ", "_").toLowerCase() + "_" + MathUtils.random(10000);
+                eq.name = set.rodName;
+                eq.mainStat1 = 10f + mult * 2f; 
+                eq.mainStat2 = 50f + mult * 15f; 
+                break;
+            case LINE:
+                eq.id = "line_" + set.setName.replaceAll(" ", "_").toLowerCase() + "_" + MathUtils.random(10000);
+                eq.name = set.lineName;
+                eq.mainStat1 = 100f + mult * 25f; 
+                eq.mainStat2 = 2f + mult * 0.4f; 
+                break;
+            case HOOK:
+                eq.id = "hook_" + set.setName.replaceAll(" ", "_").toLowerCase() + "_" + MathUtils.random(10000);
+                eq.name = set.hookName;
+                eq.mainStat1 = 5f + mult * 1.0f; 
+                eq.mainStat2 = 10f + mult * 2.0f; 
+                break;
+        }
+
+        for (int i = 0; i < eq.rarity.substatCount; i++) {
+            Substat.Type subType = Substat.Type.values()[MathUtils.random(0, Substat.Type.values().length - 1)];
+            float subVal = (MathUtils.random(1f, 3f) + (mult / 2f));
+            eq.substats.add(new Substat(subType, Math.round(subVal)));
+        }
+
+        return eq;
+    }
+
     public static String getRandomName(EquipmentType type) {
         EqSet set = SETS[MathUtils.random(0, SETS.length - 1)];
         switch (type) {
@@ -156,6 +280,8 @@ public class EquipmentGenerator {
             case "Hoàng Gia": return "Set 3 món: +30% Vàng & +30% EXP";
             case "Thời Không": return "Set 3 món: -20% Thời gian hồi chiêu (Cooldown)";
             case "Thần Thoại": return "Set 3 món: +35% Mọi chỉ số phụ";
+            case "Vệ Quốc Vang Danh": return "Set 3 món: +29% Cá Hiếm, Kháng đứt dây +10%";
+            case "Thần Khí Lạc Hồng": return "Ý Chí Bất Diệt: Vô hiệu hóa kỹ năng Boss, hồi 25% Thể lực!";
             default: return "Set 3 món: Kích hoạt sức mạnh ẩn";
         }
     }

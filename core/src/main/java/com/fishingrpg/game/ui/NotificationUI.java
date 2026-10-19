@@ -16,13 +16,13 @@ public class NotificationUI {
         float originalScaleX = font.getData().scaleX;
         float originalScaleY = font.getData().scaleY;
         
-        font.getData().setScale(1.2f);
+        font.getData().setScale(1.0f);
         layout.setText(font, message);
         
         // Max width for phone-style notification box
         float maxBoxWidth = 600f;
         if (layout.width > maxBoxWidth - 40f) {
-            float newScale = 1.2f * (maxBoxWidth - 40f) / layout.width;
+            float newScale = (maxBoxWidth - 40f) / layout.width;
             font.getData().setScale(newScale);
             layout.setText(font, message);
         }

@@ -14,6 +14,12 @@ public class PlayerProgression {
     private int skillPoints = 0;
     private int diamonds = 0;
     private int gachaTickets = 0;
+    private int premiumTickets = 0;
+    private int eventPoints = 0;
+    
+    private int totalLoginDaysThisMonth = 0;
+    private long lastLoginTimestamp = 0;
+    private long lastEventMissionResetTimestamp = 0;
 
     public static int xpRequired(int level) {
         int[] bases = {1, 2, 5};
@@ -92,6 +98,23 @@ public class PlayerProgression {
     public int getGachaTickets()       { return gachaTickets; }
     public void setGachaTickets(int t) { this.gachaTickets = t; }
     public void addGachaTickets(int t) { this.gachaTickets += t; }
+
+    public int getPremiumTickets()       { return premiumTickets; }
+    public void setPremiumTickets(int t) { this.premiumTickets = t; }
+    public void addPremiumTickets(int t) { this.premiumTickets += t; }
+
+    public int getEventPoints()          { return eventPoints; }
+    public void setEventPoints(int p)    { this.eventPoints = p; }
+    public void addEventPoints(int p)    { this.eventPoints += p; }
+
+    public int getTotalLoginDaysThisMonth() { return totalLoginDaysThisMonth; }
+    public void setTotalLoginDaysThisMonth(int days) { this.totalLoginDaysThisMonth = days; }
+
+    public long getLastLoginTimestamp() { return lastLoginTimestamp; }
+    public void setLastLoginTimestamp(long ts) { this.lastLoginTimestamp = ts; }
+
+    public long getLastEventMissionResetTimestamp() { return lastEventMissionResetTimestamp; }
+    public void setLastEventMissionResetTimestamp(long ts) { this.lastEventMissionResetTimestamp = ts; }
 
     public int getXpToNextLevel()      { return xpRequired(level) - currentXp; }
     public int getXpForCurrentLevel()  { return xpRequired(level); }

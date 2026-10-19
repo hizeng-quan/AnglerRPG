@@ -284,6 +284,10 @@ public class PlayScreen implements Screen {
                 game.setScreen(new com.fishingrpg.game.screens.QuestScreen(game, this, player));
                 return;
             }
+            if (hud.isEventClicked(mousePos, fishingManager.state)) {
+                game.setScreen(new com.fishingrpg.game.screens.EventScreen(game, this));
+                return;
+            }
         }
 
         boolean menuClicked = framesToSkip <= 0 && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isMenuClicked(mousePos, fishingManager.state);
@@ -469,4 +473,5 @@ public class PlayScreen implements Screen {
     public Viewport getViewport() { return viewport; }
     public FishingManager getFishingManager() { return fishingManager; }
     public Player getPlayer() { return player; }
+    public FishingRPG getGame() { return game; }
 }
