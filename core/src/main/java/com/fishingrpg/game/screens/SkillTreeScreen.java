@@ -961,7 +961,7 @@ public class SkillTreeScreen implements Screen {
     /**
      * Renders a distinct, handmade vector icon for every single skill in the game.
      */
-    private void drawSkillIcon(ShapeRenderer sr, String id, float cx, float cy, float r, Color baseColor, boolean unlocked) {
+    public static void drawSkillIcon(ShapeRenderer sr, String id, float cx, float cy, float r, Color baseColor, boolean unlocked) {
         float s = r / 20f;
 
         // Base circular medallion backplate with depth

@@ -391,24 +391,15 @@ public class CatalogScreen implements Screen, InputProcessor {
                     layout.setText(font, ft.getRarity().name());
                     font.draw(game.batch, layout, fx + (slotW - layout.width) / 2f, slotY + slotH - 7f);
 
-                    // Fish Name
+                    // Fish Name (Centered neatly at bottom, records shown on hover)
                     font.setColor(Color.WHITE);
-                    font.getData().setScale(0.8f);
+                    font.getData().setScale(0.82f);
                     layout.setText(font, fishName);
                     if (layout.width > slotW - 8f) {
-                        font.getData().setScale(0.8f * ((slotW - 8f) / layout.width));
+                        font.getData().setScale(0.82f * ((slotW - 8f) / layout.width));
                         layout.setText(font, fishName);
                     }
-                    font.draw(game.batch, layout, fx + (slotW - layout.width) / 2f, slotY + 48f);
-
-                    // Records (Weight & Length)
-                    float wRecord = SizeRecord.getRecord(fishName);
-                    float lRecord = SizeRecord.getRecordLength(fishName);
-                    font.setColor(1f, 0.85f, 0.3f, 1f);
-                    font.getData().setScale(0.75f);
-                    String recStr = String.format("%.1f", wRecord) + " kg • " + String.format("%.1f", lRecord) + " cm";
-                    layout.setText(font, recStr);
-                    font.draw(game.batch, layout, fx + (slotW - layout.width) / 2f, slotY + 24f);
+                    font.draw(game.batch, layout, fx + (slotW - layout.width) / 2f, slotY + 28f);
                 } else {
                     // Locked Fish labels
                     font.setColor(0.4f, 0.45f, 0.55f, 0.8f);
@@ -624,32 +615,49 @@ public class CatalogScreen implements Screen, InputProcessor {
     }
 
     private void drawFishTooltip() {
-        float tw = 380f;
-        float th = 195f;
+        float tw = 410f;
+        float th = 238f;
         float tx = mouseX + 18f;
         float ty = mouseY - 15f;
 
         if (tx + tw > W - 15f) tx = mouseX - tw - 15f;
         if (ty - th < 20f) ty = 20f + th;
 
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         sr.begin(ShapeRenderer.ShapeType.Filled);
-        // Backdrop
-        sr.setColor(0.08f, 0.12f, 0.18f, 0.96f);
-        drawRoundedRect(sr, tx, ty - th, tw, th, 8f);
+
+        // Drop shadow
+        sr.setColor(0f, 0f, 0f, 0.70f);
+        drawRoundedRect(sr, tx + 6f, ty - th - 6f, tw, th, 10f);
+
+        // Card Backdrop
+        sr.setColor(0.07f, 0.10f, 0.16f, 0.98f);
+        drawRoundedRect(sr, tx, ty - th, tw, th, 10f);
 
         // Border in rarity color
         Color rc = hoveredFish.getRarityColor();
-        sr.setColor(rc.r, rc.g, rc.b, 0.9f);
+        sr.setColor(rc.r, rc.g, rc.b, 0.95f);
         drawRectOutline(sr, tx, ty - th, tw, th, 2f);
 
-        // Header strip
-        sr.setColor(rc.r, rc.g, rc.b, 0.25f);
+        // Header strip with actual alpha blend
+        sr.setColor(rc.r * 0.25f, rc.g * 0.25f, rc.b * 0.25f, 0.95f);
         sr.rect(tx + 2f, ty - 38f, tw - 4f, 36f);
+
+        // Rarity Pill Badge on the right of header
+        float badgeW = 95f;
+        float badgeH = 22f;
+        float badgeX = tx + tw - badgeW - 12f;
+        float badgeY = ty - 31f;
+        sr.setColor(0.06f, 0.09f, 0.14f, 0.95f);
+        drawRoundedRect(sr, badgeX, badgeY, badgeW, badgeH, 4f);
+        sr.setColor(rc.r, rc.g, rc.b, 0.90f);
+        drawRectOutline(sr, badgeX, badgeY, badgeW, badgeH, 1.2f);
 
         // Fish Visual Showcase Frame on Left
         float frameX = tx + 14f;
-        float frameY = ty - 145f;
-        float frameW = 100f;
+        float frameY = ty - 146f;
+        float frameW = 98f;
         float frameH = 96f;
         sr.setColor(0.04f, 0.07f, 0.11f, 0.95f);
         drawRoundedRect(sr, frameX, frameY, frameW, frameH, 6f);
@@ -662,30 +670,31 @@ public class CatalogScreen implements Screen, InputProcessor {
         sr.end();
 
         game.batch.begin();
-        // Title
-        font.setColor(rc);
-        font.getData().setScale(1f);
-        font.draw(game.batch, hoveredFish.getName(), tx + 12f, ty - 14f);
 
-        // Rarity Tag
+        // Title: Crisp white text
         font.setColor(Color.WHITE);
-        font.getData().setScale(0.75f);
-        layout.setText(font, "[" + hoveredFish.getRarity().name() + "]");
-        font.draw(game.batch, layout, tx + tw - layout.width - 12f, ty - 16f);
+        font.getData().setScale(0.92f);
+        font.draw(game.batch, hoveredFish.getName(), tx + 14f, ty - 15f);
+
+        // Rarity Tag: Vibrant rarity color inside badge
+        font.setColor(rc);
+        font.getData().setScale(0.72f);
+        layout.setText(font, hoveredFish.getRarity().name());
+        font.draw(game.batch, layout, badgeX + (badgeW - layout.width) / 2f, badgeY + 16f);
 
         // Stats on the right of the fish frame
         float infoX = tx + 124f;
         float infoW = tw - 136f;
-        font.setColor(0.85f, 0.9f, 0.95f, 1f);
-        font.getData().setScale(0.80f);
+        font.setColor(0.85f, 0.92f, 1f, 0.95f);
+        font.getData().setScale(0.76f);
         font.draw(game.batch, "❖ Thể lực: " + (int) hoveredFish.getMaxHp() + " HP", infoX, ty - 50f);
         font.draw(game.batch, "❖ Lực kéo: " + (int) hoveredFish.getPullStrength() + " (dmg/s)", infoX, ty - 68f);
 
-        // Records
+        // Records (Weight & Length - Shown on hover!)
         float wRecord = SizeRecord.getRecord(hoveredFishName);
         float lRecord = SizeRecord.getRecordLength(hoveredFishName);
-        font.setColor(1f, 0.85f, 0.3f, 1f);
-        font.draw(game.batch, "❖ Kỷ lục: " + String.format("%.1f", wRecord) + " kg • " + String.format("%.1f", lRecord) + " cm", infoX, ty - 88f);
+        font.setColor(1f, 0.85f, 0.35f, 1f);
+        font.draw(game.batch, "❖ Kỷ lục: " + String.format(java.util.Locale.US, "%.1f", wRecord) + " kg • " + String.format(java.util.Locale.US, "%.1f", lRecord) + " cm", infoX, ty - 88f);
 
         // Skills info
         String skillsStr = "❖ Kỹ năng: ";
@@ -708,15 +717,73 @@ public class CatalogScreen implements Screen, InputProcessor {
             }
         }
         font.setColor(0.4f, 0.85f, 1f, 1f);
-        font.draw(game.batch, skillsStr, infoX, ty - 108f, infoW, Align.left, true);
+        font.draw(game.batch, skillsStr, infoX, ty - 106f, infoW, Align.left, true);
+
+        // Description / Lore Line for each fish
+        String desc = getFishLore(hoveredFishName);
+        font.setColor(0.95f, 0.88f, 0.65f, 0.95f);
+        font.getData().setScale(0.68f);
+        font.draw(game.batch, "❝ " + desc + " ❞", tx + 14f, ty - 162f, tw - 28f, Align.left, true);
 
         // Flavor footer
-        font.setColor(0.6f, 0.7f, 0.8f, 0.8f);
-        font.getData().setScale(0.75f);
-        font.draw(game.batch, "Thưởng gốc: +" + hoveredFish.getBaseGold() + " Vàng  +" + hoveredFish.getBaseXp() + " XP", tx + 14f, ty - 165f);
+        font.setColor(0.6f, 0.75f, 0.88f, 0.85f);
+        font.getData().setScale(0.70f);
+        font.draw(game.batch, "Thưởng gốc: +" + hoveredFish.getBaseGold() + " Vàng  +" + hoveredFish.getBaseXp() + " XP", tx + 14f, ty - 208f);
 
         font.getData().setScale(1f);
         game.batch.end();
+    }
+
+    public static String getFishLore(String name) {
+        if (name == null) return "Sinh vật thủy sinh kỳ bí của thế giới AnglerRPG.";
+        switch (name) {
+            // Ao Làng
+            case "Cá Rô Đồng": return "Loài cá gai góc kiên cường, sống dai dẳng dưới bùn lầy đồng quê.";
+            case "Cá Diếc": return "Thân dẹp vảy bạc mịn màng, tính tình hiền lành bơi theo đàn sát đáy.";
+            case "Cá Chép": return "Biểu tượng kiên trì vượt vũ môn, vảy rồng óng ánh và râu dài quý phái.";
+            case "Cá Mè": return "Thân dẹp trắng bạc, mắt hạ thấp, tính nhút nhát nhưng quẫy nước cực khỏe.";
+            case "Cá Mương": return "Thân hình lá liễu thon dài, bơi lội nhanh thoăn thoắt trên mặt nước ao hồ.";
+            case "Cá Lóc Nhí": return "Cá lóc con hiếu động háu ăn, mang sọc vàng cam rực lửa dọc sống lưng.";
+            case "Cá Trê": return "Sống ẩn mình dưới bùn lầy, sở hữu 4 râu nhạy cảm và ngạnh nhọn tự vệ.";
+            case "Cá Trôi": return "Thân hình ngư lôi vạm vỡ, vây đuôi viền son đỏ son và mắt ruby kiên cường.";
+            case "Cá Trắm Cỏ": return "Kình ngư ăn cỏ khổng lồ, thân khúc gỗ lực lưỡng bọc vảy quả trám trứ danh.";
+            case "Cá Chim Trắng": return "Dáng đĩa dẹp lưng gù, ức và vây đỏ rực lửa, hàm răng sắc bén ăn tạp.";
+            case "Cá Lóc Bông": return "Sát thủ đầm lầy, hoa văn rằn ri cọp sắc nhọn, hàm dưới lởm chởm răng nanh.";
+            case "Cá Trê Lai": return "Thân bọc hoa văn cẩm thạch da báo vàng đen, đầu dẹp bọc giáp xương săn đêm.";
+            case "Cá Chép Vàng": return "Cá chép hoàng kim linh thiêng, vây bướm thướt tha mang lại may mắn tột đỉnh.";
+            case "Cá Lăng Khổng Lồ": return "Thủy quái cổ thạch ngự trị đáy vực thẳm, thân xám đá hoa cương khổng lồ.";
+            case "Thủy Quái Sông Trà": return "Bá chủ truyền thuyết ngự trị vực thẳm sông Trà với sức mạnh hủy diệt.";
+
+            // Bãi Biển
+            case "Cá Chỉ Vàng": return "Dải sọc vàng rực óng ánh dọc thân bạc, món quà quen thuộc của biển cả.";
+            case "Cá Đục": return "Thân tròn thuôn dài màu cát biển, vùi mình dưới lớp cát mịn ven bờ.";
+            case "Cá Cơm": return "Thân hình nhỏ bé trong suốt như pha lê, bơi thành đàn hàng vạn con.";
+            case "Cá Mòi": return "Lưng xanh lam bụng trắng lấp lánh, di cư theo mùa tạo thành bão cá.";
+            case "Cá Lẹp": return "Thân mỏng dính như lưỡi dao, chuyên ẩn mình ngụy trang trên ngọn sóng dập dềnh.";
+            case "Cá Bạc Má": return "Đôi mắt to tròn ngơ ngác, thân lấp lánh ánh kim lướt nhanh theo đàn ngàn con.";
+            case "Cá Nục": return "Thân tròn lẳn cơ bắp, bơi lội khỏe khoắn chống chọi những ngọn sóng dữ.";
+            case "Cá Đối": return "Chuyên búng mình nhảy vọt khỏi mặt nước, đầu dẹp mõm tròn kiếm ăn rong biển.";
+            case "Cá Trích": return "Vảy bạc lấp lánh như dát bạc trên mặt biển xanh, bơi nhanh đón bình minh.";
+            case "Cá Chim Biển": return "Dáng dấp cánh chim rẽ sóng đại dương, vây bơi vút dài lướt trong gió biển.";
+            case "Cá Mú": return "Bậc thầy ngụy trang rạn san hô, miệng khổng lồ đớp gọn con mồi chớp nhoáng.";
+            case "Cá Bóp": return "Chiến binh biển cả dũng mãnh, cú kéo giằng hung bạo thử thách mọi cần thủ.";
+            case "Cá Thu Hoàng Kim": return "Bảo vật biển khơi lấp lánh ánh vàng kim, bơi như ngư lôi xé toạc đại dương.";
+            case "Cá Bò Hòm Gai": return "Khoác bộ giáp lục giác cứng như đá với những chiếc gai độc phòng thủ kiên cố.";
+            case "Hải Vương Rạn San Hô": return "Bá chủ ngự trị rạn san hô ngàn năm, mang sức mạnh thần thánh của biển khơi.";
+
+            // Đảo Xa
+            case "Cá Chuồn": return "Đôi vây ngực dang rộng như đôi cánh, lướt bay trên mặt đại dương bao la.";
+            case "Cá Nục Heo": return "Đầu gù đặc trưng, thân ngũ sắc rực rỡ đổi màu huyền ảo khi giằng co quyết liệt.";
+            case "Cá Ngừ Vây Vàng": return "Vua tốc độ biển sâu, các vây phụ vàng chói lọi bơi xuyên qua các đại dương.";
+            case "Cá Kiếm": return "Mũi kiếm xương dài nhọn hoắt như thanh kiếm báu, lao nhanh chém toạc sóng gió.";
+            case "Cá Cờ Xanh": return "Vây lưng xòe rộng như cánh buồm lộng gió, chúa tể kiêu hãnh của đại dương xa khơi.";
+            case "Cá Heo Biển Sâu": return "Sinh vật biển kỳ bí sở hữu trí thông minh vượt bậc và khả năng định vị siêu âm.";
+            case "Bạch Tuộc Khổng Lồ": return "Quái vật xúc tu khổng lồ dưới rãnh biển đen, quấn chặt mọi con tàu đi ngang.";
+            case "Cá Mập Trắng": return "Ác mộng của đại dương, hàm răng cưa chết chóc và khứu giác săn mồi hoàn hảo.";
+            case "Bạch Long Hải Thần": return "Long vương thần thoại trỗi dậy từ đáy biển sâu ngàn dặm, thống trị giông bão.";
+
+            default: return "Loài thủy tộc độc đáo với tập tính đặc biệt trong hệ sinh thái AnglerRPG.";
+        }
     }
 
     private void updateInput(float delta) {

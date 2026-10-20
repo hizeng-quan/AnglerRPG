@@ -128,24 +128,7 @@ public class PlayScreen implements Screen {
             if (mapId.equals("ao_lang")) {
                 com.fishingrpg.game.ui.AoLangBackground.render(shapeRenderer, timer, WORLD_WIDTH, WORLD_HEIGHT);
             } else if (mapId.equals("bai_bien")) {
-                // Beach: bright blue water, sand at bottom, sun rays
-                shapeRenderer.setColor(0.15f, 0.45f, 0.65f, 1f);
-                shapeRenderer.rect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
-                
-                shapeRenderer.setColor(0.7f, 0.6f, 0.3f, 1f);
-                shapeRenderer.rect(0, 0, WORLD_WIDTH, 80);
-                
-                shapeRenderer.setColor(0.6f, 0.8f, 1f, 0.3f);
-                for (int i=0; i<4; i++) {
-                    shapeRenderer.triangle(100 + i*300, WORLD_HEIGHT, 300 + i*300, WORLD_HEIGHT, 200 + i*200, 0);
-                }
-                
-                shapeRenderer.setColor(0.6f, 0.9f, 1f, 0.5f);
-                for(int i=0; i<30; i++) {
-                    float bx = (i * 73 + timer * 20f) % WORLD_WIDTH;
-                    float by = ((i * 127 + timer * 80f) % (WORLD_HEIGHT + 100)) - 50;
-                    shapeRenderer.circle(bx + com.badlogic.gdx.math.MathUtils.sin(timer*1.5f + i)*15f, by, 2f + (i%5));
-                }
+                com.fishingrpg.game.ui.BaiBienBackground.render(shapeRenderer, timer, WORLD_WIDTH, WORLD_HEIGHT);
             } else if (mapId.equals("dao_xa")) {
                 // Abyss: very dark blue, glowing particles
                 shapeRenderer.setColor(0.01f, 0.02f, 0.05f, 1f);

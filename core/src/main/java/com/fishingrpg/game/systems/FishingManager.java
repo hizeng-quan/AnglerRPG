@@ -74,6 +74,12 @@ public class FishingManager {
     public String castResultText = "";
     public float castResultTimer = 0f;
     
+    // Reel-Up Leap Animation (Hoạt ảnh kéo cá/rác/kho báu vọt lên khỏi mặt nước)
+    public float reelUpTimer = 0f;
+    public static final float REEL_UP_DURATION = 0.9f;
+    public Catchable reelUpCatch = null;
+    public float reelUpStartX = 640f, reelUpStartY = 340f;
+
     public boolean bossSkillJustUsed = false;
     private FloatingTextManager ftm;
 
@@ -202,7 +208,11 @@ public class FishingManager {
             if (success) {
                 player.recordSuccessfulCatch();
                 lastCatch = currentCatch;
-                showCatchSidebar = true;
+                reelUpCatch = currentCatch;
+                reelUpTimer = REEL_UP_DURATION;
+                reelUpStartX = 640f;
+                reelUpStartY = 320f;
+                showCatchSidebar = false;
             }
             
             // Clear one-time buffs
@@ -317,7 +327,7 @@ public class FishingManager {
                 lastCatch = currentCatch;
                 lastCatchExtra = extra;
                 lastCatchResultLine = resultLine;
-                showCatchSidebar = true;
+                showCatchSidebar = false;
             }
             
             float benBiBonus = player.isSkillEquipped("ben_bi") ? player.getSkillTree().getBenBiBonus() : 0f;
@@ -331,6 +341,13 @@ public class FishingManager {
             showCatchSidebar = false;
         }
         if (castResultTimer > 0) castResultTimer -= delta;
+        if (reelUpTimer > 0) {
+            reelUpTimer -= delta;
+            if (reelUpTimer <= 0) {
+                reelUpTimer = 0f;
+                showCatchSidebar = true;
+            }
+        }
         
         float cdDelta = delta;
         

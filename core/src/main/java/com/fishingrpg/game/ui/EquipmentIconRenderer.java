@@ -1379,49 +1379,234 @@ public class EquipmentIconRenderer {
     }
 
     // =========================================================================
-    // 7. HOÀNG GIA SET
+    // 7. HOÀNG GIA SET (Platinum Royal Crown Scepter, Imperial Silk Spool, Royal Jadeite Gold Hook)
     // =========================================================================
-    private static void drawHoangGiaRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Platinum rod with royal gold crown finial
-        sr.setColor(0.85f, 0.88f, 0.95f, 1f); // Platinum shaft
-        sr.rectLine(cx - r * 0.7f, cy - r * 0.7f, cx + r * 0.5f, cy + r * 0.5f, 4f);
-        // Golden scrollwork bands
-        sr.setColor(1f, 0.85f, 0.25f, 1f);
-        sr.circle(cx - r * 0.2f, cy - r * 0.2f, 3f);
-        sr.circle(cx + r * 0.15f, cy + r * 0.15f, 3f);
-        // Royal Crown Finial
-        float hx = cx + r * 0.65f, hy = cy + r * 0.65f;
-        sr.rect(hx - 6f, hy - 2f, 12f, 4f);
-        sr.triangle(hx - 6f, hy + 2f, hx - 6f, hy + 8f, hx - 2f, hy + 2f);
-        sr.triangle(hx - 2f, hy + 2f, hx, hy + 10f, hx + 2f, hy + 2f);
-        sr.triangle(hx + 2f, hy + 2f, hx + 6f, hy + 8f, hx + 6f, hy + 2f);
+    public static void drawHoangGiaRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Royal Golden & Violet Celestial Aura
+        sr.setColor(1.0f, 0.85f, 0.32f, 0.22f);
+        sr.circle(cx, cy, r * 1.32f);
+        sr.setColor(0.65f, 0.25f, 0.85f, 0.16f);
+        sr.circle(cx, cy, r * 1.05f);
+
+        // 2. Heavy Polished Platinum Core Shaft (Thân trượng bạch kim vương giả)
+        float startX = cx - r * 0.78f, startY = cy - r * 0.78f;
+        float endX = cx + r * 0.60f, endY = cy + r * 0.60f;
+        sr.setColor(0.70f, 0.74f, 0.84f, 1f); // Dark platinum backing
+        sr.rectLine(startX, startY, endX, endY, Math.max(4.2f, r * 0.15f));
+        sr.setColor(0.92f, 0.95f, 1.0f, 1f); // Gleaming white platinum core
+        sr.rectLine(startX, startY, endX, endY, Math.max(2.6f, r * 0.09f));
+
+        // 3. Imperial Crimson Velvet Grip & Spiraling 24K Gold Wire (Bọc nhung đỏ thẫm & chỉ vàng)
+        float gripStartX = cx - r * 0.75f, gripStartY = cy - r * 0.75f;
+        float gripEndX = cx - r * 0.28f, gripEndY = cy - r * 0.28f;
+        sr.setColor(0.72f, 0.12f, 0.22f, 1f); // Royal crimson velvet
+        sr.rectLine(gripStartX, gripStartY, gripEndX, gripEndY, Math.max(5.2f, r * 0.19f));
+
+        // 24K Gold spiraling bands around velvet
+        sr.setColor(1.0f, 0.88f, 0.35f, 1f);
+        for (int i = 0; i < 4; i++) {
+            float bx = gripStartX + i * r * 0.14f;
+            float by = gripStartY + i * r * 0.14f;
+            sr.rectLine(bx - r * 0.06f, by + r * 0.06f, bx + r * 0.06f, by - r * 0.06f, Math.max(1.8f, r * 0.06f));
+        }
+
+        // Golden filigree joint rings & ferrule collars
+        sr.setColor(1.0f, 0.82f, 0.25f, 1f);
+        sr.circle(gripEndX, gripEndY, Math.max(3.2f, r * 0.12f));
+        sr.circle(cx + r * 0.05f, cy + r * 0.05f, Math.max(2.6f, r * 0.10f));
+        sr.circle(cx + r * 0.32f, cy + r * 0.32f, Math.max(2.6f, r * 0.10f));
+
+        // 4. Imperial Crown Butt Cap with Royal Ruby Jewel (Chuôi trượng vương miện ngọc ruby)
+        sr.setColor(1.0f, 0.82f, 0.22f, 1f);
+        sr.circle(startX, startY, Math.max(4.5f, r * 0.20f));
+        // Embedded Oval Ruby
+        sr.setColor(0.95f, 0.12f, 0.25f, 1f);
+        sr.circle(startX, startY, Math.max(2.8f, r * 0.12f));
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.circle(startX - 0.8f, startY + 0.8f, 1.2f);
+
+        // 5. 3 Golden Ceramic Guides with Embedded Royal Sapphires (Khoen vàng nạm lam ngọc)
+        for (int i = 0; i < 3; i++) {
+            float gx = cx - r * 0.12f + i * r * 0.24f;
+            float gy = cy - r * 0.12f + i * r * 0.24f;
+            sr.setColor(1.0f, 0.82f, 0.25f, 1f);
+            sr.rectLine(gx, gy, gx - r * 0.09f, gy + r * 0.09f, 2f);
+            // Sapphire jewel ring
+            sr.setColor(0.20f, 0.45f, 0.95f, 1f);
+            sr.circle(gx - r * 0.09f, gy + r * 0.09f, Math.max(2f, r * 0.08f));
+            sr.setColor(0.60f, 0.85f, 1.0f, 1f);
+            sr.circle(gx - r * 0.09f, gy + r * 0.09f, Math.max(1f, r * 0.04f));
+        }
+
+        // 6. Sculpted Imperial Golden Crown Finial (Vương miện hoàng gia trên đỉnh trượng)
+        float hx = cx + r * 0.72f, hy = cy + r * 0.72f;
+        // Crown Base circlet
+        sr.setColor(1.0f, 0.85f, 0.28f, 1f);
+        sr.circle(hx, hy, Math.max(4.5f, r * 0.18f));
+        // 3 Crown fleur-de-lis points
+        sr.setColor(1.0f, 0.88f, 0.35f, 1f);
+        sr.triangle(hx - r * 0.18f, hy, hx - r * 0.28f, hy + r * 0.24f, hx - r * 0.08f, hy + r * 0.08f);
+        sr.triangle(hx, hy, hx - r * 0.04f, hy + r * 0.32f, hx + r * 0.08f, hy + r * 0.08f);
+        sr.triangle(hx, hy - r * 0.18f, hx + r * 0.24f, hy - r * 0.28f, hx + r * 0.08f, hy - r * 0.08f);
+        // Center crown peak gem (Luminous star diamond)
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(hx - r * 0.04f, hy + r * 0.32f, Math.max(1.8f, r * 0.07f));
+        sr.setColor(0.95f, 0.15f, 0.25f, 1f);
+        sr.circle(hx, hy, Math.max(2.2f, r * 0.09f));
     }
 
-    private static void drawHoangGiaLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Imperial ivory spool with crimson and gold silk
-        sr.setColor(0.95f, 0.92f, 0.85f, 1f); // Ivory
-        sr.circle(cx, cy, r * 0.75f);
-        sr.setColor(0.85f, 0.18f, 0.22f, 1f); // Royal Crimson Silk
-        sr.circle(cx, cy, r * 0.58f);
-        sr.setColor(1f, 0.85f, 0.25f, 1f); // Gold Thread core
-        sr.circle(cx, cy, r * 0.35f);
-        sr.setColor(0.95f, 0.92f, 0.85f, 1f);
-        sr.circle(cx, cy, r * 0.18f);
+    public static void drawHoangGiaLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Imperial Royal Aura
+        sr.setColor(1.0f, 0.85f, 0.30f, 0.22f);
+        sr.circle(cx, cy, r * 1.30f);
+        sr.setColor(0.75f, 0.15f, 0.25f, 0.15f);
+        sr.circle(cx, cy, r * 1.05f);
+
+        // 2. Sculpted Imperial Ivory & 24K Gold Rotor Frame (Khung tời ngà voi dát vàng)
+        sr.setColor(0.95f, 0.93f, 0.86f, 1f); // Polished Ivory
+        sr.circle(cx, cy, r * 0.92f);
+        // Outer 24k gold filigree ring
+        sr.setColor(1.0f, 0.85f, 0.25f, 1f);
+        sr.circle(cx, cy, r * 0.84f);
+        sr.setColor(0.14f, 0.12f, 0.16f, 1f);
+        sr.circle(cx, cy, r * 0.74f);
+
+        // 8 Imperial Gold Petal Crown Crests around the rim
+        sr.setColor(1.0f, 0.88f, 0.35f, 1f);
+        for (int i = 0; i < 8; i++) {
+            float ang = i * 45f * MathUtils.degreesToRadians;
+            float cos = MathUtils.cos(ang);
+            float sin = MathUtils.sin(ang);
+            float tx = cx + cos * r * 0.78f;
+            float ty = cy + sin * r * 0.78f;
+            sr.circle(tx, ty, Math.max(2.5f, r * 0.10f));
+            sr.triangle(tx, ty, tx - sin * r * 0.06f, ty + cos * r * 0.06f, cx + cos * r * 0.96f, cy + sin * r * 0.96f);
+        }
+
+        // 3. Deep Spool Well of Crimson & Gold Imperial Silk (Tơ tằm thượng hạng màu chu sa)
+        sr.setColor(0.12f, 0.08f, 0.10f, 1f);
+        sr.circle(cx, cy, r * 0.68f);
+
+        // Woven royal crimson silk layers
+        sr.setColor(0.78f, 0.12f, 0.20f, 1f); // Deep imperial crimson silk
+        sr.circle(cx, cy, r * 0.62f);
+        sr.setColor(1.0f, 0.85f, 0.30f, 1f); // 24K Gold spun thread
+        sr.circle(cx, cy, r * 0.52f);
+        sr.setColor(0.85f, 0.16f, 0.25f, 1f); // Scarlet silk
+        sr.circle(cx, cy, r * 0.42f);
+        sr.setColor(1.0f, 0.92f, 0.45f, 1f); // Core gold thread
+        sr.circle(cx, cy, r * 0.32f);
+
+        // Spiral silk brocade weave texture (Hoa văn dệt tơ tằm chéo)
+        sr.setColor(1.0f, 0.82f, 0.25f, 0.80f);
+        for (int i = 0; i < 8; i++) {
+            float ang = (i * 45f + 22.5f) * MathUtils.degreesToRadians;
+            float cos = MathUtils.cos(ang);
+            float sin = MathUtils.sin(ang);
+            sr.rectLine(cx + cos * r * 0.34f, cy + sin * r * 0.34f, cx + cos * r * 0.62f, cy + sin * r * 0.62f, 1.4f);
+        }
+
+        // 4. Center Imperial Seal Hub with Royal Ruby (Trục ấn triều đình nạm ngọc ruby)
+        sr.setColor(0.95f, 0.92f, 0.85f, 1f); // Ivory collar
+        sr.circle(cx, cy, r * 0.24f);
+        sr.setColor(1.0f, 0.82f, 0.22f, 1f); // Gold mount
+        sr.circle(cx, cy, r * 0.17f);
+        // Ruby core
+        sr.setColor(0.95f, 0.12f, 0.25f, 1f);
+        sr.circle(cx, cy, r * 0.10f);
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.circle(cx - r * 0.03f, cy + r * 0.03f, 1.2f);
+
+        // 5. Gilded Bail Arm & Flowing Royal Silk Line (Càng tời dát vàng & sợi tơ tằm tỏa sáng)
+        sr.setColor(1.0f, 0.82f, 0.22f, 1f);
+        sr.rectLine(cx + r * 0.52f, cy - r * 0.28f, cx + r * 0.84f, cy + r * 0.42f, Math.max(2.6f, r * 0.09f));
+        // Diamond roller guide
+        sr.setColor(0.55f, 0.88f, 1.0f, 1f);
+        sr.circle(cx + r * 0.84f, cy + r * 0.42f, Math.max(2.8f, r * 0.10f));
+        // Glowing gold-crimson silk thread trailing out
+        sr.setColor(1.0f, 0.88f, 0.35f, 1f);
+        sr.rectLine(cx + r * 0.84f, cy + r * 0.42f, cx + r * 1.15f, cy + r * 0.92f, Math.max(1.8f, r * 0.06f));
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(cx + r * 1.02f, cy + r * 0.70f, 1.5f);
     }
 
-    private static void drawHoangGiaHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Carved imperial jadeite hook with gold tassel
-        sr.setColor(0.20f, 0.75f, 0.45f, 1f); // Jade green
-        sr.rectLine(cx - r * 0.2f, cy + r * 0.55f, cx - r * 0.2f, cy - r * 0.35f, 4.5f);
-        sr.rectLine(cx - r * 0.2f, cy - r * 0.35f, cx + r * 0.4f, cy - r * 0.35f, 4.5f);
-        sr.rectLine(cx + r * 0.4f, cy - r * 0.35f, cx + r * 0.4f, cy + r * 0.25f, 4.5f);
-        // Gold wire wrap
-        sr.setColor(1f, 0.85f, 0.25f, 1f);
-        sr.rect(cx - r * 0.28f, cy + r * 0.1f, r * 0.16f, 3f);
-        sr.rect(cx - r * 0.28f, cy + r * 0.22f, r * 0.16f, 3f);
-        // Red ruby tassel
-        sr.setColor(0.85f, 0.18f, 0.22f, 1f);
-        sr.triangle(cx - r * 0.2f, cy + r * 0.55f, cx - r * 0.35f, cy + r * 0.8f, cx - r * 0.05f, cy + r * 0.8f);
+    public static void drawHoangGiaHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Imperial Jade & Gold Aura
+        sr.setColor(0.25f, 0.85f, 0.50f, 0.22f);
+        sr.circle(cx, cy, r * 1.25f);
+        sr.setColor(1.0f, 0.85f, 0.30f, 0.16f);
+        sr.circle(cx, cy, r * 1.05f);
+
+        // 2. Imperial Golden Lotus Eyelet & Royal Ruby Charm (Khuyên hoa sen vàng & chuỗi ngọc)
+        float eyeX = cx - r * 0.22f;
+        float eyeY = cy + r * 0.70f;
+        sr.setColor(1.0f, 0.82f, 0.22f, 1f);
+        sr.circle(eyeX, eyeY, Math.max(4.6f, r * 0.22f));
+        sr.setColor(0.08f, 0.12f, 0.16f, 1f);
+        sr.circle(eyeX, eyeY, Math.max(2.0f, r * 0.10f));
+
+        // 24K Gold filigree crown collar
+        sr.setColor(1.0f, 0.88f, 0.35f, 1f);
+        sr.rect(eyeX - r * 0.14f, eyeY - r * 0.22f, r * 0.28f, r * 0.12f);
+
+        // Hanging Royal Crimson Silk Tassel with dangling Ruby Gem (Tua rua nhung đỏ nạm ngọc ruby)
+        sr.setColor(0.85f, 0.14f, 0.22f, 1f);
+        sr.triangle(eyeX, eyeY - r * 0.22f, eyeX - r * 0.18f, eyeY - r * 0.52f, eyeX + r * 0.04f, eyeY - r * 0.52f);
+        // Ruby pendant bead
+        sr.setColor(0.95f, 0.15f, 0.25f, 1f);
+        sr.circle(eyeX - r * 0.07f, eyeY - r * 0.54f, Math.max(2.2f, r * 0.09f));
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(eyeX - r * 0.09f, eyeY - r * 0.52f, 1.2f);
+
+        // 3. Carved Imperial Emerald-Jadeite Shank (Thân ngọc cẩm thạch ngọc bích chạm rồng)
+        float shankX = cx - r * 0.20f;
+        float bendBottomY = cy - r * 0.42f;
+
+        // Deep translucent jadeite stone
+        sr.setColor(0.12f, 0.58f, 0.34f, 1f);
+        sr.rectLine(shankX, eyeY - r * 0.18f, shankX, bendBottomY, Math.max(5.8f, r * 0.24f));
+        // Luminous emerald-jade inner core
+        sr.setColor(0.28f, 0.88f, 0.54f, 1f);
+        sr.rectLine(shankX, eyeY - r * 0.18f, shankX, bendBottomY, Math.max(3.6f, r * 0.15f));
+
+        // 24K Gold Dragon Ribbon Wraps around jade shank (Dải rồng vàng quấn quanh thân ngọc)
+        sr.setColor(1.0f, 0.85f, 0.25f, 1f);
+        for (int i = 0; i < 3; i++) {
+            float by = eyeY - r * 0.32f - i * r * 0.24f;
+            sr.rectLine(shankX - r * 0.14f, by + r * 0.06f, shankX + r * 0.14f, by - r * 0.06f, Math.max(2.2f, r * 0.08f));
+        }
+
+        // 4. Sweeping U-Bend of Carved Jadeite & Gold Spine (Đáy uốn cong cẩm thạch bọc vàng)
+        sr.setColor(0.12f, 0.58f, 0.34f, 1f);
+        sr.rectLine(shankX, bendBottomY, cx + r * 0.45f, bendBottomY + r * 0.08f, Math.max(5.8f, r * 0.24f));
+        sr.setColor(0.28f, 0.88f, 0.54f, 1f);
+        sr.rectLine(shankX, bendBottomY, cx + r * 0.45f, bendBottomY + r * 0.08f, Math.max(3.6f, r * 0.15f));
+        // Gold reinforcement spine under the bend
+        sr.setColor(1.0f, 0.85f, 0.25f, 1f);
+        sr.rectLine(shankX, bendBottomY - r * 0.04f, cx + r * 0.35f, bendBottomY + r * 0.04f, 2f);
+
+        // 5. Polished Platinum Recurve Point & Razor Barb (Mũi bạch kim siêu bén & ngạnh khóa mồi)
+        float hookTipX = cx + r * 0.50f;
+        float hookTipY = cy + r * 0.38f;
+
+        // Jade upward curve
+        sr.setColor(0.12f, 0.58f, 0.34f, 1f);
+        sr.triangle(cx + r * 0.35f, bendBottomY + r * 0.04f, cx + r * 0.62f, cy + r * 0.10f, hookTipX, hookTipY);
+        // Pure Platinum forged razor cutting point
+        sr.setColor(0.85f, 0.88f, 0.96f, 1f);
+        sr.triangle(cx + r * 0.38f, bendBottomY + r * 0.06f, cx + r * 0.56f, cy + r * 0.12f, hookTipX, hookTipY);
+
+        // Platinum Inward Barb (Ngạnh móc ngược bạch kim)
+        sr.setColor(0.95f, 0.97f, 1.0f, 1f);
+        sr.triangle(hookTipX, hookTipY, cx + r * 0.42f, cy + r * 0.18f, cx + r * 0.26f, cy + r * 0.20f);
+
+        // Gold inlay accent line
+        sr.setColor(1.0f, 0.88f, 0.35f, 0.95f);
+        sr.rectLine(cx + r * 0.38f, bendBottomY + r * 0.15f, hookTipX - r * 0.05f, hookTipY - r * 0.05f, 1.5f);
+
+        // Specular glint on diamond-honed platinum tip
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(hookTipX, hookTipY, Math.max(1.5f, r * 0.06f));
     }
 
     // =========================================================================

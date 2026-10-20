@@ -78,7 +78,7 @@ public class FishVisualRenderer {
                 drawCaChepVang(sr, cx, cy, scale, wag, timer);
                 break;
             case "Cá Lăng Khổng Lồ":
-                drawCaLangKhongLo(sr, cx, cy, scale, wag);
+                drawCaLangKhongLo(sr, cx, cy, scale, wag, timer);
                 break;
             case "Thủy Quái Sông Trà":
                 drawThuyQuaiSongTra(sr, cx, cy, scale, wag, timer);
@@ -1311,97 +1311,349 @@ public class FishVisualRenderer {
     // =========================================================================
     // 13. CÁ LĂNG KHỔNG LỒ (Titan Bagrid Catfish, Slate Blue Armor, Jagged Spines)
     // =========================================================================
-    private static void drawCaLangKhongLo(ShapeRenderer sr, float cx, float cy, float s, float wag) {
-        float tailX = cx - 68f * s + wag * 6f * s;
-        float tailY = cy + wag * 7f * s;
+    public static void drawCaLangKhongLo(ShapeRenderer sr, float cx, float cy, float s, float wag, float timer) {
+        float tailX = cx - 72f * s + wag * 7f * s;
+        float tailY = cy + wag * 8f * s;
 
-        // Powerful notched caudal fin
-        sr.setColor(0.20f, 0.25f, 0.35f, 1f);
-        sr.triangle(cx - 38f * s, cy, tailX - 28f * s, tailY + 32f * s, tailX - 8f * s, tailY);
-        sr.triangle(cx - 38f * s, cy, tailX - 28f * s, tailY - 32f * s, tailX - 8f * s, tailY);
+        // 1. Deeply Bifurcated Predatory Caudal Fin (Đuôi chẻ sâu mạnh mẽ viền đỏ ngọc)
+        // Outer dark abyssal navy membrane
+        sr.setColor(0.12f, 0.16f, 0.26f, 0.95f);
+        sr.triangle(cx - 36f * s, cy, tailX - 35f * s, tailY + 36f * s, tailX - 10f * s, tailY + 4f * s);
+        sr.triangle(cx - 36f * s, cy, tailX - 35f * s, tailY - 36f * s, tailX - 10f * s, tailY - 4f * s);
 
-        // Prominent jagged dorsal spine (Ngạnh sắc nhọn cá lăng khổng lồ)
-        sr.setColor(0.70f, 0.75f, 0.85f, 1f);
-        sr.triangle(cx - 15f * s, cy + 18f * s, cx + 8f * s, cy + 18f * s, cx - 6f * s, cy + 42f * s);
+        // Radiant electric ice-blue fin rays (5 upper, 5 lower)
+        sr.setColor(0.35f, 0.70f, 0.95f, 0.85f);
+        for (int i = 0; i < 5; i++) {
+            sr.rectLine(cx - 34f * s, cy + 2f * s, tailX - (33f - i * 4f) * s, tailY + (34f - i * 7f) * s, 1.6f * s);
+            sr.rectLine(cx - 34f * s, cy - 2f * s, tailX - (33f - i * 4f) * s, tailY - (34f - i * 7f) * s, 1.6f * s);
+        }
 
-        // Massive titan armored slate-blue body
-        sr.setColor(0.25f, 0.32f, 0.44f, 1f);
-        sr.rectLine(cx - 38f * s, cy, cx + 26f * s, cy, 36f * s);
-        sr.circle(cx, cy, 26f * s);
+        // Trailing edge crimson-tinted fin tip accents
+        sr.setColor(0.70f, 0.20f, 0.32f, 0.85f);
+        sr.triangle(tailX - 35f * s, tailY + 36f * s, tailX - 22f * s, tailY + 24f * s, tailX - 38f * s, tailY + 28f * s);
+        sr.triangle(tailX - 35f * s, tailY - 36f * s, tailX - 22f * s, tailY - 24f * s, tailX - 38f * s, tailY - 28f * s);
 
-        // Silvery blue underbelly
-        sr.setColor(0.68f, 0.78f, 0.90f, 1f);
-        sr.circle(cx + 4f * s, cy - 8f * s, 21f * s);
+        // 2. Adipose Fin (Vây mỡ đặc trưng cá lăng đáy sông sâu)
+        sr.setColor(0.18f, 0.25f, 0.38f, 0.90f);
+        sr.triangle(cx - 38f * s, cy + 12f * s, cx - 20f * s, cy + 14f * s, cx - 28f * s, cy + 25f * s);
+        sr.setColor(0.35f, 0.65f, 0.90f, 0.80f);
+        sr.rectLine(cx - 38f * s, cy + 12f * s, cx - 28f * s, cy + 25f * s, 1.5f * s);
 
-        // Huge predatory catfish head
-        sr.setColor(0.28f, 0.36f, 0.48f, 1f);
-        sr.circle(cx + 38f * s, cy, 18f * s);
+        // 3. Giant Serrated Prehistoric Bone Dorsal Spine (Ngạnh lưng khổng lồ sắc nhọn như dao cưa)
+        // Webbed membrane connecting spine to dorsal hump
+        sr.setColor(0.20f, 0.28f, 0.42f, 0.75f);
+        sr.triangle(cx - 16f * s, cy + 16f * s, cx + 12f * s, cy + 16f * s, cx - 4f * s, cy + 46f * s);
+        // Fine supporting fin rays in membrane
+        sr.setColor(0.35f, 0.55f, 0.80f, 0.85f);
+        for (int r = 0; r < 3; r++) {
+            sr.rectLine(cx - 8f * s + r * 6f * s, cy + 16f * s, cx - 4f * s + r * 2f * s, cy + (40f - r * 8f) * s, 1.4f * s);
+        }
+        // Colossal rigid ivory bone spine shaft
+        sr.setColor(0.92f, 0.90f, 0.82f, 1f);
+        sr.rectLine(cx - 8f * s, cy + 16f * s, cx - 4f * s, cy + 48f * s, 3.2f * s);
+        // Jagged serrated barbs on rear edge of the spine
+        sr.setColor(0.95f, 0.92f, 0.80f, 1f);
+        for (int b = 0; b < 4; b++) {
+            float by = cy + (22f + b * 6.5f) * s;
+            float bx = cx - (7f - b * 0.8f) * s;
+            sr.triangle(bx, by, bx - 4.5f * s, by - 2.5f * s, bx - 1.5f * s, by - 5f * s);
+        }
+        // Glowing electric blue energy core in spine
+        sr.setColor(0.40f, 0.85f, 1.0f, 0.95f);
+        sr.rectLine(cx - 7f * s, cy + 17f * s, cx - 4.2f * s, cy + 46f * s, 1.4f * s);
 
-        // Giant dragon-like barbels
-        sr.setColor(0.18f, 0.22f, 0.32f, 1f);
-        sr.rectLine(cx + 44f * s, cy + 10f * s, cx + 72f * s, cy + 26f * s + wag * 3f * s, 4f * s);
-        sr.rectLine(cx + 44f * s, cy - 10f * s, cx + 72f * s, cy - 26f * s - wag * 3f * s, 4f * s);
+        // 4. Massive Titan Muscular Body & Slate-Blue Armor (Thân bọc giáp titan xanh phiến thạch)
+        // Dark abyssal slate-navy dorsal mantle
+        sr.setColor(0.16f, 0.22f, 0.34f, 1f);
+        sr.circle(cx + 6f * s, cy + 4f * s, 26f * s, 30);
+        sr.circle(cx - 16f * s, cy + 2f * s, 22f * s, 26);
+        sr.circle(cx - 36f * s, cy, 15f * s, 20);
 
-        // Intimidating icy blue eye
-        sr.setColor(0.55f, 0.85f, 1.0f, 1f);
-        sr.circle(cx + 35f * s, cy + 7f * s, 6f * s);
-        sr.setColor(0.08f, 0.12f, 0.20f, 1f);
-        sr.circle(cx + 36f * s, cy + 7f * s, 3.2f * s);
+        // Titan slate-blue body flanks
+        sr.setColor(0.24f, 0.32f, 0.46f, 1f);
+        sr.circle(cx + 6f * s, cy, 25f * s, 30);
+        sr.circle(cx - 14f * s, cy, 20f * s, 26);
+
+        // Shimmering Moonlight-Silver Underbelly (Bụng ánh bạc phát quang huyền ảo)
+        sr.setColor(0.72f, 0.82f, 0.92f, 1f);
+        sr.circle(cx + 8f * s, cy - 8f * s, 19f * s, 26);
+        sr.circle(cx - 10f * s, cy - 7f * s, 15f * s, 22);
+        sr.setColor(0.88f, 0.94f, 0.98f, 1f);
+        sr.circle(cx + 8f * s, cy - 11f * s, 14f * s, 24);
+
+        // 5. Bioluminescent Lateral Line (Đường cảm giác phát sáng xanh băng)
+        sr.setColor(0.35f, 0.75f, 1.0f, 0.65f);
+        sr.rectLine(cx - 38f * s, cy, cx + 22f * s, cy + 3f * s, 1.5f * s);
+        for (int p = 0; p < 6; p++) {
+            float px = cx - 34f * s + p * 10f * s;
+            float py = cy + 0.5f * s + (p * 0.4f) * s;
+            float glowPulse = 0.7f + 0.3f * MathUtils.sin(timer * 4f + p * 0.8f);
+            sr.setColor(0.55f, 0.90f, 1.0f, glowPulse);
+            sr.circle(px, py, 2.0f * s);
+        }
+
+        // 6. Giant Serrated Pectoral Stings (Ngạnh ngực cá lăng như cặp dao găm sát thủ)
+        sr.setColor(0.20f, 0.28f, 0.40f, 0.90f);
+        sr.triangle(cx + 12f * s, cy - 6f * s, cx - 12f * s, cy - 26f * s, cx + 2f * s, cy - 28f * s);
+        sr.setColor(0.92f, 0.90f, 0.82f, 1f);
+        sr.rectLine(cx + 12f * s, cy - 6f * s, cx - 10f * s, cy - 28f * s, 2.8f * s);
+        // Barbs on pectoral sting
+        sr.setColor(0.95f, 0.92f, 0.80f, 1f);
+        for (int pb = 0; pb < 3; pb++) {
+            float pbx = cx + (6f - pb * 5.5f) * s;
+            float pby = cy - (12f + pb * 5.5f) * s;
+            sr.triangle(pbx, pby, pbx - 3.5f * s, pby + 1.5f * s, pbx - 1.5f * s, pby - 4f * s);
+        }
+
+        // 7. Broad Predatory Armored Catfish Head & Operculum (Đầu bọc giáp dẹp & nắp mang)
+        sr.setColor(0.26f, 0.34f, 0.48f, 1f);
+        sr.circle(cx + 34f * s, cy, 19f * s);
+        sr.triangle(cx + 26f * s, cy + 18f * s, cx + 26f * s, cy - 14f * s, cx + 54f * s, cy + 1f * s);
+        sr.circle(cx + 50f * s, cy + 1f * s, 7f * s); // Broad predatory snout
+
+        // Metallic slate operculum gill plate
+        sr.setColor(0.32f, 0.42f, 0.56f, 0.85f);
+        sr.circle(cx + 26f * s, cy + 2f * s, 13f * s);
+        // Undershot predatory mouth
+        sr.setColor(0.12f, 0.16f, 0.24f, 1f);
+        sr.rectLine(cx + 42f * s, cy - 4f * s, cx + 54f * s, cy - 1f * s, 2.2f * s);
+
+        // 8. Iconic Long Sinuous Catfish Whiskers (4 Cặp râu cá lăng rồng uốn lượn uy dũng)
+        // Upper primary maxillary barbels (sweeping back with dynamic wave)
+        sr.setColor(0.18f, 0.24f, 0.36f, 1f);
+        sr.rectLine(cx + 48f * s, cy + 6f * s, cx + 66f * s, cy + 20f * s, 3.2f * s);
+        sr.rectLine(cx + 66f * s, cy + 20f * s, cx + 86f * s, cy + 30f * s + wag * 4.5f * s, 2.2f * s);
+        // Bioluminescent glowing cyan whisker tip
+        sr.setColor(0.40f, 0.85f, 1.0f, 0.95f);
+        sr.circle(cx + 86f * s, cy + 30f * s + wag * 4.5f * s, 2.2f * s);
+
+        // Lower secondary chin barbels
+        sr.setColor(0.20f, 0.26f, 0.38f, 1f);
+        sr.rectLine(cx + 48f * s, cy - 4f * s, cx + 68f * s, cy - 18f * s - wag * 3f * s, 2.4f * s);
+        // Inner delicate sensory chin whisker
+        sr.rectLine(cx + 52f * s, cy - 1f * s, cx + 66f * s, cy - 8f * s, 1.6f * s);
+
+        // 9. Piercing Arctic Ice-Blue Predatory Eye (Mắt xanh băng lạnh lùng của loài săn mồi vực thẳm)
+        sr.setColor(0.08f, 0.12f, 0.18f, 1f); // Deep socket
+        sr.circle(cx + 36f * s, cy + 7f * s, 6.5f * s);
+        sr.setColor(0.35f, 0.85f, 1.0f, 1f); // Glowing ice-cyan iris
+        sr.circle(cx + 36.5f * s, cy + 7f * s, 4.8f * s);
+        sr.setColor(0.04f, 0.06f, 0.10f, 1f); // Vertical predator slit pupil
+        sr.circle(cx + 37f * s, cy + 7f * s, 2.8f * s);
+        sr.setColor(1f, 1f, 1f, 1f); // Diamond specular glint
+        sr.circle(cx + 38.5f * s, cy + 8.5f * s, 1.4f * s);
     }
 
     // =========================================================================
-    // 14. THỦY QUÁI SÔNG TRÀ (Prehistoric Boss Behemoth, Demon Eye, Armored Spikes)
+    // 14. THỦY QUÁI SÔNG TRÀ (Apex Mythic Boss Behemoth, Demon Eye, Magma Armor)
     // =========================================================================
-    private static void drawThuyQuaiSongTra(ShapeRenderer sr, float cx, float cy, float s, float wag, float timer) {
-        float tailX = cx - 75f * s + wag * 8f * s;
-        float tailY = cy + wag * 9f * s;
+    public static void drawThuyQuaiSongTra(ShapeRenderer sr, float cx, float cy, float s, float wag, float timer) {
+        float pulse = 0.8f + 0.2f * MathUtils.sin(timer * 7f);
+        float fastPulse = 0.75f + 0.25f * MathUtils.sin(timer * 12f);
+        float tailX = cx - 78f * s + wag * 8.5f * s;
+        float tailY = cy + wag * 9.5f * s;
 
-        // Mythic Demonic Whirlpool Aura
-        float pulse = 0.8f + 0.2f * MathUtils.sin(timer * 8f);
-        sr.setColor(0.65f, 0.10f, 0.25f, 0.35f * pulse);
-        sr.circle(cx, cy, 60f * s);
-        sr.setColor(0.95f, 0.20f, 0.10f, 0.20f * pulse);
-        sr.circle(cx, cy, 75f * s);
+        // 1. Mythic Demonic Abyssal Aura (Hào quang Huyết Ma Vực Thẳm đa tầng rực lửa)
+        // Outer abyssal blood vortex
+        sr.setColor(0.65f, 0.08f, 0.18f, 0.22f * pulse);
+        sr.circle(cx, cy, 82f * s, 36);
+        // Molten magma energy ring
+        sr.setColor(0.95f, 0.22f, 0.08f, 0.28f * pulse);
+        sr.circle(cx, cy, 65f * s, 32);
+        // Inner hellfire core
+        sr.setColor(1.0f, 0.45f, 0.10f, 0.20f * pulse);
+        sr.circle(cx, cy, 48f * s, 28);
 
-        // Massive armored serrated caudal fin
-        sr.setColor(0.45f, 0.12f, 0.18f, 1f);
-        sr.triangle(cx - 42f * s, cy, tailX - 35f * s, tailY + 42f * s, tailX - 10f * s, tailY + 10f * s);
-        sr.triangle(cx - 42f * s, cy, tailX - 35f * s, tailY - 42f * s, tailX - 10f * s, tailY - 10f * s);
-
-        // Row of colossal prehistoric bone dorsal spikes
-        sr.setColor(0.92f, 0.85f, 0.70f, 1f);
+        // 6 Orbiting demonic flame embers (Tàn lửa ma quỷ xoay tròn quanh bạo chúa)
         for (int i = 0; i < 6; i++) {
-            float sx = cx - 30f * s + i * 12f * s;
-            sr.triangle(sx - 5f * s, cy + 20f * s, sx + 5f * s, cy + 20f * s, sx, cy + (38f + (i % 3) * 8f) * s);
+            float angle = timer * 2.5f + i * (MathUtils.PI / 3f);
+            float orbitR = (62f + (i % 2) * 12f) * s;
+            float ex = cx + MathUtils.cos(angle) * orbitR;
+            float ey = cy + MathUtils.sin(angle) * (orbitR * 0.65f);
+            sr.setColor(1.0f, 0.35f + (i % 2) * 0.4f, 0.1f, 0.75f * fastPulse);
+            sr.circle(ex, ey, (3.2f + (i % 2) * 1.5f) * s);
+            sr.setColor(1.0f, 0.92f, 0.45f, 0.90f);
+            sr.circle(ex, ey, 1.2f * s);
         }
 
-        // Colossal prehistoric leviathan body
-        sr.setColor(0.22f, 0.15f, 0.22f, 1f);
-        sr.rectLine(cx - 44f * s, cy, cx + 30f * s, cy, 44f * s);
-        sr.circle(cx, cy, 32f * s);
+        // 2. Colossal Scythe-Like Demon Caudal Fin (Đuôi lưỡi hái bạo chúa khổng lồ)
+        // Upper scythe blade
+        sr.setColor(0.28f, 0.06f, 0.12f, 1f);
+        sr.triangle(cx - 42f * s, cy, tailX - 42f * s, tailY + 48f * s, tailX - 12f * s, tailY + 8f * s);
+        sr.setColor(0.75f, 0.14f, 0.10f, 0.90f);
+        sr.triangle(cx - 38f * s, cy, tailX - 35f * s, tailY + 40f * s, tailX - 14f * s, tailY + 6f * s);
 
-        // Glowing crimson bloodline fissures along body
-        sr.setColor(1.0f, 0.25f, 0.15f, 0.95f);
-        sr.rectLine(cx - 38f * s, cy + 6f * s, cx + 25f * s, cy + 6f * s, 3.5f * s);
-        sr.rectLine(cx - 32f * s, cy - 6f * s, cx + 20f * s, cy - 6f * s, 3.5f * s);
+        // Lower scythe blade
+        sr.setColor(0.28f, 0.06f, 0.12f, 1f);
+        sr.triangle(cx - 42f * s, cy, tailX - 42f * s, tailY - 48f * s, tailX - 12f * s, tailY - 8f * s);
+        sr.setColor(0.75f, 0.14f, 0.10f, 0.90f);
+        sr.triangle(cx - 38f * s, cy, tailX - 35f * s, tailY - 40f * s, tailX - 14f * s, tailY - 6f * s);
 
-        // Armored skull with jutting crocodile-like jaw and sharp white fangs
-        sr.setColor(0.18f, 0.12f, 0.18f, 1f);
-        sr.triangle(cx + 25f * s, cy + 22f * s, cx + 25f * s, cy - 22f * s, cx + 62f * s, cy);
+        // Radiating molten magma veins in caudal fin
+        sr.setColor(1.0f, 0.40f, 0.10f, 0.85f * pulse);
+        for (int v = 0; v < 3; v++) {
+            sr.rectLine(cx - 38f * s, cy, tailX - (36f - v * 8f) * s, tailY + (38f - v * 12f) * s, 1.8f * s);
+            sr.rectLine(cx - 38f * s, cy, tailX - (36f - v * 8f) * s, tailY - (38f - v * 12f) * s, 1.8f * s);
+        }
 
-        // Protruding terrifying white fangs
-        sr.setColor(1.0f, 1.0f, 1.0f, 1f);
-        sr.triangle(cx + 42f * s, cy + 8f * s, cx + 46f * s, cy + 8f * s, cx + 44f * s, cy + 18f * s);
-        sr.triangle(cx + 48f * s, cy + 6f * s, cx + 52f * s, cy + 6f * s, cx + 50f * s, cy + 15f * s);
-        sr.triangle(cx + 45f * s, cy - 8f * s, cx + 49f * s, cy - 8f * s, cx + 47f * s, cy - 18f * s);
+        // 3 Vicious Trailing Bone Talons on caudal margin
+        sr.setColor(0.92f, 0.88f, 0.75f, 1f);
+        sr.triangle(tailX - 42f * s, tailY + 48f * s, tailX - 34f * s, tailY + 42f * s, tailX - 54f * s, tailY + 54f * s);
+        sr.triangle(tailX - 42f * s, tailY - 48f * s, tailX - 34f * s, tailY - 42f * s, tailX - 54f * s, tailY - 54f * s);
+        sr.triangle(tailX - 22f * s, tailY + 4f * s, tailX - 22f * s, tailY - 4f * s, tailX - 40f * s, tailY);
+        // Bloodstained talon tips
+        sr.setColor(0.90f, 0.15f, 0.15f, 0.95f);
+        sr.circle(tailX - 54f * s, tailY + 54f * s, 2.5f * s);
+        sr.circle(tailX - 54f * s, tailY - 54f * s, 2.5f * s);
 
-        // Glowing Crimson Demonic Eye
-        sr.setColor(1.0f, 0.15f, 0.15f, 1f);
-        sr.circle(cx + 40f * s, cy + 8f * s, 7f * s);
-        sr.setColor(1.0f, 0.85f, 0.20f, 1f);
-        sr.circle(cx + 41f * s, cy + 8f * s, 4f * s);
-        sr.setColor(0.05f, 0.0f, 0.0f, 1f);
-        sr.circle(cx + 42f * s, cy + 8f * s, 2f * s);
+        // 3. Prehistoric Dragon Bone Dorsal Spikes (7 Dãy gai bạo chúa tiền sử rực lửa)
+        for (int i = 0; i < 7; i++) {
+            float sx = cx - 36f * s + i * 11.5f * s;
+            float spikeH = 26f + (float) Math.sin(i * 0.52f) * 24f; // Horns rise dramatically up to 50f * s
+
+            // Obsidian armor root
+            sr.setColor(0.18f, 0.10f, 0.18f, 1f);
+            sr.triangle(sx - 6f * s, cy + 18f * s, sx + 6f * s, cy + 18f * s, sx, cy + (18f + spikeH) * s);
+
+            // Prehistoric bone horn
+            sr.setColor(0.90f, 0.84f, 0.70f, 1f);
+            sr.triangle(sx - 4.5f * s, cy + 18f * s, sx + 4.5f * s, cy + 18f * s, sx - 1.5f * s, cy + (18f + spikeH) * s);
+
+            // Molten volcanic magma fissure running inside horn
+            sr.setColor(1.0f, 0.35f, 0.12f, 0.95f);
+            sr.rectLine(sx, cy + 18f * s, sx - 1.2f * s, cy + (18f + spikeH - 4f) * s, 1.8f * s);
+
+            // Needle-sharp glowing tip glint
+            sr.setColor(1.0f, 0.88f, 0.40f, 1f);
+            sr.circle(sx - 1.5f * s, cy + (18f + spikeH) * s, 1.6f * s);
+        }
+
+        // 4. Titan Prehistoric Leviathan Dragonhide Body (Thân bọc giáp rồng hắc ám)
+        // Dorsal obsidian dragon plate
+        sr.setColor(0.12f, 0.08f, 0.15f, 1f);
+        sr.circle(cx + 8f * s, cy + 4f * s, 32f * s, 32);
+        sr.circle(cx - 18f * s, cy + 3f * s, 26f * s, 28);
+        sr.circle(cx - 40f * s, cy, 18f * s, 24);
+
+        // Main obsidian violet-black torso
+        sr.setColor(0.18f, 0.12f, 0.20f, 1f);
+        sr.circle(cx + 8f * s, cy, 30f * s, 32);
+        sr.circle(cx - 16f * s, cy, 24f * s, 28);
+
+        // Volcanic deep crimson lower flanks
+        sr.setColor(0.42f, 0.10f, 0.14f, 1f);
+        sr.circle(cx + 10f * s, cy - 10f * s, 22f * s, 28);
+        sr.circle(cx - 12f * s, cy - 9f * s, 17f * s, 24);
+
+        // 5. Dynamic Molten Volcanic Fissures (Hệ thống vết nứt magma rực lửa chạy dọc thân)
+        // Upper fissure halo
+        sr.setColor(0.95f, 0.18f, 0.08f, 0.90f * pulse);
+        sr.rectLine(cx - 38f * s, cy + 8f * s, cx - 10f * s, cy + 12f * s, 4.0f * s);
+        sr.rectLine(cx - 10f * s, cy + 12f * s, cx + 22f * s, cy + 8f * s, 3.5f * s);
+        // Upper fissure incandescent core
+        sr.setColor(1.0f, 0.82f, 0.25f, 1f);
+        sr.rectLine(cx - 36f * s, cy + 8f * s, cx - 10f * s, cy + 12f * s, 2.0f * s);
+        sr.rectLine(cx - 10f * s, cy + 12f * s, cx + 20f * s, cy + 8f * s, 1.8f * s);
+
+        // Lower fissure halo
+        sr.setColor(0.95f, 0.18f, 0.08f, 0.85f * pulse);
+        sr.rectLine(cx - 30f * s, cy - 6f * s, cx - 6f * s, cy - 8f * s, 3.2f * s);
+        sr.rectLine(cx - 6f * s, cy - 8f * s, cx + 18f * s, cy - 4f * s, 3.0f * s);
+        // Lower fissure incandescent core
+        sr.setColor(1.0f, 0.75f, 0.20f, 1f);
+        sr.rectLine(cx - 28f * s, cy - 6f * s, cx - 6f * s, cy - 8f * s, 1.6f * s);
+        sr.rectLine(cx - 6f * s, cy - 8f * s, cx + 16f * s, cy - 4f * s, 1.5f * s);
+
+        // Vertical branch fissure
+        sr.setColor(1.0f, 0.50f, 0.15f, 0.90f * pulse);
+        sr.rectLine(cx - 10f * s, cy + 12f * s, cx - 6f * s, cy - 8f * s, 1.8f * s);
+
+        // Lateral armored scutes (Vảy giáp sừng sắc bén)
+        sr.setColor(0.32f, 0.18f, 0.30f, 1f);
+        for (int j = 0; j < 4; j++) {
+            float jx = cx - 22f * s + j * 12f * s;
+            sr.triangle(jx - 4f * s, cy + 2f * s, jx + 4f * s, cy + 2f * s, jx, cy + 7f * s);
+        }
+
+        // 6. Winged Demon Pectoral Fin with Sharp Bone Claws (Vây ngực vuốt quỷ)
+        sr.setColor(0.24f, 0.08f, 0.14f, 0.95f);
+        sr.triangle(cx + 16f * s, cy - 8f * s, cx - 10f * s, cy - 30f * s, cx + 12f * s, cy - 32f * s);
+        sr.setColor(0.65f, 0.15f, 0.12f, 0.85f);
+        sr.triangle(cx + 16f * s, cy - 8f * s, cx - 6f * s, cy - 26f * s, cx + 8f * s, cy - 28f * s);
+
+        // 3 Sharp bone talons on pectoral fin
+        sr.setColor(0.90f, 0.85f, 0.72f, 1f);
+        sr.rectLine(cx + 16f * s, cy - 8f * s, cx - 8f * s, cy - 32f * s, 2.4f * s);
+        sr.rectLine(cx + 16f * s, cy - 8f * s, cx + 4f * s, cy - 34f * s, 2.2f * s);
+        sr.rectLine(cx + 16f * s, cy - 8f * s, cx + 14f * s, cy - 32f * s, 2.0f * s);
+
+        // 7. Terrifying Crocodilian Skull & Jaws (Đầu bạo chúa tiền sử & hàm răng nanh tử thần)
+        // Skull cranium
+        sr.setColor(0.18f, 0.12f, 0.20f, 1f);
+        sr.circle(cx + 38f * s, cy + 4f * s, 22f * s);
+        sr.setColor(0.16f, 0.10f, 0.18f, 1f);
+        sr.triangle(cx + 26f * s, cy + 24f * s, cx + 26f * s, cy - 18f * s, cx + 66f * s, cy + 3f * s);
+
+        // Backward-Curved Demonic Horns on the Crown (Sừng quỷ bạo chúa vuốt ngược về sau)
+        sr.setColor(0.88f, 0.82f, 0.68f, 1f);
+        sr.triangle(cx + 28f * s, cy + 22f * s, cx + 36f * s, cy + 20f * s, cx + 16f * s, cy + 40f * s);
+        sr.setColor(1.0f, 0.35f, 0.12f, 1f);
+        sr.rectLine(cx + 32f * s, cy + 21f * s, cx + 20f * s, cy + 36f * s, 1.8f * s);
+        // Cheek armor horn
+        sr.setColor(0.88f, 0.82f, 0.68f, 1f);
+        sr.triangle(cx + 26f * s, cy - 8f * s, cx + 32f * s, cy - 12f * s, cx + 18f * s, cy - 24f * s);
+
+        // Gaping Predatory Maw (Hàm há to khoe vòm họng đỏ rực tử thần)
+        sr.setColor(0.50f, 0.05f, 0.08f, 1f);
+        sr.triangle(cx + 40f * s, cy + 5f * s, cx + 40f * s, cy - 5f * s, cx + 64f * s, cy);
+        sr.setColor(0.95f, 0.25f, 0.08f, 0.85f * fastPulse);
+        sr.circle(cx + 44f * s, cy, 5.5f * s);
+
+        // Interlocking Razor-Sharp Prehistoric Fangs (6 Răng nanh khổng lồ sắc lẹm)
+        sr.setColor(0.98f, 0.98f, 0.90f, 1f);
+        // Upper jaw fangs (pointing down)
+        sr.triangle(cx + 46f * s, cy + 7f * s, cx + 52f * s, cy + 7f * s, cx + 49f * s, cy - 4f * s);
+        sr.triangle(cx + 56f * s, cy + 5f * s, cx + 60f * s, cy + 5f * s, cx + 58f * s, cy - 2f * s);
+        sr.triangle(cx + 40f * s, cy + 6f * s, cx + 44f * s, cy + 6f * s, cx + 42f * s, cy - 1f * s);
+        // Lower jaw fangs (pointing up)
+        sr.triangle(cx + 43f * s, cy - 7f * s, cx + 48f * s, cy - 7f * s, cx + 46f * s, cy + 3f * s);
+        sr.triangle(cx + 52f * s, cy - 6f * s, cx + 56f * s, cy - 6f * s, cx + 54f * s, cy + 2f * s);
+        sr.triangle(cx + 60f * s, cy - 4f * s, cx + 64f * s, cy - 4f * s, cx + 62f * s, cy + 1f * s);
+        // Bloodstained fang tips
+        sr.setColor(0.85f, 0.15f, 0.15f, 0.85f);
+        sr.circle(cx + 49f * s, cy - 4f * s, 1.5f * s);
+        sr.circle(cx + 46f * s, cy + 3f * s, 1.5f * s);
+        sr.circle(cx + 58f * s, cy - 2f * s, 1.2f * s);
+
+        // 8. Burning Demonic Eyes (Đôi Mắt Huyết Ma Bạo Chúa rực sáng)
+        sr.setColor(0.06f, 0.02f, 0.06f, 1f); // Sunken eye socket
+        sr.circle(cx + 40f * s, cy + 11f * s, 8.0f * s);
+        sr.setColor(1.0f, 0.10f, 0.10f, 0.95f * pulse); // Outer fiery red halo
+        sr.circle(cx + 40f * s, cy + 11f * s, 6.5f * s);
+        sr.setColor(1.0f, 0.85f, 0.15f, 1f); // Inner molten gold iris
+        sr.circle(cx + 40f * s, cy + 11f * s, 4.2f * s);
+        sr.setColor(0.05f, 0.0f, 0.0f, 1f); // Demonic vertical slit pupil
+        sr.rectLine(cx + 40f * s, cy + 7f * s, cx + 40f * s, cy + 15f * s, 2.2f * s);
+        sr.setColor(1.0f, 1.0f, 0.85f, 1f); // Fiery diamond specular glint
+        sr.circle(cx + 41.5f * s, cy + 12.5f * s, 1.5f * s);
+
+        // Secondary temporal ocular gem (Mắt phụ phát sáng trên thái dương)
+        sr.setColor(1.0f, 0.20f, 0.20f, 0.90f * pulse);
+        sr.circle(cx + 31f * s, cy + 17f * s, 3.2f * s);
+        sr.setColor(1.0f, 0.85f, 0.40f, 1f);
+        sr.circle(cx + 31f * s, cy + 17f * s, 1.4f * s);
+
+        // 9. Sinuous Demonic Barbels with Molten Tips (Râu rồng hắc ám phát sáng)
+        sr.setColor(0.24f, 0.10f, 0.18f, 1f);
+        sr.rectLine(cx + 52f * s, cy + 2f * s, cx + 70f * s, cy + 14f * s, 3.2f * s);
+        sr.rectLine(cx + 70f * s, cy + 14f * s, cx + 90f * s, cy + 24f * s + wag * 4.5f * s, 2.2f * s);
+        // Molten glowing tip on primary whisker
+        sr.setColor(1.0f, 0.45f, 0.10f, 0.95f);
+        sr.circle(cx + 90f * s, cy + 24f * s + wag * 4.5f * s, 2.5f * s);
+
+        // Lower jaw chin barbel
+        sr.setColor(0.24f, 0.10f, 0.18f, 1f);
+        sr.rectLine(cx + 50f * s, cy - 6f * s, cx + 74f * s, cy - 20f * s - wag * 3f * s, 2.2f * s);
     }
 
     // =========================================================================
