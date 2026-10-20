@@ -723,7 +723,7 @@ public class CatalogScreen implements Screen, InputProcessor {
         String desc = getFishLore(hoveredFishName);
         font.setColor(0.95f, 0.88f, 0.65f, 0.95f);
         font.getData().setScale(0.68f);
-        font.draw(game.batch, "❝ " + desc + " ❞", tx + 14f, ty - 162f, tw - 28f, Align.left, true);
+        font.draw(game.batch, "“" + desc + "”", tx + 14f, ty - 162f, tw - 28f, Align.left, true);
 
         // Flavor footer
         font.setColor(0.6f, 0.75f, 0.88f, 0.85f);

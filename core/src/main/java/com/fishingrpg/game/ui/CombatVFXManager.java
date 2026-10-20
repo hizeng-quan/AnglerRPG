@@ -27,6 +27,7 @@ public class CombatVFXManager {
         public Color color;
         public int shapeType; // 0: circle, 1: line, 2: shard/triangle, 3: ring
         public float angle, rotSpeed;
+        public float gravity = 0f;
 
         public Particle(float x, float y, float vx, float vy, float size, float life, Color color, int shapeType) {
             this.x = x; this.y = y; this.vx = vx; this.vy = vy;
@@ -35,6 +36,12 @@ public class CombatVFXManager {
             this.shapeType = shapeType;
             this.angle = MathUtils.random(0f, 360f);
             this.rotSpeed = MathUtils.random(-180f, 180f);
+            this.gravity = 0f;
+        }
+
+        public Particle(float x, float y, float vx, float vy, float size, float life, Color color, int shapeType, float gravity) {
+            this(x, y, vx, vy, size, life, color, shapeType);
+            this.gravity = gravity;
         }
     }
 
@@ -71,6 +78,7 @@ public class CombatVFXManager {
             } else {
                 p.x += p.vx * delta;
                 p.y += p.vy * delta;
+                p.vy -= p.gravity * delta;
                 p.angle += p.rotSpeed * delta;
                 p.color.a = Math.max(0f, p.life / p.maxLife);
             }
@@ -268,6 +276,35 @@ public class CombatVFXManager {
         }
     }
 
+    public void triggerFireworks(float cx, float cy) {
+        Color[] colors = {
+            new Color(1f, 0.85f, 0.2f, 1f),  // Radiant Gold
+            new Color(1f, 0.25f, 0.35f, 1f), // Ruby Crimson
+            new Color(0.2f, 0.85f, 1f, 1f),  // Bright Cyan
+            new Color(0.35f, 1f, 0.45f, 1f), // Emerald Green
+            new Color(0.85f, 0.4f, 1f, 1f),  // Mystic Violet
+            new Color(1f, 0.6f, 0.2f, 1f),   // Flaming Amber
+            new Color(1f, 1f, 1f, 1f)        // Silver Diamond
+        };
+
+        // Exploding starburst particles with realistic gravity
+        for (int i = 0; i < 48; i++) {
+            float angle = MathUtils.random(0f, MathUtils.PI2);
+            float speed = MathUtils.random(80f, 320f);
+            float vx = MathUtils.cos(angle) * speed;
+            float vy = MathUtils.sin(angle) * speed;
+            float life = MathUtils.random(0.8f, 1.6f);
+            Color col = colors[MathUtils.random(colors.length - 1)];
+            int shape = MathUtils.random(0, 2);
+            float size = MathUtils.random(3.5f, 6.5f);
+            float grav = MathUtils.random(90f, 150f);
+            particles.add(new Particle(cx, cy, vx, vy, size, life, col, shape, grav));
+        }
+
+        // Add expanding shockwave flash
+        effects.add(new ActiveEffect("fireworks_flash", 1, cx, cy, 0.65f, new Color(1f, 0.95f, 0.5f, 0.9f)));
+    }
+
     // =========================================================================
     // 4. DRAWING ACTIVE VFX SHAPES
     // =========================================================================
@@ -329,6 +366,12 @@ public class CombatVFXManager {
                     sr.rectLine(lx, e.cy, nx, ny, 3.5f);
                     lx = nx;
                 }
+            } else if (e.id.equals("fireworks_flash")) {
+                float ringR = progress * 140f;
+                sr.setColor(e.color.r, e.color.g, e.color.b, 0.45f * alpha);
+                sr.circle(e.cx, e.cy, ringR, 32);
+                sr.setColor(1f, 1f, 1f, 0.85f * alpha);
+                sr.circle(e.cx, e.cy, Math.max(1f, ringR * 0.4f), 24);
             }
         }
 

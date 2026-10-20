@@ -263,12 +263,8 @@ public class PlayScreen implements Screen {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || menuClicked) {
-            if (fishingManager.state != FishingManager.State.IDLE) {
-                fishingManager.state = FishingManager.State.IDLE;
-            } else {
-                game.setScreen(new MainMenuScreen(game));
-                dispose();
-            }
+            com.fishingrpg.game.data.SaveManager.savePlayer(player);
+            game.setScreen(new com.fishingrpg.game.screens.MapScreen(game, this));
             return;
         }
 

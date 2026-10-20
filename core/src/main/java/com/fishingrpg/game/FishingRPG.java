@@ -31,7 +31,7 @@ public class FishingRPG extends Game {
 
         String vietnameseChars = "áàảãạăắằẳẵặâấầẩẫậéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵđ" +
                                  "ÁÀẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬÉÈẺẼẸÊẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÚÙỦŨỤƯỨỪỬỮỰÝỲỶỸỴĐ";
-        String symbolChars = "•★☆✓✔✕✖▲▼►◄←→↑↓❖✦✧–—…'‘’\"“”%‰$€₫°~+/*=()[]{}<>:;,!?._#@&|";
+        String symbolChars = "•★☆✓✔✕✖▲▼►◄◀▶←→↑↓❖✦✧–—…'‘’\"“”%‰$€₫°~+/*=()[]{}<>:;,!?._#@&|●◆■❝❞";
         String allChars = FreeTypeFontGenerator.DEFAULT_CHARS + vietnameseChars + symbolChars;
 
         // Cấu hình thông số tăng độ sắc nét tối đa, hạn chế mờ nhòe do khử răng cưa

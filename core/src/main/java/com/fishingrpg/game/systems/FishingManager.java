@@ -74,6 +74,17 @@ public class FishingManager {
     public String castResultText = "";
     public float castResultTimer = 0f;
     
+    // Casting Flight Animation & Active Buffs Report
+    public float castFlightTimer = 0f;
+    public static final float CAST_FLIGHT_DURATION = 0.70f;
+    public float castBuffBannerTimer = 0f;
+    public String castTimingText = "";
+    public java.util.ArrayList<String> castBuffList = new java.util.ArrayList<>();
+
+    // Escape Notification
+    public float fishEscapeTimer = 0f;
+    public String fishEscapeMessage = "";
+
     // Reel-Up Leap Animation (Hoạt ảnh kéo cá/rác/kho báu vọt lên khỏi mặt nước)
     public float reelUpTimer = 0f;
     public static final float REEL_UP_DURATION = 0.9f;
@@ -125,16 +136,54 @@ public class FishingManager {
         combatMessage = "";
         rewardDone = false;
         
+        castFlightTimer = CAST_FLIGHT_DURATION;
+        castBuffBannerTimer = 3.2f;
+
         if (bonus >= 2f) {
             castResultText = "PERFECT!";
+            castTimingText = "PERFECT (+25% Hiếm, -50% Thời Gian Chờ)";
             player.getQuestManager().addProgress("perfect", 1);
             AudioManager.getInstance().playSFX("sfx_success");
         } else if (bonus > 0f) {
             castResultText = "GOOD";
+            castTimingText = "GOOD (+10% Hiếm, -20% Thời Gian Chờ)";
         } else {
             castResultText = "NORMAL";
+            castTimingText = "CHUẨN (Bình Thường)";
         }
         castResultTimer = 1.5f;
+
+        // Collect all active fishing buffs from timing, equipment, items, and skills
+        castBuffList.clear();
+        if (player.isBaitBuffActive()) {
+            castBuffList.add("MỒI THƠM: 100% Cá & Rương (0% Rác)");
+        }
+        if (player.getRarityBoost() > 0) {
+            castBuffList.add("MÓC CÂU: +" + (int) player.getRarityBoost() + "% Tỷ lệ Cá Hiếm");
+        }
+        if (player.isSetBonusActive() && player.getEquippedRod() != null) {
+            String sName = player.getEquippedRod().setName;
+            if (sName.equals("Đại Dương")) castBuffList.add("SET ĐẠI DƯƠNG: +20% Tỷ lệ Hiếm");
+            else if (sName.equals("Vực Thẳm")) castBuffList.add("SET VỰC THẲM: x3 Tỷ lệ Boss Vực Thẳm");
+            else if (sName.equals("Hải Tặc")) castBuffList.add("SET HẢI TẶC: +30% Tỷ lệ Kho Báu");
+            else if (sName.equals("Hoàng Gia")) castBuffList.add("SET HOÀNG GIA: +30% EXP & Vàng");
+            else if (sName.equals("Thần Khí Lạc Hồng")) castBuffList.add("SET LẠC HỒNG: Miễn nhiễm kỹ năng Boss");
+        }
+        if (player.getTreasureMagnetCharges() > 0) {
+            castBuffList.add("NAM CHÂM KHO BÁU: +45% Tỷ lệ Rương");
+        }
+        if (player.getWhetstoneCharges() > 0) {
+            castBuffList.add("ĐÁ MÀI: -40% Chờ Cá Cắn, +25% Lực Kéo");
+        }
+        if (player.isSkillEquipped("may_man_co_ban")) {
+            castBuffList.add("MAY MẮN CƠ BẢN: +" + (int) player.getSkillTree().getMayManCoBanBonus() + "% Cá Hiếm");
+        }
+        if (player.isSkillEquipped("ngu_dan_tinh_anh")) {
+            castBuffList.add("NGƯ DÂN TINH ANH: +" + (int) player.getSkillTree().getNguDanTinhAnhBonus() + "% Cá Epic+");
+        }
+        if (player.isSkillEquipped("tho_san_kho_bau")) {
+            castBuffList.add("THỢ SĂN KHO BÁU: +" + (int) player.getSkillTree().getThoSanKhoBauBonus() + "% Rương");
+        }
     }
 
     public void triggerBite() {
@@ -315,6 +364,13 @@ public class FishingManager {
                     Fish f = (Fish) currentCatch;
                     boolean nr = SizeRecord.checkAndUpdate(f.getName(), f.getWeightKg(), f.getLengthCm());
                     extra += (f.isFirstCatch() ? " [MỚI]" : "") + (nr ? " [KỶ LỤC]" : "");
+                    if (nr) {
+                        com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerFireworks(640f, 440f);
+                        com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerFireworks(420f, 520f);
+                        com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerFireworks(860f, 520f);
+                        if (ftm != null) ftm.addText("★ PHÁ KỶ LỤC MỚI! ★", 640f, 380f, Color.GOLD);
+                        AudioManager.getInstance().playSFX("sfx_success");
+                    }
                     
                     player.getQuestManager().addProgress("catch", multiplier);
                     if (f.getRarity() == com.fishingrpg.game.entities.Fish.Rarity.RARE || f.getRarity() == com.fishingrpg.game.entities.Fish.Rarity.EPIC || f.getRarity() == com.fishingrpg.game.entities.Fish.Rarity.BOSS) {
@@ -341,6 +397,9 @@ public class FishingManager {
             showCatchSidebar = false;
         }
         if (castResultTimer > 0) castResultTimer -= delta;
+        if (castFlightTimer > 0) castFlightTimer -= delta;
+        if (castBuffBannerTimer > 0) castBuffBannerTimer -= delta;
+        if (fishEscapeTimer > 0) fishEscapeTimer -= delta;
         if (reelUpTimer > 0) {
             reelUpTimer -= delta;
             if (reelUpTimer <= 0) {
@@ -422,7 +481,11 @@ public class FishingManager {
                     }
                     startEncounter();
                 } else if (stateTimer <= 0) {
-                    finishEncounter(false, "Cá đã chạy mất!");
+                    fishEscapeTimer = 3.2f;
+                    fishEscapeMessage = "CHẬM TAY RỒI! CÁ ĐÃ ĂN HẾT MỒI VÀ CHẠY MẤT!";
+                    finishEncounter(false, "CHẬM TAY RỒI! CÁ ĐÃ ĂN HẾT MỒI VÀ CHẠY MẤT!");
+                    if (ftm != null) ftm.addText("CÁ ĐÃ CHẠY MẤT!", 640f, 360f, new Color(1f, 0.35f, 0.25f, 1f));
+                    AudioManager.getInstance().playSFX("sfx_button");
                 }
                 break;
             case COMBAT:

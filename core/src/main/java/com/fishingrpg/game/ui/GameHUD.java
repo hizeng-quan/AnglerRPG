@@ -865,31 +865,36 @@ public class GameHUD {
         sr.setColor(1f, 0.92f, 0.45f, hoverCast ? 0.65f : 0.45f);
         sr.rect(BTN_CAST_X + 4f, BTN_CAST_Y + BTN_CAST_H - 7f, BTN_CAST_W - 8f, 4f);
 
-        // 5. Stylized Fishing Bobber & Ripple Emblem on the left
-        float bx = BTN_CAST_X + 34f;
+        // 5. Stylized Fishing Bobber Emblem - Balanced dynamically with label
+        font.getData().setScale(1f);
+        layout.setText(font, label);
+        float totalGroupW = 20f + 12f + layout.width;
+        float groupStartX = BTN_CAST_X + (BTN_CAST_W - totalGroupW) / 2f;
+        float bx = groupStartX + 10f;
         float by = BTN_CAST_Y + BTN_CAST_H / 2f;
+
         // Ripple ellipse
         sr.setColor(0.25f, 0.85f, 1f, 0.4f * pulse);
-        sr.ellipse(bx - 16f, by - 12f, 32f, 10f);
+        sr.ellipse(bx - 12f, by - 10f, 24f, 8f);
         // Bobber antenna rod
         sr.setColor(1f, 0.92f, 0.3f, 1f);
-        sr.rect(bx - 1.2f, by + 4f, 2.4f, 10f);
+        sr.rect(bx - 1f, by + 3f, 2f, 8f);
         sr.setColor(1f, 0.25f, 0.25f, 1f);
-        sr.circle(bx, by + 14f, 2.5f);
+        sr.circle(bx, by + 11f, 2f);
         // Lower white hemisphere
         sr.setColor(0.92f, 0.94f, 0.98f, 1f);
-        sr.circle(bx, by - 1f, 9f);
+        sr.circle(bx, by - 1f, 7.5f);
         // Upper red hemisphere
         sr.setColor(0.95f, 0.22f, 0.22f, 1f);
-        sr.arc(bx, by - 1f, 9f, 0f, 180f);
+        sr.arc(bx, by - 1f, 7.5f, 0f, 180f);
         // Gold equator ring
         sr.setColor(1f, 0.85f, 0.25f, 1f);
-        sr.rect(bx - 9.5f, by - 2.5f, 19f, 3f);
+        sr.rect(bx - 7.5f, by - 2f, 15f, 2.5f);
 
         // 6. Multi-tier Gold Bevel Border & Corner Accents
         sr.setColor(1f, 0.85f, 0.35f, hoverCast ? 1f : 0.85f);
         drawBoxBorder(BTN_CAST_X, BTN_CAST_Y, BTN_CAST_W, BTN_CAST_H, 2.2f);
-        // Corner gold corner brackets
+        // Corner gold brackets
         sr.setColor(1f, 0.95f, 0.55f, 1f);
         sr.rect(BTN_CAST_X, BTN_CAST_Y + BTN_CAST_H - 6f, 6f, 6f);
         sr.rect(BTN_CAST_X + BTN_CAST_W - 6f, BTN_CAST_Y + BTN_CAST_H - 6f, 6f, 6f);
@@ -898,10 +903,25 @@ public class GameHUD {
     }
 
     private void drawMenuBtn() {
-        sr.setColor(hoverMenu ? new Color(0.35f, 0.22f, 0.25f, 0.98f) : new Color(0.20f, 0.15f, 0.18f, 0.92f));
+        // Slate-navy adventure chassis with cyan/gold accents
+        sr.setColor(hoverMenu ? new Color(0.18f, 0.26f, 0.38f, 0.98f) : new Color(0.10f, 0.14f, 0.22f, 0.92f));
         sr.rect(BTN_MENU_X, BTN_MENU_Y, BTN_MENU_W, BTN_MENU_H);
-        sr.setColor(hoverMenu ? new Color(0.95f, 0.45f, 0.5f, 0.9f) : new Color(0.5f, 0.35f, 0.4f, 0.6f));
+
+        // Top glossy highlight stripe
+        sr.setColor(1f, 1f, 1f, hoverMenu ? 0.32f : 0.16f);
+        sr.rect(BTN_MENU_X + 2f, BTN_MENU_Y + BTN_MENU_H - 3f, BTN_MENU_W - 4f, 2f);
+
+        // Border
+        sr.setColor(hoverMenu ? new Color(0.45f, 0.85f, 1f, 1f) : new Color(0.35f, 0.55f, 0.75f, 0.8f));
         drawBoxBorder(BTN_MENU_X, BTN_MENU_Y, BTN_MENU_W, BTN_MENU_H, 1.5f);
+
+        // Vector Back Arrow (←) on the left of button
+        float arrX = BTN_MENU_X + 16f;
+        float arrY = BTN_MENU_Y + BTN_MENU_H / 2f;
+        sr.setColor(hoverMenu ? new Color(1f, 0.92f, 0.4f, 1f) : new Color(0.75f, 0.9f, 1f, 0.9f));
+        sr.rectLine(arrX - 6f, arrY, arrX + 6f, arrY, 2f);
+        sr.rectLine(arrX - 6f, arrY, arrX - 1f, arrY + 5f, 2f);
+        sr.rectLine(arrX - 6f, arrY, arrX - 1f, arrY - 5f, 2f);
     }
 
     // =========================================================================
@@ -1010,11 +1030,28 @@ public class GameHUD {
 
     public void drawIdleText(SpriteBatch batch, Player player) {
         // Primary Action Button text
-        font.setColor(Color.WHITE);
-        drawCenteredText(font, "RA KHƠI CÂU CÁ", BTN_CAST_X, BTN_CAST_Y, BTN_CAST_W, BTN_CAST_H);
+        String castLabel = "RA KHƠI CÂU CÁ";
+        font.getData().setScale(1f);
+        layout.setText(font, castLabel);
+        float totalGroupW = 20f + 12f + layout.width;
+        float groupStartX = BTN_CAST_X + (BTN_CAST_W - totalGroupW) / 2f;
+        float textX = groupStartX + 20f + 12f;
+        float textY = BTN_CAST_Y + (BTN_CAST_H + layout.height) / 2f;
 
-        // Menu Back Button
-        drawCenteredText(font, "MENU", BTN_MENU_X, BTN_MENU_Y, BTN_MENU_W, BTN_MENU_H);
+        font.setColor(0.12f, 0.05f, 0.02f, 0.95f);
+        font.draw(batch, castLabel, textX + 1.2f, textY - 1.2f);
+        font.setColor(hoverCast ? new Color(1f, 0.98f, 0.6f, 1f) : Color.WHITE);
+        font.draw(batch, castLabel, textX, textY);
+
+        // Menu Back Button -> BẢN ĐỒ
+        String mapLabel = "BẢN ĐỒ";
+        layout.setText(font, mapLabel);
+        float mbx = BTN_MENU_X + 16f + (BTN_MENU_W - 16f - layout.width) / 2f;
+        float mby = BTN_MENU_Y + (BTN_MENU_H + layout.height) / 2f;
+        font.setColor(0f, 0f, 0f, 0.85f);
+        font.draw(batch, mapLabel, mbx + 1f, mby - 1f);
+        font.setColor(hoverMenu ? new Color(1f, 0.92f, 0.4f, 1f) : Color.WHITE);
+        font.draw(batch, mapLabel, mbx, mby);
 
         // 7 Top Buttons Text
         String[] topNames = {"NHIỆM VỤ", "TRANG BỊ", "KỸ NĂNG", "GACHA", "CỬA HÀNG", "SỔ TAY", "SỰ KIỆN"};
@@ -2074,6 +2111,7 @@ public class GameHUD {
         // 2. Tension Gauge Readings (Integrated with Header Card)
         float tensionX = 28f;
         float tensionY = 210f;
+        float tensionW = 42f;
         float tensionH = 280f;
         float thBoxW = 66f;
         float thBoxH = 46f;
@@ -2081,11 +2119,22 @@ public class GameHUD {
         float thBoxY = tensionY + tensionH + 6f;
 
         if (screen.fishingManager.fishQuayBunTimer > 0) {
-            font.setColor(new Color(1f, 0.35f, 0.35f, 1f));
-            font.getData().setScale(0.70f);
-            font.draw(batch, "MẤT TÍN HIỆU", tensionX - 8f, tensionY + tensionH + 34f);
-            font.getData().setScale(1.5f);
-            font.draw(batch, "???", tensionX + 6f, tensionY + tensionH / 2f + 15f);
+            // Header box centered "???" (NO "MẤT TÍN HIỆU" text)
+            font.getData().setScale(0.85f);
+            font.setColor(0f, 0f, 0f, 0.90f);
+            drawCenteredText(font, "???", thBoxX + 1f, thBoxY - 1f, thBoxW, thBoxH);
+            font.setColor(new Color(1f, 0.45f, 0.45f, 1f));
+            drawCenteredText(font, "???", thBoxX, thBoxY, thBoxW, thBoxH);
+
+            // Gauge cylinder centered "???"
+            font.getData().setScale(1.4f);
+            layout.setText(font, "???");
+            float qx = tensionX + (tensionW - layout.width) / 2f;
+            float qy = tensionY + (tensionH + layout.height) / 2f;
+            font.setColor(0f, 0f, 0f, 0.95f);
+            font.draw(batch, "???", qx + 1.5f, qy - 1.5f);
+            font.setColor(new Color(1f, 0.35f, 0.4f, 1f));
+            font.draw(batch, "???", qx, qy);
             font.getData().setScale(1f);
         } else {
             float tRatio = player.getCurrentLineTension() / Math.max(1f, player.getMaxLineTension());
@@ -2111,17 +2160,16 @@ public class GameHUD {
             }
         }
 
-        // 3. Player Stamina in Combat (Only numbers, bold & clear with high contrast drop shadow)
+        // 3. Player Stamina in Combat (Only numbers, bold & clear with single razor-sharp drop shadow)
         float stmW = 220f;
         float stmH = 26f;
         float stmX = 28f;
         float stmY = 140f;
         String stmStr = (int) player.getCurrentStamina() + " / " + (int) player.getMaxStamina();
         font.getData().setScale(0.82f);
-        // High-contrast drop shadow
+        // Single crisp drop shadow (fixed duplicate opposite offset bug)
         font.setColor(0.02f, 0.04f, 0.08f, 0.95f);
-        drawCenteredText(font, stmStr, stmX + 28f + 1.2f, stmY - 1.2f, stmW - 28f, stmH);
-        drawCenteredText(font, stmStr, stmX + 28f - 1.2f, stmY + 1.2f, stmW - 28f, stmH);
+        drawCenteredText(font, stmStr, stmX + 28f + 1f, stmY - 1f, stmW - 28f, stmH);
         // Crisp Ivory White
         font.setColor(1f, 1f, 1f, 1f);
         drawCenteredText(font, stmStr, stmX + 28f, stmY, stmW - 28f, stmH);
@@ -2133,51 +2181,55 @@ public class GameHUD {
 
             // Check for fish skill alerts
             boolean isSkillActive = false;
+            boolean isPulling = false;
+            boolean isTired = false;
             String bannerText;
             Color bannerBgCol;
             Color bannerBorderCol;
 
             if (screen.fishingManager.fishCuongNoTimer > 0) {
                 isSkillActive = true;
-                bannerText = "⚠️ [CUỒNG NỘ] BẤT TỬ & GIẢI HIỆU ỨNG! ⚠️";
+                bannerText = "[!] [CUỒNG NỘ] BẤT TỬ & GIẢI HIỆU ỨNG! [!]";
                 bannerBgCol = new Color(0.78f, 0.10f, 0.12f, 0.92f);
                 bannerBorderCol = new Color(1f, 0.35f, 0.25f, 1f);
             } else if (screen.fishingManager.fishQuayBunTimer > 0) {
                 isSkillActive = true;
-                bannerText = "⚠️ [QUẪY BÙN] MẤT ĐO ĐỘ CĂNG DÂY! ⚠️";
+                bannerText = "[!] [QUẪY BÙN] MẤT ĐO ĐỘ CĂNG DÂY! [!]";
                 bannerBgCol = new Color(0.48f, 0.12f, 0.58f, 0.92f);
                 bannerBorderCol = new Color(0.85f, 0.45f, 1f, 1f);
             } else if (screen.fishingManager.fishSongThanTimer > 0) {
                 isSkillActive = true;
-                bannerText = "⚠️ [SÓNG THẦN] THỂ LỰC ĐANG SỤT GIẢM! ⚠️";
+                bannerText = "[!] [SÓNG THẦN] THỂ LỰC ĐANG SỤT GIẢM! [!]";
                 bannerBgCol = new Color(0.10f, 0.28f, 0.68f, 0.92f);
                 bannerBorderCol = new Color(0.35f, 0.75f, 1f, 1f);
             } else if (screen.fishingManager.fishButTocTimer > 0) {
                 isSkillActive = true;
-                bannerText = "⚠️ [BỨT TỐC] LỰC KÉO CỦA CÁ x2! ⚠️";
+                bannerText = "[!] [BỨT TỐC] LỰC KÉO CỦA CÁ x2! [!]";
                 bannerBgCol = new Color(0.85f, 0.36f, 0.10f, 0.92f);
                 bannerBorderCol = new Color(1f, 0.75f, 0.25f, 1f);
             } else if (screen.fishingManager.fishPhunMucTimer > 0) {
                 isSkillActive = true;
-                bannerText = "⚠️ [PHUN MỰC] TẦM NHÌN BỊ CHE KHUẤT! ⚠️";
+                bannerText = "[!] [PHUN MỰC] TẦM NHÌN BỊ CHE KHUẤT! [!]";
                 bannerBgCol = new Color(0.12f, 0.12f, 0.16f, 0.95f);
                 bannerBorderCol = new Color(0.6f, 0.6f, 0.7f, 1f);
             } else if (screen.fishingManager.fishGiatDienTimer > 0) {
                 isSkillActive = true;
-                bannerText = "⚡ [GIẬT ĐIỆN] TRÁNH GIỮ DÂY NGAY! ⚡";
+                bannerText = "[!] [GIẬT ĐIỆN] TRÁNH GIỮ DÂY NGAY! [!]";
                 bannerBgCol = new Color(0.72f, 0.62f, 0.10f, 0.92f);
                 bannerBorderCol = new Color(1f, 0.95f, 0.35f, 1f);
             } else if (f.getState() == Fish.State.PULLING) {
-                bannerText = "◄◄ CÁ ĐANG GIÃY MẠNH! THẢ DÂY! ◄◄";
-                bannerBgCol = new Color(0.82f, 0.16f, 0.18f, 0.88f);
-                bannerBorderCol = new Color(1f, 0.45f, 0.45f, 0.95f);
+                isPulling = true;
+                bannerText = "◄◄ CÁ ĐANG GIÃY MẠNH! THẢ DÂY NGAY! ◄◄";
+                bannerBgCol = new Color(0.84f, 0.12f, 0.14f, 0.92f);
+                bannerBorderCol = new Color(1f, 0.70f, 0.22f, 1f);
             } else {
-                bannerText = "►► CÁ ĐANG MỆT! GIỮ SPACE ĐỂ KÉO! ►►";
-                bannerBgCol = new Color(0.12f, 0.68f, 0.32f, 0.88f);
-                bannerBorderCol = new Color(0.45f, 1f, 0.65f, 0.95f);
+                isTired = true;
+                bannerText = "►► CÁ ĐANG MỆT! GIỮ [SPACE] KÉO CẦN! ►►";
+                bannerBgCol = new Color(0.08f, 0.58f, 0.32f, 0.92f);
+                bannerBorderCol = new Color(0.35f, 1f, 0.65f, 1f);
             }
 
-            float bannerW = isSkillActive ? 520f : 440f;
+            float bannerW = isSkillActive ? 520f : 460f;
             float bannerH = 46f;
             float bannerX = (W - bannerW) / 2f;
             float bannerY = H / 2f + 115f;
@@ -2199,18 +2251,31 @@ public class GameHUD {
             sr.setColor(1f, 1f, 1f, 0.32f);
             sr.rect(bannerX, bannerY + bannerH - 3f, bannerW, 3f);
 
+            // Side Accents for Pulling & Tired States
+            if (isPulling) {
+                float hPulse = 0.65f + 0.35f * MathUtils.sin(timer * 12f);
+                sr.setColor(1f, 0.85f, 0.2f, 0.9f * hPulse);
+                sr.rect(bannerX + 6f, bannerY + 6f, 16f, bannerH - 12f);
+                sr.rect(bannerX + bannerW - 22f, bannerY + 6f, 16f, bannerH - 12f);
+            } else if (isTired) {
+                float cPulse = 0.7f + 0.3f * MathUtils.sin(timer * 8f);
+                sr.setColor(0.45f, 1f, 0.75f, 0.85f * cPulse);
+                sr.triangle(bannerX + 8f, bannerY + bannerH / 2f, bannerX + 20f, bannerY + bannerH - 8f, bannerX + 20f, bannerY + 8f);
+                sr.triangle(bannerX + bannerW - 8f, bannerY + bannerH / 2f, bannerX + bannerW - 20f, bannerY + bannerH - 8f, bannerX + bannerW - 20f, bannerY + 8f);
+            }
+
             // Border
             sr.setColor(bannerBorderCol.r, bannerBorderCol.g, bannerBorderCol.b, bannerBorderCol.a * pulse);
-            drawBoxBorder(bannerX, bannerY, bannerW, bannerH, isSkillActive ? 2.4f : 1.8f);
+            drawBoxBorder(bannerX, bannerY, bannerW, bannerH, (isSkillActive || isPulling) ? 2.4f : 1.8f);
 
             sr.end();
             Gdx.gl.glDisable(GL20.GL_BLEND);
             batch.begin();
 
             // Text with drop shadow
-            font.setColor(0f, 0f, 0f, 0.85f);
+            font.setColor(0f, 0f, 0f, 0.90f);
             drawCenteredText(font, bannerText, bannerX + 1.2f, bannerY - 1.2f, bannerW, bannerH);
-            font.setColor(Color.WHITE);
+            font.setColor(isPulling ? new Color(1f, 0.95f, 0.6f, 1f) : isTired ? new Color(0.95f, 1f, 0.95f, 1f) : Color.WHITE);
             drawCenteredText(font, bannerText, bannerX, bannerY, bannerW, bannerH);
         }
 
@@ -2277,18 +2342,139 @@ public class GameHUD {
             drawCatchSidebarText(batch, screen.fishingManager.lastCatch, screen.fishingManager.lastCatchExtra, screen.fishingManager.lastCatchResultLine, screen.fishingManager.lastCatchDiamonds);
         }
 
-        // Reel-Up Leap Animation Text
-        if (screen.fishingManager.reelUpTimer > 0 && screen.fishingManager.reelUpCatch != null) {
-            drawReelUpAnimationText(batch);
+        // Active Buffs Report Card during casting
+        if (screen.fishingManager.castBuffBannerTimer > 0) {
+            float timer = screen.fishingManager.castBuffBannerTimer;
+            float alpha = Math.min(1f, timer / 0.6f);
+            java.util.List<String> buffs = screen.fishingManager.castBuffList;
+            int buffCount = (buffs != null) ? buffs.size() : 0;
+            float cardW = 440f;
+            float cardH = 34f + buffCount * 22f + 14f;
+            float cardX = (W - cardW) / 2f;
+            float cardY = H - 65f - cardH;
+
+            batch.end();
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            sr.begin(ShapeRenderer.ShapeType.Filled);
+
+            // Shadow
+            sr.setColor(0.02f, 0.04f, 0.08f, 0.55f * alpha);
+            sr.rect(cardX + 4f, cardY - 4f, cardW, cardH);
+
+            // Glassmorphism card body (deep navy/slate)
+            sr.setColor(0.08f, 0.12f, 0.20f, 0.92f * alpha);
+            sr.rect(cardX, cardY, cardW, cardH);
+
+            // Specular top highlight
+            sr.setColor(0.4f, 0.8f, 1f, 0.25f * alpha);
+            sr.rect(cardX + 2f, cardY + cardH - 3f, cardW - 4f, 2f);
+
+            // Card gold border
+            sr.setColor(0.85f, 0.70f, 0.25f, 0.85f * alpha);
+            drawBoxBorder(cardX, cardY, cardW, cardH, 1.5f);
+
+            sr.end();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+            batch.begin();
+
+            // Header: ✦ HIỆU ỨNG TỶ LỆ CÂU KÍCH HOẠT ✦
+            font.getData().setScale(0.78f);
+            String cardHeader = "✦ HIỆU ỨNG TỶ LỆ CÂU KÍCH HOẠT ✦";
+            layout.setText(font, cardHeader);
+            font.setColor(0f, 0f, 0f, 0.85f * alpha);
+            font.draw(batch, cardHeader, cardX + (cardW - layout.width) / 2f + 1f, cardY + cardH - 10f - 1f);
+            font.setColor(1f, 0.88f, 0.35f, alpha);
+            font.draw(batch, cardHeader, cardX + (cardW - layout.width) / 2f, cardY + cardH - 10f);
+
+            // List each buff row
+            font.getData().setScale(0.72f);
+            float rowY = cardY + cardH - 32f;
+            if (buffs != null) {
+                for (String b : buffs) {
+                    font.setColor(0f, 0f, 0f, 0.85f * alpha);
+                    font.draw(batch, b, cardX + 20f + 1f, rowY - 1f);
+                    font.setColor(0.45f, 1f, 0.75f, alpha);
+                    font.draw(batch, b, cardX + 20f, rowY);
+                    rowY -= 22f;
+                }
+            }
+            font.getData().setScale(1f);
+        }
+
+        // Fish Escape / Bite Timeout Notice Banner
+        if (screen.fishingManager.fishEscapeTimer > 0) {
+            float timer = screen.fishingManager.fishEscapeTimer;
+            float alpha = Math.min(1f, timer / 0.5f);
+            float bannerW = 560f;
+            float bannerH = 46f;
+            float bannerX = (W - bannerW) / 2f;
+            float bannerY = H / 2f + 55f;
+
+            batch.end();
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            sr.begin(ShapeRenderer.ShapeType.Filled);
+
+            // Shadow
+            sr.setColor(0.02f, 0.04f, 0.08f, 0.6f * alpha);
+            sr.rect(bannerX + 3f, bannerY - 3f, bannerW, bannerH);
+
+            // Dark ruby/obsidian chassis
+            sr.setColor(0.55f, 0.08f, 0.10f, 0.92f * alpha);
+            sr.rect(bannerX, bannerY, bannerW, bannerH);
+
+            // Glowing hazard border
+            sr.setColor(1f, 0.35f, 0.25f, 0.95f * alpha);
+            drawBoxBorder(bannerX, bannerY, bannerW, bannerH, 2f);
+
+            // Warning icon flags on left and right
+            sr.setColor(1f, 0.85f, 0.2f, alpha);
+            sr.triangle(bannerX + 18f, bannerY + 10f, bannerX + 32f, bannerY + 10f, bannerX + 25f, bannerY + 34f);
+            sr.triangle(bannerX + bannerW - 32f, bannerY + 10f, bannerX + bannerW - 18f, bannerY + 10f, bannerX + bannerW - 25f, bannerY + 34f);
+
+            sr.end();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+            batch.begin();
+
+            String escText = (screen.fishingManager.fishEscapeMessage != null && !screen.fishingManager.fishEscapeMessage.isEmpty())
+                    ? screen.fishingManager.fishEscapeMessage
+                    : "CHẬM TAY RỒI! CÁ ĐÃ ĂN HẾT MỒI VÀ CHẠY MẤT!";
+            font.getData().setScale(0.85f);
+            layout.setText(font, escText);
+            float ex = bannerX + (bannerW - layout.width) / 2f;
+            float ey = bannerY + (bannerH + layout.height) / 2f;
+            // Shadow
+            font.setColor(0f, 0f, 0f, 0.95f * alpha);
+            font.draw(batch, escText, ex + 1.2f, ey - 1.2f);
+            // Crisp White/Yellow
+            font.setColor(1f, 0.95f, 0.65f, alpha);
+            font.draw(batch, escText, ex, ey);
+            font.getData().setScale(1f);
         }
 
         if (screen.fishingManager.state == State.PRE_CAST) {
-            font.setColor(Color.WHITE);
-            drawCenteredText(font, "QUĂNG CẦN", BTN_CAST_X, BTN_CAST_Y, BTN_CAST_W, BTN_CAST_H);
+            String castLabel = "QUĂNG CẦN";
+            font.getData().setScale(1f);
+            layout.setText(font, castLabel);
+            float totalGroupW = 20f + 12f + layout.width;
+            float groupStartX = BTN_CAST_X + (BTN_CAST_W - totalGroupW) / 2f;
+            float textX = groupStartX + 20f + 12f;
+            float textY = BTN_CAST_Y + (BTN_CAST_H + layout.height) / 2f;
+
+            font.setColor(0.12f, 0.05f, 0.02f, 0.95f);
+            font.draw(batch, castLabel, textX + 1.2f, textY - 1.2f);
+            font.setColor(hoverCast ? new Color(1f, 0.98f, 0.6f, 1f) : Color.WHITE);
+            font.draw(batch, castLabel, textX, textY);
         }
 
-        // Menu Back button
-        drawCenteredText(font, "MENU", BTN_MENU_X, BTN_MENU_Y, BTN_MENU_W, BTN_MENU_H);
+        // Menu Back button -> BẢN ĐỒ
+        String mapLabel = "BẢN ĐỒ";
+        layout.setText(font, mapLabel);
+        float mbx = BTN_MENU_X + 16f + (BTN_MENU_W - 16f - layout.width) / 2f;
+        float mby = BTN_MENU_Y + (BTN_MENU_H + layout.height) / 2f;
+        font.setColor(0f, 0f, 0f, 0.85f);
+        font.draw(batch, mapLabel, mbx + 1f, mby - 1f);
+        font.setColor(hoverMenu ? new Color(1f, 0.92f, 0.4f, 1f) : Color.WHITE);
+        font.draw(batch, mapLabel, mbx, mby);
         drawInventoryText(batch, player);
     }
 
@@ -2374,19 +2560,37 @@ public class GameHUD {
     private void drawBobberText(SpriteBatch batch) {
         if (screen.fishingManager.state == State.WAITING || screen.fishingManager.state == State.BITE) {
             float time = screen.fishingManager.stateTimer;
-            float bobY = (screen.fishingManager.state == State.WAITING)
-                         ? (float) Math.sin(time * 5f) * 5f
-                         : -15f + (float) Math.random() * 10f;
+            boolean isBite = (screen.fishingManager.state == State.BITE);
+            float bobY = H / 2f + (isBite ? (-15f + MathUtils.sin(time * 25f) * 10f) : (MathUtils.sin(timer * 3f) * 6f));
+            float bobX = W / 2f;
 
-            float centerX = W / 2f;
-            float centerY = H / 2f + bobY;
+            if (isBite) {
+                float badgeY = bobY + 80f;
+                // Exclamation mark inside the comic badge
+                font.getData().setScale(1.6f);
+                String excl = "!";
+                layout.setText(font, excl);
+                // Thick shadow
+                font.setColor(0f, 0f, 0f, 0.95f);
+                font.draw(batch, excl, bobX - layout.width / 2f + 1.5f, badgeY + layout.height / 2f - 1.5f);
+                // Luminous Yellow Core
+                font.setColor(1f, 0.95f, 0.35f, 1f);
+                font.draw(batch, excl, bobX - layout.width / 2f, badgeY + layout.height / 2f);
+                font.getData().setScale(1f);
 
-            if (screen.fishingManager.state == State.BITE) {
-                float scale = 2.4f + (float) Math.sin(time * 25f) * 0.4f;
-                font.getData().setScale(scale);
-                font.setColor(1f, 0.2f, 0.2f, 1f);
-                layout.setText(font, "(!)");
-                font.draw(batch, "(!)", (W - layout.width) / 2f, H / 2f + 85f);
+                // Prompt Callout Subtext below emblem
+                font.getData().setScale(0.85f);
+                String bitePrompt = "✦ CẮN CÂU! GIẬT [SPACE] NGAY! ✦";
+                layout.setText(font, bitePrompt);
+                float px = bobX - layout.width / 2f;
+                float py = badgeY + 44f;
+                // Shadow
+                font.setColor(0.05f, 0.05f, 0.08f, 0.95f);
+                font.draw(batch, bitePrompt, px + 1.2f, py - 1.2f);
+                // Pulsing Radiant Ember
+                float promptPulse = 0.85f + 0.15f * MathUtils.sin(time * 30f);
+                font.setColor(1f, 0.88f * promptPulse, 0.25f, 1f);
+                font.draw(batch, bitePrompt, px, py);
                 font.getData().setScale(1f);
             }
         }
@@ -2593,13 +2797,74 @@ public class GameHUD {
         float bobY = H / 2f + (isBite ? (-15f + MathUtils.sin(time * 25f) * 10f) : (MathUtils.sin(timer * 3f) * 6f));
         float bobX = W / 2f;
 
-        // Expanding water ripple rings
-        for (int r = 0; r < 3; r++) {
-            float cycle = (timer * (isBite ? 1.2f : 0.4f) + r * 0.33f) % 1.0f;
-            float radX = 18f + cycle * (isBite ? 70f : 45f);
-            float radY = radX * 0.35f;
-            sr.setColor(0.5f, 0.9f, 0.95f, (1f - cycle) * (isBite ? 0.6f : 0.3f));
-            sr.ellipse(bobX - radX, bobY - 4f - radY, radX * 2f, radY * 2f);
+        // Parabolic Flight Animation when cast is traveling from rod to water
+        if (screen.fishingManager.castFlightTimer > 0) {
+            float dur = FishingManager.CAST_FLIGHT_DURATION;
+            float progress = MathUtils.clamp(1f - (screen.fishingManager.castFlightTimer / dur), 0f, 1f);
+            float rodTipX = W - 280f;
+            float rodTipY = 170f;
+            float targetX = W / 2f;
+            float targetY = H / 2f;
+            float apex = 160f;
+
+            bobX = rodTipX + (targetX - rodTipX) * progress;
+            bobY = rodTipY + (targetY - rodTipY) * progress + apex * MathUtils.sin(progress * MathUtils.PI);
+
+            // Trailing motion particles behind flying bobber
+            for (int i = 1; i <= 4; i++) {
+                float trailP = Math.max(0f, progress - i * 0.06f);
+                float tx = rodTipX + (targetX - rodTipX) * trailP;
+                float ty = rodTipY + (targetY - rodTipY) * trailP + apex * MathUtils.sin(trailP * MathUtils.PI);
+                sr.setColor(1f, 0.85f, 0.3f, 0.4f * (1f - (float) i / 5f));
+                sr.circle(tx, ty, 3.5f - i * 0.6f);
+            }
+        }
+
+        // Expanding water ripple rings (only if bobber has reached water)
+        if (screen.fishingManager.castFlightTimer <= 0.1f) {
+            for (int r = 0; r < 3; r++) {
+                float cycle = (timer * (isBite ? 1.2f : 0.4f) + r * 0.33f) % 1.0f;
+                float radX = 18f + cycle * (isBite ? 75f : 45f);
+                float radY = radX * 0.35f;
+                sr.setColor(0.5f, 0.9f, 0.95f, (1f - cycle) * (isBite ? 0.7f : 0.3f));
+                sr.ellipse(bobX - radX, bobY - 4f - radY, radX * 2f, radY * 2f);
+            }
+        }
+
+        // Dynamic Shockwave Water Splash & Comic Burst when Fish Bites (!)
+        if (isBite) {
+            // Rapid splash shockwaves
+            for (int s = 0; s < 2; s++) {
+                float sc = (time * 4f + s * 0.5f) % 1f;
+                sr.setColor(0.4f, 0.85f, 1f, (1f - sc) * 0.85f);
+                sr.ellipse(bobX - sc * 90f, bobY - 8f - sc * 30f, sc * 180f, sc * 60f);
+            }
+            // Bursting droplets
+            for (int d = 0; d < 6; d++) {
+                float da = d * 60f * MathUtils.degreesToRadians;
+                float dDist = 20f + (time * 80f) % 45f;
+                sr.setColor(0.8f, 0.95f, 1f, 0.8f);
+                sr.circle(bobX + MathUtils.cos(da) * dDist, bobY + MathUtils.sin(da) * dDist * 0.6f, 3.5f);
+            }
+
+            // Stylized Comic Diamond Alert Emblem behind (!)
+            float badgeY = bobY + 80f;
+            float pulse = 1f + 0.12f * MathUtils.sin(time * 25f);
+            // Outer glow
+            sr.setColor(1f, 0.25f, 0.15f, 0.35f);
+            sr.circle(bobX, badgeY, 36f * pulse, 24);
+            // Crimson backing diamond
+            sr.setColor(0.85f, 0.12f, 0.16f, 0.95f);
+            sr.triangle(bobX, badgeY + 28f * pulse, bobX - 22f * pulse, badgeY, bobX + 22f * pulse, badgeY);
+            sr.triangle(bobX, badgeY - 28f * pulse, bobX - 22f * pulse, badgeY, bobX + 22f * pulse, badgeY);
+            // Inner gold diamond trim
+            sr.setColor(1f, 0.92f, 0.35f, 0.95f);
+            sr.triangle(bobX, badgeY + 22f * pulse, bobX - 16f * pulse, badgeY, bobX + 16f * pulse, badgeY);
+            sr.triangle(bobX, badgeY - 22f * pulse, bobX - 16f * pulse, badgeY, bobX + 16f * pulse, badgeY);
+            // Core ruby fill
+            sr.setColor(0.92f, 0.15f, 0.18f, 1f);
+            sr.triangle(bobX, badgeY + 18f * pulse, bobX - 13f * pulse, badgeY, bobX + 13f * pulse, badgeY);
+            sr.triangle(bobX, badgeY - 18f * pulse, bobX - 13f * pulse, badgeY, bobX + 13f * pulse, badgeY);
         }
 
         // Sonar Radar active rings and sweeping scanner
@@ -2735,44 +3000,6 @@ public class GameHUD {
             LootItem loot = (LootItem) catchable;
             LootVisualRenderer.drawLoot(sr, loot.getName(), loot.getType(), curX, curY, 1.35f, this.timer);
         }
-    }
-
-    private void drawReelUpAnimationText(SpriteBatch batch) {
-        Catchable catchable = screen.fishingManager.reelUpCatch;
-        if (catchable == null) return;
-
-        float timer = screen.fishingManager.reelUpTimer;
-        float dur = FishingManager.REEL_UP_DURATION;
-        float progress = MathUtils.clamp(1f - (timer / dur), 0f, 1f);
-
-        float startX = screen.fishingManager.reelUpStartX;
-        float startY = screen.fishingManager.reelUpStartY;
-        float targetX = 640f;
-        float curX = startX + (targetX - startX) * progress;
-        float apexHeight = 260f;
-        float curY = startY + apexHeight * MathUtils.sin(progress * MathUtils.PI);
-
-        // Flashy leap title: "ĐÃ KÉO LÊN!"
-        titleFont.getData().setScale(0.9f);
-        String leapText = "ĐÃ KÉO LÊN!";
-        layout.setText(titleFont, leapText);
-        // Shadow
-        titleFont.setColor(0f, 0f, 0f, 0.85f);
-        titleFont.draw(batch, leapText, curX - layout.width / 2f + 2f, curY + 68f - 2f);
-        // Bright radiant gold
-        titleFont.setColor(1f, 0.92f, 0.35f, 1f);
-        titleFont.draw(batch, leapText, curX - layout.width / 2f, curY + 68f);
-        titleFont.getData().setScale(1f);
-
-        // Name of item
-        font.getData().setScale(0.85f);
-        String nameText = catchable.getName();
-        layout.setText(font, nameText);
-        font.setColor(0f, 0f, 0f, 0.85f);
-        font.draw(batch, nameText, curX - layout.width / 2f + 1f, curY + 44f - 1f);
-        font.setColor(Color.WHITE);
-        font.draw(batch, nameText, curX - layout.width / 2f, curY + 44f);
-        font.getData().setScale(1f);
     }
 
     private void drawBoxBorder(float x, float y, float w, float h, float thickness) {

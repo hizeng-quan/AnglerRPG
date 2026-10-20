@@ -491,7 +491,7 @@ public class EquipmentScreen implements Screen {
 
             font.setColor(isCurSort ? new Color(1f, 0.90f, 0.45f, 1f) : (hoverSort ? Color.WHITE : new Color(0.75f, 0.85f, 0.95f, 0.85f)));
             font.getData().setScale(0.76f);
-            String sortLabel = (isCurSort ? "● " : "") + sortModes[s].label;
+            String sortLabel = (isCurSort ? "• " : "") + sortModes[s].label;
             layout.setText(font, sortLabel);
             font.draw(game.batch, layout, sx + (sortBtnW - layout.width) / 2f, sortY + 18f);
         }
@@ -499,7 +499,7 @@ public class EquipmentScreen implements Screen {
         // QoL Button Text: "Mặc Nhanh"
         font.setColor(hoverAutoEquip ? Color.WHITE : new Color(1f, 0.95f, 0.75f, 1f));
         font.getData().setScale(0.78f);
-        layout.setText(font, "⚡ MẶC NHANH");
+        layout.setText(font, "✦ MẶC NHANH");
         font.draw(game.batch, layout, autoBtnX + (autoBtnW - layout.width) / 2f, autoBtnY + 18f);
         font.getData().setScale(1f);
 
