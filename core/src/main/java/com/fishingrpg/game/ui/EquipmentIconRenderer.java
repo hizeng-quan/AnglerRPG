@@ -966,46 +966,215 @@ public class EquipmentIconRenderer {
     }
 
     // =========================================================================
-    // 6. VỰC THẲM SET
+    // 6. VỰC THẲM SET (ABYSSAL VOID: Obsidian Nether Staff, Void Vein Spool, Fiend Dragon Claw Hook)
     // =========================================================================
-    private static void drawVucThamRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Obsidian void staff with glowing purple demonic eye
-        sr.setColor(0.4f, 0.1f, 0.5f, 0.35f);
-        sr.circle(cx, cy, r * 0.8f);
-        sr.setColor(0.12f, 0.08f, 0.16f, 1f);
-        sr.rectLine(cx - r * 0.7f, cy - r * 0.7f, cx + r * 0.5f, cy + r * 0.5f, 4.5f);
-        // Eldritch eye socket
-        sr.setColor(0.65f, 0.15f, 0.85f, 1f);
-        sr.circle(cx + r * 0.55f, cy + r * 0.55f, r * 0.28f);
-        // Glowing void pupil
-        sr.setColor(1f, 0.2f, 0.4f, 1f);
-        sr.circle(cx + r * 0.55f, cy + r * 0.55f, r * 0.16f);
-        sr.setColor(1f, 0.9f, 0.3f, 1f);
-        sr.circle(cx + r * 0.55f, cy + r * 0.55f, r * 0.06f);
-    }
+    public static void drawVucThamRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Abyssal Void Miasma & Eldritch Aura
+        sr.setColor(0.40f, 0.08f, 0.60f, 0.22f);
+        sr.circle(cx, cy, r * 0.95f);
+        sr.setColor(0.80f, 0.20f, 0.95f, 0.25f);
+        sr.circle(cx + r * 0.45f, cy + r * 0.45f, r * 0.55f);
 
-    private static void drawVucThamLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Dark purple void tendril spool
+        // 2. Obsidian Nether-Titanium Spine
+        float x1 = cx - r * 0.72f, y1 = cy - r * 0.72f;
+        float x2 = cx + r * 0.38f, y2 = cy + r * 0.38f;
+
+        // Dark obsidian core
+        sr.setColor(0.10f, 0.06f, 0.16f, 1f);
+        sr.rectLine(x1, y1, x2, y2, Math.max(5f, r * 0.22f));
+
+        // Deep shadow-purple chassis
+        sr.setColor(0.24f, 0.10f, 0.36f, 1f);
+        sr.rectLine(x1, y1, x2, y2, Math.max(3.4f, r * 0.14f));
+
+        // Luminous void plasma core conduit
+        sr.setColor(0.90f, 0.25f, 0.98f, 0.95f);
+        sr.rectLine(x1, y1, x2, y2, Math.max(1.8f, r * 0.08f));
+
+        // 3. Spiky Demonic Bone Horn Spire Bands along the shaft
+        for (int b = 0; b < 3; b++) {
+            float frac = 0.25f + b * 0.26f;
+            float bx = x1 + (x2 - x1) * frac;
+            float by = y1 + (y2 - y1) * frac;
+
+            // Lateral spires jutting outward
+            sr.setColor(0.35f, 0.12f, 0.48f, 1f);
+            sr.triangle(bx, by, bx - r * 0.14f, by + r * 0.12f, bx - r * 0.04f, by + r * 0.18f);
+            sr.triangle(bx, by, bx + r * 0.12f, by - r * 0.14f, bx + r * 0.18f, by - r * 0.04f);
+
+            // Spire tips glowing void magenta
+            sr.setColor(0.95f, 0.30f, 1f, 1f);
+            sr.circle(bx - r * 0.12f, by + r * 0.15f, 1.8f);
+            sr.circle(bx + r * 0.15f, by - r * 0.12f, 1.8f);
+
+            // Bone ring band
+            sr.setColor(0.65f, 0.22f, 0.85f, 1f);
+            sr.circle(bx, by, Math.max(2.8f, r * 0.11f));
+            sr.setColor(0.12f, 0.06f, 0.18f, 1f);
+            sr.circle(bx, by, 1.5f);
+        }
+
+        // 4. Eldritch Void Scythe & All-Seeing Nether Eye Headpiece
+        float tx = cx + r * 0.46f, ty = cy + r * 0.46f;
+
+        // Curved Void Crescent Blade jutting northwest
+        sr.setColor(0.16f, 0.08f, 0.24f, 1f);
+        float scyX = tx - r * 0.42f, scyY = ty + r * 0.35f;
+        sr.triangle(tx, ty, scyX, scyY, tx + r * 0.05f, ty + r * 0.32f);
+        sr.triangle(tx, ty, scyX, scyY, tx - r * 0.30f, ty + r * 0.15f);
+
+        // Razor-sharp void blade edge
+        sr.setColor(0.92f, 0.25f, 0.90f, 1f);
+        sr.triangle(tx, ty + r * 0.18f, scyX, scyY, scyX + r * 0.08f, scyY - r * 0.06f);
+
+        // Spine blade spikes
+        sr.setColor(0.60f, 0.15f, 0.80f, 1f);
+        sr.triangle(tx + r * 0.15f, ty + r * 0.10f, tx + r * 0.38f, ty + r * 0.32f, tx + r * 0.08f, ty + r * 0.26f);
+
+        // 5. Central All-Seeing Nether Eye (Multi-layered Demonic Eye)
         sr.setColor(0.20f, 0.08f, 0.30f, 1f);
-        sr.circle(cx, cy, r * 0.75f);
-        sr.setColor(0.65f, 0.20f, 0.85f, 0.9f);
-        sr.circle(cx, cy, r * 0.55f);
-        sr.setColor(0.08f, 0.04f, 0.12f, 1f);
-        sr.circle(cx, cy, r * 0.32f);
-        // Void core
-        sr.setColor(0.95f, 0.25f, 0.65f, 1f);
-        sr.circle(cx, cy, r * 0.16f);
+        sr.circle(tx, ty, r * 0.28f);
+        sr.setColor(0.85f, 0.15f, 0.40f, 1f); // Crimson outer sclera
+        sr.circle(tx, ty, r * 0.20f);
+        sr.setColor(0.95f, 0.40f, 1f, 1f); // Vivid magenta iris
+        sr.circle(tx, ty, r * 0.14f);
+
+        // Slit-pupil of the Abyss Fiend
+        sr.setColor(0.06f, 0.02f, 0.10f, 1f);
+        sr.triangle(tx, ty + r * 0.12f, tx, ty - r * 0.12f, tx - 2f, ty);
+        sr.triangle(tx, ty + r * 0.12f, tx, ty - r * 0.12f, tx + 2f, ty);
+
+        // Specular glint
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.circle(tx - 1.5f, ty + 2.5f, 2f);
+
+        // 6. Void Pommel Crystal
+        sr.setColor(0.85f, 0.25f, 0.95f, 1f);
+        sr.circle(x1, y1, r * 0.14f);
+        sr.setColor(Color.WHITE);
+        sr.circle(x1 - 1f, y1 + 1f, 1.8f);
     }
 
-    private static void drawVucThamHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Triple-fanged shadow fiend claw hook
-        sr.setColor(0.22f, 0.10f, 0.32f, 1f);
-        sr.rectLine(cx - r * 0.2f, cy + r * 0.55f, cx - r * 0.2f, cy - r * 0.35f, 4.5f);
-        sr.rectLine(cx - r * 0.2f, cy - r * 0.35f, cx + r * 0.4f, cy - r * 0.35f, 4.5f);
-        // Purple demonic talon tips
-        sr.setColor(0.85f, 0.20f, 0.75f, 1f);
-        sr.triangle(cx + r * 0.35f, cy - r * 0.35f, cx + r * 0.65f, cy + r * 0.35f, cx + r * 0.3f, cy + r * 0.1f);
-        sr.triangle(cx + r * 0.25f, cy - r * 0.35f, cx + r * 0.45f, cy + r * 0.45f, cx + r * 0.2f, cy + r * 0.1f);
+    public static void drawVucThamLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Spatio-Temporal Void Vortex Aura
+        sr.setColor(0.35f, 0.08f, 0.50f, 0.22f);
+        sr.circle(cx, cy, r * 0.96f);
+        sr.setColor(0.75f, 0.18f, 0.90f, 0.20f);
+        sr.circle(cx, cy, r * 0.80f);
+
+        // 2. Heavy Abyssal Carapace Spool Frame with 8 Demonic Horns
+        sr.setColor(0.18f, 0.08f, 0.26f, 1f);
+        sr.circle(cx, cy, r * 0.76f);
+
+        // 8 jagged demonic horn prongs around circumference
+        for (int h = 0; h < 8; h++) {
+            float ang = h * 45f;
+            float cos = MathUtils.cosDeg(ang);
+            float sin = MathUtils.sinDeg(ang);
+            float hx = cx + cos * (r * 0.72f);
+            float hy = cy + sin * (r * 0.72f);
+            float tipX = cx + cos * (r * 0.90f);
+            float tipY = cy + sin * (r * 0.90f);
+
+            sr.setColor(0.38f, 0.14f, 0.52f, 1f);
+            sr.triangle(hx - sin * 3.5f, hy + cos * 3.5f, hx + sin * 3.5f, hy - cos * 3.5f, tipX, tipY);
+
+            // Glowing purple horn tip
+            sr.setColor(0.95f, 0.30f, 1f, 1f);
+            sr.circle(tipX, tipY, 1.8f);
+        }
+
+        // Inner void bezel
+        sr.setColor(0.08f, 0.04f, 0.12f, 1f);
+        sr.circle(cx, cy, r * 0.65f);
+
+        // 3. Shimmering Nether Vein Filament (Interwoven Violet & Blood-crimson)
+        sr.setColor(0.85f, 0.20f, 0.95f, 0.95f);
+        sr.circle(cx, cy, r * 0.55f);
+        sr.setColor(0.60f, 0.10f, 0.35f, 0.95f);
+        sr.circle(cx, cy, r * 0.44f);
+        sr.setColor(0.10f, 0.04f, 0.15f, 1f);
+        sr.circle(cx, cy, r * 0.34f);
+
+        // 4. Central Nether Core & Eye
+        sr.setColor(0.28f, 0.10f, 0.38f, 1f);
+        sr.circle(cx, cy, r * 0.26f);
+        sr.setColor(0.95f, 0.35f, 0.90f, 1f);
+        sr.circle(cx, cy, r * 0.18f);
+
+        // Void Singularity Pupil
+        sr.setColor(0.05f, 0.02f, 0.08f, 1f);
+        sr.circle(cx, cy, r * 0.10f);
+        sr.setColor(Color.WHITE);
+        sr.circle(cx - 1.5f, cy + 1.5f, 1.8f);
+    }
+
+    public static void drawVucThamHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Abyssal Shadow Miasma Aura
+        sr.setColor(0.40f, 0.08f, 0.60f, 0.22f);
+        sr.circle(cx, cy, r * 0.96f);
+
+        // 2. Dragon Bone Shank & Bend
+        float shankX = cx - r * 0.22f;
+        float topY = cy + r * 0.56f;
+        float bendY = cy - r * 0.38f;
+        float barbX = cx + r * 0.38f;
+
+        // Dark obsidian bone shank
+        sr.setColor(0.14f, 0.06f, 0.20f, 1f);
+        sr.rectLine(shankX, topY, shankX, bendY, Math.max(5f, r * 0.22f));
+        sr.rectLine(shankX, bendY, barbX, bendY, Math.max(5f, r * 0.22f));
+        sr.rectLine(barbX, bendY, barbX, cy + r * 0.20f, Math.max(4.5f, r * 0.20f));
+
+        // Violet-crimson void fuller (rãnh năng lượng dọc thân)
+        sr.setColor(0.90f, 0.25f, 0.95f, 0.95f);
+        sr.rectLine(shankX, topY - r * 0.12f, shankX, bendY + 2f, Math.max(1.8f, r * 0.08f));
+        sr.rectLine(shankX, bendY, barbX, bendY, Math.max(1.8f, r * 0.08f));
+
+        // 3. Spiky Demon Bone Scales on Shank Back
+        for (int s = 0; s < 4; s++) {
+            float sy = topY - r * 0.15f - s * r * 0.18f;
+            sr.setColor(0.38f, 0.14f, 0.52f, 1f);
+            sr.triangle(shankX - r * 0.08f, sy, shankX - r * 0.24f, sy + r * 0.08f, shankX - r * 0.08f, sy + r * 0.14f);
+            sr.setColor(0.95f, 0.35f, 1f, 1f);
+            sr.circle(shankX - r * 0.24f, sy + r * 0.08f, 1.5f);
+        }
+
+        // 4. Triple Barbed Fiend Talons & Nether Point
+        float pointX = barbX + r * 0.02f;
+        float pointY = cy + r * 0.28f;
+
+        // Main spear talon
+        sr.setColor(0.85f, 0.20f, 0.85f, 1f);
+        sr.triangle(barbX - r * 0.10f, cy + r * 0.15f, barbX + r * 0.10f, cy + r * 0.15f, pointX, pointY + r * 0.22f);
+
+        // Deadly dual backward barbed fangs
+        sr.setColor(0.98f, 0.30f, 0.75f, 1f);
+        sr.triangle(barbX - r * 0.02f, cy + r * 0.24f, barbX - r * 0.22f, cy + r * 0.08f, barbX - r * 0.06f, cy + r * 0.12f);
+        sr.triangle(barbX + r * 0.06f, cy + r * 0.24f, barbX + r * 0.24f, cy + r * 0.10f, barbX + r * 0.08f, cy + r * 0.14f);
+
+        // Talon core glow
+        sr.setColor(Color.WHITE);
+        sr.circle(pointX, pointY + r * 0.16f, 2f);
+
+        // 5. Crown Eyelet: Demonic Horned Skull & Blood Talisman
+        sr.setColor(0.30f, 0.10f, 0.42f, 1f);
+        sr.circle(shankX, topY, r * 0.25f);
+        sr.setColor(0.08f, 0.04f, 0.12f, 1f);
+        sr.circle(shankX, topY, r * 0.14f);
+
+        // Demon Horns atop eyelet
+        sr.setColor(0.65f, 0.20f, 0.85f, 1f);
+        sr.triangle(shankX - r * 0.08f, topY + r * 0.12f, shankX - r * 0.22f, topY + r * 0.26f, shankX, topY + r * 0.20f);
+        sr.triangle(shankX + r * 0.08f, topY + r * 0.12f, shankX + r * 0.22f, topY + r * 0.26f, shankX, topY + r * 0.20f);
+
+        // Dangling Blood Pearl Charm
+        sr.setColor(0.85f, 0.25f, 0.95f, 0.85f);
+        sr.rectLine(shankX, topY, shankX - r * 0.28f, topY - r * 0.20f, 1.8f);
+        sr.setColor(0.95f, 0.18f, 0.45f, 1f);
+        sr.circle(shankX - r * 0.28f, topY - r * 0.20f, 4.5f);
+        sr.setColor(Color.WHITE);
+        sr.circle(shankX - r * 0.28f - 1f, topY - r * 0.20f + 1f, 1.6f);
     }
 
     // =========================================================================

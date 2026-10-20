@@ -2,6 +2,7 @@ package com.fishingrpg.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -1272,6 +1273,7 @@ public class GachaScreen implements Screen {
         float modalY = (H - modalH) / 2f;
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
         // Backdrop dark scrim
@@ -1301,9 +1303,9 @@ public class GachaScreen implements Screen {
         sr.setColor(1f, 0.85f, 0.4f, 1f);
         drawRectOutline(sr, closeX, closeY, 34f, 34f, 1.2f);
 
-        // Left Column (Rates): Width 285px
-        float col1X = modalX + 20f;
-        float col1W = 285f;
+        // Left Column (Rates): Width 310px
+        float col1X = modalX + 18f;
+        float col1W = 310f;
         float colH = modalH - 74f;
         float colY = modalY + 16f;
 
@@ -1312,9 +1314,13 @@ public class GachaScreen implements Screen {
         sr.setColor(0.2f, 0.3f, 0.45f, 0.6f);
         drawRectOutline(sr, col1X, colY, col1W, colH, 1.2f);
 
-        // Right Column (Loot Table Sets): Width 740px
-        float col2X = modalX + 320f;
-        float col2W = modalW - 340f;
+        // Divider line in Left Column
+        sr.setColor(0.15f, 0.25f, 0.38f, 0.6f);
+        sr.rectLine(col1X + 14f, colY + colH - 200f, col1X + col1W - 14f, colY + colH - 200f, 1.2f);
+
+        // Right Column (Loot Table Sets): Width 720px
+        float col2X = modalX + 342f;
+        float col2W = modalW - 360f;
         sr.setColor(0.05f, 0.07f, 0.11f, 0.95f);
         drawRoundedRect(sr, col2X, colY, col2W, colH, 8);
         sr.setColor(0.2f, 0.3f, 0.45f, 0.6f);
@@ -1332,18 +1338,18 @@ public class GachaScreen implements Screen {
             displaySets.add(st);
         }
 
-        float cardW = col2W - 24f;
-        float cardH = 46f;
-        float cardSpacing = 6f;
+        float cardW = col2W - 24f; // 696f
+        float cardH = 120f;
+        float cardSpacing = 10f;
         float totalListH = displaySets.size() * (cardH + cardSpacing);
         float visibleListH = colH - 46f;
         float maxScrollY = Math.max(0f, totalListH - visibleListH);
         modalLootScrollY = MathUtils.clamp(modalLootScrollY, 0f, maxScrollY);
 
         // Scroll buttons background if maxScrollY > 0
-        float btnUpX = col2X + col2W - 74f;
-        float btnDownX = col2X + col2W - 40f;
-        float btnY = colY + colH - 32f;
+        float btnUpX = col2X + col2W - 68f;
+        float btnDownX = col2X + col2W - 36f;
+        float btnY = colY + colH - 34f;
         if (maxScrollY > 0) {
             sr.setColor(hoverModalScrollUp ? new Color(0.25f, 0.4f, 0.6f, 1f) : new Color(0.12f, 0.18f, 0.28f, 0.9f));
             drawRoundedRect(sr, btnUpX, btnY, 28f, 22f, 4);
@@ -1356,45 +1362,52 @@ public class GachaScreen implements Screen {
             drawRectOutline(sr, btnDownX, btnY, 28f, 22f, 1f);
         }
 
+        // CRITICAL: Flush all non-clipped shapes first!
+        sr.flush();
+
         // Clip the cards inside right column
         Rectangle clipBounds = new Rectangle(col2X + 4f, colY + 4f, col2W - 8f, visibleListH);
         Rectangle scissors = new Rectangle();
-        ScissorStack.calculateScissors(camera, sr.getTransformMatrix(), clipBounds, scissors);
+        ScissorStack.calculateScissors(camera, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight(), sr.getTransformMatrix(), clipBounds, scissors);
         boolean hasScissors = ScissorStack.pushScissors(scissors);
 
-        // Draw card shapes and item vector slots
-        float startCardY = colY + colH - 42f - cardH + modalLootScrollY;
-        for (int i = 0; i < displaySets.size(); i++) {
-            StandardSetTheme st = displaySets.get(i);
-            float cY = startCardY - i * (cardH + cardSpacing);
-            float cX = col2X + 12f;
+        if (hasScissors) {
+            float startCardY = colY + colH - 44f - cardH + modalLootScrollY;
+            float boxW = 216f;
+            float boxH = 50f;
+            float gap = 8f;
 
-            if (cY + cardH < colY || cY > colY + colH) continue;
+            for (int i = 0; i < displaySets.size(); i++) {
+                StandardSetTheme st = displaySets.get(i);
+                float cY = startCardY - i * (cardH + cardSpacing);
+                float cX = col2X + 12f;
 
-            // Card background
-            sr.setColor(0.08f, 0.11f, 0.17f, 0.95f);
-            drawRoundedRect(sr, cX, cY, cardW, cardH, 6);
-            sr.setColor(st.primaryColor.r, st.primaryColor.g, st.primaryColor.b, 0.45f);
-            drawRectOutline(sr, cX, cY, cardW, cardH, 1.2f);
+                if (cY + cardH < colY || cY > colY + colH) continue;
 
-            // 3 Item Slots (Rod, Line, Hook)
-            float slotY = cY + cardH / 2f;
-            float[] slotXs = { cX + 20f, cX + 50f, cX + 80f };
-            EquipmentType[] eqTypes = { EquipmentType.ROD, EquipmentType.LINE, EquipmentType.HOOK };
+                // Card background
+                sr.setColor(0.08f, 0.11f, 0.17f, 0.95f);
+                drawRoundedRect(sr, cX, cY, cardW, cardH, 8);
+                sr.setColor(st.primaryColor.r, st.primaryColor.g, st.primaryColor.b, 0.45f);
+                drawRectOutline(sr, cX, cY, cardW, cardH, 1.2f);
 
-            for (int s = 0; s < 3; s++) {
-                float sx = slotXs[s];
-                sr.setColor(0.04f, 0.06f, 0.10f, 1f);
-                drawRoundedRect(sr, sx - 13f, slotY - 13f, 26f, 26f, 4);
-                sr.setColor(st.primaryColor.r, st.primaryColor.g, st.primaryColor.b, 0.5f);
-                drawRectOutline(sr, sx - 13f, slotY - 13f, 26f, 26f, 1f);
+                // 3 Item Boxes in a row (Rod, Line, Hook)
+                float boxY = cY + 36f;
+                EquipmentType[] eqTypes = { EquipmentType.ROD, EquipmentType.LINE, EquipmentType.HOOK };
 
-                // Render vector icon for the item
-                EquipmentIconRenderer.drawSetPiece(sr, st.setName, eqTypes[s], sx, slotY, 10.5f, st.primaryColor);
+                for (int s = 0; s < 3; s++) {
+                    float bx = cX + 16f + s * (boxW + gap);
+                    sr.setColor(0.04f, 0.06f, 0.10f, 0.95f);
+                    drawRoundedRect(sr, bx, boxY, boxW, boxH, 6);
+                    sr.setColor(st.primaryColor.r, st.primaryColor.g, st.primaryColor.b, 0.5f);
+                    drawRectOutline(sr, bx, boxY, boxW, boxH, 1f);
+
+                    // Render vector icon for the item (Centered vertically on the left of each box)
+                    EquipmentIconRenderer.drawSetPiece(sr, st.setName, eqTypes[s], bx + 24f, boxY + boxH / 2f, 15f, st.primaryColor);
+                }
             }
+            sr.flush(); // FLUSH BEFORE POPPING SCISSORS!
+            ScissorStack.popScissors();
         }
-
-        if (hasScissors) ScissorStack.popScissors();
 
         sr.end();
 
@@ -1413,64 +1426,64 @@ public class GachaScreen implements Screen {
         font.setColor(Color.WHITE);
         font.draw(game.batch, "✕", closeX + 11f, closeY + 24f);
 
-        // --- Left Column: Rates breakdown ---
+        // --- Left Column: Rates breakdown (GUARANTEED VISIBLE, NOT SCISSORED) ---
         font.setColor(0.95f, 0.85f, 0.35f, 1f);
-        font.getData().setScale(0.82f);
-        font.draw(game.batch, "XÁC SUẤT PHẨM CHẤT (RATES)", col1X + 14f, colY + colH - 18f);
+        font.getData().setScale(0.80f);
+        font.draw(game.batch, "XÁC SUẤT PHẨM CHẤT (RATES)", col1X + 16f, colY + colH - 18f);
 
-        font.getData().setScale(0.74f);
-        float rLineY = colY + colH - 52f;
+        font.getData().setScale(0.72f);
+        float rLineY = colY + colH - 50f;
         if (!isEventBanner) {
             font.setColor(Rarity.COMMON.color);
-            font.draw(game.batch, "• Common (1★): 50.0%", col1X + 14f, rLineY);
+            font.draw(game.batch, "• Common (1★): 50.0%", col1X + 16f, rLineY);
             font.setColor(Rarity.UNCOMMON.color);
-            font.draw(game.batch, "• Uncommon (2★): 30.0%", col1X + 14f, rLineY - 26f);
+            font.draw(game.batch, "• Uncommon (2★): 30.0%", col1X + 16f, rLineY - 25f);
             font.setColor(Rarity.RARE.color);
-            font.draw(game.batch, "• Rare (3★): 15.0%", col1X + 14f, rLineY - 52f);
+            font.draw(game.batch, "• Rare (3★): 15.0%", col1X + 16f, rLineY - 50f);
             font.setColor(Rarity.EPIC.color);
-            font.draw(game.batch, "• Epic (4★): 4.0%", col1X + 14f, rLineY - 78f);
+            font.draw(game.batch, "• Epic (4★): 4.0%", col1X + 16f, rLineY - 75f);
             font.setColor(Rarity.LEGENDARY.color);
-            font.draw(game.batch, "• Legendary (5★): 1.0%", col1X + 14f, rLineY - 104f);
+            font.draw(game.batch, "• Legendary (5★): 1.0%", col1X + 16f, rLineY - 100f);
 
             // Pity Rules summary
-            font.setColor(0.85f, 0.9f, 1f, 0.95f);
+            font.setColor(0.95f, 0.85f, 0.35f, 1f);
             font.getData().setScale(0.78f);
-            font.draw(game.batch, "QUY TẮC BẢO HIỂM (PITY):", col1X + 14f, rLineY - 148f);
-            font.getData().setScale(0.70f);
-            font.setColor(0.75f, 0.85f, 0.95f, 0.9f);
-            font.draw(game.batch, "• Chắc chắn nhận Rare+ sau 10 lượt", col1X + 14f, rLineY - 174f);
-            font.draw(game.batch, "• Chắc chắn nhận Epic+ sau 50 lượt", col1X + 14f, rLineY - 198f);
-            font.draw(game.batch, "• Chắc chắn nhận Legendary sau 100 lượt", col1X + 14f, rLineY - 222f);
-            font.draw(game.batch, "• Quay 10 lượt luôn có tối thiểu 1 món 4★+", col1X + 14f, rLineY - 246f);
-            font.draw(game.batch, "• Nhận đồ phẩm chất cao sẽ đặt lại bảo hiểm", col1X + 14f, rLineY - 270f);
+            font.draw(game.batch, "QUY TẮC BẢO HIỂM (PITY):", col1X + 16f, rLineY - 150f);
+            font.getData().setScale(0.68f);
+            font.setColor(0.80f, 0.88f, 0.98f, 0.92f);
+            font.draw(game.batch, "• Chắc chắn nhận Rare+ sau 10 lượt", col1X + 16f, rLineY - 176f);
+            font.draw(game.batch, "• Chắc chắn nhận Epic+ sau 50 lượt", col1X + 16f, rLineY - 200f);
+            font.draw(game.batch, "• Chắc chắn nhận Legendary sau 100 lượt", col1X + 16f, rLineY - 224f);
+            font.draw(game.batch, "• Quay 10 lượt luôn có tối thiểu 1 món 4★+", col1X + 16f, rLineY - 248f);
+            font.draw(game.batch, "• Nhận đồ phẩm chất cao sẽ reset bảo hiểm", col1X + 16f, rLineY - 272f);
         } else {
             font.setColor(Rarity.COMMON.color);
-            font.draw(game.batch, "• Common (1★): 20.0%", col1X + 14f, rLineY);
+            font.draw(game.batch, "• Common (1★): 20.0%", col1X + 16f, rLineY);
             font.setColor(Rarity.UNCOMMON.color);
-            font.draw(game.batch, "• Uncommon (2★): 40.0%", col1X + 14f, rLineY - 26f);
+            font.draw(game.batch, "• Uncommon (2★): 40.0%", col1X + 16f, rLineY - 25f);
             font.setColor(Rarity.RARE.color);
-            font.draw(game.batch, "• Rare (3★): 30.0%", col1X + 14f, rLineY - 52f);
+            font.draw(game.batch, "• Rare (3★): 30.0%", col1X + 16f, rLineY - 50f);
             font.setColor(Rarity.EPIC.color);
-            font.draw(game.batch, "• Epic (4★): 8.5%", col1X + 14f, rLineY - 78f);
+            font.draw(game.batch, "• Epic (4★): 8.5%", col1X + 16f, rLineY - 75f);
             font.setColor(new Color(1f, 0.45f, 0.35f, 1f));
-            font.draw(game.batch, "• Thần Khí Lạc Hồng (6★): 1.5%", col1X + 14f, rLineY - 104f);
+            font.draw(game.batch, "• Thần Khí Lạc Hồng (6★): 1.5%", col1X + 16f, rLineY - 100f);
 
             // Limited Pity Rules
-            font.setColor(0.85f, 0.9f, 1f, 0.95f);
+            font.setColor(0.95f, 0.85f, 0.35f, 1f);
             font.getData().setScale(0.78f);
-            font.draw(game.batch, "QUY TẮC BẢO HIỂM GIỚI HẠN:", col1X + 14f, rLineY - 148f);
-            font.getData().setScale(0.70f);
-            font.setColor(0.75f, 0.85f, 0.95f, 0.9f);
-            font.draw(game.batch, "• Chắc chắn nhận Thần Khí ở lượt 80", col1X + 14f, rLineY - 174f);
-            font.draw(game.batch, "• Quay 10 lượt luôn có tối thiểu 1 món 4★+", col1X + 14f, rLineY - 198f);
-            font.draw(game.batch, "• Tiến độ bảo hiểm được lưu sang đợt sau", col1X + 14f, rLineY - 222f);
-            font.draw(game.batch, "• Sau sự kiện, trang bị giới hạn sẽ tạm đóng", col1X + 14f, rLineY - 246f);
+            font.draw(game.batch, "QUY TẮC BẢO HIỂM GIỚI HẠN:", col1X + 16f, rLineY - 150f);
+            font.getData().setScale(0.68f);
+            font.setColor(0.80f, 0.88f, 0.98f, 0.92f);
+            font.draw(game.batch, "• Chắc chắn nhận Thần Khí ở lượt 80", col1X + 16f, rLineY - 176f);
+            font.draw(game.batch, "• Quay 10 lượt luôn có tối thiểu 1 món 4★+", col1X + 16f, rLineY - 200f);
+            font.draw(game.batch, "• Tiến độ bảo hiểm được bảo lưu qua các đợt", col1X + 16f, rLineY - 224f);
+            font.draw(game.batch, "• Sau sự kiện, trang bị giới hạn sẽ tạm đóng", col1X + 16f, rLineY - 248f);
         }
 
         // --- Right Column: Header & Scroll Buttons ---
         font.setColor(0.95f, 0.85f, 0.35f, 1f);
-        font.getData().setScale(0.82f);
-        font.draw(game.batch, "DANH SÁCH BỘ TRANG BỊ CÓ THỂ QUAY (LOOT TABLE)", col2X + 14f, colY + colH - 18f);
+        font.getData().setScale(0.80f);
+        font.draw(game.batch, "DANH SÁCH BỘ TRANG BỊ CÓ THỂ QUAY (LOOT TABLE)", col2X + 16f, colY + colH - 18f);
 
         if (maxScrollY > 0) {
             font.setColor(hoverModalScrollUp ? Color.WHITE : new Color(0.7f, 0.85f, 1f, 0.9f));
@@ -1481,41 +1494,67 @@ public class GachaScreen implements Screen {
             font.draw(game.batch, "▼", btnDownX + 9f, btnY + 16f);
         }
 
+        // CRITICAL: Flush batch before clipping cards text!
+        game.batch.flush();
+
         // Text cards pass with Scissor clipping
+        ScissorStack.calculateScissors(camera, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight(), game.batch.getTransformMatrix(), clipBounds, scissors);
         boolean hasBatchScissors = ScissorStack.pushScissors(scissors);
 
-        for (int i = 0; i < displaySets.size(); i++) {
-            StandardSetTheme st = displaySets.get(i);
-            float cY = startCardY - i * (cardH + cardSpacing);
-            float cX = col2X + 12f;
+        if (hasBatchScissors) {
+            float startCardY = colY + colH - 44f - cardH + modalLootScrollY;
+            float boxW = 216f;
+            float boxH = 50f;
+            float gap = 8f;
 
-            if (cY + cardH < colY || cY > colY + colH) continue;
+            for (int i = 0; i < displaySets.size(); i++) {
+                StandardSetTheme st = displaySets.get(i);
+                float cY = startCardY - i * (cardH + cardSpacing);
+                float cX = col2X + 12f;
 
-            float multVal = 1f + st.points * 0.15f;
+                if (cY + cardH < colY || cY > colY + colH) continue;
 
-            // Line 1: Set Name + Points/Multiplier + Item names
-            font.setColor(st.primaryColor);
-            font.getData().setScale(0.76f);
-            font.draw(game.batch, "Bộ " + st.setName, cX + 102f, cY + cardH - 8f);
+                float multVal = 1f + st.points * 0.15f;
 
-            font.setColor(1f, 0.85f, 0.35f, 1f);
-            font.getData().setScale(0.70f);
-            String badge = "[+" + st.points + " Cấp Điểm • Multiplier: x" + String.format(java.util.Locale.US, "%.2f", multVal) + "]";
-            font.draw(game.batch, badge, cX + 212f, cY + cardH - 8f);
+                // 1. Top Title: Set Name
+                font.setColor(st.primaryColor);
+                font.getData().setScale(0.80f);
+                font.draw(game.batch, "Bộ " + st.setName, cX + 16f, cY + cardH - 10f);
 
-            font.setColor(0.75f, 0.88f, 0.98f, 0.9f);
-            font.getData().setScale(0.66f);
-            String itemNames = st.rodName + "  |  " + st.lineName + "  |  " + st.hookName;
-            font.draw(game.batch, itemNames, cX + 448f, cY + cardH - 9f);
+                // 2. Middle Row: 3 Boxes (Rod, Line, Hook)
+                float boxY = cY + 36f;
+                String[] pTypes = { "CẦN CÂU", "DÂY CƯỚC", "LƯỠI CÂU" };
+                String[] pNames = { st.rodName, st.lineName, st.hookName };
 
-            // Line 2: Set Bonus Effect
-            font.setColor(0.55f, 0.95f, 0.70f, 0.95f);
-            font.getData().setScale(0.68f);
-            String bonus = "★ " + EquipmentGenerator.getSetBonusDesc(st.setName);
-            font.draw(game.batch, bonus, cX + 102f, cY + 16f);
+                for (int s = 0; s < 3; s++) {
+                    float bx = cX + 16f + s * (boxW + gap);
+
+                    // Type subtitle
+                    font.setColor(0.6f, 0.8f, 1f, 0.75f);
+                    font.getData().setScale(0.56f);
+                    font.draw(game.batch, pTypes[s], bx + 48f, boxY + boxH - 10f);
+
+                    // Item Name
+                    font.setColor(Color.WHITE);
+                    font.getData().setScale(0.66f);
+                    font.draw(game.batch, pNames[s], bx + 48f, boxY + 18f);
+                }
+
+                // 3. Bottom: Points & Multiplier + Set Bonus
+                font.setColor(1f, 0.85f, 0.35f, 1f);
+                font.getData().setScale(0.70f);
+                String badge = "[+" + st.points + " Cấp Điểm • Hệ số: x" + String.format(java.util.Locale.US, "%.2f", multVal) + "]";
+                font.draw(game.batch, badge, cX + 16f, cY + 16f);
+
+                font.setColor(0.45f, 0.95f, 0.65f, 1f);
+                font.getData().setScale(0.70f);
+                String bonus = "★ Set 3 món: " + EquipmentGenerator.getSetBonusDesc(st.setName);
+                font.draw(game.batch, bonus, cX + 240f, cY + 16f);
+            }
+
+            game.batch.flush(); // FLUSH TEXT CARDS BEFORE POPPING!
+            ScissorStack.popScissors();
         }
-
-        if (hasBatchScissors) ScissorStack.popScissors();
 
         font.getData().setScale(1f);
         game.batch.end();
@@ -1561,13 +1600,13 @@ public class GachaScreen implements Screen {
         float closeY = modalY + modalH - 44f;
         hoverCloseModal = showRateLootModal && (mouseX >= closeX && mouseX <= closeX + 34f && mouseY >= closeY && mouseY <= closeY + 34f);
 
-        float col2X = modalX + 320f;
-        float col2W = modalW - 340f;
+        float col2X = modalX + 342f;
+        float col2W = modalW - 360f;
         float colH = modalH - 74f;
         float colY = modalY + 16f;
-        float btnUpX = col2X + col2W - 74f;
-        float btnDownX = col2X + col2W - 40f;
-        float btnY = colY + colH - 32f;
+        float btnUpX = col2X + col2W - 68f;
+        float btnDownX = col2X + col2W - 36f;
+        float btnY = colY + colH - 34f;
         hoverModalScrollUp = showRateLootModal && (mouseX >= btnUpX && mouseX <= btnUpX + 28f && mouseY >= btnY && mouseY <= btnY + 22f);
         hoverModalScrollDown = showRateLootModal && (mouseX >= btnDownX && mouseX <= btnDownX + 28f && mouseY >= btnY && mouseY <= btnY + 22f);
 
@@ -1588,10 +1627,10 @@ public class GachaScreen implements Screen {
 
         if (showRateLootModal) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.UP) || Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-                modalLootScrollY = Math.max(0, modalLootScrollY - 55f);
+                modalLootScrollY = Math.max(0, modalLootScrollY - 65f);
             }
             if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN) || Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-                modalLootScrollY += 55f;
+                modalLootScrollY += 65f;
             }
         }
 
@@ -1603,12 +1642,12 @@ public class GachaScreen implements Screen {
                     return;
                 }
                 if (hoverModalScrollUp) {
-                    modalLootScrollY = Math.max(0, modalLootScrollY - 55f);
+                    modalLootScrollY = Math.max(0, modalLootScrollY - 65f);
                     AudioManager.getInstance().playSFX("sfx_button");
                     return;
                 }
                 if (hoverModalScrollDown) {
-                    modalLootScrollY += 55f;
+                    modalLootScrollY += 65f;
                     AudioManager.getInstance().playSFX("sfx_button");
                     return;
                 }
@@ -1775,6 +1814,16 @@ public class GachaScreen implements Screen {
     @Override
     public void show() {
         AudioManager.getInstance().playBGM("bgm_menu");
+        Gdx.input.setInputProcessor(new InputAdapter() {
+            @Override
+            public boolean scrolled(float amountX, float amountY) {
+                if (showRateLootModal) {
+                    modalLootScrollY += amountY * 65f;
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -1784,9 +1833,14 @@ public class GachaScreen implements Screen {
 
     @Override public void pause() {}
     @Override public void resume() {}
-    @Override public void hide() {}
+    @Override 
+    public void hide() {
+        Gdx.input.setInputProcessor(null);
+    }
+
     @Override
     public void dispose() {
+        Gdx.input.setInputProcessor(null);
         sr.dispose();
     }
 }
