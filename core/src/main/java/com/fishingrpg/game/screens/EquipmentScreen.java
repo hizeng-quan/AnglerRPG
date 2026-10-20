@@ -991,7 +991,7 @@ public class EquipmentScreen implements Screen {
     // =========================================================================
     private void drawTotalStatsPopover(ShapeRenderer sr, float x, float y) {
         float popW = 430f;
-        float popH = 370f;
+        float popH = 440f;
         if (x + popW > W - 15f) x = W - popW - 15f;
         if (x < 15f) x = 15f;
         float drawY = y - popH;
@@ -1015,7 +1015,8 @@ public class EquipmentScreen implements Screen {
         // Divider lines
         sr.setColor(0.25f, 0.45f, 0.65f, 0.5f);
         sr.rect(x + 12f, drawY + popH - 42f, popW - 24f, 1.2f);
-        sr.rect(x + 12f, drawY + 80f, popW - 24f, 1f);
+        sr.rect(x + 12f, drawY + popH - 198f, popW - 24f, 1f);
+        sr.rect(x + 12f, drawY + 76f, popW - 24f, 1f);
 
         sr.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
@@ -1023,7 +1024,7 @@ public class EquipmentScreen implements Screen {
 
     private void drawTotalStatsPopoverText(float x, float y) {
         float popW = 430f;
-        float popH = 370f;
+        float popH = 440f;
         if (x + popW > W - 15f) x = W - popW - 15f;
         if (x < 15f) x = 15f;
         float drawY = y - popH;
@@ -1048,9 +1049,9 @@ public class EquipmentScreen implements Screen {
         font.getData().setScale(0.76f);
         font.draw(game.batch, "Cấp Độ: " + player.getLevel() + "  |  Trang Bị: " + getEquippedCount() + "/3 Món", x + 20f, drawY + popH - 52f);
 
-        // Core Combat Stats
-        float lineY = drawY + popH - 78f;
-        float spacing = 22f;
+        // --- SECTION 1: CORE COMBAT STATS ---
+        float lineY = drawY + popH - 74f;
+        float spacing = 20f;
         float valX = x + 315f;
 
         font.setColor(0.95f, 0.95f, 1f, 1f);
@@ -1092,22 +1093,75 @@ public class EquipmentScreen implements Screen {
         font.draw(game.batch, String.format("+%.1f%%", baitB), valX, lineY);
         lineY -= spacing;
 
-        // Substats Summary - with safe text wrapping
+        // --- SECTION 2: INDIVIDUAL SUBSTAT LINES ---
+        lineY = drawY + popH - 212f;
         font.setColor(1f, 0.85f, 0.35f, 1f);
-        font.draw(game.batch, "• Dòng Phụ Kích Hoạt:", x + 20f, lineY);
-        lineY -= 20f;
-        font.setColor(0.85f, 0.92f, 1f, 1f);
-        font.getData().setScale(0.72f);
-        String subSummary = getSubstatsSummary();
-        font.draw(game.batch, subSummary, x + 28f, lineY, popW - 48f, Align.left, true);
         font.getData().setScale(0.76f);
+        font.draw(game.batch, "[DÒNG PHỤ TRANG BỊ TÍCH LŨY]", x + 20f, lineY);
+        lineY -= 20f;
 
-        // Set Bonus Status at bottom of popover
+        float dmg = player.getEquipmentTotalStat(Substat.Type.DAMAGE_BONUS);
+        float gold = player.getEquipmentTotalStat(Substat.Type.GOLD_BONUS);
+        float exp = player.getEquipmentTotalStat(Substat.Type.EXP_BONUS);
+        float pull = player.getEquipmentTotalStat(Substat.Type.FISH_PULL_REDUCE);
+        float stam = player.getEquipmentTotalStat(Substat.Type.STAMINA_REGEN);
+
+        boolean hasAnySub = false;
+        font.getData().setScale(0.74f);
+
+        if (dmg > 0) {
+            hasAnySub = true;
+            font.setColor(0.90f, 0.94f, 0.98f, 1f);
+            font.draw(game.batch, "  • Tăng Sát Thương:", x + 20f, lineY);
+            font.setColor(1f, 0.85f, 0.35f, 1f);
+            font.draw(game.batch, String.format("+%.1f%%", dmg), valX, lineY);
+            lineY -= 19f;
+        }
+        if (gold > 0) {
+            hasAnySub = true;
+            font.setColor(0.90f, 0.94f, 0.98f, 1f);
+            font.draw(game.batch, "  • Thưởng Vàng Nhận Được:", x + 20f, lineY);
+            font.setColor(1f, 0.85f, 0.35f, 1f);
+            font.draw(game.batch, String.format("+%.1f%%", gold), valX, lineY);
+            lineY -= 19f;
+        }
+        if (exp > 0) {
+            hasAnySub = true;
+            font.setColor(0.90f, 0.94f, 0.98f, 1f);
+            font.draw(game.batch, "  • Thưởng Kinh Nghiệm (EXP):", x + 20f, lineY);
+            font.setColor(1f, 0.85f, 0.35f, 1f);
+            font.draw(game.batch, String.format("+%.1f%%", exp), valX, lineY);
+            lineY -= 19f;
+        }
+        if (pull > 0) {
+            hasAnySub = true;
+            font.setColor(0.90f, 0.94f, 0.98f, 1f);
+            font.draw(game.batch, "  • Giảm Sức Kéo Của Cá:", x + 20f, lineY);
+            font.setColor(0.35f, 1f, 0.65f, 1f);
+            font.draw(game.batch, String.format("-%.1f%%", pull), valX, lineY);
+            lineY -= 19f;
+        }
+        if (stam > 0) {
+            hasAnySub = true;
+            font.setColor(0.90f, 0.94f, 0.98f, 1f);
+            font.draw(game.batch, "  • Tốc Độ Hồi Phục Thể Lực:", x + 20f, lineY);
+            font.setColor(0.35f, 1f, 0.65f, 1f);
+            font.draw(game.batch, String.format("+%.1f%%", stam), valX, lineY);
+            lineY -= 19f;
+        }
+
+        if (!hasAnySub) {
+            font.setColor(0.55f, 0.60f, 0.70f, 0.9f);
+            font.draw(game.batch, "  • Chưa có chỉ số phụ nào kích hoạt", x + 20f, lineY);
+        }
+
+        // --- SECTION 3: SET BONUS STATUS ---
         float setY = drawY + 54f;
         boolean setBonusActive = player.isSetBonusActive() && player.getEquippedRod() != null;
         if (setBonusActive) {
             Equipment rod = player.getEquippedRod();
             font.setColor(1f, 0.88f, 0.25f, 1f);
+            font.getData().setScale(0.76f);
             font.draw(game.batch, "★ KÍCH HOẠT: BỘ " + rod.setName.toUpperCase(), x + 20f, setY);
             font.setColor(0.85f, 0.95f, 1f, 0.9f);
             font.getData().setScale(0.70f);
@@ -1115,6 +1169,7 @@ public class EquipmentScreen implements Screen {
             font.draw(game.batch, desc, x + 20f, setY - 18f, popW - 40f, Align.left, true);
         } else {
             font.setColor(0.6f, 0.65f, 0.75f, 1f);
+            font.getData().setScale(0.76f);
             font.draw(game.batch, "• Set Bonus: Chưa kích hoạt", x + 20f, setY);
             font.setColor(0.5f, 0.55f, 0.65f, 0.85f);
             font.getData().setScale(0.70f);

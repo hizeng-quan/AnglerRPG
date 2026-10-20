@@ -126,37 +126,7 @@ public class PlayScreen implements Screen {
 
             String mapId = player.getCurrentMap();
             if (mapId.equals("ao_lang")) {
-                shapeRenderer.setColor(0.1f, 0.3f, 0.5f, 1f);
-                shapeRenderer.rect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
-                shapeRenderer.setColor(0.05f, 0.2f, 0.4f, 1f);
-                shapeRenderer.rect(0, 0, WORLD_WIDTH, WORLD_HEIGHT / 2f);
-                
-                shapeRenderer.setColor(0.2f, 0.15f, 0.1f, 0.9f);
-                shapeRenderer.circle(80, 0, 60);
-                shapeRenderer.circle(1150, -10, 80);
-                
-                shapeRenderer.setColor(0.1f, 0.4f, 0.2f, 0.6f);
-                for(int i=0; i<10; i++) {
-                    float sx = 80 + i * 110;
-                    float px = sx, py = 0;
-                    for(int j=0; j<5; j++) {
-                        float nx = px + 10f * com.badlogic.gdx.math.MathUtils.sin(timer * 2f + i + j);
-                        float ny = py + 30;
-                        shapeRenderer.rectLine(px, py, nx, ny, 6f - j);
-                        px = nx; py = ny;
-                    }
-                }
-                
-                shapeRenderer.setColor(0.2f, 0.5f, 0.7f, 0.2f);
-                shapeRenderer.triangle(300, WORLD_HEIGHT, 500, WORLD_HEIGHT, 200, 0);
-                shapeRenderer.triangle(800, WORLD_HEIGHT, 1000, WORLD_HEIGHT, WORLD_WIDTH - 200, 0);
-                
-                shapeRenderer.setColor(0.5f, 0.9f, 1f, 0.4f);
-                for(int i=0; i<20; i++) {
-                    float bx = (i * 83 + timer * 15f) % WORLD_WIDTH;
-                    float by = ((i * 137 + timer * 65f) % (WORLD_HEIGHT + 100)) - 50;
-                    shapeRenderer.circle(bx + com.badlogic.gdx.math.MathUtils.sin(timer + i)*20f, by, 3f + (i%4));
-                }
+                com.fishingrpg.game.ui.AoLangBackground.render(shapeRenderer, timer, WORLD_WIDTH, WORLD_HEIGHT);
             } else if (mapId.equals("bai_bien")) {
                 // Beach: bright blue water, sand at bottom, sun rays
                 shapeRenderer.setColor(0.15f, 0.45f, 0.65f, 1f);
@@ -192,6 +162,7 @@ public class PlayScreen implements Screen {
                 }
             }
 
+            com.fishingrpg.game.ui.CombatVFXManager.getInstance().drawShapes(shapeRenderer);
             hud.drawShapes(player, fishingManager.currentFish);
             shapeRenderer.end();
             Gdx.gl.glDisable(GL20.GL_BLEND);
@@ -212,6 +183,7 @@ public class PlayScreen implements Screen {
     }
 
     private void update(float delta) {
+        com.fishingrpg.game.ui.CombatVFXManager.getInstance().update(delta);
         if (messageTimer > 0) messageTimer -= delta;
         player.update(delta);
         if (player.justFilledStamina) {
@@ -393,24 +365,25 @@ public class PlayScreen implements Screen {
     private boolean applyItemEffect(String itemName) {
         float thucDuongBonus = player.isSkillEquipped("no_bung") ? player.getSkillTree().getNoBungBonus() : 0f;
         float healMult = 1f + (thucDuongBonus / 100f);
+        boolean success = true;
 
         switch (itemName) {
             case "Bánh Mì": {
                 int heal = (int)(25f * healMult);
                 player.consumeStamina(-heal);
                 fishingManager.combatMessage = "Dùng Bánh Mì (+" + heal + " Thể lực)!";
-                return true;
+                break;
             }
             case "Nước Tăng Lực": {
                 int heal = (int)(50f * healMult);
                 player.consumeStamina(-heal);
                 fishingManager.combatMessage = "Dùng Nước Tăng Lực (+" + heal + " Thể lực)!";
-                return true;
+                break;
             }
             case "Dây Câu Tốt":
                 player.decreaseTension(20f);
                 fishingManager.combatMessage = "Dùng Dây Câu Tốt (-20 Tension)!";
-                return true;
+                break;
             case "Mồi Thơm": {
                 if (player.isBaitBuffActive()) {
                     fishingManager.combatMessage = "Mồi Thơm đang hoạt động rồi!";
@@ -429,36 +402,40 @@ public class PlayScreen implements Screen {
                 }
                 player.setBaitBuffActive(true);
                 fishingManager.combatMessage = "Dùng Mồi Thơm (Tăng cá hiếm)!" + (!consumed ? " [Không mất mồi]" : "");
-                return consumed;
+                success = consumed;
+                break;
             }
             case "Lưới Đánh Cá":
                 player.setFishingNetActive(true);
                 fishingManager.combatMessage = "Đã giăng Lưới Đánh Cá (Cơ hội x2-x4 lượt tới)!";
-                return true;
+                break;
             case "Bùa Hoàng Kim":
                 player.addGoldBuffCharges(5);
                 fishingManager.combatMessage = "Dùng Bùa Hoàng Kim (Buff 5 lượt)!";
-                return true;
+                break;
             case "Sách Thông Thái":
                 player.addExpBuffCharges(5);
                 fishingManager.combatMessage = "Dùng Sách Thông Thái (Buff 5 lượt)!";
-                return true;
+                break;
             case "Mồi Rủi Ro":
                 player.setRiskyBaitActive(true);
                 fishingManager.combatMessage = "Dùng Mồi Rủi Ro (Nguy hiểm lượt tới)!";
-                return true;
+                break;
             case "Nước Bức Phá":
                 player.consumeStamina(-player.getMaxStamina());
                 player.setOverclockPotionActive(true);
                 fishingManager.combatMessage = "Hồi đầy Thể lực, Giảm 30% Max Tension lượt tới!";
-                return true;
+                break;
             case "Thuốc Hồi Stamina":
                 player.addStaminaRegen(50f, 10f);
                 fishingManager.combatMessage = "Đang hồi 50 Thể lực (10/s)!";
-                return true;
+                break;
             default:
-                return true; // Vật phẩm không rõ — vẫn tiêu thụ
+                break; // Vật phẩm không rõ — vẫn tiêu thụ
         }
+
+        com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerItemUseVFX(itemName, 640f, 360f);
+        return success;
     }
 
     @Override public void resize(int w, int h) { viewport.update(w, h, true); }

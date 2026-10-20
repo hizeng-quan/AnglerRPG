@@ -420,6 +420,7 @@ public class FishingManager {
                     }
 
                     AudioManager.getInstance().playSFX("sfx_skill");
+                    com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerFishSkillVFX(s.id, 640f, 360f);
                     if (s.id.equals("but_toc")) {
                         fishButTocTimer = 3f;
                         combatMessage = "CÁ BỨT TỐC! Lực kéo x2!";
@@ -693,6 +694,7 @@ public class FishingManager {
                 player.increaseTension(15f);
                 combatMessage = crit ? "BẠO KÍCH! (-" + (int)cost + " Thể lực)" : "KÉO MẠNH! (-" + (int)cost + " Thể lực)";
                 AudioManager.getInstance().playSFX("sfx_skill");
+                com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerPlayerSkillVFX("keo_manh", 640f, 360f);
                 keoManhCooldown = 3f * cdMult;
             }
         } else if (skillId.equals("giat_kep") && giatKepCooldown <= 0) {
@@ -710,11 +712,13 @@ public class FishingManager {
                 player.increaseTension(30f);
                 combatMessage = "GIẬT KÉP! (-40 Thể lực)";
                 AudioManager.getInstance().playSFX("sfx_skill");
+                com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerPlayerSkillVFX("giat_kep", 640f, 360f);
                 giatKepCooldown = 5f * cdMult;
             }
         } else if (skillId.equals("duong_suc") && duongSucCooldown <= 0 && duongSucChannelTimer <= 0) {
             duongSucChannelTimer = player.getSkillTree().getDuongSucChannelTime();
             duongSucCooldown = 10f * cdMult;
+            com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerPlayerSkillVFX("duong_suc", 640f, 360f);
         } else if (skillId.equals("pha_giap") && phaGiapCooldown <= 0) {
             float hpDmg = player.getSkillTree().getPhaGiapDamage();
             float stamCost = 30f; // Tốn 30 thể lực
@@ -731,16 +735,19 @@ public class FishingManager {
                 phaGiapDebuff = player.getSkillTree().getPhaGiapDebuff() / 100f;
                 combatMessage = "PHÁ GIÁP! (-" + (int)stamCost + " Thể lực)";
                 AudioManager.getInstance().playSFX("sfx_skill");
+                com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerPlayerSkillVFX("pha_giap", 640f, 360f);
                 phaGiapCooldown = 20f * cdMult;
             }
         } else if (skillId.equals("luot_day") && luotDayCooldown <= 0) {
             luotDayTimer = player.getSkillTree().getLuotDayDuration();
             combatMessage = "LƯỚT DÂY! (Làm yếu lực kéo của cá)";
             luotDayCooldown = 15f * cdMult;
+            com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerPlayerSkillVFX("luot_day", 640f, 360f);
         } else if (skillId.equals("loi_nguyen_troi_buoc") && troiBuocCooldown <= 0) {
             troiBuocTimer = player.getSkillTree().getLoiNguyenTroiBuocDuration();
             combatMessage = "TRÓI BUỘC! Cá không thể di chuyển!";
             troiBuocCooldown = 25f * cdMult;
+            com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerPlayerSkillVFX("loi_nguyen_troi_buoc", 640f, 360f);
         }
         
         player.getQuestManager().addProgress("skill", 1);
