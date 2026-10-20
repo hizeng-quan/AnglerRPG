@@ -346,10 +346,10 @@ public class CatalogScreen implements Screen, InputProcessor {
             font.getData().setScale(1f);
             font.draw(game.batch, c.name, cx + 15f, cy - 12f);
 
-            // Progress text
+            // Progress text (lifted upwards for optimal card balance)
             font.setColor(0.7f, 0.8f, 0.9f, 0.9f);
             font.getData().setScale(0.85f);
-            font.draw(game.batch, caughtCount + "/" + c.fishNames.size() + " Loài", cx + 245f, cy - 35f);
+            font.draw(game.batch, caughtCount + "/" + c.fishNames.size() + " Loài", cx + 245f, cy - 25f);
 
             // Right header status / claim button
             if (claimed) {
@@ -399,7 +399,7 @@ public class CatalogScreen implements Screen, InputProcessor {
                         font.getData().setScale(0.8f * ((slotW - 8f) / layout.width));
                         layout.setText(font, fishName);
                     }
-                    font.draw(game.batch, layout, fx + (slotW - layout.width) / 2f, slotY + 54f);
+                    font.draw(game.batch, layout, fx + (slotW - layout.width) / 2f, slotY + 48f);
 
                     // Records (Weight & Length)
                     float wRecord = SizeRecord.getRecord(fishName);
@@ -408,13 +408,7 @@ public class CatalogScreen implements Screen, InputProcessor {
                     font.getData().setScale(0.75f);
                     String recStr = String.format("%.1f", wRecord) + " kg • " + String.format("%.1f", lRecord) + " cm";
                     layout.setText(font, recStr);
-                    font.draw(game.batch, layout, fx + (slotW - layout.width) / 2f, slotY + 34f);
-
-                    // Hint indicator
-                    font.setColor(0.5f, 0.8f, 1f, 0.8f);
-                    font.getData().setScale(0.68f);
-                    layout.setText(font, "★ Rê chuột xem");
-                    font.draw(game.batch, layout, fx + (slotW - layout.width) / 2f, slotY + 16f);
+                    font.draw(game.batch, layout, fx + (slotW - layout.width) / 2f, slotY + 24f);
                 } else {
                     // Locked Fish labels
                     font.setColor(0.4f, 0.45f, 0.55f, 0.8f);
@@ -685,7 +679,7 @@ public class CatalogScreen implements Screen, InputProcessor {
         font.setColor(0.85f, 0.9f, 0.95f, 1f);
         font.getData().setScale(0.80f);
         font.draw(game.batch, "❖ Thể lực: " + (int) hoveredFish.getMaxHp() + " HP", infoX, ty - 50f);
-        font.draw(game.batch, "❖ Kéo giằng: " + (int) hoveredFish.getPullStrength() + " Lực", infoX, ty - 68f);
+        font.draw(game.batch, "❖ Lực kéo: " + (int) hoveredFish.getPullStrength() + " (dmg/s)", infoX, ty - 68f);
 
         // Records
         float wRecord = SizeRecord.getRecord(hoveredFishName);

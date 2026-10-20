@@ -525,52 +525,272 @@ public class EquipmentIconRenderer {
     }
 
     // =========================================================================
-    // 5. HẢI TẶC SET
+    // 5. HẢI TẶC SET (Pirate Galleon Mast, Anchor Chain Wheel, Reaper Scythe Hook)
     // =========================================================================
-    private static void drawHaiTacRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Galleon timber mast spar with pirate pulley and flag
-        sr.setColor(0.32f, 0.20f, 0.12f, 1f);
-        sr.rectLine(cx - r * 0.7f, cy - r * 0.7f, cx + r * 0.7f, cy + r * 0.7f, 5f);
-        // Brass pulley block
-        sr.setColor(0.85f, 0.65f, 0.20f, 1f);
-        sr.circle(cx + r * 0.4f, cy + r * 0.4f, r * 0.22f);
-        sr.setColor(0.18f, 0.12f, 0.08f, 1f);
-        sr.circle(cx + r * 0.4f, cy + r * 0.4f, r * 0.08f);
-        // Black Jolly Roger pennant flag
-        sr.setColor(0.12f, 0.10f, 0.12f, 1f);
-        sr.triangle(cx + r * 0.65f, cy + r * 0.65f, cx + r * 0.95f, cy + r * 0.45f, cx + r * 0.65f, cy + r * 0.35f);
-        sr.setColor(0.9f, 0.9f, 0.9f, 1f);
-        sr.circle(cx + r * 0.75f, cy + r * 0.48f, 2f);
-    }
-
-    private static void drawHaiTacLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Heavy iron anchor chain coiled on rustic nautical wheel
-        sr.setColor(0.28f, 0.18f, 0.12f, 1f);
+    public static void drawHaiTacRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Cursed Treasure & Gunpowder Smoke Aura
+        sr.setColor(0.85f, 0.40f, 0.12f, 0.20f);
+        sr.circle(cx, cy, r * 0.95f);
+        sr.setColor(0.95f, 0.20f, 0.15f, 0.15f);
         sr.circle(cx, cy, r * 0.75f);
-        sr.setColor(0.65f, 0.65f, 0.70f, 1f);
-        // Iron chain links
-        for (int a = 0; a < 6; a++) {
-            float ang = a * 60f * MathUtils.degreesToRadians;
-            sr.circle(cx + r * 0.52f * MathUtils.cos(ang), cy + r * 0.52f * MathUtils.sin(ang), 3.5f);
+
+        // 2. Weathered Black-Iron Galleon Mast Timber (Diagonal Spar)
+        float startX = cx - r * 0.72f, startY = cy - r * 0.72f;
+        float endX = cx + r * 0.65f, endY = cy + r * 0.65f;
+
+        // Dark aged ebony core
+        sr.setColor(0.18f, 0.12f, 0.08f, 1f);
+        sr.rectLine(startX, startY, endX, endY, Math.max(6.5f, r * 0.26f));
+
+        // Weathered dark mahogany wood body
+        sr.setColor(0.38f, 0.22f, 0.14f, 1f);
+        sr.rectLine(startX + 1f, startY + 1f, endX, endY, Math.max(4.2f, r * 0.18f));
+
+        // Wood grain highlight streak
+        sr.setColor(0.55f, 0.35f, 0.20f, 0.85f);
+        sr.rectLine(startX + 2f, startY + 2f, endX - r * 0.1f, endY - r * 0.1f, 1.8f);
+
+        // 3. Forged Brass & Wrought-Iron Mast Fastener Bands with Rivets
+        for (int b = 0; b < 4; b++) {
+            float frac = 0.20f + b * 0.22f;
+            float bx = startX + (endX - startX) * frac;
+            float by = startY + (endY - startY) * frac;
+            // Brass ring band
+            sr.setColor(0.85f, 0.68f, 0.22f, 1f);
+            sr.rectLine(bx - 3.5f, by + 3.5f, bx + 3.5f, by - 3.5f, Math.max(3.5f, r * 0.12f));
+            // Dark iron inner groove
+            sr.setColor(0.12f, 0.10f, 0.08f, 1f);
+            sr.rectLine(bx - 2f, by + 2f, bx + 2f, by - 2f, 1.2f);
+            // Golden rivet dots
+            sr.setColor(1f, 0.88f, 0.35f, 1f);
+            sr.circle(bx - 2f, by + 2f, 1.2f);
+            sr.circle(bx + 2f, by - 2f, 1.2f);
         }
-        sr.setColor(0.15f, 0.15f, 0.18f, 1f);
-        sr.circle(cx, cy, r * 0.32f);
-        // Skull center dot
-        sr.setColor(0.9f, 0.85f, 0.80f, 1f);
-        sr.circle(cx, cy + 1f, 3.5f);
+
+        // 4. Heavy Brass Galleon Rigging Block / Pulley
+        float px = cx + r * 0.20f, py = cy + r * 0.20f;
+        // Wooden/brass cheek housing
+        sr.setColor(0.24f, 0.15f, 0.09f, 1f);
+        sr.circle(px, py, r * 0.28f);
+        sr.setColor(0.85f, 0.65f, 0.20f, 1f);
+        sr.circle(px, py, r * 0.22f);
+        // Dark sheave groove & rope spool
+        sr.setColor(0.15f, 0.10f, 0.08f, 1f);
+        sr.circle(px, py, r * 0.14f);
+        // Golden axle hub bolt
+        sr.setColor(1f, 0.85f, 0.3f, 1f);
+        sr.circle(px, py, r * 0.06f);
+
+        // Coiled Rigging Hemp Rope
+        sr.setColor(0.70f, 0.55f, 0.35f, 1f);
+        sr.rectLine(px - r * 0.18f, py - r * 0.10f, cx - r * 0.15f, cy - r * 0.40f, 2.2f);
+        sr.rectLine(px + r * 0.12f, py - r * 0.12f, cx + r * 0.05f, cy - r * 0.35f, 1.8f);
+
+        // 5. Yardarm Cross-Spar & Pirate Storm Lantern
+        float yx = cx - r * 0.35f, yy = cy - r * 0.35f;
+        sr.setColor(0.32f, 0.18f, 0.10f, 1f);
+        sr.rectLine(yx - r * 0.20f, yy + r * 0.20f, yx + r * 0.20f, yy - r * 0.20f, 3.5f);
+        // Hanging brass lantern
+        sr.setColor(0.85f, 0.65f, 0.20f, 1f);
+        sr.rect(yx - r * 0.22f, yy + r * 0.12f, r * 0.14f, r * 0.18f);
+        // Glowing cursed flame inside
+        sr.setColor(1f, 0.85f, 0.25f, 1f);
+        sr.circle(yx - r * 0.15f, yy + r * 0.21f, r * 0.06f);
+
+        // 6. Flying Tattered Black Jolly Roger Pennant Flag
+        float fx = endX - r * 0.05f, fy = endY - r * 0.05f;
+        // Masthead cap
+        sr.setColor(0.85f, 0.70f, 0.25f, 1f);
+        sr.circle(endX, endY, r * 0.12f);
+
+        // Black ragged swallowtail banner fluttering rightward
+        sr.setColor(0.10f, 0.08f, 0.10f, 0.98f);
+        sr.triangle(fx, fy + r * 0.15f, fx + r * 0.45f, fy + r * 0.10f, fx, fy - r * 0.25f);
+        sr.triangle(fx + r * 0.45f, fy + r * 0.10f, fx + r * 0.28f, fy - r * 0.08f, fx, fy - r * 0.25f);
+
+        // Bleached ivory skull on flag
+        sr.setColor(0.92f, 0.90f, 0.85f, 1f);
+        float skX = fx + r * 0.15f, skY = fy - r * 0.02f;
+        sr.circle(skX, skY + 2f, r * 0.08f);
+        sr.rect(skX - r * 0.04f, skY - r * 0.05f, r * 0.08f, r * 0.05f);
+        // Glowing ruby red skull eye dots
+        sr.setColor(0.95f, 0.15f, 0.15f, 1f);
+        sr.circle(skX - 1.5f, skY + 2f, 1.2f);
+        sr.circle(skX + 1.5f, skY + 2f, 1.2f);
+        // Crossed pirate cutlass bones behind skull
+        sr.setColor(0.85f, 0.82f, 0.78f, 1f);
+        sr.rectLine(skX - r * 0.08f, skY - r * 0.06f, skX + r * 0.08f, skY + r * 0.08f, 1.2f);
+        sr.rectLine(skX + r * 0.08f, skY - r * 0.06f, skX - r * 0.08f, skY + r * 0.08f, 1.2f);
     }
 
-    private static void drawHaiTacHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Brutal steel reaper scythe hook
-        sr.setColor(0.25f, 0.25f, 0.30f, 1f);
-        sr.rectLine(cx - r * 0.25f, cy + r * 0.6f, cx - r * 0.25f, cy - r * 0.35f, 4.5f);
-        sr.rectLine(cx - r * 0.25f, cy - r * 0.35f, cx + r * 0.45f, cy - r * 0.35f, 4.5f);
-        // Broad scythe blade curved upward
-        sr.setColor(0.85f, 0.30f, 0.25f, 1f);
-        sr.triangle(cx + r * 0.35f, cy - r * 0.35f, cx + r * 0.65f, cy + r * 0.45f, cx + r * 0.20f, cy + r * 0.1f);
-        // Beveled steel edge
-        sr.setColor(0.95f, 0.95f, 1f, 1f);
-        sr.rectLine(cx + r * 0.25f, cy + r * 0.1f, cx + r * 0.65f, cy + r * 0.45f, 1.8f);
+    public static void drawHaiTacLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Cursed Galleon Whirlpool & Spanish Gold Aura
+        sr.setColor(0.85f, 0.55f, 0.15f, 0.20f);
+        sr.circle(cx, cy, r * 0.95f);
+        sr.setColor(0.18f, 0.12f, 0.08f, 0.40f);
+        sr.circle(cx, cy, r * 0.85f);
+
+        // 2. Ornate Nautical Galleon Ship's Wheel (Mahogany & Brass)
+        // Outer wheel rim
+        sr.setColor(0.28f, 0.16f, 0.10f, 1f);
+        sr.circle(cx, cy, r * 0.76f);
+        // Brass tire inlay
+        sr.setColor(0.85f, 0.68f, 0.22f, 1f);
+        sr.circle(cx, cy, r * 0.70f);
+        // Inner wheel opening
+        sr.setColor(0.08f, 0.07f, 0.09f, 0.95f);
+        sr.circle(cx, cy, r * 0.62f);
+
+        // 8 Turned Wheel Spokes with Handles extending beyond rim
+        for (int a = 0; a < 8; a++) {
+            float ang = a * 45f;
+            float cos = MathUtils.cosDeg(ang);
+            float sin = MathUtils.sinDeg(ang);
+            // Spoke spindle
+            sr.setColor(0.45f, 0.28f, 0.16f, 1f);
+            sr.rectLine(cx, cy, cx + cos * r * 0.72f, cy + sin * r * 0.72f, 2.5f);
+            // Turned handle grip extending outwards
+            sr.setColor(0.85f, 0.68f, 0.22f, 1f);
+            sr.circle(cx + cos * r * 0.84f, cy + sin * r * 0.84f, Math.max(2.2f, r * 0.08f));
+            sr.setColor(0.32f, 0.18f, 0.10f, 1f);
+            sr.circle(cx + cos * r * 0.84f, cy + sin * r * 0.84f, Math.max(1.2f, r * 0.04f));
+        }
+
+        // 3. Heavy Forged-Iron Admiralty Anchor crossed in center
+        float ancX = cx, ancY = cy;
+        // Anchor shank (vertical)
+        sr.setColor(0.22f, 0.22f, 0.26f, 1f);
+        sr.rectLine(ancX, ancY - r * 0.45f, ancX, ancY + r * 0.45f, Math.max(3.5f, r * 0.14f));
+        // Anchor stock (horizontal wooden crossbar)
+        sr.setColor(0.40f, 0.25f, 0.14f, 1f);
+        sr.rectLine(ancX - r * 0.32f, ancY + r * 0.28f, ancX + r * 0.32f, ancY + r * 0.28f, Math.max(3f, r * 0.12f));
+        // Brass stock tips
+        sr.setColor(0.85f, 0.68f, 0.22f, 1f);
+        sr.circle(ancX - r * 0.32f, ancY + r * 0.28f, 2.2f);
+        sr.circle(ancX + r * 0.32f, ancY + r * 0.28f, 2.2f);
+
+        // Anchor curved arms / flukes
+        sr.setColor(0.22f, 0.22f, 0.26f, 1f);
+        sr.rectLine(ancX - r * 0.30f, ancY - r * 0.30f, ancX, ancY - r * 0.48f, Math.max(3.2f, r * 0.13f));
+        sr.rectLine(ancX + r * 0.30f, ancY - r * 0.30f, ancX, ancY - r * 0.48f, Math.max(3.2f, r * 0.13f));
+        // Spade flukes
+        sr.setColor(0.55f, 0.58f, 0.65f, 1f);
+        sr.triangle(ancX - r * 0.30f, ancY - r * 0.30f, ancX - r * 0.38f, ancY - r * 0.22f, ancX - r * 0.22f, ancY - r * 0.22f);
+        sr.triangle(ancX + r * 0.30f, ancY - r * 0.30f, ancX + r * 0.38f, ancY - r * 0.22f, ancX + r * 0.22f, ancY - r * 0.22f);
+
+        // 4. Coiled Heavy Wrought-Iron Chain Links wrapping the wheel
+        for (int c = 0; c < 10; c++) {
+            float cAng = c * 36f;
+            float cosC = MathUtils.cosDeg(cAng);
+            float sinC = MathUtils.sinDeg(cAng);
+            float lx = cx + cosC * (r * 0.50f);
+            float ly = cy + sinC * (r * 0.50f);
+
+            // Outer forged iron link ring
+            sr.setColor(0.18f, 0.18f, 0.22f, 1f);
+            sr.circle(lx, ly, Math.max(3.8f, r * 0.13f));
+            // Metallic silver highlight
+            sr.setColor(0.68f, 0.72f, 0.78f, 1f);
+            sr.circle(lx - 0.8f, ly + 0.8f, Math.max(2.4f, r * 0.08f));
+            // Inner hollow link
+            sr.setColor(0.08f, 0.08f, 0.10f, 1f);
+            sr.circle(lx, ly, Math.max(1.4f, r * 0.05f));
+        }
+
+        // 5. Golden Pirate Doubloon Wheel Hub Medallion
+        sr.setColor(0.90f, 0.72f, 0.20f, 1f);
+        sr.circle(cx, cy, r * 0.24f);
+        sr.setColor(0.65f, 0.48f, 0.12f, 1f);
+        sr.circle(cx, cy, r * 0.20f);
+        // Center ivory skull boss
+        sr.setColor(0.95f, 0.92f, 0.85f, 1f);
+        sr.circle(cx, cy + 1f, r * 0.10f);
+        sr.rect(cx - r * 0.05f, cy - r * 0.07f, r * 0.10f, r * 0.07f);
+        // Glowing emerald eye sockets (Cursed Aztec/Pirate Treasure)
+        sr.setColor(0.15f, 0.95f, 0.35f, 1f);
+        sr.circle(cx - 1.8f, cy + 1f, 1.2f);
+        sr.circle(cx + 1.8f, cy + 1f, 1.2f);
+    }
+
+    public static void drawHaiTacHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Blood-Tide Maritime Curse Aura
+        sr.setColor(0.90f, 0.22f, 0.15f, 0.22f);
+        sr.circle(cx, cy, r * 0.95f);
+        sr.setColor(0.65f, 0.10f, 0.10f, 0.18f);
+        sr.circle(cx, cy, r * 0.78f);
+
+        // 2. Heavy Forged Damascus Steel Shank & Spine
+        float shankX = cx - r * 0.22f;
+        float topY = cy + r * 0.62f;
+        float bendY = cy - r * 0.48f;
+        float bladeEndX = cx + r * 0.55f;
+        float bladeEndY = cy + r * 0.40f;
+
+        // Dark forged iron spine reinforcement
+        sr.setColor(0.12f, 0.12f, 0.15f, 1f);
+        sr.rectLine(shankX, topY, shankX, bendY, Math.max(5.5f, r * 0.22f));
+        sr.rectLine(shankX, bendY, cx + r * 0.30f, bendY, Math.max(5.5f, r * 0.22f));
+
+        // Damascus slate steel shank body
+        sr.setColor(0.35f, 0.38f, 0.44f, 1f);
+        sr.rectLine(shankX, topY, shankX, bendY, Math.max(3.8f, r * 0.15f));
+        sr.rectLine(shankX, bendY, cx + r * 0.30f, bendY, Math.max(3.8f, r * 0.15f));
+
+        // 3. Brutal Sweeping Reaper Scythe Blade (Curved Upward)
+        // Main broad scythe blade
+        sr.setColor(0.48f, 0.52f, 0.60f, 1f);
+        sr.triangle(cx + r * 0.10f, bendY - 2f, bladeEndX, bladeEndY, cx + r * 0.18f, cy - r * 0.05f);
+        sr.triangle(cx + r * 0.28f, bendY - 2f, bladeEndX, bladeEndY, cx + r * 0.38f, cy + r * 0.10f);
+
+        // Reverse wicked barb on inner scythe curve
+        sr.setColor(0.70f, 0.74f, 0.82f, 1f);
+        sr.triangle(bladeEndX, bladeEndY, bladeEndX - r * 0.22f, bladeEndY - r * 0.28f, bladeEndX - r * 0.06f, bladeEndY - r * 0.32f);
+
+        // Razor-sharp mirror polished blade edge
+        sr.setColor(0.96f, 0.98f, 1f, 1f);
+        sr.rectLine(bladeEndX, bladeEndY, cx + r * 0.18f, cy - r * 0.05f, 2f);
+        sr.rectLine(cx + r * 0.18f, cy - r * 0.05f, shankX + 2f, bendY + 2f, 2f);
+
+        // 4. Etched Cursed Bloodline Fuller with Glowing Crimson Runes
+        sr.setColor(0.95f, 0.15f, 0.15f, 0.95f);
+        sr.rectLine(shankX, topY - r * 0.15f, shankX, bendY + r * 0.10f, 1.8f);
+        sr.rectLine(shankX + 2f, bendY, cx + r * 0.25f, bendY, 1.8f);
+        // Bloodline curve up the scythe spine
+        sr.rectLine(cx + r * 0.25f, bendY, bladeEndX - r * 0.08f, bladeEndY - r * 0.08f, 1.6f);
+
+        // Glowing blood drop / ruby node on fuller
+        sr.setColor(1f, 0.35f, 0.35f, 1f);
+        sr.circle(shankX, cy, 2.2f);
+        sr.circle(cx + r * 0.15f, bendY, 2.2f);
+        sr.circle(bladeEndX - r * 0.12f, bladeEndY - r * 0.12f, 2.2f);
+
+        // 5. Pirate Cutlass Brass Basket Handguard & Eyelet Shackle
+        // Eyelet ring at top
+        sr.setColor(0.85f, 0.68f, 0.22f, 1f);
+        sr.circle(shankX, topY, r * 0.24f);
+        sr.setColor(0.08f, 0.08f, 0.10f, 1f);
+        sr.circle(shankX, topY, r * 0.12f);
+
+        // Brass basket guard curving outwards to protect eyelet
+        sr.setColor(0.78f, 0.60f, 0.18f, 1f);
+        sr.rectLine(shankX, topY - r * 0.08f, shankX - r * 0.30f, topY - r * 0.28f, 3.2f);
+        sr.rectLine(shankX - r * 0.30f, topY - r * 0.28f, shankX - r * 0.12f, cy + r * 0.10f, 2.8f);
+        // Brass guard knuckle stud
+        sr.setColor(1f, 0.88f, 0.35f, 1f);
+        sr.circle(shankX - r * 0.30f, topY - r * 0.28f, 2.8f);
+
+        // 6. Dangling Spanish 8-Reales Silver Coin & Pirate Feather Charm
+        float chX = shankX - r * 0.12f, chY = cy + r * 0.10f;
+        sr.setColor(0.75f, 0.78f, 0.82f, 1f);
+        sr.rectLine(chX, chY, chX - r * 0.10f, chY - r * 0.25f, 1.5f);
+        // Pierced Spanish silver coin
+        sr.setColor(0.82f, 0.85f, 0.90f, 1f);
+        sr.circle(chX - r * 0.10f, chY - r * 0.25f, r * 0.13f);
+        sr.setColor(0.12f, 0.12f, 0.15f, 1f);
+        sr.circle(chX - r * 0.10f, chY - r * 0.25f, 1.5f);
+        // Gold edge trim on coin
+        sr.setColor(0.95f, 0.80f, 0.25f, 1f);
+        sr.circle(chX - r * 0.10f, chY - r * 0.25f, 2.2f);
     }
 
     // =========================================================================
