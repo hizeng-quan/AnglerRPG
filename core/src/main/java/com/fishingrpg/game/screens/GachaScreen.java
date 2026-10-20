@@ -81,6 +81,8 @@ public class GachaScreen implements Screen {
     private boolean hoverPull1 = false;
     private boolean hoverPull10 = false;
     private boolean hoverSet = false;
+    private boolean showSetDetailModal = false;
+    private boolean hoverCloseDetailModal = false;
     private boolean hoverCloseModal = false;
     private float modalLootScrollY = 0f;
     private boolean hoverModalScrollUp = false;
@@ -469,8 +471,15 @@ public class GachaScreen implements Screen {
 
             sr.setColor(0.09f, 0.12f, 0.18f, 0.95f);
             drawRoundedRect(sr, pedX, pedY, pedW, pedH, 8);
-            sr.setColor(isEventBanner ? new Color(0.95f, 0.65f, 0.25f, 0.85f) : curTheme.primaryColor);
-            drawRectOutline(sr, pedX, pedY, pedW, pedH, 1.5f);
+            if (hoverSet && state == State.IDLE && !showSetDetailModal && !showRateLootModal) {
+                float pulse = 0.82f + 0.18f * MathUtils.sin(animTimer * 6f);
+                Color baseC = isEventBanner ? new Color(1f, 0.75f, 0.35f, 1f) : curTheme.primaryColor;
+                sr.setColor(baseC.r * pulse, baseC.g * pulse, baseC.b * pulse, 1f);
+                drawRectOutline(sr, pedX, pedY, pedW, pedH, 2.2f);
+            } else {
+                sr.setColor(isEventBanner ? new Color(0.95f, 0.65f, 0.25f, 0.85f) : curTheme.primaryColor);
+                drawRectOutline(sr, pedX, pedY, pedW, pedH, 1.5f);
+            }
 
             // 3 Equipment Slots (Rod, Line, Hook)
             String curSetName = isEventBanner ? "Thần Khí Lạc Hồng" : curTheme.setName;
@@ -905,12 +914,6 @@ public class GachaScreen implements Screen {
                 font.draw(game.batch, "★ Tiến độ bảo hiểm được bảo lưu cho các đợt sự kiện tiếp theo ★", infoX + 25f, infoY + 52f);
             }
             font.getData().setScale(1f);
-
-            // Hover tooltip hint
-            font.setColor(0.6f, 0.75f, 0.9f, 0.65f);
-            font.getData().setScale(0.70f);
-            font.draw(game.batch, "Rà chuột vào trang bị để xem chi tiết", showcaseCX - 100f, cardY + 20f);
-            font.getData().setScale(1f);
         }
 
         // 6. Result State Texts
@@ -1088,9 +1091,9 @@ public class GachaScreen implements Screen {
             game.batch.end();
         }
 
-        // 9. Draw Hover Inspection Tooltip for Set & Pieces
-        if (hoverSet && state == State.IDLE && !showRateLootModal) {
-            drawSetDetailTooltip();
+        // 9. Draw Set Detail Modal when opened by click
+        if (showSetDetailModal && state == State.IDLE && !showRateLootModal) {
+            drawSetDetailModal();
         }
     }
 
@@ -1175,91 +1178,127 @@ public class GachaScreen implements Screen {
         sr.circle(cx, pointerBaseY + 2f, 2.5f);
     }
 
-    private void drawSetDetailTooltip() {
-        float tipW = 480f;
-        float tipH = 220f;
-        float tipX = 380f;
-        float tipY = 210f;
+    private void drawSetDetailModal() {
+        float tipW = 700f;
+        float tipH = 370f;
+        float tipX = (W - tipW) / 2f;
+        float tipY = (H - tipH) / 2f;
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
-        // Shadow
-        sr.setColor(0f, 0f, 0f, 0.7f);
-        drawRoundedRect(sr, tipX + 6f, tipY - 6f, tipW, tipH, 10);
+        // 1. Semi-transparent backdrop to focus attention on modal
+        sr.setColor(0f, 0f, 0f, 0.65f);
+        sr.rect(0, 0, W, H);
 
-        // Background
-        sr.setColor(0.08f, 0.11f, 0.18f, 0.98f);
-        drawRoundedRect(sr, tipX, tipY, tipW, tipH, 10);
+        // 2. Drop shadow
+        sr.setColor(0f, 0f, 0f, 0.8f);
+        drawRoundedRect(sr, tipX + 6f, tipY - 6f, tipW, tipH, 12);
+
+        // 3. Modal Background
+        sr.setColor(0.07f, 0.10f, 0.16f, 0.98f);
+        drawRoundedRect(sr, tipX, tipY, tipW, tipH, 12);
 
         StandardSetTheme curSet = isEventBanner ? null : STANDARD_SETS[currentStandardSetIndex];
         String setName = isEventBanner ? "Thần Khí Lạc Hồng" : curSet.setName;
         Color borderCol = isEventBanner ? new Color(1f, 0.65f, 0.3f, 1f) : curSet.primaryColor;
 
-        // Header strip
+        // 4. Header strip
         sr.setColor(borderCol.r * 0.25f, borderCol.g * 0.25f, borderCol.b * 0.25f, 0.95f);
-        sr.rect(tipX + 2f, tipY + tipH - 38f, tipW - 4f, 36f);
+        sr.rect(tipX + 2f, tipY + tipH - 42f, tipW - 4f, 40f);
 
-        // Border
+        // 5. Modal Border Outline
         sr.setColor(borderCol);
-        drawRectOutline(sr, tipX, tipY, tipW, tipH, 2f);
+        drawRectOutline(sr, tipX, tipY, tipW, tipH, 2.5f);
 
-        // 3 mini piece frames
-        float colW = 145f;
-        float pSlotY = tipY + 16f;
+        // Close button [X] at top-right
+        float closeX = tipX + tipW - 38f;
+        float closeY = tipY + tipH - 36f;
+        float closeSize = 28f;
+        sr.setColor(hoverCloseDetailModal ? new Color(0.9f, 0.25f, 0.25f, 0.95f) : new Color(0.2f, 0.25f, 0.35f, 0.9f));
+        drawRoundedRect(sr, closeX, closeY, closeSize, closeSize, 6);
+        sr.setColor(hoverCloseDetailModal ? Color.WHITE : new Color(0.7f, 0.8f, 0.9f, 1f));
+        sr.rectLine(closeX + 7f, closeY + 7f, closeX + closeSize - 7f, closeY + closeSize - 7f, 2.2f);
+        sr.rectLine(closeX + 7f, closeY + closeSize - 7f, closeX + closeSize - 7f, closeY + 7f, 2.2f);
+
+        // 6. Centered 3 Item Boxes (width 200, height 205, gap 22 -> perfectly centered with 28px margins!)
+        float boxW = 200f;
+        float boxH = 205f;
+        float boxY = tipY + 20f;
+        float gap = 22f;
+        float startX = tipX + (tipW - (3 * boxW + 2 * gap)) / 2f;
+
         for (int i = 0; i < 3; i++) {
-            float px = tipX + 16f + i * (colW + 12f);
-            sr.setColor(0.05f, 0.07f, 0.12f, 0.95f);
-            drawRoundedRect(sr, px, pSlotY, colW, 110f, 6);
-            sr.setColor(borderCol.r, borderCol.g, borderCol.b, 0.4f);
-            drawRectOutline(sr, px, pSlotY, colW, 110f, 1f);
+            float bx = startX + i * (boxW + gap);
 
-            // Vector icons in tooltip
+            // Item box container
+            sr.setColor(0.05f, 0.07f, 0.12f, 0.96f);
+            drawRoundedRect(sr, bx, boxY, boxW, boxH, 8);
+            sr.setColor(borderCol.r, borderCol.g, borderCol.b, 0.55f);
+            drawRectOutline(sr, bx, boxY, boxW, boxH, 1.5f);
+
+            // Type badge pill at top
+            sr.setColor(0.12f, 0.17f, 0.26f, 0.90f);
+            drawRoundedRect(sr, bx + 35f, boxY + boxH - 30f, boxW - 70f, 20f, 4);
+
+            // Aura glow behind 2x scaled icon
+            float iconCX = bx + boxW / 2f;
+            float iconCY = boxY + 105f;
+            sr.setColor(borderCol.r, borderCol.g, borderCol.b, 0.18f);
+            sr.circle(iconCX, iconCY, 46f);
+
+            // 2X Zoomed Vector Icon (radius = 38f instead of 20f!)
             EquipmentType type = (i == 0 ? EquipmentType.ROD : (i == 1 ? EquipmentType.LINE : EquipmentType.HOOK));
-            EquipmentIconRenderer.drawSetPiece(sr, setName, type, px + colW / 2f, pSlotY + 75f, 20f, borderCol);
+            EquipmentIconRenderer.drawSetPiece(sr, setName, type, iconCX, iconCY, 38f, borderCol);
         }
 
         sr.end();
 
         game.batch.begin();
+
         // Title
         font.setColor(borderCol);
-        font.getData().setScale(0.85f);
+        font.getData().setScale(0.88f);
         String titleStr = "THÔNG TIN CHI TIẾT: BỘ " + setName.toUpperCase();
         layout.setText(font, titleStr);
-        font.draw(game.batch, layout, tipX + 18f, tipY + tipH - 12f);
+        font.draw(game.batch, layout, tipX + 20f, tipY + tipH - 12f);
 
-        // Set perk subtitle
-        font.setColor(Color.WHITE);
-        font.getData().setScale(0.72f);
-        String perkStr = "• Kích hoạt hiệu ứng: " + EquipmentGenerator.getSetBonusDesc(setName);
-        font.draw(game.batch, perkStr, tipX + 18f, tipY + tipH - 46f);
+        // Sub-header 1: Cấp Điểm & Hệ số
+        int points = isEventBanner ? 15 : curSet.points;
+        float multVal = 1f + points * 0.15f;
+        font.setColor(1f, 0.85f, 0.35f, 1f);
+        font.getData().setScale(0.74f);
+        String pointsStr = "✦ CẤP ĐIỂM BỘ: +" + points + " Cấp Điểm  (Hệ số Multiplier: x" + String.format(java.util.Locale.US, "%.2f", multVal) + " Sức mạnh cơ bản)";
+        font.draw(game.batch, pointsStr, tipX + 22f, tipY + tipH - 52f);
 
-        // 3 pieces labels and stats
+        // Sub-header 2: Set Bonus description
+        String perkDesc = isEventBanner ? 
+            "[Ý Chí Bất Diệt] Vô hiệu hóa Kỹ Năng Boss, +50% Sát thương Boss" : 
+            EquipmentGenerator.getSetBonusDesc(setName);
+        font.setColor(0.45f, 0.95f, 0.65f, 1f);
+        font.getData().setScale(0.74f);
+        String bonusStr = "★ Hiệu ứng 3 món: " + perkDesc;
+        font.draw(game.batch, bonusStr, tipX + 22f, tipY + tipH - 74f);
+
+        // Inside the 3 boxes:
         String[] pNames = isEventBanner ?
             new String[]{"Trượng Lạc Hồng", "Dây Rồng Thiêng", "Móc Âu Cơ"} :
             new String[]{curSet.rodName, curSet.lineName, curSet.hookName};
         String[] pTypes = {"CẦN CÂU", "DÂY CƯỚC", "LƯỠI CÂU"};
-        String[] pStats = isEventBanner ?
-            new String[]{"+45 Lực kéo", "+350 Sức căng", "+15% Cá hiếm"} :
-            new String[]{"+Lực kéo cao", "+Kháng đứt dây", "+Giữ mồi tốt"};
 
         for (int i = 0; i < 3; i++) {
-            float px = tipX + 16f + i * (colW + 12f);
-            // Type badge
-            font.setColor(0.6f, 0.8f, 1f, 0.75f);
-            font.getData().setScale(0.62f);
-            drawCenteredText(font, pTypes[i], px, pSlotY + 92f, colW, 14f);
+            float bx = startX + i * (boxW + gap);
 
-            // Item Name
+            // Type badge text
+            font.setColor(0.65f, 0.85f, 1f, 0.95f);
+            font.getData().setScale(0.64f);
+            drawCenteredText(font, pTypes[i], bx, boxY + boxH - 26f, boxW, 14f);
+
+            // Item Name (Crisp & bold white, centered at bottom)
             font.setColor(Color.WHITE);
-            font.getData().setScale(0.70f);
-            drawCenteredText(font, pNames[i], px, pSlotY + 36f, colW, 16f);
-
-            // Main Stat
-            font.setColor(0.4f, 1f, 0.65f, 1f);
-            font.getData().setScale(0.68f);
-            drawCenteredText(font, pStats[i], px, pSlotY + 14f, colW, 14f);
+            font.getData().setScale(0.76f);
+            drawCenteredText(font, pNames[i], bx + 6f, boxY + 22f, boxW - 12f, 18f);
         }
 
         font.getData().setScale(1f);
@@ -1591,6 +1630,16 @@ public class GachaScreen implements Screen {
             (mouseX >= showcaseCX - 130f && mouseX <= showcaseCX + 130f && mouseY >= cardY + 45f && mouseY <= cardY + 140f)
         );
 
+        // Set Detail Modal Close Button Hover
+        float setDetailW = 700f;
+        float setDetailH = 370f;
+        float setDetailX = (W - setDetailW) / 2f;
+        float setDetailY = (H - setDetailH) / 2f;
+        float setDetailCloseX = setDetailX + setDetailW - 38f;
+        float setDetailCloseY = setDetailY + setDetailH - 36f;
+        float setDetailCloseSize = 28f;
+        hoverCloseDetailModal = showSetDetailModal && (mouseX >= setDetailCloseX && mouseX <= setDetailCloseX + setDetailCloseSize && mouseY >= setDetailCloseY && mouseY <= setDetailCloseY + setDetailCloseSize);
+
         // Modal Close Button Hover
         float modalW = 1080f;
         float modalH = 580f;
@@ -1611,6 +1660,10 @@ public class GachaScreen implements Screen {
         hoverModalScrollDown = showRateLootModal && (mouseX >= btnDownX && mouseX <= btnDownX + 28f && mouseY >= btnY && mouseY <= btnY + 22f);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            if (showSetDetailModal) {
+                showSetDetailModal = false;
+                return;
+            }
             if (showRateLootModal) {
                 showRateLootModal = false;
                 return;
@@ -1635,6 +1688,15 @@ public class GachaScreen implements Screen {
         }
 
         if (Gdx.input.justTouched()) {
+            if (showSetDetailModal) {
+                if (hoverCloseDetailModal || mouseX < setDetailX || mouseX > setDetailX + setDetailW || mouseY < setDetailY || mouseY > setDetailY + setDetailH) {
+                    showSetDetailModal = false;
+                    AudioManager.getInstance().playSFX("sfx_button");
+                    return;
+                }
+                return;
+            }
+
             if (showRateLootModal) {
                 if (hoverCloseModal || mouseX < modalX || mouseX > modalX + modalW || mouseY < modalY || mouseY > modalY + modalH) {
                     showRateLootModal = false;
@@ -1669,6 +1731,7 @@ public class GachaScreen implements Screen {
             if (hoverHelp) {
                 AudioManager.getInstance().playSFX("sfx_button");
                 showRateLootModal = !showRateLootModal;
+                showSetDetailModal = false;
                 modalLootScrollY = 0f;
                 return;
             }
@@ -1677,6 +1740,7 @@ public class GachaScreen implements Screen {
                 if (hoverTabNormal && isEventBanner) {
                     AudioManager.getInstance().playSFX("sfx_button");
                     isEventBanner = false;
+                    showSetDetailModal = false;
                     state = State.IDLE;
                     randomizeStandardSet();
                     return;
@@ -1684,20 +1748,30 @@ public class GachaScreen implements Screen {
                 if (hoverTabEvent && !isEventBanner) {
                     AudioManager.getInstance().playSFX("sfx_button");
                     isEventBanner = true;
+                    showSetDetailModal = false;
                     state = State.IDLE;
                     return;
                 }
 
                 if (hoverBuyTicket) {
+                    showSetDetailModal = false;
                     buyTicket();
                     return;
                 }
                 if (hoverPull1) {
+                    showSetDetailModal = false;
                     pullGacha(1);
                     return;
                 }
                 if (hoverPull10) {
+                    showSetDetailModal = false;
                     pullGacha(10);
+                    return;
+                }
+
+                if (state == State.IDLE && !showRateLootModal && hoverSet) {
+                    showSetDetailModal = true;
+                    AudioManager.getInstance().playSFX("sfx_button");
                     return;
                 }
             }

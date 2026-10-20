@@ -249,45 +249,246 @@ public class EquipmentIconRenderer {
     }
 
     // =========================================================================
-    // 2. THỢ SĂN SET
+    // 2. THỢ SĂN SET (Ambush Predator Harpoon Rod, Zinc-Silk Wire Spool, Sea Beast Talon Hook)
     // =========================================================================
-    private static void drawThoSanRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Camo green/brown predator spear staff
-        sr.setColor(0.35f, 0.45f, 0.22f, 1f);
-        sr.rectLine(cx - r * 0.75f, cy - r * 0.75f, cx + r * 0.75f, cy + r * 0.75f, 4f);
-        // Cross wraps (leather bindings)
-        sr.setColor(0.55f, 0.35f, 0.15f, 1f);
-        sr.rectLine(cx - r * 0.3f, cy - r * 0.25f, cx - r * 0.25f, cy - r * 0.3f, 3f);
-        sr.rectLine(cx + r * 0.1f, cy + r * 0.15f, cx + r * 0.15f, cy + r * 0.1f, 3f);
-        // Serrated spearhead tip
-        sr.setColor(0.85f, 0.85f, 0.75f, 1f);
-        sr.triangle(cx + r * 0.65f, cy + r * 0.65f, cx + r * 0.95f, cy + r * 0.95f, cx + r * 0.65f, cy + r * 0.95f);
-        sr.triangle(cx + r * 0.65f, cy + r * 0.65f, cx + r * 0.95f, cy + r * 0.95f, cx + r * 0.95f, cy + r * 0.65f);
+    public static void drawThoSanRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Predatory Camo Aura
+        sr.setColor(0.32f, 0.72f, 0.38f, 0.22f);
+        sr.circle(cx, cy, r * 1.32f);
+        sr.setColor(0.70f, 0.55f, 0.20f, 0.15f);
+        sr.circle(cx, cy, r * 1.05f);
+
+        // 2. Heavy Wrought-Iron Reinforced Core Shaft
+        sr.setColor(0.14f, 0.18f, 0.12f, 1f);
+        sr.rectLine(cx - r * 0.78f, cy - r * 0.78f, cx + r * 0.65f, cy + r * 0.65f, Math.max(4.2f, r * 0.15f));
+
+        // 3. Dense Moss-Green & Hardened Ironwood Shaft
+        sr.setColor(0.32f, 0.44f, 0.22f, 1f);
+        sr.rectLine(cx - r * 0.76f, cy - r * 0.76f, cx + r * 0.62f, cy + r * 0.62f, Math.max(2.8f, r * 0.10f));
+
+        // 4. Rawhide Leather Cross-Bindings & Gold-Bronze Ferrule Rings
+        sr.setColor(0.58f, 0.36f, 0.16f, 1f);
+        sr.rectLine(cx - r * 0.48f, cy - r * 0.42f, cx - r * 0.42f, cy - r * 0.48f, Math.max(2.2f, r * 0.08f));
+        sr.rectLine(cx - r * 0.42f, cy - r * 0.48f, cx - r * 0.48f, cy - r * 0.42f, Math.max(2.2f, r * 0.08f));
+        sr.rectLine(cx - r * 0.18f, cy - r * 0.12f, cx - r * 0.12f, cy - r * 0.18f, Math.max(2.2f, r * 0.08f));
+        sr.rectLine(cx - r * 0.12f, cy - r * 0.18f, cx - r * 0.18f, cy - r * 0.12f, Math.max(2.2f, r * 0.08f));
+        sr.rectLine(cx + r * 0.12f, cy + r * 0.18f, cx + r * 0.18f, cy + r * 0.12f, Math.max(2.2f, r * 0.08f));
+
+        // Polished brass joint rings
+        sr.setColor(0.88f, 0.74f, 0.28f, 1f);
+        sr.circle(cx - r * 0.55f, cy - r * 0.55f, Math.max(2f, r * 0.08f));
+        sr.circle(cx - r * 0.25f, cy - r * 0.25f, Math.max(2f, r * 0.08f));
+        sr.circle(cx + r * 0.05f, cy + r * 0.05f, Math.max(2f, r * 0.08f));
+        sr.circle(cx + r * 0.35f, cy + r * 0.35f, Math.max(2f, r * 0.08f));
+
+        // 5. Heavy Beast Fang Pommel & Amber Tiger-Eye
+        sr.setColor(0.24f, 0.28f, 0.22f, 1f);
+        sr.circle(cx - r * 0.78f, cy - r * 0.78f, Math.max(4.5f, r * 0.20f));
+        sr.setColor(0.85f, 0.70f, 0.25f, 1f);
+        sr.circle(cx - r * 0.78f, cy - r * 0.78f, Math.max(3.2f, r * 0.14f));
+        // Amber Eye Core
+        sr.setColor(1f, 0.72f, 0.12f, 1f);
+        sr.circle(cx - r * 0.78f, cy - r * 0.78f, Math.max(2f, r * 0.09f));
+        // Vertical slit pupil
+        sr.setColor(0.12f, 0.12f, 0.12f, 1f);
+        sr.rectLine(cx - r * 0.78f, cy - r * 0.82f, cx - r * 0.78f, cy - r * 0.74f, 1.2f);
+
+        // 6. 3 Hunter Ceramic Line Guides (Khoen dẫn dây ngọc bích)
+        for (int i = 0; i < 3; i++) {
+            float gx = cx - r * 0.15f + i * r * 0.25f;
+            float gy = cy - r * 0.15f + i * r * 0.25f;
+            sr.setColor(0.75f, 0.65f, 0.25f, 1f);
+            sr.rectLine(gx, gy, gx - r * 0.08f, gy + r * 0.08f, 1.8f);
+            sr.setColor(0.35f, 0.90f, 0.50f, 1f);
+            sr.circle(gx - r * 0.08f, gy + r * 0.08f, Math.max(1.5f, r * 0.07f));
+        }
+
+        // 7. Massive Damascus Harpoon Spearhead (Mũi phóng lao Damascus ngạnh kép)
+        float tipBaseX = cx + r * 0.52f;
+        float tipBaseY = cy + r * 0.52f;
+        float spearTipX = cx + r * 0.98f;
+        float spearTipY = cy + r * 0.98f;
+
+        // Dark forged steel spear collar
+        sr.setColor(0.20f, 0.25f, 0.20f, 1f);
+        sr.circle(tipBaseX, tipBaseY, Math.max(3.5f, r * 0.14f));
+
+        // Lateral twin predator barbs (Ngạnh móc xé thịt kép)
+        sr.setColor(0.68f, 0.74f, 0.70f, 1f);
+        sr.triangle(tipBaseX, tipBaseY, cx + r * 0.72f, cy + r * 0.44f, cx + r * 0.60f, cy + r * 0.60f);
+        sr.triangle(tipBaseX, tipBaseY, cx + r * 0.44f, cy + r * 0.72f, cx + r * 0.60f, cy + r * 0.60f);
+
+        // Main spearhead blade body (Damascus layered steel)
+        sr.setColor(0.30f, 0.36f, 0.32f, 1f);
+        sr.triangle(cx + r * 0.58f, cy + r * 0.58f, cx + r * 0.68f, cy + r * 0.88f, spearTipX, spearTipY);
+        sr.triangle(cx + r * 0.58f, cy + r * 0.58f, cx + r * 0.88f, cy + r * 0.68f, spearTipX, spearTipY);
+
+        // Silver-etched sharp blade facet
+        sr.setColor(0.88f, 0.92f, 0.88f, 1f);
+        sr.triangle(cx + r * 0.66f, cy + r * 0.66f, cx + r * 0.74f, cy + r * 0.84f, spearTipX, spearTipY);
+
+        // Emerald venom groove (Rãnh độc xanh ngọc sắc sảo)
+        sr.setColor(0.35f, 1.0f, 0.55f, 0.95f);
+        sr.rectLine(cx + r * 0.62f, cy + r * 0.62f, cx + r * 0.88f, cy + r * 0.88f, Math.max(1.8f, r * 0.06f));
+
+        // Specular glint on spearhead tip
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(spearTipX, spearTipY, Math.max(1.5f, r * 0.05f));
     }
 
-    private static void drawThoSanLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Metallic zinc/wire spool with sharp coils
-        sr.setColor(0.45f, 0.52f, 0.58f, 1f);
-        sr.circle(cx, cy, r * 0.75f);
-        sr.setColor(0.70f, 0.75f, 0.80f, 1f);
-        // Coiled wire pattern
-        sr.circle(cx, cy, r * 0.60f);
-        sr.setColor(0.20f, 0.25f, 0.30f, 1f);
-        sr.circle(cx, cy, r * 0.38f);
-        // Hexagonal metal center nut
+    public static void drawThoSanLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. High-Tensile Zinc Aura
+        sr.setColor(0.32f, 0.72f, 0.40f, 0.20f);
+        sr.circle(cx, cy, r * 1.30f);
+        sr.setColor(0.60f, 0.70f, 0.80f, 0.15f);
+        sr.circle(cx, cy, r * 1.08f);
+
+        // 2. Heavy Forged Iron Beast-Trap Rotor Frame (Khung lồng sắt tôi nguội 6 chấu ngàm)
+        sr.setColor(0.16f, 0.20f, 0.18f, 1f);
+        sr.circle(cx, cy, r * 0.92f);
+        // Outer bronze gear rim with notches
+        sr.setColor(0.72f, 0.60f, 0.24f, 1f);
+        sr.circle(cx, cy, r * 0.84f);
+        sr.setColor(0.20f, 0.25f, 0.22f, 1f);
+        sr.circle(cx, cy, r * 0.76f);
+
+        // 6 Predator Trap Teeth / Spokes around the rim
+        sr.setColor(0.85f, 0.75f, 0.32f, 1f);
+        for (int i = 0; i < 6; i++) {
+            float ang = i * 60f * MathUtils.degreesToRadians;
+            float cos = MathUtils.cos(ang);
+            float sin = MathUtils.sin(ang);
+            float tx = cx + cos * r * 0.80f;
+            float ty = cy + sin * r * 0.80f;
+            sr.triangle(tx, ty, tx - sin * r * 0.08f, ty + cos * r * 0.08f, cx + cos * r * 0.95f, cy + sin * r * 0.95f);
+        }
+
+        // 3. Deep Spool Well & Braided Zinc-Silk Wire (Cuộn dây cáp tơ kẽm xoắn titan)
+        sr.setColor(0.10f, 0.13f, 0.12f, 1f);
+        sr.circle(cx, cy, r * 0.70f);
+
+        // Concentric tightly coiled metallic wire layers
+        sr.setColor(0.48f, 0.56f, 0.62f, 1f);
+        sr.circle(cx, cy, r * 0.65f);
+        sr.setColor(0.70f, 0.78f, 0.84f, 1f);
+        sr.circle(cx, cy, r * 0.54f);
+        sr.setColor(0.35f, 0.42f, 0.48f, 1f);
+        sr.circle(cx, cy, r * 0.44f);
+        sr.setColor(0.82f, 0.88f, 0.92f, 1f);
+        sr.circle(cx, cy, r * 0.35f);
+
+        // Braided metallic cable texture lines (Các vòng xoắn tơ kẽm chéo)
+        sr.setColor(0.25f, 0.32f, 0.38f, 0.90f);
+        for (int i = 0; i < 8; i++) {
+            float ang = (i * 45f + 22.5f) * MathUtils.degreesToRadians;
+            float cos = MathUtils.cos(ang);
+            float sin = MathUtils.sin(ang);
+            sr.rectLine(cx + cos * r * 0.36f, cy + sin * r * 0.36f, cx + cos * r * 0.64f, cy + sin * r * 0.64f, 1.4f);
+        }
+
+        // 4. Center Octagonal Drag Hub with Tiger-Eye Jewel (Trục hãm ngọc mắt hổ)
+        sr.setColor(0.18f, 0.22f, 0.18f, 1f);
+        sr.circle(cx, cy, r * 0.26f);
+        sr.setColor(0.88f, 0.72f, 0.25f, 1f);
+        sr.circle(cx, cy, r * 0.18f);
+        // Tiger eye core
+        sr.setColor(1.0f, 0.75f, 0.15f, 1f);
+        sr.circle(cx, cy, r * 0.11f);
+        sr.setColor(0.10f, 0.10f, 0.10f, 1f);
+        sr.rectLine(cx, cy - r * 0.10f, cx, cy + r * 0.10f, 1.2f);
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.circle(cx - r * 0.04f, cy + r * 0.04f, 1.2f);
+
+        // 5. Heavy Drag Bail Arm & Outgoing Tense Cable (Càng tời & sợi tơ kẽm phóng ra)
+        sr.setColor(0.75f, 0.62f, 0.22f, 1f);
+        sr.rectLine(cx + r * 0.55f, cy - r * 0.25f, cx + r * 0.85f, cy + r * 0.45f, Math.max(2.5f, r * 0.08f));
+        // Emerald roller bearing
+        sr.setColor(0.35f, 0.95f, 0.55f, 1f);
+        sr.circle(cx + r * 0.85f, cy + r * 0.45f, Math.max(2.8f, r * 0.10f));
+        // High-tensile line streaming out with electric spark
+        sr.setColor(0.85f, 0.92f, 0.98f, 1f);
+        sr.rectLine(cx + r * 0.85f, cy + r * 0.45f, cx + r * 1.15f, cy + r * 0.95f, Math.max(1.8f, r * 0.06f));
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(cx + r * 1.0f, cy + r * 0.70f, 1.5f);
+    }
+
+    public static void drawThoSanHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Predatory Talon Aura
+        sr.setColor(0.32f, 0.72f, 0.38f, 0.20f);
+        sr.circle(cx, cy, r * 1.25f);
+        sr.setColor(0.75f, 0.65f, 0.30f, 0.15f);
+        sr.circle(cx, cy, r * 1.05f);
+
+        // 2. Heavy Brass Ring Eyelet & Predator Fang Talisman (Khuyên đồng & bùa nanh thú)
+        float eyeX = cx - r * 0.22f;
+        float eyeY = cy + r * 0.70f;
+        sr.setColor(0.20f, 0.24f, 0.20f, 1f);
+        sr.circle(eyeX, eyeY, Math.max(4.5f, r * 0.22f));
+        sr.setColor(0.88f, 0.74f, 0.28f, 1f);
+        sr.circle(eyeX, eyeY, Math.max(3.5f, r * 0.16f));
+        sr.setColor(0.08f, 0.11f, 0.14f, 1f);
+        sr.circle(eyeX, eyeY, Math.max(1.8f, r * 0.08f));
+
+        // Rawhide wraps binding the eyelet
+        sr.setColor(0.58f, 0.38f, 0.18f, 1f);
+        sr.rect(eyeX - r * 0.12f, eyeY - r * 0.24f, r * 0.24f, r * 0.14f);
         sr.setColor(0.85f, 0.75f, 0.30f, 1f);
-        sr.rect(cx - r * 0.18f, cy - r * 0.18f, r * 0.18f, r * 0.18f, r * 0.36f, r * 0.36f, 1f, 1f, 45f);
-    }
+        sr.rectLine(eyeX - r * 0.12f, eyeY - r * 0.17f, eyeX + r * 0.12f, eyeY - r * 0.17f, 1.5f);
 
-    private static void drawThoSanHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Curved sea beast predator bone talon hook
-        sr.setColor(0.88f, 0.85f, 0.72f, 1f);
-        sr.rectLine(cx - r * 0.2f, cy + r * 0.6f, cx - r * 0.2f, cy - r * 0.3f, 4.5f);
-        sr.rectLine(cx - r * 0.2f, cy - r * 0.3f, cx + r * 0.45f, cy - r * 0.25f, 4.5f);
-        // Talon sharp hook tip
-        sr.triangle(cx + r * 0.35f, cy - r * 0.3f, cx + r * 0.55f, cy + r * 0.35f, cx + r * 0.25f, cy + r * 0.1f);
-        // Barbed tooth on spine
-        sr.triangle(cx - r * 0.2f, cy - r * 0.05f, cx - r * 0.45f, cy + r * 0.15f, cx - r * 0.2f, cy + r * 0.15f);
+        // Hanging carved beast fang talisman (Nanh quái thú biển đeo lủng lẳng)
+        sr.setColor(0.92f, 0.90f, 0.80f, 1f);
+        sr.triangle(eyeX - r * 0.08f, eyeY - r * 0.24f, eyeX - r * 0.18f, eyeY - r * 0.50f, eyeX, eyeY - r * 0.24f);
+
+        // 3. Thick Prehistoric Beast Talon Shank (Thân vuốt hóa thạch bọc sống lưng thép)
+        float shankX = cx - r * 0.20f;
+        float bendBottomY = cy - r * 0.42f;
+
+        // Dark reinforced steel backplate
+        sr.setColor(0.18f, 0.22f, 0.18f, 1f);
+        sr.rectLine(shankX, eyeY - r * 0.20f, shankX, bendBottomY, Math.max(5.5f, r * 0.22f));
+
+        // Ivory fossil talon bone core
+        sr.setColor(0.88f, 0.86f, 0.76f, 1f);
+        sr.rectLine(shankX, eyeY - r * 0.20f, shankX, bendBottomY, Math.max(3.8f, r * 0.15f));
+
+        // 3 Reverse Serrated Predator Barbs along the spine (3 ngạnh răng cưa lưng vuốt)
+        sr.setColor(0.28f, 0.34f, 0.28f, 1f);
+        for (int i = 0; i < 3; i++) {
+            float by = eyeY - r * 0.32f - i * r * 0.24f;
+            sr.triangle(shankX, by, shankX - r * 0.24f, by + r * 0.10f, shankX, by + r * 0.12f);
+            sr.setColor(0.85f, 0.88f, 0.82f, 1f);
+            sr.triangle(shankX, by + 1f, shankX - r * 0.18f, by + r * 0.08f, shankX, by + r * 0.10f);
+            sr.setColor(0.28f, 0.34f, 0.28f, 1f);
+        }
+
+        // 4. Sweeping U-Bend & Lethal Recurve (Cung uốn cong đáy vuốt quái thú)
+        sr.setColor(0.18f, 0.22f, 0.18f, 1f);
+        sr.rectLine(shankX, bendBottomY, cx + r * 0.45f, bendBottomY + r * 0.08f, Math.max(5.5f, r * 0.22f));
+        sr.setColor(0.88f, 0.86f, 0.76f, 1f);
+        sr.rectLine(shankX, bendBottomY, cx + r * 0.45f, bendBottomY + r * 0.08f, Math.max(3.8f, r * 0.15f));
+
+        // 5. Razor-Honed Talon Point & Inward Retaining Barb (Mũi móng vuốt cong & ngạnh khóa mồi)
+        float hookTipX = cx + r * 0.50f;
+        float hookTipY = cy + r * 0.38f;
+
+        // Upward talon curve
+        sr.setColor(0.18f, 0.22f, 0.18f, 1f);
+        sr.triangle(cx + r * 0.35f, bendBottomY + r * 0.04f, cx + r * 0.62f, cy + r * 0.10f, hookTipX, hookTipY);
+        // Ivory cutting core
+        sr.setColor(0.88f, 0.86f, 0.76f, 1f);
+        sr.triangle(cx + r * 0.38f, bendBottomY + r * 0.06f, cx + r * 0.56f, cy + r * 0.08f, hookTipX, hookTipY);
+
+        // Vicious Inward Secondary Barb (Ngạnh móc ngược giữ chặt mồi)
+        sr.setColor(0.92f, 0.94f, 0.90f, 1f);
+        sr.triangle(hookTipX, hookTipY, cx + r * 0.42f, cy + r * 0.18f, cx + r * 0.26f, cy + r * 0.20f);
+
+        // Emerald venomous etching line
+        sr.setColor(0.35f, 1.0f, 0.55f, 0.95f);
+        sr.rectLine(cx + r * 0.38f, bendBottomY + r * 0.15f, hookTipX - r * 0.05f, hookTipY - r * 0.05f, 1.5f);
+
+        // Specular glint on talon tip
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(hookTipX, hookTipY, Math.max(1.5f, r * 0.06f));
     }
 
     // =========================================================================
