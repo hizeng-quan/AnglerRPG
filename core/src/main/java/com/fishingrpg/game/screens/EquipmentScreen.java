@@ -400,14 +400,8 @@ public class EquipmentScreen implements Screen {
         titleFont.setColor(0.98f, 0.88f, 0.45f, 1f);
         titleFont.getData().setScale(0.92f);
         layout.setText(titleFont, "KHO TRANG BỊ CÂU CÁ");
-        titleFont.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 18f);
+        titleFont.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 35f);
         titleFont.getData().setScale(1f);
-
-        font.setColor(0.65f, 0.82f, 0.98f, 0.88f);
-        font.getData().setScale(0.78f);
-        layout.setText(font, "Quản lý Cần Câu, Dây Cước, Lưỡi Câu và kích hoạt hiệu ứng Thần Khí");
-        font.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 52f);
-        font.getData().setScale(1f);
 
         // Back button text
         font.setColor(hoverBack ? Color.WHITE : new Color(0.85f, 0.92f, 1f, 0.92f));

@@ -122,7 +122,6 @@ public class FishingManager {
         if (bonus >= 2f) {
             castResultText = "PERFECT!";
             player.getQuestManager().addProgress("perfect", 1);
-            if (ftm != null) ftm.addText("PERFECT!", 640f, 500f, Color.GOLD);
             AudioManager.getInstance().playSFX("sfx_success");
         } else if (bonus > 0f) {
             castResultText = "GOOD";

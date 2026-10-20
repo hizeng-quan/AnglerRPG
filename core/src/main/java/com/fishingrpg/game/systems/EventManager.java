@@ -2,27 +2,24 @@ package com.fishingrpg.game.systems;
 
 import com.badlogic.gdx.utils.TimeUtils;
 import com.fishingrpg.game.entities.Player;
+import com.fishingrpg.game.entities.Quest;
 
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.Collections;
+import java.util.List;
 import java.util.TimeZone;
 
 public class EventManager {
 
-    private Player player;
+    private transient Player player;
     
     // Event specific constants
     public static final long EVENT_END_TIMESTAMP;
     
-    // Daily missions status: 0 = not done, 1 = done
-    // index 0: Catch 50 fish
-    // index 1: Spend 2000 gold
-    // index 2: Pull Event Gacha 1 time
-    public boolean[] dailyMissionsCompleted = new boolean[3];
-    public boolean allMissionsClaimedToday = false;
-    public int fishCaughtToday = 0;
-    public int goldSpentToday = 0;
-    public int eventGachaPulledToday = 0;
+    // 6 Daily Event Quests & Milestone
+    public final List<Quest> eventQuests = new ArrayList<>();
+    public boolean milestoneClaimedToday = false;
 
     static {
         Calendar cal = Calendar.getInstance(TimeZone.getDefault());
@@ -32,6 +29,48 @@ public class EventManager {
             end = TimeUtils.millis() + 60L * 24 * 60 * 60 * 1000L;
         }
         EVENT_END_TIMESTAMP = end;
+    }
+
+    public static class EventQuestTemplate {
+        public String id;
+        public String title;
+        public String description;
+        public int target;
+        public int rewardGold;
+        public int rewardDiamonds;
+        public String rewardItem;
+        public int rewardItemCount;
+
+        public EventQuestTemplate(String id, String title, String description, int target, int rewardGold, int rewardDiamonds, String rewardItem, int rewardItemCount) {
+            this.id = id;
+            this.title = title;
+            this.description = description;
+            this.target = target;
+            this.rewardGold = rewardGold;
+            this.rewardDiamonds = rewardDiamonds;
+            this.rewardItem = rewardItem;
+            this.rewardItemCount = rewardItemCount;
+        }
+
+        public Quest createQuest() {
+            return new Quest(id, Quest.Type.EVENT, title, description, target, 0, rewardDiamonds, rewardGold, rewardItem, rewardItemCount);
+        }
+    }
+
+    private static final List<EventQuestTemplate> EVENT_QUEST_POOL = new ArrayList<>();
+    static {
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_catch", "Hào Khí Đánh Bắt", "Câu thành công 5 con cá", 5, 300, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_perfect", "Tay Cần Lạc Hồng", "Đạt PERFECT khi quăng cần 2 lần", 2, 0, 15, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_spend", "Giao Thương Hội Làng", "Tiêu 150 Vàng trong ngày", 150, 300, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_gacha", "Vận May Sự Kiện", "Quay Gacha 1 lần", 1, 0, 0, "Vé Quay", 1));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_rare", "Cá Quý Đại Dương", "Câu 1 con cá Rare trở lên", 1, 0, 15, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_skill", "Khí Phách Ngư Dân", "Dùng 3 lần Kỹ năng khi câu cá", 3, 250, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_catch_3", "Ra Khơi Quyết Thắng", "Câu thành công 3 con cá", 3, 200, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_perfect_1", "Bách Phát Bách Trúng", "Đạt PERFECT 1 lần khi quăng cần", 1, 0, 10, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_spend_100", "Trù Bị Ngư Cụ", "Tiêu 100 Vàng tại Tiệm Tạp Hóa", 100, 200, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_skill_2", "Tuyệt Kỹ Ngư Gia", "Dùng 2 lần Kỹ năng trong lúc câu", 2, 200, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_rare_boss", "Chiến Tích Vang Danh", "Bắt 1 con cá Rare trở lên", 1, 0, 20, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_catch_7", "Ngư Phủ Tinh Anh", "Câu thành công 7 con cá", 7, 400, 0, null, 0));
     }
 
     public static class DailyReward {
@@ -55,17 +94,86 @@ public class EventManager {
 
     public void checkAndResetDailyMissions() {
         long currentDayStart = getStartOfDay(TimeUtils.millis());
-        if (player.getLastEventMissionResetTimestamp() < currentDayStart) {
-            // New day! Reset missions.
+        if (player.getLastEventMissionResetTimestamp() < currentDayStart || eventQuests.isEmpty()) {
             player.setLastEventMissionResetTimestamp(currentDayStart);
-            for (int i = 0; i < 3; i++) {
-                dailyMissionsCompleted[i] = false;
-            }
-            allMissionsClaimedToday = false;
-            fishCaughtToday = 0;
-            goldSpentToday = 0;
-            eventGachaPulledToday = 0;
+            resetEventQuests();
         }
+    }
+
+    public void resetEventQuests() {
+        eventQuests.clear();
+        milestoneClaimedToday = false;
+        List<EventQuestTemplate> pool = new ArrayList<>(EVENT_QUEST_POOL);
+        Collections.shuffle(pool);
+        int pickCount = Math.min(6, pool.size());
+        for (int i = 0; i < pickCount; i++) {
+            eventQuests.add(pool.get(i).createQuest());
+        }
+    }
+
+    public int getCompletedMissionsCount() {
+        int count = 0;
+        for (Quest q : eventQuests) {
+            if (q.isCompleted()) count++;
+        }
+        return count;
+    }
+
+    public boolean canClaimMilestone() {
+        return !milestoneClaimedToday && getCompletedMissionsCount() >= 4;
+    }
+
+    public String claimMilestone() {
+        if (!canClaimMilestone()) return null;
+        milestoneClaimedToday = true;
+        player.addEventPoints(1);
+        player.gainGold(500);
+        player.addDiamonds(20);
+        return "Nhận Mốc 4/6: +1 Điểm Sự Kiện, +500 Vàng, +20 KC!";
+    }
+
+    public String claimQuestReward(Quest q) {
+        if (q == null || !q.isCompleted() || q.claimed) return null;
+        q.claimed = true;
+        StringBuilder sb = new StringBuilder("Nhận thưởng " + q.title + ": ");
+        if (q.rewardGold > 0) {
+            player.gainGold(q.rewardGold);
+            sb.append("+").append(q.rewardGold).append(" Vàng ");
+        }
+        if (q.rewardDiamonds > 0) {
+            player.addDiamonds(q.rewardDiamonds);
+            sb.append("+").append(q.rewardDiamonds).append(" KC ");
+        }
+        if (q.rewardItem != null && !q.rewardItem.isEmpty()) {
+            if (q.rewardItem.equals("Vé Quay")) {
+                player.addGachaTickets(q.rewardItemCount > 0 ? q.rewardItemCount : 1);
+            } else {
+                player.addItem(q.rewardItem, q.rewardItemCount > 0 ? q.rewardItemCount : 1);
+            }
+            sb.append("+").append(q.rewardItemCount > 0 ? q.rewardItemCount : 1).append(" ").append(q.rewardItem).append(" ");
+        }
+        return sb.toString().trim() + "!";
+    }
+
+    public void addProgress(String prefix, int amount) {
+        checkAndResetDailyMissions();
+        for (Quest q : eventQuests) {
+            if (q.id.startsWith("ev_" + prefix) && !q.isCompleted()) {
+                q.addProgress(amount);
+            }
+        }
+    }
+
+    public void onFishCaught() {
+        addProgress("catch", 1);
+    }
+
+    public void onGoldSpent(int amount) {
+        addProgress("spend", amount);
+    }
+
+    public void onEventGachaPulled() {
+        addProgress("gacha", 1);
     }
 
     public boolean hasClaimedLoginToday() {
@@ -159,50 +267,11 @@ public class EventManager {
         if (!hasClaimedLoginToday() && player.getTotalLoginDaysThisMonth() < 25) {
             return true;
         }
-        for (boolean done : dailyMissionsCompleted) {
-            if (!done) return true;
+        for (Quest q : eventQuests) {
+            if (q.isCompleted() && !q.claimed) return true;
         }
+        if (canClaimMilestone()) return true;
         return false;
-    }
-
-    public void onFishCaught() {
-        checkAndResetDailyMissions();
-        if (!dailyMissionsCompleted[0]) {
-            fishCaughtToday++;
-            if (fishCaughtToday >= 50) {
-                dailyMissionsCompleted[0] = true;
-                checkAllCompleted();
-            }
-        }
-    }
-
-    public void onGoldSpent(int amount) {
-        checkAndResetDailyMissions();
-        if (!dailyMissionsCompleted[1]) {
-            goldSpentToday += amount;
-            if (goldSpentToday >= 2000) {
-                dailyMissionsCompleted[1] = true;
-                checkAllCompleted();
-            }
-        }
-    }
-
-    public void onEventGachaPulled() {
-        checkAndResetDailyMissions();
-        if (!dailyMissionsCompleted[2]) {
-            eventGachaPulledToday++;
-            if (eventGachaPulledToday >= 1) {
-                dailyMissionsCompleted[2] = true;
-                checkAllCompleted();
-            }
-        }
-    }
-
-    private void checkAllCompleted() {
-        if (!allMissionsClaimedToday && dailyMissionsCompleted[0] && dailyMissionsCompleted[1] && dailyMissionsCompleted[2]) {
-            allMissionsClaimedToday = true;
-            player.addEventPoints(1);
-        }
     }
 
     public String getEventTimeRemaining() {
@@ -212,7 +281,7 @@ public class EventManager {
         
         long days = diff / (24 * 60 * 60 * 1000L);
         long hours = (diff % (24 * 60 * 60 * 1000L)) / (60 * 60 * 1000L);
-        return "Còn lại: " + days + " ngày " + hours + " giờ";
+        return days + " ngày " + hours + " giờ";
     }
 
     public long getStartOfDay(long millis) {

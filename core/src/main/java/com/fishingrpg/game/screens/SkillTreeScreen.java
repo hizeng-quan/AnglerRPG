@@ -774,11 +774,7 @@ public class SkillTreeScreen implements Screen {
         // Header Bar
         titleFont.setColor(0.95f, 0.85f, 0.45f, 1f);
         layout.setText(titleFont, "CÂY THIÊN PHÚ NGƯ PHỦ");
-        titleFont.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 22f);
-
-        font.setColor(0.65f, 0.8f, 0.95f, 0.85f);
-        layout.setText(font, "Phát triển thiên phú câu cá và gán chiêu thức giằng co phím Q, W, E, R");
-        font.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 48f);
+        titleFont.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 35f);
         
         // Back Button Text
         font.setColor(hoverBack ? Color.WHITE : new Color(0.8f, 0.9f, 1f, 0.9f));

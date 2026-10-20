@@ -515,15 +515,10 @@ public class CatalogScreen implements Screen, InputProcessor {
         layout.setText(font, "← QUAY LẠI");
         font.draw(game.batch, layout, 25f + (130f - layout.width) / 2f, H - 32f);
 
-        // Screen Title & Subtitle
+        // Screen Title
         titleFont.setColor(0.95f, 0.85f, 0.45f, 1f);
         layout.setText(titleFont, "BÁCH KHOA TOÀN THƯ THỦY TỘC");
-        titleFont.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 20f);
-
-        font.setColor(0.65f, 0.8f, 0.95f, 0.85f);
-        font.getData().setScale(0.85f);
-        layout.setText(font, "Khám phá các loài cá huyền bí, ghi danh kỷ lục thể trọng và hoàn tất bộ sưu tập");
-        font.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 48f);
+        titleFont.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 33f);
 
         // Right Action Text
         if (availableClaim > 0) {

@@ -15,13 +15,13 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.fishingrpg.game.FishingRPG;
 import com.fishingrpg.game.entities.Player;
-import com.fishingrpg.game.entities.equipment.Equipment;
+import com.fishingrpg.game.entities.Quest;
 import com.fishingrpg.game.entities.equipment.EquipmentGenerator;
 import com.fishingrpg.game.entities.equipment.EquipmentType;
-import com.fishingrpg.game.entities.equipment.Rarity;
 import com.fishingrpg.game.systems.AudioManager;
 import com.fishingrpg.game.systems.EventManager;
 import com.fishingrpg.game.systems.EventManager.DailyReward;
+import com.fishingrpg.game.ui.EquipmentIconRenderer;
 import com.fishingrpg.game.ui.NotificationUI;
 
 public class EventScreen implements Screen {
@@ -48,7 +48,7 @@ public class EventScreen implements Screen {
     private float messageTimer = 0f;
 
     // Background floating ember particles
-    private static final int PARTICLE_COUNT = 30;
+    private static final int PARTICLE_COUNT = 35;
     private final float[] particleX = new float[PARTICLE_COUNT];
     private final float[] particleY = new float[PARTICLE_COUNT];
     private final float[] particleSpeed = new float[PARTICLE_COUNT];
@@ -74,11 +74,11 @@ public class EventScreen implements Screen {
         this.titleFont = game.titleFont != null ? game.titleFont : game.font;
         this.layout = new GlyphLayout();
 
-        // Initialize atmospheric floating particles
+        // Initialize atmospheric floating embers
         for (int i = 0; i < PARTICLE_COUNT; i++) {
             particleX[i] = MathUtils.random(0, W);
             particleY[i] = MathUtils.random(0, H);
-            particleSpeed[i] = MathUtils.random(15f, 40f);
+            particleSpeed[i] = MathUtils.random(15f, 42f);
             particleSize[i] = MathUtils.random(2f, 4.5f);
             particlePhase[i] = MathUtils.random(0f, 6.28f);
         }
@@ -159,24 +159,70 @@ public class EventScreen implements Screen {
     }
 
     // =========================================================================
-    // BACKGROUND & HEADER SHAPES
+    // BACKGROUND & HEADER SHAPES (ĐÔNG SƠN LẠC HỒNG THEME)
     // =========================================================================
 
     private void drawBackgroundShapes() {
-        // Deep mythical festive gradient: dark midnight violet to deep charcoal blue
+        // Deep imperial festive gradient: Midnight crimson ruby to royal indigo
         sr.rect(0, 0, W, H,
-                new Color(0.04f, 0.06f, 0.10f, 1f),
-                new Color(0.04f, 0.06f, 0.10f, 1f),
-                new Color(0.12f, 0.06f, 0.15f, 1f),
-                new Color(0.12f, 0.06f, 0.15f, 1f));
+                new Color(0.08f, 0.03f, 0.05f, 1f),
+                new Color(0.08f, 0.03f, 0.05f, 1f),
+                new Color(0.12f, 0.07f, 0.16f, 1f),
+                new Color(0.12f, 0.07f, 0.16f, 1f));
+
+        // Majestic Dong Son Bronze Drum Watermark in background center
+        float drumCX = W / 2f;
+        float drumCY = H / 2f - 25f;
+
+        // Concentric bronze drum rings
+        sr.setColor(0.95f, 0.75f, 0.25f, 0.05f);
+        sr.circle(drumCX, drumCY, 320f);
+        sr.setColor(0.08f, 0.03f, 0.05f, 1f);
+        sr.circle(drumCX, drumCY, 314f);
+
+        sr.setColor(0.95f, 0.75f, 0.25f, 0.06f);
+        sr.circle(drumCX, drumCY, 240f);
+        sr.setColor(0.08f, 0.03f, 0.05f, 1f);
+        sr.circle(drumCX, drumCY, 235f);
+
+        sr.setColor(0.95f, 0.75f, 0.25f, 0.07f);
+        sr.circle(drumCX, drumCY, 160f);
+        sr.setColor(0.08f, 0.03f, 0.05f, 1f);
+        sr.circle(drumCX, drumCY, 156f);
+
+        // Radiant 14-pointed Sunburst rays at drum core
+        float sunR = 75f;
+        sr.setColor(1f, 0.85f, 0.3f, 0.07f);
+        for (int i = 0; i < 14; i++) {
+            float rad1 = (i * (360f / 14f)) * MathUtils.degreesToRadians;
+            float rad2 = ((i + 0.5f) * (360f / 14f)) * MathUtils.degreesToRadians;
+            float rad3 = ((i + 1f) * (360f / 14f)) * MathUtils.degreesToRadians;
+            float x1 = drumCX + MathUtils.cos(rad1) * 22f;
+            float y1 = drumCY + MathUtils.sin(rad1) * 22f;
+            float x2 = drumCX + MathUtils.cos(rad2) * sunR;
+            float y2 = drumCY + MathUtils.sin(rad2) * sunR;
+            float x3 = drumCX + MathUtils.cos(rad3) * 22f;
+            float y3 = drumCY + MathUtils.sin(rad3) * 22f;
+            sr.triangle(x1, y1, x2, y2, x3, y3);
+        }
+
+        // Stylized Chim Lac birds silhouettes circling along middle ring
+        for (int b = 0; b < 4; b++) {
+            float bAngle = (b * 90f + animTimer * 4f) * MathUtils.degreesToRadians;
+            float bx = drumCX + MathUtils.cos(bAngle) * 200f;
+            float by = drumCY + MathUtils.sin(bAngle) * 200f;
+            sr.setColor(1f, 0.85f, 0.35f, 0.08f);
+            sr.triangle(bx, by, bx + 18f, by - 6f, bx - 8f, by - 12f);
+            sr.triangle(bx, by, bx - 14f, by + 12f, bx + 6f, by + 4f);
+        }
 
         // Floating ember particles
         for (int i = 0; i < PARTICLE_COUNT; i++) {
             float alpha = 0.35f + 0.35f * MathUtils.sin(animTimer * 2f + particlePhase[i]);
             if (i % 3 == 0) {
-                sr.setColor(1f, 0.8f, 0.3f, alpha); // Gold ember
+                sr.setColor(1f, 0.82f, 0.3f, alpha); // Gold ember
             } else {
-                sr.setColor(0.95f, 0.35f, 0.3f, alpha); // Ruby ember
+                sr.setColor(0.95f, 0.3f, 0.25f, alpha); // Ruby ember
             }
             sr.circle(particleX[i], particleY[i], particleSize[i]);
         }
@@ -194,26 +240,43 @@ public class EventScreen implements Screen {
         sr.setColor(hoverBack ? new Color(1f, 0.85f, 0.4f, 1f) : new Color(0.6f, 0.4f, 0.5f, 0.8f));
         drawBoxBorder(25f, H - 58f, 115f, 42f, 2f);
 
-        // Countdown pill badge shape
-        float timePillW = 215f;
-        float timePillX = W - timePillW - 190f - 20f; // 855f
-        sr.setColor(0.15f, 0.12f, 0.2f, 0.9f);
-        sr.rect(timePillX, H - 56f, timePillW, 38f);
-        sr.setColor(0.85f, 0.65f, 0.25f, 0.6f);
-        drawBoxBorder(timePillX, H - 56f, timePillW, 38f, 1.5f);
+        // SEPARATE TOP RIGHT PILLS:
+        // 1. Event points badge pill (Rightmost)
+        float ptsPillW = 175f;
+        float ptsPillH = 38f;
+        float ptsPillX = W - ptsPillW - 25f; // 1080f
+        float ptsPillY = H - 56f;
 
-        // Event points badge shape
-        float ptsPillW = 185f;
-        float ptsPillX = W - ptsPillW - 25f; // 1070f
         sr.setColor(0.22f, 0.16f, 0.08f, 0.95f);
-        sr.rect(ptsPillX, H - 56f, ptsPillW, 38f);
+        sr.rect(ptsPillX, ptsPillY, ptsPillW, ptsPillH);
         sr.setColor(1f, 0.85f, 0.3f, 0.9f);
-        drawBoxBorder(ptsPillX, H - 56f, ptsPillW, 38f, 1.5f);
-        // Star badge accent
+        drawBoxBorder(ptsPillX, ptsPillY, ptsPillW, ptsPillH, 1.5f);
+        // Star badge icon
         sr.setColor(1f, 0.85f, 0.25f, 1f);
-        sr.circle(ptsPillX + 18f, H - 37f, 8f);
+        sr.circle(ptsPillX + 18f, ptsPillY + ptsPillH / 2f, 8f);
         sr.setColor(0.9f, 0.4f, 0.1f, 1f);
-        sr.circle(ptsPillX + 18f, H - 37f, 4f);
+        sr.circle(ptsPillX + 18f, ptsPillY + ptsPillH / 2f, 4f);
+
+        // 2. Countdown time pill badge (Separated to the left with 18px gap)
+        float timePillW = 225f;
+        float timePillH = 38f;
+        float timePillX = ptsPillX - timePillW - 18f; // 837f
+        float timePillY = H - 56f;
+
+        sr.setColor(0.14f, 0.12f, 0.22f, 0.92f);
+        sr.rect(timePillX, timePillY, timePillW, timePillH);
+        sr.setColor(0.85f, 0.65f, 0.25f, 0.7f);
+        drawBoxBorder(timePillX, timePillY, timePillW, timePillH, 1.5f);
+        // Clock / hourglass small icon
+        sr.setColor(0.85f, 0.75f, 0.3f, 1f);
+        float tIconX = timePillX + 18f;
+        float tIconY = timePillY + timePillH / 2f;
+        sr.circle(tIconX, tIconY, 7f);
+        sr.setColor(0.14f, 0.12f, 0.22f, 1f);
+        sr.circle(tIconX, tIconY, 4.5f);
+        sr.setColor(0.95f, 0.85f, 0.4f, 1f);
+        sr.rectLine(tIconX, tIconY, tIconX, tIconY + 4f, 1.5f);
+        sr.rectLine(tIconX, tIconY, tIconX + 3f, tIconY, 1.5f);
     }
 
     private void drawTabShapes() {
@@ -247,6 +310,24 @@ public class EventScreen implements Screen {
                 drawBoxBorder(tx, tabY, tabW, tabH, 1.5f);
             }
 
+            // Notification indicator on Tab 0 if any quest is completed & unclaimed
+            if (i == 0) {
+                boolean hasQuestClaim = false;
+                for (Quest q : eventManager.eventQuests) {
+                    if (q.isCompleted() && !q.claimed) {
+                        hasQuestClaim = true;
+                        break;
+                    }
+                }
+                if (hasQuestClaim || eventManager.canClaimMilestone()) {
+                    float pulse = 0.85f + 0.15f * MathUtils.sin(animTimer * 6f);
+                    sr.setColor(1f, 0.85f, 0.2f, pulse);
+                    sr.circle(tx + tabW - 18f, tabY + tabH - 12f, 6.5f);
+                    sr.setColor(0.9f, 0.2f, 0.1f, pulse);
+                    sr.circle(tx + tabW - 18f, tabY + tabH - 12f, 3.5f);
+                }
+            }
+
             // Notification indicator on Tab 1 if login not claimed today
             if (i == 1 && !eventManager.hasClaimedLoginToday() && player.getTotalLoginDaysThisMonth() < 25) {
                 float pulse = 0.85f + 0.15f * MathUtils.sin(animTimer * 6f);
@@ -265,10 +346,10 @@ public class EventScreen implements Screen {
         float panelH = H - 155f;
 
         // Main glassmorphism background
-        sr.setColor(0.09f, 0.12f, 0.19f, 0.94f);
+        sr.setColor(0.08f, 0.11f, 0.17f, 0.94f);
         sr.rect(panelX, panelY, panelW, panelH);
 
-        // Multi-line border
+        // Multi-line festive border
         sr.setColor(0.25f, 0.35f, 0.5f, 0.55f);
         drawBoxBorder(panelX, panelY, panelW, panelH, 2f);
         sr.setColor(0.85f, 0.65f, 0.25f, 0.4f);
@@ -292,166 +373,209 @@ public class EventScreen implements Screen {
     }
 
     // =========================================================================
-    // TAB 0: NHIỆM VỤ SỰ KIỆN (MISSIONS)
+    // TAB 0: NHIỆM VỤ SỰ KIỆN (GRID 2x3 & MILESTONE BAR LIKE QUEST SCREEN)
     // =========================================================================
 
     private void drawMissionsShapes() {
-        float startX = 75f;
-        float cardW = W - 150f;
+        float startX = 65f;
+        float containerW = W - 130f;
 
-        // Top Summary Banner
+        // 1. Top Milestone Banner (Span full width)
         float bannerY = H - 225f;
         float bannerH = 58f;
-        sr.setColor(0.14f, 0.18f, 0.28f, 0.95f);
-        sr.rect(startX, bannerY, cardW, bannerH);
+        sr.setColor(0.12f, 0.16f, 0.25f, 0.95f);
+        sr.rect(startX, bannerY, containerW, bannerH);
         sr.setColor(0.85f, 0.65f, 0.25f, 0.7f);
-        drawBoxBorder(startX, bannerY, cardW, bannerH, 1.5f);
+        drawBoxBorder(startX, bannerY, containerW, bannerH, 1.5f);
 
-        // Left accent stripe
-        boolean allDone = eventManager.dailyMissionsCompleted[0] &&
-                          eventManager.dailyMissionsCompleted[1] &&
-                          eventManager.dailyMissionsCompleted[2];
-        sr.setColor(allDone ? new Color(0.2f, 0.85f, 0.4f, 1f) : new Color(0.95f, 0.6f, 0.15f, 1f));
-        sr.rect(startX, bannerY, 6f, bannerH);
+        // Milestone Progress Track Bar inside Banner
+        float pbX = startX + 18f;
+        float pbY = bannerY + 12f;
+        float pbW = containerW - 390f;
+        float pbH = 12f;
 
-        // 3 Mission Cards
-        float[] cardY = { H - 332f, H - 440f, H - 548f };
-        float cardH = 96f;
+        sr.setColor(0.06f, 0.08f, 0.13f, 0.95f);
+        sr.rect(pbX, pbY, pbW, pbH);
 
-        for (int i = 0; i < 3; i++) {
-            float cy = cardY[i];
-            boolean done = eventManager.dailyMissionsCompleted[i];
-            boolean hoverCard = isMouseOver(startX, cy, cardW, cardH);
+        int completedCount = eventManager.getCompletedMissionsCount();
+        float mRatio = MathUtils.clamp(completedCount / 4f, 0f, 1f);
+        if (mRatio > 0f) {
+            sr.setColor(completedCount >= 4 ? new Color(0.25f, 0.88f, 0.45f, 1f) : new Color(0.25f, 0.65f, 1f, 1f));
+            sr.rect(pbX, pbY, Math.max(8f, pbW * mRatio), pbH);
+        }
+        sr.setColor(0.25f, 0.45f, 0.65f, 0.7f);
+        drawBoxBorder(pbX, pbY, pbW, pbH, 1f);
+
+        // Milestone Claim Button on Right of Banner
+        float mBtnW = 180f;
+        float mBtnH = 40f;
+        float mBtnX = startX + containerW - mBtnW - 14f;
+        float mBtnY = bannerY + 9f;
+
+        if (eventManager.milestoneClaimedToday) {
+            sr.setColor(0.14f, 0.22f, 0.18f, 0.9f);
+            sr.rect(mBtnX, mBtnY, mBtnW, mBtnH);
+            sr.setColor(0.25f, 0.65f, 0.4f, 0.6f);
+            drawBoxBorder(mBtnX, mBtnY, mBtnW, mBtnH, 1.2f);
+        } else if (completedCount >= 4) {
+            float pulse = 0.8f + 0.2f * MathUtils.sin(animTimer * 5f);
+            sr.rect(mBtnX, mBtnY, mBtnW, mBtnH,
+                    new Color(0.85f * pulse, 0.6f * pulse, 0.12f * pulse, 1f),
+                    new Color(0.85f * pulse, 0.6f * pulse, 0.12f * pulse, 1f),
+                    new Color(1f * pulse, 0.85f * pulse, 0.25f * pulse, 1f),
+                    new Color(1f * pulse, 0.85f * pulse, 0.25f * pulse, 1f));
+            sr.setColor(1f, 0.95f, 0.5f, 1f);
+            drawBoxBorder(mBtnX, mBtnY, mBtnW, mBtnH, 2f);
+        } else {
+            sr.setColor(0.12f, 0.16f, 0.24f, 0.85f);
+            sr.rect(mBtnX, mBtnY, mBtnW, mBtnH);
+            sr.setColor(0.3f, 0.4f, 0.55f, 0.5f);
+            drawBoxBorder(mBtnX, mBtnY, mBtnW, mBtnH, 1.2f);
+        }
+
+        // Optional Claim All Button (to the left of Milestone Button)
+        boolean hasUnclaimed = false;
+        for (Quest q : eventManager.eventQuests) {
+            if (q.isCompleted() && !q.claimed) {
+                hasUnclaimed = true;
+                break;
+            }
+        }
+        if (hasUnclaimed) {
+            float caW = 160f;
+            float caH = 40f;
+            float caX = mBtnX - caW - 12f;
+            float caY = mBtnY;
+            sr.setColor(0.18f, 0.35f, 0.24f, 0.95f);
+            sr.rect(caX, caY, caW, caH);
+            sr.setColor(0.35f, 0.9f, 0.5f, 0.85f);
+            drawBoxBorder(caX, caY, caW, caH, 1.4f);
+        }
+
+        // 2. 6 Event Quest Cards (2 columns x 3 rows)
+        float cardGapX = 18f;
+        float cardGapY = 12f;
+        float cardW = (containerW - cardGapX) / 2f;
+        float cardH = 110f;
+        float gridStartY = H - 245f;
+
+        for (int i = 0; i < eventManager.eventQuests.size() && i < 6; i++) {
+            Quest q = eventManager.eventQuests.get(i);
+            int col = i % 2;
+            int row = i / 2;
+            float qx = startX + col * (cardW + cardGapX);
+            float qy = gridStartY - row * (cardH + cardGapY) - cardH;
+
+            boolean hoverCard = isMouseOver(qx, qy, cardW, cardH);
 
             // Card background
-            if (done) {
-                sr.setColor(hoverCard ? new Color(0.12f, 0.24f, 0.22f, 0.95f) : new Color(0.10f, 0.19f, 0.18f, 0.9f));
+            if (q.claimed) {
+                sr.setColor(0.09f, 0.12f, 0.16f, 0.85f);
+            } else if (q.isCompleted()) {
+                sr.setColor(hoverCard ? new Color(0.14f, 0.24f, 0.20f, 0.98f) : new Color(0.10f, 0.19f, 0.16f, 0.92f));
             } else {
-                sr.setColor(hoverCard ? new Color(0.15f, 0.20f, 0.30f, 0.95f) : new Color(0.11f, 0.15f, 0.23f, 0.9f));
+                sr.setColor(hoverCard ? new Color(0.14f, 0.18f, 0.26f, 0.95f) : new Color(0.10f, 0.14f, 0.20f, 0.90f));
             }
-            sr.rect(startX, cy, cardW, cardH);
+            sr.rect(qx, qy, cardW, cardH);
 
-            // Border
-            sr.setColor(done ? new Color(0.25f, 0.75f, 0.45f, 0.8f) : new Color(0.25f, 0.35f, 0.5f, 0.7f));
-            drawBoxBorder(startX, cy, cardW, cardH, 1.5f);
-
-            // Left colored stripe
-            sr.setColor(done ? new Color(0.25f, 0.9f, 0.45f, 1f) : new Color(0.95f, 0.65f, 0.2f, 1f));
-            sr.rect(startX, cy, 6f, cardH);
-
-            // Icon Badge Circle
-            float iconX = startX + 44f;
-            float iconY = cy + cardH / 2f;
-            sr.setColor(done ? new Color(0.18f, 0.4f, 0.25f, 1f) : new Color(0.2f, 0.26f, 0.38f, 1f));
-            sr.circle(iconX, iconY, 26f);
-            sr.setColor(done ? new Color(0.35f, 0.9f, 0.5f, 1f) : new Color(0.85f, 0.65f, 0.25f, 1f));
-            sr.circle(iconX, iconY, 23f);
-            sr.setColor(done ? new Color(0.15f, 0.3f, 0.2f, 1f) : new Color(0.15f, 0.18f, 0.28f, 1f));
-            sr.circle(iconX, iconY, 20f);
-
-            // Distinct geometric icon inside circle
-            if (i == 0) {
-                // Fish emblem
-                sr.setColor(done ? new Color(0.35f, 0.9f, 0.5f, 1f) : new Color(0.3f, 0.75f, 1f, 1f));
-                sr.ellipse(iconX - 2f, iconY, 14f, 8f);
-                sr.triangle(iconX + 6f, iconY, iconX + 13f, iconY + 7f, iconX + 13f, iconY - 7f);
-            } else if (i == 1) {
-                // Coin emblem
-                sr.setColor(done ? new Color(0.35f, 0.9f, 0.5f, 1f) : new Color(1f, 0.85f, 0.3f, 1f));
-                sr.circle(iconX, iconY, 11f);
-                sr.setColor(0.15f, 0.18f, 0.28f, 1f);
-                sr.circle(iconX, iconY, 7f);
+            // Card border
+            if (q.claimed) {
+                sr.setColor(0.2f, 0.3f, 0.4f, 0.45f);
+            } else if (q.isCompleted()) {
+                sr.setColor(0.35f, 0.85f, 0.5f, 0.85f);
             } else {
-                // Gacha chest emblem
-                sr.setColor(done ? new Color(0.35f, 0.9f, 0.5f, 1f) : new Color(1f, 0.45f, 0.65f, 1f));
-                sr.rect(iconX - 9f, iconY - 8f, 18f, 16f);
-                sr.setColor(1f, 0.85f, 0.3f, 1f);
-                sr.rect(iconX - 2f, iconY - 8f, 4f, 16f);
+                sr.setColor(0.25f, 0.35f, 0.5f, 0.65f);
             }
+            drawBoxBorder(qx, qy, cardW, cardH, q.isCompleted() && !q.claimed ? 1.8f : 1.2f);
 
-            // Action Button (centered vertically on card)
-            float btnW = 145f;
-            float btnH = 42f;
-            float btnX = startX + cardW - btnW - 18f;
-            float btnY = cy + (cardH - btnH) / 2f;
+            // Left decorative festive stripe
+            sr.setColor(q.claimed ? new Color(0.3f, 0.4f, 0.5f, 0.5f) : (q.isCompleted() ? new Color(0.3f, 0.9f, 0.5f, 1f) : new Color(0.95f, 0.65f, 0.2f, 1f)));
+            sr.rect(qx, qy, 5f, cardH);
 
-            if (done) {
-                sr.setColor(0.12f, 0.35f, 0.22f, 0.95f);
-                sr.rect(btnX, btnY, btnW, btnH);
-                sr.setColor(0.35f, 0.95f, 0.5f, 1f);
-                drawBoxBorder(btnX, btnY, btnW, btnH, 1.5f);
-            } else {
-                sr.setColor(0.12f, 0.17f, 0.26f, 0.9f);
-                sr.rect(btnX, btnY, btnW, btnH);
-                sr.setColor(0.3f, 0.42f, 0.58f, 0.75f);
-                drawBoxBorder(btnX, btnY, btnW, btnH, 1.2f);
-            }
-
-            // Reward Pill (top right, left of button)
-            float pillW = 210f;
+            // Reward pill background on top right
+            float pillW = 160f;
             float pillH = 26f;
-            float pillX = btnX - pillW - 16f;
-            float pillY = cy + cardH - 33f;
-
-            sr.setColor(0.20f, 0.15f, 0.08f, 0.92f);
+            float pillX = qx + cardW - pillW - 14f;
+            float pillY = qy + cardH - 32f;
+            sr.setColor(0.18f, 0.14f, 0.08f, 0.9f);
             sr.rect(pillX, pillY, pillW, pillH);
-            sr.setColor(0.85f, 0.65f, 0.22f, 0.75f);
+            sr.setColor(0.85f, 0.65f, 0.25f, 0.7f);
             drawBoxBorder(pillX, pillY, pillW, pillH, 1.2f);
 
-            // Progress Bar (bottom row spanning full content width)
-            float contentX = startX + 85f;
-            float barX = contentX;
-            float barY = cy + 15f;
-            float barW = btnX - 16f - barX;
-            float barH = 12f;
+            // Progress bar
+            float qpbX = qx + 18f;
+            float qpbY = qy + 14f;
+            float qpbW = cardW - 155f;
+            float qpbH = 12f;
 
-            // Bar background
-            sr.setColor(0.06f, 0.08f, 0.13f, 0.95f);
-            sr.rect(barX, barY, barW, barH);
+            sr.setColor(0.06f, 0.08f, 0.12f, 0.95f);
+            sr.rect(qpbX, qpbY, qpbW, qpbH);
 
-            // Bar fill
-            float progress = 0f;
-            if (i == 0) progress = MathUtils.clamp((float) eventManager.fishCaughtToday / 50f, 0f, 1f);
-            else if (i == 1) progress = MathUtils.clamp((float) eventManager.goldSpentToday / 2000f, 0f, 1f);
-            else if (i == 2) progress = MathUtils.clamp((float) eventManager.eventGachaPulledToday / 1f, 0f, 1f);
-
-            if (progress > 0) {
-                sr.setColor(done ? new Color(0.25f, 0.85f, 0.45f, 1f) : new Color(0.25f, 0.65f, 1f, 1f));
-                sr.rect(barX, barY, Math.max(8f, barW * progress), barH);
+            float pRatio = MathUtils.clamp((float) q.progress / q.target, 0f, 1f);
+            if (pRatio > 0) {
+                sr.setColor(q.isCompleted() ? new Color(0.25f, 0.85f, 0.45f, 1f) : new Color(0.25f, 0.65f, 1f, 1f));
+                sr.rect(qpbX, qpbY, Math.max(8f, qpbW * pRatio), qpbH);
             }
             sr.setColor(0.25f, 0.35f, 0.48f, 0.65f);
-            drawBoxBorder(barX, barY, barW, barH, 1f);
+            drawBoxBorder(qpbX, qpbY, qpbW, qpbH, 1f);
+
+            // Claim / Status Button
+            float btnW = 115f;
+            float btnH = 36f;
+            float btnX = qx + cardW - btnW - 14f;
+            float btnY = qy + 12f;
+
+            if (q.claimed) {
+                sr.setColor(0.12f, 0.18f, 0.15f, 0.8f);
+                sr.rect(btnX, btnY, btnW, btnH);
+                sr.setColor(0.25f, 0.5f, 0.35f, 0.5f);
+                drawBoxBorder(btnX, btnY, btnW, btnH, 1.2f);
+            } else if (q.isCompleted()) {
+                float pulse = 0.8f + 0.2f * MathUtils.sin(animTimer * 5f);
+                sr.rect(btnX, btnY, btnW, btnH,
+                        new Color(0.15f, 0.45f * pulse, 0.25f * pulse, 1f),
+                        new Color(0.15f, 0.45f * pulse, 0.25f * pulse, 1f),
+                        new Color(0.25f, 0.85f * pulse, 0.45f * pulse, 1f),
+                        new Color(0.25f, 0.85f * pulse, 0.45f * pulse, 1f));
+                sr.setColor(0.4f, 1f, 0.6f, 1f);
+                drawBoxBorder(btnX, btnY, btnW, btnH, 1.8f);
+            } else {
+                sr.setColor(0.12f, 0.16f, 0.24f, 0.8f);
+                sr.rect(btnX, btnY, btnW, btnH);
+                sr.setColor(0.3f, 0.4f, 0.55f, 0.5f);
+                drawBoxBorder(btnX, btnY, btnW, btnH, 1.2f);
+            }
         }
     }
 
     // =========================================================================
-    // TAB 1: ĐIỂM DANH THÁNG (ATTENDANCE)
+    // TAB 1: ĐIỂM DANH THÁNG (ATTENDANCE) - SPACING FIXED (NO OVERLAP)
     // =========================================================================
 
     private void drawAttendanceShapes() {
         float startX = 72f;
         float cardW = W - 144f;
 
-        // Top Summary & Claim Bar
-        float headerY = H - 218f;
-        float headerH = 54f;
+        // Top Summary & Claim Bar (Height 50px)
+        float headerY = H - 212f;
+        float headerH = 50f;
 
         sr.setColor(0.13f, 0.17f, 0.26f, 0.95f);
         sr.rect(startX, headerY, cardW, headerH);
         sr.setColor(0.85f, 0.65f, 0.25f, 0.6f);
         drawBoxBorder(startX, headerY, cardW, headerH, 1.5f);
 
-        // Claim Button on Right
+        // Claim Button on Right of summary
         float claimBtnX = startX + cardW - 270f;
-        float claimBtnY = headerY + 7f;
+        float claimBtnY = headerY + 6f;
         float claimBtnW = 255f;
-        float claimBtnH = 40f;
+        float claimBtnH = 38f;
 
         boolean claimedToday = eventManager.hasClaimedLoginToday();
-        boolean hoverClaim = isMouseOver(claimBtnX, claimBtnBtnY(headerY), claimBtnW, claimBtnH);
+        int daysLogged = player.getTotalLoginDaysThisMonth();
 
-        if (!claimedToday && player.getTotalLoginDaysThisMonth() < 25) {
-            float pulse = 0.88f + 0.12f * MathUtils.sin(animTimer * 5f);
+        if (!claimedToday && daysLogged < 25) {
+            float pulse = 0.8f + 0.2f * MathUtils.sin(animTimer * 5f);
             sr.rect(claimBtnX, claimBtnY, claimBtnW, claimBtnH,
                     new Color(0.8f * pulse, 0.55f * pulse, 0.1f * pulse, 1f),
                     new Color(0.8f * pulse, 0.55f * pulse, 0.1f * pulse, 1f),
@@ -466,14 +590,13 @@ public class EventScreen implements Screen {
             drawBoxBorder(claimBtnX, claimBtnY, claimBtnW, claimBtnH, 1.5f);
         }
 
-        // 25 Days Grid (5 cols x 5 rows)
-        int daysLogged = player.getTotalLoginDaysThisMonth();
+        // 25 Days Grid (5 cols x 5 rows) - START Y ADJUSTED TO H - 296f FOR 16px CLEARANCE
         float gridStartX = 72f;
-        float gridStartY = H - 290f;
+        float gridStartY = H - 296f;
         float boxW = 216f;
-        float boxH = 74f;
+        float boxH = 68f;
         float gapX = 14f;
-        float gapY = 10f;
+        float gapY = 8f;
 
         for (int i = 0; i < 25; i++) {
             int dayNum = i + 1;
@@ -488,20 +611,17 @@ public class EventScreen implements Screen {
             DailyReward reward = eventManager.getDailyReward(dayNum);
 
             if (isClaimed) {
-                // Done / Claimed
                 sr.setColor(hoverBox ? new Color(0.14f, 0.26f, 0.20f, 0.95f) : new Color(0.10f, 0.20f, 0.16f, 0.9f));
                 sr.rect(bx, by, boxW, boxH);
                 sr.setColor(0.25f, 0.7f, 0.4f, 0.7f);
                 drawBoxBorder(bx, by, boxW, boxH, 1.5f);
             } else if (isToday) {
-                // Active Today!
-                float pulse = 0.88f + 0.12f * MathUtils.sin(animTimer * 5f);
-                sr.setColor(new Color(0.32f * pulse, 0.24f * pulse, 0.10f * pulse, 0.98f));
+                float pulse = 0.8f + 0.2f * MathUtils.sin(animTimer * 4f);
+                sr.setColor(hoverBox ? new Color(0.28f, 0.22f, 0.12f, 0.95f) : new Color(0.22f, 0.17f, 0.08f, 0.95f));
                 sr.rect(bx, by, boxW, boxH);
                 sr.setColor(1f, 0.85f, 0.35f, pulse);
                 drawBoxBorder(bx, by, boxW, boxH, 2.2f);
             } else {
-                // Upcoming / Locked
                 sr.setColor(hoverBox ? new Color(0.15f, 0.19f, 0.28f, 0.95f) : new Color(0.10f, 0.13f, 0.20f, 0.85f));
                 sr.rect(bx, by, boxW, boxH);
                 sr.setColor(reward.isMilestone ? new Color(0.85f, 0.65f, 0.25f, 0.6f) : new Color(0.22f, 0.28f, 0.4f, 0.5f));
@@ -511,13 +631,9 @@ public class EventScreen implements Screen {
             // Milestone Banner across top of milestone card
             if (reward.isMilestone) {
                 sr.setColor(1f, 0.8f, 0.25f, 0.85f);
-                sr.rect(bx, by + boxH - 6f, boxW, 6f);
+                sr.rect(bx, by + boxH - 5f, boxW, 5f);
             }
         }
-    }
-
-    private float claimBtnBtnY(float headerY) {
-        return headerY + 7f;
     }
 
     // =========================================================================
@@ -566,7 +682,6 @@ public class EventScreen implements Screen {
             sr.setColor(hoverItem ? new Color(0.15f, 0.19f, 0.28f, 0.98f) : new Color(0.11f, 0.14f, 0.21f, 0.92f));
             sr.rect(ix, iy, itemW, itemH);
 
-            // Card border (Rarity color: Crimson for limited gear, gold/purple for tickets)
             Color borderColor = getShopItemBorderColor(i);
             sr.setColor(borderColor.r, borderColor.g, borderColor.b, hoverItem ? 0.95f : 0.65f);
             drawBoxBorder(ix, iy, itemW, itemH, hoverItem ? 2f : 1.2f);
@@ -580,7 +695,7 @@ public class EventScreen implements Screen {
             sr.setColor(borderColor.r, borderColor.g, borderColor.b, 0.8f);
             drawBoxBorder(iconBoxX, iconBoxY, iconBoxSize, iconBoxSize, 1.5f);
 
-            // Draw primitive icon inside box
+            // DRAW REVOLUTIONARY ARTWORK FOR VỆ QUỐC SET
             drawShopItemIcon(i, iconBoxX + iconBoxSize / 2f, iconBoxY + iconBoxSize / 2f);
 
             // Buy button shape
@@ -607,25 +722,14 @@ public class EventScreen implements Screen {
 
     private void drawShopItemIcon(int index, float cx, float cy) {
         if (index == 0) {
-            // Rod icon
-            sr.setColor(1f, 0.3f, 0.35f, 1f);
-            sr.rectLine(cx - 20f, cy - 20f, cx + 20f, cy + 20f, 4.5f);
-            sr.setColor(1f, 0.85f, 0.3f, 1f);
-            sr.circle(cx + 20f, cy + 20f, 4f);
+            // Cần Câu Vệ Quốc: Use glorious vector illustration
+            EquipmentIconRenderer.drawVeQuocRod(sr, cx, cy, 26f, Color.GOLD);
         } else if (index == 1) {
-            // Line icon
-            sr.setColor(0.4f, 0.8f, 1f, 1f);
-            sr.circle(cx, cy, 18f);
-            sr.setColor(0.08f, 0.10f, 0.15f, 1f);
-            sr.circle(cx, cy, 12f);
-            sr.setColor(1f, 0.35f, 0.4f, 1f);
-            sr.circle(cx, cy, 6f);
+            // Dây Cước Vệ Quốc: Use glorious vector illustration
+            EquipmentIconRenderer.drawVeQuocLine(sr, cx, cy, 26f, Color.GOLD);
         } else if (index == 2) {
-            // Hook icon
-            sr.setColor(1f, 0.85f, 0.3f, 1f);
-            sr.rectLine(cx, cy + 18f, cx, cy - 8f, 4f);
-            sr.rectLine(cx, cy - 8f, cx - 12f, cy - 8f, 4f);
-            sr.rectLine(cx - 12f, cy - 8f, cx - 12f, cy + 6f, 4f);
+            // Lưỡi Câu Vệ Quốc: Use glorious vector illustration
+            EquipmentIconRenderer.drawVeQuocHook(sr, cx, cy, 26f, Color.GOLD);
         } else if (index == 3) {
             // Premium Ticket (Purple ticket)
             sr.setColor(0.7f, 0.35f, 0.9f, 1f);
@@ -639,32 +743,13 @@ public class EventScreen implements Screen {
             sr.setColor(0.1f, 0.15f, 0.25f, 1f);
             sr.circle(cx, cy, 5f);
         } else if (index == 5) {
-            // Gold sack
-            sr.setColor(1f, 0.85f, 0.25f, 1f);
-            sr.circle(cx, cy - 3f, 16f);
-            sr.rect(cx - 6f, cy + 8f, 12f, 8f);
-            sr.setColor(0.85f, 0.35f, 0.2f, 1f);
-            sr.rect(cx - 8f, cy + 7f, 16f, 3f);
+            // Gold coin pouch
+            sr.setColor(0.85f, 0.65f, 0.15f, 1f);
+            sr.circle(cx, cy - 3f, 14f);
+            sr.triangle(cx - 10f, cy + 6f, cx + 10f, cy + 6f, cx, cy + 18f);
+            sr.setColor(0.95f, 0.2f, 0.25f, 1f);
+            sr.rect(cx - 8f, cy + 3f, 16f, 3.5f);
         }
-    }
-
-    private int getShopItemPrice(int index) {
-        switch (index) {
-            case 0: return 5; // Cần Câu Vệ Quốc
-            case 1: return 5; // Dây Cước Vệ Quốc
-            case 2: return 5; // Lưỡi Câu Vệ Quốc
-            case 3: return 3; // Vé Quay Cao Cấp x3
-            case 4: return 2; // Vé Quay Thường x5
-            case 5: return 1; // Túi 10,000 Vàng
-            default: return 1;
-        }
-    }
-
-    private Color getShopItemBorderColor(int index) {
-        if (index <= 2) return new Color(0.92f, 0.25f, 0.28f, 1f); // LIMITED_EVENT Red
-        if (index == 3) return new Color(0.75f, 0.4f, 0.95f, 1f); // Epic/Premium Purple
-        if (index == 4) return new Color(1f, 0.8f, 0.25f, 1f);   // Rare Gold
-        return new Color(0.95f, 0.75f, 0.2f, 1f);                 // Gold
     }
 
     // =========================================================================
@@ -672,37 +757,39 @@ public class EventScreen implements Screen {
     // =========================================================================
 
     private void drawHeaderTexts() {
-        // Back Button
-        font.setColor(Color.WHITE);
-        drawCenteredText(font, "← QUAY LẠI", 25f, H - 58f, 115f, 42f);
+        // Back Button Text
+        boolean hoverBack = isMouseOver(25f, H - 58f, 115f, 42f);
+        font.setColor(hoverBack ? Color.WHITE : new Color(0.85f, 0.85f, 0.95f, 0.9f));
+        layout.setText(font, "← QUAY LẠI");
+        font.draw(game.batch, layout, 25f + (115f - layout.width) / 2f, H - 32f);
 
-        // Center Title & Subtitle within available center space (between Back btn at 140f and timePill at 855f)
+        // Center Title (Clean, prominent, no subtitle)
         float centerAreaX = 145f;
-        float centerAreaW = (W - 215f - 190f - 20f) - centerAreaX - 10f; // 700px
+        float centerAreaW = (W - 225f - 175f - 40f) - centerAreaX - 10f;
 
         titleFont.setColor(0f, 0f, 0f, 0.6f);
-        drawCenteredText(titleFont, "HÀO KHÍ LẠC HỒNG", centerAreaX + 2f, H - 42f, centerAreaW, 30f); // shadow
+        drawCenteredText(titleFont, "HÀO KHÍ LẠC HỒNG", centerAreaX + 2f, H - 76f, centerAreaW, 74f); // shadow
         titleFont.setColor(1f, 0.88f, 0.35f, 1f);
-        drawCenteredText(titleFont, "HÀO KHÍ LẠC HỒNG", centerAreaX, H - 40f, centerAreaW, 30f);
+        drawCenteredText(titleFont, "HÀO KHÍ LẠC HỒNG", centerAreaX, H - 74f, centerAreaW, 74f);
 
-        // Subtitle (concise & centered in center area, never touches right badges)
-        font.setColor(0.85f, 0.85f, 0.85f, 0.9f);
-        font.getData().setScale(0.82f);
-        drawCenteredText(font, "★ SỰ KIỆN GIỚI HẠN MÙA LỄ HỘI ★", centerAreaX, H - 65f, centerAreaW, 20f);
-        font.getData().setScale(1f);
-
-        // Countdown Timer Badge Text
-        float timePillW = 215f;
-        float timePillX = W - timePillW - 190f - 20f;
-        font.setColor(1f, 0.9f, 0.35f, 1f);
-        String eventTime = eventManager.getEventTimeRemaining().replace("Còn lại: ", "");
-        font.getData().setScale(0.82f);
-        drawCenteredText(font, "Thời gian: " + eventTime, timePillX, H - 56f, timePillW, 38f);
-        font.getData().setScale(1f);
-
-        // Event Points Badge Text
-        float ptsPillW = 185f;
+        // Top Right Pills:
+        float ptsPillW = 175f;
+        float ptsPillH = 38f;
         float ptsPillX = W - ptsPillW - 25f;
+        float ptsPillY = H - 56f;
+
+        float timePillW = 225f;
+        float timePillH = 38f;
+        float timePillX = ptsPillX - timePillW - 18f;
+        float timePillY = H - 56f;
+
+        // 1. Time Remaining Badge
+        font.setColor(1f, 0.9f, 0.35f, 1f);
+        font.getData().setScale(0.80f);
+        String eventTime = eventManager.getEventTimeRemaining();
+        drawCenteredText(font, "Thời gian: " + eventTime, timePillX + 15f, timePillY, timePillW - 20f, timePillH);
+
+        // 2. Event Points Badge
         font.setColor(1f, 0.95f, 0.4f, 1f);
         font.getData().setScale(0.85f);
         font.draw(game.batch, "Điểm: " + player.getEventPoints() + " SK", ptsPillX + 34f, H - 32f);
@@ -731,134 +818,138 @@ public class EventScreen implements Screen {
     }
 
     private void drawMissionsTexts() {
-        float startX = 75f;
-        float cardW = W - 150f;
-
-        // Banner text
+        float startX = 65f;
+        float containerW = W - 130f;
         float bannerY = H - 225f;
-        float bannerH = 58f;
 
-        titleFont.getData().setScale(0.6f);
-        titleFont.setColor(1f, 0.85f, 0.3f, 1f);
-        titleFont.draw(game.batch, "NHIỆM VỤ HÀNG NGÀY • LÀM MỚI LÚC 00:00", startX + 25f, bannerY + bannerH - 12f);
-        titleFont.getData().setScale(1f);
+        // 1. Top Milestone Banner Text
+        int completedCount = eventManager.getCompletedMissionsCount();
+        font.setColor(1f, 0.85f, 0.35f, 1f);
+        font.getData().setScale(0.85f);
+        font.draw(game.batch, "NHIỆM VỤ SỰ KIỆN HẰNG NGÀY • LÀM MỚI LÚC 00:00", startX + 18f, bannerY + 54f);
 
-        font.setColor(0.85f, 0.9f, 0.95f, 0.9f);
-        font.draw(game.batch, "Hoàn thành đủ 3 nhiệm vụ mỗi ngày nhận ngay +1 Điểm Sự Kiện!", startX + 25f, bannerY + 22f);
+        // Milestone reward description (removed "TIẾN ĐỘ SỰ KIỆN: ")
+        font.setColor(0.88f, 0.92f, 1f, 0.95f);
+        font.getData().setScale(0.74f);
+        String progStr = "Hoàn thành 4/6 nhiệm vụ nhận: +1 Điểm SK, +500 Vàng, +20 KC";
+        font.draw(game.batch, progStr, startX + 18f, bannerY + 28f);
 
-        int doneCount = (eventManager.dailyMissionsCompleted[0] ? 1 : 0) +
-                        (eventManager.dailyMissionsCompleted[1] ? 1 : 0) +
-                        (eventManager.dailyMissionsCompleted[2] ? 1 : 0);
+        // Milestone Button Text
+        float mBtnW = 180f;
+        float mBtnH = 40f;
+        float mBtnX = startX + containerW - mBtnW - 14f;
+        float mBtnY = bannerY + 9f;
 
-        if (eventManager.allMissionsClaimedToday || doneCount == 3) {
-            font.setColor(0.35f, 1f, 0.5f, 1f);
-            font.getData().setScale(0.85f);
-            drawCenteredText(font, "✔ ĐÃ NHẬN THƯỞNG TỔNG KẾT (+1 ĐIỂM SK)!", startX + cardW - 380f, bannerY, 360f, bannerH);
-            font.getData().setScale(1f);
+        font.getData().setScale(0.82f);
+        if (eventManager.milestoneClaimedToday) {
+            font.setColor(0.4f, 0.85f, 0.55f, 1f);
+            drawCenteredText(font, "✓ ĐÃ MỞ RƯƠNG", mBtnX, mBtnY, mBtnW, mBtnH);
+        } else if (completedCount >= 4) {
+            font.setColor(0.1f, 0.1f, 0.15f, 1f);
+            drawCenteredText(font, "★ NHẬN MỐC THƯỞNG ★", mBtnX, mBtnY, mBtnW, mBtnH);
         } else {
-            font.setColor(1f, 0.85f, 0.35f, 1f);
-            font.getData().setScale(0.9f);
-            drawCenteredText(font, "Tiến độ hôm nay: " + doneCount + " / 3 hoàn thành", startX + cardW - 360f, bannerY, 340f, bannerH);
-            font.getData().setScale(1f);
+            font.setColor(0.7f, 0.8f, 0.9f, 0.75f);
+            drawCenteredText(font, completedCount + "/4 ĐỂ MỞ", mBtnX, mBtnY, mBtnW, mBtnH);
         }
 
-        // Mission Cards Text
-        String[] titles = {
-            "Cần Mẫn Đánh Bắt",
-            "Đầu Tư Tiêu Pha",
-            "Vận May Chiêu Tài (Banner Sự Kiện)"
-        };
-        String[] descs = {
-            "Câu đủ 50 con cá trong ngày hôm nay",
-            "Tiêu 2,000 Vàng trong ngày (mua đồ, nâng cấp)",
-            "Quay ít nhất 1 lần tại Banner Gacha Sự Kiện hôm nay"
-        };
-        String[] progressTexts = {
-            eventManager.fishCaughtToday + " / 50 Con (" + Math.min(100, (int)(eventManager.fishCaughtToday / 50f * 100)) + "%)",
-            eventManager.goldSpentToday + " / 2,000 Vàng (" + Math.min(100, (int)(eventManager.goldSpentToday / 2000f * 100)) + "%)",
-            eventManager.eventGachaPulledToday + " / 1 Lần (" + (eventManager.eventGachaPulledToday >= 1 ? "100" : "0") + "%)"
-        };
-        String[] rewards = {
-            "Phần thưởng: +500 Vàng",
-            "Phần thưởng: +1,000 Vàng",
-            "Phần thưởng: +1 Vé Quay Thường"
-        };
+        // Optional Claim All Button Text
+        boolean hasUnclaimed = false;
+        for (Quest q : eventManager.eventQuests) {
+            if (q.isCompleted() && !q.claimed) {
+                hasUnclaimed = true;
+                break;
+            }
+        }
+        if (hasUnclaimed) {
+            float caW = 160f;
+            float caH = 40f;
+            float caX = mBtnX - caW - 12f;
+            float caY = mBtnY;
+            font.setColor(0.4f, 1f, 0.65f, 1f);
+            drawCenteredText(font, "★ NHẬN TẤT CẢ ★", caX, caY, caW, caH);
+        }
 
-        float[] cardY = { H - 332f, H - 440f, H - 548f };
-        float cardH = 96f;
+        // 2. 6 Event Quest Cards Texts
+        float cardGapX = 18f;
+        float cardGapY = 12f;
+        float cardW = (containerW - cardGapX) / 2f;
+        float cardH = 110f;
+        float gridStartY = H - 245f;
 
-        for (int i = 0; i < 3; i++) {
-            float cy = cardY[i];
-            boolean done = eventManager.dailyMissionsCompleted[i];
+        for (int i = 0; i < eventManager.eventQuests.size() && i < 6; i++) {
+            Quest q = eventManager.eventQuests.get(i);
+            int col = i % 2;
+            int row = i / 2;
+            float qx = startX + col * (cardW + cardGapX);
+            float qy = gridStartY - row * (cardH + cardGapY) - cardH;
 
-            float contentX = startX + 85f;
-            float btnW = 145f;
-            float btnH = 42f;
-            float btnX = startX + cardW - btnW - 18f;
-            float btnY = cy + (cardH - btnH) / 2f;
-
-            float pillW = 210f;
+            float pillW = 160f;
             float pillH = 26f;
-            float pillX = btnX - pillW - 16f;
-            float pillY = cy + cardH - 33f;
+            float pillX = qx + cardW - pillW - 14f;
+            float pillY = qy + cardH - 32f;
 
-            float barX = contentX;
-            float barY = cy + 15f;
-            float barW = btnX - 16f - barX;
+            float qpbX = qx + 18f;
+            float qpbY = qy + 14f;
+            float qpbW = cardW - 155f;
 
-            // 1. Mission Title (Auto-fit so it never touches the reward pill)
-            font.setColor(done ? new Color(0.35f, 0.95f, 0.55f, 1f) : new Color(1f, 0.88f, 0.4f, 1f));
-            font.getData().setScale(0.92f);
-            layout.setText(font, titles[i]);
-            float maxTitleW = pillX - contentX - 15f;
+            float btnW = 115f;
+            float btnH = 36f;
+            float btnX = qx + cardW - btnW - 14f;
+            float btnY = qy + 12f;
+
+            // Line 1 Left: Quest Title
+            font.setColor(q.claimed ? new Color(0.6f, 0.7f, 0.8f, 0.8f) : new Color(1f, 0.88f, 0.35f, 1f));
+            font.getData().setScale(0.88f);
+            layout.setText(font, q.title);
+            float maxTitleW = pillX - qx - 28f;
             if (layout.width > maxTitleW) {
-                font.getData().setScale(0.92f * (maxTitleW / layout.width));
+                font.getData().setScale(0.88f * (maxTitleW / layout.width));
             }
-            font.draw(game.batch, titles[i], contentX, cy + cardH - 16f);
+            font.draw(game.batch, q.title, qx + 18f, qy + cardH - 14f);
 
-            // 2. Reward Pill Text
+            // Line 1 Right: Reward Pill Text
             font.setColor(1f, 0.85f, 0.3f, 1f);
-            font.getData().setScale(0.78f);
-            drawCenteredText(font, rewards[i], pillX, pillY, pillW, pillH);
+            font.getData().setScale(0.76f);
+            drawCenteredText(font, q.getRewardSummary(), pillX, pillY, pillW, pillH);
 
-            // 3. Description (Single line with full width, completely separated vertically)
+            // Line 2: Description (Clean, concise - NO redundant "Tiến độ mục tiêu" text!)
             font.setColor(0.78f, 0.85f, 0.92f, 0.9f);
-            font.getData().setScale(0.80f);
-            layout.setText(font, descs[i]);
-            float maxDescW = btnX - 16f - contentX;
+            font.getData().setScale(0.78f);
+            layout.setText(font, q.description);
+            float maxDescW = cardW - 36f;
             if (layout.width > maxDescW) {
-                font.getData().setScale(0.80f * (maxDescW / layout.width));
+                font.getData().setScale(0.78f * (maxDescW / layout.width));
             }
-            font.draw(game.batch, descs[i], contentX, cy + cardH - 45f);
+            font.draw(game.batch, q.description, qx + 18f, qy + cardH - 44f);
 
-            // 4. Progress Text & Track Labels (above the progress bar)
-            font.setColor(0.55f, 0.65f, 0.78f, 0.85f);
+            // Line 3: Progress count text (raised up so it does not collide with progress bar)
+            font.setColor(0.85f, 0.92f, 1f, 0.9f);
             font.getData().setScale(0.72f);
-            font.draw(game.batch, "Tiến độ mục tiêu", barX, barY + 22f);
+            String progText = q.progress + " / " + q.target;
+            layout.setText(font, progText);
+            font.draw(game.batch, layout, qpbX + qpbW - layout.width, qpbY + 30f);
 
-            font.setColor(0.88f, 0.93f, 1f, 0.95f);
-            font.getData().setScale(0.74f);
-            layout.setText(font, progressTexts[i]);
-            font.draw(game.batch, layout, barX + barW - layout.width, barY + 22f);
-
-            // 5. Button Status Label
-            font.getData().setScale(0.85f);
-            if (done) {
-                font.setColor(0.35f, 0.95f, 0.55f, 1f);
-                drawCenteredText(font, "✔ HOÀN THÀNH", btnX, btnY, btnW, btnH);
+            // Line 3 Right: Button Status Label
+            font.getData().setScale(0.82f);
+            if (q.claimed) {
+                font.setColor(0.4f, 0.85f, 0.55f, 1f);
+                drawCenteredText(font, "✓ ĐÃ NHẬN", btnX, btnY, btnW, btnH);
+            } else if (q.isCompleted()) {
+                font.setColor(Color.WHITE);
+                drawCenteredText(font, "NHẬN", btnX, btnY, btnW, btnH);
             } else {
                 font.setColor(0.7f, 0.82f, 0.95f, 0.85f);
                 drawCenteredText(font, "ĐANG LÀM", btnX, btnY, btnW, btnH);
             }
-            font.getData().setScale(1f);
         }
+        font.getData().setScale(1f);
     }
 
     private void drawAttendanceTexts() {
         float startX = 72f;
         float cardW = W - 144f;
-        float headerY = H - 218f;
-        float headerH = 54f;
+        float headerY = H - 212f;
+        float headerH = 50f;
 
         int daysLogged = player.getTotalLoginDaysThisMonth();
         boolean claimedToday = eventManager.hasClaimedLoginToday();
@@ -870,16 +961,16 @@ public class EventScreen implements Screen {
         titleFont.getData().setScale(1f);
 
         font.setColor(0.85f, 0.88f, 0.95f, 0.85f);
-        font.draw(game.batch, "Điểm danh đều đặn để nhận trọn bộ quà & Cần Câu Vệ Quốc tại ngày 25!", startX + 25f, headerY + 20f);
+        font.draw(game.batch, "Điểm danh đều đặn để nhận trọn bộ quà & Cần Câu Vệ Quốc tại ngày 25!", startX + 25f, headerY + 18f);
 
         // Claim Button on Right
         float claimBtnX = startX + cardW - 270f;
-        float claimBtnY = headerY + 7f;
+        float claimBtnY = headerY + 6f;
         float claimBtnW = 255f;
-        float claimBtnH = 40f;
+        float claimBtnH = 38f;
 
         if (!claimedToday && daysLogged < 25) {
-            font.setColor(0.12f, 0.1f, 0.05f, 1f); // Dark bold text on glowing button
+            font.setColor(0.12f, 0.1f, 0.05f, 1f);
             drawCenteredText(font, "ĐIỂM DANH HÔM NAY", claimBtnX, claimBtnY, claimBtnW, claimBtnH);
         } else {
             font.setColor(0.4f, 1f, 0.6f, 1f);
@@ -888,11 +979,11 @@ public class EventScreen implements Screen {
 
         // 25 Days Grid
         float gridStartX = 72f;
-        float gridStartY = H - 290f;
+        float gridStartY = H - 296f;
         float boxW = 216f;
-        float boxH = 74f;
+        float boxH = 68f;
         float gapX = 14f;
-        float gapY = 10f;
+        float gapY = 8f;
 
         for (int i = 0; i < 25; i++) {
             int dayNum = i + 1;
@@ -914,27 +1005,19 @@ public class EventScreen implements Screen {
                 font.setColor(0.4f, 0.85f, 0.55f, 1f);
             } else if (isToday) {
                 font.setColor(1f, 0.9f, 0.35f, 1f);
+            } else if (reward.isMilestone) {
+                font.setColor(1f, 0.8f, 0.25f, 1f);
             } else {
-                font.setColor(reward.isMilestone ? new Color(1f, 0.85f, 0.35f, 1f) : new Color(0.85f, 0.9f, 0.98f, 0.85f));
+                font.setColor(0.85f, 0.9f, 0.95f, 0.9f);
             }
-            layout.setText(font, dayTitle);
-            float maxTitleW = boxW - 20f;
-            if (layout.width > maxTitleW) {
-                font.getData().setScale(0.82f * (maxTitleW / layout.width));
-            }
-            font.draw(game.batch, dayTitle, bx + 10f, by + boxH - 14f);
+            font.draw(game.batch, dayTitle, bx + 12f, by + boxH - 12f);
 
-            // Reward description (Auto-scaled so Day 5, 10, 15, 20, 25 milestones never overflow box)
-            font.setColor(isClaimed ? new Color(0.6f, 0.75f, 0.65f, 0.85f) : (isToday ? Color.WHITE : new Color(0.95f, 0.8f, 0.3f, 0.95f)));
-            font.getData().setScale(0.78f);
-            layout.setText(font, reward.rewardSummary);
-            float maxRewardW = boxW - 20f;
-            if (layout.width > maxRewardW) {
-                font.getData().setScale(0.78f * (maxRewardW / layout.width));
-            }
-            font.draw(game.batch, reward.rewardSummary, bx + 10f, by + 28f);
-            font.getData().setScale(1f);
+            // Reward Summary text
+            font.getData().setScale(0.74f);
+            font.setColor(reward.isMilestone ? new Color(1f, 0.9f, 0.45f, 1f) : new Color(0.75f, 0.95f, 0.85f, 1f));
+            font.draw(game.batch, reward.rewardSummary, bx + 12f, by + 22f);
         }
+        font.getData().setScale(1f);
     }
 
     private void drawShopTexts() {
@@ -943,20 +1026,26 @@ public class EventScreen implements Screen {
         float bannerY = H - 222f;
         float bannerH = 58f;
 
-        // Set Banner Text
-        titleFont.getData().setScale(0.62f);
+        // Top Banner Title
         titleFont.setColor(1f, 0.88f, 0.35f, 1f);
+        titleFont.getData().setScale(0.68f);
         titleFont.draw(game.batch, "BỘ TRANG BỊ GIỚI HẠN: VỆ QUỐC VANG DANH (LIMITED EVENT)", startX + 20f, bannerY + bannerH - 12f);
         titleFont.getData().setScale(1f);
 
-        font.setColor(0.95f, 0.9f, 0.85f, 0.95f);
-        font.draw(game.batch, "Kích hoạt hiệu ứng (3 món): +29% Tỉ lệ cá hiếm, Kháng đứt dây +10%!", startX + 20f, bannerY + 20f);
+        // Top Banner Subtitle
+        font.setColor(1f, 0.92f, 0.75f, 0.95f);
+        font.getData().setScale(0.82f);
+        font.draw(game.batch, "Kích hoạt hiệu ứng (3 món): +29% Tỉ lệ cá hiếm, Kháng đứt dây +10%!", startX + 20f, bannerY + 22f);
 
-        // Balance text on right
-        font.setColor(1f, 0.92f, 0.4f, 1f);
-        drawCenteredText(font, "Số dư: " + player.getEventPoints() + " Điểm SK", startX + cardW - 250f, bannerY, 230f, bannerH);
+        // Player current points indicator
+        font.setColor(1f, 0.85f, 0.35f, 1f);
+        font.getData().setScale(0.85f);
+        String ptsStr = "Số dư: " + player.getEventPoints() + " Điểm SK";
+        layout.setText(font, ptsStr);
+        font.draw(game.batch, ptsStr, startX + cardW - layout.width - 20f, bannerY + bannerH / 2f + 6f);
+        font.getData().setScale(1f);
 
-        // 6 Shop Items
+        // 6 Shop Cards
         float itemW = 360f;
         float itemH = 188f;
         float gapX = 27f;
@@ -972,6 +1061,7 @@ public class EventScreen implements Screen {
             "Vé Quay Thường x5",
             "Túi Vàng Đại Phú"
         };
+
         String[] itemSubtitles = {
             "Cần Câu Limited Event",
             "Dây Cước Limited Event",
@@ -980,6 +1070,7 @@ public class EventScreen implements Screen {
             "Vé Gacha Banner Tiêu Chuẩn",
             "Nhận ngay 10,000 Vàng"
         };
+
         String[] itemStats = {
             "Sát thương +20 • Thể lực +125",
             "Sức căng +225 • Kháng đứt +4%",
@@ -997,88 +1088,62 @@ public class EventScreen implements Screen {
 
             int price = getShopItemPrice(i);
             boolean canAfford = player.getEventPoints() >= price;
-            float maxItemTextW = itemW - 110f;
 
-            // Name
-            Color nameColor = getShopItemBorderColor(i);
-            font.setColor(nameColor);
-            font.getData().setScale(0.88f);
-            layout.setText(font, itemNames[i]);
-            if (layout.width > maxItemTextW) {
-                font.getData().setScale(0.88f * (maxItemTextW / layout.width));
-            }
-            font.draw(game.batch, itemNames[i], ix + 95f, iy + itemH - 22f);
+            // Title
+            font.setColor(getShopItemBorderColor(i));
+            font.getData().setScale(0.85f);
+            font.draw(game.batch, itemNames[i], ix + 95f, iy + itemH - 18f);
 
             // Subtitle
-            font.setColor(0.75f, 0.8f, 0.9f, 0.85f);
-            font.getData().setScale(0.76f);
-            layout.setText(font, itemSubtitles[i]);
-            if (layout.width > maxItemTextW) {
-                font.getData().setScale(0.76f * (maxItemTextW / layout.width));
-            }
-            font.draw(game.batch, itemSubtitles[i], ix + 95f, iy + itemH - 46f);
+            font.setColor(0.7f, 0.75f, 0.85f, 0.85f);
+            font.getData().setScale(0.72f);
+            font.draw(game.batch, itemSubtitles[i], ix + 95f, iy + itemH - 42f);
 
-            // Stats preview
-            font.setColor(1f, 0.9f, 0.45f, 0.95f);
-            font.getData().setScale(0.76f);
-            layout.setText(font, itemStats[i]);
-            if (layout.width > maxItemTextW) {
-                font.getData().setScale(0.76f * (maxItemTextW / layout.width));
-            }
-            font.draw(game.batch, itemStats[i], ix + 95f, iy + itemH - 70f);
-            font.getData().setScale(1f);
+            // Stats
+            font.setColor(1f, 0.88f, 0.35f, 0.95f);
+            font.getData().setScale(0.72f);
+            font.draw(game.batch, itemStats[i], ix + 95f, iy + itemH - 64f);
 
-            // Price / Exchange button text
+            // Buy button text
             float btnX = ix + 14f;
             float btnY = iy + 14f;
             float btnW = itemW - 28f;
             float btnH = 38f;
 
+            font.getData().setScale(0.82f);
             if (canAfford) {
-                font.setColor(0.12f, 0.1f, 0.05f, 1f); // Dark bold text on glowing button
+                font.setColor(0.12f, 0.1f, 0.05f, 1f);
                 drawCenteredText(font, "ĐỔI (" + price + " ĐIỂM SK)", btnX, btnY, btnW, btnH);
             } else {
-                font.setColor(0.7f, 0.75f, 0.85f, 0.75f);
+                font.setColor(0.6f, 0.7f, 0.8f, 0.7f);
                 drawCenteredText(font, "THIẾU ĐIỂM (" + price + " Điểm)", btnX, btnY, btnW, btnH);
             }
         }
+        font.getData().setScale(1f);
     }
 
-    // =========================================================================
-    // TOOLTIP & POPUPS
-    // =========================================================================
-
     private void drawShopTooltip(int itemIndex) {
-        float tipW = 410f;
-        float tipH = 165f;
-        float tipX = mousePos.x + 18f;
+        float tipW = 320f;
+        float tipH = 145f;
+        float tipX = mousePos.x + 15f;
         float tipY = mousePos.y - tipH - 10f;
 
-        if (tipX + tipW > W - 20f) tipX = mousePos.x - tipW - 18f;
-        if (tipX < 20f) tipX = 20f;
+        if (tipX + tipW > W - 20f) tipX = W - tipW - 20f;
         if (tipY < 20f) tipY = 20f;
-        if (tipY + tipH > H - 20f) tipY = H - tipH - 20f;
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
         sr.begin(ShapeRenderer.ShapeType.Filled);
-        sr.setColor(0.07f, 0.09f, 0.15f, 0.97f);
+        sr.setColor(0.06f, 0.09f, 0.15f, 0.98f);
         sr.rect(tipX, tipY, tipW, tipH);
-        sr.setColor(0.92f, 0.25f, 0.28f, 0.9f);
+        sr.setColor(1f, 0.4f, 0.45f, 0.85f);
         drawBoxBorder(tipX, tipY, tipW, tipH, 1.8f);
-
-        // Divider line above set bonus
-        sr.setColor(0.6f, 0.25f, 0.28f, 0.5f);
-        sr.rect(tipX + 15f, tipY + 45f, tipW - 30f, 1.2f);
         sr.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
 
         game.batch.begin();
         float maxTipTextW = tipW - 30f;
-
         String tipTitle = "";
-        String line1 = "";
-        String line2 = "";
-        String line3 = "";
+        String line1 = "", line2 = "", line3 = "";
         String setBonus = "Set Vệ Quốc: +29% Cá hiếm, Kháng đứt +10%";
 
         if (itemIndex == 0) {
@@ -1098,7 +1163,6 @@ public class EventScreen implements Screen {
             line3 = "• Tỉ lệ giữ mồi: +20.0%";
         }
 
-        // Title
         font.setColor(0.95f, 0.35f, 0.38f, 1f);
         font.getData().setScale(0.88f);
         layout.setText(font, tipTitle);
@@ -1107,14 +1171,12 @@ public class EventScreen implements Screen {
         }
         font.draw(game.batch, tipTitle, tipX + 15f, tipY + tipH - 18f);
 
-        // Details
         font.setColor(Color.WHITE);
         font.getData().setScale(0.80f);
         font.draw(game.batch, line1, tipX + 15f, tipY + tipH - 44f);
         font.draw(game.batch, line2, tipX + 15f, tipY + tipH - 68f);
         font.draw(game.batch, line3, tipX + 15f, tipY + tipH - 92f);
 
-        // Set Bonus
         font.setColor(1f, 0.88f, 0.35f, 1f);
         font.getData().setScale(0.80f);
         layout.setText(font, setBonus);
@@ -1166,26 +1228,114 @@ public class EventScreen implements Screen {
                 }
             }
 
-            // 3. Tab 1: Claim attendance button or active day card click
+            // 3. Tab 0: Event Missions & Milestone Click
+            if (selectedTab == 0) {
+                float mStartX = 65f;
+                float containerW = W - 130f;
+                float bannerY = H - 225f;
+
+                float mBtnW = 180f;
+                float mBtnH = 40f;
+                float mBtnX = mStartX + containerW - mBtnW - 14f;
+                float mBtnY = bannerY + 9f;
+
+                // Click Milestone Button (Hoàn thành 4/6 để nhận mốc thưởng)
+                if (isMouseOver(mBtnX, mBtnY, mBtnW, mBtnH)) {
+                    if (eventManager.milestoneClaimedToday) {
+                        showMessage("Bạn đã mở rương mốc sự kiện hôm nay rồi!");
+                    } else if (eventManager.canClaimMilestone()) {
+                        String res = eventManager.claimMilestone();
+                        AudioManager.getInstance().playSFX("sfx_success");
+                        showMessage(res);
+                    } else {
+                        showMessage("Hãy hoàn thành ít nhất 4/6 nhiệm vụ để mở mốc thưởng!");
+                    }
+                    return;
+                }
+
+                // Click "Nhận tất cả" Button
+                boolean hasUnclaimed = false;
+                for (Quest q : eventManager.eventQuests) {
+                    if (q.isCompleted() && !q.claimed) {
+                        hasUnclaimed = true;
+                        break;
+                    }
+                }
+                if (hasUnclaimed) {
+                    float caW = 160f;
+                    float caH = 40f;
+                    float caX = mBtnX - caW - 12f;
+                    float caY = mBtnY;
+                    if (isMouseOver(caX, caY, caW, caH)) {
+                        int claimedCount = 0;
+                        for (Quest q : eventManager.eventQuests) {
+                            if (q.isCompleted() && !q.claimed) {
+                                eventManager.claimQuestReward(q);
+                                claimedCount++;
+                            }
+                        }
+                        if (eventManager.canClaimMilestone()) {
+                            eventManager.claimMilestone();
+                        }
+                        AudioManager.getInstance().playSFX("sfx_catch");
+                        showMessage("Đã nhận tất cả (" + claimedCount + " nhiệm vụ hoàn thành)!");
+                        return;
+                    }
+                }
+
+                // Click individual quest claim button
+                float cardGapX = 18f;
+                float cardGapY = 12f;
+                float cardW = (containerW - cardGapX) / 2f;
+                float cardH = 110f;
+                float gridStartY = H - 245f;
+
+                for (int i = 0; i < eventManager.eventQuests.size() && i < 6; i++) {
+                    Quest q = eventManager.eventQuests.get(i);
+                    int col = i % 2;
+                    int row = i / 2;
+                    float qx = mStartX + col * (cardW + cardGapX);
+                    float qy = gridStartY - row * (cardH + cardGapY) - cardH;
+
+                    float btnW = 115f;
+                    float btnH = 36f;
+                    float btnX = qx + cardW - btnW - 14f;
+                    float btnY = qy + 12f;
+
+                    if (isMouseOver(btnX, btnY, btnW, btnH)) {
+                        if (q.claimed) {
+                            showMessage("Bạn đã nhận phần thưởng nhiệm vụ này rồi!");
+                        } else if (q.isCompleted()) {
+                            String res = eventManager.claimQuestReward(q);
+                            AudioManager.getInstance().playSFX("sfx_catch");
+                            showMessage(res);
+                        } else {
+                            showMessage("Chưa hoàn thành mục tiêu: " + q.description);
+                        }
+                        return;
+                    }
+                }
+            }
+
+            // 4. Tab 1: Attendance claim
             if (selectedTab == 1) {
                 float cardW = W - 144f;
-                float headerY = H - 218f;
+                float headerY = H - 212f;
                 float claimBtnX = 72f + cardW - 270f;
-                float claimBtnY = headerY + 7f;
+                float claimBtnY = headerY + 6f;
                 float claimBtnW = 255f;
-                float claimBtnH = 40f;
+                float claimBtnH = 38f;
 
                 boolean clickedClaim = isMouseOver(claimBtnX, claimBtnY, claimBtnW, claimBtnH);
 
-                // Also check today's active card
                 int daysLogged = player.getTotalLoginDaysThisMonth();
                 if (!clickedClaim && !eventManager.hasClaimedLoginToday() && daysLogged < 25) {
                     int todayIdx = daysLogged;
                     int col = todayIdx % 5;
                     int row = todayIdx / 5;
                     float bx = 72f + col * (216f + 14f);
-                    float by = H - 290f - row * (74f + 10f);
-                    if (isMouseOver(bx, by, 216f, 74f)) {
+                    float by = H - 296f - row * (68f + 8f);
+                    if (isMouseOver(bx, by, 216f, 68f)) {
                         clickedClaim = true;
                     }
                 }
@@ -1206,7 +1356,7 @@ public class EventScreen implements Screen {
                 }
             }
 
-            // 4. Tab 2: Shop Buy buttons
+            // 5. Tab 2: Shop Buy buttons
             if (selectedTab == 2) {
                 float itemW = 360f;
                 float itemH = 188f;
@@ -1265,7 +1415,7 @@ public class EventScreen implements Screen {
                 break;
             case 4:
                 player.addGachaTickets(5);
-                showMessage("Đổi thành công: +5 Vé Quay Thường!");
+                showMessage("Đổi thành công: +5 Vé Quay Tiêu Chuẩn!");
                 break;
             case 5:
                 player.gainGold(10000);
@@ -1274,36 +1424,56 @@ public class EventScreen implements Screen {
         }
     }
 
+    private int getShopItemPrice(int index) {
+        switch (index) {
+            case 0: return 5;
+            case 1: return 5;
+            case 2: return 5;
+            case 3: return 3;
+            case 4: return 2;
+            case 5: return 1;
+            default: return 99;
+        }
+    }
+
+    private Color getShopItemBorderColor(int index) {
+        if (index <= 2) {
+            return new Color(0.95f, 0.35f, 0.38f, 1f); // Crimson for limited gear
+        } else if (index == 3) {
+            return new Color(0.75f, 0.45f, 0.95f, 1f); // Purple
+        } else if (index == 4) {
+            return new Color(1f, 0.82f, 0.3f, 1f); // Gold
+        } else {
+            return new Color(0.95f, 0.8f, 0.25f, 1f);
+        }
+    }
+
     private void goBack() {
-        game.setScreen(previousScreen);
+        if (previousScreen != null) {
+            game.setScreen(previousScreen);
+        } else {
+            game.setScreen(new MainMenuScreen(game));
+        }
         dispose();
     }
 
-    // =========================================================================
-    // HELPER UTILITIES
-    // =========================================================================
-
     private boolean isMouseOver(float x, float y, float w, float h) {
-        return mousePos.x >= x && mousePos.x <= x + w &&
-               mousePos.y >= y && mousePos.y <= y + h;
+        return mousePos.x >= x && mousePos.x <= x + w && mousePos.y >= y && mousePos.y <= y + h;
     }
 
     private void drawBoxBorder(float x, float y, float w, float h, float thickness) {
-        sr.rectLine(x, y, x + w, y, thickness);
-        sr.rectLine(x, y + h, x + w, y + h, thickness);
-        sr.rectLine(x, y, x, y + h, thickness);
-        sr.rectLine(x + w, y, x + w, y + h, thickness);
+        sr.rect(x, y, w, thickness);
+        sr.rect(x, y + h - thickness, w, thickness);
+        sr.rect(x, y, thickness, h);
+        sr.rect(x + w - thickness, y, thickness, h);
     }
 
-    private void drawCenteredText(BitmapFont f, String text, float x, float y, float width, float height) {
+    private void drawCenteredText(BitmapFont f, String text, float x, float y, float w, float h) {
         layout.setText(f, text);
-        f.draw(game.batch, text, x + (width - layout.width) / 2f, y + (height + layout.height) / 2f);
+        f.draw(game.batch, text, x + (w - layout.width) / 2f, y + (h + layout.height) / 2f);
     }
 
-    @Override public void resize(int w, int h) {
-        viewport.update(w, h, true);
-    }
-
+    @Override public void resize(int width, int height) { viewport.update(width, height, true); }
     @Override public void pause() {}
     @Override public void resume() {}
     @Override public void hide() {}

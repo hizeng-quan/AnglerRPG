@@ -97,6 +97,86 @@ public class EquipmentIconRenderer {
         }
     }
 
+    public static void drawSetPiece(ShapeRenderer sr, String setName, EquipmentType type, float cx, float cy, float r, Color color) {
+        Equipment fake = new Equipment();
+        fake.setName = setName;
+        fake.type = type;
+        draw(sr, fake, type, cx, cy, r, color);
+    }
+
+    // =========================================================================
+    // CURRENCY ICONS: DIAMOND, NORMAL TICKET, PREMIUM TICKET
+    // =========================================================================
+    public static void drawDiamondIcon(ShapeRenderer sr, float cx, float cy, float r) {
+        float tw = r * 0.9f;
+        float mw = r * 1.35f;
+        float th = r * 0.45f;
+        float ph = r * 0.95f;
+
+        // Top crown
+        sr.setColor(0.35f, 0.85f, 1f, 1f);
+        sr.triangle(cx - tw / 2f, cy + th, cx + tw / 2f, cy + th, cx + mw / 2f, cy);
+        sr.triangle(cx - tw / 2f, cy + th, cx + mw / 2f, cy, cx - mw / 2f, cy);
+
+        // Top center facet highlight
+        sr.setColor(0.75f, 0.95f, 1f, 1f);
+        sr.triangle(cx - tw * 0.35f, cy + th, cx + tw * 0.35f, cy + th, cx, cy);
+
+        // Bottom pavilion
+        sr.setColor(0.12f, 0.55f, 0.85f, 1f);
+        sr.triangle(cx - mw / 2f, cy, cx + mw / 2f, cy, cx, cy - ph);
+
+        // Center bottom facet
+        sr.setColor(0.25f, 0.72f, 0.98f, 1f);
+        sr.triangle(cx - mw * 0.28f, cy, cx + mw * 0.28f, cy, cx, cy - ph);
+
+        // Specular glint
+        sr.setColor(1f, 1f, 1f, 0.9f);
+        sr.circle(cx - tw * 0.20f, cy + th * 0.5f, r * 0.14f);
+    }
+
+    public static void drawNormalTicketIcon(ShapeRenderer sr, float cx, float cy, float w, float h) {
+        sr.setColor(0.92f, 0.68f, 0.18f, 1f);
+        sr.rect(cx - w / 2f, cy - h / 2f, w, h);
+        sr.setColor(1f, 0.82f, 0.32f, 1f);
+        sr.rect(cx - w / 2f + 2f, cy - h / 2f + 2f, w - 4f, h - 4f);
+
+        sr.setColor(0.08f, 0.12f, 0.18f, 1f);
+        sr.circle(cx - w / 2f, cy, h * 0.28f);
+        sr.circle(cx + w / 2f, cy, h * 0.28f);
+
+        sr.setColor(0.85f, 0.55f, 0.12f, 0.8f);
+        sr.rectLine(cx - w * 0.22f, cy - h * 0.32f, cx - w * 0.22f, cy + h * 0.32f, 1.2f);
+
+        sr.setColor(1f, 0.95f, 0.5f, 1f);
+        sr.circle(cx + w * 0.12f, cy, h * 0.24f);
+        sr.setColor(0.90f, 0.60f, 0.12f, 1f);
+        sr.circle(cx + w * 0.12f, cy, h * 0.12f);
+    }
+
+    public static void drawPremiumTicketIcon(ShapeRenderer sr, float cx, float cy, float w, float h) {
+        sr.setColor(0.75f, 0.15f, 0.25f, 1f);
+        sr.rect(cx - w / 2f, cy - h / 2f, w, h);
+        sr.setColor(0.90f, 0.22f, 0.35f, 1f);
+        sr.rect(cx - w / 2f + 2f, cy - h / 2f + 2f, w - 4f, h - 4f);
+
+        sr.setColor(1f, 0.85f, 0.3f, 1f);
+        sr.rectLine(cx - w / 2f + 3f, cy + h / 2f - 2f, cx + w / 2f - 3f, cy + h / 2f - 2f, 1.5f);
+        sr.rectLine(cx - w / 2f + 3f, cy - h / 2f + 2f, cx + w / 2f - 3f, cy - h / 2f + 2f, 1.5f);
+
+        sr.setColor(0.08f, 0.04f, 0.08f, 1f);
+        sr.circle(cx - w / 2f, cy, h * 0.28f);
+        sr.circle(cx + w / 2f, cy, h * 0.28f);
+
+        sr.setColor(1f, 0.85f, 0.3f, 0.8f);
+        sr.rectLine(cx - w * 0.22f, cy - h * 0.32f, cx - w * 0.22f, cy + h * 0.32f, 1.2f);
+
+        sr.setColor(1f, 0.90f, 0.35f, 1f);
+        sr.circle(cx + w * 0.12f, cy, h * 0.25f);
+        sr.setColor(1f, 0.25f, 0.35f, 1f);
+        sr.circle(cx + w * 0.12f, cy, h * 0.13f);
+    }
+
     private static void drawEmptySlot(ShapeRenderer sr, EquipmentType type, float cx, float cy, float r) {
         sr.setColor(0.25f, 0.35f, 0.45f, 0.35f);
         if (type == EquipmentType.ROD) {
@@ -540,52 +620,152 @@ public class EquipmentIconRenderer {
     // =========================================================================
     // 10. VỆ QUỐC VANG DANH SET
     // =========================================================================
-    private static void drawVeQuocRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Heroic bamboo battle-spear rod with fluttering red banner
-        sr.setColor(0.65f, 0.55f, 0.22f, 1f);
-        sr.rectLine(cx - r * 0.7f, cy - r * 0.7f, cx + r * 0.65f, cy + r * 0.65f, 4.5f);
-        // Bronze spear tip
-        sr.setColor(0.85f, 0.55f, 0.15f, 1f);
-        sr.triangle(cx + r * 0.55f, cy + r * 0.55f, cx + r * 0.95f, cy + r * 0.95f, cx + r * 0.65f, cy + r * 0.95f);
-        sr.triangle(cx + r * 0.55f, cy + r * 0.55f, cx + r * 0.95f, cy + r * 0.95f, cx + r * 0.95f, cy + r * 0.65f);
-        // Fluttering crimson banner
-        sr.setColor(0.90f, 0.18f, 0.20f, 1f);
-        sr.triangle(cx + r * 0.5f, cy + r * 0.5f, cx + r * 0.85f, cy + r * 0.25f, cx + r * 0.5f, cy + r * 0.25f);
-        // Gold star on banner
-        sr.setColor(1f, 0.88f, 0.25f, 1f);
-        sr.circle(cx + r * 0.62f, cy + r * 0.33f, 2.5f);
+    // =========================================================================
+    // 10. VỆ QUỐC VANG DANH SET
+    // =========================================================================
+    public static void drawVeQuocRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Glowing battle aura behind spear-rod
+        sr.setColor(1f, 0.85f, 0.25f, 0.20f);
+        sr.circle(cx, cy, r * 0.95f);
+
+        // 2. Heavy lacquered red-and-gold battle bamboo rod
+        float x1 = cx - r * 0.75f, y1 = cy - r * 0.75f;
+        float x2 = cx + r * 0.55f, y2 = cy + r * 0.55f;
+        sr.setColor(0.72f, 0.14f, 0.16f, 1f); // Imperial crimson lacquer
+        sr.rectLine(x1, y1, x2, y2, Math.max(3.5f, r * 0.18f));
+
+        // 3. Gold-leaf bamboo node rings
+        sr.setColor(1f, 0.85f, 0.25f, 1f);
+        for (float f = 0.2f; f <= 0.8f; f += 0.25f) {
+            float nx = x1 + (x2 - x1) * f;
+            float ny = y1 + (y2 - y1) * f;
+            sr.circle(nx, ny, Math.max(2.5f, r * 0.12f));
+        }
+
+        // 4. Dong Son Bronze Spear Tip atop rod
+        float tipX = cx + r * 0.85f, tipY = cy + r * 0.85f;
+        sr.setColor(0.92f, 0.65f, 0.18f, 1f); // Antique Bronze
+        sr.triangle(x2, y2, tipX, tipY, cx + r * 0.45f, cy + r * 0.75f);
+        sr.triangle(x2, y2, tipX, tipY, cx + r * 0.75f, cy + r * 0.45f);
+        // Steel edge highlight
+        sr.setColor(1f, 0.95f, 0.75f, 1f);
+        sr.rectLine(x2, y2, tipX, tipY, 1.8f);
+
+        // 5. Fluttering Crimson Battle Pennant (Cờ Lệnh Ngũ Sắc)
+        sr.setColor(0.90f, 0.15f, 0.18f, 1f);
+        sr.triangle(cx + r * 0.4f, cy + r * 0.4f, cx + r * 0.85f, cy + r * 0.05f, cx + r * 0.35f, cy + r * 0.12f);
+        // Gold flame border on pennant
+        sr.setColor(1f, 0.85f, 0.25f, 1f);
+        sr.rectLine(cx + r * 0.4f, cy + r * 0.4f, cx + r * 0.85f, cy + r * 0.05f, 1.6f);
+        sr.rectLine(cx + r * 0.85f, cy + r * 0.05f, cx + r * 0.35f, cy + r * 0.12f, 1.6f);
+
+        // 6. Brilliant Gold Star on pennant
+        float starX = cx + r * 0.52f, starY = cy + r * 0.22f;
+        sr.setColor(1f, 0.90f, 0.25f, 1f);
+        sr.circle(starX, starY, Math.max(2.5f, r * 0.12f));
+        sr.rect(starX - 2f, starY - 2f, 2f, 2f, 4f, 4f, 1f, 1f, 45f);
+
+        // 7. Cyan spirit fishing line connecting rod guides
+        sr.setColor(0.35f, 0.95f, 1f, 0.85f);
+        sr.rectLine(x1 + r * 0.15f, y1 + r * 0.15f, tipX, tipY, 1.2f);
     }
 
-    private static void drawVeQuocLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Braided tricolor red-and-gold defense cord on bronze spool
-        sr.setColor(0.75f, 0.52f, 0.22f, 1f); // Bronze
+    public static void drawVeQuocLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Radiant bronze drum aura
+        sr.setColor(0.95f, 0.65f, 0.2f, 0.18f);
+        sr.circle(cx, cy, r * 0.95f);
+
+        // 2. Heavy Antique Bronze Spool outer rim
+        sr.setColor(0.72f, 0.48f, 0.18f, 1f);
+        sr.circle(cx, cy, r * 0.82f);
+        sr.setColor(0.92f, 0.72f, 0.25f, 1f);
         sr.circle(cx, cy, r * 0.75f);
-        sr.setColor(0.85f, 0.18f, 0.20f, 1f); // Red cord
-        sr.circle(cx, cy, r * 0.55f);
-        sr.setColor(1f, 0.85f, 0.25f, 1f); // Gold cord core
-        sr.circle(cx, cy, r * 0.35f);
-        // Center bronze hub
-        sr.setColor(0.45f, 0.28f, 0.12f, 1f);
-        sr.circle(cx, cy, r * 0.18f);
+        sr.setColor(0.35f, 0.22f, 0.08f, 1f);
+        sr.circle(cx, cy, r * 0.68f);
+
+        // 3. Dong Son 8-Pointed Sunburst Spool Spokes
+        sr.setColor(1f, 0.85f, 0.35f, 0.9f);
+        for (int i = 0; i < 8; i++) {
+            float rad = (i * 45f) * com.badlogic.gdx.math.MathUtils.degreesToRadians;
+            float sx = cx + com.badlogic.gdx.math.MathUtils.cos(rad) * r * 0.68f;
+            float sy = cy + com.badlogic.gdx.math.MathUtils.sin(rad) * r * 0.68f;
+            sr.rectLine(cx, cy, sx, sy, 2f);
+        }
+
+        // 4. Braided Crimson & Golden Silk Defense Cord
+        sr.setColor(0.85f, 0.18f, 0.22f, 1f); // Crimson braided silk
+        sr.circle(cx, cy, r * 0.52f);
+        sr.setColor(1f, 0.88f, 0.30f, 1f); // Gold thread accents
+        sr.circle(cx, cy, r * 0.38f);
+        sr.setColor(0.75f, 0.15f, 0.18f, 1f);
+        sr.circle(cx, cy, r * 0.26f);
+
+        // 5. Central Bronze Spindle & Star Rivet
+        sr.setColor(0.25f, 0.15f, 0.08f, 1f);
+        sr.circle(cx, cy, r * 0.16f);
+        sr.setColor(1f, 0.90f, 0.35f, 1f);
+        sr.circle(cx, cy, r * 0.09f);
+
+        // 6. Bronze crank handle
+        float hx = cx + r * 0.55f, hy = cy + r * 0.45f;
+        sr.setColor(0.85f, 0.60f, 0.20f, 1f);
+        sr.rectLine(cx, cy, hx, hy, 2.5f);
+        sr.setColor(0.6f, 0.15f, 0.15f, 1f);
+        sr.circle(hx, hy, r * 0.12f);
+        sr.setColor(1f, 0.85f, 0.3f, 1f);
+        sr.circle(hx, hy, r * 0.06f);
     }
 
-    private static void drawVeQuocHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Heroic forged steel hook crowned with brilliant golden 5-pointed star
-        sr.setColor(0.85f, 0.55f, 0.20f, 1f);
-        sr.rectLine(cx - r * 0.2f, cy + r * 0.55f, cx - r * 0.2f, cy - r * 0.35f, 4f);
-        sr.rectLine(cx - r * 0.2f, cy - r * 0.35f, cx + r * 0.4f, cy - r * 0.35f, 4f);
-        sr.rectLine(cx + r * 0.4f, cy - r * 0.35f, cx + r * 0.4f, cy + r * 0.25f, 4f);
-        // Golden 5-pointed Star at top eyelet
-        float sx = cx - r * 0.2f, sy = cy + r * 0.58f;
-        sr.setColor(1f, 0.88f, 0.20f, 1f);
-        sr.circle(sx, sy, r * 0.22f);
-        sr.rect(sx - 3f, sy - 3f, 3f, 3f, 6f, 6f, 1f, 1f, 45f);
+    public static void drawVeQuocHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Dragon claw aura
+        sr.setColor(1f, 0.3f, 0.3f, 0.18f);
+        sr.circle(cx, cy, r * 0.95f);
+
+        // 2. Thick sacred bronze spine shank
+        float shankX = cx - r * 0.25f;
+        float topY = cy + r * 0.60f;
+        float bendY = cy - r * 0.45f;
+        float barbX = cx + r * 0.48f;
+        float barbY = cy + r * 0.25f;
+
+        // Shank & Bend
+        sr.setColor(0.78f, 0.52f, 0.18f, 1f); // Antique Bronze
+        sr.rectLine(shankX, topY, shankX, bendY, Math.max(3.8f, r * 0.18f));
+        sr.rectLine(shankX, bendY, barbX, bendY, Math.max(3.8f, r * 0.18f));
+        sr.rectLine(barbX, bendY, barbX, barbY, Math.max(3.5f, r * 0.16f));
+
+        // 3. Razor-sharp Dragon Claw Barb Tip
+        sr.setColor(0.95f, 0.75f, 0.25f, 1f);
+        sr.triangle(barbX - r * 0.08f, barbY - r * 0.1f, barbX + r * 0.08f, barbY - r * 0.1f, barbX - r * 0.15f, barbY + r * 0.25f);
+        // Bloodline razor edge
+        sr.setColor(1f, 0.2f, 0.25f, 1f);
+        sr.rectLine(barbX, barbY - r * 0.1f, barbX - r * 0.15f, barbY + r * 0.25f, 1.5f);
+
+        // 4. Hook spine wave notches (Dong Son Wave Motif)
+        sr.setColor(1f, 0.88f, 0.35f, 1f);
+        sr.circle(shankX, cy + r * 0.25f, r * 0.09f);
+        sr.circle(shankX, cy, r * 0.09f);
+        sr.circle(shankX, cy - r * 0.25f, r * 0.09f);
+
+        // 5. Crown Eyelet with Golden 5-Pointed Star
+        sr.setColor(0.85f, 0.60f, 0.20f, 1f);
+        sr.circle(shankX, topY, r * 0.25f);
+        sr.setColor(0.12f, 0.15f, 0.22f, 1f);
+        sr.circle(shankX, topY, r * 0.14f);
+        sr.setColor(1f, 0.90f, 0.30f, 1f);
+        sr.circle(shankX, topY + r * 0.04f, r * 0.12f);
+        sr.rect(shankX - 2.5f, topY + r * 0.04f - 2.5f, 2.5f, 2.5f, 5f, 5f, 1f, 1f, 45f);
+
+        // 6. Fluttering Red Silk Tassel from eyelet
+        sr.setColor(0.90f, 0.15f, 0.20f, 1f);
+        sr.rectLine(shankX, topY, shankX - r * 0.35f, topY - r * 0.25f, 2.5f);
+        sr.rectLine(shankX, topY, shankX - r * 0.22f, topY - r * 0.35f, 2f);
     }
 
     // =========================================================================
     // 11. THẦN KHÍ LẠC HỒNG SET
     // =========================================================================
-    private static void drawLacHongRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+    public static void drawLacHongRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
         // Dong Son bronze drum totem staff crested with majestic Chim Lac bird
         sr.setColor(1f, 0.75f, 0.2f, 0.35f);
         sr.circle(cx + r * 0.5f, cy + r * 0.5f, r * 0.45f);
@@ -606,7 +786,7 @@ public class EquipmentIconRenderer {
         sr.triangle(bx, by, bx - 8f, by - 6f, bx - 2f, by);
     }
 
-    private static void drawLacHongLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+    public static void drawLacHongLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
         // Sacred Dragon Sinew wound on imperial Dong Son bronze spool
         sr.setColor(0.85f, 0.62f, 0.22f, 1f);
         sr.circle(cx, cy, r * 0.75f);
@@ -621,7 +801,7 @@ public class EquipmentIconRenderer {
         sr.circle(cx, cy, r * 0.08f);
     }
 
-    private static void drawLacHongHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+    public static void drawLacHongHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
         // Celestial Au Co Lotus Hook cradling glowing ocean pearl
         sr.setColor(1f, 0.82f, 0.25f, 1f);
         sr.rectLine(cx - r * 0.2f, cy + r * 0.55f, cx - r * 0.2f, cy - r * 0.35f, 4.5f);

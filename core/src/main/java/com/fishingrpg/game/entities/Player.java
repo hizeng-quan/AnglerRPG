@@ -61,6 +61,7 @@ public class Player {
         inventory.addItem("Bánh Mì", 3);
         
         this.questManager = new QuestManager();
+        this.questManager.setPlayer(this);
         this.questManager.initIfEmpty();
         applySkillBonuses();
     }
@@ -252,7 +253,10 @@ public class Player {
     // Misc
     // =========================================================================
     public QuestManager getQuestManager() { return questManager; }
-    public void setQuestManager(QuestManager qm) { this.questManager = qm; }
+    public void setQuestManager(QuestManager qm) { 
+        this.questManager = qm; 
+        if (qm != null) qm.setPlayer(this);
+    }
     
     public String getCurrentMap() { return currentMap; }
     public void setCurrentMap(String mapId) { this.currentMap = mapId; }

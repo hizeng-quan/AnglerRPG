@@ -351,11 +351,7 @@ public class MapScreen implements Screen {
         // Header Title
         game.titleFont.setColor(0.95f, 0.85f, 0.45f, 1f);
         layout.setText(game.titleFont, "HẢI TRÌNH KHÁM PHÁ");
-        game.titleFont.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 22);
-
-        game.font.setColor(0.6f, 0.8f, 0.95f, 0.85f);
-        layout.setText(game.font, "Lựa chọn ngư trường để ra khơi và săn tìm các loài cá quý hiếm");
-        game.font.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 50);
+        game.titleFont.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 36f);
 
         // Back button text
         game.font.setColor(hoverBack ? Color.WHITE : new Color(0.8f, 0.9f, 1f, 0.9f));

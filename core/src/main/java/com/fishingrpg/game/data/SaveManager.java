@@ -5,6 +5,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.fishingrpg.game.entities.Player;
+import com.fishingrpg.game.entities.Quest;
 import com.fishingrpg.game.entities.equipment.Equipment;
 import com.fishingrpg.game.entities.equipment.EquipmentGenerator;
 import com.fishingrpg.game.entities.equipment.EquipmentType;
@@ -40,20 +41,16 @@ public class SaveManager {
         prefs.putInteger("totalLoginDaysThisMonth", player.getTotalLoginDaysThisMonth());
         prefs.putLong("lastLoginTimestamp", player.getLastLoginTimestamp());
         prefs.putLong("lastEventMissionResetTimestamp", player.getLastEventMissionResetTimestamp());
-        if (player.getEventManager() != null) {
-            prefs.putInteger("eventFishCaughtToday", player.getEventManager().fishCaughtToday);
-            prefs.putInteger("eventGoldSpentToday", player.getEventManager().goldSpentToday);
-            prefs.putInteger("eventGachaPulledToday", player.getEventManager().eventGachaPulledToday);
-            prefs.putBoolean("eventMission0", player.getEventManager().dailyMissionsCompleted[0]);
-            prefs.putBoolean("eventMission1", player.getEventManager().dailyMissionsCompleted[1]);
-            prefs.putBoolean("eventMission2", player.getEventManager().dailyMissionsCompleted[2]);
-            prefs.putBoolean("eventAllMissionsClaimed", player.getEventManager().allMissionsClaimedToday);
-        }
         prefs.putInteger("fishCaught",   player.getFishCaught());
         prefs.putInteger("skillPoints",  player.getSkillPoints());
 
         Json json = new Json();
         json.setOutputType(JsonWriter.OutputType.json);
+
+        if (player.getEventManager() != null) {
+            prefs.putString("eventQuests", json.toJson(player.getEventManager().eventQuests));
+            prefs.putBoolean("eventMilestoneClaimed", player.getEventManager().milestoneClaimedToday);
+        }
 
         prefs.putString("inventory",         json.toJson(player.getInventory()));
         prefs.putString("claimedCollections",json.toJson(player.getClaimedCollections()));
@@ -116,16 +113,7 @@ public class SaveManager {
         player.setTotalLoginDaysThisMonth(prefs.getInteger("totalLoginDaysThisMonth", 0));
         player.setLastLoginTimestamp(prefs.getLong("lastLoginTimestamp", 0L));
         player.setLastEventMissionResetTimestamp(prefs.getLong("lastEventMissionResetTimestamp", 0L));
-        if (player.getEventManager() != null) {
-            player.getEventManager().fishCaughtToday = prefs.getInteger("eventFishCaughtToday", 0);
-            player.getEventManager().goldSpentToday = prefs.getInteger("eventGoldSpentToday", 0);
-            player.getEventManager().eventGachaPulledToday = prefs.getInteger("eventGachaPulledToday", 0);
-            player.getEventManager().dailyMissionsCompleted[0] = prefs.getBoolean("eventMission0", false);
-            player.getEventManager().dailyMissionsCompleted[1] = prefs.getBoolean("eventMission1", false);
-            player.getEventManager().dailyMissionsCompleted[2] = prefs.getBoolean("eventMission2", false);
-            player.getEventManager().allMissionsClaimedToday = prefs.getBoolean("eventAllMissionsClaimed", false);
-            player.getEventManager().checkAndResetDailyMissions();
-        }
+
         player.setFishCaught(prefs.getInteger("fishCaught"));
         player.setCurrentMap(prefs.getString("currentMap", "ao_lang"));
         player.setSkillPoints(prefs.getInteger("skillPoints", 0));
@@ -201,7 +189,26 @@ public class SaveManager {
             player.setQuestManager(new QuestManager());
             player.getQuestManager().initIfEmpty();
         }
+        player.getQuestManager().setPlayer(player);
         player.getQuestManager().checkResets();
+
+        // --- Event Manager Quests ---
+        if (player.getEventManager() != null) {
+            try {
+                String eqJson = prefs.getString("eventQuests", null);
+                if (eqJson != null && !eqJson.isEmpty()) {
+                    ArrayList<Quest> loaded = json.fromJson(ArrayList.class, Quest.class, eqJson);
+                    if (loaded != null && !loaded.isEmpty()) {
+                        player.getEventManager().eventQuests.clear();
+                        player.getEventManager().eventQuests.addAll(loaded);
+                    }
+                }
+            } catch (Exception e) {
+                Gdx.app.error(TAG, "Error parsing eventQuests.", e);
+            }
+            player.getEventManager().milestoneClaimedToday = prefs.getBoolean("eventMilestoneClaimed", false);
+            player.getEventManager().checkAndResetDailyMissions();
+        }
 
         // --- Equipment ---
         try {

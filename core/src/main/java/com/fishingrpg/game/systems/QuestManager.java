@@ -57,17 +57,61 @@ public class QuestManager {
         }
     }
 
+    private transient com.fishingrpg.game.entities.Player player;
+
+    public void setPlayer(com.fishingrpg.game.entities.Player player) {
+        this.player = player;
+    }
+
+    public static class QuestTemplate {
+        public String id;
+        public String title;
+        public String description;
+        public int target;
+        public int rewardPoints;
+        public int rewardDiamonds;
+
+        public QuestTemplate(String id, String title, String description, int target, int rewardPoints, int rewardDiamonds) {
+            this.id = id;
+            this.title = title;
+            this.description = description;
+            this.target = target;
+            this.rewardPoints = rewardPoints;
+            this.rewardDiamonds = rewardDiamonds;
+        }
+
+        public Quest createQuest() {
+            return new Quest(id, Quest.Type.DAILY, title, description, target, rewardPoints, rewardDiamonds);
+        }
+    }
+
+    private static final List<QuestTemplate> DAILY_POOL = new ArrayList<>();
+    static {
+        DAILY_POOL.add(new QuestTemplate("d_catch", "Thợ Câu Chăm Chỉ", "Câu thành công 5 con cá", 5, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_perfect", "Tay Câu Cừ Khôi", "Đạt PERFECT khi quăng cần 3 lần", 3, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_gacha", "Thử Vận May", "Quay Gacha 1 lần", 1, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_spend", "Mua Sắm", "Tiêu 100 Vàng tại Tiệm Tạp Hóa", 100, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_rare", "Thợ Săn Đồ Hiếm", "Câu 1 con cá Rare trở lên", 1, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_skill", "Nâng Cao Tay Nghề", "Sử dụng Kỹ năng 5 lần", 5, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_catch_3", "Khởi Động Ngày Mới", "Câu thành công 3 con cá", 3, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_perfect_2", "Canh Góc Chuẩn", "Đạt PERFECT khi quăng cần 2 lần", 2, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_spend_200", "Thương Nhân Hào Phóng", "Tiêu 200 Vàng trong ngày", 200, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_skill_3", "Thuần Thục Kỹ Năng", "Sử dụng Kỹ năng 3 lần", 3, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_catch_7", "Bội Thu Ngày Mới", "Câu thành công 7 con cá", 7, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_rare_2", "Săn Cá Khủng", "Câu 2 con cá Rare trở lên", 2, 25, 0));
+    }
+
     private void resetDailyQuests() {
         dailyQuests.clear();
         dailyPoints = 0;
         dailyChestClaimed = false;
         
-        dailyQuests.add(new Quest("d_catch", Quest.Type.DAILY, "Thợ Câu Chăm Chỉ", "Câu thành công 5 con cá", 5, 25, 0));
-        dailyQuests.add(new Quest("d_perfect", Quest.Type.DAILY, "Tay Câu Cừ Khôi", "Đạt PERFECT khi quăng cần 3 lần", 3, 25, 0));
-        dailyQuests.add(new Quest("d_gacha", Quest.Type.DAILY, "Thử Vận May", "Quay Gacha 1 lần", 1, 25, 0));
-        dailyQuests.add(new Quest("d_spend", Quest.Type.DAILY, "Mua Sắm", "Tiêu 100 Vàng", 100, 25, 0));
-        dailyQuests.add(new Quest("d_rare", Quest.Type.DAILY, "Thợ Săn Đồ Hiếm", "Câu 1 con cá Rare trở lên", 1, 25, 0));
-        dailyQuests.add(new Quest("d_skill", Quest.Type.DAILY, "Nâng Cao Tay Nghề", "Sử dụng Kỹ năng 5 lần", 5, 25, 0));
+        List<QuestTemplate> pool = new ArrayList<>(DAILY_POOL);
+        java.util.Collections.shuffle(pool);
+        int pickCount = Math.min(6, pool.size());
+        for (int i = 0; i < pickCount; i++) {
+            dailyQuests.add(pool.get(i).createQuest());
+        }
     }
 
     private void resetWeeklyQuests() {
@@ -164,6 +208,9 @@ public class QuestManager {
         updateList(dailyQuests, "d_" + prefix, amount);
         updateList(weeklyQuests, "w_" + prefix, amount);
         updateList(achievements, "a_" + prefix, amount);
+        if (player != null && player.getEventManager() != null) {
+            player.getEventManager().addProgress(prefix, amount);
+        }
     }
 
     private void updateList(List<Quest> list, String matchId, int amount) {

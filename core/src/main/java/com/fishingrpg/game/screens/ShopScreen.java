@@ -426,11 +426,7 @@ public class ShopScreen implements Screen {
         // Title
         titleFont.setColor(0.95f, 0.85f, 0.45f, 1f);
         layout.setText(titleFont, "TIỆM TẠP HÓA NGƯ ÔNG");
-        titleFont.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 22f);
-
-        font.setColor(1f, 0.82f, 0.35f, 0.95f);
-        layout.setText(font, "★ GIỜ VÀNG: 2 mặt hàng ngẫu nhiên đang GIẢM GIÁ 10% - 50%! (Làm mới sau mỗi 4 lần câu)");
-        font.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 48f);
+        titleFont.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 35f);
 
         // Back button text
         font.setColor(hoverBack ? Color.WHITE : new Color(0.9f, 0.8f, 0.65f, 0.9f));
