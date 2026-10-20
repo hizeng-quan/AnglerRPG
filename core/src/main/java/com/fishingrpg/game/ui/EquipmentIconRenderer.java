@@ -105,76 +105,83 @@ public class EquipmentIconRenderer {
     }
 
     // =========================================================================
-    // CURRENCY ICONS: DIAMOND, NORMAL TICKET, PREMIUM TICKET
+    // CURRENCY ICONS: DIAMOND, NORMAL TICKET, PREMIUM TICKET (UNIVERSAL)
     // =========================================================================
     public static void drawDiamondIcon(ShapeRenderer sr, float cx, float cy, float r) {
-        float tw = r * 0.9f;
-        float mw = r * 1.35f;
-        float th = r * 0.45f;
-        float ph = r * 0.95f;
+        float hw = r * 0.72f;
+        float hh = r * 1.15f;
 
-        // Top crown
-        sr.setColor(0.35f, 0.85f, 1f, 1f);
-        sr.triangle(cx - tw / 2f, cy + th, cx + tw / 2f, cy + th, cx + mw / 2f, cy);
-        sr.triangle(cx - tw / 2f, cy + th, cx + mw / 2f, cy, cx - mw / 2f, cy);
+        // 1. Soft atmospheric cyan glow aura
+        sr.setColor(0.25f, 0.75f, 1f, 0.22f);
+        sr.circle(cx, cy, r * 1.35f);
 
-        // Top center facet highlight
+        // 2. Base Rhombic Diamond Body
+        // Left facet (Vibrant royal cyan)
+        sr.setColor(0.20f, 0.65f, 0.95f, 1f);
+        sr.triangle(cx, cy + hh, cx - hw, cy, cx, cy - hh);
+        // Right facet (Deep abyssal sapphire shadow)
+        sr.setColor(0.10f, 0.42f, 0.80f, 1f);
+        sr.triangle(cx, cy + hh, cx + hw, cy, cx, cy - hh);
+
+        // 3. Multi-angle crystal facets & light reflections
+        // Top-left reflective facet (Bright aqua-white)
         sr.setColor(0.75f, 0.95f, 1f, 1f);
-        sr.triangle(cx - tw * 0.35f, cy + th, cx + tw * 0.35f, cy + th, cx, cy);
+        sr.triangle(cx, cy + hh, cx - hw * 0.45f, cy + hh * 0.2f, cx, cy);
+        // Center core facet (Luminous crystalline cyan)
+        sr.setColor(0.45f, 0.88f, 1f, 0.95f);
+        sr.triangle(cx, cy + hh * 0.55f, cx - hw * 0.35f, cy, cx, cy - hh * 0.55f);
+        sr.triangle(cx, cy + hh * 0.55f, cx + hw * 0.35f, cy, cx, cy - hh * 0.55f);
 
-        // Bottom pavilion
-        sr.setColor(0.12f, 0.55f, 0.85f, 1f);
-        sr.triangle(cx - mw / 2f, cy, cx + mw / 2f, cy, cx, cy - ph);
-
-        // Center bottom facet
-        sr.setColor(0.25f, 0.72f, 0.98f, 1f);
-        sr.triangle(cx - mw * 0.28f, cy, cx + mw * 0.28f, cy, cx, cy - ph);
-
-        // Specular glint
-        sr.setColor(1f, 1f, 1f, 0.9f);
-        sr.circle(cx - tw * 0.20f, cy + th * 0.5f, r * 0.14f);
+        // 4. Brilliant specular glint on upper-left vertex & peak
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.circle(cx - hw * 0.25f, cy + hh * 0.35f, Math.max(1.5f, r * 0.16f));
+        sr.circle(cx, cy + hh - 1.5f, Math.max(1f, r * 0.11f));
     }
 
     public static void drawNormalTicketIcon(ShapeRenderer sr, float cx, float cy, float w, float h) {
-        sr.setColor(0.92f, 0.68f, 0.18f, 1f);
+        // 1. Warm Golden ticket base
+        sr.setColor(0.95f, 0.70f, 0.20f, 1f);
         sr.rect(cx - w / 2f, cy - h / 2f, w, h);
-        sr.setColor(1f, 0.82f, 0.32f, 1f);
-        sr.rect(cx - w / 2f + 2f, cy - h / 2f + 2f, w - 4f, h - 4f);
 
+        // 2. Inner border / decorative rim
+        sr.setColor(1f, 0.88f, 0.35f, 1f);
+        sr.rect(cx - w / 2f + 1.5f, cy - h / 2f + 1.5f, w - 3f, h - 3f);
+        sr.setColor(0.92f, 0.65f, 0.15f, 1f);
+        sr.rect(cx - w / 2f + 2.5f, cy - h / 2f + 2.5f, w - 5f, h - 5f);
+
+        // 3. Side semi-circle ticket notches
         sr.setColor(0.08f, 0.12f, 0.18f, 1f);
-        sr.circle(cx - w / 2f, cy, h * 0.28f);
-        sr.circle(cx + w / 2f, cy, h * 0.28f);
+        sr.circle(cx - w / 2f, cy, h * 0.26f);
+        sr.circle(cx + w / 2f, cy, h * 0.26f);
 
-        sr.setColor(0.85f, 0.55f, 0.12f, 0.8f);
-        sr.rectLine(cx - w * 0.22f, cy - h * 0.32f, cx - w * 0.22f, cy + h * 0.32f, 1.2f);
-
-        sr.setColor(1f, 0.95f, 0.5f, 1f);
-        sr.circle(cx + w * 0.12f, cy, h * 0.24f);
-        sr.setColor(0.90f, 0.60f, 0.12f, 1f);
-        sr.circle(cx + w * 0.12f, cy, h * 0.12f);
+        // 4. Center punch hole (dark circle like in event shop!)
+        sr.setColor(0.10f, 0.14f, 0.22f, 1f);
+        sr.circle(cx, cy, h * 0.22f);
+        sr.setColor(0.14f, 0.18f, 0.28f, 1f);
+        sr.circle(cx, cy, h * 0.12f);
     }
 
     public static void drawPremiumTicketIcon(ShapeRenderer sr, float cx, float cy, float w, float h) {
-        sr.setColor(0.75f, 0.15f, 0.25f, 1f);
+        // 1. Royal Purple / Violet ticket base (matching Event shop!)
+        sr.setColor(0.70f, 0.32f, 0.88f, 1f);
         sr.rect(cx - w / 2f, cy - h / 2f, w, h);
-        sr.setColor(0.90f, 0.22f, 0.35f, 1f);
-        sr.rect(cx - w / 2f + 2f, cy - h / 2f + 2f, w - 4f, h - 4f);
 
-        sr.setColor(1f, 0.85f, 0.3f, 1f);
-        sr.rectLine(cx - w / 2f + 3f, cy + h / 2f - 2f, cx + w / 2f - 3f, cy + h / 2f - 2f, 1.5f);
-        sr.rectLine(cx - w / 2f + 3f, cy - h / 2f + 2f, cx + w / 2f - 3f, cy - h / 2f + 2f, 1.5f);
+        // 2. Inner border / decorative rim
+        sr.setColor(0.85f, 0.45f, 1f, 1f);
+        sr.rect(cx - w / 2f + 1.5f, cy - h / 2f + 1.5f, w - 3f, h - 3f);
+        sr.setColor(0.58f, 0.22f, 0.75f, 1f);
+        sr.rect(cx - w / 2f + 2.5f, cy - h / 2f + 2.5f, w - 5f, h - 5f);
 
-        sr.setColor(0.08f, 0.04f, 0.08f, 1f);
-        sr.circle(cx - w / 2f, cy, h * 0.28f);
-        sr.circle(cx + w / 2f, cy, h * 0.28f);
+        // 3. Side semi-circle ticket notches
+        sr.setColor(0.08f, 0.12f, 0.18f, 1f);
+        sr.circle(cx - w / 2f, cy, h * 0.26f);
+        sr.circle(cx + w / 2f, cy, h * 0.26f);
 
-        sr.setColor(1f, 0.85f, 0.3f, 0.8f);
-        sr.rectLine(cx - w * 0.22f, cy - h * 0.32f, cx - w * 0.22f, cy + h * 0.32f, 1.2f);
-
-        sr.setColor(1f, 0.90f, 0.35f, 1f);
-        sr.circle(cx + w * 0.12f, cy, h * 0.25f);
-        sr.setColor(1f, 0.25f, 0.35f, 1f);
-        sr.circle(cx + w * 0.12f, cy, h * 0.13f);
+        // 4. Center punch hole (Golden circle emblem like in event shop!)
+        sr.setColor(1f, 0.85f, 0.30f, 1f);
+        sr.circle(cx, cy, h * 0.22f);
+        sr.setColor(1f, 0.95f, 0.55f, 1f);
+        sr.circle(cx, cy, h * 0.12f);
     }
 
     private static void drawEmptySlot(ShapeRenderer sr, EquipmentType type, float cx, float cy, float r) {
@@ -337,45 +344,184 @@ public class EquipmentIconRenderer {
     }
 
     // =========================================================================
-    // 4. ĐẠI DƯƠNG SET
+    // 4. ĐẠI DƯƠNG SET (OCEANUS / LEVIATHAN)
     // =========================================================================
-    private static void drawDaiDuongRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Deep sapphire trident scepter
-        sr.setColor(0.12f, 0.35f, 0.75f, 1f);
-        sr.rectLine(cx - r * 0.7f, cy - r * 0.7f, cx + r * 0.5f, cy + r * 0.5f, 4f);
-        // Wave trident prongs
-        sr.setColor(0.25f, 0.75f, 0.95f, 1f);
-        sr.triangle(cx + r * 0.4f, cy + r * 0.4f, cx + r * 0.85f, cy + r * 0.85f, cx + r * 0.6f, cy + r * 0.85f);
-        sr.triangle(cx + r * 0.4f, cy + r * 0.4f, cx + r * 0.45f, cy + r * 0.95f, cx + r * 0.65f, cy + r * 0.75f);
-        sr.triangle(cx + r * 0.4f, cy + r * 0.4f, cx + r * 0.95f, cy + r * 0.45f, cx + r * 0.75f, cy + r * 0.65f);
-        // Ocean pearl gem
-        sr.setColor(0.85f, 0.98f, 1f, 1f);
-        sr.circle(cx + r * 0.45f, cy + r * 0.45f, r * 0.16f);
+    public static void drawDaiDuongRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Abyssal Bioluminescent Vortex Aura
+        sr.setColor(0.12f, 0.60f, 0.95f, 0.20f);
+        sr.circle(cx, cy, r * 0.95f);
+        sr.setColor(0.20f, 0.85f, 1f, 0.22f);
+        sr.circle(cx + r * 0.40f, cy + r * 0.40f, r * 0.55f);
+
+        // 2. Abyssal Cobalt-Steel & Coral-Gold Scepter Shaft
+        float x1 = cx - r * 0.72f, y1 = cy - r * 0.72f;
+        float x2 = cx + r * 0.38f, y2 = cy + r * 0.38f;
+
+        // Dark deep-sea cobalt spine
+        sr.setColor(0.08f, 0.20f, 0.45f, 1f);
+        sr.rectLine(x1, y1, x2, y2, Math.max(4.2f, r * 0.18f));
+        // Luminous aquamarine core conduit
+        sr.setColor(0.35f, 0.95f, 1f, 0.95f);
+        sr.rectLine(x1, y1, x2, y2, Math.max(1.8f, r * 0.08f));
+
+        // Golden spiral sea-coral wraps and node rings along shaft
+        sr.setColor(0.95f, 0.80f, 0.25f, 1f);
+        for (float f = 0.2f; f <= 0.8f; f += 0.3f) {
+            float nx = x1 + (x2 - x1) * f;
+            float ny = y1 + (y2 - y1) * f;
+            sr.circle(nx, ny, Math.max(2.5f, r * 0.11f));
+        }
+
+        // 3. Neptune Wave Trident Crown Headpiece
+        float tx = cx + r * 0.50f, ty = cy + r * 0.50f;
+
+        // Center Wave Trident Blade (Pointing northeast)
+        sr.setColor(0.25f, 0.80f, 1f, 1f);
+        float pCX = tx + r * 0.38f, pCY = ty + r * 0.38f;
+        sr.triangle(tx, ty, pCX, pCY, tx + r * 0.22f, ty + r * 0.45f);
+        sr.triangle(tx, ty, pCX, pCY, tx + r * 0.45f, ty + r * 0.22f);
+
+        // Left Curved Wave Prong
+        float pLX = tx - r * 0.08f + r * 0.38f, pLY = ty + r * 0.25f + r * 0.38f;
+        sr.setColor(0.18f, 0.65f, 0.95f, 1f);
+        sr.triangle(tx, ty, pLX, pLY, tx + r * 0.05f, ty + r * 0.35f);
+        // Left prong barb
+        sr.setColor(0.65f, 0.95f, 1f, 1f);
+        sr.triangle(pLX, pLY, pLX - r * 0.12f, pLY + r * 0.05f, tx + r * 0.05f, ty + r * 0.35f);
+
+        // Right Curved Wave Prong
+        float pRX = tx + r * 0.25f + r * 0.38f, pRY = ty - r * 0.08f + r * 0.38f;
+        sr.setColor(0.18f, 0.65f, 0.95f, 1f);
+        sr.triangle(tx, ty, pRX, pRY, tx + r * 0.35f, ty + r * 0.05f);
+        // Right prong barb
+        sr.setColor(0.65f, 0.95f, 1f, 1f);
+        sr.triangle(pRX, pRY, pRX + r * 0.05f, pRY - r * 0.12f, tx + r * 0.35f, ty + r * 0.05f);
+
+        // Trident Center Spine Highlight
+        sr.setColor(1f, 1f, 1f, 0.9f);
+        sr.rectLine(tx, ty, pCX, pCY, 1.8f);
+
+        // Central Ocean Heart Gemstone (Royal Aquamarine Diamond)
+        sr.setColor(0.08f, 0.45f, 0.75f, 1f);
+        sr.circle(tx, ty, r * 0.22f);
+        sr.setColor(0.40f, 0.92f, 1f, 1f);
+        sr.circle(tx, ty, r * 0.15f);
+
+        // Iridescent Giant Ocean Pearl Finial at base of trident
+        sr.setColor(0.92f, 0.98f, 1f, 1f);
+        sr.circle(tx, ty, r * 0.09f);
+        sr.setColor(Color.WHITE);
+        sr.circle(tx - 1.5f, ty + 1.5f, 2f);
     }
 
-    private static void drawDaiDuongLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Glowing aqua fiber-optic glass spool
-        sr.setColor(0.10f, 0.45f, 0.65f, 1f);
-        sr.circle(cx, cy, r * 0.75f);
-        sr.setColor(0.35f, 0.95f, 0.90f, 0.9f);
-        sr.circle(cx, cy, r * 0.55f);
-        sr.setColor(0.08f, 0.20f, 0.35f, 1f);
-        sr.circle(cx, cy, r * 0.3f);
-        // Glowing cyan center gem
-        sr.setColor(0.6f, 1f, 0.95f, 1f);
-        sr.circle(cx, cy, r * 0.15f);
+    public static void drawDaiDuongLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Oceanic Abyssal Swirl Aura
+        sr.setColor(0.10f, 0.45f, 0.85f, 0.25f);
+        sr.circle(cx, cy, r * 0.95f);
+        sr.setColor(0.20f, 0.85f, 1f, 0.20f);
+        sr.circle(cx, cy, r * 0.80f);
+
+        // 2. Heavy Nautilus Shell & Deep-Sea Bronze Outer Bezel
+        sr.setColor(0.85f, 0.68f, 0.25f, 1f);
+        sr.circle(cx, cy, r * 0.76f);
+        // Wave-carved teeth notches around circumference (8 wave notches)
+        for (int w = 0; w < 8; w++) {
+            float wAng = w * 45f;
+            float wx = cx + com.badlogic.gdx.math.MathUtils.cosDeg(wAng) * (r * 0.76f + 2f);
+            float wy = cy + com.badlogic.gdx.math.MathUtils.sinDeg(wAng) * (r * 0.76f + 2f);
+            sr.circle(wx, wy, Math.max(2f, r * 0.08f));
+        }
+
+        // Inner cobalt rim
+        sr.setColor(0.08f, 0.18f, 0.35f, 1f);
+        sr.circle(cx, cy, r * 0.66f);
+
+        // 3. Spun Aquamarine Fiber-Optic Glass Filament Thread
+        sr.setColor(0.25f, 0.85f, 1f, 0.95f);
+        sr.circle(cx, cy, r * 0.54f);
+        sr.setColor(0.10f, 0.35f, 0.65f, 1f);
+        sr.circle(cx, cy, r * 0.44f);
+        sr.setColor(0.65f, 0.98f, 1f, 0.95f);
+        sr.circle(cx, cy, r * 0.34f);
+
+        // Optical pulse nodes on thread
+        sr.setColor(Color.WHITE);
+        sr.circle(cx - r * 0.38f, cy, 2.5f);
+        sr.circle(cx + r * 0.38f, cy, 2.5f);
+        sr.circle(cx, cy - r * 0.38f, 2.5f);
+        sr.circle(cx, cy + r * 0.38f, 2.5f);
+
+        // 4. Abyssal Core with Golden Compass Star & Ocean Pearl
+        sr.setColor(0.05f, 0.12f, 0.25f, 1f);
+        sr.circle(cx, cy, r * 0.22f);
+        // Golden compass star cross
+        sr.setColor(1f, 0.88f, 0.35f, 1f);
+        sr.rectLine(cx - r * 0.18f, cy, cx + r * 0.18f, cy, 1.8f);
+        sr.rectLine(cx, cy - r * 0.18f, cx, cy + r * 0.18f, 1.8f);
+
+        // Central Iridescent Pearl
+        sr.setColor(0.90f, 0.98f, 1f, 1f);
+        sr.circle(cx, cy, r * 0.10f);
+        sr.setColor(Color.WHITE);
+        sr.circle(cx - 1f, cy + 1f, 1.5f);
     }
 
-    private static void drawDaiDuongHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Leviathan tooth hook bound in kelp
-        sr.setColor(0.20f, 0.85f, 0.80f, 1f);
-        sr.rectLine(cx - r * 0.2f, cy + r * 0.6f, cx - r * 0.2f, cy - r * 0.3f, 4f);
-        sr.rectLine(cx - r * 0.2f, cy - r * 0.3f, cx + r * 0.4f, cy - r * 0.3f, 4f);
-        // Jagged tooth tip
-        sr.triangle(cx + r * 0.35f, cy - r * 0.3f, cx + r * 0.55f, cy + r * 0.35f, cx + r * 0.25f, cy + r * 0.1f);
-        // Sea kelp green band
-        sr.setColor(0.15f, 0.55f, 0.25f, 1f);
-        sr.rect(cx - r * 0.28f, cy + r * 0.1f, r * 0.2f, r * 0.15f);
+    public static void drawDaiDuongHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Deep-Sea Leviathan Jaw Aura
+        sr.setColor(0.12f, 0.65f, 0.90f, 0.20f);
+        sr.circle(cx, cy, r * 0.95f);
+
+        // 2. Heavy Ancient Leviathan Bone Fang Hook Body
+        float shankX = cx - r * 0.25f;
+        float topY = cy + r * 0.60f;
+        float bendY = cy - r * 0.45f;
+        float barbX = cx + r * 0.48f;
+        float barbY = cy + r * 0.25f;
+
+        // Abyssal Cobalt Spine Reinforcement
+        sr.setColor(0.08f, 0.22f, 0.45f, 1f);
+        sr.rectLine(shankX - 2f, topY, shankX - 2f, bendY, Math.max(4.5f, r * 0.20f));
+        sr.rectLine(shankX, bendY, barbX, bendY, Math.max(4.5f, r * 0.20f));
+
+        // Ancient Leviathan Ivory Tooth Shank
+        sr.setColor(0.85f, 0.92f, 0.95f, 1f);
+        sr.rectLine(shankX, topY, shankX, bendY, Math.max(3.2f, r * 0.14f));
+        sr.rectLine(shankX, bendY, barbX, bendY, Math.max(3.2f, r * 0.14f));
+        sr.rectLine(barbX, bendY, barbX, barbY, Math.max(3.5f, r * 0.16f));
+
+        // Luminous Oceanic Wave Runes along Shank
+        sr.setColor(0.35f, 0.95f, 1f, 1f);
+        sr.circle(shankX, cy + r * 0.25f, r * 0.08f);
+        sr.circle(shankX, cy, r * 0.08f);
+        sr.circle(shankX, cy - r * 0.25f, r * 0.08f);
+
+        // 3. Dual Razor-Sharp Sea Serpent Tooth Barbs
+        // Main Barb Tip
+        sr.setColor(0.30f, 0.85f, 1f, 1f);
+        sr.triangle(barbX - r * 0.08f, barbY - r * 0.1f, barbX + r * 0.08f, barbY - r * 0.1f, barbX - r * 0.15f, barbY + r * 0.25f);
+        // Razor-sharp cyan glint edge
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.rectLine(barbX, barbY - r * 0.1f, barbX - r * 0.15f, barbY + r * 0.25f, 1.5f);
+        // Secondary Inner Wave Barb
+        sr.setColor(0.20f, 0.75f, 0.95f, 1f);
+        sr.triangle(barbX - r * 0.04f, barbY - r * 0.22f, barbX + r * 0.06f, barbY - r * 0.22f, barbX - r * 0.20f, barbY - r * 0.05f);
+
+        // 4. Crown Eyelet: Golden Anchor-Knot Medallion
+        sr.setColor(0.85f, 0.70f, 0.25f, 1f);
+        sr.circle(shankX, topY, r * 0.26f);
+        sr.setColor(0.08f, 0.14f, 0.25f, 1f);
+        sr.circle(shankX, topY, r * 0.14f);
+        // Golden Anchor Ring Crown
+        sr.setColor(1f, 0.88f, 0.35f, 1f);
+        sr.circle(shankX, topY + r * 0.05f, r * 0.12f);
+
+        // Dangling Luminescent Angler-Fish Lure Pearl Charm
+        sr.setColor(0.25f, 0.85f, 1f, 0.85f);
+        sr.rectLine(shankX, topY, shankX - r * 0.30f, topY - r * 0.22f, 1.8f);
+        sr.setColor(0.40f, 0.95f, 1f, 0.35f);
+        sr.circle(shankX - r * 0.30f, topY - r * 0.22f, 7f);
+        sr.setColor(0.95f, 1f, 1f, 1f);
+        sr.circle(shankX - r * 0.30f, topY - r * 0.22f, 3.5f);
     }
 
     // =========================================================================
@@ -517,52 +663,165 @@ public class EquipmentIconRenderer {
     }
 
     // =========================================================================
-    // 8. THỜI KHÔNG SET
+    // 8. THỜI KHÔNG SET (CHRONO / SPACE-TIME)
     // =========================================================================
-    private static void drawThoiKhongRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Chrono celestial hourglass staff with clockwork gear
-        sr.setColor(0.4f, 0.2f, 0.8f, 0.3f);
-        sr.circle(cx, cy, r * 0.85f);
-        sr.setColor(0.85f, 0.75f, 0.35f, 1f);
-        sr.rectLine(cx - r * 0.7f, cy - r * 0.7f, cx + r * 0.45f, cy + r * 0.45f, 3.5f);
-        // Astrolabe ring
+    public static void drawThoiKhongRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Cosmic Temporal Rift Aura
+        sr.setColor(0.35f, 0.85f, 1f, 0.20f);
+        sr.circle(cx, cy, r * 0.95f);
+        sr.setColor(0.65f, 0.25f, 0.95f, 0.22f);
+        sr.circle(cx + r * 0.45f, cy + r * 0.45f, r * 0.55f);
+
+        // 2. Dual-twist astral titanium shaft with energy channel
+        float x1 = cx - r * 0.72f, y1 = cy - r * 0.72f;
+        float x2 = cx + r * 0.42f, y2 = cy + r * 0.42f;
+        // Outer dark titanium spine
+        sr.setColor(0.16f, 0.18f, 0.28f, 1f);
+        sr.rectLine(x1, y1, x2, y2, Math.max(4f, r * 0.18f));
+        // Luminous cyan plasma core conduit
+        sr.setColor(0.35f, 0.95f, 1f, 0.95f);
+        sr.rectLine(x1, y1, x2, y2, Math.max(1.8f, r * 0.08f));
+
+        // 3. Gold chronometer node rings along shaft
+        sr.setColor(1f, 0.85f, 0.35f, 1f);
+        for (float f = 0.2f; f <= 0.8f; f += 0.3f) {
+            float nx = x1 + (x2 - x1) * f;
+            float ny = y1 + (y2 - y1) * f;
+            sr.circle(nx, ny, Math.max(2.5f, r * 0.11f));
+        }
+
+        // 4. Astrolabe Chrono Gear Headpiece
         float ax = cx + r * 0.55f, ay = cy + r * 0.55f;
-        sr.setColor(0.35f, 0.65f, 0.95f, 1f);
-        sr.circle(ax, ay, r * 0.32f);
-        sr.setColor(0.08f, 0.10f, 0.20f, 1f);
-        sr.circle(ax, ay, r * 0.22f);
-        // Clock hands
-        sr.setColor(1f, 0.88f, 0.35f, 1f);
-        sr.rectLine(ax, ay, ax + 5f, ay + 6f, 1.8f);
-        sr.rectLine(ax, ay, ax - 4f, ay + 2f, 1.8f);
+        float ringR = r * 0.38f;
+
+        // Outer Gear Teeth Ring (Brass Gold)
+        sr.setColor(0.95f, 0.75f, 0.25f, 1f);
+        sr.circle(ax, ay, ringR);
+        // Gear teeth notches (8 teeth)
+        for (int t = 0; t < 8; t++) {
+            float tAng = t * 45f;
+            float tx = ax + MathUtils.cosDeg(tAng) * (ringR + 2f);
+            float ty = ay + MathUtils.sinDeg(tAng) * (ringR + 2f);
+            sr.circle(tx, ty, Math.max(2f, r * 0.08f));
+        }
+
+        // Deep cosmos dial face
+        sr.setColor(0.06f, 0.08f, 0.18f, 0.95f);
+        sr.circle(ax, ay, ringR * 0.75f);
+
+        // Rotating orbital ring
+        sr.setColor(0.4f, 0.95f, 1f, 0.8f);
+        sr.circle(ax, ay, ringR * 0.5f);
+        sr.setColor(0.06f, 0.08f, 0.18f, 1f);
+        sr.circle(ax, ay, ringR * 0.35f);
+
+        // Core Singularity Crystal (Amethyst / Cyan)
+        sr.setColor(0.85f, 0.35f, 1f, 1f);
+        sr.circle(ax, ay, ringR * 0.22f);
+        sr.setColor(Color.WHITE);
+        sr.circle(ax, ay, ringR * 0.10f);
+
+        // Chrono Clock Hands (Gold)
+        sr.setColor(1f, 0.9f, 0.4f, 1f);
+        sr.rectLine(ax, ay, ax + r * 0.22f, ay + r * 0.08f, 1.8f);
+        sr.rectLine(ax, ay, ax - r * 0.05f, ay + r * 0.20f, 1.8f);
+
+        // Floating Hourglass Crystal Finial atop staff
+        float fx = ax + r * 0.28f, fy = ay + r * 0.28f;
+        sr.setColor(0.35f, 0.95f, 1f, 1f);
+        sr.triangle(fx - 4f, fy + 8f, fx + 4f, fy + 8f, fx, fy);
+        sr.triangle(fx - 4f, fy - 8f, fx + 4f, fy - 8f, fx, fy);
     }
 
-    private static void drawThoiKhongLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Cosmic purple wormhole spiral spool
-        sr.setColor(0.35f, 0.15f, 0.65f, 1f);
-        sr.circle(cx, cy, r * 0.75f);
-        sr.setColor(0.75f, 0.40f, 1f, 0.9f);
-        sr.circle(cx, cy, r * 0.55f);
-        sr.setColor(0.10f, 0.05f, 0.25f, 1f);
-        sr.circle(cx, cy, r * 0.35f);
-        // Neon cyan temporal distortion core
+    public static void drawThoiKhongLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Spatio-temporal wormhole distortion aura
+        sr.setColor(0.45f, 0.18f, 0.85f, 0.25f);
+        sr.circle(cx, cy, r * 0.95f);
+        sr.setColor(0.2f, 0.85f, 1f, 0.20f);
+        sr.circle(cx, cy, r * 0.80f);
+
+        // 2. Heavy Chrono Brass Spool Outer Bezel with Gear Rim
+        sr.setColor(0.85f, 0.65f, 0.22f, 1f);
+        sr.circle(cx, cy, r * 0.76f);
+        for (int g = 0; g < 12; g++) {
+            float gAng = g * 30f;
+            float gx = cx + MathUtils.cosDeg(gAng) * (r * 0.78f);
+            float gy = cy + MathUtils.sinDeg(gAng) * (r * 0.78f);
+            sr.circle(gx, gy, 2.2f);
+        }
+
+        // Inner dark void bevel
+        sr.setColor(0.08f, 0.06f, 0.16f, 1f);
+        sr.circle(cx, cy, r * 0.66f);
+
+        // 3. Shimmering Tachyon Filament Thread (Interwoven Cyan & Violet spool winding)
+        sr.setColor(0.3f, 0.95f, 1f, 0.95f);
+        sr.circle(cx, cy, r * 0.56f);
+        sr.setColor(0.75f, 0.25f, 0.95f, 1f);
+        sr.circle(cx, cy, r * 0.44f);
+        sr.setColor(0.25f, 0.85f, 0.95f, 1f);
+        sr.circle(cx, cy, r * 0.32f);
+
+        // 4. Central Space-Time Singularity Core
+        sr.setColor(0.04f, 0.02f, 0.08f, 1f);
+        sr.circle(cx, cy, r * 0.22f);
+        // Glowing event horizon ring
+        sr.setColor(1f, 0.92f, 0.45f, 1f);
+        sr.circle(cx, cy, r * 0.12f);
+        sr.setColor(Color.WHITE);
+        sr.circle(cx, cy, r * 0.06f);
+
+        // 4 Cardinal temporal warp rays
+        sr.setColor(0.4f, 0.95f, 1f, 0.8f);
+        sr.rectLine(cx - r * 0.26f, cy, cx + r * 0.26f, cy, 1.5f);
+        sr.rectLine(cx, cy - r * 0.26f, cx, cy + r * 0.26f, 1.5f);
+    }
+
+    public static void drawThoiKhongHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Cosmic Void Singularity Aura
+        sr.setColor(0.55f, 0.25f, 0.95f, 0.22f);
+        sr.circle(cx, cy, r * 0.95f);
+
+        float shankX = cx - r * 0.22f;
+        float topY = cy + r * 0.58f;
+        float botY = cy - r * 0.38f;
+        float bendX = cx + r * 0.42f;
+
+        // 2. Void Obsidian Hook Body with Cosmic Fracture
+        sr.setColor(0.14f, 0.12f, 0.24f, 1f); // Dark matter obsidian
+        sr.rectLine(shankX, topY, shankX, botY, Math.max(4.5f, r * 0.16f));
+        sr.rectLine(shankX, botY, bendX, botY, Math.max(4.5f, r * 0.16f));
+        sr.rectLine(bendX, botY, bendX, cy + r * 0.25f, Math.max(4.2f, r * 0.15f));
+
+        // 3. Luminous Cyan Chrono Runes along shank
+        sr.setColor(0.35f, 0.95f, 1f, 0.95f);
+        sr.rectLine(shankX, topY - r * 0.15f, shankX, botY + r * 0.15f, 1.8f);
+        // Rune tick marks
+        sr.circle(shankX, cy + r * 0.25f, 2f);
+        sr.circle(shankX, cy, 2f);
+        sr.circle(shankX, cy - r * 0.25f, 2f);
+
+        // 4. Dimensional Rift Crescent Barb (Cuts through reality)
+        sr.setColor(0.85f, 0.35f, 1f, 1f); // Amethyst void blade
+        sr.triangle(bendX, cy + r * 0.25f, bendX + r * 0.32f, cy + r * 0.48f, bendX - r * 0.08f, cy + r * 0.15f);
+        // Razor starlight edge
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.rectLine(bendX, cy + r * 0.25f, bendX + r * 0.32f, cy + r * 0.48f, 1.6f);
+
+        // 5. Crown Eyelet with Chrono Orb & Hanging Pendulum
+        sr.setColor(0.95f, 0.75f, 0.25f, 1f); // Brass eyelet
+        sr.circle(shankX, topY, r * 0.24f);
+        sr.setColor(0.06f, 0.08f, 0.18f, 1f);
+        sr.circle(shankX, topY, r * 0.13f);
+        // Glowing temporal jewel in eyelet
         sr.setColor(0.4f, 0.95f, 1f, 1f);
-        sr.circle(cx, cy, r * 0.18f);
-    }
+        sr.circle(shankX, topY, r * 0.08f);
 
-    private static void drawThoiKhongHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Void singularity black hole hook with cosmic accretion ring
-        sr.setColor(0.55f, 0.35f, 0.95f, 0.4f);
-        sr.circle(cx + r * 0.15f, cy, r * 0.65f);
-        sr.setColor(0.20f, 0.15f, 0.40f, 1f);
-        sr.rectLine(cx - r * 0.2f, cy + r * 0.55f, cx - r * 0.2f, cy - r * 0.35f, 4f);
-        sr.rectLine(cx - r * 0.2f, cy - r * 0.35f, cx + r * 0.4f, cy - r * 0.35f, 4f);
-        // Singularity void tip
-        sr.setColor(0.85f, 0.45f, 1f, 1f);
-        sr.triangle(cx + r * 0.35f, cy - r * 0.35f, cx + r * 0.6f, cy + r * 0.35f, cx + r * 0.25f, cy + r * 0.1f);
-        // Glowing star spark in center
-        sr.setColor(1f, 1f, 1f, 1f);
-        sr.circle(cx + r * 0.1f, cy, 2.5f);
+        // Hanging stardust pendulum charm
+        sr.setColor(0.95f, 0.75f, 0.25f, 0.9f);
+        sr.rectLine(shankX, topY, shankX - r * 0.28f, topY - r * 0.25f, 1.8f);
+        sr.setColor(0.85f, 0.35f, 1f, 1f);
+        sr.circle(shankX - r * 0.28f, topY - r * 0.25f, 3.5f);
     }
 
     // =========================================================================

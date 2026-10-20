@@ -940,9 +940,8 @@ public class GameHUD {
         sr.rect(goldX, diaY, resW, resH);
         sr.setColor(0.75f, 0.45f, 0.95f, 0.75f);
         drawBoxBorder(goldX, diaY, resW, resH, 1.2f);
-        // Diamond Icon (Diamond shape)
-        sr.setColor(0.6f, 0.9f, 1f, 1f);
-        sr.rect(goldX + 16f - 5f, diaY + resH / 2f - 5f, 5f, 5f, 10f, 10f, 1f, 1f, 45f);
+        // Diamond Icon (Universal glowing diamond)
+        EquipmentIconRenderer.drawDiamondIcon(sr, goldX + 16f, diaY + resH / 2f, 8f);
 
         // Active Bait Buff Banner if active (Expanded window to 340px)
         if (player.isBaitBuffActive()) {

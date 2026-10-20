@@ -732,16 +732,10 @@ public class EventScreen implements Screen {
             EquipmentIconRenderer.drawVeQuocHook(sr, cx, cy, 26f, Color.GOLD);
         } else if (index == 3) {
             // Premium Ticket (Purple ticket)
-            sr.setColor(0.7f, 0.35f, 0.9f, 1f);
-            sr.rect(cx - 18f, cy - 12f, 36f, 24f);
-            sr.setColor(1f, 0.85f, 0.3f, 1f);
-            sr.circle(cx, cy, 5f);
+            EquipmentIconRenderer.drawPremiumTicketIcon(sr, cx, cy, 36f, 24f);
         } else if (index == 4) {
             // Standard Ticket (Golden ticket)
-            sr.setColor(0.95f, 0.7f, 0.2f, 1f);
-            sr.rect(cx - 18f, cy - 12f, 36f, 24f);
-            sr.setColor(0.1f, 0.15f, 0.25f, 1f);
-            sr.circle(cx, cy, 5f);
+            EquipmentIconRenderer.drawNormalTicketIcon(sr, cx, cy, 36f, 24f);
         } else if (index == 5) {
             // Gold coin pouch
             sr.setColor(0.85f, 0.65f, 0.15f, 1f);
@@ -825,14 +819,8 @@ public class EventScreen implements Screen {
         // 1. Top Milestone Banner Text
         int completedCount = eventManager.getCompletedMissionsCount();
         font.setColor(1f, 0.85f, 0.35f, 1f);
-        font.getData().setScale(0.85f);
-        font.draw(game.batch, "NHIỆM VỤ SỰ KIỆN HẰNG NGÀY • LÀM MỚI LÚC 00:00", startX + 18f, bannerY + 54f);
-
-        // Milestone reward description (removed "TIẾN ĐỘ SỰ KIỆN: ")
-        font.setColor(0.88f, 0.92f, 1f, 0.95f);
-        font.getData().setScale(0.74f);
-        String progStr = "Hoàn thành 4/6 nhiệm vụ nhận: +1 Điểm SK, +500 Vàng, +20 KC";
-        font.draw(game.batch, progStr, startX + 18f, bannerY + 28f);
+        font.getData().setScale(0.88f);
+        font.draw(game.batch, "NHIỆM VỤ SỰ KIỆN HẰNG NGÀY • LÀM MỚI LÚC 00:00", startX + 18f, bannerY + 44f);
 
         // Milestone Button Text
         float mBtnW = 180f;

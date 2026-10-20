@@ -20,6 +20,7 @@ import com.fishingrpg.game.FishingRPG;
 import com.fishingrpg.game.entities.ItemData;
 import com.fishingrpg.game.entities.Player;
 import com.fishingrpg.game.systems.AudioManager;
+import com.fishingrpg.game.ui.EquipmentIconRenderer;
 import com.fishingrpg.game.ui.LootVisualRenderer;
 import com.fishingrpg.game.ui.NotificationUI;
 
@@ -254,11 +255,7 @@ public class ShopScreen implements Screen {
         // Diamond icon
         float dcx = diaDockX + 20f;
         float dcy = diaDockY + diaDockH / 2f;
-        sr.setColor(0.3f, 0.85f, 1f, 1f);
-        sr.triangle(dcx, dcy + 10f, dcx - 9f, dcy, dcx + 9f, dcy);
-        sr.triangle(dcx, dcy - 10f, dcx - 9f, dcy, dcx + 9f, dcy);
-        sr.setColor(1f, 1f, 1f, 0.95f);
-        sr.triangle(dcx, dcy + 7f, dcx - 4f, dcy, dcx + 4f, dcy);
+        EquipmentIconRenderer.drawDiamondIcon(sr, dcx, dcy, 9f);
 
         // Category Filter Tabs
         float tabW = 260f;

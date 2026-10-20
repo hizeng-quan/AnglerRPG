@@ -84,6 +84,14 @@ public class GachaScreen implements Screen {
     private float mouseX = 0f;
     private float mouseY = 0f;
 
+    // Centered dock and button element coordinates
+    private float dockDiaIconX, dockDiaTxtX;
+    private float dockNormIconX, dockNormTxtX;
+    private float dockPremIconX, dockPremTxtX;
+    private float btn1IconX, btn1TxtX;
+    private float btn2IconX, btn2TxtX;
+    private float btn3IconX, btn3TxtX;
+
     public static class StandardSetTheme {
         public String setName;
         public String rodName;
@@ -207,6 +215,64 @@ public class GachaScreen implements Screen {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
+        // Pre-calculate centered icon & text coordinates for top dock
+        float resW = 345f;
+        float resH = 46f;
+        float resX = W - resW - 25f;
+        float secW = resW / 3f;
+
+        font.getData().setScale(0.88f);
+        // Section 0: Diamonds
+        String diaStr = String.valueOf(player.getDiamonds());
+        layout.setText(font, diaStr);
+        float diaGroupW = 16f + 7f + layout.width;
+        float diaStartX = resX + (secW - diaGroupW) / 2f;
+        dockDiaIconX = diaStartX + 8f;
+        dockDiaTxtX = diaStartX + 16f + 7f;
+
+        // Section 1: Normal Tickets
+        String normStr = String.valueOf(player.getGachaTickets());
+        layout.setText(font, normStr);
+        float normGroupW = 24f + 7f + layout.width;
+        float normStartX = resX + secW + (secW - normGroupW) / 2f;
+        dockNormIconX = normStartX + 12f;
+        dockNormTxtX = normStartX + 24f + 7f;
+
+        // Section 2: Premium Tickets
+        String premStr = String.valueOf(player.getPremiumTickets());
+        layout.setText(font, premStr);
+        float premGroupW = 24f + 7f + layout.width;
+        float premStartX = resX + secW * 2f + (secW - premGroupW) / 2f;
+        dockPremIconX = premStartX + 12f;
+        dockPremTxtX = premStartX + 24f + 7f;
+
+        // Pre-calculate centered icon & text coordinates for bottom action buttons
+        // Button 1: Buy Ticket
+        String costTxt = isEventBanner ? "20" : "10";
+        font.getData().setScale(1f);
+        layout.setText(font, costTxt);
+        float b1GroupW = 16f + 8f + layout.width;
+        float b1StartX = 220f + (240f - b1GroupW) / 2f;
+        btn1IconX = b1StartX + 8f;
+        btn1TxtX = b1StartX + 16f + 8f;
+
+        // Button 2: Pull 1x
+        font.getData().setScale(0.85f);
+        layout.setText(font, "1");
+        float b2GroupW = 22f + 8f + layout.width;
+        float b2StartX = 490f + (240f - b2GroupW) / 2f;
+        btn2IconX = b2StartX + 11f;
+        btn2TxtX = b2StartX + 22f + 8f;
+
+        // Button 3: Pull 10x
+        font.getData().setScale(0.82f);
+        layout.setText(font, "10  •  Chắc chắn 4★+");
+        float b3GroupW = 22f + 8f + layout.width;
+        float b3StartX = 760f + (280f - b3GroupW) / 2f;
+        btn3IconX = b3StartX + 11f;
+        btn3TxtX = b3StartX + 22f + 8f;
+        font.getData().setScale(1f);
+
         drawShapes();
         drawBatch();
 
@@ -302,16 +368,22 @@ public class GachaScreen implements Screen {
         float resH = 46f;
         float resX = W - resW - 25f;
         float resY = H - 64f;
+        float secW = resW / 3f;
         sr.setColor(0.08f, 0.12f, 0.18f, 0.95f);
         drawRoundedRect(sr, resX, resY, resW, resH, 8);
         sr.setColor(0.25f, 0.45f, 0.65f, 0.8f);
         drawRectOutline(sr, resX, resY, resW, resH, 1.5f);
 
-        // Render Currency Icons inside Dock
+        // Section Separator dividers
+        sr.setColor(0.20f, 0.32f, 0.48f, 0.65f);
+        sr.rectLine(resX + secW, resY + 8f, resX + secW, resY + resH - 8f, 1f);
+        sr.rectLine(resX + secW * 2f, resY + 8f, resX + secW * 2f, resY + resH - 8f, 1f);
+
+        // Render Currency Icons inside Dock (Precisely Centered)
         float iconY = resY + resH / 2f;
-        EquipmentIconRenderer.drawDiamondIcon(sr, resX + 26f, iconY, 12f);
-        EquipmentIconRenderer.drawNormalTicketIcon(sr, resX + 138f, iconY, 26f, 17f);
-        EquipmentIconRenderer.drawPremiumTicketIcon(sr, resX + 252f, iconY, 26f, 17f);
+        EquipmentIconRenderer.drawDiamondIcon(sr, dockDiaIconX, iconY, 9f);
+        EquipmentIconRenderer.drawNormalTicketIcon(sr, dockNormIconX, iconY, 24f, 15f);
+        EquipmentIconRenderer.drawPremiumTicketIcon(sr, dockPremIconX, iconY, 24f, 15f);
 
         // 3. Banner Selector Tabs (Centered)
         float tabW = 260f;
@@ -478,21 +550,68 @@ public class GachaScreen implements Screen {
         // 5. SPINNING STATE: Roller Bar
         if (state == State.SPINNING) {
             float spinX = 140f;
-            float spinY = 280f;
+            float spinY = 265f;
             float spinW = 1000f;
-            float spinH = 150f;
+            float spinH = 180f;
 
-            sr.setColor(0.06f, 0.08f, 0.14f, 0.95f);
+            // Roller container background
+            sr.setColor(0.05f, 0.07f, 0.12f, 0.98f);
             drawRoundedRect(sr, spinX, spinY, spinW, spinH, 14);
-            sr.setColor(isEventBanner ? new Color(1f, 0.5f, 0.3f, 0.8f) : new Color(0.4f, 0.8f, 1f, 0.8f));
+            sr.setColor(isEventBanner ? new Color(1f, 0.5f, 0.3f, 0.85f) : new Color(0.35f, 0.75f, 0.95f, 0.85f));
             drawRectOutline(sr, spinX, spinY, spinW, spinH, 2.5f);
 
-            // Center Target Crosshair
+            // Scissor clip for equipment cards
+            sr.flush();
+            Rectangle clipBounds = new Rectangle(spinX + 4f, spinY + 4f, spinW - 8f, spinH - 8f);
+            Rectangle scissors = new Rectangle();
+            ScissorStack.calculateScissors(camera, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight(), sr.getTransformMatrix(), clipBounds, scissors);
+
+            if (ScissorStack.pushScissors(scissors)) {
+                float progress = spinTimer / totalSpinTime;
+                float easedProgress = Interpolation.pow5Out.apply(progress);
+
+                float itemWidth = 135f;
+                float itemHeight = 158f;
+                float spacing = 20f;
+                float totalW = itemWidth + spacing;
+
+                int targetIndex = 65;
+                float targetOffset = -(targetIndex * totalW) + (spinW / 2f) - (itemWidth / 2f);
+                float currentOffset = spinX + targetOffset * easedProgress;
+
+                for (int i = 0; i < spinItems.size(); i++) {
+                    float ix = currentOffset + i * totalW;
+                    if (ix + itemWidth > spinX && ix < spinX + spinW) {
+                        Equipment eq = spinItems.get(i);
+                        float cardY = spinY + 11f;
+
+                        // Card background
+                        sr.setColor(0.08f, 0.11f, 0.18f, 0.96f);
+                        drawRoundedRect(sr, ix, cardY, itemWidth, itemHeight, 10);
+
+                        // Rarity aura glow behind equipment icon
+                        Color rCol = eq.rarity != null ? eq.rarity.color : Color.WHITE;
+                        sr.setColor(rCol.r, rCol.g, rCol.b, 0.22f);
+                        sr.circle(ix + itemWidth / 2f, cardY + itemHeight - 55f, 32f);
+
+                        // Card border
+                        sr.setColor(rCol.r, rCol.g, rCol.b, 0.85f);
+                        drawRectOutline(sr, ix, cardY, itemWidth, itemHeight, 1.8f);
+
+                        // Real vector equipment artwork!
+                        EquipmentIconRenderer.draw(sr, eq, eq.type, ix + itemWidth / 2f, cardY + itemHeight - 55f, 26f, rCol);
+                    }
+                }
+                sr.flush();
+                ScissorStack.popScissors();
+            }
+
+            // Center Target Crosshair Indicator (over top of cards)
             float cx = W / 2f;
-            sr.setColor(1f, 0.85f, 0.3f, 0.85f);
+            sr.setColor(1f, 0.85f, 0.3f, 0.95f);
             sr.rect(cx - 3, spinY, 6, spinH);
-            sr.triangle(cx - 14, spinY + spinH, cx + 14, spinY + spinH, cx, spinY + spinH - 18);
-            sr.triangle(cx - 14, spinY, cx + 14, spinY, cx, spinY + 18);
+            sr.triangle(cx - 15, spinY + spinH, cx + 15, spinY + spinH, cx, spinY + spinH - 20);
+            sr.triangle(cx - 15, spinY, cx + 15, spinY, cx, spinY + 20);
         }
 
         // 6. RESULT STATE: Pull Results Grid
@@ -568,8 +687,8 @@ public class GachaScreen implements Screen {
             sr.setColor(hoverBuyTicket ? new Color(0.6f, 0.85f, 1f, 1f) : new Color(0.3f, 0.6f, 0.9f, 0.8f));
             drawRectOutline(sr, b1X, btnY, b1W, btnH, 2f);
 
-            // Draw diamond icon in button 1
-            EquipmentIconRenderer.drawDiamondIcon(sr, b1X + 70f, btnY + 18f, 8f);
+            // Draw diamond icon in button 1 (Centered)
+            EquipmentIconRenderer.drawDiamondIcon(sr, btn1IconX, btnY + 20f, 8f);
 
             // Button 2: Pull 1x
             float b2X = 490f;
@@ -579,11 +698,11 @@ public class GachaScreen implements Screen {
             sr.setColor(hoverPull1 ? new Color(0.6f, 1f, 0.7f, 1f) : new Color(0.3f, 0.85f, 0.5f, 0.8f));
             drawRectOutline(sr, b2X, btnY, b2W, btnH, 2f);
 
-            // Draw ticket icon in button 2
+            // Draw ticket icon in button 2 (Centered)
             if (isEventBanner) {
-                EquipmentIconRenderer.drawPremiumTicketIcon(sr, b2X + 68f, btnY + 18f, 18f, 12f);
+                EquipmentIconRenderer.drawPremiumTicketIcon(sr, btn2IconX, btnY + 20f, 22f, 14f);
             } else {
-                EquipmentIconRenderer.drawNormalTicketIcon(sr, b2X + 68f, btnY + 18f, 18f, 12f);
+                EquipmentIconRenderer.drawNormalTicketIcon(sr, btn2IconX, btnY + 20f, 22f, 14f);
             }
 
             // Button 3: Pull 10x
@@ -594,11 +713,11 @@ public class GachaScreen implements Screen {
             sr.setColor(hoverPull10 ? new Color(1f, 0.85f, 0.4f, 1f) : new Color(0.95f, 0.65f, 0.25f, 0.8f));
             drawRectOutline(sr, b3X, btnY, b3W, btnH, 2.5f);
 
-            // Draw ticket icon in button 3
+            // Draw ticket icon in button 3 (Centered)
             if (isEventBanner) {
-                EquipmentIconRenderer.drawPremiumTicketIcon(sr, b3X + 48f, btnY + 18f, 18f, 12f);
+                EquipmentIconRenderer.drawPremiumTicketIcon(sr, btn3IconX, btnY + 20f, 22f, 14f);
             } else {
-                EquipmentIconRenderer.drawNormalTicketIcon(sr, b3X + 48f, btnY + 18f, 18f, 12f);
+                EquipmentIconRenderer.drawNormalTicketIcon(sr, btn3IconX, btnY + 20f, 22f, 14f);
             }
         }
 
@@ -619,22 +738,21 @@ public class GachaScreen implements Screen {
         font.draw(game.batch, layout, 155f + (130f - layout.width) / 2f, H - 36f);
 
         // 2. Resource Dock Text (Only quantities next to vector icons)
-        float resW = 345f;
-        float resX = W - resW - 25f;
+        float resH = 46f;
         float resY = H - 64f;
 
         font.getData().setScale(0.88f);
-        // Diamond quantity
+        // Diamond quantity (Centered)
         font.setColor(0.4f, 0.95f, 1f, 1f);
-        font.draw(game.batch, String.valueOf(player.getDiamonds()), resX + 45f, resY + 29f);
+        font.draw(game.batch, String.valueOf(player.getDiamonds()), dockDiaTxtX, resY + 29f);
 
-        // Regular Ticket quantity
+        // Regular Ticket quantity (Centered)
         font.setColor(1f, 0.88f, 0.35f, 1f);
-        font.draw(game.batch, String.valueOf(player.getGachaTickets()), resX + 158f, resY + 29f);
+        font.draw(game.batch, String.valueOf(player.getGachaTickets()), dockNormTxtX, resY + 29f);
 
-        // Premium Ticket quantity
+        // Premium Ticket quantity (Centered)
         font.setColor(1f, 0.55f, 0.65f, 1f);
-        font.draw(game.batch, String.valueOf(player.getPremiumTickets()), resX + 272f, resY + 29f);
+        font.draw(game.batch, String.valueOf(player.getPremiumTickets()), dockPremTxtX, resY + 29f);
         font.getData().setScale(1f);
 
         // 3. Centered Header Title
@@ -884,7 +1002,7 @@ public class GachaScreen implements Screen {
 
             font.setColor(0.4f, 0.95f, 1f, 1f);
             String costTxt = isEventBanner ? "20" : "10";
-            font.draw(game.batch, costTxt, b1X + 85f, btnY + 23f);
+            font.draw(game.batch, costTxt, btn1TxtX, btnY + 26f);
 
             // Button 2: Pull 1x
             float b2X = 490f;
@@ -895,7 +1013,7 @@ public class GachaScreen implements Screen {
 
             font.setColor(0.7f, 1f, 0.8f, 1f);
             font.getData().setScale(0.85f);
-            font.draw(game.batch, "1", b2X + 82f, btnY + 23f);
+            font.draw(game.batch, "1", btn2TxtX, btnY + 26f);
             font.getData().setScale(1f);
 
             // Button 3: Pull 10x
@@ -907,7 +1025,7 @@ public class GachaScreen implements Screen {
 
             font.setColor(1f, 0.85f, 0.4f, 1f);
             font.getData().setScale(0.82f);
-            font.draw(game.batch, "10  •  Chắc chắn 4★+", b3X + 62f, btnY + 23f);
+            font.draw(game.batch, "10  •  Chắc chắn 4★+", btn3TxtX, btnY + 26f);
             font.getData().setScale(1f);
         }
 
@@ -917,7 +1035,12 @@ public class GachaScreen implements Screen {
         if (state == State.SPINNING) {
             game.batch.begin();
             game.batch.flush();
-            Rectangle clipBounds = new Rectangle(140f, 280f, 1000f, 150f);
+            float spinX = 140f;
+            float spinY = 265f;
+            float spinW = 1000f;
+            float spinH = 180f;
+
+            Rectangle clipBounds = new Rectangle(spinX + 4f, spinY + 4f, spinW - 8f, spinH - 8f);
             Rectangle scissors = new Rectangle();
             ScissorStack.calculateScissors(camera, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight(), game.batch.getTransformMatrix(), clipBounds, scissors);
 
@@ -925,22 +1048,33 @@ public class GachaScreen implements Screen {
                 float progress = spinTimer / totalSpinTime;
                 float easedProgress = Interpolation.pow5Out.apply(progress);
 
-                float itemWidth = 160f;
-                float spacing = 30f;
+                float itemWidth = 135f;
+                float itemHeight = 158f;
+                float spacing = 20f;
                 float totalW = itemWidth + spacing;
 
                 int targetIndex = 65;
-                float targetOffset = -(targetIndex * totalW) + (1000f / 2f) - (itemWidth / 2f);
-                float currentOffset = 140f + targetOffset * easedProgress;
+                float targetOffset = -(targetIndex * totalW) + (spinW / 2f) - (itemWidth / 2f);
+                float currentOffset = spinX + targetOffset * easedProgress;
 
                 for (int i = 0; i < spinItems.size(); i++) {
                     float ix = currentOffset + i * totalW;
-                    if (ix > 140f - itemWidth && ix < 1140f) {
+                    if (ix + itemWidth > spinX && ix < spinX + spinW) {
                         Equipment eq = spinItems.get(i);
-                        font.setColor(eq.rarity.color);
-                        font.draw(game.batch, eq.name, ix, 385f, itemWidth, Align.center, true);
-                        font.setColor(0.8f, 0.9f, 1f, 0.8f);
-                        font.draw(game.batch, eq.rarity.name(), ix, 325f, itemWidth, Align.center, false);
+                        float cardY = spinY + 11f;
+
+                        // Equipment Name in rarity color
+                        font.setColor(eq.rarity != null ? eq.rarity.color : Color.WHITE);
+                        font.getData().setScale(0.72f);
+                        font.draw(game.batch, eq.name, ix + 4f, cardY + 58f, itemWidth - 8f, Align.center, true);
+
+                        // Equipment Type & Rarity tag
+                        font.setColor(0.8f, 0.9f, 1f, 0.85f);
+                        font.getData().setScale(0.64f);
+                        String typeLabel = (eq.type == EquipmentType.ROD ? "Cần" : eq.type == EquipmentType.LINE ? "Cước" : "Lưỡi");
+                        String rarName = (eq.rarity != null ? eq.rarity.name() : "");
+                        font.draw(game.batch, typeLabel + " • " + rarName, ix + 4f, cardY + 22f, itemWidth - 8f, Align.center, false);
+                        font.getData().setScale(1f);
                     }
                 }
 
@@ -1484,7 +1618,11 @@ public class GachaScreen implements Screen {
                 Equipment fake = new Equipment();
                 fake.type = EquipmentType.values()[MathUtils.random(0, 2)];
                 fake.rarity = Rarity.values()[MathUtils.random(0, Rarity.EPIC.ordinal())];
-                fake.name = com.fishingrpg.game.entities.equipment.EquipmentGenerator.getRandomName(fake.type);
+                StandardSetTheme theme = STANDARD_SETS[MathUtils.random(0, STANDARD_SETS.length - 1)];
+                fake.setName = theme.setName;
+                if (fake.type == EquipmentType.ROD) fake.name = theme.rodName;
+                else if (fake.type == EquipmentType.LINE) fake.name = theme.lineName;
+                else fake.name = theme.hookName;
                 fake.level = player.getLevel();
                 spinItems.add(fake);
             }
