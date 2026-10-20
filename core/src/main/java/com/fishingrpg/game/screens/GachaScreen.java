@@ -81,6 +81,9 @@ public class GachaScreen implements Screen {
     private boolean hoverPull10 = false;
     private boolean hoverSet = false;
     private boolean hoverCloseModal = false;
+    private float modalLootScrollY = 0f;
+    private boolean hoverModalScrollUp = false;
+    private boolean hoverModalScrollDown = false;
     private float mouseX = 0f;
     private float mouseY = 0f;
 
@@ -1263,8 +1266,8 @@ public class GachaScreen implements Screen {
     }
 
     private void drawRateAndLootModal() {
-        float modalW = 920f;
-        float modalH = 500f;
+        float modalW = 1080f;
+        float modalH = 580f;
         float modalX = (W - modalW) / 2f;
         float modalY = (H - modalH) / 2f;
 
@@ -1298,9 +1301,9 @@ public class GachaScreen implements Screen {
         sr.setColor(1f, 0.85f, 0.4f, 1f);
         drawRectOutline(sr, closeX, closeY, 34f, 34f, 1.2f);
 
-        // Left Column (Rates): Width 320px
+        // Left Column (Rates): Width 285px
         float col1X = modalX + 20f;
-        float col1W = 310f;
+        float col1W = 285f;
         float colH = modalH - 74f;
         float colY = modalY + 16f;
 
@@ -1309,13 +1312,89 @@ public class GachaScreen implements Screen {
         sr.setColor(0.2f, 0.3f, 0.45f, 0.6f);
         drawRectOutline(sr, col1X, colY, col1W, colH, 1.2f);
 
-        // Right Column (Loot Table Sets): Width 550px
-        float col2X = modalX + 350f;
-        float col2W = modalW - 370f;
+        // Right Column (Loot Table Sets): Width 740px
+        float col2X = modalX + 320f;
+        float col2W = modalW - 340f;
         sr.setColor(0.05f, 0.07f, 0.11f, 0.95f);
         drawRoundedRect(sr, col2X, colY, col2W, colH, 8);
         sr.setColor(0.2f, 0.3f, 0.45f, 0.6f);
         drawRectOutline(sr, col2X, colY, col2W, colH, 1.2f);
+
+        // Gather all sets to display
+        List<StandardSetTheme> displaySets = new ArrayList<>();
+        if (isEventBanner) {
+            displaySets.add(new StandardSetTheme("Thần Khí Lạc Hồng", "Trượng Lạc Hồng", "Dây Rồng Thiêng", "Móc Âu Cơ", 15,
+                new Color(1f, 0.45f, 0.35f, 1f), new Color(0.85f, 0.25f, 0.2f, 1f), new Color(1f, 0.6f, 0.4f, 0.5f), "LIMITED"));
+            displaySets.add(new StandardSetTheme("Vệ Quốc Vang Danh", "Cần Khởi Nghĩa", "Cước Vệ Quốc", "Lưỡi Sao Vàng", 5,
+                new Color(1f, 0.85f, 0.35f, 1f), new Color(0.85f, 0.4f, 0.1f, 1f), new Color(1f, 0.8f, 0.3f, 0.5f), "EVENT"));
+        }
+        for (StandardSetTheme st : STANDARD_SETS) {
+            displaySets.add(st);
+        }
+
+        float cardW = col2W - 24f;
+        float cardH = 46f;
+        float cardSpacing = 6f;
+        float totalListH = displaySets.size() * (cardH + cardSpacing);
+        float visibleListH = colH - 46f;
+        float maxScrollY = Math.max(0f, totalListH - visibleListH);
+        modalLootScrollY = MathUtils.clamp(modalLootScrollY, 0f, maxScrollY);
+
+        // Scroll buttons background if maxScrollY > 0
+        float btnUpX = col2X + col2W - 74f;
+        float btnDownX = col2X + col2W - 40f;
+        float btnY = colY + colH - 32f;
+        if (maxScrollY > 0) {
+            sr.setColor(hoverModalScrollUp ? new Color(0.25f, 0.4f, 0.6f, 1f) : new Color(0.12f, 0.18f, 0.28f, 0.9f));
+            drawRoundedRect(sr, btnUpX, btnY, 28f, 22f, 4);
+            sr.setColor(0.35f, 0.65f, 0.95f, 0.8f);
+            drawRectOutline(sr, btnUpX, btnY, 28f, 22f, 1f);
+
+            sr.setColor(hoverModalScrollDown ? new Color(0.25f, 0.4f, 0.6f, 1f) : new Color(0.12f, 0.18f, 0.28f, 0.9f));
+            drawRoundedRect(sr, btnDownX, btnY, 28f, 22f, 4);
+            sr.setColor(0.35f, 0.65f, 0.95f, 0.8f);
+            drawRectOutline(sr, btnDownX, btnY, 28f, 22f, 1f);
+        }
+
+        // Clip the cards inside right column
+        Rectangle clipBounds = new Rectangle(col2X + 4f, colY + 4f, col2W - 8f, visibleListH);
+        Rectangle scissors = new Rectangle();
+        ScissorStack.calculateScissors(camera, sr.getTransformMatrix(), clipBounds, scissors);
+        boolean hasScissors = ScissorStack.pushScissors(scissors);
+
+        // Draw card shapes and item vector slots
+        float startCardY = colY + colH - 42f - cardH + modalLootScrollY;
+        for (int i = 0; i < displaySets.size(); i++) {
+            StandardSetTheme st = displaySets.get(i);
+            float cY = startCardY - i * (cardH + cardSpacing);
+            float cX = col2X + 12f;
+
+            if (cY + cardH < colY || cY > colY + colH) continue;
+
+            // Card background
+            sr.setColor(0.08f, 0.11f, 0.17f, 0.95f);
+            drawRoundedRect(sr, cX, cY, cardW, cardH, 6);
+            sr.setColor(st.primaryColor.r, st.primaryColor.g, st.primaryColor.b, 0.45f);
+            drawRectOutline(sr, cX, cY, cardW, cardH, 1.2f);
+
+            // 3 Item Slots (Rod, Line, Hook)
+            float slotY = cY + cardH / 2f;
+            float[] slotXs = { cX + 20f, cX + 50f, cX + 80f };
+            EquipmentType[] eqTypes = { EquipmentType.ROD, EquipmentType.LINE, EquipmentType.HOOK };
+
+            for (int s = 0; s < 3; s++) {
+                float sx = slotXs[s];
+                sr.setColor(0.04f, 0.06f, 0.10f, 1f);
+                drawRoundedRect(sr, sx - 13f, slotY - 13f, 26f, 26f, 4);
+                sr.setColor(st.primaryColor.r, st.primaryColor.g, st.primaryColor.b, 0.5f);
+                drawRectOutline(sr, sx - 13f, slotY - 13f, 26f, 26f, 1f);
+
+                // Render vector icon for the item
+                EquipmentIconRenderer.drawSetPiece(sr, st.setName, eqTypes[s], sx, slotY, 10.5f, st.primaryColor);
+            }
+        }
+
+        if (hasScissors) ScissorStack.popScissors();
 
         sr.end();
 
@@ -1337,96 +1416,106 @@ public class GachaScreen implements Screen {
         // --- Left Column: Rates breakdown ---
         font.setColor(0.95f, 0.85f, 0.35f, 1f);
         font.getData().setScale(0.82f);
-        font.draw(game.batch, "XÁC SUẤT PHẨM CHẤT (RATES)", col1X + 16f, colY + colH - 18f);
+        font.draw(game.batch, "XÁC SUẤT PHẨM CHẤT (RATES)", col1X + 14f, colY + colH - 18f);
 
-        font.getData().setScale(0.76f);
+        font.getData().setScale(0.74f);
         float rLineY = colY + colH - 52f;
         if (!isEventBanner) {
             font.setColor(Rarity.COMMON.color);
-            font.draw(game.batch, "• Common (1★): 50.0%", col1X + 16f, rLineY);
+            font.draw(game.batch, "• Common (1★): 50.0%", col1X + 14f, rLineY);
             font.setColor(Rarity.UNCOMMON.color);
-            font.draw(game.batch, "• Uncommon (2★): 30.0%", col1X + 16f, rLineY - 26f);
+            font.draw(game.batch, "• Uncommon (2★): 30.0%", col1X + 14f, rLineY - 26f);
             font.setColor(Rarity.RARE.color);
-            font.draw(game.batch, "• Rare (3★): 15.0%", col1X + 16f, rLineY - 52f);
+            font.draw(game.batch, "• Rare (3★): 15.0%", col1X + 14f, rLineY - 52f);
             font.setColor(Rarity.EPIC.color);
-            font.draw(game.batch, "• Epic (4★): 4.0%", col1X + 16f, rLineY - 78f);
+            font.draw(game.batch, "• Epic (4★): 4.0%", col1X + 14f, rLineY - 78f);
             font.setColor(Rarity.LEGENDARY.color);
-            font.draw(game.batch, "• Legendary (5★): 1.0%", col1X + 16f, rLineY - 104f);
+            font.draw(game.batch, "• Legendary (5★): 1.0%", col1X + 14f, rLineY - 104f);
 
             // Pity Rules summary
             font.setColor(0.85f, 0.9f, 1f, 0.95f);
-            font.getData().setScale(0.80f);
-            font.draw(game.batch, "QUY TẮC BẢO HIỂM (PITY):", col1X + 16f, rLineY - 150f);
-            font.getData().setScale(0.72f);
+            font.getData().setScale(0.78f);
+            font.draw(game.batch, "QUY TẮC BẢO HIỂM (PITY):", col1X + 14f, rLineY - 148f);
+            font.getData().setScale(0.70f);
             font.setColor(0.75f, 0.85f, 0.95f, 0.9f);
-            font.draw(game.batch, "• Chắc chắn nhận Rare+ sau 10 lượt", col1X + 16f, rLineY - 176f);
-            font.draw(game.batch, "• Chắc chắn nhận Epic+ sau 50 lượt", col1X + 16f, rLineY - 200f);
-            font.draw(game.batch, "• Chắc chắn nhận Legendary sau 100 lượt", col1X + 16f, rLineY - 224f);
-            font.draw(game.batch, "• Quay 10 lượt chắc chắn có tối thiểu 1 món 4★+", col1X + 16f, rLineY - 248f);
-            font.draw(game.batch, "• Nhận đồ phẩm chất cao sẽ đặt lại bảo hiểm", col1X + 16f, rLineY - 272f);
+            font.draw(game.batch, "• Chắc chắn nhận Rare+ sau 10 lượt", col1X + 14f, rLineY - 174f);
+            font.draw(game.batch, "• Chắc chắn nhận Epic+ sau 50 lượt", col1X + 14f, rLineY - 198f);
+            font.draw(game.batch, "• Chắc chắn nhận Legendary sau 100 lượt", col1X + 14f, rLineY - 222f);
+            font.draw(game.batch, "• Quay 10 lượt luôn có tối thiểu 1 món 4★+", col1X + 14f, rLineY - 246f);
+            font.draw(game.batch, "• Nhận đồ phẩm chất cao sẽ đặt lại bảo hiểm", col1X + 14f, rLineY - 270f);
         } else {
             font.setColor(Rarity.COMMON.color);
-            font.draw(game.batch, "• Common (1★): 20.0%", col1X + 16f, rLineY);
+            font.draw(game.batch, "• Common (1★): 20.0%", col1X + 14f, rLineY);
             font.setColor(Rarity.UNCOMMON.color);
-            font.draw(game.batch, "• Uncommon (2★): 40.0%", col1X + 16f, rLineY - 26f);
+            font.draw(game.batch, "• Uncommon (2★): 40.0%", col1X + 14f, rLineY - 26f);
             font.setColor(Rarity.RARE.color);
-            font.draw(game.batch, "• Rare (3★): 30.0%", col1X + 16f, rLineY - 52f);
+            font.draw(game.batch, "• Rare (3★): 30.0%", col1X + 14f, rLineY - 52f);
             font.setColor(Rarity.EPIC.color);
-            font.draw(game.batch, "• Epic (4★): 8.5%", col1X + 16f, rLineY - 78f);
+            font.draw(game.batch, "• Epic (4★): 8.5%", col1X + 14f, rLineY - 78f);
             font.setColor(new Color(1f, 0.45f, 0.35f, 1f));
-            font.draw(game.batch, "• Thần Khí Lạc Hồng (6★): 1.5%", col1X + 16f, rLineY - 104f);
+            font.draw(game.batch, "• Thần Khí Lạc Hồng (6★): 1.5%", col1X + 14f, rLineY - 104f);
 
             // Limited Pity Rules
             font.setColor(0.85f, 0.9f, 1f, 0.95f);
-            font.getData().setScale(0.80f);
-            font.draw(game.batch, "QUY TẮC BẢO HIỂM GIỚI HẠN:", col1X + 16f, rLineY - 150f);
-            font.getData().setScale(0.72f);
+            font.getData().setScale(0.78f);
+            font.draw(game.batch, "QUY TẮC BẢO HIỂM GIỚI HẠN:", col1X + 14f, rLineY - 148f);
+            font.getData().setScale(0.70f);
             font.setColor(0.75f, 0.85f, 0.95f, 0.9f);
-            font.draw(game.batch, "• Chắc chắn nhận Thần Khí Lạc Hồng ở lượt 80", col1X + 16f, rLineY - 176f);
-            font.draw(game.batch, "• Quay 10 lượt luôn đảm bảo có tối thiểu 1 món 4★+", col1X + 16f, rLineY - 200f);
-            font.draw(game.batch, "• Tiến độ bảo hiểm được lưu sang các đợt sau", col1X + 16f, rLineY - 224f);
-            font.draw(game.batch, "• Sau sự kiện, trang bị giới hạn sẽ tạm đóng", col1X + 16f, rLineY - 248f);
+            font.draw(game.batch, "• Chắc chắn nhận Thần Khí ở lượt 80", col1X + 14f, rLineY - 174f);
+            font.draw(game.batch, "• Quay 10 lượt luôn có tối thiểu 1 món 4★+", col1X + 14f, rLineY - 198f);
+            font.draw(game.batch, "• Tiến độ bảo hiểm được lưu sang đợt sau", col1X + 14f, rLineY - 222f);
+            font.draw(game.batch, "• Sau sự kiện, trang bị giới hạn sẽ tạm đóng", col1X + 14f, rLineY - 246f);
         }
 
-        // --- Right Column: Loot Table (Available Sets) ---
+        // --- Right Column: Header & Scroll Buttons ---
         font.setColor(0.95f, 0.85f, 0.35f, 1f);
         font.getData().setScale(0.82f);
-        font.draw(game.batch, "DANH SÁCH BỘ TRANG BỊ CÓ THỂ QUAY (LOOT TABLE)", col2X + 16f, colY + colH - 18f);
+        font.draw(game.batch, "DANH SÁCH BỘ TRANG BỊ CÓ THỂ QUAY (LOOT TABLE)", col2X + 14f, colY + colH - 18f);
 
-        float sRowY = colY + colH - 50f;
-        float sRowH = 38f;
+        if (maxScrollY > 0) {
+            font.setColor(hoverModalScrollUp ? Color.WHITE : new Color(0.7f, 0.85f, 1f, 0.9f));
+            font.getData().setScale(0.75f);
+            font.draw(game.batch, "▲", btnUpX + 9f, btnY + 16f);
 
-        if (isEventBanner) {
-            // Limited Set highlight
+            font.setColor(hoverModalScrollDown ? Color.WHITE : new Color(0.7f, 0.85f, 1f, 0.9f));
+            font.draw(game.batch, "▼", btnDownX + 9f, btnY + 16f);
+        }
+
+        // Text cards pass with Scissor clipping
+        boolean hasBatchScissors = ScissorStack.pushScissors(scissors);
+
+        for (int i = 0; i < displaySets.size(); i++) {
+            StandardSetTheme st = displaySets.get(i);
+            float cY = startCardY - i * (cardH + cardSpacing);
+            float cX = col2X + 12f;
+
+            if (cY + cardH < colY || cY > colY + colH) continue;
+
+            float multVal = 1f + st.points * 0.15f;
+
+            // Line 1: Set Name + Points/Multiplier + Item names
+            font.setColor(st.primaryColor);
             font.getData().setScale(0.76f);
-            font.setColor(1f, 0.5f, 0.35f, 1f);
-            font.draw(game.batch, "★ BỘ THẦN KHÍ LẠC HỒNG (15 Cấp Điểm - Giới Hạn): Trượng Lạc Hồng | Dây Rồng Thiêng | Móc Âu Cơ", col2X + 16f, sRowY);
-            font.setColor(0.75f, 0.95f, 0.8f, 0.9f);
-            font.getData().setScale(0.68f);
-            font.draw(game.batch, "   Hiệu ứng: Vô hiệu hóa Kỹ Năng Boss, +50% Lực kéo Thủy Quái & Cá Khổng Lồ", col2X + 16f, sRowY - 16f);
+            font.draw(game.batch, "Bộ " + st.setName, cX + 102f, cY + cardH - 8f);
 
             font.setColor(1f, 0.85f, 0.35f, 1f);
-            font.getData().setScale(0.76f);
-            font.draw(game.batch, "★ BỘ VỆ QUỐC VANG DANH (5 Cấp Điểm): Cần Khởi Nghĩa | Cước Vệ Quốc | Lưỡi Sao Vàng", col2X + 16f, sRowY - 40f);
-            font.setColor(0.75f, 0.95f, 0.8f, 0.9f);
+            font.getData().setScale(0.70f);
+            String badge = "[+" + st.points + " Cấp Điểm • Multiplier: x" + String.format(java.util.Locale.US, "%.2f", multVal) + "]";
+            font.draw(game.batch, badge, cX + 212f, cY + cardH - 8f);
+
+            font.setColor(0.75f, 0.88f, 0.98f, 0.9f);
+            font.getData().setScale(0.66f);
+            String itemNames = st.rodName + "  |  " + st.lineName + "  |  " + st.hookName;
+            font.draw(game.batch, itemNames, cX + 448f, cY + cardH - 9f);
+
+            // Line 2: Set Bonus Effect
+            font.setColor(0.55f, 0.95f, 0.70f, 0.95f);
             font.getData().setScale(0.68f);
-            font.draw(game.batch, "   Hiệu ứng: +29% Tỉ lệ cá hiếm, Kháng đứt dây +10%", col2X + 16f, sRowY - 56f);
-
-            sRowY -= 76f;
+            String bonus = "★ " + EquipmentGenerator.getSetBonusDesc(st.setName);
+            font.draw(game.batch, bonus, cX + 102f, cY + 16f);
         }
 
-        // Standard Sets List
-        int setMax = isEventBanner ? 6 : 9;
-        font.getData().setScale(0.72f);
-        for (int i = 0; i < setMax && i < STANDARD_SETS.length; i++) {
-            StandardSetTheme st = STANDARD_SETS[i];
-            font.setColor(st.primaryColor);
-            String setHeader = "• Bộ " + st.setName + " (+" + st.points + " Cấp Điểm): " + st.rodName + " | " + st.lineName + " | " + st.hookName;
-            font.draw(game.batch, setHeader, col2X + 16f, sRowY);
-            font.setColor(0.7f, 0.8f, 0.9f, 0.75f);
-            font.draw(game.batch, "  " + EquipmentGenerator.getSetBonusDesc(st.setName), col2X + 16f, sRowY - 15f);
-            sRowY -= 36f;
-        }
+        if (hasBatchScissors) ScissorStack.popScissors();
 
         font.getData().setScale(1f);
         game.batch.end();
@@ -1464,13 +1553,23 @@ public class GachaScreen implements Screen {
         );
 
         // Modal Close Button Hover
-        float modalW = 920f;
-        float modalH = 500f;
+        float modalW = 1080f;
+        float modalH = 580f;
         float modalX = (W - modalW) / 2f;
         float modalY = (H - modalH) / 2f;
         float closeX = modalX + modalW - 46f;
         float closeY = modalY + modalH - 44f;
         hoverCloseModal = showRateLootModal && (mouseX >= closeX && mouseX <= closeX + 34f && mouseY >= closeY && mouseY <= closeY + 34f);
+
+        float col2X = modalX + 320f;
+        float col2W = modalW - 340f;
+        float colH = modalH - 74f;
+        float colY = modalY + 16f;
+        float btnUpX = col2X + col2W - 74f;
+        float btnDownX = col2X + col2W - 40f;
+        float btnY = colY + colH - 32f;
+        hoverModalScrollUp = showRateLootModal && (mouseX >= btnUpX && mouseX <= btnUpX + 28f && mouseY >= btnY && mouseY <= btnY + 22f);
+        hoverModalScrollDown = showRateLootModal && (mouseX >= btnDownX && mouseX <= btnDownX + 28f && mouseY >= btnY && mouseY <= btnY + 22f);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             if (showRateLootModal) {
@@ -1487,10 +1586,31 @@ public class GachaScreen implements Screen {
             return;
         }
 
+        if (showRateLootModal) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.UP) || Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+                modalLootScrollY = Math.max(0, modalLootScrollY - 55f);
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN) || Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+                modalLootScrollY += 55f;
+            }
+        }
+
         if (Gdx.input.justTouched()) {
             if (showRateLootModal) {
                 if (hoverCloseModal || mouseX < modalX || mouseX > modalX + modalW || mouseY < modalY || mouseY > modalY + modalH) {
                     showRateLootModal = false;
+                    AudioManager.getInstance().playSFX("sfx_button");
+                    return;
+                }
+                if (hoverModalScrollUp) {
+                    modalLootScrollY = Math.max(0, modalLootScrollY - 55f);
+                    AudioManager.getInstance().playSFX("sfx_button");
+                    return;
+                }
+                if (hoverModalScrollDown) {
+                    modalLootScrollY += 55f;
+                    AudioManager.getInstance().playSFX("sfx_button");
+                    return;
                 }
                 return;
             }
@@ -1510,6 +1630,7 @@ public class GachaScreen implements Screen {
             if (hoverHelp) {
                 AudioManager.getInstance().playSFX("sfx_button");
                 showRateLootModal = !showRateLootModal;
+                modalLootScrollY = 0f;
                 return;
             }
 

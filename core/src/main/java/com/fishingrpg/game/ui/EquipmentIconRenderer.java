@@ -293,54 +293,226 @@ public class EquipmentIconRenderer {
     // =========================================================================
     // 3. BĂNG GIÁ SET
     // =========================================================================
-    private static void drawBangGiaRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Glacial crystal ice spear staff
-        sr.setColor(0.35f, 0.75f, 0.95f, 0.4f);
-        sr.circle(cx, cy, r * 0.8f);
-        // Sharp ice crystal shaft
-        sr.setColor(0.75f, 0.92f, 1f, 1f);
-        sr.rectLine(cx - r * 0.7f, cy - r * 0.7f, cx + r * 0.7f, cy + r * 0.7f, 4f);
-        // Icicle spikes
-        sr.setColor(0.55f, 0.85f, 1f, 1f);
-        sr.triangle(cx, cy, cx - r * 0.25f, cy + r * 0.25f, cx + r * 0.1f, cy + r * 0.1f);
-        sr.triangle(cx + r * 0.3f, cy + r * 0.3f, cx + r * 0.15f, cy + r * 0.55f, cx + r * 0.4f, cy + r * 0.4f);
-        // Snowflake crystal star tip
-        sr.setColor(1f, 1f, 1f, 1f);
-        sr.circle(cx + r * 0.7f, cy + r * 0.7f, r * 0.18f);
-        sr.rect(cx + r * 0.7f - 2f, cy + r * 0.7f - 6f, 4f, 12f);
-        sr.rect(cx + r * 0.7f - 6f, cy + r * 0.7f - 2f, 12f, 4f);
-    }
+    // 3. BĂNG GIÁ SET (Glacial Permafrost Scepter, Absolute-Zero Spool, Cryo Hook)
+    // =========================================================================
+    public static void drawBangGiaRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Glacial Blizzard & Diamond Frost Aura
+        sr.setColor(0.35f, 0.85f, 1f, 0.22f);
+        sr.circle(cx, cy, r * 0.95f);
+        sr.setColor(0.65f, 0.95f, 1f, 0.18f);
+        sr.circle(cx + r * 0.35f, cy + r * 0.35f, r * 0.55f);
 
-    private static void drawBangGiaLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Frosted ice-blue crystal spool with snowflakes
-        sr.setColor(0.40f, 0.80f, 1f, 1f);
-        sr.circle(cx, cy, r * 0.75f);
-        sr.setColor(0.85f, 0.95f, 1f, 1f);
-        sr.circle(cx, cy, r * 0.55f);
-        sr.setColor(0.15f, 0.35f, 0.65f, 1f);
-        sr.circle(cx, cy, r * 0.32f);
-        // Ice crystal pips
+        // 2. Faceted Permafrost Glacier Crystal Shaft (Diagonal)
+        float startX = cx - r * 0.72f, startY = cy - r * 0.72f;
+        float endX = cx + r * 0.45f, endY = cy + r * 0.45f;
+
+        // Dark deep sapphire crystal spine
+        sr.setColor(0.12f, 0.32f, 0.60f, 1f);
+        sr.rectLine(startX, startY, endX, endY, Math.max(5.5f, r * 0.22f));
+
+        // Translucent glacial cyan crystal body
+        sr.setColor(0.65f, 0.90f, 1f, 0.95f);
+        sr.rectLine(startX + 1f, startY + 1f, endX, endY, Math.max(3.8f, r * 0.16f));
+
+        // Faceted diamond ice specular highlight
+        sr.setColor(0.92f, 0.98f, 1f, 1f);
+        sr.rectLine(startX + 2f, startY + 2f, endX - r * 0.08f, endY - r * 0.08f, 1.6f);
+
+        // 3. Platinum-Silver Frost Rune Bands with Cold Crystal Studs
+        for (int b = 0; b < 3; b++) {
+            float frac = 0.22f + b * 0.28f;
+            float bx = startX + (endX - startX) * frac;
+            float by = startY + (endY - startY) * frac;
+            sr.setColor(0.85f, 0.92f, 1f, 1f);
+            sr.rectLine(bx - 3.2f, by + 3.2f, bx + 3.2f, by - 3.2f, Math.max(3.2f, r * 0.12f));
+            sr.setColor(0.25f, 0.75f, 1f, 1f);
+            sr.circle(bx, by, 1.8f);
+        }
+
+        // 4. Lateral Jagged Icicle Spurs growing along shaft
+        sr.setColor(0.55f, 0.88f, 1f, 0.95f);
+        sr.triangle(cx - r * 0.15f, cy - r * 0.15f, cx - r * 0.35f, cy + r * 0.05f, cx - r * 0.05f, cy - r * 0.05f);
+        sr.triangle(cx + r * 0.15f, cy + r * 0.15f, cx + r * 0.02f, cy + r * 0.38f, cx + r * 0.25f, cy + r * 0.25f);
+        // Frost spur razor tips
         sr.setColor(1f, 1f, 1f, 0.95f);
-        sr.circle(cx - r * 0.42f, cy, 2.5f);
-        sr.circle(cx + r * 0.42f, cy, 2.5f);
-        sr.circle(cx, cy - r * 0.42f, 2.5f);
-        sr.circle(cx, cy + r * 0.42f, 2.5f);
+        sr.rectLine(cx - r * 0.15f, cy - r * 0.15f, cx - r * 0.35f, cy + r * 0.05f, 1.4f);
+        sr.rectLine(cx + r * 0.15f, cy + r * 0.15f, cx + r * 0.02f, cy + r * 0.38f, 1.4f);
+
+        // 5. Crown Headpiece: 6-Pointed Arctic Snowflake Star (Hoa Tuyết Cực Bắc)
+        float hx = endX + r * 0.12f, hy = endY + r * 0.12f;
+        // Outer snowflake aura
+        sr.setColor(0.50f, 0.92f, 1f, 0.35f);
+        sr.circle(hx, hy, r * 0.30f);
+
+        // 6 Symmetric crystalline rays
+        sr.setColor(0.85f, 0.96f, 1f, 1f);
+        for (int a = 0; a < 6; a++) {
+            float ang = a * 60f;
+            float cos = MathUtils.cosDeg(ang);
+            float sin = MathUtils.sinDeg(ang);
+            float rx = hx + cos * r * 0.32f;
+            float ry = hy + sin * r * 0.32f;
+            // Ray spine
+            sr.rectLine(hx, hy, rx, ry, 2f);
+            // Ray branching barbs
+            float bx1 = hx + cos * r * 0.20f;
+            float by1 = hy + sin * r * 0.20f;
+            float bCos = MathUtils.cosDeg(ang + 45f) * r * 0.08f;
+            float bSin = MathUtils.sinDeg(ang + 45f) * r * 0.08f;
+            sr.rectLine(bx1, by1, bx1 + bCos, by1 + bSin, 1.2f);
+            float bCos2 = MathUtils.cosDeg(ang - 45f) * r * 0.08f;
+            float bSin2 = MathUtils.sinDeg(ang - 45f) * r * 0.08f;
+            sr.rectLine(bx1, by1, bx1 + bCos2, by1 + bSin2, 1.2f);
+        }
+
+        // Brilliant pure-white cryogenic diamond core
+        sr.setColor(0.30f, 0.75f, 1f, 1f);
+        sr.circle(hx, hy, r * 0.12f);
+        sr.setColor(Color.WHITE);
+        sr.circle(hx, hy, r * 0.07f);
+        sr.circle(hx - 1f, hy + 1f, 1.8f);
+
+        // Dangling faceted frost prism pendant
+        sr.setColor(0.70f, 0.90f, 1f, 0.85f);
+        sr.rectLine(hx, hy - r * 0.12f, hx - r * 0.15f, hy - r * 0.38f, 1.5f);
+        sr.setColor(0.85f, 0.98f, 1f, 1f);
+        sr.triangle(hx - r * 0.15f, hy - r * 0.38f, hx - r * 0.22f, hy - r * 0.50f, hx - r * 0.08f, hy - r * 0.50f);
+        sr.triangle(hx - r * 0.22f, hy - r * 0.50f, hx - r * 0.08f, hy - r * 0.50f, hx - r * 0.15f, hy - r * 0.60f);
     }
 
-    private static void drawBangGiaHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Crystalline ice hook with snowflake eyelet
-        sr.setColor(0.65f, 0.90f, 1f, 1f);
-        sr.rectLine(cx - r * 0.2f, cy + r * 0.55f, cx - r * 0.2f, cy - r * 0.35f, 3.8f);
-        sr.rectLine(cx - r * 0.2f, cy - r * 0.35f, cx + r * 0.4f, cy - r * 0.35f, 3.8f);
-        sr.rectLine(cx + r * 0.4f, cy - r * 0.35f, cx + r * 0.4f, cy + r * 0.25f, 3.8f);
-        // Sharp frozen icicle barb
-        sr.setColor(0.9f, 0.98f, 1f, 1f);
-        sr.triangle(cx + r * 0.4f, cy + r * 0.25f, cx + r * 0.2f, cy + r * 0.1f, cx + r * 0.55f, cy + r * 0.1f);
-        // Snowflake eyelet at top
+    public static void drawBangGiaLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Sub-Zero Freezing Mist Aura
+        sr.setColor(0.35f, 0.85f, 1f, 0.22f);
+        sr.circle(cx, cy, r * 0.95f);
+        sr.setColor(0.12f, 0.40f, 0.75f, 0.35f);
+        sr.circle(cx, cy, r * 0.80f);
+
+        // 2. Heavy Carved Permafrost Glacier Wheel Rim
+        sr.setColor(0.40f, 0.78f, 0.95f, 1f);
+        sr.circle(cx, cy, r * 0.76f);
+
+        // 6 Diamond Ice Crystal Spurs around circumference
+        for (int i = 0; i < 6; i++) {
+            float ang = i * 60f;
+            float cos = MathUtils.cosDeg(ang);
+            float sin = MathUtils.sinDeg(ang);
+            float px = cx + cos * (r * 0.76f + 2f);
+            float py = cy + sin * (r * 0.76f + 2f);
+            sr.setColor(0.85f, 0.98f, 1f, 1f);
+            sr.circle(px, py, Math.max(2.2f, r * 0.09f));
+            sr.setColor(0.20f, 0.65f, 0.95f, 1f);
+            sr.circle(px, py, Math.max(1.2f, r * 0.05f));
+        }
+
+        // Inner deep sapphire ice trench
+        sr.setColor(0.08f, 0.22f, 0.45f, 1f);
+        sr.circle(cx, cy, r * 0.65f);
+
+        // 3. Absolute-Zero Superconducting Frost Filament (Cuộn cước băng lam)
+        sr.setColor(0.70f, 0.92f, 1f, 0.95f);
+        sr.circle(cx, cy, r * 0.54f);
+        sr.setColor(0.12f, 0.35f, 0.65f, 1f);
+        sr.circle(cx, cy, r * 0.44f);
+        sr.setColor(0.88f, 0.98f, 1f, 0.95f);
+        sr.circle(cx, cy, r * 0.34f);
+
+        // 4 Freezing optical pulse nodes on thread
+        sr.setColor(Color.WHITE);
+        sr.circle(cx - r * 0.38f, cy, 2.2f);
+        sr.circle(cx + r * 0.38f, cy, 2.2f);
+        sr.circle(cx, cy - r * 0.38f, 2.2f);
+        sr.circle(cx, cy + r * 0.38f, 2.2f);
+
+        // 4. Center Hub: Ornate Hexagonal True-Ice Snowflake Medallion
+        sr.setColor(0.18f, 0.50f, 0.85f, 1f);
+        sr.circle(cx, cy, r * 0.24f);
+
+        // Snowflake core cross
         sr.setColor(1f, 1f, 1f, 1f);
-        sr.circle(cx - r * 0.2f, cy + r * 0.6f, r * 0.2f);
-        sr.setColor(0.2f, 0.4f, 0.6f, 1f);
-        sr.circle(cx - r * 0.2f, cy + r * 0.6f, r * 0.08f);
+        sr.rectLine(cx - r * 0.18f, cy, cx + r * 0.18f, cy, 1.8f);
+        sr.rectLine(cx, cy - r * 0.18f, cx, cy + r * 0.18f, 1.8f);
+        sr.rectLine(cx - r * 0.12f, cy - r * 0.12f, cx + r * 0.12f, cy + r * 0.12f, 1.4f);
+        sr.rectLine(cx - r * 0.12f, cy + r * 0.12f, cx + r * 0.12f, cy - r * 0.12f, 1.4f);
+
+        // Sparkling center crystal glint
+        sr.setColor(0.95f, 1f, 1f, 1f);
+        sr.circle(cx, cy, r * 0.07f);
+        sr.circle(cx - 1f, cy + 1f, 1.5f);
+    }
+
+    public static void drawBangGiaHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Cryogenic Frostbite Reaping Aura
+        sr.setColor(0.38f, 0.88f, 1f, 0.25f);
+        sr.circle(cx, cy, r * 0.95f);
+        sr.setColor(0.65f, 0.95f, 1f, 0.18f);
+        sr.circle(cx, cy, r * 0.78f);
+
+        // 2. Heavy Sculpted Permafrost Glacier Shank
+        float shankX = cx - r * 0.22f;
+        float topY = cy + r * 0.62f;
+        float bendY = cy - r * 0.45f;
+        float barbX = cx + r * 0.48f;
+        float barbY = cy + r * 0.28f;
+
+        // Dark glacial cobalt reinforcement
+        sr.setColor(0.10f, 0.28f, 0.55f, 1f);
+        sr.rectLine(shankX, topY, shankX, bendY, Math.max(5.5f, r * 0.22f));
+        sr.rectLine(shankX, bendY, barbX, bendY, Math.max(5.5f, r * 0.22f));
+
+        // Faceted cyan ice crystal shank body
+        sr.setColor(0.65f, 0.92f, 1f, 1f);
+        sr.rectLine(shankX, topY, shankX, bendY, Math.max(3.8f, r * 0.15f));
+        sr.rectLine(shankX, bendY, barbX, bendY, Math.max(3.8f, r * 0.15f));
+        sr.rectLine(barbX, bendY, barbX, barbY, Math.max(3.8f, r * 0.15f));
+
+        // Frost rime highlight along edge
+        sr.setColor(0.92f, 0.98f, 1f, 1f);
+        sr.rectLine(shankX + 1.2f, topY, shankX + 1.2f, bendY, 1.4f);
+        sr.rectLine(shankX + 1.2f, bendY + 1.2f, barbX, bendY + 1.2f, 1.4f);
+
+        // 3. Dual Razor-Sharp Glacier Icicle Barbs
+        // Main sharp tip pointing inward/upward
+        sr.setColor(0.85f, 0.96f, 1f, 1f);
+        sr.triangle(barbX - r * 0.08f, barbY - r * 0.1f, barbX + r * 0.08f, barbY - r * 0.1f, barbX - r * 0.14f, barbY + r * 0.25f);
+        // Razor white glint on tip
+        sr.setColor(Color.WHITE);
+        sr.rectLine(barbX, barbY - r * 0.1f, barbX - r * 0.14f, barbY + r * 0.25f, 1.6f);
+
+        // Secondary jagged frost barb on inner curve
+        sr.setColor(0.50f, 0.85f, 1f, 1f);
+        sr.triangle(barbX - r * 0.04f, barbY - r * 0.24f, barbX + r * 0.06f, barbY - r * 0.24f, barbX - r * 0.20f, barbY - r * 0.06f);
+
+        // 4. Glowing Sub-Zero Freezing Runes along Shank
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.circle(shankX, cy + r * 0.25f, r * 0.07f);
+        sr.circle(shankX, cy, r * 0.07f);
+        sr.circle(shankX, cy - r * 0.25f, r * 0.07f);
+        sr.setColor(0.35f, 0.90f, 1f, 1f);
+        sr.circle(shankX, cy + r * 0.25f, r * 0.04f);
+        sr.circle(shankX, cy, r * 0.04f);
+        sr.circle(shankX, cy - r * 0.25f, r * 0.04f);
+
+        // 5. Crown Eyelet: 6-Spoke Snowflake Crystal Crown
+        sr.setColor(0.55f, 0.88f, 1f, 1f);
+        sr.circle(shankX, topY, r * 0.24f);
+        sr.setColor(0.08f, 0.18f, 0.35f, 1f);
+        sr.circle(shankX, topY, r * 0.12f);
+        // Crystal snowflake points around crown
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        for (int a = 0; a < 6; a++) {
+            float ang = a * 60f;
+            float cos = MathUtils.cosDeg(ang);
+            float sin = MathUtils.sinDeg(ang);
+            sr.circle(shankX + cos * r * 0.24f, topY + sin * r * 0.24f, 1.8f);
+        }
+
+        // Dangling cryo pearl charm
+        sr.setColor(0.65f, 0.90f, 1f, 0.85f);
+        sr.rectLine(shankX, topY, shankX - r * 0.28f, topY - r * 0.22f, 1.5f);
+        sr.setColor(0.85f, 0.98f, 1f, 1f);
+        sr.circle(shankX - r * 0.28f, topY - r * 0.22f, 4.5f);
+        sr.setColor(Color.WHITE);
+        sr.circle(shankX - r * 0.28f - 1f, topY - r * 0.22f + 1f, 1.8f);
     }
 
     // =========================================================================

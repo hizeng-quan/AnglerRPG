@@ -283,102 +283,169 @@ public class FishVisualRenderer {
     }
 
     // =========================================================================
-    // 3. CÁ CHÉP (Golden Orange Scales, Barbels/Whiskers, Wavy Red-Orange Fins)
+    // 3. CÁ CHÉP (Common Carp: King of Freshwater, Golden Armor Scales, Flowing Vermilion Fins, Barbels)
     // =========================================================================
-    private static void drawCaChep(ShapeRenderer sr, float cx, float cy, float s, float wag) {
-        float tailX = cx - 60f * s + wag * 5f * s;
-        float tailY = cy + wag * 7f * s;
+    public static void drawCaChep(ShapeRenderer sr, float cx, float cy, float s, float wag) {
+        float tailX = cx - 58f * s + wag * 4.8f * s;
+        float tailY = cy + wag * 6.5f * s;
 
-        // Flowing orange-red caudal fin
-        sr.setColor(0.90f, 0.35f, 0.15f, 0.95f);
-        sr.triangle(cx - 36f * s, cy, tailX - 26f * s, tailY + 28f * s, tailX - 8f * s, tailY + 6f * s);
-        sr.triangle(cx - 36f * s, cy, tailX - 26f * s, tailY - 28f * s, tailX - 8f * s, tailY - 6f * s);
+        // 1. Broad Flowing Forked Caudal Fin with Fiery Vermilion Rays & Amber Web
+        // Translucent golden-amber web base
+        sr.setColor(0.92f, 0.60f, 0.18f, 0.9f);
+        sr.triangle(cx - 35f * s, cy, tailX - 26f * s, tailY + 28f * s, tailX - 10f * s, tailY + 4f * s);
+        sr.triangle(cx - 35f * s, cy, tailX - 26f * s, tailY - 28f * s, tailX - 10f * s, tailY - 4f * s);
+        // Fiery scarlet-vermilion fin margins (Đuôi cá chép sắc đỏ son tài lộc)
+        sr.setColor(0.95f, 0.28f, 0.12f, 0.95f);
+        sr.triangle(tailX - 10f * s, tailY + 4f * s, tailX - 26f * s, tailY + 28f * s, tailX - 20f * s, tailY + 14f * s);
+        sr.triangle(tailX - 10f * s, tailY - 4f * s, tailX - 26f * s, tailY - 28f * s, tailX - 20f * s, tailY - 14f * s);
+        // Radiating fin rays
+        sr.setColor(0.75f, 0.20f, 0.08f, 1f);
+        sr.rectLine(cx - 35f * s, cy, tailX - 24f * s, tailY + 24f * s, 1.5f * s);
+        sr.rectLine(cx - 35f * s, cy, tailX - 24f * s, tailY - 24f * s, 1.5f * s);
 
-        // Golden dorsal fin
-        sr.setColor(0.85f, 0.50f, 0.12f, 1f);
-        sr.triangle(cx - 20f * s, cy + 16f * s, cx + 18f * s, cy + 16f * s, cx - 4f * s, cy + 32f * s);
+        // 2. Anal & Pelvic Fins (Flowing orange-vermilion)
+        sr.setColor(0.92f, 0.35f, 0.15f, 0.95f);
+        sr.triangle(cx - 16f * s, cy - 14f * s, cx - 32f * s, cy - 12f * s, cx - 26f * s, cy - 26f * s);
+        sr.triangle(cx + 8f * s, cy - 14f * s, cx - 2f * s, cy - 14f * s, cx + 2f * s, cy - 25f * s);
 
-        // Robust golden-amber body
-        sr.setColor(0.92f, 0.62f, 0.18f, 1f);
-        sr.circle(cx, cy, 27f * s, 28);
-        sr.circle(cx - 16f * s, cy, 22f * s, 24);
-        sr.circle(cx + 16f * s, cy, 22f * s, 24);
-
-        // Golden yellow belly
-        sr.setColor(0.98f, 0.82f, 0.35f, 1f);
-        sr.circle(cx + 2f * s, cy - 7f * s, 19f * s, 24);
-
-        // Crosshatch scale patterns
-        sr.setColor(0.78f, 0.42f, 0.10f, 0.75f);
-        for (int i = 0; i < 4; i++) {
-            float sx = cx - 18f * s + i * 10f * s;
-            sr.circle(sx, cy + 2f * s, 5f * s);
-            sr.circle(sx + 5f * s, cy - 4f * s, 4f * s);
+        // 3. Flowing Arched Dorsal Fin with Serrated Front Spine
+        sr.setColor(0.88f, 0.45f, 0.12f, 0.95f);
+        sr.triangle(cx - 24f * s, cy + 16f * s, cx + 18f * s, cy + 16f * s, cx - 6f * s, cy + 34f * s);
+        // Serrated dark dorsal spine
+        sr.setColor(0.65f, 0.25f, 0.08f, 1f);
+        sr.rectLine(cx - 24f * s, cy + 16f * s, cx - 6f * s, cy + 34f * s, 2.2f * s);
+        for (int d = 0; d < 6; d++) {
+            float dx = cx - 20f * s + d * 6.5f * s;
+            sr.rectLine(dx, cy + 16f * s, cx - 6f * s, cy + 34f * s, 1.1f * s);
         }
 
-        // Pectoral Fin
-        sr.setColor(0.92f, 0.40f, 0.15f, 0.95f);
-        sr.triangle(cx + 8f * s, cy - 4f * s, cx - 10f * s, cy - 20f * s, cx + 14f * s, cy - 15f * s);
+        // 4. Robust Arched Golden-Amber Body (Thân cá chép dầy, lưng gù uy dũng)
+        // Dark golden-bronze dorsal arch
+        sr.setColor(0.78f, 0.48f, 0.14f, 1f);
+        sr.circle(cx - 2f * s, cy + 5f * s, 27f * s, 28);
 
-        // Head & Snout
+        // Metallic golden-orange flank
+        sr.setColor(0.95f, 0.65f, 0.18f, 1f);
+        sr.circle(cx, cy, 26f * s, 28);
+        sr.circle(cx - 15f * s, cy, 21f * s, 24);
+        sr.circle(cx + 15f * s, cy, 22f * s, 24);
+
+        // Bright butter-gold belly
+        sr.setColor(1.0f, 0.85f, 0.35f, 1f);
+        sr.circle(cx + 2f * s, cy - 7f * s, 18f * s, 24);
+        sr.circle(cx - 10f * s, cy - 6f * s, 15f * s, 20);
+
+        // 5. Dragon Armor Diamond Scale Pattern (Lớp vảy vàng xếp lớp như vảy rồng)
+        sr.setColor(0.72f, 0.38f, 0.08f, 0.8f);
+        for (int r = -1; r <= 1; r++) {
+            for (int c = 0; c < 4; c++) {
+                float sx = cx - 16f * s + c * 9.5f * s;
+                float sy = cy + r * 8.5f * s;
+                sr.circle(sx, sy, 4.5f * s);
+                // Golden highlight glint on scale edge
+                sr.setColor(1f, 0.88f, 0.45f, 0.7f);
+                sr.circle(sx + 1.2f * s, sy + 1.2f * s, 1.8f * s);
+                sr.setColor(0.72f, 0.38f, 0.08f, 0.8f);
+            }
+        }
+
+        // 6. Translucent Pectoral Fin (Spade-shaped vermilion fin)
+        sr.setColor(0.95f, 0.38f, 0.12f, 0.95f);
+        sr.triangle(cx + 8f * s, cy - 3f * s, cx - 10f * s, cy - 20f * s, cx + 15f * s, cy - 15f * s);
+        sr.setColor(1.0f, 0.75f, 0.35f, 0.7f);
+        sr.triangle(cx + 8f * s, cy - 3f * s, cx - 3f * s, cy - 14f * s, cx + 12f * s, cy - 11f * s);
+
+        // 7. Head & Noble Snout
         sr.setColor(0.88f, 0.55f, 0.16f, 1f);
-        sr.triangle(cx + 25f * s, cy + 14f * s, cx + 25f * s, cy - 12f * s, cx + 48f * s, cy - 2f * s);
+        sr.triangle(cx + 25f * s, cy + 15f * s, cx + 25f * s, cy - 13f * s, cx + 48f * s, cy - 1f * s);
+        // Operculum (nắp mang ánh vàng)
+        sr.setColor(0.75f, 0.45f, 0.12f, 1f);
+        sr.rectLine(cx + 20f * s, cy + 13f * s, cx + 24f * s, cy - 11f * s, 2.5f * s);
+        // Thick fleshy lips (miệng cá chép dày)
+        sr.setColor(0.95f, 0.55f, 0.35f, 1f);
+        sr.circle(cx + 47f * s, cy - 2f * s, 3.5f * s);
 
-        // Signature Carp Barbels / Whiskers (Râu cá chép)
-        sr.setColor(0.95f, 0.70f, 0.20f, 1f);
-        sr.rectLine(cx + 42f * s, cy - 6f * s, cx + 52f * s, cy - 14f * s + wag * 2f * s, 2.5f * s);
-        sr.rectLine(cx + 44f * s, cy - 4f * s, cx + 55f * s, cy - 8f * s, 2f * s);
+        // 8. Signature Twin Pairs of Waving Carp Barbels (Râu cá chép mềm mại rước lộc)
+        sr.setColor(0.95f, 0.65f, 0.15f, 1f);
+        // Primary long whisker
+        sr.rectLine(cx + 44f * s, cy - 4f * s, cx + 58f * s, cy - 15f * s + wag * 3f * s, 2.2f * s);
+        // Secondary delicate upper whisker
+        sr.rectLine(cx + 46f * s, cy - 1f * s, cx + 56f * s, cy - 7f * s + wag * 2f * s, 1.6f * s);
 
-        // Golden eye
-        sr.setColor(1.0f, 0.88f, 0.30f, 1f);
-        sr.circle(cx + 34f * s, cy + 3f * s, 5.5f * s);
-        sr.setColor(0.12f, 0.08f, 0.04f, 1f);
-        sr.circle(cx + 35f * s, cy + 3f * s, 3f * s);
+        // 9. Alert Golden-Ringed Eye with Sharp Specular Glint
+        sr.setColor(1.0f, 0.85f, 0.25f, 1f);
+        sr.circle(cx + 34f * s, cy + 4f * s, 5.5f * s);
+        sr.setColor(0.12f, 0.08f, 0.05f, 1f);
+        sr.circle(cx + 35f * s, cy + 4f * s, 3.2f * s);
         sr.setColor(1f, 1f, 1f, 1f);
-        sr.circle(cx + 36f * s, cy + 4f * s, 1.2f * s);
+        sr.circle(cx + 36.5f * s, cy + 5.5f * s, 1.2f * s);
     }
 
     // =========================================================================
-    // 4. CÁ MÈ (Broad Silver Body, Low Set Eye, High Profile)
+    // 4. CÁ MÈ (Silver Carp: Deep Silvery Body, Big Head, Distinct Low-Set Eye)
     // =========================================================================
-    private static void drawCaMe(ShapeRenderer sr, float cx, float cy, float s, float wag) {
-        float tailX = cx - 58f * s + wag * 5f * s;
-        float tailY = cy + wag * 6f * s;
+    public static void drawCaMe(ShapeRenderer sr, float cx, float cy, float s, float wag) {
+        float tailX = cx - 58f * s + wag * 4.5f * s;
+        float tailY = cy + wag * 5.8f * s;
 
-        // Tail fin
-        sr.setColor(0.70f, 0.76f, 0.84f, 0.9f);
-        sr.triangle(cx - 32f * s, cy, tailX - 22f * s, tailY + 26f * s, tailX - 8f * s, tailY);
-        sr.triangle(cx - 32f * s, cy, tailX - 22f * s, tailY - 26f * s, tailX - 8f * s, tailY);
+        // 1. Sweeping Forked Caudal Fin with Silvery Sheen
+        sr.setColor(0.72f, 0.78f, 0.86f, 0.88f);
+        sr.triangle(cx - 34f * s, cy, tailX - 24f * s, tailY + 27f * s, tailX - 10f * s, tailY);
+        sr.triangle(cx - 34f * s, cy, tailX - 24f * s, tailY - 27f * s, tailX - 10f * s, tailY);
+        // Slate ray highlights
+        sr.setColor(0.55f, 0.62f, 0.72f, 0.9f);
+        sr.rectLine(cx - 34f * s, cy, tailX - 22f * s, tailY + 23f * s, 1.3f * s);
+        sr.rectLine(cx - 34f * s, cy, tailX - 22f * s, tailY - 23f * s, 1.3f * s);
 
-        // Dorsal fin
+        // 2. Anal & Pelvic Fins (Translucent pearl-slate)
+        sr.setColor(0.78f, 0.84f, 0.90f, 0.85f);
+        sr.triangle(cx - 16f * s, cy - 14f * s, cx - 30f * s, cy - 12f * s, cx - 25f * s, cy - 25f * s);
+        sr.triangle(cx + 6f * s, cy - 14f * s, cx - 2f * s, cy - 14f * s, cx + 2f * s, cy - 23f * s);
+
+        // 3. Arched Triangular Dorsal Fin positioned mid-back
         sr.setColor(0.65f, 0.72f, 0.80f, 0.95f);
-        sr.triangle(cx - 10f * s, cy + 18f * s, cx + 16f * s, cy + 18f * s, cx + 2f * s, cy + 34f * s);
+        sr.triangle(cx - 12f * s, cy + 18f * s, cx + 16f * s, cy + 18f * s, cx + 2f * s, cy + 35f * s);
+        sr.setColor(0.50f, 0.58f, 0.68f, 1f);
+        sr.rectLine(cx - 12f * s, cy + 18f * s, cx + 2f * s, cy + 35f * s, 1.8f * s);
 
-        // Deep broad silver body (high back)
-        sr.setColor(0.80f, 0.85f, 0.92f, 1f);
-        sr.circle(cx, cy + 2f * s, 28f * s, 28);
+        // 4. Broad Deep Silvery Body (Thân dẹp bên, vồng cao)
+        // Slate-green dorsal curve
+        sr.setColor(0.55f, 0.62f, 0.68f, 1f);
+        sr.circle(cx - 2f * s, cy + 6f * s, 28f * s, 28);
+
+        // Silvery-platinum midflank
+        sr.setColor(0.82f, 0.88f, 0.94f, 1f);
+        sr.circle(cx, cy + 1f * s, 27f * s, 28);
         sr.circle(cx - 15f * s, cy, 22f * s, 24);
-        sr.circle(cx + 15f * s, cy, 24f * s, 24);
+        sr.circle(cx + 15f * s, cy, 23f * s, 24);
 
-        // Silver-white belly
-        sr.setColor(0.92f, 0.95f, 0.98f, 1f);
-        sr.circle(cx + 2f * s, cy - 6f * s, 20f * s, 24);
+        // Radiant silver-white belly keel (Sống bụng lườn trắng bạc)
+        sr.setColor(0.95f, 0.98f, 1.0f, 1f);
+        sr.circle(cx + 2f * s, cy - 7f * s, 20f * s, 24);
+        sr.circle(cx - 10f * s, cy - 6f * s, 16f * s, 20);
 
-        // Large curved head with low-set eye (Characteristics of bighead/silver carp)
-        sr.setColor(0.75f, 0.82f, 0.90f, 1f);
-        sr.triangle(cx + 24f * s, cy + 18f * s, cx + 24f * s, cy - 14f * s, cx + 48f * s, cy);
+        // 5. Massive Aerodynamic Head Profile (Đặc trưng "Đầu cá mè" to quá khổ)
+        sr.setColor(0.76f, 0.82f, 0.90f, 1f);
+        sr.triangle(cx + 24f * s, cy + 20f * s, cx + 24f * s, cy - 15f * s, cx + 52f * s, cy + 1f * s);
+        // Opercular plate contour
+        sr.setColor(0.62f, 0.70f, 0.78f, 1f);
+        sr.rectLine(cx + 20f * s, cy + 18f * s, cx + 26f * s, cy - 13f * s, 2.5f * s);
 
-        // Low-set Eye (Eye is uniquely set below the midline of the head)
-        sr.setColor(0.95f, 0.95f, 0.90f, 1f);
-        sr.circle(cx + 34f * s, cy - 5f * s, 5f * s);
-        sr.setColor(0.15f, 0.18f, 0.22f, 1f);
-        sr.circle(cx + 35f * s, cy - 5f * s, 2.8f * s);
+        // Upturned mouth for plankton filter feeding (Miệng hếch lên lọc sinh vật phù du)
+        sr.setColor(0.55f, 0.62f, 0.72f, 1f);
+        sr.rectLine(cx + 42f * s, cy - 4f * s, cx + 52f * s, cy + 2f * s, 2.5f * s);
+
+        // 6. Signature Low-Set Eye (Mắt cá mè nằm thấp dưới đường trục miệng)
+        sr.setColor(0.95f, 0.96f, 0.90f, 1f);
+        sr.circle(cx + 36f * s, cy - 5.5f * s, 5.2f * s);
+        sr.setColor(0.12f, 0.16f, 0.22f, 1f);
+        sr.circle(cx + 37f * s, cy - 5.5f * s, 3.0f * s);
         sr.setColor(1f, 1f, 1f, 1f);
-        sr.circle(cx + 36f * s, cy - 4f * s, 1.2f * s);
+        sr.circle(cx + 38.2f * s, cy - 4.2f * s, 1.2f * s);
 
-        // Pectoral fin
-        sr.setColor(0.72f, 0.78f, 0.86f, 0.9f);
-        sr.triangle(cx + 8f * s, cy - 4f * s, cx - 10f * s, cy - 18f * s, cx + 12f * s, cy - 14f * s);
+        // 7. Long Pectoral Fin sweeping back
+        sr.setColor(0.72f, 0.80f, 0.88f, 0.92f);
+        sr.triangle(cx + 10f * s, cy - 2f * s, cx - 8f * s, cy - 18f * s, cx + 18f * s, cy - 14f * s);
     }
 
     // =========================================================================
@@ -449,71 +516,77 @@ public class FishVisualRenderer {
     // 5B. CÁ LÓC NHÍ (Juvenile Snakehead Fry: Golden Racing Stripe, Tiger Saddles)
     // =========================================================================
     public static void drawCaLocNhi(ShapeRenderer sr, float cx, float cy, float s, float wag) {
-        float tailX = cx - 50f * s + wag * 4.8f * s;
-        float tailY = cy + wag * 5.8f * s;
+        float tailX = cx - 38f * s + wag * 4.0f * s;
+        float tailY = cy + wag * 5.0f * s;
 
-        // 1. Rounded Paddle Tail with Signature Glowing Amber-Gold Outer Margin
+        // 1. Muscular Caudal Peduncle seamlessly connecting body directly into tail
+        sr.setColor(0.36f, 0.48f, 0.28f, 1f);
+        sr.triangle(cx - 18f * s, cy + 9f * s, cx - 18f * s, cy - 9f * s, tailX, tailY);
+        sr.setColor(0.28f, 0.38f, 0.22f, 1f);
+        sr.triangle(cx - 18f * s, cy + 9f * s, cx - 10f * s, cy + 9f * s, tailX, tailY);
+
+        // 2. Rounded Paddle Tail with Signature Glowing Amber-Gold Outer Margin
         sr.setColor(0.24f, 0.32f, 0.18f, 0.95f);
-        sr.circle(tailX - 6f * s, tailY, 14f * s);
+        sr.circle(tailX - 2f * s, tailY, 13f * s);
         // Glowing warm amber rim (Vành đuôi cam vàng rực rỡ đặc trưng cá chuối/lóc con)
         sr.setColor(1.0f, 0.72f, 0.15f, 0.95f);
-        sr.circle(tailX - 7f * s, tailY, 9f * s);
+        sr.circle(tailX - 3f * s, tailY, 8.5f * s);
         // Dark juvenile ocellus center spot
         sr.setColor(0.12f, 0.16f, 0.10f, 1f);
-        sr.circle(tailX - 8f * s, tailY, 5f * s);
+        sr.circle(tailX - 4f * s, tailY, 4.5f * s);
 
-        // 2. Long Dorsal & Anal Fin spanning almost entire length
+        // 3. Long Dorsal & Anal Fin spanning almost entire length
         sr.setColor(0.25f, 0.35f, 0.20f, 0.95f);
         for (int i = 0; i < 9; i++) {
-            float fx = cx - 28f * s + i * 6.5f * s;
+            float fx = cx - 26f * s + i * 5.8f * s;
             sr.rectLine(fx, cy + 7f * s, fx + 3f * s, cy + 16f * s, 2.5f * s);
             // Anal fin rays on underside
             if (i < 6) {
-                float ax = cx - 28f * s + i * 6.0f * s;
+                float ax = cx - 26f * s + i * 5.5f * s;
                 sr.rectLine(ax, cy - 7f * s, ax + 2f * s, cy - 14f * s, 2.0f * s);
             }
         }
 
-        // 3. Slender Predatory Fry Cylindrical Body
+        // 4. Slender Predatory Fry Cylindrical Body
         // Charcoal-olive dorsal saddle
         sr.setColor(0.28f, 0.38f, 0.22f, 1f);
-        sr.rectLine(cx - 30f * s, cy + 2f * s, cx + 22f * s, cy + 2f * s, 17f * s);
+        sr.rectLine(cx - 28f * s, cy + 2f * s, cx + 22f * s, cy + 2f * s, 17f * s);
 
         // Mid-flank olive green body
         sr.setColor(0.38f, 0.50f, 0.30f, 1f);
-        sr.rectLine(cx - 30f * s, cy, cx + 22f * s, cy, 18f * s);
+        sr.rectLine(cx - 28f * s, cy, cx + 22f * s, cy, 18f * s);
         sr.circle(cx - 4f * s, cy, 12.5f * s);
 
-        // 4. Brilliant Glowing Golden-Orange Lateral Racing Stripe (Vệt vàng cam huyền thoại)
+        // 5. Brilliant Glowing Golden-Orange Lateral Racing Stripe (Vệt vàng cam huyền thoại)
         sr.setColor(1.0f, 0.68f, 0.12f, 1f);
-        sr.rectLine(cx - 32f * s, cy + 0.5f * s, cx + 26f * s, cy + 1f * s, 4.2f * s);
+        sr.rectLine(cx - 30f * s, cy + 0.5f * s, tailX, tailY, 4.0f * s);
         // Radiant highlight through center of stripe
         sr.setColor(1.0f, 0.88f, 0.40f, 0.95f);
-        sr.rectLine(cx - 28f * s, cy + 0.5f * s, cx + 24f * s, cy + 1f * s, 1.8f * s);
+        sr.rectLine(cx - 26f * s, cy + 0.5f * s, tailX - 2f * s, tailY, 1.8f * s);
 
-        // 5. Dark Camouflage Tiger Saddles along Spine (5 mottled predatory blotches)
+        // 6. Dark Camouflage Tiger Saddles along Spine (5 mottled predatory blotches)
         sr.setColor(0.12f, 0.18f, 0.10f, 0.95f);
         for (int i = 0; i < 5; i++) {
-            float bx = cx - 24f * s + i * 9.5f * s;
+            float bx = cx - 22f * s + i * 9.0f * s;
             sr.triangle(bx, cy + 9f * s, bx + 5f * s, cy - 1f * s, bx - 3f * s, cy + 2f * s);
         }
 
-        // 6. Cream/Butter-Yellow Ventral Belly
+        // 7. Cream/Butter-Yellow Ventral Belly
         sr.setColor(0.88f, 0.90f, 0.76f, 0.9f);
-        sr.rectLine(cx - 24f * s, cy - 5.5f * s, cx + 18f * s, cy - 5.5f * s, 4.8f * s);
+        sr.rectLine(cx - 22f * s, cy - 5.5f * s, cx + 18f * s, cy - 5.5f * s, 4.8f * s);
 
-        // 7. Pectoral Fin (Fan-shaped)
+        // 8. Pectoral Fin (Fan-shaped)
         sr.setColor(0.48f, 0.60f, 0.36f, 0.9f);
         sr.triangle(cx + 12f * s, cy - 2f * s, cx + 2f * s, cy - 12f * s, cx + 16f * s, cy - 9f * s);
 
-        // 8. Flattened Snake-Like Head Profile
+        // 9. Flattened Snake-Like Head Profile
         sr.setColor(0.32f, 0.44f, 0.25f, 1f);
         sr.triangle(cx + 18f * s, cy + 10f * s, cx + 18f * s, cy - 9f * s, cx + 42f * s, cy - 1f * s);
         // Lower jaw predatory protrusion
         sr.setColor(0.25f, 0.35f, 0.20f, 1f);
         sr.rectLine(cx + 32f * s, cy - 5f * s, cx + 42f * s, cy - 1f * s, 2.2f * s);
 
-        // 9. Alert, Predatory Golden Eye
+        // 10. Alert, Predatory Golden Eye
         sr.setColor(1.0f, 0.82f, 0.20f, 1f);
         sr.circle(cx + 30f * s, cy + 4.5f * s, 5.2f * s);
         sr.setColor(0.08f, 0.08f, 0.08f, 1f);
@@ -523,50 +596,79 @@ public class FishVisualRenderer {
     }
 
     // =========================================================================
-    // 6. CÁ TRÊ (Flat Broad Head, Smooth Dark Slate Skin, 4 Long Barbels)
+    // 6. CÁ TRÊ (Walking Catfish: Scaleless Mud-Brown Body, Broad Flat Head, 4 Waving Barbels)
     // =========================================================================
-    private static void drawCaTre(ShapeRenderer sr, float cx, float cy, float s, float wag) {
-        float tailX = cx - 58f * s + wag * 6f * s;
-        float tailY = cy + wag * 7f * s;
+    public static void drawCaTre(ShapeRenderer sr, float cx, float cy, float s, float wag) {
+        float tailX = cx - 58f * s + wag * 5.5f * s;
+        float tailY = cy + wag * 6.8f * s;
 
-        // Long rounded paddle-tail fin
-        sr.setColor(0.22f, 0.20f, 0.18f, 1f);
-        sr.circle(tailX - 10f * s, tailY, 16f * s);
-        sr.rectLine(cx - 35f * s, cy, tailX - 10f * s, tailY, 14f * s);
+        // 1. Long Rounded Paddle Tail seamlessly joined to muscular body
+        sr.setColor(0.20f, 0.18f, 0.16f, 1f);
+        sr.circle(tailX - 8f * s, tailY, 15f * s);
+        // Peduncle connection
+        sr.triangle(cx - 24f * s, cy + 10f * s, cx - 24f * s, cy - 10f * s, tailX - 6f * s, tailY);
 
-        // Long dorsal & anal fin running along body
-        sr.setColor(0.28f, 0.25f, 0.22f, 1f);
-        sr.rectLine(cx - 30f * s, cy + 9f * s, cx + 10f * s, cy + 9f * s, 4f * s);
-        sr.rectLine(cx - 30f * s, cy - 9f * s, cx + 10f * s, cy - 9f * s, 4f * s);
+        // 2. Continuous Long Dorsal & Anal Fin spanning almost full length
+        sr.setColor(0.26f, 0.24f, 0.20f, 0.95f);
+        for (int i = 0; i < 10; i++) {
+            float fx = cx - 32f * s + i * 5.8f * s;
+            sr.rectLine(fx, cy + 8f * s, fx + 2f * s, cy + 15f * s, 2.2f * s);
+            if (i < 7) {
+                float ax = cx - 30f * s + i * 5.5f * s;
+                sr.rectLine(ax, cy - 8f * s, ax + 2f * s, cy - 14f * s, 2.0f * s);
+            }
+        }
 
-        // Smooth scaleless dark slate/mud-brown body
-        sr.setColor(0.26f, 0.24f, 0.20f, 1f);
-        sr.circle(cx, cy, 20f * s, 26);
+        // 3. Smooth Scaleless Mud-Brown Body (Da trơn bóng màu xám đen bùn)
+        // Dark charcoal-slate dorsal ridge
+        sr.setColor(0.18f, 0.16f, 0.14f, 1f);
+        sr.rectLine(cx - 30f * s, cy + 1.5f * s, cx + 12f * s, cy + 1.5f * s, 17f * s);
+
+        // Velvet mud-brown flank
+        sr.setColor(0.28f, 0.25f, 0.21f, 1f);
+        sr.rectLine(cx - 30f * s, cy, cx + 12f * s, cy, 18f * s);
+        sr.circle(cx, cy, 19f * s, 26);
         sr.circle(cx - 15f * s, cy, 16f * s, 22);
 
-        // Wide flat spade head (Đầu trê dẹp bè)
-        sr.setColor(0.32f, 0.29f, 0.24f, 1f);
-        sr.rect(cx + 10f * s, cy - 14f * s, 28f * s, 28f * s);
-        sr.circle(cx + 36f * s, cy, 14f * s);
+        // Pale creamy-ochre underbelly (Bụng cá trê màu vàng đất nhạt)
+        sr.setColor(0.72f, 0.68f, 0.50f, 1f);
+        sr.rectLine(cx - 22f * s, cy - 5.5f * s, cx + 12f * s, cy - 5.5f * s, 6.5f * s);
+        sr.circle(cx + 4f * s, cy - 4f * s, 11f * s);
 
-        // Pale yellowish-grey underbelly
-        sr.setColor(0.72f, 0.68f, 0.52f, 1f);
-        sr.circle(cx + 6f * s, cy - 4f * s, 12f * s);
+        // 4. Wide Armored Flat Spade Head (Đầu trê bẹp dẹp bọc xương giáp)
+        sr.setColor(0.32f, 0.28f, 0.23f, 1f);
+        sr.rect(cx + 8f * s, cy - 14f * s, 26f * s, 28f * s);
+        sr.circle(cx + 34f * s, cy, 14f * s);
+        // Operculum suture line
+        sr.setColor(0.18f, 0.15f, 0.12f, 1f);
+        sr.rectLine(cx + 10f * s, cy + 13f * s, cx + 14f * s, cy - 13f * s, 2.2f * s);
 
-        // 4 Long Catfish Whiskers / Barbels (4 sợi râu cá trê ngoe nguẩy)
-        sr.setColor(0.20f, 0.18f, 0.15f, 1f);
-        // Upper barbels
-        sr.rectLine(cx + 38f * s, cy + 8f * s, cx + 58f * s, cy + 20f * s + wag * 3f * s, 3f * s);
-        sr.rectLine(cx + 42f * s, cy + 5f * s, cx + 64f * s, cy + 12f * s + wag * 2f * s, 2.5f * s);
-        // Lower barbels
-        sr.rectLine(cx + 38f * s, cy - 8f * s, cx + 58f * s, cy - 20f * s - wag * 3f * s, 3f * s);
-        sr.rectLine(cx + 42f * s, cy - 5f * s, cx + 64f * s, cy - 12f * s - wag * 2f * s, 2.5f * s);
+        // 5. Pectoral Fins with Sharp Defensive Spines (Ngạnh cá trê sắc nhọn hai bên)
+        sr.setColor(0.38f, 0.32f, 0.25f, 0.95f);
+        sr.triangle(cx + 12f * s, cy - 3f * s, cx - 2f * s, cy - 16f * s, cx + 16f * s, cy - 13f * s);
+        // Stiff sharp pectoral spine needle
+        sr.setColor(0.85f, 0.82f, 0.70f, 1f);
+        sr.rectLine(cx + 12f * s, cy - 3f * s, cx - 2f * s, cy - 16f * s, 1.8f * s);
 
-        // Small beady eyes placed on top of flat head
-        sr.setColor(0.85f, 0.85f, 0.65f, 1f);
-        sr.circle(cx + 30f * s, cy + 6f * s, 4f * s);
+        // 6. Broad Sensual Catfish Mouth & 4 Long Waving Barbels (4 sợi râu trê uyển chuyển)
+        sr.setColor(0.14f, 0.12f, 0.10f, 1f);
+        sr.rectLine(cx + 30f * s, cy - 3f * s, cx + 46f * s, cy, 2.5f * s);
+
+        sr.setColor(0.18f, 0.16f, 0.14f, 1f);
+        // Upper barbels (râu mép trên vươn dài ngoe nguẩy)
+        sr.rectLine(cx + 36f * s, cy + 7f * s, cx + 58f * s, cy + 20f * s + wag * 3.5f * s, 2.6f * s);
+        sr.rectLine(cx + 40f * s, cy + 4f * s, cx + 65f * s, cy + 11f * s + wag * 2.5f * s, 2.2f * s);
+        // Lower barbels (râu cằm dưới rà đáy tìm mồi)
+        sr.rectLine(cx + 36f * s, cy - 7f * s, cx + 58f * s, cy - 20f * s - wag * 3.5f * s, 2.6f * s);
+        sr.rectLine(cx + 40f * s, cy - 4f * s, cx + 65f * s, cy - 11f * s - wag * 2.5f * s, 2.2f * s);
+
+        // 7. Small Beady Eyes on Top of Skull
+        sr.setColor(0.88f, 0.85f, 0.60f, 1f);
+        sr.circle(cx + 28f * s, cy + 7f * s, 4.2f * s);
         sr.setColor(0.08f, 0.08f, 0.08f, 1f);
-        sr.circle(cx + 31f * s, cy + 6f * s, 2.2f * s);
+        sr.circle(cx + 29f * s, cy + 7f * s, 2.5f * s);
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(cx + 30.2f * s, cy + 8f * s, 1f * s);
     }
 
     // =========================================================================
