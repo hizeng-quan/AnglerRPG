@@ -356,9 +356,17 @@ public class SkillTreeScreen implements Screen {
         
         if (selectedSkill != null && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             if (upgradeBtn.contains(mouse.x, mouse.y)) {
-                if (tree.canUpgrade(selectedSkill.id, player.getSkillPoints())) {
+                String bName = getBookNameForSkill(selectedSkill.id);
+                boolean hasBook = bName != null && player.getItemCount(bName) > 0;
+                boolean canUpSP = tree.canUpgrade(selectedSkill.id, player.getSkillPoints());
+                if (canUpSP) {
                     AudioManager.getInstance().playSFX("sfx_button");
                     player.upgradeSkill(selectedSkill.id);
+                } else if (hasBook && !selectedSkill.isMaxed()) {
+                    AudioManager.getInstance().playSFX("sfx_skill");
+                    player.consumeItem(bName);
+                    selectedSkill.upgrade();
+                    player.applySkillBonuses();
                 }
             } else if (equipBtn.contains(mouse.x, mouse.y) && selectedSkill.isUnlocked()) {
                 AudioManager.getInstance().playSFX("sfx_button");
@@ -613,13 +621,23 @@ public class SkillTreeScreen implements Screen {
             drawSkillIcon(sr, selectedSkill.id, pX + 25f + 37.5f, pH - 110f + 37.5f, 26f, skColor, selectedSkill.isUnlocked());
 
             // Upgrade Button
-            boolean canUp = !selectedSkill.isMaxed() && tree.canUpgrade(selectedSkill.id, player.getSkillPoints());
+            String bName = getBookNameForSkill(selectedSkill.id);
+            boolean hasBook = bName != null && player.getItemCount(bName) > 0;
+            boolean canUpSP = tree.canUpgrade(selectedSkill.id, player.getSkillPoints());
+            boolean canUp = !selectedSkill.isMaxed() && (canUpSP || hasBook);
             boolean hoverUp = upgradeBtn.contains(mouse.x, mouse.y);
             if (canUp) {
-                sr.setColor(hoverUp ? new Color(0.25f, 0.70f, 0.42f, 1f) : new Color(0.18f, 0.52f, 0.30f, 0.95f));
-                drawRoundedRect(sr, upgradeBtn.x, upgradeBtn.y, upgradeBtn.width, upgradeBtn.height, 8);
-                sr.setColor(hoverUp ? new Color(0.6f, 1f, 0.75f, 1f) : new Color(0.35f, 0.85f, 0.5f, 0.8f));
-                drawRectOutline(sr, upgradeBtn.x, upgradeBtn.y, upgradeBtn.width, upgradeBtn.height, 1.8f);
+                if (hasBook && !canUpSP) {
+                    sr.setColor(hoverUp ? new Color(0.85f, 0.65f, 0.15f, 1f) : new Color(0.65f, 0.45f, 0.10f, 0.95f));
+                    drawRoundedRect(sr, upgradeBtn.x, upgradeBtn.y, upgradeBtn.width, upgradeBtn.height, 8);
+                    sr.setColor(hoverUp ? new Color(1f, 0.9f, 0.4f, 1f) : new Color(0.85f, 0.7f, 0.25f, 0.85f));
+                    drawRectOutline(sr, upgradeBtn.x, upgradeBtn.y, upgradeBtn.width, upgradeBtn.height, 1.8f);
+                } else {
+                    sr.setColor(hoverUp ? new Color(0.25f, 0.70f, 0.42f, 1f) : new Color(0.18f, 0.52f, 0.30f, 0.95f));
+                    drawRoundedRect(sr, upgradeBtn.x, upgradeBtn.y, upgradeBtn.width, upgradeBtn.height, 8);
+                    sr.setColor(hoverUp ? new Color(0.6f, 1f, 0.75f, 1f) : new Color(0.35f, 0.85f, 0.5f, 0.8f));
+                    drawRectOutline(sr, upgradeBtn.x, upgradeBtn.y, upgradeBtn.width, upgradeBtn.height, 1.8f);
+                }
             } else {
                 sr.setColor(0.14f, 0.16f, 0.22f, 0.9f);
                 drawRoundedRect(sr, upgradeBtn.x, upgradeBtn.y, upgradeBtn.width, upgradeBtn.height, 8);
@@ -890,11 +908,37 @@ public class SkillTreeScreen implements Screen {
             }
 
             // Upgrade Button Text
+            String bName = getBookNameForSkill(selectedSkill.id);
+            boolean hasBook = bName != null && player.getItemCount(bName) > 0;
+            boolean canUpSP = tree.canUpgrade(selectedSkill.id, player.getSkillPoints());
+
+            if (hasBook) {
+                font.setColor(1f, 0.85f, 0.25f, 1f);
+                font.getData().setScale(0.82f);
+                font.draw(game.batch, "★ Trong túi có: " + player.getItemCount(bName) + " " + bName + " (Có thể dùng thay SP)", pX + 25f, curY - 75f);
+                font.getData().setScale(1f);
+            }
+
             if (!selectedSkill.isMaxed()) {
-                String cost = (selectedSkill.isUnlocked() ? "NÂNG CẤP (" : "MỞ KHÓA (") + selectedSkill.getUpgradeCost() + " SP)";
-                font.setColor(Color.WHITE);
+                String cost;
+                if (hasBook && !canUpSP) {
+                    cost = "NÂNG CẤP (DÙNG 1 SÁCH - 0 SP)";
+                    font.setColor(1f, 0.92f, 0.35f, 1f);
+                } else if (hasBook && canUpSP) {
+                    cost = "NÂNG CẤP (" + selectedSkill.getUpgradeCost() + " SP hoặc 1 Sách)";
+                    font.setColor(Color.WHITE);
+                } else {
+                    cost = (selectedSkill.isUnlocked() ? "NÂNG CẤP (" : "MỞ KHÓA (") + selectedSkill.getUpgradeCost() + " SP)";
+                    font.setColor(Color.WHITE);
+                }
+                font.getData().setScale(0.85f);
                 layout.setText(font, cost);
+                if (layout.width > upgradeBtn.width - 12f) {
+                    font.getData().setScale(0.85f * ((upgradeBtn.width - 12f) / layout.width));
+                    layout.setText(font, cost);
+                }
                 font.draw(game.batch, layout, upgradeBtn.x + (upgradeBtn.width - layout.width) / 2f, upgradeBtn.y + 30f);
+                font.getData().setScale(1f);
             } else {
                 font.setColor(0.9f, 0.5f, 1f, 1f);
                 layout.setText(font, "★ ĐÃ ĐẠT CẤP TỐI ĐA ★");
@@ -1689,6 +1733,19 @@ public class SkillTreeScreen implements Screen {
 
     @Override public void pause() {}
     @Override public void resume() {}
+
+    private String getBookNameForSkill(String skillId) {
+        if (skillId == null) return null;
+        switch (skillId) {
+            case "duong_suc":           return "Sách: Dưỡng Sức";
+            case "giat_kep":            return "Sách: Giật Kép";
+            case "mat_dai_bang":        return "Sách: Mắt Đại Bàng";
+            case "thuan_hoa":           return "Sách: Thuần Hóa";
+            case "loi_nguyen_troi_buoc": return "Sách: Trói Buộc";
+            case "trai_tim_dai_duong":  return "Sách: Trái Tim ĐD";
+            default: return null;
+        }
+    }
 
     @Override public void dispose() {
         if (previousInputProcessor != null) {

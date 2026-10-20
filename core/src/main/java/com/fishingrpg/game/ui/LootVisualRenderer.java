@@ -37,11 +37,11 @@ public class LootVisualRenderer {
             drawSunkenChest(sr, cx, cy, scale, timer);
         } else if (name.equals("Kiếm Cổ")) {
             drawAncientSword(sr, cx, cy, scale, timer);
-        } else if (name.startsWith("Sách:") || name.equals("Sách Thông Thái")) {
-            drawSpellBook(sr, cx, cy, scale, timer);
+        } else if (name.startsWith("Sách") || name.equals("Sách Thông Thái")) {
+            drawSpellBook(sr, cx, cy, scale, timer, name);
         } else if (name.equals("Mồi Thơm") || name.equals("Mồi Rủi Ro")) {
             drawBaitJar(sr, cx, cy, scale, name.equals("Mồi Rủi Ro"));
-        } else if (name.equals("Thuốc Hồi Stamina") || name.equals("Nước Tăng Lực") || name.equals("Nước Bức Phá")) {
+        } else if (name.equals("Thuốc Hồi Stamina") || name.equals("Nước Tăng Lực") || name.equals("Nước Bức Phá") || name.equals("Nước Bứt Phá")) {
             drawPotionFlask(sr, cx, cy, scale, name);
         } else if (name.equals("Dây Câu Tốt")) {
             drawLineSpool(sr, cx, cy, scale);
@@ -51,6 +51,16 @@ public class LootVisualRenderer {
             drawGoldTalisman(sr, cx, cy, scale, timer);
         } else if (name.equals("Lưới Đánh Cá")) {
             drawFishingNet(sr, cx, cy, scale);
+        } else if (name.equals("Bình Xịt Đóng Băng")) {
+            drawCryoSpray(sr, cx, cy, scale, timer);
+        } else if (name.equals("Trà Thảo Mộc Định Thần") || name.equals("Trà Thảo Mộc")) {
+            drawHerbalTea(sr, cx, cy, scale, timer);
+        } else if (name.equals("Đá Mài Lưỡi Câu")) {
+            drawWhetstone(sr, cx, cy, scale, timer);
+        } else if (name.equals("Nam Châm Kho Báu")) {
+            drawTreasureMagnet(sr, cx, cy, scale, timer);
+        } else if (name.equals("Kính Nhìn Xuyên Nước")) {
+            drawSonarGoggles(sr, cx, cy, scale, timer);
         } else if (type == CatchableType.TRASH) {
             drawGenericTrash(sr, cx, cy, scale);
         } else if (type == CatchableType.TREASURE) {
@@ -238,9 +248,9 @@ public class LootVisualRenderer {
 
         // Fluted Golden Lip
         sr.setColor(1f, 0.85f, 0.25f, 1f);
-        sr.ellipse(cx, cy + 40f * s, 30f * s, 10f * s);
+        sr.ellipse(cx - 15f * s, cy + 35f * s, 30f * s, 10f * s);
         sr.setColor(0.18f, 0.32f, 0.30f, 1f);
-        sr.ellipse(cx, cy + 40f * s, 22f * s, 6f * s);
+        sr.ellipse(cx - 11f * s, cy + 37f * s, 22f * s, 6f * s);
 
         // Dual dragon ear handles (Quai rồng hai bên)
         sr.setColor(1f, 0.82f, 0.22f, 1f);
@@ -378,12 +388,51 @@ public class LootVisualRenderer {
      * 5. Sách Kỹ Năng / Bí Kíp (Ancient mystical leather spellbook with arcane rune & ribbon)
      */
     public static void drawSpellBook(ShapeRenderer sr, float cx, float cy, float s, float timer) {
+        drawSpellBook(sr, cx, cy, s, timer, "");
+    }
+
+    public static void drawSpellBook(ShapeRenderer sr, float cx, float cy, float s, float timer, String bookName) {
+        if (bookName == null) bookName = "";
+        Color coverColor = new Color(0.35f, 0.16f, 0.10f, 1f); // default leather brown
+        Color auraColor = new Color(0.55f, 0.3f, 0.95f, 0.25f);
+        Color symbolColor = new Color(0.2f, 0.95f, 1f, 1f);
+
+        if (bookName.contains("Dưỡng Sức")) {
+            coverColor = new Color(0.12f, 0.38f, 0.22f, 1f); // Jade green
+            auraColor = new Color(0.2f, 0.85f, 0.45f, 0.30f);
+            symbolColor = new Color(0.4f, 1f, 0.6f, 1f);
+        } else if (bookName.contains("Giật Kép")) {
+            coverColor = new Color(0.52f, 0.15f, 0.12f, 1f); // Crimson
+            auraColor = new Color(0.95f, 0.3f, 0.2f, 0.30f);
+            symbolColor = new Color(1f, 0.85f, 0.2f, 1f);
+        } else if (bookName.contains("Mắt Đại Bàng")) {
+            coverColor = new Color(0.12f, 0.25f, 0.52f, 1f); // Sapphire
+            auraColor = new Color(0.2f, 0.6f, 1f, 0.30f);
+            symbolColor = new Color(1f, 0.9f, 0.35f, 1f);
+        } else if (bookName.contains("Thông Thái")) {
+            coverColor = new Color(0.38f, 0.15f, 0.52f, 1f); // Arcane purple
+            auraColor = new Color(0.7f, 0.3f, 1f, 0.30f);
+            symbolColor = new Color(1f, 0.9f, 0.4f, 1f);
+        } else if (bookName.contains("Thuần Hóa")) {
+            coverColor = new Color(0.16f, 0.42f, 0.28f, 1f); // Forest jade
+            auraColor = new Color(0.25f, 0.9f, 0.55f, 0.30f);
+            symbolColor = new Color(0.5f, 1f, 0.7f, 1f);
+        } else if (bookName.contains("Trói Buộc")) {
+            coverColor = new Color(0.22f, 0.12f, 0.36f, 1f); // Deep chain indigo
+            auraColor = new Color(0.45f, 0.25f, 0.85f, 0.30f);
+            symbolColor = new Color(0.75f, 0.5f, 1f, 1f);
+        } else if (bookName.contains("Trái Tim ĐD")) {
+            coverColor = new Color(0.08f, 0.28f, 0.44f, 1f); // Oceanic deep teal
+            auraColor = new Color(0.2f, 0.75f, 0.95f, 0.30f);
+            symbolColor = new Color(0.35f, 0.95f, 1f, 1f);
+        }
+
         // Arcane glow
-        sr.setColor(0.55f, 0.3f, 0.95f, 0.25f);
+        sr.setColor(auraColor);
         sr.circle(cx, cy, 48f * s, 28);
 
         // Leather Book Cover (Bìa sách cổ)
-        sr.setColor(0.35f, 0.16f, 0.10f, 1f);
+        sr.setColor(coverColor);
         sr.rect(cx - 28f * s, cy - 30f * s, 56f * s, 60f * s);
 
         // Aged Parchment Pages edge (Trang sách cổ vàng ố)
@@ -398,9 +447,9 @@ public class LootVisualRenderer {
 
         // Glowing Arcane Symbol on cover (Phù hiệu bí thuật phát sáng)
         float pulse = 0.7f + 0.3f * MathUtils.sin(timer * 4f);
-        sr.setColor(0.2f, 0.95f, 1f, pulse);
+        sr.setColor(symbolColor.r, symbolColor.g, symbolColor.b, pulse);
         sr.circle(cx - 4f * s, cy, 14f * s, 24);
-        sr.setColor(0.35f, 0.16f, 0.10f, 1f);
+        sr.setColor(coverColor);
         sr.circle(cx - 4f * s, cy, 10f * s, 20);
         sr.setColor(1f, 0.88f, 0.25f, pulse);
         sr.circle(cx - 4f * s, cy, 5f * s, 12);
@@ -416,17 +465,36 @@ public class LootVisualRenderer {
     // =========================================================================
 
     public static void drawBread(ShapeRenderer sr, float cx, float cy, float s) {
-        // Golden crust loaf
-        sr.setColor(0.85f, 0.58f, 0.24f, 1f);
-        sr.ellipse(cx, cy, 42f * s, 22f * s);
-        sr.setColor(0.95f, 0.74f, 0.38f, 1f);
-        sr.ellipse(cx, cy + 2f * s, 36f * s, 16f * s);
+        float bw = 48f * s;
+        float bh = 26f * s;
 
-        // Artisan score marks (3 rãnh bánh mì nướng giòn)
-        sr.setColor(0.65f, 0.38f, 0.15f, 1f);
-        sr.rectLine(cx - 12f * s, cy - 4f * s, cx - 6f * s, cy + 8f * s, 2.5f * s);
-        sr.rectLine(cx - 2f * s, cy - 4f * s, cx + 4f * s, cy + 8f * s, 2.5f * s);
-        sr.rectLine(cx + 8f * s, cy - 4f * s, cx + 14f * s, cy + 8f * s, 2.5f * s);
+        // Shadow under loaf
+        sr.setColor(0.14f, 0.08f, 0.04f, 0.35f);
+        sr.ellipse(cx - bw / 2f + 2f * s, cy - bh / 2f - 4f * s, bw, bh * 0.7f);
+
+        // Golden baked crust loaf (perfectly centered at cx, cy)
+        sr.setColor(0.82f, 0.52f, 0.20f, 1f);
+        sr.ellipse(cx - bw / 2f, cy - bh / 2f, bw, bh);
+
+        // Fluffy warm golden-yellow inner dome
+        sr.setColor(0.96f, 0.76f, 0.38f, 1f);
+        sr.ellipse(cx - bw * 0.44f, cy - bh * 0.38f, bw * 0.88f, bh * 0.76f);
+
+        // Golden center highlight
+        sr.setColor(1f, 0.88f, 0.55f, 0.85f);
+        sr.ellipse(cx - bw * 0.32f, cy - bh * 0.22f, bw * 0.64f, bh * 0.45f);
+
+        // 3 artisan score cuts perfectly aligned across the bread body
+        sr.setColor(0.55f, 0.28f, 0.10f, 1f);
+        sr.rectLine(cx - 12f * s, cy - 6f * s, cx - 6f * s, cy + 7f * s, 2.8f * s);
+        sr.rectLine(cx - 2f * s, cy - 6f * s, cx + 4f * s, cy + 7f * s, 2.8f * s);
+        sr.rectLine(cx + 8f * s, cy - 6f * s, cx + 14f * s, cy + 7f * s, 2.8f * s);
+
+        // Flour dust specks along cuts
+        sr.setColor(1f, 0.98f, 0.92f, 0.8f);
+        sr.circle(cx - 6f * s, cy + 7f * s, 1.8f * s);
+        sr.circle(cx + 4f * s, cy + 7f * s, 1.8f * s);
+        sr.circle(cx + 14f * s, cy + 7f * s, 1.8f * s);
     }
 
     public static void drawBaitJar(ShapeRenderer sr, float cx, float cy, float s, boolean isRisky) {
@@ -454,7 +522,7 @@ public class LootVisualRenderer {
     public static void drawPotionFlask(ShapeRenderer sr, float cx, float cy, float s, String name) {
         Color liquidColor = new Color(0.2f, 0.95f, 0.45f, 1f); // Stamina green
         if (name.equals("Nước Tăng Lực")) liquidColor = new Color(0.2f, 0.75f, 1f, 1f);
-        else if (name.equals("Nước Bức Phá")) liquidColor = new Color(0.95f, 0.22f, 0.20f, 1f);
+        else if (name.equals("Nước Bức Phá") || name.equals("Nước Bứt Phá")) liquidColor = new Color(0.95f, 0.22f, 0.20f, 1f);
 
         // Round potion flask body
         sr.setColor(0.85f, 0.95f, 1f, 0.4f); // Glass
@@ -532,5 +600,206 @@ public class LootVisualRenderer {
 
     private static void drawGenericPotion(ShapeRenderer sr, float cx, float cy, float s) {
         drawPotionFlask(sr, cx, cy, s, "Thuốc Hồi Stamina");
+    }
+
+    // =========================================================================
+    // NEW TACTICAL & UTILITY ITEMS
+    // =========================================================================
+
+    public static void drawCryoSpray(ShapeRenderer sr, float cx, float cy, float s, float timer) {
+        // Frost aura
+        float pulse = 0.5f + 0.5f * MathUtils.sin(timer * 5f);
+        sr.setColor(0.3f, 0.85f, 1f, 0.25f * pulse);
+        sr.circle(cx, cy, 38f * s, 24);
+
+        // Canister metallic cyan body
+        sr.setColor(0.18f, 0.42f, 0.62f, 1f);
+        sr.rect(cx - 15f * s, cy - 24f * s, 30f * s, 42f * s);
+        sr.circle(cx, cy - 22f * s, 15f * s, 20);
+
+        // Chrome metallic gradient strip
+        sr.setColor(0.65f, 0.90f, 1f, 0.85f);
+        sr.rect(cx - 11f * s, cy - 20f * s, 5f * s, 36f * s);
+
+        // Canister shoulder & nozzle collar
+        sr.setColor(0.75f, 0.82f, 0.88f, 1f);
+        sr.triangle(cx - 15f * s, cy + 18f * s, cx + 15f * s, cy + 18f * s, cx, cy + 28f * s);
+        sr.rect(cx - 6f * s, cy + 24f * s, 12f * s, 8f * s);
+
+        // Spray push button nozzle
+        sr.setColor(0.2f, 0.75f, 0.95f, 1f);
+        sr.rect(cx - 5f * s, cy + 30f * s, 10f * s, 8f * s);
+        // Nozzle spout angled to the left
+        sr.rect(cx - 10f * s, cy + 33f * s, 6f * s, 4f * s);
+
+        // Snowflake frost emblem on body
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.rectLine(cx - 8f * s, cy, cx + 8f * s, cy, 2.5f * s);
+        sr.rectLine(cx, cy - 8f * s, cx, cy + 8f * s, 2.5f * s);
+        sr.rectLine(cx - 6f * s, cy - 6f * s, cx + 6f * s, cy + 6f * s, 2f * s);
+        sr.rectLine(cx - 6f * s, cy + 6f * s, cx + 6f * s, cy - 6f * s, 2f * s);
+
+        // Freezing cryo vapor puffs escaping from nozzle
+        sr.setColor(0.7f, 0.95f, 1f, 0.75f);
+        sr.circle(cx - 14f * s, cy + 35f * s, 4.5f * s, 10);
+        sr.circle(cx - 21f * s, cy + 39f * s, 6.5f * s, 10);
+    }
+
+    public static void drawHerbalTea(ShapeRenderer sr, float cx, float cy, float s, float timer) {
+        // Dark polished wooden saucer
+        float sw = 50f * s;
+        float sh = 16f * s;
+        sr.setColor(0.35f, 0.22f, 0.12f, 1f);
+        sr.ellipse(cx - sw / 2f, cy - 24f * s - sh / 2f, sw, sh);
+        sr.setColor(0.50f, 0.32f, 0.18f, 1f);
+        sr.ellipse(cx - sw * 0.42f, cy - 23f * s - sh * 0.42f, sw * 0.84f, sh * 0.84f);
+
+        // Celadon jade ceramic teacup bowl
+        sr.setColor(0.28f, 0.52f, 0.42f, 1f);
+        sr.circle(cx, cy - 6f * s, 22f * s, 24);
+        sr.rect(cx - 20f * s, cy - 6f * s, 40f * s, 16f * s);
+
+        // Warm jade interior glaze
+        sr.setColor(0.42f, 0.68f, 0.55f, 1f);
+        sr.circle(cx, cy - 6f * s, 19f * s, 20);
+
+        // Soothing emerald herbal tea surface
+        float lw = 36f * s;
+        float lh = 14f * s;
+        sr.setColor(0.18f, 0.62f, 0.32f, 1f);
+        sr.ellipse(cx - lw / 2f, cy + 4f * s - lh / 2f, lw, lh);
+        sr.setColor(0.35f, 0.82f, 0.45f, 0.8f);
+        sr.ellipse(cx - lw * 0.38f, cy + 4f * s - lh * 0.35f, lw * 0.76f, lh * 0.7f);
+
+        // Floating fresh green tea leaf
+        sr.setColor(0.12f, 0.45f, 0.18f, 1f);
+        sr.triangle(cx - 6f * s, cy + 5f * s, cx + 8f * s, cy + 3f * s, cx + 2f * s, cy + 8f * s);
+
+        // Gentle aromatic steam vapors rising from cup
+        float wag1 = MathUtils.sin(timer * 3f) * 4f * s;
+        float wag2 = MathUtils.cos(timer * 2.5f) * 5f * s;
+        sr.setColor(0.9f, 1f, 0.95f, 0.5f);
+        sr.rectLine(cx - 6f * s, cy + 12f * s, cx - 4f * s + wag1, cy + 32f * s, 2.5f * s);
+        sr.rectLine(cx + 8f * s, cy + 12f * s, cx + 6f * s + wag2, cy + 36f * s, 2.5f * s);
+    }
+
+    public static void drawWhetstone(ShapeRenderer sr, float cx, float cy, float s, float timer) {
+        // Coarse bottom stone layer (charcoal slate)
+        sr.setColor(0.24f, 0.26f, 0.30f, 1f);
+        sr.rect(cx - 26f * s, cy - 20f * s, 52f * s, 18f * s);
+        // Base edge bevel
+        sr.setColor(0.16f, 0.18f, 0.22f, 1f);
+        sr.rect(cx - 26f * s, cy - 23f * s, 52f * s, 4f * s);
+
+        // Fine top sharpening layer (warm amber-tan oilstone)
+        sr.setColor(0.85f, 0.65f, 0.38f, 1f);
+        sr.rect(cx - 26f * s, cy - 2f * s, 52f * s, 20f * s);
+
+        // Smooth top hone surface with wet sheen
+        sr.setColor(0.96f, 0.80f, 0.52f, 1f);
+        sr.rect(cx - 24f * s, cy + 10f * s, 48f * s, 6f * s);
+        sr.setColor(1f, 1f, 1f, 0.65f);
+        sr.rect(cx - 18f * s, cy + 12f * s, 32f * s, 2.5f * s);
+
+        // Heavy forged steel fishing hook laid across stone
+        sr.setColor(0.72f, 0.78f, 0.85f, 1f);
+        sr.rectLine(cx - 18f * s, cy - 8f * s, cx + 12f * s, cy + 22f * s, 4.5f * s);
+        // Curved barb tip
+        sr.rectLine(cx + 12f * s, cy + 22f * s, cx + 22f * s, cy + 12f * s, 4f * s);
+        sr.triangle(cx + 22f * s, cy + 12f * s, cx + 24f * s, cy + 18f * s, cx + 28f * s, cy + 10f * s);
+
+        // Brilliant sharpening spark glint on hook tip
+        float sparkPulse = 0.5f + 0.5f * MathUtils.sin(timer * 6f);
+        sr.setColor(1f, 0.95f, 0.4f, sparkPulse);
+        sr.circle(cx + 25f * s, cy + 13f * s, 5f * s * sparkPulse, 12);
+        sr.rectLine(cx + 18f * s, cy + 13f * s, cx + 32f * s, cy + 13f * s, 2f * s);
+        sr.rectLine(cx + 25f * s, cy + 6f * s, cx + 25f * s, cy + 20f * s, 2f * s);
+    }
+
+    public static void drawTreasureMagnet(ShapeRenderer sr, float cx, float cy, float s, float timer) {
+        // Red lacquer horseshoe magnet body
+        sr.setColor(0.85f, 0.18f, 0.18f, 1f);
+        // Left prong
+        sr.rect(cx - 25f * s, cy - 12f * s, 14f * s, 36f * s);
+        // Right prong
+        sr.rect(cx + 11f * s, cy - 12f * s, 14f * s, 36f * s);
+        // Top curved arch bridge
+        sr.rect(cx - 25f * s, cy + 14f * s, 50f * s, 16f * s);
+        sr.circle(cx - 18f * s, cy + 22f * s, 10f * s, 16);
+        sr.circle(cx + 18f * s, cy + 22f * s, 10f * s, 16);
+
+        // Center cutout arch
+        sr.setColor(0.12f, 0.10f, 0.08f, 0.9f);
+        sr.rect(cx - 11f * s, cy - 15f * s, 22f * s, 30f * s);
+        sr.circle(cx, cy + 14f * s, 11f * s, 16);
+
+        // Chrome silver magnetic pole shoes
+        sr.setColor(0.82f, 0.88f, 0.92f, 1f);
+        sr.rect(cx - 25f * s, cy - 24f * s, 14f * s, 12f * s);
+        sr.rect(cx + 11f * s, cy - 24f * s, 14f * s, 12f * s);
+
+        // Silver rim lips
+        sr.setColor(0.95f, 0.98f, 1f, 1f);
+        sr.rect(cx - 26f * s, cy - 25f * s, 16f * s, 3f * s);
+        sr.rect(cx + 10f * s, cy - 25f * s, 16f * s, 3f * s);
+
+        // Floating magnetic gold coin in between
+        sr.setColor(1f, 0.85f, 0.22f, 1f);
+        sr.circle(cx, cy - 14f * s, 8f * s, 16);
+        sr.setColor(0.85f, 0.65f, 0.15f, 1f);
+        sr.circle(cx, cy - 14f * s, 5f * s, 14);
+
+        // Pulsing golden magnetic flux arcs
+        float wave = 0.5f + 0.5f * MathUtils.sin(timer * 5f);
+        sr.setColor(1f, 0.9f, 0.3f, 0.6f * wave);
+        sr.rectLine(cx - 18f * s, cy - 30f * s, cx + 18f * s, cy - 30f * s, 2.5f * s);
+        sr.circle(cx - 22f * s, cy - 34f * s, 2.5f * s);
+        sr.circle(cx + 22f * s, cy - 34f * s, 2.5f * s);
+    }
+
+    public static void drawSonarGoggles(ShapeRenderer sr, float cx, float cy, float s, float timer) {
+        // Brown riveted leather strap
+        sr.setColor(0.42f, 0.25f, 0.14f, 1f);
+        sr.rect(cx - 36f * s, cy - 5f * s, 72f * s, 10f * s);
+        sr.setColor(0.28f, 0.16f, 0.08f, 1f);
+        sr.circle(cx - 32f * s, cy, 3f * s);
+        sr.circle(cx + 32f * s, cy, 3f * s);
+
+        // Brass nose bridge bridge
+        sr.setColor(0.92f, 0.75f, 0.25f, 1f);
+        sr.rect(cx - 6f * s, cy - 3f * s, 12f * s, 6f * s);
+
+        // Left & Right Brass Goggle Outer Eyepieces
+        sr.setColor(0.85f, 0.68f, 0.22f, 1f);
+        sr.circle(cx - 16f * s, cy, 18f * s, 24);
+        sr.circle(cx + 16f * s, cy, 18f * s, 24);
+
+        // Dark inner bezel
+        sr.setColor(0.12f, 0.18f, 0.22f, 1f);
+        sr.circle(cx - 16f * s, cy, 14f * s, 20);
+        sr.circle(cx + 16f * s, cy, 14f * s, 20);
+
+        // Glowing deep ocean sonar screen
+        sr.setColor(0.08f, 0.45f, 0.65f, 0.95f);
+        sr.circle(cx - 16f * s, cy, 12f * s, 20);
+        sr.circle(cx + 16f * s, cy, 12f * s, 20);
+
+        // Concentric radar sweep rings
+        sr.setColor(0.35f, 0.95f, 1f, 0.85f);
+        sr.circle(cx - 16f * s, cy, 8f * s, 16);
+        sr.circle(cx + 16f * s, cy, 8f * s, 16);
+        sr.circle(cx - 16f * s, cy, 3.5f * s, 12);
+        sr.circle(cx + 16f * s, cy, 3.5f * s, 12);
+
+        // Crosshairs in lenses
+        sr.rectLine(cx - 24f * s, cy, cx - 8f * s, cy, 1.5f * s);
+        sr.rectLine(cx - 16f * s, cy - 8f * s, cx - 16f * s, cy + 8f * s, 1.5f * s);
+        sr.rectLine(cx + 8f * s, cy, cx + 24f * s, cy, 1.5f * s);
+        sr.rectLine(cx + 16f * s, cy - 8f * s, cx + 16f * s, cy + 8f * s, 1.5f * s);
+
+        // Glass reflection sheen
+        sr.setColor(1f, 1f, 1f, 0.65f);
+        sr.rectLine(cx - 21f * s, cy + 5f * s, cx - 14f * s, cy + 10f * s, 2f * s);
+        sr.rectLine(cx + 11f * s, cy + 5f * s, cx + 18f * s, cy + 10f * s, 2f * s);
     }
 }

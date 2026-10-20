@@ -55,6 +55,12 @@ public class FishingManager {
     public boolean lastEncounterSuccess = false;
 
     // --- New mechanics fields ---
+    public Catchable predictedCatch = null;
+    public Catchable lastCatch = null;
+    public boolean showCatchSidebar = false;
+    public String lastCatchExtra = "";
+    public String lastCatchResultLine = "";
+    public int lastCatchDiamonds = 0;
     public float phaGiapCooldown = 0f;
     public float luotDayCooldown = 0f;
     public float troiBuocCooldown = 0f;
@@ -102,6 +108,14 @@ public class FishingManager {
         state = State.WAITING;
         castBonus = bonus;
         stateTimer = MathUtils.random(2f, 5f) - (bonus > 1f ? 1f : 0f); // Bonus giup ca nhanh can hon
+        if (player.getWhetstoneCharges() > 0) {
+            stateTimer *= 0.6f; // Lưỡi câu sắc bén thu hút cá cắn nhanh hơn 40%
+        }
+        if (player.getSonarCharges() > 0) {
+            predictedCatch = LootTable.rollCatch(player);
+        } else {
+            predictedCatch = null;
+        }
         combatMessage = "";
         rewardDone = false;
         
@@ -131,7 +145,12 @@ public class FishingManager {
     }
 
     public void startEncounter() {
-        currentCatch = LootTable.rollCatch(player);
+        if (predictedCatch != null) {
+            currentCatch = predictedCatch;
+            predictedCatch = null;
+        } else {
+            currentCatch = LootTable.rollCatch(player);
+        }
         player.setBaitBuffActive(false);
         rewardDone = false;
         if (!currentCatch.requiresCombat()) {
@@ -176,18 +195,29 @@ public class FishingManager {
     }
 
     public void finishEncounter(boolean success, String failReason) {
-        state = State.RESULT;
+        state = State.PRE_CAST;
         if (!rewardDone) {
             rewardDone = true;
             lastEncounterSuccess = success;
             
             if (success) {
                 player.recordSuccessfulCatch();
+                lastCatch = currentCatch;
+                showCatchSidebar = true;
             }
             
             // Clear one-time buffs
             player.setRiskyBaitActive(false);
             player.setOverclockPotionActive(false);
+            if (player.getWhetstoneCharges() > 0) {
+                player.consumeWhetstoneCharge();
+            }
+            if (player.getTreasureMagnetCharges() > 0) {
+                player.consumeTreasureMagnetCharge();
+            }
+            if (player.getSonarCharges() > 0) {
+                player.consumeSonarCharge();
+            }
             
             if (!success) {
                 isLineBroken = true;
@@ -245,6 +275,9 @@ public class FishingManager {
                             diamonds *= multiplier;
                             player.addDiamonds(diamonds);
                             combatMessage += " [+" + diamonds + " KC]";
+                            lastCatchDiamonds = diamonds;
+                        } else {
+                            lastCatchDiamonds = 0;
                         }
                     }
                 }
@@ -282,6 +315,10 @@ public class FishingManager {
 
                 combatMessage = "CÂU ĐƯỢC: " + currentCatch.getName() + extra + (lvUp > 0 ? " [TĂNG CẤP]" : "");
                 resultLine = "+" + xp + " XP   +" + (gold * multiplier) + " Vàng";
+                lastCatch = currentCatch;
+                lastCatchExtra = extra;
+                lastCatchResultLine = resultLine;
+                showCatchSidebar = true;
             }
             
             float benBiBonus = player.isSkillEquipped("ben_bi") ? player.getSkillTree().getBenBiBonus() : 0f;
@@ -291,6 +328,9 @@ public class FishingManager {
     }
 
     public void update(float delta, boolean actClicked, boolean isSpaceJust, boolean isSpaceDown, boolean[] activeSkillInputs, boolean actClose) {
+        if (actClose) {
+            showCatchSidebar = false;
+        }
         if (castResultTimer > 0) castResultTimer -= delta;
         
         float cdDelta = delta;
@@ -585,6 +625,7 @@ public class FishingManager {
             // Deal damage
             float dmgMult = 1f;
             if (phaGiapTimer > 0) dmgMult += phaGiapDebuff;
+            if (player.getWhetstoneCharges() > 0) dmgMult += 0.25f; // Đá mài tăng +25% sát thương kéo
             float dmg = player.getBasePullDamage() * dmgMult * delta;
             if (fishCuongNoTimer > 0) {
                 dmg = 0f;

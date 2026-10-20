@@ -20,6 +20,7 @@ import com.fishingrpg.game.FishingRPG;
 import com.fishingrpg.game.entities.ItemData;
 import com.fishingrpg.game.entities.Player;
 import com.fishingrpg.game.systems.AudioManager;
+import com.fishingrpg.game.ui.LootVisualRenderer;
 import com.fishingrpg.game.ui.NotificationUI;
 
 import java.util.ArrayList;
@@ -90,6 +91,31 @@ public class ShopScreen implements Screen {
             moteAlpha[i] = MathUtils.random(0.2f, 0.6f);
         }
 
+        refreshShopItemsList();
+    }
+
+    private void refreshShopItemsList() {
+        this.allShopItems = new ArrayList<>(com.fishingrpg.game.data.ItemDatabase.getShopItems());
+        if (player != null && player.getInventory() != null) {
+            for (String ownedName : player.getInventory().keySet()) {
+                if (ownedName.equals("Vàng") || player.getItemCount(ownedName) <= 0) continue;
+                boolean alreadyInShop = false;
+                for (ItemData it : allShopItems) {
+                    if (it.name.equals(ownedName)) {
+                        alreadyInShop = true;
+                        break;
+                    }
+                }
+                if (!alreadyInShop) {
+                    ItemData itemData = com.fishingrpg.game.data.ItemDatabase.getItem(ownedName);
+                    if (itemData != null) {
+                        allShopItems.add(itemData);
+                    } else {
+                        allShopItems.add(new ItemData(ownedName, "Vật phẩm câu được từ biển sâu", com.fishingrpg.game.entities.ItemUsageType.BOTH, 200));
+                    }
+                }
+            }
+        }
         filterItems();
     }
 
@@ -99,15 +125,15 @@ public class ShopScreen implements Screen {
             if (currentCategory == 0) {
                 filteredItems.add(item);
             } else if (currentCategory == 1) {
-                if (item.name.contains("Mồi") || item.name.contains("Nước") || item.name.contains("Bánh") || item.name.contains("Trà")) {
+                if (item.name.contains("Mồi") || item.name.contains("Nước") || item.name.contains("Bánh") || item.name.contains("Trà") || item.name.contains("Thuốc") || item.name.contains("Bình Xịt")) {
                     filteredItems.add(item);
                 }
             } else if (currentCategory == 2) {
-                if (item.name.startsWith("Sách: ")) {
+                if (item.name.startsWith("Sách: ") || item.name.contains("Sách")) {
                     filteredItems.add(item);
                 }
             } else if (currentCategory == 3) {
-                if (!item.name.contains("Mồi") && !item.name.contains("Nước") && !item.name.contains("Bánh") && !item.name.contains("Trà") && !item.name.startsWith("Sách: ")) {
+                if (!item.name.contains("Mồi") && !item.name.contains("Nước") && !item.name.contains("Bánh") && !item.name.contains("Trà") && !item.name.contains("Thuốc") && !item.name.contains("Bình Xịt") && !item.name.startsWith("Sách: ") && !item.name.contains("Sách")) {
                     filteredItems.add(item);
                 }
             }
@@ -198,20 +224,41 @@ public class ShopScreen implements Screen {
         sr.setColor(hoverBack ? new Color(1f, 0.85f, 0.4f, 1f) : new Color(0.7f, 0.5f, 0.25f, 0.7f));
         drawRectOutline(sr, 25, H - 64, 130, 44, 1.5f);
 
-        // Player Gold Dock (Top Right)
-        float goldDockW = 260f;
+        // Player Currency Docks (Top Right: Gold & Diamonds)
+        float goldDockW = 145f;
         float goldDockH = 44f;
-        float goldDockX = W - goldDockW - 25f;
+        float goldDockX = W - 305f;
         float goldDockY = H - 64f;
+
+        float diaDockW = 125f;
+        float diaDockH = 44f;
+        float diaDockX = W - 150f;
+        float diaDockY = H - 64f;
+
+        // Gold Dock
         sr.setColor(0.18f, 0.12f, 0.08f, 0.95f);
         drawRoundedRect(sr, goldDockX, goldDockY, goldDockW, goldDockH, 8);
         sr.setColor(0.95f, 0.75f, 0.25f, 0.9f);
         drawRectOutline(sr, goldDockX, goldDockY, goldDockW, goldDockH, 1.5f);
         // Golden Coin circle icon
         sr.setColor(1f, 0.85f, 0.2f, 1f);
-        sr.circle(goldDockX + 24, goldDockY + goldDockH / 2f, 12);
+        sr.circle(goldDockX + 22, goldDockY + goldDockH / 2f, 11);
         sr.setColor(0.85f, 0.65f, 0.1f, 1f);
-        sr.circle(goldDockX + 24, goldDockY + goldDockH / 2f, 9);
+        sr.circle(goldDockX + 22, goldDockY + goldDockH / 2f, 8);
+
+        // Diamond Dock
+        sr.setColor(0.08f, 0.14f, 0.22f, 0.95f);
+        drawRoundedRect(sr, diaDockX, diaDockY, diaDockW, diaDockH, 8);
+        sr.setColor(0.35f, 0.75f, 1f, 0.9f);
+        drawRectOutline(sr, diaDockX, diaDockY, diaDockW, diaDockH, 1.5f);
+        // Diamond icon
+        float dcx = diaDockX + 20f;
+        float dcy = diaDockY + diaDockH / 2f;
+        sr.setColor(0.3f, 0.85f, 1f, 1f);
+        sr.triangle(dcx, dcy + 10f, dcx - 9f, dcy, dcx + 9f, dcy);
+        sr.triangle(dcx, dcy - 10f, dcx - 9f, dcy, dcx + 9f, dcy);
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.triangle(dcx, dcy + 7f, dcx - 4f, dcy, dcx + 4f, dcy);
 
         // Category Filter Tabs
         float tabW = 260f;
@@ -262,9 +309,12 @@ public class ShopScreen implements Screen {
                 if (item.name.equals("Sách: Dưỡng Sức")) skillId = "duong_suc";
                 else if (item.name.equals("Sách: Giật Kép")) skillId = "giat_kep";
                 else if (item.name.equals("Sách: Mắt Đại Bàng")) skillId = "mat_dai_bang";
+                else if (item.name.equals("Sách: Thuần Hóa")) skillId = "thuan_hoa";
+                else if (item.name.equals("Sách: Trói Buộc")) skillId = "loi_nguyen_troi_buoc";
+                else if (item.name.equals("Sách: Trái Tim ĐD")) skillId = "trai_tim_dai_duong";
 
                 com.fishingrpg.game.skills.Skill s = player.getSkillTree().getSkill(skillId);
-                if (s != null && s.getLevel() > 0) isSoldOut = true;
+                if (s != null && s.isMaxed()) isSoldOut = true;
             }
 
             boolean hoverCard = (m.x >= x && m.x <= x + itemW && m.y >= y && m.y <= y + itemH);
@@ -332,10 +382,16 @@ public class ShopScreen implements Screen {
                 drawRectOutline(sr, sellBtnX, sellBtnY, sellBtnW, sellBtnH, 1.5f);
             }
 
-            // Flash sale discount ribbon
+            // Flash sale discount ribbon & original strikethrough price bar
             if (discount > 0 && !isSoldOut) {
                 sr.setColor(0.85f, 0.18f, 0.18f, 0.95f);
                 drawRoundedRect(sr, x + 8, y + itemH - 24, 75, 20, 4);
+
+                // Red strikethrough line over original price
+                float origPx = x + itemW - 12f - 75f;
+                float origPy = y + itemH - 36f;
+                sr.setColor(0.95f, 0.3f, 0.3f, 0.95f);
+                sr.rect(origPx, origPy + 4f, 72f, 2f);
             }
         }
 
@@ -372,8 +428,8 @@ public class ShopScreen implements Screen {
         layout.setText(titleFont, "TIỆM TẠP HÓA NGƯ ÔNG");
         titleFont.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 22f);
 
-        font.setColor(0.8f, 0.7f, 0.55f, 0.9f);
-        layout.setText(font, "Ngư cụ chuyên dụng, mồi nhử thượng hạng và bí kíp câu cá cổ truyền");
+        font.setColor(1f, 0.82f, 0.35f, 0.95f);
+        layout.setText(font, "★ GIỜ VÀNG: 2 mặt hàng ngẫu nhiên đang GIẢM GIÁ 10% - 50%! (Làm mới sau mỗi 4 lần câu)");
         font.draw(game.batch, layout, W / 2f - layout.width / 2f, H - 48f);
 
         // Back button text
@@ -381,10 +437,16 @@ public class ShopScreen implements Screen {
         layout.setText(font, "← QUAY LẠI");
         font.draw(game.batch, layout, 25f + (130f - layout.width) / 2f, H - 36f);
 
-        // Gold Dock Text
+        // Gold & Diamond Currency Texts
         font.setColor(1f, 0.9f, 0.35f, 1f);
-        String goldStr = player.getGold() + " Vàng";
-        font.draw(game.batch, goldStr, goldDockX + 46f, goldDockY + 28f);
+        font.getData().setScale(0.85f);
+        layout.setText(font, player.getGold() + " V");
+        font.draw(game.batch, layout, goldDockX + 38f, goldDockY + (goldDockH + layout.height) / 2f);
+
+        font.setColor(0.4f, 0.9f, 1f, 1f);
+        layout.setText(font, player.getDiamonds() + " KC");
+        font.draw(game.batch, layout, diaDockX + 36f, diaDockY + (diaDockH + layout.height) / 2f);
+        font.getData().setScale(1f);
 
         // Category filter tab texts
         for (int c = 0; c < CATEGORY_NAMES.length; c++) {
@@ -443,35 +505,56 @@ public class ShopScreen implements Screen {
 
             if (isSoldOut) {
                 font.setColor(0.6f, 0.6f, 0.6f, 1f);
+                font.getData().setScale(0.85f);
                 layout.setText(font, "ĐÃ HỌC");
-                font.draw(game.batch, layout, buyBtnX + (buyBtnW - layout.width) / 2f, buyBtnY + 22f);
+                font.draw(game.batch, layout, buyBtnX + (buyBtnW - layout.width) / 2f, buyBtnY + (buyBtnH + layout.height) / 2f);
             } else {
                 font.setColor(Color.WHITE);
-                String buyTxt = "MUA: " + currentPrice + "g";
+                font.getData().setScale(0.82f);
+                String buyTxt = "MUA: " + currentPrice + " V";
                 layout.setText(font, buyTxt);
-                font.draw(game.batch, layout, buyBtnX + (buyBtnW - layout.width) / 2f, buyBtnY + 22f);
+                if (layout.width > buyBtnW - 8f) {
+                    font.getData().setScale(0.82f * ((buyBtnW - 8f) / layout.width));
+                    layout.setText(font, buyTxt);
+                }
+                font.draw(game.batch, layout, buyBtnX + (buyBtnW - layout.width) / 2f, buyBtnY + (buyBtnH + layout.height) / 2f);
             }
 
             // Sell Button Text (if owned)
             if (player.hasItem(item.name)) {
                 float sellBtnW = 100f;
+                float sellBtnH = 34f;
                 float sellBtnX = buyBtnX - sellBtnW - 8f;
                 float sellBtnY = y + 12f;
 
-                font.setColor(1f, 0.85f, 0.85f, 1f);
-                String sellTxt = "BÁN: +" + item.sellPrice + "g";
+                font.setColor(1f, 0.88f, 0.88f, 1f);
+                font.getData().setScale(0.82f);
+                String sellTxt = "BÁN: +" + item.sellPrice + " V";
                 layout.setText(font, sellTxt);
-                font.draw(game.batch, layout, sellBtnX + (sellBtnW - layout.width) / 2f, sellBtnY + 22f);
+                if (layout.width > sellBtnW - 8f) {
+                    font.getData().setScale(0.82f * ((sellBtnW - 8f) / layout.width));
+                    layout.setText(font, sellTxt);
+                }
+                font.draw(game.batch, layout, sellBtnX + (sellBtnW - layout.width) / 2f, sellBtnY + (sellBtnH + layout.height) / 2f);
             }
 
-            // Discount ribbon tag text
+            // Discount ribbon tag text and original strikethrough price
             if (discount > 0 && !isSoldOut) {
                 font.setColor(Color.WHITE);
                 font.getData().setScale(0.8f);
                 layout.setText(font, "-" + discount + "%");
-                font.draw(game.batch, layout, x + 8 + (75 - layout.width) / 2f, y + itemH - 8);
-                font.getData().setScale(1f);
+                font.draw(game.batch, layout, x + 8 + (75 - layout.width) / 2f, y + itemH - 24 + (20f + layout.height) / 2f);
+
+                // Original crossed out price
+                font.setColor(0.75f, 0.75f, 0.75f, 0.85f);
+                font.getData().setScale(0.82f);
+                String origTxt = item.buyPrice + " V";
+                layout.setText(font, origTxt);
+                float origPx = x + itemW - 12f - 75f;
+                float origPy = y + itemH - 36f;
+                font.draw(game.batch, origTxt, origPx + (72f - layout.width) / 2f, origPy + 9f);
             }
+            font.getData().setScale(1f);
         }
 
         game.batch.end();
@@ -486,35 +569,10 @@ public class ShopScreen implements Screen {
     }
 
     private void drawItemCategoryIcon(ShapeRenderer sr, String itemName, float cx, float cy, boolean isSoldOut) {
-        if (itemName.startsWith("Sách: ")) {
-            // Book Icon
-            sr.setColor(isSoldOut ? Color.DARK_GRAY : new Color(0.75f, 0.25f, 0.25f, 1f));
-            drawRoundedRect(sr, cx - 18, cy - 22, 36, 44, 4);
-            sr.setColor(isSoldOut ? Color.GRAY : new Color(0.95f, 0.85f, 0.45f, 1f));
-            sr.rect(cx - 14, cy - 18, 6, 36);
-            sr.circle(cx + 4, cy, 6);
-        } else if (itemName.contains("Nước") || itemName.contains("Trà")) {
-            // Potion Vial
-            sr.setColor(isSoldOut ? Color.DARK_GRAY : new Color(0.2f, 0.65f, 0.95f, 0.9f));
-            sr.circle(cx, cy - 8, 18);
-            sr.rect(cx - 6, cy - 8, 12, 24);
-            // Cork
-            sr.setColor(0.55f, 0.35f, 0.15f, 1f);
-            drawRoundedRect(sr, cx - 8, cy + 14, 16, 8, 2);
-        } else if (itemName.contains("Mồi") || itemName.contains("Bánh")) {
-            // Bait Pouch / Food
-            sr.setColor(isSoldOut ? Color.DARK_GRAY : new Color(0.85f, 0.65f, 0.35f, 1f));
-            sr.circle(cx, cy - 4, 20);
-            sr.setColor(0.6f, 0.4f, 0.2f, 1f);
-            sr.rectLine(cx - 15, cy + 12, cx + 15, cy + 12, 4);
-        } else {
-            // Gear / Talisman
-            sr.setColor(isSoldOut ? Color.DARK_GRAY : new Color(0.95f, 0.75f, 0.25f, 1f));
-            sr.circle(cx, cy, 18);
-            sr.setColor(0.12f, 0.08f, 0.05f, 1f);
-            sr.circle(cx, cy, 10);
-            sr.setColor(0.95f, 0.35f, 0.25f, 1f);
-            sr.circle(cx, cy, 5);
+        LootVisualRenderer.drawLoot(sr, itemName, com.fishingrpg.game.loot.CatchableType.CONSUMABLE, cx, cy, 0.85f, animTimer);
+        if (isSoldOut) {
+            sr.setColor(0.08f, 0.08f, 0.08f, 0.65f);
+            sr.circle(cx, cy, 34f);
         }
     }
 
@@ -653,8 +711,11 @@ public class ShopScreen implements Screen {
                     if (item.name.equals("Sách: Dưỡng Sức")) skillId = "duong_suc";
                     else if (item.name.equals("Sách: Giật Kép")) skillId = "giat_kep";
                     else if (item.name.equals("Sách: Mắt Đại Bàng")) skillId = "mat_dai_bang";
+                    else if (item.name.equals("Sách: Thuần Hóa")) skillId = "thuan_hoa";
+                    else if (item.name.equals("Sách: Trói Buộc")) skillId = "loi_nguyen_troi_buoc";
+                    else if (item.name.equals("Sách: Trái Tim ĐD")) skillId = "trai_tim_dai_duong";
                     com.fishingrpg.game.skills.Skill s = player.getSkillTree().getSkill(skillId);
-                    if (s != null && s.getLevel() > 0) isSoldOut = true;
+                    if (s != null && s.isMaxed()) isSoldOut = true;
                 }
 
                 float buyBtnW = player.hasItem(item.name) ? 120f : 150f;
@@ -669,11 +730,17 @@ public class ShopScreen implements Screen {
                         player.getQuestManager().addProgress("spend", currentPrice);
                         if (!skillId.isEmpty()) {
                             com.fishingrpg.game.skills.Skill s = player.getSkillTree().getSkill(skillId);
-                            if (s != null) s.upgrade();
-                            showMessage("Đã học thành công " + item.name.substring(6) + "!");
+                            if (s != null && s.getLevel() == 0) {
+                                s.upgrade();
+                                player.applySkillBonuses();
+                                showMessage("Đã học thành công bí kíp " + item.name.substring(6) + " (Cấp 1)!");
+                            } else {
+                                player.addItem(item.name, 1);
+                                showMessage("Đã mua " + item.name + "! Dùng tại Phím tắt để Đột phá hoặc Quy đổi SP.");
+                            }
                         } else {
                             player.addItem(item.name, 1);
-                            showMessage("Đã mua thành công " + item.name + "!");
+                            showMessage("Đã mua thành công " + item.name + " (-" + currentPrice + " Vàng)!");
                         }
                     } else {
                         showMessage("Bạn không đủ Vàng để mua!");
@@ -692,7 +759,10 @@ public class ShopScreen implements Screen {
                         AudioManager.getInstance().playSFX("sfx_button");
                         player.consumeItem(item.name);
                         player.gainGold(item.sellPrice);
-                        showMessage("Đã bán " + item.name + " (+" + item.sellPrice + "g)!");
+                        showMessage("Đã bán " + item.name + " (+" + item.sellPrice + " Vàng)!");
+                        if (player.getItemCount(item.name) <= 0) {
+                            refreshShopItemsList();
+                        }
                         return;
                     }
                 }

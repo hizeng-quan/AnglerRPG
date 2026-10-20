@@ -43,6 +43,9 @@ public class LootTable {
         if (player != null && player.isSetBonusActive() && player.getEquippedRod() != null && player.getEquippedRod().setName.equals("Hải Tặc")) {
             treasureBonus += 30f;
         }
+        if (player != null && player.getTreasureMagnetCharges() > 0) {
+            treasureBonus += 45f;
+        }
         
         float wFish = W_FISH;
         float wTrash = W_TRASH;

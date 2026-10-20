@@ -70,6 +70,18 @@
     "skills": []
   },
   {
+    "name": "Cá Lóc Nhí",
+    "maxHp": 35.0,
+    "pullStrength": 7.0,
+    "rarity": "COMMON",
+    "baseWeightKg": 0.25,
+    "baseLengthCm": 16.0,
+    "baseXp": 4,
+    "baseGold": 3,
+    "map": "ao_lang",
+    "skills": []
+  },
+  {
     "name": "Cá Trê",
     "maxHp": 60.0,
     "pullStrength": 18.0,

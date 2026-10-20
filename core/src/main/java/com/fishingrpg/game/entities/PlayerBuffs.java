@@ -12,6 +12,9 @@ public class PlayerBuffs {
     private boolean fishingNetActive      = false;
     private boolean riskyBaitActive       = false;
     private boolean overclockPotionActive = false;
+    private int     whetstoneCharges      = 0;
+    private int     treasureMagnetCharges = 0;
+    private int     sonarCharges          = 0;
 
     // --- Sweet Bait ---
     public boolean isBaitBuffActive()           { return baitBuffActive; }
@@ -40,4 +43,22 @@ public class PlayerBuffs {
     // --- Overclock Potion ---
     public boolean isOverclockPotionActive()              { return overclockPotionActive; }
     public void    setOverclockPotionActive(boolean v)    { overclockPotionActive = v; }
+
+    // --- Whetstone (Đá Mài Lưỡi Câu) ---
+    public int  getWhetstoneCharges()                    { return whetstoneCharges; }
+    public void addWhetstoneCharges(int charges)         { whetstoneCharges += charges; }
+    public void consumeWhetstoneCharge()                 { if (whetstoneCharges > 0) whetstoneCharges--; }
+    public void setWhetstoneCharges(int v)               { whetstoneCharges = Math.max(0, v); }
+
+    // --- Treasure Magnet (Nam Châm Kho Báu) ---
+    public int  getTreasureMagnetCharges()               { return treasureMagnetCharges; }
+    public void addTreasureMagnetCharges(int charges)    { treasureMagnetCharges += charges; }
+    public void consumeTreasureMagnetCharge()            { if (treasureMagnetCharges > 0) treasureMagnetCharges--; }
+    public void setTreasureMagnetCharges(int v)          { treasureMagnetCharges = Math.max(0, v); }
+
+    // --- Sonar Hydro-Goggles (Kính Nhìn Xuyên Nước) ---
+    public int  getSonarCharges()                        { return sonarCharges; }
+    public void addSonarCharges(int charges)             { sonarCharges += charges; }
+    public void consumeSonarCharge()                     { if (sonarCharges > 0) sonarCharges--; }
+    public void setSonarCharges(int v)                   { sonarCharges = Math.max(0, v); }
 }

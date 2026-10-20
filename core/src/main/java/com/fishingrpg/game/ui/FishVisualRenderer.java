@@ -53,6 +53,9 @@ public class FishVisualRenderer {
             case "Cá Mương":
                 drawCaMuong(sr, cx, cy, scale, wagFine);
                 break;
+            case "Cá Lóc Nhí":
+                drawCaLocNhi(sr, cx, cy, scale, wagFine);
+                break;
             case "Cá Trê":
                 drawCaTre(sr, cx, cy, scale, wag);
                 break;
@@ -327,6 +330,59 @@ public class FishVisualRenderer {
         sr.circle(cx + 34f * s, cy + 2f * s, 3f * s);
         sr.setColor(1f, 1f, 1f, 1f);
         sr.circle(cx + 35f * s, cy + 3f * s, 1f * s);
+    }
+
+    // =========================================================================
+    // 5B. CÁ LÓC NHÍ (Juvenile Snakehead Fry, Golden Lateral Stripe, Tiger Spots)
+    // =========================================================================
+    private static void drawCaLocNhi(ShapeRenderer sr, float cx, float cy, float s, float wag) {
+        float tailX = cx - 48f * s + wag * 4.5f * s;
+        float tailY = cy + wag * 5.5f * s;
+
+        // Rounded juvenile paddle tail with warm rim
+        sr.setColor(0.30f, 0.40f, 0.22f, 0.9f);
+        sr.circle(tailX - 6f * s, tailY, 13f * s);
+        sr.setColor(1.0f, 0.75f, 0.20f, 0.8f);
+        sr.circle(tailX - 8f * s, tailY, 7f * s);
+
+        // Long soft dorsal fin running along the back
+        sr.setColor(0.28f, 0.38f, 0.20f, 0.95f);
+        for (int i = 0; i < 7; i++) {
+            float fx = cx - 26f * s + i * 7.5f * s;
+            sr.rectLine(fx, cy + 6f * s, fx + 3f * s, cy + 15f * s, 2.4f * s);
+        }
+
+        // Slender juvenile torpedo body
+        sr.setColor(0.36f, 0.48f, 0.28f, 1f); // Olive green
+        sr.rectLine(cx - 28f * s, cy, cx + 18f * s, cy, 18f * s);
+        sr.circle(cx - 4f * s, cy, 12f * s);
+
+        // Golden/Orange signature juvenile lateral line (Vệt vàng cam đặc trưng cá lóc nhí)
+        sr.setColor(1.0f, 0.72f, 0.16f, 0.95f);
+        sr.rectLine(cx - 30f * s, cy, cx + 22f * s, cy + 1f * s, 3.8f * s);
+
+        // Dark tiger camouflage bars along back
+        sr.setColor(0.14f, 0.20f, 0.12f, 0.95f);
+        for (int i = 0; i < 5; i++) {
+            float bx = cx - 22f * s + i * 8.5f * s;
+            sr.triangle(bx, cy + 8f * s, bx + 4f * s, cy - 2f * s, bx - 3f * s, cy + 2f * s);
+        }
+
+        // Cream belly
+        sr.setColor(0.85f, 0.88f, 0.75f, 0.85f);
+        sr.rectLine(cx - 20f * s, cy - 5f * s, cx + 14f * s, cy - 5f * s, 4f * s);
+
+        // Snake-like juvenile head
+        sr.setColor(0.32f, 0.42f, 0.24f, 1f);
+        sr.triangle(cx + 15f * s, cy + 9f * s, cx + 15f * s, cy - 9f * s, cx + 38f * s, cy - 1f * s);
+
+        // Big, cute, alert golden eye
+        sr.setColor(1.0f, 0.82f, 0.25f, 1f);
+        sr.circle(cx + 26f * s, cy + 4f * s, 5f * s);
+        sr.setColor(0.08f, 0.08f, 0.08f, 1f);
+        sr.circle(cx + 27f * s, cy + 4f * s, 2.8f * s);
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(cx + 28f * s, cy + 5f * s, 1.2f * s);
     }
 
     // =========================================================================

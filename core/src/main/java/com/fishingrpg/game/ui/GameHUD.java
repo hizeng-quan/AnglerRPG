@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
+import com.badlogic.gdx.utils.Align;
 import com.fishingrpg.game.PlayScreen;
 import com.fishingrpg.game.entities.Fish;
 import com.fishingrpg.game.entities.Player;
@@ -41,7 +42,7 @@ public class GameHUD {
     private static final float INV_SLOT_SIZE = 58f;
     private static final float INV_PADDING = 8f;
     private static final float INV_PANEL_W = 3 * INV_SLOT_SIZE + 4 * INV_PADDING; // 206f
-    private static final float INV_PANEL_H = 3 * INV_SLOT_SIZE + 4 * INV_PADDING + 32f; // 238f
+    private static final float INV_PANEL_H = 3 * INV_SLOT_SIZE + 4 * INV_PADDING + 28f; // 234f
     private static final float INV_X = W - INV_PANEL_W - 16f;
     private static final float INV_Y = 16f;
 
@@ -81,6 +82,7 @@ public class GameHUD {
     private boolean hoverEvent = false;
     private boolean hoverCang = false;
     private boolean hoverClose = false;
+    private boolean hoverCatchClose = false;
     private final boolean[] hoverActives = new boolean[4];
 
     private float timer = 0f;
@@ -146,14 +148,22 @@ public class GameHUD {
                     m.x >= BTN_CANG_X && m.x <= BTN_CANG_X + 85f &&
                     m.y >= BTN_CANG_Y && m.y <= BTN_CANG_Y + 66f;
 
-        // Modal Result continue button
-        hoverClose = state == State.RESULT && hoverCast;
+        // Close button on catch sidebar
+        float sbX = INV_X;
+        float sbY = INV_Y + INV_PANEL_H + 10f;
+        float sbW = INV_PANEL_W;
+        float sbH = 325f;
+        hoverCatchClose = screen.fishingManager.showCatchSidebar &&
+                          m.x >= sbX + sbW - 24f && m.x <= sbX + sbW - 4f &&
+                          m.y >= sbY + sbH - 24f && m.y <= sbY + sbH - 4f;
+        hoverClose = hoverCatchClose;
 
         hoveredInventoryItem = getClickedInventoryItem(m, state);
     }
 
     public boolean isCastHovered() { return hoverCast; }
     public boolean isCloseHovered() { return hoverClose; }
+    public boolean isCatchCloseHovered() { return hoverCatchClose; }
     public boolean isActiveSlotHovered(int slotIndex) {
         if (slotIndex >= 0 && slotIndex < 4) return hoverActives[slotIndex];
         return false;
@@ -1157,13 +1167,39 @@ public class GameHUD {
             LootVisualRenderer.drawLoot(sr, name, com.fishingrpg.game.loot.CatchableType.CONSUMABLE,
                     x + INV_SLOT_SIZE / 2f, y + INV_SLOT_SIZE / 2f - 2f, 0.60f, timer);
 
+            // Special glow & badge backing for skill books
+            if (name.startsWith("Sách: ")) {
+                String skillId = getSkillIdFromBookName(name);
+                com.fishingrpg.game.skills.Skill s = skillId != null ? player.getSkillTree().getSkill(skillId) : null;
+                if (s != null) {
+                    if (s.getLevel() == 0) {
+                        sr.setColor(0.08f, 0.38f, 0.18f, 0.95f);
+                        sr.rect(x + INV_SLOT_SIZE - 29f, y + INV_SLOT_SIZE - 17f, 27f, 15f);
+                    } else if (!s.isMaxed()) {
+                        float pulse = 0.5f + 0.5f * MathUtils.sin(timer * 5f);
+                        sr.setColor(1f, 0.82f, 0.2f, 0.8f + 0.2f * pulse);
+                        drawBoxBorder(x, y, INV_SLOT_SIZE, INV_SLOT_SIZE, 2f);
+                        sr.setColor(0.55f, 0.38f, 0.08f, 0.95f);
+                        sr.rect(x + INV_SLOT_SIZE - 29f, y + INV_SLOT_SIZE - 17f, 27f, 15f);
+                    } else {
+                        float pulse = 0.5f + 0.5f * MathUtils.sin(timer * 5f);
+                        sr.setColor(0.4f, 0.85f, 1f, 0.8f + 0.2f * pulse);
+                        drawBoxBorder(x, y, INV_SLOT_SIZE, INV_SLOT_SIZE, 2f);
+                        sr.setColor(0.12f, 0.35f, 0.52f, 0.95f);
+                        sr.rect(x + INV_SLOT_SIZE - 29f, y + INV_SLOT_SIZE - 17f, 27f, 15f);
+                    }
+                }
+            }
+
             // Key badge backing in top-left
             sr.setColor(0.06f, 0.08f, 0.14f, 0.92f);
-            sr.rect(x + 2f, y + INV_SLOT_SIZE - 17f, 18f, 15f);
+            sr.rect(x + 2f, y + INV_SLOT_SIZE - 17f, 20f, 15f);
 
             // Quantity badge backing in bottom-right
+            int qtyVal = entry.getValue();
+            float qbW = (qtyVal >= 100) ? 32f : (qtyVal >= 10) ? 26f : 20f;
             sr.setColor(0.06f, 0.08f, 0.14f, 0.92f);
-            sr.rect(x + INV_SLOT_SIZE - 28f, y + 2f, 26f, 15f);
+            sr.rect(x + INV_SLOT_SIZE - qbW - 2f, y + 2f, qbW, 15f);
             i++;
         }
     }
@@ -1186,12 +1222,42 @@ public class GameHUD {
             // Top-left: [1] hotkey in bright cyan
             font.setColor(0.35f, 0.9f, 1f, 1f);
             font.getData().setScale(0.70f);
-            font.draw(batch, "[" + (i + 1) + "]", x + 3f, y + INV_SLOT_SIZE - 4f);
+            String hotkeyStr = "[" + (i + 1) + "]";
+            layout.setText(font, hotkeyStr);
+            font.draw(batch, layout, x + 2f + (20f - layout.width) / 2f, y + INV_SLOT_SIZE - 17f + (15f + layout.height) / 2f);
+
+            // Top-right skill book status badge text
+            if (name.startsWith("Sách: ")) {
+                String skillId = getSkillIdFromBookName(name);
+                com.fishingrpg.game.skills.Skill s = skillId != null ? player.getSkillTree().getSkill(skillId) : null;
+                if (s != null) {
+                    font.getData().setScale(0.65f);
+                    if (s.getLevel() == 0) {
+                        font.setColor(0.45f, 1f, 0.55f, 1f);
+                        layout.setText(font, "HỌC");
+                        font.draw(batch, layout, x + INV_SLOT_SIZE - 29f + (27f - layout.width) / 2f, y + INV_SLOT_SIZE - 17f + (15f + layout.height) / 2f);
+                    } else if (!s.isMaxed()) {
+                        font.setColor(1f, 0.92f, 0.3f, 1f);
+                        layout.setText(font, "★UP");
+                        font.draw(batch, layout, x + INV_SLOT_SIZE - 29f + (27f - layout.width) / 2f, y + INV_SLOT_SIZE - 17f + (15f + layout.height) / 2f);
+                    } else {
+                        font.setColor(0.45f, 0.95f, 1f, 1f);
+                        layout.setText(font, "+SP");
+                        font.draw(batch, layout, x + INV_SLOT_SIZE - 29f + (27f - layout.width) / 2f, y + INV_SLOT_SIZE - 17f + (15f + layout.height) / 2f);
+                    }
+                    font.getData().setScale(1f);
+                }
+            }
 
             // Bottom-right: xN quantity in bright gold/white
             font.setColor(1f, 0.9f, 0.25f, 1f);
             font.getData().setScale(0.72f);
-            font.draw(batch, "x" + entry.getValue(), x + INV_SLOT_SIZE - 26f, y + 14f);
+            String qtyStr = "x" + entry.getValue();
+            layout.setText(font, qtyStr);
+            int qtyVal = entry.getValue();
+            float qbW = (qtyVal >= 100) ? 32f : (qtyVal >= 10) ? 26f : 20f;
+            float qbX = x + INV_SLOT_SIZE - qbW - 2f;
+            font.draw(batch, layout, qbX + (qbW - layout.width) / 2f, y + 2f + (15f + layout.height) / 2f);
             font.getData().setScale(1f);
             i++;
         }
@@ -1208,8 +1274,9 @@ public class GameHUD {
         if (hoveredInventoryItem != null) {
             com.fishingrpg.game.entities.ItemData itemData = com.fishingrpg.game.data.ItemDatabase.getItem(hoveredInventoryItem);
             if (itemData != null) {
-                float tipW = 250f;
-                float tipH = 95f;
+                boolean isBook = hoveredInventoryItem.startsWith("Sách: ");
+                float tipW = isBook ? 320f : 260f;
+                float tipH = isBook ? 120f : 95f;
                 Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
                 screen.getViewport().unproject(mouse);
                 float tipX = mouse.x - tipW - 12f;
@@ -1228,20 +1295,45 @@ public class GameHUD {
                 Gdx.gl.glDisable(GL20.GL_BLEND);
                 batch.begin();
 
-                font.setColor(1f, 0.88f, 0.3f, 1f);
-                font.draw(batch, itemData.name, tipX + 12, tipY + 74);
-                font.setColor(0.85f, 0.88f, 0.95f, 1f);
-                font.getData().setScale(0.8f);
-                font.draw(batch, itemData.description, tipX + 12, tipY + 50);
+                if (isBook) {
+                    String skillId = getSkillIdFromBookName(hoveredInventoryItem);
+                    com.fishingrpg.game.skills.Skill s = skillId != null ? player.getSkillTree().getSkill(skillId) : null;
 
-                String usageText = "";
-                if (itemData.usageType == com.fishingrpg.game.entities.ItemUsageType.IN_COMBAT) usageText = "• Chỉ dùng lúc giằng co";
-                else if (itemData.usageType == com.fishingrpg.game.entities.ItemUsageType.PRE_COMBAT) usageText = "• Dùng trước khi quăng cần";
-                else usageText = "• Dùng bất kỳ lúc nào";
+                    font.setColor(1f, 0.88f, 0.3f, 1f);
+                    font.draw(batch, itemData.name, tipX + 12, tipY + tipH - 16f);
+                    font.setColor(0.85f, 0.88f, 0.95f, 1f);
+                    font.getData().setScale(0.8f);
+                    font.draw(batch, itemData.description, tipX + 12, tipY + tipH - 40f);
 
-                font.setColor(0.4f, 0.9f, 0.5f, 1f);
-                font.draw(batch, usageText, tipX + 12, tipY + 24);
-                font.getData().setScale(1f);
+                    if (s == null || s.getLevel() == 0) {
+                        font.setColor(0.4f, 1f, 0.5f, 1f);
+                        font.draw(batch, "• Bấm phím / Nhấp: Học kỹ năng (Cấp 1)", tipX + 12, tipY + tipH - 66f);
+                    } else if (!s.isMaxed()) {
+                        font.setColor(1f, 0.85f, 0.25f, 1f);
+                        font.draw(batch, "• Bấm phím / Nhấp: ĐỘT PHÁ Cấp " + (s.getLevel() + 1) + " (0 SP)", tipX + 12, tipY + tipH - 66f);
+                    } else {
+                        font.setColor(0.4f, 0.9f, 1f, 1f);
+                        font.draw(batch, "• Bấm phím / Nhấp: QUY ĐỔI thành +1 Điểm Kỹ Năng (SP)", tipX + 12, tipY + tipH - 66f);
+                    }
+                    font.setColor(0.9f, 0.75f, 0.45f, 1f);
+                    font.draw(batch, "• Hoặc đem bán tại Cửa Hàng để nhận " + itemData.sellPrice + " Vàng", tipX + 12, tipY + tipH - 92f);
+                    font.getData().setScale(1f);
+                } else {
+                    font.setColor(1f, 0.88f, 0.3f, 1f);
+                    font.draw(batch, itemData.name, tipX + 12, tipY + 74);
+                    font.setColor(0.85f, 0.88f, 0.95f, 1f);
+                    font.getData().setScale(0.8f);
+                    font.draw(batch, itemData.description, tipX + 12, tipY + 50);
+
+                    String usageText = "";
+                    if (itemData.usageType == com.fishingrpg.game.entities.ItemUsageType.IN_COMBAT) usageText = "• Chỉ dùng lúc giằng co";
+                    else if (itemData.usageType == com.fishingrpg.game.entities.ItemUsageType.PRE_COMBAT) usageText = "• Dùng trước khi quăng cần";
+                    else usageText = "• Dùng bất kỳ lúc nào";
+
+                    font.setColor(0.4f, 0.9f, 0.5f, 1f);
+                    font.draw(batch, usageText, tipX + 12, tipY + 24);
+                    font.getData().setScale(1f);
+                }
             }
         }
     }
@@ -1254,6 +1346,18 @@ public class GameHUD {
         // 0. Water Bobber in WAITING or BITE
         if (screen.fishingManager.state == State.WAITING || screen.fishingManager.state == State.BITE) {
             drawWaterBobberShapes();
+
+            // Sonar detection radar box backing
+            if (screen.fishingManager.predictedCatch != null) {
+                float boxW = 500f;
+                float boxH = 36f;
+                float boxX = (W - boxW) / 2f;
+                float boxY = 550f;
+                sr.setColor(0.04f, 0.12f, 0.20f, 0.92f);
+                sr.rect(boxX, boxY, boxW, boxH);
+                sr.setColor(0.25f, 0.85f, 1f, 0.85f);
+                drawBoxBorder(boxX, boxY, boxW, boxH, 1.5f);
+            }
         }
 
         // 0. Combat Fish in Water & Dynamic Bending Rod in COMBAT
@@ -1525,17 +1629,17 @@ public class GameHUD {
             drawBoxBorder(BTN_CANG_X, BTN_CANG_Y, 85f, 66f, 1.8f);
         }
 
-        // 6. Action / Result Primary Button
-        if (screen.fishingManager.state == State.RESULT || screen.fishingManager.state == State.PRE_CAST) {
-            drawCastButton(screen.fishingManager.state == State.RESULT ? "TIẾP TỤC CÂU" : "QUĂNG CẦN");
+        // 6. Action Primary Button
+        if (screen.fishingManager.state == State.PRE_CAST) {
+            drawCastButton("QUĂNG CẦN");
         }
 
         // 7. Persistent Top Header Bar (Level, EXP, Map, Buffs, Gold, Diamonds)
         drawTopPlayerHeaderShapes(player);
 
-        // 8. Epic Result Modal Frame
-        if (screen.fishingManager.state == State.RESULT) {
-            drawResultModalShapes();
+        // 8. Catch Notification on Right Sidebar (above Quick Slots)
+        if (screen.fishingManager.showCatchSidebar && screen.fishingManager.lastCatch != null) {
+            drawCatchSidebarShapes(screen.fishingManager.lastCatch);
         }
 
         // 9. Screen Ink Overlay Skills
@@ -1665,150 +1769,68 @@ public class GameHUD {
         sr.circle(gemX, gemY, 2.5f);
     }
 
-    private void drawResultModalShapes() {
-        float modalW = 600f;
-        float modalH = 430f;
-        float modalX = (W - modalW) / 2f;
-        float modalY = 145f;
+    private void drawCatchSidebarShapes(Catchable catchable) {
+        if (catchable == null) return;
+        float sbX = INV_X;
+        float sbY = INV_Y + INV_PANEL_H + 10f;
+        float sbW = INV_PANEL_W;
+        float sbH = 325f;
 
-        boolean success = screen.fishingManager.lastEncounterSuccess;
-
-        // Modal backing
-        sr.setColor(0.08f, 0.11f, 0.18f, 0.97f);
-        sr.rect(modalX, modalY, modalW, modalH);
-
-        // Header Ribbon
-        float ribbonH = 50f;
-        float ribbonY = modalY + modalH - ribbonH;
-        if (success) {
-            sr.rect(modalX, ribbonY, modalW, ribbonH,
-                    new Color(0.25f, 0.18f, 0.08f, 1f),
-                    new Color(0.25f, 0.18f, 0.08f, 1f),
-                    new Color(0.45f, 0.32f, 0.10f, 1f),
-                    new Color(0.45f, 0.32f, 0.10f, 1f));
-            sr.setColor(1f, 0.85f, 0.35f, 1f);
-            sr.rect(modalX, ribbonY, modalW, 2.5f);
-
-            // Spotlight pedestal & unique illustrations
-            float pedestalX = modalX + modalW / 2f;
-            float pedestalY = modalY + 225f;
-
-            if (screen.fishingManager.currentCatch instanceof Fish) {
-                Fish f = (Fish) screen.fishingManager.currentCatch;
-                Color rColor = f.getRarityColor();
-                sr.setColor(rColor.r, rColor.g, rColor.b, 0.12f);
-                sr.circle(pedestalX, pedestalY, 85f, 36);
-                sr.setColor(rColor.r, rColor.g, rColor.b, 0.22f);
-                sr.circle(pedestalX, pedestalY, 65f, 32);
-
-                // Pedestal Base Platform
-                sr.setColor(0.14f, 0.18f, 0.28f, 0.9f);
-                sr.ellipse(pedestalX, pedestalY - 32f, 160f, 32f);
-                sr.setColor(rColor.r, rColor.g, rColor.b, 0.7f);
-                sr.ellipse(pedestalX, pedestalY - 32f, 150f, 26f);
-                sr.setColor(0.09f, 0.13f, 0.20f, 0.95f);
-                sr.ellipse(pedestalX, pedestalY - 30f, 140f, 20f);
-
-                // Rotating celebration rays/sparkles
-                float rayRot = timer * 0.8f;
-                for (int ray = 0; ray < 8; ray++) {
-                    float a = rayRot + ray * (MathUtils.PI2 / 8f);
-                    float rx = pedestalX + MathUtils.cos(a) * 80f;
-                    float ry = pedestalY + MathUtils.sin(a) * 52f;
-                    sr.setColor(1f, 0.9f, 0.4f, 0.6f + 0.3f * MathUtils.sin(timer * 4f + ray));
-                    sr.circle(rx, ry, 2.5f, 8);
-                }
-
-                // DRAW THE UNIQUE HANDCRAFTED FISH SPECIES!
-                FishVisualRenderer.drawFish(sr, f.getName(), pedestalX, pedestalY, 1.4f, timer, rColor);
-            } else if (screen.fishingManager.currentCatch instanceof LootItem) {
-                LootItem loot = (LootItem) screen.fishingManager.currentCatch;
-
-                if (loot.getType() == CatchableType.TREASURE) {
-                    // Mystical ancient golden dais
-                    sr.setColor(1f, 0.85f, 0.25f, 0.15f);
-                    sr.circle(pedestalX, pedestalY, 95f, 36);
-                    sr.setColor(1f, 0.85f, 0.25f, 0.25f);
-                    sr.circle(pedestalX, pedestalY, 70f, 32);
-
-                    // Ornate platform
-                    sr.setColor(0.24f, 0.18f, 0.08f, 0.95f);
-                    sr.ellipse(pedestalX, pedestalY - 32f, 160f, 32f);
-                    sr.setColor(1f, 0.85f, 0.3f, 0.8f);
-                    sr.ellipse(pedestalX, pedestalY - 32f, 150f, 26f);
-                    sr.setColor(0.12f, 0.09f, 0.04f, 0.95f);
-                    sr.ellipse(pedestalX, pedestalY - 30f, 140f, 20f);
-
-                    // Golden sparkles rotating
-                    float rayRot = timer * 0.9f;
-                    for (int ray = 0; ray < 8; ray++) {
-                        float a = rayRot + ray * (MathUtils.PI2 / 8f);
-                        float rx = pedestalX + MathUtils.cos(a) * 85f;
-                        float ry = pedestalY + MathUtils.sin(a) * 55f;
-                        sr.setColor(1f, 0.9f, 0.35f, 0.7f + 0.3f * MathUtils.sin(timer * 5f + ray));
-                        sr.circle(rx, ry, 3f, 8);
-                    }
-
-                    // DRAW UNIQUE HANDCRAFTED TREASURE!
-                    LootVisualRenderer.drawLoot(sr, loot.getName(), loot.getType(), pedestalX, pedestalY, 2.0f, timer);
-
-                } else if (loot.getType() == CatchableType.TRASH) {
-                    // Wet mossy stone slab pedestal
-                    sr.setColor(0.12f, 0.18f, 0.20f, 0.3f);
-                    sr.circle(pedestalX, pedestalY, 80f, 32);
-
-                    // Weathered slab platform
-                    sr.setColor(0.12f, 0.16f, 0.18f, 0.95f);
-                    sr.ellipse(pedestalX, pedestalY - 32f, 155f, 30f);
-                    sr.setColor(0.35f, 0.48f, 0.45f, 0.75f);
-                    sr.ellipse(pedestalX, pedestalY - 32f, 145f, 24f);
-                    sr.setColor(0.08f, 0.11f, 0.12f, 0.95f);
-                    sr.ellipse(pedestalX, pedestalY - 30f, 135f, 18f);
-
-                    // Water ripple rings
-                    float rip = (timer * 1.5f) % 1f;
-                    sr.setColor(0.4f, 0.75f, 0.8f, (1f - rip) * 0.4f);
-                    sr.ellipse(pedestalX, pedestalY - 30f, 140f * (0.6f + rip * 0.4f), 20f * (0.6f + rip * 0.4f));
-
-                    // DRAW UNIQUE HANDCRAFTED TRASH!
-                    LootVisualRenderer.drawLoot(sr, loot.getName(), loot.getType(), pedestalX, pedestalY, 2.0f, timer);
-
-                } else {
-                    // Consumable / potion altar
-                    sr.setColor(0.2f, 0.7f, 0.9f, 0.18f);
-                    sr.circle(pedestalX, pedestalY, 85f, 32);
-
-                    sr.setColor(0.12f, 0.16f, 0.26f, 0.95f);
-                    sr.ellipse(pedestalX, pedestalY - 32f, 150f, 30f);
-                    sr.setColor(0.3f, 0.65f, 0.95f, 0.8f);
-                    sr.ellipse(pedestalX, pedestalY - 32f, 140f, 24f);
-                    sr.setColor(0.08f, 0.10f, 0.18f, 0.95f);
-                    sr.ellipse(pedestalX, pedestalY - 30f, 130f, 18f);
-
-                    // DRAW UNIQUE HANDCRAFTED CONSUMABLE!
-                    LootVisualRenderer.drawLoot(sr, loot.getName(), loot.getType(), pedestalX, pedestalY, 2.0f, timer);
-                }
-            }
-        } else {
-            sr.setColor(0.35f, 0.10f, 0.12f, 1f);
-            sr.rect(modalX, ribbonY, modalW, ribbonH);
-            sr.setColor(0.9f, 0.25f, 0.25f, 1f);
-            sr.rect(modalX, ribbonY, modalW, 2.5f);
+        Color themeColor = Color.GOLD;
+        if (catchable instanceof Fish) {
+            themeColor = ((Fish) catchable).getRarityColor();
+        } else if (catchable instanceof LootItem) {
+            LootItem li = (LootItem) catchable;
+            if (li.getType() == CatchableType.TREASURE) themeColor = new Color(1f, 0.85f, 0.25f, 1f);
+            else if (li.getType() == CatchableType.TRASH) themeColor = new Color(0.6f, 0.75f, 0.8f, 1f);
+            else themeColor = new Color(0.35f, 0.95f, 0.65f, 1f);
         }
 
-        // Rewards / Specs Card Inner Box
-        float boxX = modalX + 25f;
-        float boxY = modalY + 20f;
-        float boxW = modalW - 50f;
-        float boxH = 125f;
-        sr.setColor(0.12f, 0.16f, 0.25f, 0.9f);
-        sr.rect(boxX, boxY, boxW, boxH);
-        sr.setColor(0.3f, 0.4f, 0.55f, 0.6f);
-        drawBoxBorder(boxX, boxY, boxW, boxH, 1.2f);
+        // Panel background (Dark obsidian glass)
+        sr.setColor(0.08f, 0.11f, 0.17f, 0.95f);
+        sr.rect(sbX, sbY, sbW, sbH);
+        sr.setColor(themeColor.r, themeColor.g, themeColor.b, 0.85f);
+        drawBoxBorder(sbX, sbY, sbW, sbH, 1.6f);
 
-        // Outer Metallic Border with Gold Corner Notches
-        sr.setColor(success ? new Color(1f, 0.85f, 0.35f, 0.85f) : new Color(0.9f, 0.3f, 0.3f, 0.85f));
-        drawBoxBorder(modalX, modalY, modalW, modalH, 2.2f);
+        // Header bar
+        sr.setColor(0.14f, 0.18f, 0.28f, 0.95f);
+        sr.rect(sbX, sbY + sbH - 26f, sbW, 26f);
+        sr.setColor(themeColor.r, themeColor.g, themeColor.b, 0.7f);
+        sr.rect(sbX, sbY + sbH - 26f, sbW, 1.5f);
+
+        // Close button backing (top right corner of header)
+        sr.setColor(hoverCatchClose ? new Color(0.65f, 0.2f, 0.2f, 0.95f) : new Color(0.18f, 0.22f, 0.32f, 0.8f));
+        sr.rect(sbX + sbW - 22f, sbY + sbH - 22f, 18f, 18f);
+
+        // Center illustration & pedestal
+        float cx = sbX + sbW / 2f;
+        float cy = sbY + 185f;
+        sr.setColor(themeColor.r, themeColor.g, themeColor.b, 0.15f);
+        sr.circle(cx, cy, 38f, 24);
+
+        // Concentric, perfectly centered pedestal platform ellipses!
+        float pw = 84f, ph = 18f;
+        sr.setColor(0.12f, 0.16f, 0.24f, 0.85f);
+        sr.ellipse(cx - pw / 2f, cy - 24f - ph / 2f, pw, ph);
+        sr.setColor(themeColor.r, themeColor.g, themeColor.b, 0.6f);
+        sr.ellipse(cx - (pw - 8f) / 2f, cy - 24f - (ph - 4f) / 2f, pw - 8f, ph - 4f);
+        sr.setColor(0.08f, 0.10f, 0.16f, 0.95f);
+        sr.ellipse(cx - (pw - 16f) / 2f, cy - 23f - (ph - 6f) / 2f, pw - 16f, ph - 6f);
+
+        // Draw the vector art illustration!
+        if (catchable instanceof Fish) {
+            Fish f = (Fish) catchable;
+            FishVisualRenderer.drawFish(sr, f.getName(), cx, cy, 0.82f, timer, themeColor);
+        } else if (catchable instanceof LootItem) {
+            LootItem loot = (LootItem) catchable;
+            LootVisualRenderer.drawLoot(sr, loot.getName(), loot.getType(), cx, cy, 0.88f, timer);
+        }
+
+        // Inner specs & rewards card
+        sr.setColor(0.06f, 0.08f, 0.13f, 0.92f);
+        sr.rect(sbX + 8f, sbY + 8f, sbW - 16f, 118f);
+        sr.setColor(0.22f, 0.28f, 0.38f, 0.7f);
+        drawBoxBorder(sbX + 8f, sbY + 8f, sbW - 16f, 118f, 1.2f);
     }
 
     private void drawInkOverlays() {
@@ -1839,6 +1861,22 @@ public class GameHUD {
     public void drawText(SpriteBatch batch, Player player, Catchable item, String msg, String res) {
         // 0. Persistent Top Header Bar (Level, EXP, Map, Buffs, Gold, Diamonds)
         drawTopPlayerHeaderText(batch, player);
+
+        // Sonar detection banner during WAITING or BITE
+        if ((screen.fishingManager.state == State.WAITING || screen.fishingManager.state == State.BITE) 
+                && screen.fishingManager.predictedCatch != null) {
+            float boxW = 500f;
+            float boxH = 36f;
+            float boxX = (W - boxW) / 2f;
+            float boxY = 550f;
+            Catchable pc = screen.fishingManager.predictedCatch;
+            font.setColor(0.35f, 0.95f, 1f, 1f);
+            font.getData().setScale(0.85f);
+            String radarText = "✦ RADAR THẤU THỊ: Đang tiếp cận [" + pc.getName() + "] (Còn " + player.getSonarCharges() + " lượt)";
+            layout.setText(font, radarText);
+            font.draw(batch, layout, boxX + (boxW - layout.width) / 2f, boxY + (boxH + layout.height) / 2f);
+            font.getData().setScale(1f);
+        }
 
         // 1. Top Fish HP and Creature Name in COMBAT
         if (item != null && screen.fishingManager.state == State.COMBAT) {
@@ -2014,12 +2052,11 @@ public class GameHUD {
         // 8. Water Bobber & Bite Notice
         drawBobberText(batch);
 
-        // 9. Result Modal Content
-        if (screen.fishingManager.state == State.RESULT) {
-            drawResultModalText(batch, msg, res);
-            font.setColor(Color.WHITE);
-            drawCenteredText(font, "TIẾP TỤC CÂU", BTN_CAST_X, BTN_CAST_Y, BTN_CAST_W, BTN_CAST_H);
-        } else if (screen.fishingManager.state == State.PRE_CAST) {
+        // 9. Catch Notification on Right Sidebar Content
+        if (screen.fishingManager.showCatchSidebar && screen.fishingManager.lastCatch != null) {
+            drawCatchSidebarText(batch, screen.fishingManager.lastCatch, screen.fishingManager.lastCatchExtra, screen.fishingManager.lastCatchResultLine, screen.fishingManager.lastCatchDiamonds);
+        }
+        if (screen.fishingManager.state == State.PRE_CAST) {
             font.setColor(Color.WHITE);
             drawCenteredText(font, "QUĂNG CẦN", BTN_CAST_X, BTN_CAST_Y, BTN_CAST_W, BTN_CAST_H);
         }
@@ -2119,137 +2156,133 @@ public class GameHUD {
         }
     }
 
-    private void drawResultModalText(SpriteBatch batch, String msg, String res) {
-        float modalW = 600f;
-        float modalH = 430f;
-        float modalX = (W - modalW) / 2f;
-        float modalY = 145f;
-        boolean success = screen.fishingManager.lastEncounterSuccess;
+    private void drawCatchSidebarText(SpriteBatch batch, Catchable catchable, String extra, String resLine, int diamonds) {
+        if (catchable == null) return;
+        float sbX = INV_X;
+        float sbY = INV_Y + INV_PANEL_H + 10f;
+        float sbW = INV_PANEL_W;
+        float sbH = 325f;
 
-        if (success) {
-            if (screen.fishingManager.currentCatch instanceof Fish) {
-                // Header Title
-                titleFont.setColor(1f, 0.90f, 0.35f, 1f);
-                drawCenteredText(titleFont, "★ CHIẾN LỢI PHẨM THU HOẠCH ★", modalX, modalY + modalH - 50f, modalW, 50f);
-
-                Fish f = (Fish) screen.fishingManager.currentCatch;
-
-                // Fish Name in Rarity Color (cleanly positioned above the fish pedestal)
-                font.setColor(f.getRarityColor());
-                font.getData().setScale(1.3f);
-                layout.setText(font, f.getName());
-                font.draw(batch, f.getName(), (W - layout.width) / 2f, modalY + modalH - 62f);
-                font.getData().setScale(1f);
-
-                // Rarity & Category Tag
-                font.setColor(0.85f, 0.9f, 0.98f, 0.9f);
-                String tag = "Độ hiếm: " + f.getRarity().name();
-                layout.setText(font, tag);
-                font.draw(batch, tag, (W - layout.width) / 2f, modalY + modalH - 92f);
-
-                // Size Specs inside Inner Box (below fish pedestal)
-                float boxY = modalY + 20f;
-                font.setColor(Color.WHITE);
-                String spec = "Chiều dài: " + String.format("%.1f", f.getLengthCm()) + " cm  •  Cân nặng: " +
-                              String.format("%.1f", f.getWeightKg()) + " kg";
-                drawCenteredText(font, spec, modalX + 25f, boxY + 86f, modalW - 50f, 25f);
-
-                // Grade / Record Badge
-                if (msg != null && msg.contains("[KỶ LỤC]")) {
-                    font.setColor(1f, 0.85f, 0.2f, 1f);
-                    drawCenteredText(font, "★ PHÁ KỶ LỤC CHIỀU DÀI MỚI! ★", modalX + 25f, boxY + 54f, modalW - 50f, 25f);
-                } else if (msg != null && msg.contains("[MỚI]")) {
-                    font.setColor(0.35f, 1f, 0.5f, 1f);
-                    drawCenteredText(font, "★ LOÀI CÁ MỚI ĐÃ ĐƯỢC GHI VÀO SỔ TAY! ★", modalX + 25f, boxY + 54f, modalW - 50f, 25f);
-                } else {
-                    font.setColor(0.4f, 0.85f, 1f, 1f);
-                    drawCenteredText(font, "Thu hoạch xuất sắc!", modalX + 25f, boxY + 54f, modalW - 50f, 25f);
-                }
-
-                // Earnings summary line
-                if (res != null && !res.isEmpty()) {
-                    font.setColor(0.45f, 1f, 0.55f, 1f);
-                    drawCenteredText(font, res, modalX + 25f, boxY + 22f, modalW - 50f, 25f);
-                }
-            } else if (screen.fishingManager.currentCatch instanceof LootItem) {
-                LootItem loot = (LootItem) screen.fishingManager.currentCatch;
-
-                if (loot.getType() == CatchableType.TREASURE) {
-                    titleFont.setColor(1f, 0.88f, 0.25f, 1f);
-                    drawCenteredText(titleFont, "★ TRỤC VỚT ĐƯỢC KHO BÁU CỔ XƯA! ★", modalX, modalY + modalH - 50f, modalW, 50f);
-
-                    font.setColor(1f, 0.85f, 0.25f, 1f);
-                    font.getData().setScale(1.3f);
-                    layout.setText(font, loot.getName());
-                    font.draw(batch, loot.getName(), (W - layout.width) / 2f, modalY + modalH - 62f);
-                    font.getData().setScale(1f);
-
-                    font.setColor(0.95f, 0.75f, 0.35f, 0.95f);
-                    String tag = "Loại: Kho Báu Quý Giá";
-                    layout.setText(font, tag);
-                    font.draw(batch, tag, (W - layout.width) / 2f, modalY + modalH - 92f);
-                } else if (loot.getType() == CatchableType.TRASH) {
-                    titleFont.setColor(0.72f, 0.88f, 0.88f, 1f);
-                    drawCenteredText(titleFont, "✦ VỚ ĐƯỢC PHẾ LIỆU / RÁC THẢI ✦", modalX, modalY + modalH - 50f, modalW, 50f);
-
-                    font.setColor(0.75f, 0.85f, 0.85f, 1f);
-                    font.getData().setScale(1.3f);
-                    layout.setText(font, loot.getName());
-                    font.draw(batch, loot.getName(), (W - layout.width) / 2f, modalY + modalH - 62f);
-                    font.getData().setScale(1f);
-
-                    font.setColor(0.65f, 0.78f, 0.78f, 0.95f);
-                    String tag = "Loại: Phế Liệu Dưới Lòng Hồ";
-                    layout.setText(font, tag);
-                    font.draw(batch, tag, (W - layout.width) / 2f, modalY + modalH - 92f);
-                } else {
-                    titleFont.setColor(0.35f, 0.95f, 0.65f, 1f);
-                    drawCenteredText(titleFont, "★ NHẶT ĐƯỢC VẬT PHẨM HỮU ÍCH ★", modalX, modalY + modalH - 50f, modalW, 50f);
-
-                    font.setColor(0.35f, 0.95f, 0.65f, 1f);
-                    font.getData().setScale(1.3f);
-                    layout.setText(font, loot.getName());
-                    font.draw(batch, loot.getName(), (W - layout.width) / 2f, modalY + modalH - 62f);
-                    font.getData().setScale(1f);
-
-                    font.setColor(0.6f, 0.85f, 0.95f, 0.95f);
-                    String tag = "Loại: Vật Phẩm Tiêu Hao";
-                    layout.setText(font, tag);
-                    font.draw(batch, tag, (W - layout.width) / 2f, modalY + modalH - 92f);
-                }
-
-                // Inner specs box content
-                float boxY = modalY + 20f;
-                font.setColor(Color.WHITE);
-                font.getData().setScale(0.92f);
-                drawCenteredText(font, loot.getDescription(), modalX + 25f, boxY + 74f, modalW - 50f, 30f);
-                font.getData().setScale(1f);
-
-                // Rewards
-                font.setColor(1f, 0.88f, 0.25f, 1f);
-                String rewardStr = "+" + loot.getGoldValue() + " Vàng  •  +" + loot.getXpValue() + " XP";
-                drawCenteredText(font, rewardStr, modalX + 25f, boxY + 38f, modalW - 50f, 25f);
-
-                if (res != null && !res.isEmpty()) {
-                    font.setColor(0.45f, 1f, 0.55f, 1f);
-                    font.getData().setScale(0.85f);
-                    drawCenteredText(font, res, modalX + 25f, boxY + 14f, modalW - 50f, 20f);
-                    font.getData().setScale(1f);
-                }
-            } else if (screen.fishingManager.currentCatch != null) {
-                font.setColor(Color.WHITE);
-                drawCenteredText(font, "NHẬN ĐƯỢC: " + screen.fishingManager.currentCatch.getName(),
-                                 modalX + 25f, modalY + modalH / 2f, modalW - 50f, 40f);
+        Color themeColor = Color.GOLD;
+        String headerTitle = "CHIẾN LỢI PHẨM";
+        if (catchable instanceof Fish) {
+            themeColor = ((Fish) catchable).getRarityColor();
+            headerTitle = "★ CHIẾN LỢI PHẨM ★";
+        } else if (catchable instanceof LootItem) {
+            LootItem li = (LootItem) catchable;
+            if (li.getType() == CatchableType.TREASURE) {
+                themeColor = new Color(1f, 0.85f, 0.25f, 1f);
+                headerTitle = "✦ KHO BÁU CỔ XƯA ✦";
+            } else if (li.getType() == CatchableType.TRASH) {
+                themeColor = new Color(0.6f, 0.75f, 0.8f, 1f);
+                headerTitle = "✦ PHẾ LIỆU HỒ ✦";
+            } else {
+                themeColor = new Color(0.35f, 0.95f, 0.65f, 1f);
+                headerTitle = "★ VẬT PHẨM MỚI ★";
             }
-        } else {
-            // Failed Catch Header
-            titleFont.setColor(1f, 0.35f, 0.35f, 1f);
-            drawCenteredText(titleFont, "✕ CÁ ĐÃ THOÁT MẤT! ✕", modalX, modalY + modalH - 50f, modalW, 50f);
-
-            String failReason = (msg != null && !msg.isEmpty()) ? msg : "Dây câu bị đứt hoặc cá đã bơi thoát mất!";
-            font.setColor(0.95f, 0.85f, 0.85f, 1f);
-            drawCenteredText(font, failReason, modalX + 25f, modalY + modalH / 2f - 20f, modalW - 50f, 40f);
         }
+
+        // 1. Header Title
+        font.setColor(themeColor);
+        font.getData().setScale(0.68f);
+        drawCenteredText(font, headerTitle, sbX + 4f, sbY + sbH - 26f, sbW - 28f, 26f);
+
+        // Close '✕' button text
+        font.setColor(hoverCatchClose ? Color.WHITE : new Color(0.75f, 0.8f, 0.9f, 0.8f));
+        font.getData().setScale(0.70f);
+        layout.setText(font, "✕");
+        font.draw(batch, layout, sbX + sbW - 22f + (18f - layout.width) / 2f, sbY + sbH - 22f + (18f + layout.height) / 2f);
+
+        // 2. Name & Category Tag
+        font.setColor(themeColor);
+        font.getData().setScale(0.92f);
+        layout.setText(font, catchable.getName());
+        if (layout.width > sbW - 16f) {
+            font.getData().setScale(0.92f * ((sbW - 16f) / layout.width));
+            layout.setText(font, catchable.getName());
+        }
+        font.draw(batch, layout, sbX + (sbW - layout.width) / 2f, sbY + sbH - 34f);
+
+        // Subtitle category tag
+        font.setColor(0.7f, 0.82f, 0.9f, 0.85f);
+        font.getData().setScale(0.68f);
+        String subTag;
+        if (catchable instanceof Fish) {
+            subTag = ((Fish) catchable).getRarity().name();
+        } else if (catchable instanceof LootItem) {
+            LootItem li = (LootItem) catchable;
+            if (li.getType() == CatchableType.TREASURE) subTag = "Kho Báu Quý Giá";
+            else if (li.getType() == CatchableType.TRASH) subTag = "Phế Liệu Thu Thập";
+            else subTag = "Vật Phẩm Tiêu Hao";
+        } else {
+            subTag = "Thu Hoạch";
+        }
+        layout.setText(font, subTag);
+        font.draw(batch, layout, sbX + (sbW - layout.width) / 2f, sbY + sbH - 52f);
+
+        // 3. Inner Specs & Rewards Box Content
+        float innerBoxX = sbX + 8f;
+        float innerBoxY = sbY + 8f;
+        float innerBoxW = sbW - 16f;
+
+        if (catchable instanceof Fish) {
+            Fish f = (Fish) catchable;
+
+            // Line 1: Length & Weight
+            font.setColor(0.85f, 0.92f, 1f, 1f);
+            font.getData().setScale(0.72f);
+            String spec = String.format("%.1f", f.getLengthCm()) + " cm  •  " + String.format("%.1f", f.getWeightKg()) + " kg";
+            drawCenteredText(font, spec, innerBoxX, innerBoxY + 88f, innerBoxW, 20f);
+
+            // Line 2: Record / First / Catch status
+            if (extra != null && extra.contains("[KỶ LỤC]")) {
+                font.setColor(1f, 0.85f, 0.2f, 1f);
+                drawCenteredText(font, "★ PHÁ KỶ LỤC DÀI! ★", innerBoxX, innerBoxY + 64f, innerBoxW, 20f);
+            } else if (extra != null && extra.contains("[MỚI]")) {
+                font.setColor(0.35f, 1f, 0.5f, 1f);
+                drawCenteredText(font, "★ LOÀI CÁ MỚI! ★", innerBoxX, innerBoxY + 64f, innerBoxW, 20f);
+            } else {
+                font.setColor(0.45f, 0.8f, 1f, 1f);
+                drawCenteredText(font, "Thu hoạch thành công!", innerBoxX, innerBoxY + 64f, innerBoxW, 20f);
+            }
+
+            // Line 3: XP & Gold
+            font.setColor(0.4f, 1f, 0.5f, 1f);
+            font.getData().setScale(0.76f);
+            String rLine = (resLine != null && !resLine.isEmpty()) ? resLine : ("+" + f.getXpValue() + " XP  +" + f.getGoldValue() + " V");
+            drawCenteredText(font, rLine, innerBoxX, innerBoxY + 38f, innerBoxW, 20f);
+
+            // Line 4: Diamonds bonus or tip
+            if (diamonds > 0) {
+                font.setColor(0.4f, 0.9f, 1f, 1f);
+                font.getData().setScale(0.70f);
+                drawCenteredText(font, "+ " + diamonds + " Kim Cương!", innerBoxX, innerBoxY + 12f, innerBoxW, 20f);
+            } else {
+                font.setColor(0.65f, 0.75f, 0.85f, 0.7f);
+                font.getData().setScale(0.66f);
+                drawCenteredText(font, "Tiếp tục quăng cần câu!", innerBoxX, innerBoxY + 12f, innerBoxW, 20f);
+            }
+        } else if (catchable instanceof LootItem) {
+            LootItem loot = (LootItem) catchable;
+
+            // Description
+            font.setColor(0.88f, 0.92f, 0.98f, 1f);
+            font.getData().setScale(0.70f);
+            font.draw(batch, loot.getDescription(), innerBoxX + 6f, innerBoxY + 104f, innerBoxW - 12f, Align.center, true);
+
+            // Single unified reward line (no duplicate!)
+            font.setColor(1f, 0.88f, 0.25f, 1f);
+            font.getData().setScale(0.76f);
+            String rw = "+" + loot.getGoldValue() + " Vàng  •  +" + loot.getXpValue() + " XP";
+            drawCenteredText(font, rw, innerBoxX, innerBoxY + 36f, innerBoxW, 20f);
+
+            // Prompt
+            font.setColor(0.65f, 0.75f, 0.85f, 0.7f);
+            font.getData().setScale(0.66f);
+            drawCenteredText(font, "Tiếp tục quăng cần câu!", innerBoxX, innerBoxY + 12f, innerBoxW, 20f);
+        }
+
+        font.getData().setScale(1f);
     }
 
     private void drawCombatFishAndFishingLine(Player player, Fish fish) {
@@ -2330,7 +2363,23 @@ public class GameHUD {
             float radX = 18f + cycle * (isBite ? 70f : 45f);
             float radY = radX * 0.35f;
             sr.setColor(0.5f, 0.9f, 0.95f, (1f - cycle) * (isBite ? 0.6f : 0.3f));
-            sr.ellipse(bobX, bobY - 4f, radX * 2f, radY * 2f);
+            sr.ellipse(bobX - radX, bobY - 4f - radY, radX * 2f, radY * 2f);
+        }
+
+        // Sonar Radar active rings and sweeping scanner
+        if (screen.getPlayer() != null && screen.getPlayer().getSonarCharges() > 0) {
+            float sonarAngle = (timer * 220f) % 360f;
+            float pulse = 0.5f + 0.5f * MathUtils.sin(timer * 6f);
+            sr.setColor(0.1f, 0.9f, 1f, 0.35f * pulse);
+            sr.circle(bobX, bobY, 60f, 32);
+            sr.setColor(0.2f, 0.7f, 1f, 0.22f);
+            sr.circle(bobX, bobY, 110f, 36);
+            // Sweeping radar scan line
+            float sweepRad = 110f;
+            float swX = bobX + sweepRad * MathUtils.cosDeg(sonarAngle);
+            float swY = bobY + sweepRad * MathUtils.sinDeg(sonarAngle);
+            sr.setColor(0.4f, 1f, 1f, 0.75f);
+            sr.rectLine(bobX, bobY, swX, swY, 2f);
         }
 
         // Float lower white body
@@ -2381,5 +2430,18 @@ public class GameHUD {
     private void drawCenteredText(BitmapFont f, String text, float x, float y, float width, float height) {
         layout.setText(f, text);
         f.draw(screen.getGame().batch, text, x + (width - layout.width) / 2f, y + (height + layout.height) / 2f);
+    }
+
+    private String getSkillIdFromBookName(String bookName) {
+        if (bookName == null) return null;
+        switch (bookName) {
+            case "Sách: Dưỡng Sức":   return "duong_suc";
+            case "Sách: Giật Kép":    return "giat_kep";
+            case "Sách: Mắt Đại Bàng":return "mat_dai_bang";
+            case "Sách: Thuần Hóa":   return "thuan_hoa";
+            case "Sách: Trói Buộc":   return "loi_nguyen_troi_buoc";
+            case "Sách: Trái Tim ĐD": return "trai_tim_dai_duong";
+            default: return null;
+        }
     }
 }

@@ -191,6 +191,15 @@ public class Player {
     public void setRiskyBaitActive(boolean active) { buffs.setRiskyBaitActive(active); }
     public boolean isOverclockPotionActive() { return buffs.isOverclockPotionActive(); }
     public void setOverclockPotionActive(boolean active) { buffs.setOverclockPotionActive(active); }
+    public int getWhetstoneCharges() { return buffs.getWhetstoneCharges(); }
+    public void addWhetstoneCharges(int charges) { buffs.addWhetstoneCharges(charges); }
+    public void consumeWhetstoneCharge() { buffs.consumeWhetstoneCharge(); }
+    public int getTreasureMagnetCharges() { return buffs.getTreasureMagnetCharges(); }
+    public void addTreasureMagnetCharges(int charges) { buffs.addTreasureMagnetCharges(charges); }
+    public void consumeTreasureMagnetCharge() { buffs.consumeTreasureMagnetCharge(); }
+    public int getSonarCharges() { return buffs.getSonarCharges(); }
+    public void addSonarCharges(int charges) { buffs.addSonarCharges(charges); }
+    public void consumeSonarCharge() { buffs.consumeSonarCharge(); }
 
     // =========================================================================
     // PlayerEconomy Delegation

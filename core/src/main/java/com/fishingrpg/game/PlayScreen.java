@@ -203,7 +203,12 @@ public class PlayScreen implements Screen {
             itemClicked = true;
         }
 
-        boolean mouseJustClicked = framesToSkip <= 0 && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !itemClicked;
+        boolean actClose = framesToSkip <= 0 && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isCloseHovered();
+        if (actClose) {
+            fishingManager.showCatchSidebar = false;
+        }
+
+        boolean mouseJustClicked = framesToSkip <= 0 && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !itemClicked && !actClose;
         boolean actClicked = mouseJustClicked && hud.isCastHovered();
         
         if (fishingManager.state == FishingManager.State.IDLE && actClicked) {
@@ -274,8 +279,6 @@ public class PlayScreen implements Screen {
             activeSkillInputs[3] = Gdx.input.isKeyJustPressed(Input.Keys.R) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(3));
         }
 
-        boolean actClose = framesToSkip <= 0 && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isCloseHovered();
-
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || menuClicked) {
             if (fishingManager.state != FishingManager.State.IDLE) {
                 fishingManager.state = FishingManager.State.IDLE;
@@ -293,10 +296,11 @@ public class PlayScreen implements Screen {
         if (!player.hasItem(itemName)) return;
 
         com.fishingrpg.game.entities.ItemData item = com.fishingrpg.game.data.ItemDatabase.getItem(itemName);
-        if (item == null) {
-            if (itemName.startsWith("Sách: ")) handleSkillBook(itemName);
+        if (itemName.startsWith("Sách: ")) {
+            handleSkillBook(itemName);
             return;
         }
+        if (item == null) return;
 
         // Kiểm tra điều kiện sử dụng theo trạng thái game
         boolean isCombat = (fishingManager.state == FishingManager.State.COMBAT
@@ -327,7 +331,10 @@ public class PlayScreen implements Screen {
     }
 
     /**
-     * Xử lý tiêu thụ Sách kỹ năng (không có trong ItemDatabase).
+     * Xử lý tiêu thụ Sách kỹ năng:
+     * - Cấp 0: Học kỹ năng lên Cấp 1
+     * - Cấp 1..Max-1: Đột phá cấp độ (+1 Cấp) thay cho 1 Skill Point
+     * - Cấp Max: Quy đổi thành +1 Điểm Kỹ Năng (SP)
      * Chỉ dùng được khi đang IDLE hoặc PRE_CAST.
      */
     private void handleSkillBook(String itemName) {
@@ -348,13 +355,28 @@ public class PlayScreen implements Screen {
         if (skillId == null) return;
 
         com.fishingrpg.game.skills.Skill s = player.getSkillTree().getSkill(skillId);
-        if (s != null && s.getLevel() == 0) {
+        if (s == null) return;
+
+        if (s.getLevel() == 0) {
             s.setCurrentLevel(1);
             player.consumeItem(itemName);
-            fishingManager.combatMessage = "Học thành công: " + s.name + "!";
+            fishingManager.combatMessage = "HỌC THÀNH CÔNG: " + s.name + " (Cấp 1)!";
             player.applySkillBonuses();
+            AudioManager.getInstance().playSFX("sfx_success");
+            com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerItemUseVFX(itemName, 640f, 360f);
+        } else if (!s.isMaxed()) {
+            s.upgrade();
+            player.consumeItem(itemName);
+            fishingManager.combatMessage = "ĐỘT PHÁ BÍ KÍP! " + s.name + " đã lên Cấp " + s.getLevel() + " (Miễn phí 1 SP)!";
+            player.applySkillBonuses();
+            AudioManager.getInstance().playSFX("sfx_success");
+            com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerItemUseVFX(itemName, 640f, 360f);
         } else {
-            fishingManager.combatMessage = "Đã học kỹ năng này rồi!";
+            player.getProgression().setSkillPoints(player.getSkillPoints() + 1);
+            player.consumeItem(itemName);
+            fishingManager.combatMessage = "KỸ NĂNG ĐÃ TỐI ĐA: Quy đổi " + itemName + " thành +1 Điểm Kỹ Năng (SP)!";
+            AudioManager.getInstance().playSFX("sfx_success");
+            com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerItemUseVFX(itemName, 640f, 360f);
         }
     }
 
@@ -375,9 +397,9 @@ public class PlayScreen implements Screen {
                 break;
             }
             case "Nước Tăng Lực": {
-                int heal = (int)(50f * healMult);
+                int heal = (int)(player.getMaxStamina() * 0.25f * healMult);
                 player.consumeStamina(-heal);
-                fishingManager.combatMessage = "Dùng Nước Tăng Lực (+" + heal + " Thể lực)!";
+                fishingManager.combatMessage = "Nước Tăng Lực: Hồi 25% Thể lực (+" + heal + ")!";
                 break;
             }
             case "Dây Câu Tốt":
@@ -422,6 +444,7 @@ public class PlayScreen implements Screen {
                 fishingManager.combatMessage = "Dùng Mồi Rủi Ro (Nguy hiểm lượt tới)!";
                 break;
             case "Nước Bức Phá":
+            case "Nước Bứt Phá":
                 player.consumeStamina(-player.getMaxStamina());
                 player.setOverclockPotionActive(true);
                 fishingManager.combatMessage = "Hồi đầy Thể lực, Giảm 30% Max Tension lượt tới!";
@@ -429,6 +452,37 @@ public class PlayScreen implements Screen {
             case "Thuốc Hồi Stamina":
                 player.addStaminaRegen(50f, 10f);
                 fishingManager.combatMessage = "Đang hồi 50 Thể lực (10/s)!";
+                break;
+            case "Bình Xịt Đóng Băng":
+                fishingManager.troiBuocTimer = 2.0f;
+                fishingManager.combatMessage = "ĐÓNG BĂNG! Cá bị đóng băng hoàn toàn trong 2.0 giây!";
+                break;
+            case "Trà Thảo Mộc Định Thần":
+            case "Trà Thảo Mộc": {
+                fishingManager.fishCuongNoTimer = 0f;
+                fishingManager.fishButTocTimer = 0f;
+                fishingManager.fishQuayBunTimer = 0f;
+                fishingManager.fishSongThanTimer = 0f;
+                fishingManager.fishGiatDienTimer = 0f;
+                fishingManager.fishHutMauTimer = 0f;
+                fishingManager.fishPhunMucTimer = 0f;
+                fishingManager.fishPhunMucMuTimer = 0f;
+                fishingManager.fishSongAmTimer = 0f;
+                fishingManager.fishBaoToTimer = 0f;
+                fishingManager.combatMessage = "Trà Thảo Mộc: Hóa giải toàn bộ trạng thái đặc biệt của cá!";
+                break;
+            }
+            case "Đá Mài Lưỡi Câu":
+                player.addWhetstoneCharges(5);
+                fishingManager.combatMessage = "Đá Mài: +25% sát thương kéo cá & cắn câu siêu tốc (5 lượt)!";
+                break;
+            case "Nam Châm Kho Báu":
+                player.addTreasureMagnetCharges(3);
+                fishingManager.combatMessage = "Nam Châm Kho Báu: Tăng 400% cơ hội trúng Cổ Vật & Rương Báu (3 lượt)!";
+                break;
+            case "Kính Nhìn Xuyên Nước":
+                player.addSonarCharges(3);
+                fishingManager.combatMessage = "Kính Nhìn Xuyên Nước: Kích hoạt Thấu thị mặt nước (3 lượt)!";
                 break;
             default:
                 break; // Vật phẩm không rõ — vẫn tiêu thụ
