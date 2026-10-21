@@ -87,6 +87,25 @@ public class SaveManager {
     }
 
     // =========================================================================
+    // Clear / Reset Save
+    // =========================================================================
+
+    public static boolean hasSaveData() {
+        Preferences prefs = Gdx.app.getPreferences(PREF_NAME);
+        return prefs.contains("level");
+    }
+
+    public static void clearSave() {
+        Preferences prefs = Gdx.app.getPreferences(PREF_NAME);
+        prefs.clear();
+        prefs.flush();
+        Preferences recs = Gdx.app.getPreferences("AnglerRPG_Records");
+        recs.clear();
+        recs.flush();
+        Gdx.app.log(TAG, "All player save data and records have been cleared.");
+    }
+
+    // =========================================================================
     // Load
     // =========================================================================
 
