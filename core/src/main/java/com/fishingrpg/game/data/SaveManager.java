@@ -113,16 +113,38 @@ public class SaveManager {
         Preferences savePrefs = Gdx.app.getPreferences(PREF_NAME);
         Preferences recsPrefs = Gdx.app.getPreferences("AnglerRPG_Records");
 
-        Map<String, Object> exportMap = new HashMap<>();
-        exportMap.put("game", "AnglerRPG");
-        exportMap.put("saveVersion", SAVE_VERSION);
-        exportMap.put("exportTime", java.time.LocalDateTime.now().toString());
-        exportMap.put("playerData", savePrefs.get());
-        exportMap.put("recordData", recsPrefs.get());
+        java.io.StringWriter sw = new java.io.StringWriter();
+        com.badlogic.gdx.utils.JsonWriter jw = new com.badlogic.gdx.utils.JsonWriter(sw);
+        jw.setOutputType(com.badlogic.gdx.utils.JsonWriter.OutputType.json);
+        try {
+            jw.object();
+            jw.set("game", "AnglerRPG");
+            jw.set("saveVersion", SAVE_VERSION);
+            jw.set("exportTime", java.time.LocalDateTime.now().toString());
 
-        Json json = new Json();
-        json.setOutputType(JsonWriter.OutputType.json);
-        return json.prettyPrint(json.toJson(exportMap));
+            jw.object("playerData");
+            for (Map.Entry<String, ?> e : savePrefs.get().entrySet()) {
+                if (e.getValue() != null) {
+                    jw.set(e.getKey(), e.getValue().toString());
+                }
+            }
+            jw.pop();
+
+            jw.object("recordData");
+            for (Map.Entry<String, ?> e : recsPrefs.get().entrySet()) {
+                if (e.getValue() != null) {
+                    jw.set(e.getKey(), e.getValue().toString());
+                }
+            }
+            jw.pop();
+
+            jw.pop();
+            jw.close();
+            return sw.toString();
+        } catch (java.io.IOException e) {
+            Gdx.app.error(TAG, "Error generating export JSON", e);
+            return "{}";
+        }
     }
 
     public static java.io.File exportToFile(java.io.File targetFile) throws java.io.IOException {
@@ -134,46 +156,34 @@ public class SaveManager {
         return targetFile;
     }
 
-    @SuppressWarnings("unchecked")
     public static boolean importDataFromString(String jsonStr, Player player) {
         if (jsonStr == null || jsonStr.trim().isEmpty()) return false;
         try {
-            Json json = new Json();
-            Map<String, Object> root = json.fromJson(HashMap.class, jsonStr);
-            if (root == null || !root.containsKey("playerData")) return false;
+            com.badlogic.gdx.utils.JsonReader reader = new com.badlogic.gdx.utils.JsonReader();
+            com.badlogic.gdx.utils.JsonValue root = reader.parse(jsonStr);
+            if (root == null || !root.has("playerData")) {
+                Gdx.app.error(TAG, "JSON missing playerData root");
+                return false;
+            }
 
-            Map<String, Object> playerData = (Map<String, Object>) root.get("playerData");
-            if (playerData == null) return false;
-
+            com.badlogic.gdx.utils.JsonValue playerData = root.get("playerData");
             Preferences savePrefs = Gdx.app.getPreferences(PREF_NAME);
             savePrefs.clear();
-            for (Map.Entry<String, Object> e : playerData.entrySet()) {
-                Object val = e.getValue();
-                if (val instanceof Integer) savePrefs.putInteger(e.getKey(), (Integer) val);
-                else if (val instanceof Long) savePrefs.putLong(e.getKey(), (Long) val);
-                else if (val instanceof Float) savePrefs.putFloat(e.getKey(), (Float) val);
-                else if (val instanceof Double) savePrefs.putFloat(e.getKey(), ((Double) val).floatValue());
-                else if (val instanceof Boolean) savePrefs.putBoolean(e.getKey(), (Boolean) val);
-                else if (val != null) savePrefs.putString(e.getKey(), val.toString());
+            for (com.badlogic.gdx.utils.JsonValue entry = playerData.child; entry != null; entry = entry.next) {
+                String valStr = (entry.isObject() && entry.has("value")) ? entry.getString("value") : entry.asString();
+                savePrefs.putString(entry.name, valStr);
             }
             savePrefs.flush();
 
-            if (root.containsKey("recordData")) {
-                Map<String, Object> recData = (Map<String, Object>) root.get("recordData");
-                if (recData != null) {
-                    Preferences recPrefs = Gdx.app.getPreferences("AnglerRPG_Records");
-                    recPrefs.clear();
-                    for (Map.Entry<String, Object> e : recData.entrySet()) {
-                        Object val = e.getValue();
-                        if (val instanceof Float) recPrefs.putFloat(e.getKey(), (Float) val);
-                        else if (val instanceof Double) recPrefs.putFloat(e.getKey(), ((Double) val).floatValue());
-                        else if (val instanceof Boolean) recPrefs.putBoolean(e.getKey(), (Boolean) val);
-                        else if (val instanceof Integer) recPrefs.putInteger(e.getKey(), (Integer) val);
-                        else if (val instanceof Long) recPrefs.putLong(e.getKey(), (Long) val);
-                        else if (val != null) recPrefs.putString(e.getKey(), val.toString());
-                    }
-                    recPrefs.flush();
+            if (root.has("recordData")) {
+                com.badlogic.gdx.utils.JsonValue recordData = root.get("recordData");
+                Preferences recPrefs = Gdx.app.getPreferences("AnglerRPG_Records");
+                recPrefs.clear();
+                for (com.badlogic.gdx.utils.JsonValue entry = recordData.child; entry != null; entry = entry.next) {
+                    String valStr = (entry.isObject() && entry.has("value")) ? entry.getString("value") : entry.asString();
+                    recPrefs.putString(entry.name, valStr);
                 }
+                recPrefs.flush();
             }
 
             if (player != null) {

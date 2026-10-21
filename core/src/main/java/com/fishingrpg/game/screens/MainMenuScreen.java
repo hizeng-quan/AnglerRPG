@@ -167,6 +167,7 @@ public class MainMenuScreen implements Screen {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             Gdx.app.exit();
+            System.exit(0);
             return;
         }
 
@@ -198,6 +199,7 @@ public class MainMenuScreen implements Screen {
                 handleImport();
             } else {
                 Gdx.app.exit();
+                System.exit(0);
             }
         });
     }
@@ -224,13 +226,15 @@ public class MainMenuScreen implements Screen {
     }
 
     private void handleImport() {
-        new Thread(() -> {
+        Thread importThread = new Thread(() -> {
             String jsonContent = null;
             String sourceName = "";
 
+            java.awt.FileDialog fd = null;
             try {
-                java.awt.FileDialog fd = new java.awt.FileDialog((java.awt.Frame) null, "Chọn file lưu trữ AnglerRPG (*.json)", java.awt.FileDialog.LOAD);
+                fd = new java.awt.FileDialog((java.awt.Frame) null, "Chọn file lưu trữ AnglerRPG (*.json)", java.awt.FileDialog.LOAD);
                 fd.setFile("*.json");
+                fd.setAlwaysOnTop(true);
                 fd.setVisible(true);
                 String f = fd.getFile();
                 String d = fd.getDirectory();
@@ -243,6 +247,10 @@ public class MainMenuScreen implements Screen {
                 }
             } catch (Throwable t) {
                 Gdx.app.log("MainMenu", "Native FileDialog fallback: " + t.getMessage());
+            } finally {
+                if (fd != null) {
+                    try { fd.dispose(); } catch (Throwable ignored) {}
+                }
             }
 
             if (jsonContent == null) {
@@ -258,7 +266,7 @@ public class MainMenuScreen implements Screen {
             if (jsonContent == null) {
                 try {
                     String clip = Gdx.app.getClipboard().getContents();
-                    if (clip != null && clip.contains("\"game\"") && clip.contains("playerData")) {
+                    if (clip != null && clip.contains("playerData")) {
                         jsonContent = clip;
                         sourceName = "Clipboard";
                     }
@@ -280,7 +288,9 @@ public class MainMenuScreen implements Screen {
                     AudioManager.getInstance().playSFX("sfx_fail");
                 }
             });
-        }).start();
+        });
+        importThread.setDaemon(true);
+        importThread.start();
     }
 
     private void draw() {
