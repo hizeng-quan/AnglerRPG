@@ -315,12 +315,14 @@ public class CombatVFXManager {
             float alpha = Math.max(0f, e.timer / e.maxDuration);
 
             if (e.id.equals("keo_manh")) {
-                // Expanding golden power ring
-                sr.setColor(1f, 0.85f, 0.25f, 0.8f * alpha);
-                float r = 20f + progress * 130f;
-                sr.circle(e.cx, e.cy, r, 32);
-                sr.setColor(0.1f, 0.3f, 0.5f, 1f);
-                sr.circle(e.cx, e.cy, Math.max(0f, r - 8f), 32);
+                // Expanding golden power ring & molten tension shockwave
+                float r = 25f + progress * 140f;
+                sr.setColor(1f, 0.55f, 0.15f, 0.75f * alpha);
+                sr.circle(e.cx, e.cy, r, 36);
+                sr.setColor(1f, 0.90f, 0.30f, 0.90f * alpha);
+                sr.circle(e.cx, e.cy, r * 0.88f, 32);
+                sr.setColor(1f, 1f, 1f, 0.95f * alpha);
+                sr.circle(e.cx, e.cy, Math.max(0f, 18f * (1f - progress)), 20);
             } else if (e.id.equals("giat_kep")) {
                 // Twin X-cross slashes
                 sr.setColor(1f, 0.4f, 0.15f, 0.9f * alpha);
@@ -328,9 +330,17 @@ public class CombatVFXManager {
                 sr.rectLine(e.cx - span, e.cy - span, e.cx + span, e.cy + span, 7f * (1f - progress));
                 sr.rectLine(e.cx - span, e.cy + span, e.cx + span, e.cy - span, 7f * (1f - progress));
             } else if (e.id.equals("pha_giap")) {
-                // Shattered armor icon & red vulnerability circle
-                sr.setColor(1f, 0.25f, 0.25f, 0.5f * alpha);
-                sr.circle(e.cx, e.cy, 35f + progress * 35f, 24);
+                // Shattered titan armor shockwave & volcanic fracture ring
+                float r = 30f + progress * 85f;
+                sr.setColor(1f, 0.30f, 0.15f, 0.75f * alpha);
+                sr.circle(e.cx, e.cy, r, 28);
+                sr.setColor(1f, 0.85f, 0.25f, 0.85f * alpha);
+                sr.circle(e.cx, e.cy, r * 0.72f, 24);
+                // 4 diagonal fracture cracks
+                float fLen = 22f + progress * 45f;
+                sr.setColor(1f, 0.95f, 0.80f, alpha);
+                sr.rectLine(e.cx - fLen, e.cy - fLen, e.cx + fLen, e.cy + fLen, 3f * (1f - progress));
+                sr.rectLine(e.cx - fLen, e.cy + fLen, e.cx + fLen, e.cy - fLen, 3f * (1f - progress));
             } else if (e.id.equals("duong_suc")) {
                 // Emerald life spiral circles
                 sr.setColor(0.25f, 1f, 0.55f, 0.6f * alpha);

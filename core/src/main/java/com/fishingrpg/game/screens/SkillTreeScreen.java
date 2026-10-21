@@ -1000,240 +1000,316 @@ public class SkillTreeScreen implements Screen {
 
         switch (id) {
             // ==================== NHÁNH SỨC MẠNH (8 skills) ====================
-            case "keo_manh": { // Kéo Mạnh: Muscular Flexing Arm / Bicep (Bắp tay cơ bắp)
-                // 1. Upper Arm & Shoulder base
-                sr.setColor(c);
-                sr.rectLine(cx - 10f * s, cy - 7f * s, cx - 4f * s, cy - 7f * s, 6f * s);
-                
-                // 2. Forearm angling upward towards clenched fist
-                sr.rectLine(cx - 7f * s, cy - 6f * s, cx + 2f * s, cy + 5f * s, 6.5f * s);
-                
-                // 3. Bulging Bicep peak (Bắp tay cuồn cuộn)
-                sr.setColor(cLight);
-                sr.circle(cx - 1f * s, cy + 1f * s, 5.5f * s);
-                
-                // 4. Tricep curve beneath
-                sr.setColor(c);
-                sr.circle(cx - 4f * s, cy - 5f * s, 4.5f * s);
-                
-                // 5. Clenched Fist at top
-                sr.setColor(cLight);
-                sr.circle(cx + 3.5f * s, cy + 6.5f * s, 4.2f * s);
-                // Thumb & knuckles
-                sr.setColor(white);
-                sr.circle(cx + 1.5f * s, cy + 4.5f * s, 2f * s); // Thumb
-                sr.rectLine(cx + 2f * s, cy + 8.5f * s, cx + 6.5f * s, cy + 7f * s, 1.8f * s); // Knuckle ridge
-                
-                // 6. Muscle definition shade line
-                sr.setColor(0.08f, 0.10f, 0.16f, 0.85f);
-                sr.rectLine(cx - 3.5f * s, cy - 1f * s, cx + 0.5f * s, cy + 3.5f * s, 1.5f * s);
-                
-                // 7. Power aura sparks around the flexed bicep
+            case "keo_manh": { // Kéo Mạnh: Muscular Flexing Arm / Bicep & Tension Fishing Line (Bắp tay cơ bắp & Dây câu căng lửa)
+                // 1. Fiery Muscle Aura & Power Sparks
                 sr.setColor(gold);
-                sr.triangle(cx - 4f * s, cy + 9f * s, cx - 1f * s, cy + 13f * s, cx, cy + 8f * s);
-                sr.triangle(cx + 8f * s, cy + 9f * s, cx + 12f * s, cy + 11f * s, cx + 8f * s, cy + 5f * s);
-                sr.circle(cx - 7f * s, cy + 4f * s, 1.2f * s);
+                sr.triangle(cx - 5f * s, cy + 9f * s, cx - 1f * s, cy + 14f * s, cx + 1f * s, cy + 8f * s);
+                sr.triangle(cx + 8f * s, cy + 10f * s, cx + 13f * s, cy + 13f * s, cx + 9f * s, cy + 6f * s);
+                sr.circle(cx - 8f * s, cy + 5f * s, 1.4f * s);
+                sr.circle(cx + 10f * s, cy - 2f * s, 1.2f * s);
+
+                // 2. High-Tension Golden Fishing Line Cutting Across
+                sr.setColor(gold);
+                sr.rectLine(cx - 12f * s, cy + 13f * s, cx + 5f * s, cy + 6f * s, 2.0f * s);
+                sr.rectLine(cx + 5f * s, cy + 6f * s, cx + 13f * s, cy - 12f * s, 2.0f * s);
+                sr.setColor(white);
+                sr.rectLine(cx - 11f * s, cy + 12.5f * s, cx + 4.5f * s, cy + 6f * s, 1.0f * s);
+
+                // 3. Deltoid Shoulder & Upper Arm Base
+                sr.setColor(c);
+                sr.rectLine(cx - 11f * s, cy - 8f * s, cx - 4f * s, cy - 8f * s, 6.5f * s);
+                sr.circle(cx - 9f * s, cy - 7f * s, 4.2f * s); // Deltoid cap
+
+                // 4. Tricep & Forearm angling up to fist
+                sr.setColor(c);
+                sr.circle(cx - 4.5f * s, cy - 5.5f * s, 5.0f * s); // Tricep
+                sr.rectLine(cx - 7f * s, cy - 6f * s, cx + 2f * s, cy + 5f * s, 7.0f * s); // Forearm
+
+                // 5. Bulging Peak Bicep (Bắp tay cuồn cuộn nổi khối)
+                sr.setColor(cLight);
+                sr.circle(cx - 1.2f * s, cy + 1.2f * s, 6.0f * s);
+                sr.setColor(gold);
+                sr.circle(cx - 0.8f * s, cy + 2.5f * s, 3.2f * s); // Peak muscle highlight
+
+                // 6. Armored Wrist Gauntlet & Clenched Fist
+                sr.setColor(c);
+                sr.rectLine(cx + 1f * s, cy + 3.5f * s, cx + 4f * s, cy + 7.5f * s, 6.5f * s);
+                sr.setColor(cLight);
+                sr.circle(cx + 4.2f * s, cy + 6.8f * s, 4.6f * s);
+
+                // Knuckle Ridge & Thumb Wrapped Tight Around Line
+                sr.setColor(white);
+                sr.circle(cx + 2.0f * s, cy + 4.8f * s, 2.2f * s); // Thumb
+                sr.rectLine(cx + 2.5f * s, cy + 9.0f * s, cx + 7.5f * s, cy + 7.2f * s, 2.2f * s); // Knuckles
+
+                // 7. Muscular Striation Shade Lines
+                sr.setColor(0.06f, 0.08f, 0.14f, 0.85f);
+                sr.rectLine(cx - 3.8f * s, cy - 1f * s, cx + 0.5f * s, cy + 3.8f * s, 1.6f * s);
+                sr.rectLine(cx - 7f * s, cy - 5f * s, cx - 2f * s, cy - 3f * s, 1.4f * s);
                 break;
             }
 
-            case "day_thep": { // Dây Thép: Reinforced Steel Cable & Hex Core
+            case "day_thep": { // Dây Thép: High-Tensile 7-Strand Braided Steel Cable & Hex Core
+                // 1. Electromagnetic Containment Ring
                 sr.setColor(cLight);
-                sr.circle(cx, cy, 11f * s);
-                sr.setColor(0.09f, 0.12f, 0.19f, 1f);
-                sr.circle(cx, cy, 7.5f * s);
-                
-                // 4 Crossing Braided Steel Strands
-                sr.setColor(c);
-                sr.rectLine(cx - 9f * s, cy - 9f * s, cx + 9f * s, cy + 9f * s, 3f * s);
-                sr.setColor(cLight);
-                sr.rectLine(cx - 9f * s, cy + 9f * s, cx + 9f * s, cy - 9f * s, 3f * s);
-                
-                // Center Hex Nut Core
+                sr.circle(cx, cy, 11.5f * s);
+                sr.setColor(0.08f, 0.10f, 0.16f, 1f);
+                sr.circle(cx, cy, 8.5f * s);
+
+                // 2. 6 Orbiting Heavy Twisted Steel Strands (Bện cáp thép xoắn 6 sợi)
+                for (int i = 0; i < 6; i++) {
+                    float a = (i * 60f) * MathUtils.degreesToRadians;
+                    float sx = cx + MathUtils.cos(a) * 5.8f * s;
+                    float sy = cy + MathUtils.sin(a) * 5.8f * s;
+                    sr.setColor((i % 2 == 0) ? c : cLight);
+                    sr.circle(sx, sy, 3.2f * s);
+                    sr.setColor(white);
+                    sr.circle(sx + 0.5f * s, sy + 0.5f * s, 1.2f * s); // Specular metallic glint
+                }
+
+                // 3. Central Tungsten Core & Golden Hex Nut Lock
                 sr.setColor(gold);
-                sr.circle(cx, cy, 4.5f * s);
-                sr.setColor(0.09f, 0.12f, 0.19f, 1f);
+                sr.circle(cx, cy, 4.2f * s);
+                sr.setColor(0.08f, 0.10f, 0.16f, 1f);
                 sr.circle(cx, cy, 2.2f * s);
                 sr.setColor(white);
-                sr.circle(cx + 1f * s, cy + 1f * s, 1.2f * s);
-                break;
-            }
+                sr.circle(cx + 0.8f * s, cy + 0.8f * s, 1.2f * s);
 
-            case "co_bap_thep": { // Cơ Bắp Thép: Heavy Plated Steel Barbell & Power Core
-                // Knurled Steel Bar
-                sr.setColor(white);
-                sr.rectLine(cx - 11f * s, cy, cx + 11f * s, cy, 3.8f * s);
-                
-                // Inner Plates (Tier 1)
-                sr.setColor(c);
-                sr.rect(cx - 9f * s, cy - 8.5f * s, 3.5f * s, 17f * s);
-                sr.rect(cx + 5.5f * s, cy - 8.5f * s, 3.5f * s, 17f * s);
-                
-                // Outer Plates (Tier 2)
-                sr.setColor(cLight);
-                sr.rect(cx - 12.5f * s, cy - 6.5f * s, 2.8f * s, 13f * s);
-                sr.rect(cx + 9.7f * s, cy - 6.5f * s, 2.8f * s, 13f * s);
-                
-                // Collar rings
+                // 4. Tensile Energy Sparks
                 sr.setColor(gold);
-                sr.circle(cx - 5.5f * s, cy, 2.8f * s);
-                sr.circle(cx + 5.5f * s, cy, 2.8f * s);
-                
-                // Center Diamond Power Crest
-                sr.triangle(cx, cy + 6f * s, cx - 4f * s, cy, cx + 4f * s, cy);
-                sr.triangle(cx, cy - 6f * s, cx - 4f * s, cy, cx + 4f * s, cy);
-                sr.setColor(white);
-                sr.circle(cx, cy, 1.8f * s);
+                sr.triangle(cx - 10f * s, cy + 10f * s, cx - 13f * s, cy + 13f * s, cx - 8f * s, cy + 12f * s);
+                sr.triangle(cx + 10f * s, cy - 10f * s, cx + 13f * s, cy - 13f * s, cx + 8f * s, cy - 12f * s);
                 break;
             }
 
-            case "bao_kich": { // Bạo Kích: 8-Point Nova Critical Strike Burst
-                // 4 Diagonal secondary orange spikes
+            case "co_bap_thep": { // Cơ Bắp Thép: Cybernetic Armored Titan Torso & Molten Energy Veins
+                // 1. Burning Magma Backplate
                 sr.setColor(c);
-                sr.triangle(cx, cy, cx - 9f * s, cy + 9f * s, cx, cy + 3f * s);
-                sr.triangle(cx, cy, cx + 9f * s, cy + 9f * s, cx + 3f * s, cy);
-                sr.triangle(cx, cy, cx - 9f * s, cy - 9f * s, cx - 3f * s, cy);
-                sr.triangle(cx, cy, cx + 9f * s, cy - 9f * s, cx, cy - 3f * s);
-                
-                // 4 Primary golden razor-sharp spikes
+                sr.triangle(cx - 12f * s, cy + 9f * s, cx + 12f * s, cy + 9f * s, cx, cy - 12f * s);
+
+                // 2. Heavy Chromed Pectoral Plates (Ngực áo giáp thép titan nổi khối)
+                sr.setColor(cLight);
+                sr.circle(cx - 5.5f * s, cy + 3.5f * s, 5.5f * s);
+                sr.circle(cx + 5.5f * s, cy + 3.5f * s, 5.5f * s);
+                sr.setColor(white);
+                sr.circle(cx - 5.5f * s, cy + 4.8f * s, 2.4f * s);
+                sr.circle(cx + 5.5f * s, cy + 4.8f * s, 2.4f * s);
+
+                // 3. Tiered Abdominal Muscle Plates (6 múi cơ bụng giáp thép)
+                sr.setColor(c);
+                for (int ab = 0; ab < 3; ab++) {
+                    float ay = cy - 2f * s - ab * 3.5f * s;
+                    float aw = (9f - ab * 1.8f) * s;
+                    sr.rect(cx - aw, ay, aw - 0.8f * s, 2.8f * s);
+                    sr.rect(cx + 0.8f * s, ay, aw - 0.8f * s, 2.8f * s);
+                }
+
+                // 4. Molten Energy Seam Channels (Mạch năng lượng dung nham chạy dọc khe giáp)
                 sr.setColor(gold);
-                sr.triangle(cx, cy + 14f * s, cx - 4f * s, cy, cx + 4f * s, cy);
-                sr.triangle(cx, cy - 14f * s, cx - 4f * s, cy, cx + 4f * s, cy);
-                sr.triangle(cx - 14f * s, cy, cx, cy - 4f * s, cx, cy + 4f * s);
-                sr.triangle(cx + 14f * s, cy, cx, cy - 4f * s, cx, cy + 4f * s);
-                
-                // Blinding white-hot diamond core
+                sr.rectLine(cx, cy + 7f * s, cx, cy - 11f * s, 1.6f * s); // Central sternum seam
+                sr.rectLine(cx - 10f * s, cy + 3.5f * s, cx + 10f * s, cy + 3.5f * s, 1.4f * s); // Pectoral line
+
+                // 5. Titan Crest Core (Biểu tượng sức mạnh trung tâm ngực)
+                sr.setColor(gold);
+                sr.triangle(cx, cy + 7f * s, cx - 3.5f * s, cy + 3.5f * s, cx + 3.5f * s, cy + 3.5f * s);
                 sr.setColor(white);
-                sr.triangle(cx, cy + 5f * s, cx - 3f * s, cy, cx + 3f * s, cy);
-                sr.triangle(cx, cy - 5f * s, cx - 3f * s, cy, cx + 3f * s, cy);
-                sr.circle(cx, cy, 2.2f * s);
+                sr.circle(cx, cy + 4.8f * s, 1.4f * s);
                 break;
             }
 
-            case "pha_giap": { // Phá Giáp: Cracked Knight's Breastplate (Áo giáp bị nứt)
-                // 1. Armor Main Body (Chestplate / Cuirass)
+            case "bao_kich": { // Bạo Kích: 16-Point Supernova Critical Strike Explosion
+                // 1. Outer Shockwave Blast Ring
                 sr.setColor(c);
-                sr.triangle(cx - 10f * s, cy + 6f * s, cx + 10f * s, cy + 6f * s, cx, cy - 11f * s);
-                sr.rect(cx - 10f * s, cy + 1f * s, 20f * s, 5f * s);
-                
-                // 2. Shoulders / Pauldrons
+                sr.circle(cx, cy, 10f * s);
+                sr.setColor(0.08f, 0.10f, 0.16f, 1f);
+                sr.circle(cx, cy, 8f * s);
+
+                // 2. 8 Diagonal Secondary Energy Spikes
                 sr.setColor(cLight);
-                sr.circle(cx - 8f * s, cy + 6f * s, 3.8f * s);
-                sr.circle(cx + 8f * s, cy + 6f * s, 3.8f * s);
-                
-                // 3. Neck notch cutout
-                sr.setColor(0.09f, 0.12f, 0.19f, 1f);
-                sr.circle(cx, cy + 9f * s, 4.5f * s);
-                
-                // 4. Armor Pectoral Plates & Waist Rim
+                for (int d = 0; d < 4; d++) {
+                    float a = (45f + d * 90f) * MathUtils.degreesToRadians;
+                    float dx1 = cx + MathUtils.cos(a) * 11f * s;
+                    float dy1 = cy + MathUtils.sin(a) * 11f * s;
+                    sr.triangle(cx, cy, dx1, dy1, cx + MathUtils.cos(a + 0.25f) * 4f * s, cy + MathUtils.sin(a + 0.25f) * 4f * s);
+                }
+
+                // 3. 4 Colossal Razor-Sharp Cardinal Cleaver Spikes (4 đại kiếm quang hướng tâm)
+                sr.setColor(gold);
+                sr.triangle(cx, cy + 14.5f * s, cx - 4.5f * s, cy, cx + 4.5f * s, cy);
+                sr.triangle(cx, cy - 14.5f * s, cx - 4.5f * s, cy, cx + 4.5f * s, cy);
+                sr.triangle(cx - 14.5f * s, cy, cx, cy - 4.5f * s, cx, cy + 4.5f * s);
+                sr.triangle(cx + 14.5f * s, cy, cx, cy - 4.5f * s, cx, cy + 4.5f * s);
+
+                // 4. White-Hot Diamond Nova Core
+                sr.setColor(white);
+                sr.triangle(cx, cy + 6.5f * s, cx - 3.5f * s, cy, cx + 3.5f * s, cy);
+                sr.triangle(cx, cy - 6.5f * s, cx - 3.5f * s, cy, cx + 3.5f * s, cy);
+                sr.circle(cx, cy, 2.5f * s);
+
+                // 5. Flying Critical Shards
+                sr.setColor(gold);
+                sr.triangle(cx - 11f * s, cy + 9f * s, cx - 13f * s, cy + 12f * s, cx - 9f * s, cy + 12f * s);
+                sr.triangle(cx + 11f * s, cy - 9f * s, cx + 13f * s, cy - 12f * s, cx + 9f * s, cy - 12f * s);
+                break;
+            }
+
+            case "pha_giap": { // Phá Giáp: Shattered Titan Shield & Volcanic Lava Eruption (Khiên giáp vỡ vụn)
+                // 1. Reinforced Medieval Tower Shield Base
+                sr.setColor(c);
+                sr.triangle(cx - 11f * s, cy + 6f * s, cx + 11f * s, cy + 6f * s, cx, cy - 12f * s);
+                sr.rect(cx - 11f * s, cy + 1f * s, 22f * s, 6f * s);
+
+                // 2. Shield Beveled Rim & Pauldrons
                 sr.setColor(cLight);
-                sr.rectLine(cx - 8f * s, cy - 9f * s, cx + 8f * s, cy - 9f * s, 2f * s);
-                sr.rectLine(cx - 7f * s, cy + 2f * s, cx - 1f * s, cy + 2f * s, 1.5f * s);
-                sr.rectLine(cx + 1f * s, cy + 2f * s, cx + 7f * s, cy + 2f * s, 1.5f * s);
-                
-                // 5. THE JAGGED CRACK (Vết nứt vỡ xuyên suốt giáp)
+                sr.circle(cx - 9f * s, cy + 7f * s, 4.2f * s);
+                sr.circle(cx + 9f * s, cy + 7f * s, 4.2f * s);
+                sr.rectLine(cx - 10f * s, cy - 10f * s, cx + 10f * s, cy - 10f * s, 2.2f * s);
+
+                // 3. Shield Boss / Crest Center
+                sr.setColor(gold);
+                sr.circle(cx, cy + 1f * s, 4.5f * s);
+                sr.setColor(c);
+                sr.circle(cx, cy + 1f * s, 2.5f * s);
+
+                // 4. THE JAGGED SHATTER CRACKS (Vết nứt vỡ toác xuyên suốt khiên)
                 sr.setColor(0.06f, 0.08f, 0.12f, 1f);
-                sr.rectLine(cx + 4f * s, cy + 9f * s, cx + 1f * s, cy + 3f * s, 2.8f * s);
-                sr.rectLine(cx + 1f * s, cy + 3f * s, cx - 3f * s, cy - 1f * s, 2.8f * s);
-                sr.rectLine(cx - 3f * s, cy - 1f * s, cx - 1f * s, cy - 6f * s, 2.8f * s);
-                sr.rectLine(cx - 1f * s, cy - 6f * s, cx - 4f * s, cy - 11f * s, 2.8f * s);
-                sr.rectLine(cx + 1f * s, cy + 3f * s, cx + 6f * s, cy + 1f * s, 2.2f * s);
-                
-                // 6. Glowing fracture heat & flying armor shards
-                sr.setColor(gold);
-                sr.rectLine(cx + 4f * s, cy + 9f * s, cx + 1f * s, cy + 3f * s, 1.2f * s);
-                sr.rectLine(cx + 1f * s, cy + 3f * s, cx - 3f * s, cy - 1f * s, 1.2f * s);
-                sr.rectLine(cx - 3f * s, cy - 1f * s, cx - 1f * s, cy - 6f * s, 1.2f * s);
-                sr.rectLine(cx - 1f * s, cy - 6f * s, cx - 4f * s, cy - 11f * s, 1.2f * s);
-                sr.triangle(cx + 7f * s, cy + 4f * s, cx + 9f * s, cy + 2f * s, cx + 8f * s, cy + 6f * s);
-                sr.triangle(cx - 6f * s, cy - 3f * s, cx - 8f * s, cy - 1f * s, cx - 8f * s, cy - 4f * s);
-                break;
-            }
+                sr.rectLine(cx + 4f * s, cy + 9f * s, cx + 1f * s, cy + 3f * s, 3.2f * s);
+                sr.rectLine(cx + 1f * s, cy + 3f * s, cx - 3.5f * s, cy - 1f * s, 3.2f * s);
+                sr.rectLine(cx - 3.5f * s, cy - 1f * s, cx - 1f * s, cy - 6f * s, 3.2f * s);
+                sr.rectLine(cx - 1f * s, cy - 6f * s, cx - 4f * s, cy - 12f * s, 3.2f * s);
+                sr.rectLine(cx + 1f * s, cy + 3f * s, cx + 7f * s, cy + 1f * s, 2.6f * s);
 
-            case "the_luc_doi_dao": { // Thể Lực Dồi Dào: Radiant Vitality Heart & Golden Wings
-                // Golden Angelic Wings behind
+                // 5. Molten Lava Fire Bursting From Within Fissures
                 sr.setColor(gold);
-                sr.triangle(cx - 2f * s, cy + 4f * s, cx - 13f * s, cy + 9f * s, cx - 8f * s, cy);
-                sr.triangle(cx + 2f * s, cy + 4f * s, cx + 13f * s, cy + 9f * s, cx + 8f * s, cy);
-                
-                // Rich Ruby Heart
-                sr.setColor(new Color(0.95f, 0.28f, 0.42f, unlocked ? 1f : 0.6f));
-                sr.circle(cx - 4.5f * s, cy + 3.5f * s, 5.2f * s);
-                sr.circle(cx + 4.5f * s, cy + 3.5f * s, 5.2f * s);
-                sr.triangle(cx - 9.2f * s, cy + 2.5f * s, cx + 9.2f * s, cy + 2.5f * s, cx, cy - 9.5f * s);
-                
-                // Specular highlight on left lobe
+                sr.rectLine(cx + 4f * s, cy + 9f * s, cx + 1f * s, cy + 3f * s, 1.4f * s);
+                sr.rectLine(cx + 1f * s, cy + 3f * s, cx - 3.5f * s, cy - 1f * s, 1.4f * s);
+                sr.rectLine(cx - 3.5f * s, cy - 1f * s, cx - 1f * s, cy - 6f * s, 1.4f * s);
+                sr.rectLine(cx - 1f * s, cy - 6f * s, cx - 4f * s, cy - 12f * s, 1.4f * s);
+
+                // 6. Exploding Armor Shards & Fiery Shrapnel
+                sr.triangle(cx + 8f * s, cy + 5f * s, cx + 12f * s, cy + 2f * s, cx + 10f * s, cy + 7f * s);
+                sr.triangle(cx - 7f * s, cy - 3f * s, cx - 11f * s, cy - 1f * s, cx - 10f * s, cy - 5f * s);
                 sr.setColor(white);
-                sr.circle(cx - 4.5f * s, cy + 5f * s, 1.8f * s);
-                
-                // Vitality Pulse Cross in center
-                sr.rect(cx - 1.4f * s, cy - 3f * s, 2.8f * s, 7.5f * s);
-                sr.rect(cx - 3.8f * s, cy - 0.5f * s, 7.6f * s, 2.8f * s);
+                sr.circle(cx + 2f * s, cy + 3f * s, 1.5f * s);
                 break;
             }
 
-            case "ben_bi": { // Bền Bỉ: Epic Blacksmith Anvil (Cái đe rèn kiên cố)
-                // 1. Heavy Stepped Steel Base
-                sr.setColor(c);
-                sr.rect(cx - 10f * s, cy - 10f * s, 20f * s, 3.5f * s);
+            case "the_luc_doi_dao": { // Thể Lực Dồi Dào: Sacred Phoenix Dragon Heart of Eternal Vitality
+                // 1. Tiered Golden Phoenix Wings Spreading Behind (Đôi cánh phượng hoàng rực lửa)
+                sr.setColor(gold);
+                // Upper wing feather tiers
+                sr.triangle(cx - 2f * s, cy + 5f * s, cx - 14f * s, cy + 11f * s, cx - 8f * s, cy + 1f * s);
+                sr.triangle(cx + 2f * s, cy + 5f * s, cx + 14f * s, cy + 11f * s, cx + 8f * s, cy + 1f * s);
+                // Lower wing feather tiers
                 sr.setColor(cLight);
-                sr.rectLine(cx - 10f * s, cy - 6.5f * s, cx + 10f * s, cy - 6.5f * s, 1.5f * s);
-                
+                sr.triangle(cx - 2f * s, cy + 2f * s, cx - 12f * s, cy + 5f * s, cx - 6f * s, cy - 4f * s);
+                sr.triangle(cx + 2f * s, cy + 2f * s, cx + 12f * s, cy + 5f * s, cx + 6f * s, cy - 4f * s);
+
+                // 2. Radiant 3D Faceted Ruby Crystal Heart
+                Color heartRuby = unlocked ? new Color(0.96f, 0.20f, 0.35f, 1f) : new Color(0.55f, 0.35f, 0.40f, 0.6f);
+                Color heartDark = unlocked ? new Color(0.70f, 0.12f, 0.22f, 1f) : new Color(0.35f, 0.22f, 0.26f, 0.6f);
+                sr.setColor(heartRuby);
+                sr.circle(cx - 4.6f * s, cy + 3.8f * s, 5.4f * s);
+                sr.circle(cx + 4.6f * s, cy + 3.8f * s, 5.4f * s);
+                sr.triangle(cx - 9.6f * s, cy + 2.8f * s, cx + 9.6f * s, cy + 2.8f * s, cx, cy - 10.5f * s);
+                // Lower dark shade facet
+                sr.setColor(heartDark);
+                sr.triangle(cx, cy + 3.8f * s, cx + 9.6f * s, cy + 2.8f * s, cx, cy - 10.5f * s);
+
+                // 3. Specular Diamond Glints on Lobes
+                sr.setColor(white);
+                sr.circle(cx - 4.8f * s, cy + 5.5f * s, 1.8f * s);
+                sr.circle(cx + 4.8f * s, cy + 5.5f * s, 1.2f * s);
+
+                // 4. Vitality Pulse Lightning Surge Wave (Nhịp đập sinh mệnh bất tận)
+                sr.setColor(gold);
+                sr.rectLine(cx - 7f * s, cy, cx - 3f * s, cy, 1.6f * s);
+                sr.rectLine(cx - 3f * s, cy, cx - 1f * s, cy + 4f * s, 2.0f * s);
+                sr.rectLine(cx - 1f * s, cy + 4f * s, cx + 1.5f * s, cy - 5f * s, 2.0f * s);
+                sr.rectLine(cx + 1.5f * s, cy - 5f * s, cx + 3.5f * s, cy + 2f * s, 2.0f * s);
+                sr.rectLine(cx + 3.5f * s, cy + 2f * s, cx + 7f * s, cy, 1.6f * s);
+                break;
+            }
+
+            case "ben_bi": { // Bền Bỉ: Mythic Volcanic Titan Anvil & Poised Forge War-Hammer
+                // 1. Heavy Stepped Volcanic Steel Base
+                sr.setColor(c);
+                sr.rect(cx - 10f * s, cy - 10.5f * s, 20f * s, 4.0f * s);
+                sr.setColor(cLight);
+                sr.rectLine(cx - 10f * s, cy - 6.5f * s, cx + 10f * s, cy - 6.5f * s, 1.8f * s);
+
                 // 2. Waisted Pedestal Column
                 sr.setColor(c);
                 sr.triangle(cx - 10f * s, cy - 6.5f * s, cx - 5f * s, cy - 1f * s, cx - 5f * s, cy - 6.5f * s);
                 sr.triangle(cx + 10f * s, cy - 6.5f * s, cx + 5f * s, cy - 1f * s, cx + 5f * s, cy - 6.5f * s);
-                sr.rect(cx - 5f * s, cy - 6.5f * s, 10f * s, 5.5f * s);
-                
-                // 3. Main Anvil Body & Table
-                sr.rect(cx - 6f * s, cy - 1f * s, 14f * s, 5.5f * s);
-                
-                // 4. Anvil Horn (Mũi đe nhọn dài bên trái)
+                sr.rect(cx - 5.5f * s, cy - 6.5f * s, 11f * s, 5.5f * s);
+
+                // 3. Main Anvil Body & Working Table
+                sr.rect(cx - 6.5f * s, cy - 1f * s, 15f * s, 5.5f * s);
+
+                // 4. Horn & Polished Face (Mũi đe nhọn dài bên trái)
                 sr.setColor(cLight);
-                sr.triangle(cx - 6f * s, cy + 4.5f * s, cx - 14f * s, cy + 2.5f * s, cx - 6f * s, cy - 1f * s);
-                sr.circle(cx - 14f * s, cy + 2.5f * s, 1.2f * s);
-                
-                // 5. Heel & Step with Hardy Hole
-                sr.setColor(c);
-                sr.rect(cx + 8f * s, cy, 5f * s, 4.5f * s);
-                sr.setColor(0.09f, 0.12f, 0.19f, 1f);
-                sr.rect(cx + 9.5f * s, cy + 2f * s, 2.2f * s, 2.2f * s);
-                
-                // 6. Polished Steel Working Face
+                sr.triangle(cx - 6.5f * s, cy + 4.5f * s, cx - 14.5f * s, cy + 2.5f * s, cx - 6.5f * s, cy - 1f * s);
+                sr.circle(cx - 14.5f * s, cy + 2.5f * s, 1.4f * s);
+                // Working Face
                 sr.setColor(white);
-                sr.rectLine(cx - 13.5f * s, cy + 4.5f * s, cx + 13f * s, cy + 4.5f * s, 2f * s);
-                
-                // 7. Forge Sparks flying from striking face
+                sr.rectLine(cx - 14f * s, cy + 4.5f * s, cx + 13.5f * s, cy + 4.5f * s, 2.2f * s);
+
+                // 5. Poised Forge War-Hammer (Búa rèn hoàng kim giáng xuống mặt đe)
                 sr.setColor(gold);
-                sr.circle(cx - 2f * s, cy + 8f * s, 1.4f * s);
-                sr.circle(cx + 3f * s, cy + 11f * s, 1.8f * s);
-                sr.circle(cx + 6f * s, cy + 7.5f * s, 1.2f * s);
-                sr.triangle(cx + 2f * s, cy + 10f * s, cx + 4f * s, cy + 13f * s, cx + 4f * s, cy + 9f * s);
+                // Hammer Handle
+                sr.rectLine(cx + 2f * s, cy + 6f * s, cx + 9f * s, cy + 13.5f * s, 2.4f * s);
+                // Heavy Hammer Head
+                sr.setColor(white);
+                sr.rect(cx + 0.5f * s, cy + 5.5f * s, 4.5f * s, 4.0f * s);
+                sr.setColor(cLight);
+                sr.circle(cx + 2.7f * s, cy + 7.5f * s, 2.0f * s);
+
+                // 6. Explosive Shower of Forge Sparks (Cơn mưa tàn lửa rèn thần thoại)
+                sr.setColor(gold);
+                sr.circle(cx - 2.5f * s, cy + 8.5f * s, 1.6f * s);
+                sr.circle(cx + 3f * s, cy + 12f * s, 2.0f * s);
+                sr.circle(cx + 6f * s, cy + 8f * s, 1.4f * s);
+                sr.triangle(cx - 1f * s, cy + 10f * s, cx + 1f * s, cy + 13f * s, cx + 2f * s, cy + 9f * s);
                 break;
             }
 
-            case "no_bung": { // No Bụng: Succulent Roast Feast & Aroma Steam
-                // Golden-Brown Roasted Meat Body
-                sr.setColor(new Color(0.85f, 0.48f, 0.18f, unlocked ? 1f : 0.6f));
-                sr.circle(cx - 2f * s, cy + 1f * s, 8.5f * s);
-                
-                // Glaze highlight & grill sear marks
-                sr.setColor(gold);
-                sr.circle(cx - 3f * s, cy + 3f * s, 5f * s);
-                sr.setColor(new Color(0.55f, 0.25f, 0.08f, 1f));
-                sr.rectLine(cx - 6f * s, cy + 3f * s, cx - 1f * s, cy - 2f * s, 1.8f * s);
-                sr.rectLine(cx - 2f * s, cy + 6f * s, cx + 2f * s, cy + 1f * s, 1.8f * s);
-                
-                // Ivory Bone Handle with Knuckles
+            case "no_bung": { // No Bụng: Royal Roast Behemoth Feast & Steaming Aroma
+                // 1. Ornate Scalloped Silver Serving Platter
+                sr.setColor(new Color(0.75f, 0.85f, 0.95f, unlocked ? 0.95f : 0.55f));
+                sr.ellipse(cx - 11f * s, cy - 10.5f * s, 22f * s, 6.5f * s);
                 sr.setColor(white);
-                sr.rectLine(cx + 3.5f * s, cy - 2.5f * s, cx + 10.5f * s, cy - 8.5f * s, 3.5f * s);
-                sr.circle(cx + 10.5f * s, cy - 7f * s, 2.5f * s);
-                sr.circle(cx + 9f * s, cy - 10f * s, 2.5f * s);
-                
-                // Rising Fragrant Steam Ribbons
-                sr.setColor(new Color(0.88f, 0.95f, 1f, unlocked ? 0.85f : 0.45f));
-                sr.rectLine(cx - 7f * s, cy + 8.5f * s, cx - 4.5f * s, cy + 13.5f * s, 2f * s);
-                sr.rectLine(cx - 1f * s, cy + 9.5f * s, cx + 1.5f * s, cy + 14.5f * s, 2f * s);
-                sr.circle(cx + 5f * s, cy + 12f * s, 1.2f * s);
+                sr.ellipse(cx - 9.5f * s, cy - 9.8f * s, 19f * s, 4.5f * s);
+
+                // 2. Massive Succulent Golden Roast Meat Leg
+                sr.setColor(new Color(0.85f, 0.45f, 0.15f, unlocked ? 1f : 0.6f));
+                sr.circle(cx - 2f * s, cy + 1.5f * s, 9.0f * s);
+
+                // Honey-Amber Crystalline Glaze & Criss-Cross Sear Marks
+                sr.setColor(gold);
+                sr.circle(cx - 3f * s, cy + 3.8f * s, 5.8f * s);
+                sr.setColor(new Color(0.48f, 0.20f, 0.06f, 1f));
+                sr.rectLine(cx - 7f * s, cy + 4f * s, cx - 1f * s, cy - 2.5f * s, 2.0f * s);
+                sr.rectLine(cx - 2f * s, cy + 7f * s, cx + 3f * s, cy + 1f * s, 2.0f * s);
+                sr.rectLine(cx - 6f * s, cy - 1f * s, cx + 1f * s, cy + 5f * s, 1.6f * s);
+
+                // 3. Ivory Bone Handle with Knuckles
+                sr.setColor(white);
+                sr.rectLine(cx + 4f * s, cy - 2f * s, cx + 11.5f * s, cy - 8.5f * s, 4.0f * s);
+                sr.circle(cx + 11.5f * s, cy - 7f * s, 2.8f * s);
+                sr.circle(cx + 10f * s, cy - 10f * s, 2.8f * s);
+                // Chef's frill ring on bone
+                sr.setColor(gold);
+                sr.circle(cx + 6.5f * s, cy - 4.5f * s, 2.5f * s);
+
+                // 4. Rising Fragrant Steam Ribbons & Appetizing Sparkles
+                sr.setColor(new Color(0.90f, 0.96f, 1f, unlocked ? 0.90f : 0.45f));
+                sr.rectLine(cx - 7f * s, cy + 9f * s, cx - 4.5f * s, cy + 14.5f * s, 2.2f * s);
+                sr.rectLine(cx - 1f * s, cy + 10f * s, cx + 1.5f * s, cy + 15.5f * s, 2.2f * s);
+                sr.rectLine(cx + 5f * s, cy + 8f * s, cx + 7.5f * s, cy + 13f * s, 1.8f * s);
+                sr.setColor(gold);
+                sr.circle(cx - 5f * s, cy + 14.5f * s, 1.2f * s);
+                sr.circle(cx + 2f * s, cy + 15.5f * s, 1.4f * s);
                 break;
             }
 

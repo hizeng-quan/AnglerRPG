@@ -86,6 +86,7 @@ public class EquipmentIconRenderer {
                 break;
 
             case "Thần Khí Lạc Hồng":
+            case "Lạc Hồng":
                 if (type == EquipmentType.ROD) drawLacHongRod(sr, cx, cy, r, mainCol);
                 else if (type == EquipmentType.LINE) drawLacHongLine(sr, cx, cy, r, mainCol);
                 else drawLacHongHook(sr, cx, cy, r, mainCol);
@@ -2505,57 +2506,292 @@ public class EquipmentIconRenderer {
     }
 
     // =========================================================================
-    // 11. THẦN KHÍ LẠC HỒNG SET
+    // 11. THẦN KHÍ LẠC HỒNG SET (Imperial Dong Son Bronze Drum Staff, Sacred Dragon Spool, Au Co Lotus Hook)
     // =========================================================================
     public static void drawLacHongRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Dong Son bronze drum totem staff crested with majestic Chim Lac bird
-        sr.setColor(1f, 0.75f, 0.2f, 0.35f);
-        sr.circle(cx + r * 0.5f, cy + r * 0.5f, r * 0.45f);
-        // Bronze drum totem staff
-        sr.setColor(0.80f, 0.55f, 0.18f, 1f);
-        sr.rectLine(cx - r * 0.7f, cy - r * 0.7f, cx + r * 0.45f, cy + r * 0.45f, 5f);
-        // Dong Son sun concentric rings
-        sr.setColor(1f, 0.85f, 0.25f, 1f);
-        sr.circle(cx - r * 0.1f, cy - r * 0.1f, 4f);
-        sr.circle(cx + r * 0.2f, cy + r * 0.2f, 4f);
-        // Chim Lac bird in full flight atop staff
-        float bx = cx + r * 0.65f, by = cy + r * 0.65f;
-        sr.setColor(1f, 0.92f, 0.35f, 1f);
-        // Beak & Head
-        sr.triangle(bx, by, bx + 10f, by + 4f, bx + 2f, by + 8f);
-        // Wings spreading
-        sr.triangle(bx, by, bx - 6f, by + 12f, bx + 2f, by + 8f);
-        sr.triangle(bx, by, bx - 8f, by - 6f, bx - 2f, by);
+        // 1. Radiant Dong Son Solar Bronze & Crimson Ruby Flame Aura
+        sr.setColor(1f, 0.72f, 0.18f, 0.18f);
+        sr.circle(cx, cy, r * 0.98f);
+        sr.setColor(0.95f, 0.18f, 0.22f, 0.22f);
+        sr.circle(cx + r * 0.48f, cy + r * 0.48f, r * 0.54f);
+
+        // 2. Antique Dong Son Bronze & 24K Gold Celestial Shaft
+        float x1 = cx - r * 0.72f, y1 = cy - r * 0.72f;
+        float x2 = cx + r * 0.45f, y2 = cy + r * 0.45f;
+        // Deep antique bronze mantle
+        sr.setColor(0.68f, 0.42f, 0.14f, 1f);
+        sr.rectLine(x1, y1, x2, y2, Math.max(4.5f, r * 0.22f));
+        // Burnished 24K royal gold inlay
+        sr.setColor(1.0f, 0.84f, 0.25f, 1f);
+        sr.rectLine(x1, y1, x2, y2, Math.max(2.6f, r * 0.12f));
+        // Luminous imperial emerald jade core vein
+        sr.setColor(0.18f, 0.78f, 0.45f, 0.95f);
+        sr.rectLine(x1, y1, x2, y2, Math.max(1.2f, r * 0.05f));
+
+        // 3. 4 Raised Dong Son Geometric Collar Rings with Embedded Glowing Rubies
+        for (float f = 0.20f; f <= 0.80f; f += 0.20f) {
+            float nx = x1 + (x2 - x1) * f;
+            float ny = y1 + (y2 - y1) * f;
+            // Bronze collar ring
+            sr.setColor(0.85f, 0.62f, 0.18f, 1f);
+            sr.circle(nx, ny, Math.max(3.4f, r * 0.15f));
+            // Inset flaming Ruby gem
+            sr.setColor(0.96f, 0.15f, 0.25f, 1f);
+            sr.circle(nx, ny, Math.max(1.8f, r * 0.08f));
+            sr.setColor(1f, 1f, 1f, 0.9f);
+            sr.circle(nx + 0.6f, ny + 0.6f, Math.max(0.8f, r * 0.04f));
+        }
+
+        // 4. Imperial Jade Grip & Cross-Laced Crimson Silk Cord
+        float gx = x1 + (x2 - x1) * 0.10f;
+        float gy = y1 + (y2 - y1) * 0.10f;
+        sr.setColor(0.15f, 0.65f, 0.38f, 1f);
+        sr.circle(gx, gy, Math.max(4.0f, r * 0.18f));
+        sr.setColor(0.90f, 0.15f, 0.20f, 1f);
+        sr.rectLine(x1, y1, gx + 2f, gy + 2f, 1.8f);
+        // Hanging Dong Son bronze bell pommel
+        sr.setColor(0.85f, 0.62f, 0.18f, 1f);
+        sr.triangle(x1, y1, x1 - r * 0.12f, y1 - r * 0.18f, x1 - r * 0.18f, y1 - r * 0.10f);
+
+        // 5. Royal Crimson Silk Tassels & Dangling Jade Beads
+        sr.setColor(0.90f, 0.15f, 0.22f, 0.95f);
+        sr.rectLine(gx, gy, gx - r * 0.26f, gy - r * 0.18f, 2.2f);
+        sr.rectLine(gx, gy, gx - r * 0.18f, gy - r * 0.28f, 1.8f);
+        sr.setColor(0.20f, 0.85f, 0.50f, 1f);
+        sr.circle(gx - r * 0.26f, gy - r * 0.18f, Math.max(1.6f, r * 0.07f));
+        sr.circle(gx - r * 0.18f, gy - r * 0.28f, Math.max(1.4f, r * 0.06f));
+
+        // 6. Miniature Dong Son Bronze Drum Headpiece (Trống Đồng Đông Sơn Cổ Điển)
+        float sx = cx + r * 0.50f, sy = cy + r * 0.50f;
+        // Outer bronze drum flange
+        sr.setColor(0.72f, 0.45f, 0.14f, 1f);
+        sr.circle(sx, sy, r * 0.36f);
+        sr.setColor(0.98f, 0.82f, 0.22f, 1f);
+        sr.circle(sx, sy, r * 0.30f);
+        sr.setColor(0.40f, 0.20f, 0.06f, 1f); // Inner drum face recess
+        sr.circle(sx, sy, r * 0.22f);
+
+        // 14-Pointed Dong Son Sunburst Rays (Mặt trời 14 tia sáng rực lửa)
+        sr.setColor(1.0f, 0.88f, 0.28f, 1f);
+        for (int i = 0; i < 14; i++) {
+            float rad = (i * (360f / 14f)) * MathUtils.degreesToRadians;
+            float px1 = sx + MathUtils.cos(rad) * r * 0.12f;
+            float py1 = sy + MathUtils.sin(rad) * r * 0.12f;
+            float px2 = sx + MathUtils.cos(rad) * r * 0.22f;
+            float py2 = sy + MathUtils.sin(rad) * r * 0.22f;
+            sr.rectLine(px1, py1, px2, py2, 1.4f);
+        }
+
+        // Tangential dot circle pattern (Vòng hoa văn chấm tròn tiếp tuyến)
+        sr.setColor(1.0f, 0.92f, 0.45f, 0.9f);
+        for (int i = 0; i < 10; i++) {
+            float rad = (i * 36f) * MathUtils.degreesToRadians;
+            float dx = sx + MathUtils.cos(rad) * r * 0.26f;
+            float dy = sy + MathUtils.sin(rad) * r * 0.26f;
+            sr.circle(dx, dy, Math.max(1.2f, r * 0.04f));
+        }
+
+        // 7. MAJESTIC CHIM LẠC BIRD IN FULL FLIGHT (Chim Lạc sải cánh thần thoại)
+        float bx = sx + r * 0.05f, by = sy + r * 0.05f;
+        // Majestic outstretched wings (Tầng cánh chim Lạc vươn cao kiêu hãnh)
+        sr.setColor(1f, 0.88f, 0.25f, 1f);
+        sr.triangle(bx, by, bx - r * 0.32f, by + r * 0.24f, bx - r * 0.10f, by + r * 0.35f);
+        sr.triangle(bx, by, bx + r * 0.24f, by - r * 0.32f, bx + r * 0.35f, by - r * 0.10f);
+        // Wing feather serrations
+        sr.setColor(1f, 0.96f, 0.55f, 1f);
+        sr.triangle(bx, by, bx - r * 0.28f, by + r * 0.20f, bx - r * 0.18f, by + r * 0.28f);
+        sr.triangle(bx, by, bx + r * 0.20f, by - r * 0.28f, bx + r * 0.28f, by - r * 0.18f);
+
+        // Long stylized neck, head & characteristic crest (Đầu, mỏ nhọn và mào chim Lạc vươn cao)
+        sr.setColor(1f, 0.92f, 0.30f, 1f);
+        sr.triangle(bx, by, bx + r * 0.26f, by + r * 0.26f, bx + r * 0.08f, by + r * 0.30f);
+        // Beak (Mỏ dài thanh thoát)
+        sr.setColor(1f, 1f, 0.80f, 1f);
+        sr.triangle(bx + r * 0.24f, by + r * 0.24f, bx + r * 0.42f, by + r * 0.38f, bx + r * 0.28f, by + r * 0.28f);
+        // Swept-back royal crest (Mào chim Lạc uốn cong)
+        sr.setColor(0.96f, 0.18f, 0.25f, 1f);
+        sr.triangle(bx + r * 0.12f, by + r * 0.28f, bx - r * 0.05f, by + r * 0.42f, bx + r * 0.18f, by + r * 0.32f);
+
+        // Eye: Piercing Ruby Star
+        sr.setColor(0.95f, 0.10f, 0.18f, 1f);
+        sr.circle(bx + r * 0.22f, by + r * 0.26f, Math.max(1.8f, r * 0.07f));
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(bx + r * 0.24f, by + r * 0.27f, Math.max(0.9f, r * 0.035f));
+
+        // Long streaming tail plumes (Đuôi chim Lạc trải dài uốn lượn)
+        sr.setColor(1.0f, 0.82f, 0.20f, 0.95f);
+        sr.triangle(bx, by, bx - r * 0.35f, by - r * 0.20f, bx - r * 0.22f, by - r * 0.32f);
+        sr.setColor(0.95f, 0.20f, 0.25f, 0.9f);
+        sr.rectLine(bx, by, bx - r * 0.38f, by - r * 0.26f, 1.8f);
+
+        // 8. Central Radiant Ruby Sun Core
+        sr.setColor(0.98f, 0.18f, 0.25f, 1f);
+        sr.circle(sx, sy, r * 0.11f);
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(sx + 0.5f, sy + 0.5f, Math.max(1.0f, r * 0.045f));
     }
 
     public static void drawLacHongLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Sacred Dragon Sinew wound on imperial Dong Son bronze spool
-        sr.setColor(0.85f, 0.62f, 0.22f, 1f);
-        sr.circle(cx, cy, r * 0.75f);
-        sr.setColor(1f, 0.82f, 0.25f, 1f);
-        sr.circle(cx, cy, r * 0.58f);
-        sr.setColor(0.55f, 0.25f, 0.10f, 1f);
+        // 1. Dragon Pearl Aura & Solar Flame Halo
+        sr.setColor(0.95f, 0.22f, 0.22f, 0.20f);
+        sr.circle(cx, cy, r * 0.98f);
+        sr.setColor(1.0f, 0.85f, 0.25f, 0.18f);
+        sr.circle(cx, cy, r * 0.88f);
+
+        // 2. Heavy Antique Dong Son Bronze Drum Spool Casing
+        sr.setColor(0.70f, 0.44f, 0.15f, 1f);
+        sr.circle(cx, cy, r * 0.85f);
+        sr.setColor(1.0f, 0.84f, 0.26f, 1f);
+        sr.circle(cx, cy, r * 0.77f);
+        sr.setColor(0.28f, 0.14f, 0.05f, 1f); // Recessed spool chamber
+        sr.circle(cx, cy, r * 0.68f);
+
+        // 3. 16-Toothed Dong Son Sunburst Cog Rim (Vành răng cưa mặt trời Đông Sơn)
+        sr.setColor(1.0f, 0.88f, 0.30f, 1f);
+        for (int i = 0; i < 16; i++) {
+            float rad = (i * 22.5f) * MathUtils.degreesToRadians;
+            float px = cx + MathUtils.cos(rad) * r * 0.85f;
+            float py = cy + MathUtils.sin(rad) * r * 0.85f;
+            sr.circle(px, py, Math.max(1.8f, r * 0.07f));
+        }
+
+        // 4. Coiled Sacred Dragon Sinew (Hàng trăm vòng gân rồng thiêng vàng kim & đỏ ruby)
+        for (int l = 0; l < 4; l++) {
+            float lr = r * (0.68f - l * 0.09f);
+            sr.setColor((l % 2 == 0) ? new Color(1.0f, 0.84f, 0.25f, 0.95f) : new Color(0.95f, 0.20f, 0.25f, 0.95f));
+            sr.circle(cx, cy, lr);
+        }
+        sr.setColor(0.35f, 0.12f, 0.05f, 1f);
         sr.circle(cx, cy, r * 0.38f);
-        // Divine dragon pearl in center
-        sr.setColor(1f, 0.3f, 0.35f, 1f);
-        sr.circle(cx, cy, r * 0.20f);
-        sr.setColor(1f, 1f, 1f, 1f);
+
+        // 5. DUAL CELESTIAL DRAGONS MOUNT (Song Long Chầu Nguyệt / Rồng Thiêng Lạc Long Quân ôm cuộn cước)
+        // Upper Celestial Dragon arching over spool
+        sr.setColor(0.18f, 0.75f, 0.42f, 1f); // Emerald dragon body
+        sr.rectLine(cx - r * 0.55f, cy + r * 0.45f, cx + r * 0.55f, cy + r * 0.45f, Math.max(3.0f, r * 0.13f));
+        sr.setColor(1.0f, 0.85f, 0.25f, 1f); // Golden dragon dorsal fin spines
+        for (int d = -3; d <= 3; d++) {
+            float dx = cx + d * r * 0.14f;
+            sr.triangle(dx - 1.5f, cy + r * 0.48f, dx + 1.5f, cy + r * 0.48f, dx, cy + r * 0.62f);
+        }
+        // Dragon Head with horns and fierce whiskers (Đầu Rồng Lạc Long Quân)
+        float dhx = cx + r * 0.60f, dhy = cy + r * 0.45f;
+        sr.setColor(1.0f, 0.85f, 0.25f, 1f);
+        sr.triangle(dhx, dhy, dhx + r * 0.24f, dhy + r * 0.08f, dhx + r * 0.10f, dhy + r * 0.20f);
+        // Antler Horn
+        sr.setColor(0.96f, 0.20f, 0.25f, 1f);
+        sr.rectLine(dhx + r * 0.06f, dhy + r * 0.15f, dhx - r * 0.05f, dhy + r * 0.32f, 2f);
+        // Dragon Whisker (Râu rồng uốn lượn)
+        sr.setColor(1.0f, 0.92f, 0.45f, 1f);
+        sr.rectLine(dhx + r * 0.20f, dhy + r * 0.05f, dhx + r * 0.34f, dhy - r * 0.12f, 1.4f);
+
+        // 6. CENTRAL DIVINE DRAGON PEARL (Viên Ngọc Rồng Lạc Hồng rực lửa)
+        sr.setColor(1.0f, 0.85f, 0.25f, 1f);
+        // 8 Radiant sun rays emerging from pearl
+        for (int i = 0; i < 8; i++) {
+            float rad = (i * 45f) * MathUtils.degreesToRadians;
+            float px1 = cx + MathUtils.cos(rad) * r * 0.15f;
+            float py1 = cy + MathUtils.sin(rad) * r * 0.15f;
+            float px2 = cx + MathUtils.cos(rad) * r * 0.32f;
+            float py2 = cy + MathUtils.sin(rad) * r * 0.32f;
+            sr.rectLine(px1, py1, px2, py2, 1.8f);
+        }
+
+        // Deep Ruby dragon pearl body
+        sr.setColor(0.96f, 0.15f, 0.22f, 1f);
+        sr.circle(cx, cy, r * 0.22f);
+        sr.setColor(1.0f, 0.45f, 0.30f, 1f);
+        sr.circle(cx, cy, r * 0.15f);
+        sr.setColor(1.0f, 0.95f, 0.60f, 1f);
         sr.circle(cx, cy, r * 0.08f);
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(cx + 0.8f, cy + 0.8f, Math.max(1.0f, r * 0.045f));
+
+        // 7. Trailing Golden Dragon Filament & Hanging Imperial Jade Talisman
+        sr.setColor(1.0f, 0.85f, 0.25f, 0.95f);
+        sr.rectLine(cx + r * 0.45f, cy - r * 0.40f, cx + r * 0.22f, cy - r * 0.72f, 2.2f);
+        sr.rectLine(cx + r * 0.22f, cy - r * 0.72f, cx - r * 0.10f, cy - r * 0.82f, 1.8f);
+        // Dangling Imperial Jade Token (Lệnh bài Lạc Hồng)
+        sr.setColor(0.18f, 0.78f, 0.45f, 1f);
+        sr.rect(cx - r * 0.18f, cy - r * 0.90f, r * 0.16f, r * 0.18f);
+        sr.setColor(1.0f, 0.85f, 0.25f, 1f);
+        sr.circle(cx - r * 0.10f, cy - r * 0.81f, Math.max(1.2f, r * 0.05f));
     }
 
     public static void drawLacHongHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Celestial Au Co Lotus Hook cradling glowing ocean pearl
-        sr.setColor(1f, 0.82f, 0.25f, 1f);
-        sr.rectLine(cx - r * 0.2f, cy + r * 0.55f, cx - r * 0.2f, cy - r * 0.35f, 4.5f);
-        sr.rectLine(cx - r * 0.2f, cy - r * 0.35f, cx + r * 0.4f, cy - r * 0.35f, 4.5f);
-        sr.rectLine(cx + r * 0.4f, cy - r * 0.35f, cx + r * 0.4f, cy + r * 0.25f, 4.5f);
-        // Pink lotus flower petal cradle
-        sr.setColor(0.95f, 0.45f, 0.65f, 1f);
-        sr.triangle(cx - r * 0.2f, cy + r * 0.55f, cx - r * 0.45f, cy + r * 0.8f, cx - r * 0.2f, cy + r * 0.75f);
-        sr.triangle(cx - r * 0.2f, cy + r * 0.55f, cx + r * 0.05f, cy + r * 0.8f, cx - r * 0.2f, cy + r * 0.75f);
-        // Sacred Pearl in center
-        sr.setColor(1f, 0.98f, 0.88f, 1f);
-        sr.circle(cx - r * 0.2f, cy + r * 0.62f, r * 0.15f);
+        // 1. Sacred Lotus Halo & Celestial Aura
+        sr.setColor(0.96f, 0.35f, 0.55f, 0.18f);
+        sr.circle(cx, cy, r * 0.98f);
+        sr.setColor(1.0f, 0.85f, 0.25f, 0.18f);
+        sr.circle(cx + r * 0.10f, cy - r * 0.10f, r * 0.82f);
+
+        // 2. CELESTIAL METEORIC BRONZE-GOLD HOOK (Thiên Thạch Thần Kim)
+        float shankX = cx - r * 0.22f;
+        float topY = cy + r * 0.56f;
+        float bendY = cy - r * 0.62f;
+        float tipX = cx + r * 0.52f;
+        float tipY = cy + r * 0.28f;
+
+        // Antique Bronze spine
+        sr.setColor(0.70f, 0.44f, 0.15f, 1f);
+        sr.rectLine(shankX, topY, shankX, bendY, Math.max(4.8f, r * 0.22f));
+        sr.rectLine(shankX, bendY, tipX, bendY, Math.max(4.8f, r * 0.22f));
+        sr.rectLine(tipX, bendY, tipX, tipY, Math.max(4.8f, r * 0.22f));
+
+        // 24K Polished Gold razor blade edge
+        sr.setColor(1.0f, 0.86f, 0.28f, 1f);
+        sr.rectLine(shankX, topY, shankX, bendY, Math.max(2.4f, r * 0.11f));
+        sr.rectLine(shankX, bendY, tipX, bendY, Math.max(2.4f, r * 0.11f));
+        sr.rectLine(tipX, bendY, tipX, tipY, Math.max(2.4f, r * 0.11f));
+
+        // Engraved Turquoise Jade Wave Inlays along hook shank
+        sr.setColor(0.18f, 0.80f, 0.55f, 0.95f);
+        sr.rectLine(shankX, topY - r * 0.20f, shankX, bendY + r * 0.20f, Math.max(1.2f, r * 0.05f));
+
+        // 3. BLOSSOMING SACRED LOTUS FLOWER CRADLE (Đóa Sen Tiên Mẫu Âu Cơ)
+        float lx = shankX;
+        float ly = topY - r * 0.10f;
+        // Lotus Jade Sepals
+        sr.setColor(0.18f, 0.72f, 0.40f, 1f);
+        sr.triangle(lx, ly, lx - r * 0.32f, ly - r * 0.12f, lx - r * 0.20f, ly - r * 0.24f);
+        sr.triangle(lx, ly, lx + r * 0.32f, ly - r * 0.12f, lx + r * 0.20f, ly - r * 0.24f);
+        // Outer Pink Lotus Petals
+        sr.setColor(0.96f, 0.38f, 0.58f, 1f);
+        sr.triangle(lx, ly, lx - r * 0.36f, ly + r * 0.24f, lx - r * 0.12f, ly + r * 0.32f);
+        sr.triangle(lx, ly, lx + r * 0.36f, ly + r * 0.24f, lx + r * 0.12f, ly + r * 0.32f);
+        // Center Tender Petals with Gold Rim
+        sr.setColor(1.0f, 0.88f, 0.94f, 1f);
+        sr.triangle(lx, ly, lx - r * 0.16f, ly + r * 0.36f, lx + r * 0.16f, ly + r * 0.36f);
+        sr.setColor(1.0f, 0.86f, 0.28f, 1f);
+        sr.circle(lx, ly + r * 0.15f, Math.max(1.8f, r * 0.08f));
+
+        // 4. CHIM LẠC BEAK SPEARHEAD BARB & POINT (Ngạnh câu tạo hình mỏ Chim Lạc)
+        sr.setColor(1.0f, 0.88f, 0.28f, 1f);
+        // Inward facing spearhead barb
+        sr.triangle(tipX, tipY - r * 0.14f, tipX, tipY + r * 0.22f, tipX - r * 0.28f, tipY + r * 0.04f);
+        // Razor white blade facet
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.triangle(tipX, tipY, tipX, tipY + r * 0.22f, tipX - r * 0.16f, tipY + r * 0.14f);
+        // Ruby gem set into barb
+        sr.setColor(0.96f, 0.15f, 0.22f, 1f);
+        sr.circle(tipX - r * 0.08f, tipY + r * 0.02f, Math.max(1.5f, r * 0.065f));
+
+        // 5. CROWN EYELET & TIÊN CHÂU BÁCH NOÃN (Viên Ngọc Tiên Châu Âu Cơ)
+        sr.setColor(1.0f, 0.86f, 0.28f, 1f);
+        sr.circle(shankX, topY + r * 0.18f, Math.max(3.8f, r * 0.17f));
+        // Luminous Iridescent Opal Pearl (Bách Noãn Tiên Châu)
+        sr.setColor(0.98f, 0.98f, 0.92f, 1f);
+        sr.circle(shankX, topY + r * 0.18f, Math.max(2.4f, r * 0.11f));
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(shankX + 0.6f, topY + r * 0.20f, Math.max(1.0f, r * 0.045f));
+
+        // 6. Fluttering Twin Royal Crimson Silk Ribbons
+        sr.setColor(0.90f, 0.15f, 0.22f, 1f);
+        sr.rectLine(shankX, topY + r * 0.12f, shankX - r * 0.32f, topY - r * 0.12f, 2.2f);
+        sr.rectLine(shankX, topY + r * 0.12f, shankX - r * 0.22f, topY - r * 0.25f, 1.8f);
+        // Dangling Bronze Bell beads
+        sr.setColor(0.85f, 0.62f, 0.18f, 1f);
+        sr.circle(shankX - r * 0.32f, topY - r * 0.12f, Math.max(1.6f, r * 0.07f));
+        sr.circle(shankX - r * 0.22f, topY - r * 0.25f, Math.max(1.4f, r * 0.06f));
     }
 
     // =========================================================================
