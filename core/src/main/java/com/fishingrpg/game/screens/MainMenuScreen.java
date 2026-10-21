@@ -22,7 +22,15 @@ public class MainMenuScreen implements Screen {
     private static final float W = 1280f;
     private static final float H = 720f;
 
-    private static final String[] ITEMS = { "BẮT ĐẦU CÂU", "THOÁT" };
+    private static final String[] ITEMS = { "BẮT ĐẦU CÂU", "XUẤT DỮ LIỆU", "NẠP DỮ LIỆU", "THOÁT" };
+    private static final float BTN_W = 380f;
+    private static final float BTN_H = 52f;
+    private static final float BTN_START_Y = 275f;
+    private static final float BTN_SPACING = 66f;
+
+    private String statusMessage = null;
+    private float statusTimer = 0f;
+    private boolean statusIsSuccess = true;
 
     private final FishingRPG game;
     private final ShapeRenderer sr;
@@ -109,19 +117,22 @@ public class MainMenuScreen implements Screen {
 
     private void update(float delta) {
         timer += delta;
+        if (statusTimer > 0f) {
+            statusTimer -= delta;
+            if (statusTimer <= 0f) statusMessage = null;
+        }
 
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         viewport.unproject(mousePos);
 
-        float btnW = 380f, btnH = 68f;
-        float btnX = (W - btnW) / 2f;
+        float btnX = (W - BTN_W) / 2f;
         boolean mouseMoved = Gdx.input.getDeltaX() != 0 || Gdx.input.getDeltaY() != 0;
         int hovered = -1;
 
         for (int i = 0; i < ITEMS.length; i++) {
-            float btnY = 220f - i * 95f;
-            if (mousePos.x >= btnX && mousePos.x <= btnX + btnW &&
-                mousePos.y >= btnY && mousePos.y <= btnY + btnH) {
+            float btnY = BTN_START_Y - i * BTN_SPACING;
+            if (mousePos.x >= btnX && mousePos.x <= btnX + BTN_W &&
+                mousePos.y >= btnY && mousePos.y <= btnY + BTN_H) {
                 hovered = i;
                 if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
                     AudioManager.getInstance().playSFX("sfx_button");
@@ -181,10 +192,95 @@ public class MainMenuScreen implements Screen {
             if (item == 0) {
                 game.setScreen(new PlayScreen(game));
                 dispose();
+            } else if (item == 1) {
+                handleExport();
+            } else if (item == 2) {
+                handleImport();
             } else {
                 Gdx.app.exit();
             }
         });
+    }
+
+    private void handleExport() {
+        try {
+            com.fishingrpg.game.data.SaveManager.savePlayer(game.player);
+            java.io.File file = new java.io.File("angler_save.json");
+            com.fishingrpg.game.data.SaveManager.exportToFile(file);
+            String json = com.fishingrpg.game.data.SaveManager.exportDataToString();
+            Gdx.app.getClipboard().setContents(json);
+
+            statusMessage = "✓ Đã xuất thành công: 'angler_save.json' & Clipboard!";
+            statusTimer = 5.0f;
+            statusIsSuccess = true;
+            AudioManager.getInstance().playSFX("sfx_success");
+        } catch (Exception e) {
+            Gdx.app.error("MainMenu", "Export failed", e);
+            statusMessage = "✕ Lỗi xuất dữ liệu: " + e.getMessage();
+            statusTimer = 5.0f;
+            statusIsSuccess = false;
+            AudioManager.getInstance().playSFX("sfx_fail");
+        }
+    }
+
+    private void handleImport() {
+        new Thread(() -> {
+            String jsonContent = null;
+            String sourceName = "";
+
+            try {
+                java.awt.FileDialog fd = new java.awt.FileDialog((java.awt.Frame) null, "Chọn file lưu trữ AnglerRPG (*.json)", java.awt.FileDialog.LOAD);
+                fd.setFile("*.json");
+                fd.setVisible(true);
+                String f = fd.getFile();
+                String d = fd.getDirectory();
+                if (f != null && d != null) {
+                    java.io.File selected = new java.io.File(d, f);
+                    if (selected.exists()) {
+                        jsonContent = java.nio.file.Files.readString(selected.toPath(), java.nio.charset.StandardCharsets.UTF_8);
+                        sourceName = selected.getName();
+                    }
+                }
+            } catch (Throwable t) {
+                Gdx.app.log("MainMenu", "Native FileDialog fallback: " + t.getMessage());
+            }
+
+            if (jsonContent == null) {
+                java.io.File local = new java.io.File("angler_save.json");
+                if (local.exists()) {
+                    try {
+                        jsonContent = java.nio.file.Files.readString(local.toPath(), java.nio.charset.StandardCharsets.UTF_8);
+                        sourceName = "angler_save.json";
+                    } catch (Exception ignored) {}
+                }
+            }
+
+            if (jsonContent == null) {
+                try {
+                    String clip = Gdx.app.getClipboard().getContents();
+                    if (clip != null && clip.contains("\"game\"") && clip.contains("playerData")) {
+                        jsonContent = clip;
+                        sourceName = "Clipboard";
+                    }
+                } catch (Exception ignored) {}
+            }
+
+            final String fJson = jsonContent;
+            final String fSource = sourceName;
+            Gdx.app.postRunnable(() -> {
+                if (fJson != null && com.fishingrpg.game.data.SaveManager.importDataFromString(fJson, game.player)) {
+                    statusMessage = "✓ Nạp thành công từ " + fSource + " (Cấp " + game.player.getLevel() + " • " + game.player.getGold() + " Vàng)!";
+                    statusTimer = 5.0f;
+                    statusIsSuccess = true;
+                    AudioManager.getInstance().playSFX("sfx_success");
+                } else {
+                    statusMessage = "✕ Không tìm thấy dữ liệu hợp lệ (Hãy sao chép vào Clipboard hoặc lưu file 'angler_save.json')!";
+                    statusTimer = 5.0f;
+                    statusIsSuccess = false;
+                    AudioManager.getInstance().playSFX("sfx_fail");
+                }
+            });
+        }).start();
     }
 
     private void draw() {
@@ -210,6 +306,7 @@ public class MainMenuScreen implements Screen {
         drawFloatingMotes();
         drawLogoEmblemShapes();
         drawButtonsShapes();
+        drawStatusMessageShape();
         sr.end();
 
         // 2. Line details: Waves, seabirds, and crest accents
@@ -222,6 +319,7 @@ public class MainMenuScreen implements Screen {
         game.batch.begin();
         drawTypographicLogoAndTexts();
         drawButtonTexts();
+        drawStatusMessageText();
         drawFooterInfo();
         game.batch.end();
     }
@@ -512,41 +610,60 @@ public class MainMenuScreen implements Screen {
     // BUTTON SHAPES (GLASSMORPHISM & HOVER GLOW)
     // =========================================================================
     private void drawButtonsShapes() {
-        float btnW = 380f, btnH = 68f;
-        float btnX = (W - btnW) / 2f;
+        float btnX = (W - BTN_W) / 2f;
 
         for (int i = 0; i < ITEMS.length; i++) {
-            float btnY = 220f - i * 95f;
+            float btnY = BTN_START_Y - i * BTN_SPACING;
             boolean isSel = (i == selected);
 
             if (isSel) {
                 // Outer radiant glow
                 float pulse = 0.5f + 0.5f * MathUtils.sin(timer * 5f);
                 sr.setColor(1f, 0.85f, 0.35f, 0.22f + 0.12f * pulse);
-                drawRoundedRect(sr, btnX - 6f, btnY - 6f, btnW + 12f, btnH + 12f, 16);
+                drawRoundedRect(sr, btnX - 6f, btnY - 6f, BTN_W + 12f, BTN_H + 12f, 16);
 
                 // Button plate background (Sapphire-Gold gradient)
                 sr.setColor(0.12f, 0.18f, 0.32f, 0.96f);
-                drawRoundedRect(sr, btnX, btnY, btnW, btnH, 12);
+                drawRoundedRect(sr, btnX, btnY, BTN_W, BTN_H, 12);
 
                 // High-polish gold border
                 sr.setColor(1f, 0.88f, 0.35f, 1f);
-                drawRectOutline(sr, btnX, btnY, btnW, btnH, 2.5f);
+                drawRectOutline(sr, btnX, btnY, BTN_W, BTN_H, 2.5f);
 
                 // Side accent indicator bars
                 sr.setColor(1f, 0.92f, 0.5f, 1f);
-                sr.rect(btnX + 12f, btnY + 16f, 4f, btnH - 32f);
-                sr.rect(btnX + btnW - 16f, btnY + 16f, 4f, btnH - 32f);
+                sr.rect(btnX + 12f, btnY + 14f, 4f, BTN_H - 28f);
+                sr.rect(btnX + BTN_W - 16f, btnY + 14f, 4f, BTN_H - 28f);
             } else {
                 // Glassmorphism translucent obsidian plate
                 sr.setColor(0.06f, 0.09f, 0.16f, 0.88f);
-                drawRoundedRect(sr, btnX, btnY, btnW, btnH, 12);
+                drawRoundedRect(sr, btnX, btnY, BTN_W, BTN_H, 12);
 
                 // Subtle metallic blue border
                 sr.setColor(0.25f, 0.40f, 0.60f, 0.70f);
-                drawRectOutline(sr, btnX, btnY, btnW, btnH, 1.5f);
+                drawRectOutline(sr, btnX, btnY, BTN_W, BTN_H, 1.5f);
             }
         }
+    }
+
+    private void drawStatusMessageShape() {
+        if (statusMessage == null || statusTimer <= 0f) return;
+        float alpha = Math.min(1f, statusTimer / 0.5f);
+        float bannerY = 338f;
+        layout.setText(subFont, statusMessage);
+        float bannerW = Math.max(480f, layout.width + 48f);
+        float bannerH = 40f;
+        float bannerX = (W - bannerW) / 2f;
+
+        sr.setColor(0.04f, 0.08f, 0.16f, 0.94f * alpha);
+        drawRoundedRect(sr, bannerX, bannerY, bannerW, bannerH, 10);
+
+        if (statusIsSuccess) {
+            sr.setColor(0.20f, 0.88f, 0.50f, 0.85f * alpha);
+        } else {
+            sr.setColor(0.95f, 0.32f, 0.32f, 0.85f * alpha);
+        }
+        drawRectOutline(sr, bannerX, bannerY, bannerW, bannerH, 1.8f);
     }
 
     // =========================================================================
@@ -588,11 +705,10 @@ public class MainMenuScreen implements Screen {
     }
 
     private void drawButtonTexts() {
-        float btnW = 380f, btnH = 68f;
-        float btnX = (W - btnW) / 2f;
+        float btnX = (W - BTN_W) / 2f;
 
         for (int i = 0; i < ITEMS.length; i++) {
-            float btnY = 220f - i * 95f;
+            float btnY = BTN_START_Y - i * BTN_SPACING;
             boolean isSel = (i == selected);
 
             String text = isSel ? ("►  " + ITEMS[i] + "  ◄") : ITEMS[i];
@@ -602,25 +718,45 @@ public class MainMenuScreen implements Screen {
                 menuFont.setColor(0.02f, 0.04f, 0.08f, 0.9f);
                 layout.setText(menuFont, text);
                 menuFont.draw(game.batch, text,
-                    btnX + (btnW - layout.width) / 2f + 2f,
-                    btnY + (btnH + layout.height) / 2f - 2f
+                    btnX + (BTN_W - layout.width) / 2f + 2f,
+                    btnY + (BTN_H + layout.height) / 2f - 2f
                 );
 
                 // Bright Champagne Gold
                 menuFont.setColor(1f, 0.96f, 0.78f, 1f);
                 menuFont.draw(game.batch, text,
-                    btnX + (btnW - layout.width) / 2f,
-                    btnY + (btnH + layout.height) / 2f
+                    btnX + (BTN_W - layout.width) / 2f,
+                    btnY + (BTN_H + layout.height) / 2f
                 );
             } else {
                 menuFont.setColor(0.70f, 0.82f, 0.92f, 0.88f);
                 layout.setText(menuFont, text);
                 menuFont.draw(game.batch, text,
-                    btnX + (btnW - layout.width) / 2f,
-                    btnY + (btnH + layout.height) / 2f
+                    btnX + (BTN_W - layout.width) / 2f,
+                    btnY + (BTN_H + layout.height) / 2f
                 );
             }
         }
+    }
+
+    private void drawStatusMessageText() {
+        if (statusMessage == null || statusTimer <= 0f) return;
+        float alpha = Math.min(1f, statusTimer / 0.5f);
+        float bannerY = 338f;
+        float bannerH = 40f;
+        layout.setText(subFont, statusMessage);
+        float bannerX = (W - layout.width) / 2f;
+        float textY = bannerY + (bannerH + layout.height) / 2f;
+
+        subFont.setColor(0.01f, 0.02f, 0.04f, 0.8f * alpha);
+        subFont.draw(game.batch, statusMessage, bannerX + 1.2f, textY - 1.2f);
+
+        if (statusIsSuccess) {
+            subFont.setColor(0.55f, 1f, 0.75f, alpha);
+        } else {
+            subFont.setColor(1f, 0.75f, 0.75f, alpha);
+        }
+        subFont.draw(game.batch, statusMessage, bannerX, textY);
     }
 
     private void drawFooterInfo() {
@@ -630,7 +766,7 @@ public class MainMenuScreen implements Screen {
         subFont.draw(game.batch, "Điều khiển: [↑/↓/W/S] Chọn mục  •  [Enter/Space] Bắt đầu", 25f, 26f);
 
         // Version tag on bottom right
-        String ver = "v0.4.14 • Fishing RPG";
+        String ver = "v0.4.15 • Fishing RPG";
         layout.setText(subFont, ver);
         subFont.draw(game.batch, ver, W - layout.width - 25f, 26f);
         subFont.getData().setScale(1f);

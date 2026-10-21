@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Version-v0.4.14-00b4d8?style=for-the-badge&logo=git&logoColor=white" alt="Version v0.4.14" /></a>
+  <a href="#-tính-năng-nổi-bật"><img src="https://img.shields.io/badge/Version-v0.4.15-00b4d8?style=for-the-badge&logo=git&logoColor=white" alt="Version v0.4.15" /></a>
   <a href="https://libgdx.com/"><img src="https://img.shields.io/badge/Framework-libGDX%201.14.2-e63946?style=for-the-badge&logo=libgdx&logoColor=white" alt="libGDX 1.14.2" /></a>
   <a href="https://openjdk.org/"><img src="https://img.shields.io/badge/Java-17%20%7C%2021-f77f00?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java 17/21" /></a>
   <a href="https://www.lwjgl.org/"><img src="https://img.shields.io/badge/Platform-Desktop%20(LWJGL3)-457b9d?style=for-the-badge&logo=windows&logoColor=white" alt="LWJGL3 Desktop" /></a>
@@ -254,10 +254,23 @@ AnglerRPG/
 
 ---
 
-### Đóng Gói Thành File Thực Thi (.jar)
+### Đóng Gói Thành File Thực Thi (.jar & .exe)
 
-Để xuất game ra file `.jar` có thể chạy trên mọi máy tính đã cài Java:
+#### 1. Khởi chạy trực tiếp file .exe (Không cần cài đặt Java):
+Game đã được đóng gói sẵn dưới dạng tệp thực thi Windows độc lập kèm bộ runtime JRE nhúng:
+- Thư mục chạy game: `dist/AnglerRPG-Windows/`
+- Tệp thực thi: **`AnglerRPG.exe`** (hoặc `FishingRPG.exe`)
+- Gói nén phân phối đầy đủ: **`dist/AnglerRPG-v0.4.15-Windows-x64.zip`**
 
+*Người chơi chỉ cần nhấp đúp vào file `AnglerRPG.exe` để bắt đầu trải nghiệm ngay!*
+
+#### 2. Đóng gói lại file .exe từ mã nguồn:
+```powershell
+.\gradlew.bat lwjgl3:packageWinX64
+```
+File thực thi và runtime sẽ được sinh tại: `lwjgl3/build/construo/winX64/roast/`.
+
+#### 3. Xuất file thực thi .jar đa nền tảng:
 ```bash
 # Windows
 .\gradlew.bat lwjgl3:jar
@@ -266,12 +279,9 @@ AnglerRPG/
 ./gradlew lwjgl3:jar
 ```
 
-File thực thi sau khi hoàn tất sẽ nằm tại:
-`lwjgl3/build/libs/AnglerRPG-1.0.0.jar`
-
-Khởi chạy file jar bằng lệnh:
+File JAR sẽ xuất hiện tại `lwjgl3/build/libs/FishingRPG-1.0.0.jar` và có thể khởi chạy bằng:
 ```bash
-java -jar lwjgl3/build/libs/AnglerRPG-1.0.0.jar
+java -jar lwjgl3/build/libs/FishingRPG-1.0.0.jar
 ```
 
 ---
@@ -288,6 +298,12 @@ Trò chơi sử dụng hệ thống **LibGDX Preferences** để tự động l�
 - **macOS / Linux**: `~/.prefs/`
   - `AnglerRPG_Save`
   - `AnglerRPG_Records`
+
+### Xuất & Nạp Dữ Liệu Lưu Trữ (Export & Import Data)
+
+Tại **Menu Chính** của trò chơi, bạn có thể dễ dàng sao lưu hoặc chuyển đổi dữ liệu chơi giữa các máy:
+- **📤 XUẤT DỮ LIỆU**: Bấm vào nút này để xuất toàn bộ chỉ số, trang bị, kỹ năng và kỷ lục câu cá ra file `angler_save.json` (được lưu tại thư mục gốc game) và đồng thời sao chép toàn bộ chuỗi JSON vào Clipboard.
+- **📥 NẠP DỮ LIỆU**: Mở cửa sổ duyệt file để chọn file `.json` sao lưu từ máy tính, hoặc tự động đọc file `angler_save.json` cục bộ / dán từ Clipboard để phục hồi tiến trình ngay lập tức.
 
 ### Cách Xóa / Làm Mới Dữ Liệu (Reset Data)
 
