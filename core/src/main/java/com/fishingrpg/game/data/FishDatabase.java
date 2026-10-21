@@ -118,6 +118,10 @@ public class FishDatabase {
             if (hookBoost > 0) {
                 for (int i = 2; i < weights.length; i++) weights[i] *= (1f + hookBoost);
             }
+            float timingBoost = player.getCastRarityBoost() / 100f;
+            if (timingBoost > 0) {
+                for (int i = 2; i < weights.length; i++) weights[i] *= (1f + timingBoost);
+            }
             if (player.isSetBonusActive() && player.getEquippedRod() != null) {
                 if (player.getEquippedRod().setName.equals("Đại Dương")) {
                     for (int i = 2; i < weights.length; i++) weights[i] *= 1.20f;

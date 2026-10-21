@@ -132,7 +132,7 @@ public class Fish implements Catchable {
                id.equals("song_than") || id.equals("cuong_no") || id.equals("phun_muc") ||
                id.equals("giat_dien") || id.equals("nhay_vot") || id.equals("song_am") ||
                id.equals("phun_muc_mu") || id.equals("hut_mau") || id.equals("bao_to") ||
-               id.equals("quet_xuc_tu");
+               id.equals("quet_xuc_tu") || id.equals("muc_mu_hut_mau");
     }
 
     public static String getSkillDisplayName(String id) {
@@ -157,6 +157,7 @@ public class Fish implements Catchable {
             case "xuc_tu":       return "Xúc tu siết";
             case "quet_xuc_tu":  return "Quét xúc tu";
             case "hut_mau":      return "Hút máu";
+            case "muc_mu_hut_mau": return "Mực mù hút máu";
             default:             return id.replace("_", " ");
         }
     }

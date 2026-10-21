@@ -39,6 +39,7 @@ public class FishingManager {
     public float fishPhunMucTimer = 0f;
     public float fishGiatDienTimer = 0f;
     public float fishNhayVotTimer = 0f;
+    public float fishLanSauTimer = 0f;
     public float fishBaoToTimer = 0f;
     public float fishPhunMucMuTimer = 0f;
     public float fishHutMauTimer = 0f;
@@ -80,6 +81,7 @@ public class FishingManager {
     public float castBuffBannerTimer = 0f;
     public String castTimingText = "";
     public java.util.ArrayList<String> castBuffList = new java.util.ArrayList<>();
+    public boolean isReeling = false;
 
     // Escape Notification
     public float fishEscapeTimer = 0f;
@@ -155,6 +157,15 @@ public class FishingManager {
 
         // Collect all active fishing buffs from timing, equipment, items, and skills
         castBuffList.clear();
+        if (bonus >= 2f) {
+            player.setCastRarityBoost(25f);
+            castBuffList.add("QUĂNG HOÀN HẢO (PERFECT): +25% Tỷ lệ Hiếm, Cắn nhanh 50%");
+        } else if (bonus > 0f) {
+            player.setCastRarityBoost(10f);
+            castBuffList.add("QUĂNG CHUẨN XÁC (GOOD): +10% Tỷ lệ Hiếm, Cắn nhanh 20%");
+        } else {
+            player.setCastRarityBoost(0f);
+        }
         if (player.isBaitBuffActive()) {
             castBuffList.add("MỒI THƠM: 100% Cá & Rương (0% Rác)");
         }
@@ -276,6 +287,7 @@ public class FishingManager {
             if (player.getSonarCharges() > 0) {
                 player.consumeSonarCharge();
             }
+            player.setCastRarityBoost(0f);
             
             if (!success) {
                 isLineBroken = true;
@@ -393,6 +405,7 @@ public class FishingManager {
     }
 
     public void update(float delta, boolean actClicked, boolean isSpaceJust, boolean isSpaceDown, boolean[] activeSkillInputs, boolean actClose) {
+        this.isReeling = isSpaceDown;
         if (actClose) {
             showCatchSidebar = false;
         }
@@ -547,6 +560,7 @@ public class FishingManager {
                         fishQuayBunTimer = 4f;
                         combatMessage = "CÁ QUẪY BÙN! Không thấy thanh Tension!";
                     } else if (s.id.equals("lan_sau")) {
+                        fishLanSauTimer = 2.5f;
                         player.increaseTension(player.getMaxLineTension() * 0.3f);
                         combatMessage = "CÁ LẶN SÂU! Tension tăng sốc!";
                     } else if (s.id.equals("song_than")) {
@@ -581,6 +595,11 @@ public class FishingManager {
                     } else if (s.id.equals("hut_mau")) {
                         fishHutMauTimer = 3.5f;
                         combatMessage = "MỎ QUẠ CẮN XÉ! Hút thể lực để hồi sinh mệnh!";
+                    } else if (s.id.equals("muc_mu_hut_mau")) {
+                        fishPhunMucMuTimer = 4.5f;
+                        fishHutMauTimer = 4.5f;
+                        combatMessage = "MỰC MÙ HÚT MÁU! Màn đêm che khuất & Mỏ quạ hút thể lực hồi sinh mệnh!";
+                        com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerFishSkillVFX("muc_mu_hut_mau", 640f, 360f);
                     } else if (s.id.equals("bao_to")) {
                         fishBaoToTimer = 3f;
                         player.increaseTension(player.getMaxLineTension() * 0.4f);
@@ -592,6 +611,7 @@ public class FishingManager {
         }
         
         if (fishButTocTimer > 0) fishButTocTimer -= delta;
+        if (fishLanSauTimer > 0) fishLanSauTimer -= delta;
         if (fishQuayBunTimer > 0) fishQuayBunTimer -= delta;
         if (fishSongThanTimer > 0) {
             fishSongThanTimer -= delta;
@@ -826,12 +846,12 @@ public class FishingManager {
                 if (currentFish.getPassiveSkill("vay_cung") != null) fishDef -= 0.5f;
                 float finalDmg = dmg * dmgMult * fishDef;
                 currentFish.takeDamage(finalDmg);
-                if (ftm != null) ftm.addText("-" + (int)finalDmg, 640f + MathUtils.random(-50, 50), 360f + MathUtils.random(-50, 50), Color.RED);
+                if (ftm != null) ftm.addText(crit ? "BẠO KÍCH! -" + (int)finalDmg : "KÉO MẠNH! -" + (int)finalDmg, 640f + MathUtils.random(-30, 30), 400f + MathUtils.random(-20, 20), crit ? Color.GOLD : new Color(1f, 0.45f, 0.2f, 1f));
 
                 player.increaseTension(15f);
-                combatMessage = crit ? "BẠO KÍCH! (-" + (int)cost + " Thể lực)" : "KÉO MẠNH! (-" + (int)cost + " Thể lực)";
+                combatMessage = crit ? "BẠO KÍCH KÉO MẠNH! Xung lực bộc phá (-" + (int)cost + " Thể lực)" : "KÉO MẠNH! Giật cần xung lực cực đại! (-" + (int)cost + " Thể lực)";
                 AudioManager.getInstance().playSFX("sfx_skill");
-                com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerPlayerSkillVFX("keo_manh", 640f, 360f);
+                com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerPlayerSkillVFX("keo_manh", 640f, 340f);
                 keoManhCooldown = 3f * cdMult;
             }
         } else if (skillId.equals("giat_kep") && giatKepCooldown <= 0) {

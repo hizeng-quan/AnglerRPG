@@ -2727,28 +2727,111 @@ public class GameHUD {
 
     private void drawCombatFishAndFishingLine(Player player, Fish fish) {
         boolean isPulling = (fish.getState() == Fish.State.PULLING);
-        float pullOffset = isPulling ? (MathUtils.sin(timer * 15f) * 22f) : (MathUtils.sin(timer * 2.2f) * 45f);
-        float fishX = W / 2f + pullOffset;
-        float fishY = H / 2f - 20f + (isPulling ? -20f + MathUtils.cos(timer * 12f) * 12f : MathUtils.sin(timer * 3f) * 20f);
+        boolean isReeling = screen.fishingManager.isReeling;
+        float fishHpRatio = MathUtils.clamp(fish.getCurrentHp() / Math.max(1f, fish.getMaxHp()), 0f, 1f);
+        float tRatio = MathUtils.clamp(player.getCurrentLineTension() / Math.max(1f, player.getMaxLineTension()), 0f, 1f);
 
-        // Water ripples / thrashing wake around fish
-        if (isPulling) {
-            sr.setColor(0.9f, 0.96f, 1f, 0.65f);
-            sr.circle(fishX + 35f, fishY, 26f + 8f * MathUtils.sin(timer * 16f), 16);
-            sr.circle(fishX - 35f, fishY, 22f + 6f * MathUtils.sin(timer * 18f), 16);
-            sr.circle(fishX, fishY - 12f, 30f, 18);
+        // 1. DYNAMIC DISTANCE (Kéo ra xa khi giãy mạnh, kéo lại gần khi kiệt sức và thu cước)
+        // targetDist: 0.0f = rất gần cần thủ (ở sát bờ/thuyền), 1.0f = bơi xa tít ngoài khơi
+        float targetDist = fishHpRatio * 0.55f + (isPulling ? 0.35f : 0.05f) + (tRatio * 0.15f);
+        if (isReeling && !isPulling) targetDist -= 0.22f;
+        targetDist = MathUtils.clamp(targetDist, 0.05f, 1.0f);
+
+        // Tỷ lệ co giãn kích thước theo khoảng cách: gần thì to (1.48x), xa thì nhỏ lại (0.95x)
+        float baseScale = MathUtils.lerp(1.48f, 0.95f, targetDist);
+
+        // Tọa độ nước gốc (khi cá kéo ra xa sẽ lệch về góc trên bên trái; khi thu dây lại gần sẽ về góc dưới bên phải)
+        float baseX = W / 2f - 30f - (targetDist * 85f);
+        float baseY = H / 2f - 35f + (targetDist * 30f);
+
+        // 2. VIBRANT STRUGGLING & THRASHING (Hoạt ảnh cá vùng vẫy dữ dội trên mặt nước)
+        float thrashX = 0f;
+        float thrashY = 0f;
+        float animationTimer = timer;
+
+        if (screen.fishingManager.troiBuocTimer > 0) {
+            // Đóng băng / Trói buộc: cá run rẩy vi mô, vây đuôi ngừng quẫy
+            thrashX = MathUtils.sin(timer * 40f) * 2f;
+            thrashY = MathUtils.cos(timer * 40f) * 2f;
+            animationTimer *= 0.1f;
+        } else if (isPulling) {
+            // Cá đang giằng giãy: quẫy đuôi tốc độ cực cao, lắc đầu quẫy mình chống cự
+            float struggleSpeed = (screen.fishingManager.fishButTocTimer > 0) ? 35f : 20f;
+            float struggleAmp = (screen.fishingManager.fishButTocTimer > 0) ? 32f : 22f;
+            animationTimer *= 3.8f;
+            thrashX = -Math.abs(MathUtils.sin(timer * 4.5f)) * 35f + MathUtils.sin(timer * struggleSpeed) * struggleAmp;
+            thrashY = MathUtils.cos(timer * (struggleSpeed * 0.8f)) * (struggleAmp * 0.65f);
         } else {
-            sr.setColor(0.4f, 0.85f, 0.9f, 0.25f);
-            sr.ellipse(fishX, fishY, 90f + 15f * MathUtils.sin(timer * 2f), 30f);
+            // Cá mệt mỏi: trôi nhẹ theo dòng nước, nhịp thu dây kéo giật từng nhịp
+            animationTimer *= 1.4f;
+            float reelTug = (isReeling ? MathUtils.sin(timer * 12f) * 9f : 0f);
+            thrashX = MathUtils.sin(timer * 2.8f) * 14f + reelTug;
+            thrashY = MathUtils.sin(timer * 2.2f) * 10f;
         }
 
-        // Draw the exact fish species vector artwork
-        FishVisualRenderer.drawFish(sr, fish.getName(), fishX, fishY, 1.35f, timer, fish.getRarityColor());
+        // 3. SPECIAL STATE OVERLAYS (Nhảy vọt trên không, Lặn sâu vực thẳm, Bứt tốc)
+        float specialOffsetY = 0f;
+        float specialOffsetX = 0f;
+
+        // Nhảy vọt (Cá vọt khỏi mặt nước bay lên không trung theo đường cung parabol)
+        if (screen.fishingManager.fishNhayVotTimer > 0) {
+            float jumpDur = 1.8f;
+            float jumpP = MathUtils.clamp(1f - (screen.fishingManager.fishNhayVotTimer / jumpDur), 0f, 1f);
+            specialOffsetY += MathUtils.sin(jumpP * MathUtils.PI) * 115f;
+            specialOffsetX += MathUtils.cos(jumpP * MathUtils.PI) * 35f;
+            baseScale *= (1f + 0.18f * MathUtils.sin(jumpP * MathUtils.PI));
+        }
+
+        // Lặn sâu (Cá lặn chúc xuống đáy sâu)
+        if (screen.fishingManager.fishLanSauTimer > 0) {
+            specialOffsetY -= 42f;
+            baseScale *= 0.85f;
+        }
+
+        // Bứt tốc (Phóng vút về bên trái xé nước)
+        if (screen.fishingManager.fishButTocTimer > 0) {
+            specialOffsetX -= 55f;
+        }
+
+        float fishX = baseX + thrashX + specialOffsetX;
+        float fishY = baseY + thrashY + specialOffsetY;
+
+        // 4. WATER RIPPLES, WAKE & FOAM (Bọt nước cuộn trào & vệt sóng rẽ nước)
+        if (screen.fishingManager.troiBuocTimer > 0) {
+            // Vòng băng giá phát quang
+            sr.setColor(0.35f, 0.9f, 1f, 0.8f);
+            sr.circle(fishX, fishY, 46f * baseScale, 6);
+        } else if (screen.fishingManager.fishNhayVotTimer > 0) {
+            // Bóng cá trên mặt nước khi đang trên không
+            sr.setColor(0.04f, 0.08f, 0.15f, 0.45f);
+            sr.ellipse(fishX, baseY, 68f * baseScale, 20f * baseScale);
+            // Giọt nước vung tóe rơi rớt từ bụng cá
+            sr.setColor(0.85f, 0.95f, 1f, 0.75f);
+            sr.circle(fishX + MathUtils.sin(timer * 20f) * 14f, fishY - 18f, 3.5f);
+            sr.circle(fishX - MathUtils.sin(timer * 26f) * 14f, fishY - 26f, 2.5f);
+        } else if (isPulling) {
+            // Bọt nước quẫy trắng xóa và sóng rẽ dữ dội
+            float wakeSize = 36f * baseScale;
+            sr.setColor(0.95f, 0.98f, 1f, 0.70f);
+            sr.ellipse(fishX + 42f * baseScale, fishY, wakeSize + 12f * MathUtils.sin(timer * 18f), wakeSize * 0.5f);
+            sr.ellipse(fishX - 35f * baseScale, fishY - 5f, wakeSize + 8f * MathUtils.cos(timer * 22f), wakeSize * 0.4f);
+            sr.setColor(0.55f, 0.85f, 1f, 0.45f);
+            sr.circle(fishX + 22f * baseScale, fishY + 8f, 22f * baseScale, 16);
+            sr.circle(fishX - 42f * baseScale, fishY - 4f, 26f * baseScale, 16);
+        } else {
+            // Sóng nước điều hòa lan tỏa nhẹ nhàng
+            sr.setColor(0.35f, 0.80f, 0.92f, 0.32f);
+            float rW = (85f + 15f * MathUtils.sin(timer * 3f)) * baseScale;
+            float rH = (26f + 6f * MathUtils.sin(timer * 3f)) * baseScale;
+            sr.ellipse(fishX, fishY - 6f, rW, rH);
+        }
+
+        // Draw the exact fish species vector artwork with dynamic scale & animationTimer
+        FishVisualRenderer.drawFish(sr, fish.getName(), fishX, fishY, baseScale, animationTimer, fish.getRarityColor());
 
         // Dynamic Bending Fishing Rod from bottom right
         float rodBaseX = W - 100f;
         float rodBaseY = 0f;
-        float tRatio = MathUtils.clamp(player.getCurrentLineTension() / Math.max(1f, player.getMaxLineTension()), 0f, 1f);
 
         float rodLength = 280f;
         float rodAngle = 138f - tRatio * 32f + (tRatio > 0.85f ? MathUtils.sin(timer * 40f) * 4f : 0f);
@@ -2773,7 +2856,7 @@ public class GameHUD {
         sr.circle(rodTipX, rodTipY, 3.5f, 8);
 
         // Fishing Line connecting rod tip to fish's mouth
-        float mouthX = fishX + 45f;
+        float mouthX = fishX + 42f * baseScale;
         float mouthY = fishY;
         float lineJitter = (tRatio > 0.85f) ? MathUtils.sin(timer * 50f) * 3f : 0f;
 
@@ -2788,7 +2871,7 @@ public class GameHUD {
 
         // Splash ring where line pierces water at mouth
         sr.setColor(0.85f, 0.98f, 1f, 0.7f);
-        sr.circle(mouthX, mouthY, 7f + 3f * MathUtils.sin(timer * 12f), 12);
+        sr.circle(mouthX, mouthY, (7f + 3f * MathUtils.sin(timer * 12f)) * baseScale, 12);
     }
 
     private void drawWaterBobberShapes() {

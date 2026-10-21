@@ -108,6 +108,7 @@ public class MapScreen implements Screen {
                     if (canUnlockMap(map)) {
                         AudioManager.getInstance().playSFX("sfx_button");
                         player.setCurrentMap(map.id);
+                        com.fishingrpg.game.data.SaveManager.savePlayer(player);
                         playScreen.getFishingManager().state = com.fishingrpg.game.systems.FishingManager.State.PRE_CAST;
                         game.setScreen(playScreen);
                     } else {
@@ -130,7 +131,6 @@ public class MapScreen implements Screen {
     private void goBackToHub() {
         AudioManager.getInstance().playSFX("sfx_button");
         playScreen.getFishingManager().state = com.fishingrpg.game.systems.FishingManager.State.IDLE;
-        player.setCurrentMap("ao_lang");
         game.setScreen(playScreen);
     }
 

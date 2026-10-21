@@ -102,12 +102,21 @@ public class CombatVFXManager {
         effects.add(new ActiveEffect(skillId, 1, cx, cy, 1.2f, Color.GOLD));
 
         if (skillId.equals("keo_manh")) {
-            // Gold power surge slam & bursting water shockwaves
-            for (int i = 0; i < 28; i++) {
-                float ang = MathUtils.random(0f, MathUtils.PI2);
-                float spd = MathUtils.random(80f, 320f);
+            // High-velocity upward kinetic pull chevrons and volcanic gold embers
+            for (int i = 0; i < 35; i++) {
+                float ang = MathUtils.random(55f, 125f) * MathUtils.degreesToRadians;
+                float spd = MathUtils.random(260f, 650f);
+                particles.add(new Particle(cx + MathUtils.random(-35f, 35f), cy - 20f,
+                        MathUtils.cos(ang) * spd, MathUtils.sin(ang) * spd,
+                        MathUtils.random(5f, 10f), MathUtils.random(0.5f, 0.9f),
+                        (i % 3 == 0) ? new Color(1f, 1f, 0.6f, 1f) : new Color(1f, 0.65f, 0.15f, 1f), 0));
+            }
+            // Bursting water droplet spray horizontally
+            for (int i = 0; i < 22; i++) {
+                float spd = MathUtils.random(140f, 340f);
+                float ang = (i % 2 == 0 ? 0f : 180f) * MathUtils.degreesToRadians + MathUtils.random(-0.5f, 0.5f);
                 particles.add(new Particle(cx, cy, MathUtils.cos(ang) * spd, MathUtils.sin(ang) * spd,
-                        MathUtils.random(4f, 9f), MathUtils.random(0.4f, 0.8f), new Color(1f, 0.85f, 0.2f, 1f), 0));
+                        MathUtils.random(3.5f, 7.5f), MathUtils.random(0.4f, 0.8f), new Color(0.7f, 0.9f, 1f, 0.9f), 0));
             }
         } else if (skillId.equals("giat_kep")) {
             // Twin fierce cross-slashes
@@ -259,12 +268,19 @@ public class CombatVFXManager {
                 particles.add(new Particle(cx, cy, MathUtils.cos(ang) * 140f, MathUtils.sin(ang) * 140f,
                         4f, 0.9f, new Color(0.2f, 0.9f, 0.8f, 0.9f), 0));
             }
-        } else if (skillId.equals("hut_mau")) {
+        } else if (skillId.equals("hut_mau") || skillId.equals("muc_mu_hut_mau")) {
             // Crimson life drain drops streaming into fish
-            for (int i = 0; i < 25; i++) {
+            for (int i = 0; i < 28; i++) {
                 particles.add(new Particle(cx - MathUtils.random(120f, 220f), cy + MathUtils.random(-50f, 50f),
-                        MathUtils.random(120f, 190f), MathUtils.random(-20f, 20f),
-                        MathUtils.random(4f, 8f), MathUtils.random(0.7f, 1.2f), new Color(0.9f, 0.1f, 0.25f, 0.9f), 0));
+                        MathUtils.random(120f, 210f), MathUtils.random(-25f, 25f),
+                        MathUtils.random(4f, 9f), MathUtils.random(0.7f, 1.2f), new Color(0.95f, 0.12f, 0.35f, 0.95f), 0));
+            }
+            // Abyssal dark ink spores swirling outward
+            for (int i = 0; i < 25; i++) {
+                float ang = MathUtils.random(0f, MathUtils.PI2);
+                float spd = MathUtils.random(50f, 180f);
+                particles.add(new Particle(cx, cy, MathUtils.cos(ang) * spd, MathUtils.sin(ang) * spd,
+                        MathUtils.random(8f, 18f), MathUtils.random(0.8f, 1.5f), new Color(0.12f, 0.05f, 0.18f, 0.85f), 0));
             }
         } else if (skillId.equals("bao_to")) {
             // Violet thunderbolts striking down
@@ -324,14 +340,38 @@ public class CombatVFXManager {
             float alpha = Math.max(0f, e.timer / e.maxDuration);
 
             if (e.id.equals("keo_manh")) {
-                // Expanding golden power ring & molten tension shockwave
-                float r = 25f + progress * 140f;
-                sr.setColor(1f, 0.55f, 0.15f, 0.75f * alpha);
-                sr.circle(e.cx, e.cy, r, 36);
-                sr.setColor(1f, 0.90f, 0.30f, 0.90f * alpha);
-                sr.circle(e.cx, e.cy, r * 0.88f, 32);
-                sr.setColor(1f, 1f, 1f, 0.95f * alpha);
-                sr.circle(e.cx, e.cy, Math.max(0f, 18f * (1f - progress)), 20);
+                // 1. Dual Kinetic Pull Chevrons (▲ ▲) rushing violently upward!
+                float chevronY1 = e.cy - 10f + progress * 160f;
+                float chevronY2 = e.cy + 35f + progress * 180f;
+                float chevW = 50f * (1f - progress * 0.4f);
+                float chevH = 32f * (1f - progress * 0.4f);
+
+                // Lower Chevron ▲
+                sr.setColor(1f, 0.55f, 0.1f, 0.85f * alpha);
+                sr.triangle(e.cx - chevW, chevronY1 - chevH, e.cx + chevW, chevronY1 - chevH, e.cx, chevronY1);
+                sr.setColor(1f, 0.95f, 0.4f, 0.95f * alpha);
+                sr.triangle(e.cx - chevW * 0.7f, chevronY1 - chevH * 0.85f, e.cx + chevW * 0.7f, chevronY1 - chevH * 0.85f, e.cx, chevronY1 - 4f);
+
+                // Upper Chevron ▲
+                sr.setColor(1f, 0.8f, 0.2f, 0.95f * alpha);
+                sr.triangle(e.cx - chevW * 0.85f, chevronY2 - chevH * 0.85f, e.cx + chevW * 0.85f, chevronY2 - chevH * 0.85f, e.cx, chevronY2);
+                sr.setColor(1f, 1f, 0.8f, 1f * alpha);
+                sr.triangle(e.cx - chevW * 0.55f, chevronY2 - chevH * 0.7f, e.cx + chevW * 0.55f, chevronY2 - chevH * 0.7f, e.cx, chevronY2 - 3f);
+
+                // 2. Blazing vertical line tension surge
+                float beamH = 260f * progress;
+                sr.setColor(1f, 0.6f, 0.15f, 0.7f * alpha);
+                sr.rectLine(e.cx, e.cy - 40f, e.cx, e.cy + beamH, 12f * (1f - progress));
+                sr.setColor(1f, 1f, 0.85f, 0.95f * alpha);
+                sr.rectLine(e.cx, e.cy - 40f, e.cx, e.cy + beamH, 4f * (1f - progress));
+
+                // 3. Expanding water shockwave ellipses on surface
+                float rw = 35f + progress * 160f;
+                float rh = 12f + progress * 48f;
+                sr.setColor(1f, 0.75f, 0.2f, 0.7f * alpha);
+                sr.ellipse(e.cx - rw, e.cy - rh, rw * 2f, rh * 2f);
+                sr.setColor(0.6f, 0.9f, 1f, 0.85f * alpha);
+                sr.ellipse(e.cx - rw * 0.8f, e.cy - rh * 0.8f, rw * 1.6f, rh * 1.6f);
             } else if (e.id.equals("giat_kep")) {
                 // Twin X-cross slashes
                 sr.setColor(1f, 0.4f, 0.15f, 0.9f * alpha);
@@ -395,6 +435,15 @@ public class CombatVFXManager {
                     sr.rectLine(lx, e.cy, nx, ny, 3.5f);
                     lx = nx;
                 }
+            } else if (e.id.equals("muc_mu_hut_mau")) {
+                // Expanding abyssal dark ink sphere & crimson life-drain vortex
+                float r = 35f + progress * 130f;
+                sr.setColor(0.08f, 0.04f, 0.12f, 0.88f * alpha);
+                sr.circle(e.cx, e.cy, r, 32);
+                sr.setColor(0.75f, 0.10f, 0.35f, 0.75f * alpha);
+                sr.circle(e.cx, e.cy, r * 0.75f, 28);
+                sr.setColor(0.95f, 0.25f, 0.85f, 0.85f * alpha);
+                sr.circle(e.cx, e.cy, r * 0.45f, 24);
             } else if (e.id.equals("fireworks_flash")) {
                 float ringR = progress * 140f;
                 sr.setColor(e.color.r, e.color.g, e.color.b, 0.45f * alpha);

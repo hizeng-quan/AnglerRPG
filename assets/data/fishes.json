@@ -512,15 +512,11 @@
         "isActive": false
       },
       {
-        "id": "phun_muc_mu",
-        "isActive": true
-      },
-      {
         "id": "quet_xuc_tu",
         "isActive": true
       },
       {
-        "id": "hut_mau",
+        "id": "muc_mu_hut_mau",
         "isActive": true
       }
     ]

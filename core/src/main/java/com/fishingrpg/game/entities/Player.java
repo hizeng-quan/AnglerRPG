@@ -264,4 +264,8 @@ public class Player {
     public java.util.HashSet<String> getClaimedCollections() { return claimedCollections; }
     public void claimCollection(String collectionId) { claimedCollections.add(collectionId); }
     public void setClaimedCollections(java.util.HashSet<String> collections) { this.claimedCollections = collections; }
+
+    private float castRarityBoost = 0f;
+    public float getCastRarityBoost() { return castRarityBoost; }
+    public void setCastRarityBoost(float boost) { this.castRarityBoost = boost; }
 }

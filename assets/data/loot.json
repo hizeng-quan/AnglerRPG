@@ -8,7 +8,7 @@
   "consumable": [
     { "name": "Mồi Thơm", "type": "CONSUMABLE", "goldValue": 5, "xpValue": 0, "description": "Tăng tỷ lệ cá hiếm." },
     { "name": "Thuốc Hồi Stamina", "type": "CONSUMABLE", "goldValue": 5, "xpValue": 0, "description": "Hồi phục 50 Thể Lực." },
-    { "name": "Dây Câu Tốt", "type": "CONSUMABLE", "goldValue": 5, "xpValue": 0, "description": "Tăng max Tension +20." }
+    { "name": "Dây Câu Tốt", "type": "CONSUMABLE", "goldValue": 5, "xpValue": 0, "description": "Giảm 20 Tension khi sử dụng." }
   ],
   "treasure": [
     { "name": "Bình Cổ", "type": "TREASURE", "goldValue": 30, "xpValue": 80, "description": "Bình gốm cổ xưa." },
