@@ -768,19 +768,25 @@ public class CatalogScreen implements Screen, InputProcessor {
             case "Cá Mú": return "Bậc thầy ngụy trang rạn san hô, miệng khổng lồ đớp gọn con mồi chớp nhoáng.";
             case "Cá Bóp": return "Chiến binh biển cả dũng mãnh, cú kéo giằng hung bạo thử thách mọi cần thủ.";
             case "Cá Thu Hoàng Kim": return "Bảo vật biển khơi lấp lánh ánh vàng kim, bơi như ngư lôi xé toạc đại dương.";
-            case "Cá Bò Hòm Gai": return "Khoác bộ giáp lục giác cứng như đá với những chiếc gai độc phòng thủ kiên cố.";
-            case "Hải Vương Rạn San Hô": return "Bá chủ ngự trị rạn san hô ngàn năm, mang sức mạnh thần thánh của biển khơi.";
+            case "Cá Ngừ Đại Dương": return "Vua tốc độ biển khơi, thân hình ngư lôi bơi không ngừng nghỉ giữa đại dương.";
+            case "Bạch Tuộc Khổng Lồ": return "Quái vật xúc tu ngự trị đáy biển, phun mực mù mịt và siết chặt con mồi.";
 
             // Đảo Xa
+            case "Cá Ngựa Vằn": return "Sọc trắng đen tương phản nổi bật giữa rạn san hô, dáng bơi uyển chuyển.";
+            case "Cá Hề": return "Bộ cánh cam sọc trắng rực rỡ, cộng sinh hòa thuận bên những xúc tu hải quỳ.";
+            case "Cá Đuối Nhỏ": return "Dáng dấp cánh diều lướt êm trên nền cát san hô, ngạnh đuôi tự vệ sắc bén.";
+            case "Mực Ống": return "Thân trong suốt đổi màu linh hoạt, chuyển động phản lực nhanh như tên bắn.";
+            case "Cá Nóc": return "Phồng tròn như quả cầu gai khi gặp nguy hiểm, thân chứa độc tố bí ẩn.";
+            case "Cá Phèn": return "Đôi râu cằm linh hoạt sục sạo đáy cát tìm mồi, vảy ánh hồng cam rực rỡ.";
+            case "Cá Mặt Trăng": return "Dáng tròn khổng lồ như chiếc đĩa bạc, thích nổi nghiêng phơi mình dưới ánh mặt trời.";
+            case "Cá Cờ": return "Vây lưng cao vút như cánh buồm xé toạc đại dương, thợ săn tốc độ siêu hạng.";
+            case "Rùa Biển": return "Sứ giả ngàn năm tuổi của đại dương, mai rùa hoa văn tuyệt mỹ bơi nghìn hải lý.";
             case "Cá Chuồn": return "Đôi vây ngực dang rộng như đôi cánh, lướt bay trên mặt đại dương bao la.";
-            case "Cá Nục Heo": return "Đầu gù đặc trưng, thân ngũ sắc rực rỡ đổi màu huyền ảo khi giằng co quyết liệt.";
-            case "Cá Ngừ Vây Vàng": return "Vua tốc độ biển sâu, các vây phụ vàng chói lọi bơi xuyên qua các đại dương.";
+            case "Cá Mập Cáo": return "Chiếc đuôi dài uyển chuyển như ngọn roi quất bầy cá, sát thủ săn mồi bóng đêm.";
             case "Cá Kiếm": return "Mũi kiếm xương dài nhọn hoắt như thanh kiếm báu, lao nhanh chém toạc sóng gió.";
-            case "Cá Cờ Xanh": return "Vây lưng xòe rộng như cánh buồm lộng gió, chúa tể kiêu hãnh của đại dương xa khơi.";
-            case "Cá Heo Biển Sâu": return "Sinh vật biển kỳ bí sở hữu trí thông minh vượt bậc và khả năng định vị siêu âm.";
-            case "Bạch Tuộc Khổng Lồ": return "Quái vật xúc tu khổng lồ dưới rãnh biển đen, quấn chặt mọi con tàu đi ngang.";
-            case "Cá Mập Trắng": return "Ác mộng của đại dương, hàm răng cưa chết chóc và khứu giác săn mồi hoàn hảo.";
-            case "Bạch Long Hải Thần": return "Long vương thần thoại trỗi dậy từ đáy biển sâu ngàn dặm, thống trị giông bão.";
+            case "Cá Voi Lưng Gù": return "Người khổng lồ hiền lành của biển sâu, cất tiếng hát du dương giữa đại dương mênh mông.";
+            case "Mực Khổng Lồ": return "Thủy quái bóng đêm ngự trị vực sâu ngàn mét, xúc tu khổng lồ với giác hút gai góc.";
+            case "Thần Biển Leviathan": return "Huyền thoại tối thượng của biển khơi sâu thẳm, quyền năng sấm sét khuấy đảo sóng thần.";
 
             default: return "Loài thủy tộc độc đáo với tập tính đặc biệt trong hệ sinh thái AnglerRPG.";
         }

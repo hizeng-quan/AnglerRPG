@@ -1877,162 +1877,253 @@ public class EquipmentIconRenderer {
     // 8. THỜI KHÔNG SET (CHRONO / SPACE-TIME)
     // =========================================================================
     public static void drawThoiKhongRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Cosmic Temporal Rift Aura
-        sr.setColor(0.35f, 0.85f, 1f, 0.20f);
-        sr.circle(cx, cy, r * 0.95f);
-        sr.setColor(0.65f, 0.25f, 0.95f, 0.22f);
-        sr.circle(cx + r * 0.45f, cy + r * 0.45f, r * 0.55f);
+        // 1. Cosmic Temporal Rift & Tachyon Singularity Aura
+        sr.setColor(0.35f, 0.85f, 1f, 0.22f);
+        sr.circle(cx, cy, r * 1.30f);
+        sr.setColor(0.68f, 0.25f, 0.95f, 0.25f);
+        sr.circle(cx + r * 0.45f, cy + r * 0.45f, r * 0.75f);
+        sr.setColor(0.20f, 0.95f, 0.85f, 0.18f);
+        sr.circle(cx - r * 0.35f, cy - r * 0.35f, r * 0.55f);
 
-        // 2. Dual-twist astral titanium shaft with energy channel
-        float x1 = cx - r * 0.72f, y1 = cy - r * 0.72f;
+        // 2. Dual-Twist Astral Titanium Staff Shaft with Energy Channel
+        float x1 = cx - r * 0.76f, y1 = cy - r * 0.76f;
         float x2 = cx + r * 0.42f, y2 = cy + r * 0.42f;
-        // Outer dark titanium spine
-        sr.setColor(0.16f, 0.18f, 0.28f, 1f);
-        sr.rectLine(x1, y1, x2, y2, Math.max(4f, r * 0.18f));
-        // Luminous cyan plasma core conduit
-        sr.setColor(0.35f, 0.95f, 1f, 0.95f);
-        sr.rectLine(x1, y1, x2, y2, Math.max(1.8f, r * 0.08f));
 
-        // 3. Gold chronometer node rings along shaft
-        sr.setColor(1f, 0.85f, 0.35f, 1f);
-        for (float f = 0.2f; f <= 0.8f; f += 0.3f) {
-            float nx = x1 + (x2 - x1) * f;
-            float ny = y1 + (y2 - y1) * f;
-            sr.circle(nx, ny, Math.max(2.5f, r * 0.11f));
+        // Outer dark celestial titanium spine
+        sr.setColor(0.12f, 0.14f, 0.24f, 1f);
+        sr.rectLine(x1, y1, x2, y2, Math.max(4.5f, r * 0.18f));
+
+        // Polished void metal casing
+        sr.setColor(0.26f, 0.30f, 0.45f, 1f);
+        sr.rectLine(x1, y1, x2, y2, Math.max(3.2f, r * 0.12f));
+
+        // Luminous cyan plasma core conduit (Ống dẫn năng lượng plasma không-thời gian)
+        sr.setColor(0.35f, 0.95f, 1f, 0.95f);
+        sr.rectLine(x1, y1, x2, y2, Math.max(1.8f, r * 0.07f));
+        // Brilliant white tachyon energy beam center
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.rectLine(x1 + 0.5f, y1 + 0.5f, x2 - 0.5f, y2 - 0.5f, Math.max(1f, r * 0.035f));
+
+        // Spiraling amethyst magnetic coils around the shaft
+        sr.setColor(0.78f, 0.35f, 0.98f, 0.9f);
+        for (float f = 0.15f; f <= 0.85f; f += 0.18f) {
+            float sx = x1 + (x2 - x1) * f;
+            float sy = y1 + (y2 - y1) * f;
+            sr.rectLine(sx - r * 0.07f, sy + r * 0.07f, sx + r * 0.07f, sy - r * 0.07f, Math.max(2.2f, r * 0.08f));
         }
 
-        // 4. Astrolabe Chrono Gear Headpiece
+        // 3. Gold Chronometer Node Rings along shaft (Vòng đai bánh răng thời gian hoàng kim)
+        sr.setColor(1f, 0.85f, 0.35f, 1f);
+        for (float f = 0.22f; f <= 0.78f; f += 0.28f) {
+            float nx = x1 + (x2 - x1) * f;
+            float ny = y1 + (y2 - y1) * f;
+            sr.circle(nx, ny, Math.max(2.8f, r * 0.11f));
+            sr.setColor(0.12f, 0.14f, 0.24f, 1f);
+            sr.circle(nx, ny, Math.max(1.4f, r * 0.05f));
+            sr.setColor(1f, 0.85f, 0.35f, 1f);
+        }
+
+        // Pommel base: Space-time gyroscope counterweight
+        sr.setColor(0.92f, 0.75f, 0.25f, 1f);
+        sr.circle(x1, y1, Math.max(4.0f, r * 0.16f));
+        sr.setColor(0.35f, 0.95f, 1f, 1f);
+        sr.circle(x1, y1, Math.max(2.2f, r * 0.09f));
+
+        // 4. Grand Astrolabe Chrono Gear Headpiece (Thước đo sao & bánh răng Thời Không đa tầng)
         float ax = cx + r * 0.55f, ay = cy + r * 0.55f;
-        float ringR = r * 0.38f;
+        float ringR = r * 0.40f;
 
         // Outer Gear Teeth Ring (Brass Gold)
         sr.setColor(0.95f, 0.75f, 0.25f, 1f);
         sr.circle(ax, ay, ringR);
-        // Gear teeth notches (8 teeth)
-        for (int t = 0; t < 8; t++) {
-            float tAng = t * 45f;
-            float tx = ax + MathUtils.cosDeg(tAng) * (ringR + 2f);
-            float ty = ay + MathUtils.sinDeg(tAng) * (ringR + 2f);
-            sr.circle(tx, ty, Math.max(2f, r * 0.08f));
+        // 12-toothed precision clockwork gear notches
+        for (int t = 0; t < 12; t++) {
+            float tAng = t * 30f;
+            float tx = ax + MathUtils.cosDeg(tAng) * (ringR + 2.5f);
+            float ty = ay + MathUtils.sinDeg(tAng) * (ringR + 2.5f);
+            sr.circle(tx, ty, Math.max(2.2f, r * 0.085f));
         }
 
-        // Deep cosmos dial face
-        sr.setColor(0.06f, 0.08f, 0.18f, 0.95f);
-        sr.circle(ax, ay, ringR * 0.75f);
+        // Deep cosmos dial face (Mặt số thiên văn tím sẫm)
+        sr.setColor(0.06f, 0.08f, 0.18f, 0.98f);
+        sr.circle(ax, ay, ringR * 0.78f);
 
-        // Rotating orbital ring
-        sr.setColor(0.4f, 0.95f, 1f, 0.8f);
-        sr.circle(ax, ay, ringR * 0.5f);
+        // Orbital celestial rings (Vòng quỹ đạo thiên cầu)
+        sr.setColor(0.40f, 0.95f, 1f, 0.85f);
+        sr.circle(ax, ay, ringR * 0.54f);
         sr.setColor(0.06f, 0.08f, 0.18f, 1f);
-        sr.circle(ax, ay, ringR * 0.35f);
+        sr.circle(ax, ay, ringR * 0.40f);
 
-        // Core Singularity Crystal (Amethyst / Cyan)
+        // Core Singularity Crystal (Thạch anh không gian tím / lam phát quang)
         sr.setColor(0.85f, 0.35f, 1f, 1f);
-        sr.circle(ax, ay, ringR * 0.22f);
-        sr.setColor(Color.WHITE);
-        sr.circle(ax, ay, ringR * 0.10f);
+        sr.circle(ax, ay, ringR * 0.26f);
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(ax, ay, ringR * 0.12f);
 
-        // Chrono Clock Hands (Gold)
-        sr.setColor(1f, 0.9f, 0.4f, 1f);
-        sr.rectLine(ax, ay, ax + r * 0.22f, ay + r * 0.08f, 1.8f);
-        sr.rectLine(ax, ay, ax - r * 0.05f, ay + r * 0.20f, 1.8f);
+        // Chrono Clock Hands (Kim đồng hồ thời gian chỉ quá khứ & tương lai)
+        sr.setColor(1f, 0.92f, 0.42f, 1f);
+        sr.rectLine(ax, ay, ax + r * 0.24f, ay + r * 0.08f, Math.max(2.0f, r * 0.075f));
+        sr.rectLine(ax, ay, ax - r * 0.06f, ay + r * 0.22f, Math.max(2.0f, r * 0.075f));
+        // Dial hand pivots
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(ax, ay, Math.max(1.8f, r * 0.07f));
 
-        // Floating Hourglass Crystal Finial atop staff
-        float fx = ax + r * 0.28f, fy = ay + r * 0.28f;
-        sr.setColor(0.35f, 0.95f, 1f, 1f);
-        sr.triangle(fx - 4f, fy + 8f, fx + 4f, fy + 8f, fx, fy);
-        sr.triangle(fx - 4f, fy - 8f, fx + 4f, fy - 8f, fx, fy);
+        // 5. Floating Antigravity Hourglass Crystal Finial (Quả cầu đồng hồ cát pha lê không trọng lực)
+        float fx = ax + r * 0.30f, fy = ay + r * 0.30f;
+        // Crystal chambers
+        sr.setColor(0.35f, 0.95f, 1f, 0.95f);
+        sr.triangle(fx - 5f, fy + 9f, fx + 5f, fy + 9f, fx, fy);
+        sr.triangle(fx - 5f, fy - 9f, fx + 5f, fy - 9f, fx, fy);
+        // Golden hourglass brackets
+        sr.setColor(1f, 0.85f, 0.35f, 1f);
+        sr.rectLine(fx - 6f, fy + 9f, fx + 6f, fy + 9f, 1.8f);
+        sr.rectLine(fx - 6f, fy - 9f, fx + 6f, fy - 9f, 1.8f);
+        // Falling stardust grains
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.circle(fx, fy + 3f, 1.2f);
+        sr.circle(fx, fy - 4f, 1.2f);
     }
 
     public static void drawThoiKhongLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
         // 1. Spatio-temporal wormhole distortion aura
-        sr.setColor(0.45f, 0.18f, 0.85f, 0.25f);
-        sr.circle(cx, cy, r * 0.95f);
-        sr.setColor(0.2f, 0.85f, 1f, 0.20f);
-        sr.circle(cx, cy, r * 0.80f);
+        sr.setColor(0.48f, 0.18f, 0.88f, 0.28f);
+        sr.circle(cx, cy, r * 1.30f);
+        sr.setColor(0.20f, 0.85f, 1f, 0.24f);
+        sr.circle(cx, cy, r * 1.05f);
 
-        // 2. Heavy Chrono Brass Spool Outer Bezel with Gear Rim
-        sr.setColor(0.85f, 0.65f, 0.22f, 1f);
-        sr.circle(cx, cy, r * 0.76f);
+        // 2. Heavy Chrono Brass Spool Outer Bezel with Gear Rim (Vành cuộn bánh răng thiên văn)
+        sr.setColor(0.92f, 0.72f, 0.25f, 1f);
+        sr.circle(cx, cy, r * 0.85f);
+        // 12 Gear teeth along rim
         for (int g = 0; g < 12; g++) {
             float gAng = g * 30f;
-            float gx = cx + MathUtils.cosDeg(gAng) * (r * 0.78f);
-            float gy = cy + MathUtils.sinDeg(gAng) * (r * 0.78f);
-            sr.circle(gx, gy, 2.2f);
+            float gx = cx + MathUtils.cosDeg(gAng) * (r * 0.88f);
+            float gy = cy + MathUtils.sinDeg(gAng) * (r * 0.88f);
+            sr.circle(gx, gy, Math.max(2.4f, r * 0.09f));
         }
 
         // Inner dark void bevel
-        sr.setColor(0.08f, 0.06f, 0.16f, 1f);
-        sr.circle(cx, cy, r * 0.66f);
+        sr.setColor(0.08f, 0.06f, 0.18f, 1f);
+        sr.circle(cx, cy, r * 0.72f);
 
-        // 3. Shimmering Tachyon Filament Thread (Interwoven Cyan & Violet spool winding)
-        sr.setColor(0.3f, 0.95f, 1f, 0.95f);
-        sr.circle(cx, cy, r * 0.56f);
-        sr.setColor(0.75f, 0.25f, 0.95f, 1f);
-        sr.circle(cx, cy, r * 0.44f);
-        sr.setColor(0.25f, 0.85f, 0.95f, 1f);
-        sr.circle(cx, cy, r * 0.32f);
+        // Sunburst radial spokes (Nan hoa mặt trời bánh răng thời gian)
+        sr.setColor(0.85f, 0.68f, 0.22f, 0.8f);
+        for (int s = 0; s < 6; s++) {
+            float sAng = s * 60f;
+            float sx1 = cx + MathUtils.cosDeg(sAng) * (r * 0.32f);
+            float sy1 = cy + MathUtils.sinDeg(sAng) * (r * 0.32f);
+            float sx2 = cx + MathUtils.cosDeg(sAng) * (r * 0.72f);
+            float sy2 = cy + MathUtils.sinDeg(sAng) * (r * 0.72f);
+            sr.rectLine(sx1, sy1, sx2, sy2, Math.max(1.8f, r * 0.065f));
+        }
 
-        // 4. Central Space-Time Singularity Core
-        sr.setColor(0.04f, 0.02f, 0.08f, 1f);
-        sr.circle(cx, cy, r * 0.22f);
-        // Glowing event horizon ring
-        sr.setColor(1f, 0.92f, 0.45f, 1f);
-        sr.circle(cx, cy, r * 0.12f);
+        // 3. Shimmering Multilayered Tachyon Filament Thread (Sợi cước tachyon lượng tử đan xen)
+        // Deep cyan spool winding
+        sr.setColor(0.25f, 0.85f, 1f, 0.95f);
+        sr.circle(cx, cy, r * 0.62f);
+        // Amethyst spacetime thread layer
+        sr.setColor(0.78f, 0.32f, 0.98f, 0.95f);
+        sr.circle(cx, cy, r * 0.50f);
+        // Electric tachyon core
+        sr.setColor(0.35f, 0.95f, 1f, 0.95f);
+        sr.circle(cx, cy, r * 0.38f);
+        // Specular thread rings
+        sr.setColor(1f, 1f, 1f, 0.65f);
+        for (int i = 0; i < 3; i++) {
+            sr.circle(cx, cy, r * (0.42f + i * 0.08f));
+        }
+
+        // 4. Central Space-Time Singularity Core (Lõi hố đen kỳ dị)
+        sr.setColor(0.04f, 0.02f, 0.10f, 1f);
+        sr.circle(cx, cy, r * 0.26f);
+        // Glowing accretion disk
+        sr.setColor(1f, 0.88f, 0.35f, 1f);
+        sr.circle(cx, cy, r * 0.15f);
         sr.setColor(Color.WHITE);
-        sr.circle(cx, cy, r * 0.06f);
+        sr.circle(cx, cy, r * 0.08f);
 
         // 4 Cardinal temporal warp rays
-        sr.setColor(0.4f, 0.95f, 1f, 0.8f);
-        sr.rectLine(cx - r * 0.26f, cy, cx + r * 0.26f, cy, 1.5f);
-        sr.rectLine(cx, cy - r * 0.26f, cx, cy + r * 0.26f, 1.5f);
+        sr.setColor(0.40f, 0.95f, 1f, 0.85f);
+        sr.rectLine(cx - r * 0.30f, cy, cx + r * 0.30f, cy, Math.max(1.6f, r * 0.06f));
+        sr.rectLine(cx, cy - r * 0.30f, cx, cy + r * 0.30f, Math.max(1.6f, r * 0.06f));
+
+        // 5. Floating Infinity / Mobius Loop (Dải sáng vô cực uốn lượn bay quanh)
+        sr.setColor(0.40f, 0.95f, 1f, 0.70f);
+        float mRad = r * 0.60f;
+        sr.ellipse(cx - mRad * 0.45f, cy - r * 0.15f, mRad * 0.9f, mRad * 0.45f);
+        sr.ellipse(cx - mRad * 0.45f, cy + r * 0.15f, mRad * 0.9f, mRad * 0.45f);
     }
 
     public static void drawThoiKhongHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
         // 1. Cosmic Void Singularity Aura
-        sr.setColor(0.55f, 0.25f, 0.95f, 0.22f);
-        sr.circle(cx, cy, r * 0.95f);
+        sr.setColor(0.60f, 0.25f, 0.98f, 0.28f);
+        sr.circle(cx, cy, r * 1.30f);
+        sr.setColor(0.30f, 0.90f, 1f, 0.20f);
+        sr.circle(cx, cy, r * 1.05f);
 
-        float shankX = cx - r * 0.22f;
-        float topY = cy + r * 0.58f;
-        float botY = cy - r * 0.38f;
-        float bendX = cx + r * 0.42f;
+        float eyeX = cx - r * 0.24f;
+        float topY = cy + r * 0.62f;
+        float botY = cy - r * 0.40f;
+        float bendApexX = cx + r * 0.12f;
+        float bendApexY = cy - r * 0.58f;
+        float barbX = cx + r * 0.45f;
+        float barbY = cy - r * 0.08f;
+        float tipX = cx + r * 0.40f;
+        float tipY = cy + r * 0.28f;
 
-        // 2. Void Obsidian Hook Body with Cosmic Fracture
-        sr.setColor(0.14f, 0.12f, 0.24f, 1f); // Dark matter obsidian
-        sr.rectLine(shankX, topY, shankX, botY, Math.max(4.5f, r * 0.16f));
-        sr.rectLine(shankX, botY, bendX, botY, Math.max(4.5f, r * 0.16f));
-        sr.rectLine(bendX, botY, bendX, cy + r * 0.25f, Math.max(4.2f, r * 0.15f));
+        // 2. Void Obsidian Hook Body with Cosmic Fracture (Thân lưỡi câu hắc thạch không gian)
+        // Heavy dark matter under-spine
+        sr.setColor(0.10f, 0.08f, 0.20f, 1f);
+        sr.rectLine(eyeX, topY, eyeX, botY, Math.max(4.6f, r * 0.17f));
+        sr.rectLine(eyeX, botY, bendApexX, bendApexY, Math.max(4.6f, r * 0.17f));
+        sr.rectLine(bendApexX, bendApexY, barbX, barbY, Math.max(4.6f, r * 0.17f));
+        sr.rectLine(barbX, barbY, tipX, tipY, Math.max(3.6f, r * 0.13f));
 
-        // 3. Luminous Cyan Chrono Runes along shank
+        // Polished void amethyst body
+        sr.setColor(0.28f, 0.22f, 0.48f, 1f);
+        sr.rectLine(eyeX, topY, eyeX, botY, Math.max(2.8f, r * 0.11f));
+        sr.rectLine(eyeX, botY, bendApexX, bendApexY, Math.max(2.8f, r * 0.11f));
+        sr.rectLine(bendApexX, bendApexY, barbX, barbY, Math.max(2.8f, r * 0.11f));
+        sr.rectLine(barbX, barbY, tipX, tipY, Math.max(2.2f, r * 0.085f));
+
+        // 3. Luminous Cyan Chrono-Runes along curved shank (Cổ ngữ thời gian phát sáng)
         sr.setColor(0.35f, 0.95f, 1f, 0.95f);
-        sr.rectLine(shankX, topY - r * 0.15f, shankX, botY + r * 0.15f, 1.8f);
-        // Rune tick marks
-        sr.circle(shankX, cy + r * 0.25f, 2f);
-        sr.circle(shankX, cy, 2f);
-        sr.circle(shankX, cy - r * 0.25f, 2f);
+        sr.rectLine(eyeX, topY - r * 0.15f, eyeX, botY + r * 0.15f, Math.max(1.6f, r * 0.06f));
+        // Chrono tick markings
+        sr.circle(eyeX, cy + r * 0.25f, Math.max(2.2f, r * 0.08f));
+        sr.circle(eyeX, cy, Math.max(2.2f, r * 0.08f));
+        sr.circle(eyeX, cy - r * 0.25f, Math.max(2.2f, r * 0.08f));
+        // White core of runes
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.circle(eyeX, cy + r * 0.25f, 1f);
+        sr.circle(eyeX, cy, 1f);
+        sr.circle(eyeX, cy - r * 0.25f, 1f);
 
-        // 4. Dimensional Rift Crescent Barb (Cuts through reality)
-        sr.setColor(0.85f, 0.35f, 1f, 1f); // Amethyst void blade
-        sr.triangle(bendX, cy + r * 0.25f, bendX + r * 0.32f, cy + r * 0.48f, bendX - r * 0.08f, cy + r * 0.15f);
+        // 4. Dimensional Rift Crescent Barb (Ngạnh rách toạc không gian)
+        sr.setColor(0.88f, 0.35f, 1f, 1f); // Amethyst void blade
+        sr.triangle(barbX, barbY, tipX + r * 0.15f, tipY + r * 0.12f, barbX - r * 0.12f, barbY + r * 0.12f);
         // Razor starlight edge
         sr.setColor(1f, 1f, 1f, 0.95f);
-        sr.rectLine(bendX, cy + r * 0.25f, bendX + r * 0.32f, cy + r * 0.48f, 1.6f);
+        sr.rectLine(barbX, barbY, tipX + r * 0.15f, tipY + r * 0.12f, 1.8f);
 
-        // 5. Crown Eyelet with Chrono Orb & Hanging Pendulum
-        sr.setColor(0.95f, 0.75f, 0.25f, 1f); // Brass eyelet
-        sr.circle(shankX, topY, r * 0.24f);
+        // 5. Crown Eyelet with Chrono Gear & Hanging Pendulum (Bánh răng thiên văn & con lắc)
+        sr.setColor(0.95f, 0.75f, 0.25f, 1f); // Brass gear eyelet
+        sr.circle(eyeX, topY, r * 0.25f);
         sr.setColor(0.06f, 0.08f, 0.18f, 1f);
-        sr.circle(shankX, topY, r * 0.13f);
+        sr.circle(eyeX, topY, r * 0.14f);
         // Glowing temporal jewel in eyelet
-        sr.setColor(0.4f, 0.95f, 1f, 1f);
-        sr.circle(shankX, topY, r * 0.08f);
+        sr.setColor(0.40f, 0.95f, 1f, 1f);
+        sr.circle(eyeX, topY, r * 0.09f);
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(eyeX, topY, r * 0.04f);
 
-        // Hanging stardust pendulum charm
+        // Hanging stardust pendulum charm (Quả lắc đồng hồ đung đưa)
         sr.setColor(0.95f, 0.75f, 0.25f, 0.9f);
-        sr.rectLine(shankX, topY, shankX - r * 0.28f, topY - r * 0.25f, 1.8f);
+        sr.rectLine(eyeX, topY, eyeX - r * 0.30f, topY - r * 0.28f, Math.max(1.6f, r * 0.06f));
         sr.setColor(0.85f, 0.35f, 1f, 1f);
-        sr.circle(shankX - r * 0.28f, topY - r * 0.25f, 3.5f);
+        sr.circle(eyeX - r * 0.30f, topY - r * 0.28f, Math.max(3.8f, r * 0.14f));
+        sr.setColor(0.35f, 0.95f, 1f, 1f);
+        sr.circle(eyeX - r * 0.30f, topY - r * 0.28f, Math.max(2.0f, r * 0.08f));
     }
 
     // =========================================================================

@@ -92,6 +92,15 @@ public class FishVisualRenderer {
             case "Cá Cơm":
                 drawCaCom(sr, cx, cy, scale, wagFine);
                 break;
+            case "Cá Mòi":
+                drawCaMoi(sr, cx, cy, scale, wag);
+                break;
+            case "Cá Lẹp":
+                drawCaLep(sr, cx, cy, scale, wag);
+                break;
+            case "Cá Bạc Má":
+                drawCaBacMa(sr, cx, cy, scale, wag);
+                break;
             default:
                 drawGenericFish(sr, cx, cy, scale, wag, rarityColor);
                 break;
@@ -1702,11 +1711,11 @@ public class FishVisualRenderer {
         sr.setColor(0.95f, 0.97f, 1f, 1f);
         sr.ellipse(cx - 42f * s, cy - 18f * s, 86f * s, 26f * s);
 
-        // 5. SIGNATURE BROAD GOLDEN STRIPE (Dải sọc vàng kim óng ả đặc trưng)
+        // 5. SIGNATURE BROAD GOLDEN STRIPE (Dải sọc vàng kim óng ả đặc trưng - giữ yên trên thân, chỉ đuôi chuyển động)
         sr.setColor(1f, 0.86f, 0.16f, 1f);
-        sr.rectLine(cx + 34f * s, cy + 3f * s, tailX + 18f * s, tailY, 5.5f * s);
+        sr.rectLine(cx + 34f * s, cy + 3f * s, cx - 44f * s, cy + 1f * s, 5.5f * s);
         sr.setColor(1f, 0.96f, 0.55f, 0.95f);
-        sr.rectLine(cx + 34f * s, cy + 3.5f * s, tailX + 18f * s, tailY + 0.5f * s, 2.2f * s);
+        sr.rectLine(cx + 34f * s, cy + 3.5f * s, cx - 44f * s, cy + 1.5f * s, 2.2f * s);
 
         // Lateral scutes near tail (Gai vảy cứng đường bên ở đuôi)
         sr.setColor(0.88f, 0.72f, 0.15f, 0.85f);
@@ -1788,7 +1797,7 @@ public class FishVisualRenderer {
         sr.setColor(0.96f, 0.94f, 0.88f, 1f);
         sr.ellipse(cx - 46f * s, cy - 14f * s, 96f * s, 18f * s);
 
-        // 4. Sandy Camouflage Speckles & Subtle Lateral Line (Đốm cát ngụy trang & đường bên)
+        // 4. Sandy Camouflage Speckles & Subtle Lateral Line (Đốm cát ngụy trang & đường bên - cố định trên thân)
         sr.setColor(0.55f, 0.42f, 0.24f, 0.65f);
         for (int i = 0; i < 7; i++) {
             float sx = cx - 35f * s + i * 11f * s;
@@ -1797,7 +1806,7 @@ public class FishVisualRenderer {
             sr.circle(sx + 3f * s, sy + 3f * s, 1.2f * s);
         }
         sr.setColor(0.95f, 0.88f, 0.65f, 0.8f);
-        sr.rectLine(cx + 36f * s, cy + 1f * s, tailX + 16f * s, tailY, 1.8f * s);
+        sr.rectLine(cx + 36f * s, cy + 1f * s, cx - 48f * s, cy + 1f * s, 1.8f * s);
 
         // 5. Distinct Long Conical Snout & Head (Mõm nhọn hình nón sục cát)
         sr.setColor(0.82f, 0.70f, 0.48f, 1f);
@@ -1863,21 +1872,21 @@ public class FishVisualRenderer {
         sr.setColor(1f, 1f, 1f, 0.85f);
         sr.ellipse(cx - 36f * s, cy - 10f * s, 72f * s, 12f * s);
 
-        // 4. Visible Internal Vertebrae & Silver Viscera (Đốt sống & túi nội tạng mờ ảo trong thân)
+        // 4. Visible Internal Vertebrae & Silver Viscera (Đốt sống & túi nội tạng mờ ảo trong thân - giữ yên)
         sr.setColor(0.55f, 0.75f, 0.90f, 0.40f);
-        sr.rectLine(cx + 18f * s, cy, tailX + 12f * s, tailY, 1.2f * s);
+        sr.rectLine(cx + 18f * s, cy, cx - 38f * s, cy, 1.2f * s);
         for (int i = 0; i < 9; i++) {
             float vx = cx - 28f * s + i * 5.5f * s;
-            sr.circle(vx, cy + (wag * 0.3f * i * 0.1f) * s, 1.1f * s);
+            sr.circle(vx, cy, 1.1f * s);
         }
         sr.setColor(0.78f, 0.86f, 0.95f, 0.70f);
         sr.ellipse(cx + 6f * s, cy - 6f * s, 14f * s, 8f * s);
 
-        // 5. BRILLIANT IRIDESCENT SILVER-MIRROR STRIPE (Dải sọc gương bạc lấp lánh phản quang)
+        // 5. BRILLIANT IRIDESCENT SILVER-MIRROR STRIPE (Dải sọc gương bạc lấp lánh phản quang - cố định trên thân)
         sr.setColor(0.92f, 0.96f, 1f, 0.95f);
-        sr.rectLine(cx + 26f * s, cy, tailX + 14f * s, tailY, 3.6f * s);
+        sr.rectLine(cx + 26f * s, cy, cx - 38f * s, cy, 3.6f * s);
         sr.setColor(1f, 1f, 1f, 1f);
-        sr.rectLine(cx + 26f * s, cy + 0.5f * s, tailX + 14f * s, tailY + 0.5f * s, 1.6f * s);
+        sr.rectLine(cx + 26f * s, cy + 0.5f * s, cx - 38f * s, cy + 0.5f * s, 1.6f * s);
 
         // 6. Delicate Head, Translucent Snout & Deep Cleft Mouth (Đầu nhọn, miệng xẻ sâu)
         sr.setColor(0.78f, 0.90f, 1f, 0.85f);
@@ -1898,6 +1907,304 @@ public class FishVisualRenderer {
         sr.circle(cx + 32f * s, cy + 2.5f * s, 3.2f * s);
         sr.setColor(1f, 1f, 1f, 0.95f);
         sr.circle(cx + 33.2f * s, cy + 3.6f * s, 1.4f * s);
+    }
+
+    // =========================================================================
+    // 19. CÁ MÒI (Sardine / Pilchard: Steel-Blue Back, Flank Spots, Keeled Silver Belly)
+    // =========================================================================
+    public static void drawCaMoi(ShapeRenderer sr, float cx, float cy, float s, float wag) {
+        float tailX = cx - 55f * s + wag * 4.5f * s;
+        float tailY = cy + wag * 6f * s;
+
+        // 1. Caudal Fin (Deeply notched steel-blue / dusky forked tail)
+        sr.setColor(0.25f, 0.42f, 0.58f, 0.95f);
+        sr.triangle(tailX + 16f * s, tailY, tailX - 26f * s, tailY + 26f * s, tailX - 10f * s, tailY + 3f * s);
+        sr.triangle(tailX + 16f * s, tailY, tailX - 26f * s, tailY - 26f * s, tailX - 10f * s, tailY - 3f * s);
+        sr.setColor(0.65f, 0.80f, 0.92f, 0.85f);
+        sr.triangle(tailX + 14f * s, tailY, tailX - 22f * s, tailY + 22f * s, tailX - 16f * s, tailY + 4f * s);
+        sr.triangle(tailX + 14f * s, tailY, tailX - 22f * s, tailY - 22f * s, tailX - 16f * s, tailY - 4f * s);
+        sr.setColor(0.18f, 0.32f, 0.45f, 0.9f);
+        sr.rectLine(tailX + 14f * s, tailY, tailX - 24f * s, tailY + 24f * s, 1.4f * s);
+        sr.rectLine(tailX + 14f * s, tailY, tailX - 24f * s, tailY - 24f * s, 1.4f * s);
+        sr.rectLine(tailX + 14f * s, tailY, tailX - 20f * s, tailY + 12f * s, 1.2f * s);
+        sr.rectLine(tailX + 14f * s, tailY, tailX - 20f * s, tailY - 12f * s, 1.2f * s);
+
+        // 2. Dorsal Fin (Central triangular delicate fin)
+        sr.setColor(0.32f, 0.50f, 0.65f, 0.85f);
+        sr.triangle(cx - 10f * s, cy + 15f * s, cx + 14f * s, cy + 14f * s, cx + 2f * s, cy + 32f * s);
+        sr.setColor(0.65f, 0.82f, 0.95f, 0.9f);
+        sr.rectLine(cx - 8f * s, cy + 15f * s, cx + 2f * s, cy + 32f * s, 1.5f * s);
+        sr.rectLine(cx - 1f * s, cy + 14f * s, cx + 6f * s, cy + 28f * s, 1.2f * s);
+        sr.rectLine(cx + 6f * s, cy + 14f * s, cx + 11f * s, cy + 22f * s, 1.1f * s);
+
+        // Pelvic and anal fins (Small, translucent silvery-white)
+        sr.setColor(0.80f, 0.90f, 0.98f, 0.75f);
+        sr.triangle(cx - 6f * s, cy - 14f * s, cx + 6f * s, cy - 13f * s, cx - 2f * s, cy - 24f * s);
+        sr.triangle(cx - 30f * s, cy - 11f * s, cx - 16f * s, cy - 12f * s, cx - 24f * s, cy - 20f * s);
+
+        // 3. Elongated Compressed Body (Lưng xanh thép thẫm, bụng trắng bạc)
+        sr.setColor(0.12f, 0.28f, 0.44f, 1f); // Dark dorsal ridge
+        sr.ellipse(cx - 48f * s, cy - 16f * s, 98f * s, 34f * s);
+        sr.setColor(0.24f, 0.50f, 0.68f, 1f); // Metallic ocean blue
+        sr.ellipse(cx - 46f * s, cy - 15f * s, 94f * s, 31f * s);
+        sr.setColor(0.78f, 0.88f, 0.95f, 1f); // Silvery flank
+        sr.ellipse(cx - 44f * s, cy - 15f * s, 90f * s, 25f * s);
+        sr.setColor(0.96f, 0.98f, 1.0f, 1f); // Brilliant pearl belly
+        sr.ellipse(cx - 40f * s, cy - 16f * s, 82f * s, 18f * s);
+
+        // Sharp ventral keeled belly line
+        sr.setColor(0.85f, 0.92f, 0.98f, 1f);
+        sr.rectLine(cx - 35f * s, cy - 15f * s, cx + 25f * s, cy - 13f * s, 1.8f * s);
+
+        // 4. SIGNATURE SARDINE SPOTS (Chuỗi đốm đen ngọc thạch đặc trưng dọc lưng cá mòi - cố định trên thân)
+        for (int i = 0; i < 6; i++) {
+            float spotX = cx + 14f * s - i * 8.5f * s;
+            float spotY = cy + 5f * s;
+            // Silver glow ring around spot
+            sr.setColor(0.68f, 0.86f, 0.98f, 0.85f);
+            sr.circle(spotX, spotY, 3.2f * s);
+            // Crisp dark indigo/black core spot
+            sr.setColor(0.10f, 0.16f, 0.24f, 1f);
+            sr.circle(spotX, spotY, 2.0f * s);
+        }
+
+        // Faint gold-cyan lateral sheen above the spots
+        sr.setColor(0.65f, 0.85f, 0.80f, 0.45f);
+        sr.rectLine(cx + 25f * s, cy + 7f * s, cx - 36f * s, cy + 6f * s, 2.0f * s);
+
+        // 5. Head & Operculum (Đầu thon, nắp mang ánh vàng chanh)
+        sr.setColor(0.20f, 0.42f, 0.58f, 1f);
+        sr.triangle(cx + 34f * s, cy + 12f * s, cx + 52f * s, cy, cx + 34f * s, cy - 10f * s);
+        sr.setColor(0.88f, 0.92f, 0.96f, 1f);
+        sr.triangle(cx + 36f * s, cy + 8f * s, cx + 52f * s, cy, cx + 36f * s, cy - 7f * s);
+        // Golden glint on operculum cheek
+        sr.setColor(0.95f, 0.85f, 0.35f, 0.70f);
+        sr.circle(cx + 28f * s, cy - 1f * s, 7.5f * s);
+        sr.setColor(0.85f, 0.92f, 0.98f, 0.95f);
+        sr.circle(cx + 28f * s, cy - 1f * s, 6.0f * s);
+        // Gill curve
+        sr.setColor(0.35f, 0.52f, 0.65f, 0.85f);
+        sr.rectLine(cx + 22f * s, cy + 10f * s, cx + 25f * s, cy - 8f * s, 1.6f * s);
+        // Mouth
+        sr.setColor(0.18f, 0.28f, 0.38f, 1f);
+        sr.rectLine(cx + 52f * s, cy, cx + 42f * s, cy - 3f * s, 1.4f * s);
+
+        // 6. Pectoral Fin (Vây ngực vát chéo)
+        sr.setColor(0.75f, 0.88f, 0.96f, 0.85f);
+        sr.triangle(cx + 18f * s, cy - 2f * s, cx + 2f * s, cy - 12f * s, cx + 10f * s, cy - 6f * s);
+        sr.setColor(0.35f, 0.55f, 0.72f, 0.8f);
+        sr.rectLine(cx + 18f * s, cy - 2f * s, cx + 3f * s, cy - 11f * s, 1.2f * s);
+
+        // 7. Bright Eye (Mắt to sáng viền bạc)
+        sr.setColor(0.92f, 0.96f, 1f, 1f);
+        sr.circle(cx + 36f * s, cy + 3.5f * s, 5.2f * s);
+        sr.setColor(0.08f, 0.12f, 0.18f, 1f);
+        sr.circle(cx + 36f * s, cy + 3.5f * s, 3.4f * s);
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.circle(cx + 37.2f * s, cy + 4.8f * s, 1.4f * s);
+    }
+
+    // =========================================================================
+    // 20. CÁ LẸP (Thryssa / Anchovy-Scad: Ultra-Thin Knife Silhouette, Serrated Keel, Long Maxilla)
+    // =========================================================================
+    public static void drawCaLep(ShapeRenderer sr, float cx, float cy, float s, float wag) {
+        float tailX = cx - 58f * s + wag * 5f * s;
+        float tailY = cy + wag * 7f * s;
+
+        // 1. Caudal Fin (Clear translucent glassy forked tail with pale lemon-cyan sheen)
+        sr.setColor(0.72f, 0.90f, 0.88f, 0.90f);
+        sr.triangle(tailX + 16f * s, tailY, tailX - 25f * s, tailY + 25f * s, tailX - 8f * s, tailY + 2f * s);
+        sr.triangle(tailX + 16f * s, tailY, tailX - 25f * s, tailY - 25f * s, tailX - 8f * s, tailY - 2f * s);
+        sr.setColor(1f, 1f, 0.80f, 0.80f);
+        sr.triangle(tailX + 14f * s, tailY, tailX - 21f * s, tailY + 20f * s, tailX - 14f * s, tailY + 3f * s);
+        sr.triangle(tailX + 14f * s, tailY, tailX - 21f * s, tailY - 20f * s, tailX - 14f * s, tailY - 3f * s);
+        sr.setColor(0.45f, 0.65f, 0.60f, 0.85f);
+        sr.rectLine(tailX + 14f * s, tailY, tailX - 23f * s, tailY + 22f * s, 1.3f * s);
+        sr.rectLine(tailX + 14f * s, tailY, tailX - 23f * s, tailY - 22f * s, 1.3f * s);
+
+        // 2. SIGNATURE LONG ANAL FIN (Vây hậu môn thuôn dài dải quạt mỏng manh chạy dọc bụng sau)
+        sr.setColor(0.85f, 0.95f, 0.90f, 0.75f);
+        sr.triangle(cx - 40f * s, cy - 8f * s, cx - 2f * s, cy - 15f * s, cx - 26f * s, cy - 26f * s);
+        sr.setColor(0.95f, 0.90f, 0.50f, 0.85f); // Amber-yellow edge fringe
+        sr.rectLine(cx - 2f * s, cy - 15f * s, cx - 26f * s, cy - 26f * s, 1.5f * s);
+        sr.rectLine(cx - 26f * s, cy - 26f * s, cx - 40f * s, cy - 8f * s, 1.2f * s);
+        // Delicate fin rays along long anal fin
+        sr.setColor(0.60f, 0.78f, 0.75f, 0.7f);
+        for (int r = 0; r < 5; r++) {
+            float rx = cx - 8f * s - r * 6f * s;
+            sr.rectLine(rx, cy - 14f * s + r * 1.2f * s, rx - 3f * s, cy - 20f * s - r * 1f * s, 1.1f * s);
+        }
+
+        // Small dorsal fin (Vây lưng nhỏ lùi về sau)
+        sr.setColor(0.65f, 0.85f, 0.80f, 0.8f);
+        sr.triangle(cx - 16f * s, cy + 14f * s, cx + 4f * s, cy + 13f * s, cx - 6f * s, cy + 26f * s);
+        sr.setColor(0.35f, 0.55f, 0.50f, 0.85f);
+        sr.rectLine(cx - 14f * s, cy + 14f * s, cx - 6f * s, cy + 26f * s, 1.4f * s);
+
+        // 3. ULTRA-THIN KNIFE BLADE BODY (Thân dẹp bên rất mỏng như lá tre, dải sống bụng sắc như lưỡi dao)
+        sr.setColor(0.20f, 0.42f, 0.44f, 1f); // Dorsal teal-green contour
+        sr.ellipse(cx - 46f * s, cy - 17f * s, 94f * s, 35f * s);
+        sr.setColor(0.70f, 0.88f, 0.86f, 1f); // Pale seafoam iridescent body
+        sr.ellipse(cx - 44f * s, cy - 16f * s, 90f * s, 32f * s);
+        sr.setColor(0.92f, 0.97f, 0.96f, 1f); // Mirror silvery-white belly
+        sr.ellipse(cx - 40f * s, cy - 16f * s, 82f * s, 26f * s);
+
+        // 4. SERRATED KEEL BELLY SCUTES (Gai nhọn răng cưa sắc bén ở viền sống bụng)
+        sr.setColor(1f, 1f, 1f, 1f); // Razor sharp white edge
+        sr.rectLine(cx + 20f * s, cy - 14f * s, cx - 42f * s, cy - 6f * s, 2.2f * s);
+        sr.setColor(0.55f, 0.70f, 0.65f, 0.9f);
+        for (int k = 0; k < 8; k++) {
+            float kx = cx + 16f * s - k * 7f * s;
+            float ky = cy - 14f * s + k * 1.0f * s;
+            sr.rectLine(kx, ky, kx - 2f * s, ky - 3.5f * s, 1.3f * s); // Serration teeth
+        }
+
+        // Subtle faint green-gold lateral line (Đường bên ánh xanh ngọc dịu - cố định trên thân)
+        sr.setColor(0.60f, 0.85f, 0.75f, 0.6f);
+        sr.rectLine(cx + 28f * s, cy + 1f * s, cx - 40f * s, cy + 2f * s, 1.8f * s);
+
+        // 5. SIGNATURE EXTENDED SNOUT & LONG NEEDLE MAXILLA (Mõm nhọn, hàm trên kéo dài như chiếc gai nhọn)
+        sr.setColor(0.65f, 0.82f, 0.80f, 1f);
+        sr.triangle(cx + 30f * s, cy + 10f * s, cx + 50f * s, cy + 2f * s, cx + 30f * s, cy - 12f * s);
+        sr.setColor(0.90f, 0.96f, 0.95f, 1f);
+        sr.triangle(cx + 32f * s, cy + 6f * s, cx + 49f * s, cy + 2f * s, cx + 32f * s, cy - 8f * s);
+        // Characteristic needle-like elongated maxilla running backward along lower head
+        sr.setColor(0.25f, 0.38f, 0.35f, 1f);
+        sr.rectLine(cx + 49f * s, cy + 1f * s, cx + 18f * s, cy - 8f * s, 1.8f * s);
+        // Golden glint on sharp jaw tip
+        sr.setColor(1f, 0.90f, 0.40f, 0.9f);
+        sr.rectLine(cx + 49f * s, cy + 1f * s, cx + 44f * s, cy - 1f * s, 1.4f * s);
+
+        // Gill crescent
+        sr.setColor(0.40f, 0.60f, 0.58f, 0.8f);
+        sr.rectLine(cx + 20f * s, cy + 8f * s, cx + 24f * s, cy - 6f * s, 1.5f * s);
+
+        // 6. Delicate Pectoral Fin (Vây ngực mảnh)
+        sr.setColor(0.80f, 0.92f, 0.88f, 0.85f);
+        sr.triangle(cx + 16f * s, cy - 4f * s, cx + 2f * s, cy - 12f * s, cx + 10f * s, cy - 7f * s);
+
+        // 7. Large Silver-Lemon Eye (Mắt to tròn ánh vàng chanh)
+        sr.setColor(0.95f, 0.92f, 0.40f, 1f);
+        sr.circle(cx + 34f * s, cy + 4f * s, 5.0f * s);
+        sr.setColor(0.08f, 0.12f, 0.14f, 1f);
+        sr.circle(cx + 34f * s, cy + 4f * s, 3.2f * s);
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.circle(cx + 35.2f * s, cy + 5.2f * s, 1.3f * s);
+    }
+
+    // =========================================================================
+    // 21. CÁ BẠC MÁ (Indian Mackerel: Fusiform Body, Detached Finlets, Shining Mirror Cheeks)
+    // =========================================================================
+    public static void drawCaBacMa(ShapeRenderer sr, float cx, float cy, float s, float wag) {
+        float tailX = cx - 60f * s + wag * 4.5f * s;
+        float tailY = cy + wag * 6.0f * s;
+
+        // 1. Caudal Fin (Broad, deeply forked sickle tail with pointed yellow-tipped lobes)
+        sr.setColor(0.18f, 0.38f, 0.35f, 0.95f);
+        sr.triangle(tailX + 16f * s, tailY, tailX - 28f * s, tailY + 28f * s, tailX - 12f * s, tailY + 3f * s);
+        sr.triangle(tailX + 16f * s, tailY, tailX - 28f * s, tailY - 28f * s, tailX - 12f * s, tailY - 3f * s);
+        sr.setColor(0.95f, 0.85f, 0.25f, 0.90f); // Bright yellow fin tips
+        sr.triangle(tailX - 14f * s, tailY + 14f * s, tailX - 28f * s, tailY + 28f * s, tailX - 24f * s, tailY + 16f * s);
+        sr.triangle(tailX - 14f * s, tailY - 14f * s, tailX - 28f * s, tailY - 28f * s, tailX - 24f * s, tailY - 16f * s);
+        sr.setColor(0.12f, 0.26f, 0.24f, 0.9f);
+        sr.rectLine(tailX + 14f * s, tailY, tailX - 26f * s, tailY + 26f * s, 1.4f * s);
+        sr.rectLine(tailX + 14f * s, tailY, tailX - 26f * s, tailY - 26f * s, 1.4f * s);
+
+        // Slender caudal peduncle with small keels (Cuống đuôi mảnh)
+        sr.setColor(0.25f, 0.45f, 0.42f, 1f);
+        sr.rectLine(cx - 44f * s, cy, tailX + 16f * s, tailY, 5.5f * s);
+
+        // 2. SIGNATURE DETACHED FINLETS (5 vây phụ nhỏ hình tam giác ở cả lưng và bụng cuống đuôi)
+        for (int f = 0; f < 5; f++) {
+            float finX = cx - 28f * s - f * 6.5f * s;
+            float finWagY = cy + (tailY - cy) * (f / 5.0f);
+            // Dorsal finlet
+            sr.setColor(0.95f, 0.85f, 0.25f, 0.95f);
+            sr.triangle(finX, finWagY + 6f * s, finX - 4f * s, finWagY + 13f * s, finX - 5f * s, finWagY + 6f * s);
+            // Ventral finlet
+            sr.triangle(finX, finWagY - 6f * s, finX - 4f * s, finWagY - 13f * s, finX - 5f * s, finWagY - 6f * s);
+            // Finlet dark spine
+            sr.setColor(0.15f, 0.30f, 0.28f, 1f);
+            sr.rectLine(finX, finWagY + 6f * s, finX - 4f * s, finWagY + 13f * s, 1.1f * s);
+            sr.rectLine(finX, finWagY - 6f * s, finX - 4f * s, finWagY - 13f * s, 1.1f * s);
+        }
+
+        // 3. Dual Dorsal Fins & Anal Fin (Vây lưng thứ nhất nhiều gai, vây thứ 2 nhỏ)
+        // 1st spiny dorsal fin
+        sr.setColor(0.20f, 0.45f, 0.42f, 0.85f);
+        sr.triangle(cx + 2f * s, cy + 18f * s, cx + 22f * s, cy + 16f * s, cx + 10f * s, cy + 35f * s);
+        sr.setColor(0.90f, 0.82f, 0.30f, 0.9f);
+        sr.rectLine(cx + 4f * s, cy + 18f * s, cx + 10f * s, cy + 35f * s, 1.6f * s);
+        sr.rectLine(cx + 10f * s, cy + 17f * s, cx + 15f * s, cy + 28f * s, 1.3f * s);
+        sr.rectLine(cx + 16f * s, cy + 16f * s, cx + 19f * s, cy + 23f * s, 1.1f * s);
+
+        // 2nd small dorsal & anal fin
+        sr.setColor(0.85f, 0.78f, 0.25f, 0.85f);
+        sr.triangle(cx - 24f * s, cy + 14f * s, cx - 12f * s, cy + 16f * s, cx - 18f * s, cy + 25f * s);
+        sr.triangle(cx - 22f * s, cy - 14f * s, cx - 10f * s, cy - 16f * s, cx - 16f * s, cy - 25f * s);
+
+        // 4. ROBUST FUSIFORM TORPEDO BODY (Thân hình thoi tròn lẳn, lực lưỡng chuyên bơi nhanh)
+        sr.setColor(0.10f, 0.35f, 0.32f, 1f); // Deep emerald-teal back
+        sr.ellipse(cx - 48f * s, cy - 18f * s, 100f * s, 38f * s);
+        sr.setColor(0.20f, 0.52f, 0.48f, 1f); // Metallic sea-green midflank
+        sr.ellipse(cx - 46f * s, cy - 17f * s, 96f * s, 34f * s);
+        sr.setColor(0.82f, 0.90f, 0.94f, 1f); // Silvery flank
+        sr.ellipse(cx - 44f * s, cy - 17f * s, 90f * s, 28f * s);
+        sr.setColor(0.95f, 0.97f, 1.0f, 1f); // Pearlescent belly
+        sr.ellipse(cx - 40f * s, cy - 17f * s, 82f * s, 20f * s);
+
+        // 5. SIGNATURE WAVY VERMICULATED DORSAL PATTERNS (Vân rằn ri gợn sóng đặc trưng cá bạc má - cố định trên thân)
+        sr.setColor(0.08f, 0.24f, 0.22f, 0.85f);
+        for (int p = 0; p < 8; p++) {
+            float px = cx + 18f * s - p * 7.5f * s;
+            sr.rectLine(px, cy + 16f * s, px - 2.5f * s, cy + 7f * s, 1.8f * s);
+            sr.rectLine(px - 2.5f * s, cy + 7f * s, px + 1.0f * s, cy + 3f * s, 1.5f * s);
+        }
+
+        // Luminous Golden Lateral Sheen Stripe (Dải sáng vàng ánh kim phản quang đường bên - cố định trên thân)
+        sr.setColor(0.98f, 0.88f, 0.30f, 0.85f);
+        sr.rectLine(cx + 30f * s, cy + 1f * s, cx - 44f * s, cy + 1f * s, 3.2f * s);
+        sr.setColor(1.0f, 0.98f, 0.70f, 0.90f);
+        sr.rectLine(cx + 30f * s, cy + 1.5f * s, cx - 44f * s, cy + 1.5f * s, 1.5f * s);
+
+        // 6. SIGNATURE "BẠC MÁ" SHINING MIRROR-POLISHED CHEEKS (Đôi má nắp mang ánh gương bạc lấp lánh)
+        sr.setColor(0.20f, 0.45f, 0.42f, 1f);
+        sr.triangle(cx + 34f * s, cy + 12f * s, cx + 56f * s, cy + 1f * s, cx + 34f * s, cy - 10f * s);
+        sr.setColor(0.88f, 0.94f, 0.98f, 1f);
+        sr.triangle(cx + 36f * s, cy + 8f * s, cx + 55f * s, cy + 1f * s, cx + 36f * s, cy - 8f * s);
+
+        // THE GLISTENING SILVER-PLATINUM CHEEK PLATE (Má Bạc Má)
+        sr.setColor(0.85f, 0.75f, 0.25f, 0.9f); // Gold rim
+        sr.ellipse(cx + 22f * s, cy - 8f * s, 16f * s, 18f * s);
+        sr.setColor(0.96f, 0.98f, 1.0f, 1.0f); // Mirror platinum center
+        sr.ellipse(cx + 23f * s, cy - 7f * s, 14f * s, 16f * s);
+        sr.setColor(1f, 1f, 1f, 0.95f); // Crisp specular glint
+        sr.ellipse(cx + 25f * s, cy - 5f * s, 8f * s, 10f * s);
+
+        // Gill crescent line
+        sr.setColor(0.25f, 0.42f, 0.40f, 0.9f);
+        sr.rectLine(cx + 20f * s, cy + 12f * s, cx + 24f * s, cy - 9f * s, 1.8f * s);
+        // Wide streamlined mouth
+        sr.setColor(0.12f, 0.22f, 0.20f, 1f);
+        sr.rectLine(cx + 56f * s, cy + 1f * s, cx + 42f * s, cy - 2f * s, 1.6f * s);
+
+        // 7. Pectoral Fin (Vây ngực vát nhọn màu vàng viền đen)
+        sr.setColor(0.95f, 0.82f, 0.25f, 0.9f);
+        sr.triangle(cx + 18f * s, cy - 1f * s, cx + 2f * s, cy - 11f * s, cx + 10f * s, cy - 5f * s);
+        sr.setColor(0.18f, 0.32f, 0.30f, 0.9f);
+        sr.rectLine(cx + 18f * s, cy - 1f * s, cx + 3f * s, cy - 10f * s, 1.3f * s);
+
+        // 8. Large Dark Eye with Adipose Eyelid (Mắt to tròn đặc trưng với mí mỡ trong mờ)
+        // Adipose eyelid glassy border
+        sr.setColor(0.70f, 0.88f, 0.95f, 0.65f);
+        sr.ellipse(cx + 33f * s, cy - 1f * s, 14f * s, 12f * s);
+        // Eye socket and golden iris
+        sr.setColor(0.95f, 0.82f, 0.20f, 1f);
+        sr.circle(cx + 39f * s, cy + 4f * s, 5.8f * s);
+        sr.setColor(0.08f, 0.10f, 0.12f, 1f);
+        sr.circle(cx + 39f * s, cy + 4f * s, 3.8f * s);
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.circle(cx + 40.5f * s, cy + 5.5f * s, 1.5f * s);
     }
 
     // =========================================================================
