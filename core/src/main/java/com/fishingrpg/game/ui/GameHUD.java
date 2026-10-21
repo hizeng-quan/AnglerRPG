@@ -1043,8 +1043,8 @@ public class GameHUD {
         font.setColor(hoverCast ? new Color(1f, 0.98f, 0.6f, 1f) : Color.WHITE);
         font.draw(batch, castLabel, textX, textY);
 
-        // Menu Back Button -> BẢN ĐỒ
-        String mapLabel = "BẢN ĐỒ";
+        // Menu Back Button -> MENU
+        String mapLabel = "MENU";
         layout.setText(font, mapLabel);
         float mbx = BTN_MENU_X + 16f + (BTN_MENU_W - 16f - layout.width) / 2f;
         float mby = BTN_MENU_Y + (BTN_MENU_H + layout.height) / 2f;

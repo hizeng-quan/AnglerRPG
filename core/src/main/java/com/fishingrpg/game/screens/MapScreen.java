@@ -52,6 +52,7 @@ public class MapScreen implements Screen {
     private float[] partSpeed = new float[PARTICLE_COUNT];
     private float[] partRadius = new float[PARTICLE_COUNT];
     private float[] partAlpha = new float[PARTICLE_COUNT];
+    private InputAdapter inputAdapter;
 
     public MapScreen(FishingRPG game, PlayScreen playScreen) {
         this.game = game;
@@ -74,16 +75,24 @@ public class MapScreen implements Screen {
             partAlpha[i] = MathUtils.random(0.2f, 0.6f);
         }
 
-        Gdx.input.setInputProcessor(new InputAdapter() {
+        inputAdapter = new InputAdapter() {
+            @Override
+            public boolean keyDown(int keycode) {
+                if (keycode == Input.Keys.ESCAPE) {
+                    goBackToHub();
+                    return true;
+                }
+                return false;
+            }
+
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                 if (button != Input.Buttons.LEFT) return false;
                 Vector3 m = new Vector3(screenX, screenY, 0);
                 viewport.unproject(m);
 
-                if (hoverBack) {
-                    AudioManager.getInstance().playSFX("sfx_button");
-                    game.setScreen(playScreen);
+                if (hoverBack || (m.x >= 25 && m.x <= 155 && m.y >= H - 65 && m.y <= H - 20)) {
+                    goBackToHub();
                     return true;
                 }
 
@@ -114,7 +123,15 @@ public class MapScreen implements Screen {
                 }
                 return false;
             }
-        });
+        };
+        Gdx.input.setInputProcessor(inputAdapter);
+    }
+
+    private void goBackToHub() {
+        AudioManager.getInstance().playSFX("sfx_button");
+        playScreen.getFishingManager().state = com.fishingrpg.game.systems.FishingManager.State.IDLE;
+        player.setCurrentMap("ao_lang");
+        game.setScreen(playScreen);
     }
 
     private void showNotification(String msg) {
@@ -155,6 +172,11 @@ public class MapScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            goBackToHub();
+            return;
+        }
+
         animTimer += delta;
         if (messageTimer > 0) messageTimer -= delta;
 
@@ -644,6 +666,7 @@ public class MapScreen implements Screen {
     @Override
     public void show() {
         AudioManager.getInstance().playBGM("bgm_menu");
+        Gdx.input.setInputProcessor(inputAdapter);
     }
 
     @Override
