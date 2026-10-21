@@ -203,49 +203,313 @@ public class EquipmentIconRenderer {
     // =========================================================================
     // 1. TẬP SỰ SET
     // =========================================================================
-    private static void drawTapSuRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Bamboo pole with segmented joints and green leaf sprout
-        sr.setColor(0.72f, 0.68f, 0.25f, 1f);
-        sr.rectLine(cx - r * 0.7f, cy - r * 0.7f, cx + r * 0.7f, cy + r * 0.7f, 3.5f);
-        // Darker bamboo rings
-        sr.setColor(0.45f, 0.38f, 0.12f, 1f);
-        sr.circle(cx - r * 0.35f, cy - r * 0.35f, 2.5f);
-        sr.circle(cx, cy, 2.5f);
-        sr.circle(cx + r * 0.35f, cy + r * 0.35f, 2.5f);
-        // Green bamboo leaf at tip
-        sr.setColor(0.35f, 0.85f, 0.35f, 1f);
-        sr.triangle(cx + r * 0.65f, cy + r * 0.65f, cx + r * 0.85f, cy + r * 0.80f, cx + r * 0.75f, cy + r * 0.55f);
-        // Red-white cork bobber
-        sr.setColor(0.9f, 0.2f, 0.2f, 1f);
-        sr.circle(cx + r * 0.4f, cy + r * 0.1f, 3.5f);
-        sr.setColor(1f, 1f, 1f, 1f);
-        sr.circle(cx + r * 0.4f, cy + r * 0.02f, 2f);
+    public static void drawTapSuRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Warm sunlit rustic aura (Golden amber / fresh bamboo light)
+        sr.setColor(0.92f, 0.78f, 0.42f, 0.22f);
+        sr.circle(cx, cy, r * 1.30f);
+        sr.setColor(0.45f, 0.80f, 0.35f, 0.15f);
+        sr.circle(cx, cy, r * 1.05f);
+
+        // 2. Main Bamboo Pole with natural gentle curve (Aged golden yellow culm)
+        float startX = cx - r * 0.78f;
+        float startY = cy - r * 0.78f;
+        float endX = cx + r * 0.65f;
+        float endY = cy + r * 0.65f;
+
+        // Dark underlying core shadow
+        sr.setColor(0.35f, 0.28f, 0.10f, 1f);
+        sr.rectLine(startX, startY, endX, endY, Math.max(3.8f, r * 0.14f));
+
+        // Golden aged bamboo body
+        sr.setColor(0.82f, 0.72f, 0.32f, 1f);
+        sr.rectLine(startX, startY, endX, endY, Math.max(2.6f, r * 0.095f));
+
+        // Bamboo top highlight reflection
+        sr.setColor(0.96f, 0.90f, 0.55f, 0.85f);
+        sr.rectLine(startX + 0.8f, startY + 0.8f, endX, endY, Math.max(1.2f, r * 0.045f));
+
+        // 3. Bamboo Segment Nodes & Dark Annular Rings (Các lóng và đốt tre già)
+        float[] nodeFracs = { 0.15f, 0.38f, 0.60f, 0.80f };
+        for (float nf : nodeFracs) {
+            float nx = startX + (endX - startX) * nf;
+            float ny = startY + (endY - startY) * nf;
+
+            // Swollen node ring base
+            sr.setColor(0.48f, 0.36f, 0.12f, 1f);
+            sr.circle(nx, ny, Math.max(2.2f, r * 0.08f));
+            // Dark ridge line across node
+            sr.setColor(0.25f, 0.18f, 0.06f, 1f);
+            sr.rectLine(nx - r * 0.06f, ny + r * 0.06f, nx + r * 0.06f, ny - r * 0.06f, Math.max(1.5f, r * 0.05f));
+            // Bright node rim highlight
+            sr.setColor(0.95f, 0.85f, 0.45f, 0.9f);
+            sr.circle(nx - r * 0.02f, ny - r * 0.02f, Math.max(1.2f, r * 0.04f));
+        }
+
+        // 4. Traditional Hemp Twine Wrapping on Handle (Bọc dây gai bện quấn tay cầm)
+        float handleEnd = 0.32f;
+        float hx1 = startX;
+        float hy1 = startY;
+        float hx2 = startX + (endX - startX) * handleEnd;
+        float hy2 = startY + (endY - startY) * handleEnd;
+
+        // Dark under-grip
+        sr.setColor(0.38f, 0.26f, 0.14f, 1f);
+        sr.rectLine(hx1, hy1, hx2, hy2, Math.max(4.6f, r * 0.17f));
+
+        // Cross-coiled hemp rope bindings
+        for (int i = 0; i <= 6; i++) {
+            float hf = (float) i / 6f;
+            float px = hx1 + (hx2 - hx1) * hf;
+            float py = hy1 + (hy2 - hy1) * hf;
+            sr.setColor((i % 2 == 0) ? new Color(0.68f, 0.52f, 0.30f, 1f) : new Color(0.55f, 0.40f, 0.22f, 1f));
+            sr.rectLine(px - r * 0.07f, py + r * 0.07f, px + r * 0.07f, py - r * 0.07f, Math.max(1.8f, r * 0.065f));
+        }
+
+        // Carved wooden butt cap pommel at handle base (Chuôi gỗ tiện mộc mạc)
+        sr.setColor(0.28f, 0.18f, 0.08f, 1f);
+        sr.circle(startX, startY, Math.max(3.8f, r * 0.15f));
+        sr.setColor(0.60f, 0.44f, 0.24f, 1f);
+        sr.circle(startX, startY, Math.max(2.6f, r * 0.10f));
+        sr.setColor(0.88f, 0.72f, 0.42f, 1f);
+        sr.circle(startX - r * 0.03f, startY + r * 0.03f, Math.max(1.2f, r * 0.045f));
+
+        // 5. Brass Line Guides tied with Red Thread (Khoen đồng buộc chỉ đỏ truyền thống)
+        float[] guideFracs = { 0.48f, 0.70f, 0.90f };
+        for (float gf : guideFracs) {
+            float gx = startX + (endX - startX) * gf;
+            float gy = startY + (endY - startY) * gf;
+
+            // Red silk thread wrap collar (Chỉ đỏ buộc khoen)
+            sr.setColor(0.85f, 0.18f, 0.15f, 1f);
+            sr.rectLine(gx - r * 0.04f, gy - r * 0.04f, gx + r * 0.04f, gy + r * 0.04f, Math.max(3.4f, r * 0.12f));
+
+            // Brass guide leg & ring (Khoen đồng thau)
+            float rx = gx - r * 0.09f;
+            float ry = gy + r * 0.09f;
+            sr.setColor(0.78f, 0.65f, 0.25f, 1f);
+            sr.rectLine(gx, gy, rx, ry, Math.max(1.6f, r * 0.06f));
+            sr.circle(rx, ry, Math.max(2.2f, r * 0.08f));
+            sr.setColor(0.12f, 0.15f, 0.20f, 1f);
+            sr.circle(rx, ry, Math.max(1.2f, r * 0.04f));
+        }
+
+        // 6. Flexible Tip with Fresh Bamboo Sprout (Chồi lộc tre xanh biếc đầy sức sống)
+        float tipX = cx + r * 0.65f;
+        float tipY = cy + r * 0.65f;
+        // Tip ferrule
+        sr.setColor(0.85f, 0.72f, 0.28f, 1f);
+        sr.circle(tipX, tipY, Math.max(2.2f, r * 0.08f));
+
+        // Fresh green bamboo leaves sprouting at tip
+        sr.setColor(0.28f, 0.75f, 0.25f, 1f);
+        sr.triangle(tipX, tipY, tipX + r * 0.32f, tipY + r * 0.18f, tipX + r * 0.14f, tipY + r * 0.28f);
+        sr.setColor(0.42f, 0.90f, 0.35f, 1f);
+        sr.triangle(tipX, tipY, tipX + r * 0.20f, tipY + r * 0.35f, tipX + r * 0.05f, tipY + r * 0.30f);
+        // Central leaf vein
+        sr.setColor(0.85f, 0.98f, 0.60f, 0.9f);
+        sr.rectLine(tipX, tipY, tipX + r * 0.24f, tipY + r * 0.22f, 1f);
+
+        // 7. Looping Monofilament Line & Nostalgic Red-White Cork Float (Dây cước phao xốp đỏ-trắng)
+        float floatX = cx + r * 0.35f;
+        float floatY = cy - r * 0.12f;
+
+        // Fine fishing line drooping from tip
+        sr.setColor(0.88f, 0.94f, 1f, 0.75f);
+        sr.rectLine(tipX, tipY, floatX, floatY + r * 0.16f, 1.2f);
+        sr.rectLine(floatX, floatY - r * 0.16f, floatX - r * 0.15f, floatY - r * 0.45f, 1.2f);
+
+        // Oval cork bobber (Phao bầu dục đỏ trắng mộc mạc)
+        float fW = Math.max(4.5f, r * 0.16f);
+        float fH = Math.max(7.5f, r * 0.28f);
+        // Upper red half
+        sr.setColor(0.92f, 0.18f, 0.15f, 1f);
+        sr.ellipse(floatX - fW / 2f, floatY, fW, fH * 0.5f);
+        // Lower white/cork half
+        sr.setColor(0.95f, 0.95f, 0.92f, 1f);
+        sr.ellipse(floatX - fW / 2f, floatY - fH * 0.5f, fW, fH * 0.5f);
+        // Black dividing center ring & stem
+        sr.setColor(0.20f, 0.15f, 0.10f, 1f);
+        sr.rect(floatX - fW / 2f, floatY - 1f, fW, 2f);
+        sr.rectLine(floatX, floatY + fH * 0.5f, floatX, floatY - fH * 0.5f, 1.2f);
     }
 
-    private static void drawTapSuLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Classic blue spool with clear monofilament
-        sr.setColor(0.22f, 0.45f, 0.75f, 1f);
+    public static void drawTapSuLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Serene cyan-amber rustic aura
+        sr.setColor(0.40f, 0.75f, 0.95f, 0.20f);
+        sr.circle(cx, cy, r * 1.30f);
+        sr.setColor(0.85f, 0.72f, 0.40f, 0.15f);
+        sr.circle(cx, cy, r * 1.05f);
+
+        // 2. Heavy Natural Hardwood Spool Frame (Vành cuộn gỗ mộc hạt dẻ)
+        // Outer wood flange shadow
+        sr.setColor(0.24f, 0.15f, 0.08f, 1f);
+        sr.circle(cx, cy, r * 0.90f);
+        // Rich walnut/rosewood body
+        sr.setColor(0.48f, 0.32f, 0.18f, 1f);
+        sr.circle(cx, cy, r * 0.85f);
+        // Golden wood-grain ring
+        sr.setColor(0.68f, 0.48f, 0.28f, 0.9f);
+        sr.circle(cx, cy, r * 0.80f);
+        sr.setColor(0.38f, 0.24f, 0.12f, 1f);
         sr.circle(cx, cy, r * 0.75f);
-        sr.setColor(0.75f, 0.90f, 1f, 0.9f);
-        sr.circle(cx, cy, r * 0.55f);
-        sr.setColor(0.12f, 0.25f, 0.45f, 1f);
-        sr.circle(cx, cy, r * 0.3f);
-        sr.setColor(col);
-        sr.circle(cx, cy, r * 0.15f);
+
+        // 3. Multilayered Glistening Monofilament Nylon Line (Lớp cuộn cước trong suốt phản quang)
+        // Dark spool well
+        sr.setColor(0.18f, 0.28f, 0.40f, 1f);
+        sr.circle(cx, cy, r * 0.72f);
+        // Deep blue-cyan transparent monofilament body
+        sr.setColor(0.32f, 0.65f, 0.88f, 0.95f);
+        sr.circle(cx, cy, r * 0.68f);
+        // Bright translucent mono layer with light penetration
+        sr.setColor(0.65f, 0.88f, 1f, 0.90f);
+        sr.circle(cx, cy, r * 0.60f);
+
+        // Concentric winding ridges (Vòng gân các sợi cước quấn khít)
+        sr.setColor(0.85f, 0.95f, 1f, 0.70f);
+        for (int i = 0; i < 4; i++) {
+            float rr = r * (0.42f + i * 0.065f);
+            sr.circle(cx, cy, rr);
+        }
+        sr.setColor(0.40f, 0.70f, 0.92f, 1f);
+        sr.circle(cx, cy, r * 0.38f);
+
+        // 4. Center Spool Hub & Vintage Parchment Label (Nhãn giấy mộc cổ điển & khuy đồng)
+        // Dark inner well
+        sr.setColor(0.20f, 0.14f, 0.08f, 1f);
+        sr.circle(cx, cy, r * 0.35f);
+        // Aged vintage cream paper label
+        sr.setColor(0.94f, 0.90f, 0.78f, 1f);
+        sr.circle(cx, cy, r * 0.30f);
+        // Inner gold seal rim
+        sr.setColor(0.82f, 0.68f, 0.25f, 1f);
+        sr.circle(cx, cy, r * 0.25f);
+        // Center brass spindle axle pin (Trục đồng thau)
+        sr.setColor(0.30f, 0.22f, 0.08f, 1f);
+        sr.circle(cx, cy, r * 0.16f);
+        sr.setColor(0.92f, 0.78f, 0.32f, 1f);
+        sr.circle(cx, cy, r * 0.11f);
+        sr.setColor(1f, 0.95f, 0.70f, 1f);
+        sr.circle(cx - r * 0.03f, cy + r * 0.03f, r * 0.045f);
+
+        // 5. Loose Leader Line, Figure-Eight Loop & Orange Rubber Stopper Bead (Đầu dây cước bung ra & hạt chặn)
+        float lx1 = cx + r * 0.55f;
+        float ly1 = cy + r * 0.45f;
+        float lx2 = cx + r * 0.88f;
+        float ly2 = cy + r * 0.68f;
+        float lx3 = cx + r * 0.98f;
+        float ly3 = cy + r * 0.35f;
+
+        // Flying monofilament strand
+        sr.setColor(1f, 1f, 1f, 0.92f);
+        sr.rectLine(lx1, ly1, lx2, ly2, Math.max(1.8f, r * 0.07f));
+        sr.rectLine(lx2, ly2, lx3, ly3, Math.max(1.8f, r * 0.07f));
+
+        // Terminal tied loop
+        sr.circle(lx3, ly3, Math.max(3.0f, r * 0.11f));
+        sr.setColor(0.08f, 0.12f, 0.18f, 1f);
+        sr.circle(lx3, ly3, Math.max(1.5f, r * 0.055f));
+
+        // Bright Orange Rubber Bobber Stopper Bead (Hạt chặn phao cao su màu cam rực rỡ)
+        sr.setColor(0.98f, 0.42f, 0.10f, 1f);
+        sr.circle(lx2 - r * 0.05f, ly2 - r * 0.03f, Math.max(3.5f, r * 0.13f));
+        sr.setColor(1f, 0.75f, 0.35f, 1f);
+        sr.circle(lx2 - r * 0.07f, ly2 - r * 0.01f, Math.max(1.5f, r * 0.055f));
     }
 
-    private static void drawTapSuHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Rustic hook with gray lead split-shot sinker
-        sr.setColor(0.65f, 0.70f, 0.75f, 1f);
-        sr.rectLine(cx - r * 0.25f, cy + r * 0.55f, cx - r * 0.25f, cy - r * 0.35f, 3f);
-        sr.rectLine(cx - r * 0.25f, cy - r * 0.35f, cx + r * 0.35f, cy - r * 0.35f, 3f);
-        sr.rectLine(cx + r * 0.35f, cy - r * 0.35f, cx + r * 0.35f, cy + r * 0.2f, 3f);
-        sr.triangle(cx + r * 0.35f, cy + r * 0.2f, cx + r * 0.15f, cy + r * 0.05f, cx + r * 0.45f, cy + r * 0.05f);
-        // Dark lead ball sinker at top
-        sr.setColor(0.35f, 0.38f, 0.42f, 1f);
-        sr.circle(cx - r * 0.25f, cy + r * 0.35f, r * 0.22f);
-        sr.setColor(0.55f, 0.58f, 0.62f, 1f);
-        sr.circle(cx - r * 0.28f, cy + r * 0.38f, r * 0.1f);
+    public static void drawTapSuHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Subtle silver-amber aura
+        sr.setColor(0.70f, 0.75f, 0.82f, 0.20f);
+        sr.circle(cx, cy, r * 1.30f);
+        sr.setColor(0.85f, 0.65f, 0.25f, 0.14f);
+        sr.circle(cx, cy, r * 1.05f);
+
+        // Hook geometry points
+        float eyeX = cx - r * 0.28f;
+        float eyeY = cy + r * 0.68f;
+        float shankBottomX = cx - r * 0.28f;
+        float shankBottomY = cy - r * 0.35f;
+        float bendApexX = cx + r * 0.15f;
+        float bendApexY = cy - r * 0.55f;
+        float barbX = cx + r * 0.42f;
+        float barbY = cy - r * 0.05f;
+        float tipX = cx + r * 0.38f;
+        float tipY = cy + r * 0.22f;
+
+        // 2. High-Carbon Tempered Steel Hook Body (Thân lưỡi câu thép đen tôi nguội)
+        // Under-shadow / heavy metallic gauge
+        sr.setColor(0.12f, 0.14f, 0.18f, 1f);
+        sr.rectLine(eyeX, eyeY, shankBottomX, shankBottomY, Math.max(4.2f, r * 0.16f));
+        sr.rectLine(shankBottomX, shankBottomY, bendApexX, bendApexY, Math.max(4.2f, r * 0.16f));
+        sr.rectLine(bendApexX, bendApexY, barbX, barbY, Math.max(4.2f, r * 0.16f));
+        sr.rectLine(barbX, barbY, tipX, tipY, Math.max(3.2f, r * 0.12f));
+
+        // Dark gunmetal polished steel
+        sr.setColor(0.38f, 0.42f, 0.48f, 1f);
+        sr.rectLine(eyeX, eyeY, shankBottomX, shankBottomY, Math.max(2.6f, r * 0.10f));
+        sr.rectLine(shankBottomX, shankBottomY, bendApexX, bendApexY, Math.max(2.6f, r * 0.10f));
+        sr.rectLine(bendApexX, bendApexY, barbX, barbY, Math.max(2.6f, r * 0.10f));
+        sr.rectLine(barbX, barbY, tipX, tipY, Math.max(2.0f, r * 0.075f));
+
+        // Bright steel edge specular highlight
+        sr.setColor(0.85f, 0.90f, 0.98f, 0.9f);
+        sr.rectLine(eyeX + 0.8f, eyeY, shankBottomX + 0.8f, shankBottomY, Math.max(1.2f, r * 0.04f));
+        sr.rectLine(shankBottomX, shankBottomY - 0.8f, bendApexX, bendApexY - 0.8f, Math.max(1.2f, r * 0.04f));
+
+        // Forged eyelet loop at top of shank (Khoen xỏ cước đỉnh cán)
+        sr.setColor(0.18f, 0.22f, 0.28f, 1f);
+        sr.circle(eyeX, eyeY, Math.max(4.0f, r * 0.16f));
+        sr.setColor(0.55f, 0.60f, 0.68f, 1f);
+        sr.circle(eyeX, eyeY, Math.max(2.8f, r * 0.11f));
+        sr.setColor(0.08f, 0.10f, 0.14f, 1f);
+        sr.circle(eyeX, eyeY, Math.max(1.5f, r * 0.06f));
+
+        // Razor-sharp needle point & barb (Ngạnh câu & mũi nhọn)
+        sr.setColor(0.92f, 0.95f, 1f, 1f);
+        sr.triangle(tipX, tipY, tipX - r * 0.08f, tipY - r * 0.18f, tipX + r * 0.06f, tipY - r * 0.18f);
+        // Backward barb fang (Ngạnh câu giữ mồi)
+        sr.setColor(0.35f, 0.40f, 0.46f, 1f);
+        sr.triangle(barbX, barbY + r * 0.04f, barbX - r * 0.16f, barbY - r * 0.10f, barbX + r * 0.02f, barbY - r * 0.10f);
+        sr.setColor(0.85f, 0.92f, 1f, 1f);
+        sr.rectLine(barbX, barbY + r * 0.04f, barbX - r * 0.16f, barbY - r * 0.10f, 1f);
+
+        // 3. Realistic Metallic Split-Shot Lead Sinker clamped onto shank (Viên chì kẹp xẻ rãnh kim loại)
+        float leadCX = eyeX;
+        float leadCY = cy + r * 0.32f;
+        float leadR = Math.max(5.5f, r * 0.24f);
+
+        // Outer lead drop shadow
+        sr.setColor(0.15f, 0.17f, 0.20f, 1f);
+        sr.circle(leadCX, leadCY, leadR);
+        // Heavy gray lead body
+        sr.setColor(0.44f, 0.48f, 0.54f, 1f);
+        sr.circle(leadCX, leadCY, leadR * 0.90f);
+        // Clamp split groove (Rãnh kẹp chì)
+        sr.setColor(0.18f, 0.20f, 0.24f, 1f);
+        sr.rectLine(leadCX - leadR * 0.85f, leadCY, leadCX + leadR * 0.85f, leadCY, Math.max(1.8f, r * 0.07f));
+        // Soft metallic sheen highlight
+        sr.setColor(0.78f, 0.84f, 0.90f, 0.85f);
+        sr.circle(leadCX - leadR * 0.28f, leadCY + leadR * 0.32f, leadR * 0.35f);
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.circle(leadCX - leadR * 0.28f, leadCY + leadR * 0.32f, leadR * 0.15f);
+
+        // 4. Wriggling Red Earthworm Bait hooked on the bend (Chú giun đất đỏ tươi móc mồi sống động)
+        float w1X = bendApexX + r * 0.12f;
+        float w1Y = bendApexY + r * 0.08f;
+        float w2X = bendApexX + r * 0.28f;
+        float w2Y = bendApexY - r * 0.12f;
+        float w3X = bendApexX + r * 0.45f;
+        float w3Y = bendApexY - r * 0.02f;
+
+        // Worm fleshy red-crimson body
+        sr.setColor(0.82f, 0.22f, 0.20f, 1f);
+        sr.rectLine(w1X, w1Y, w2X, w2Y, Math.max(3.2f, r * 0.12f));
+        sr.rectLine(w2X, w2Y, w3X, w3Y, Math.max(2.8f, r * 0.10f));
+        sr.circle(w3X, w3Y, Math.max(2.2f, r * 0.08f));
+        // Worm segments & highlight
+        sr.setColor(0.96f, 0.48f, 0.42f, 0.9f);
+        sr.circle(w1X, w1Y, Math.max(1.6f, r * 0.06f));
+        sr.circle(w2X, w2Y, Math.max(1.6f, r * 0.06f));
+        sr.circle(w3X - 1f, w3Y + 1f, Math.max(1.0f, r * 0.04f));
     }
 
     // =========================================================================

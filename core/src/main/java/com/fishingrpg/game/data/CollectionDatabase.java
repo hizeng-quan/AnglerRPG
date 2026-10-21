@@ -38,7 +38,7 @@ public class CollectionDatabase {
         collections.add(new Collection("al_san_moi", "Sát Thủ Đầm Lầy", 3000, 1500, 
             "Cá Lóc Bông", "Cá Trê Lai", "Cá Chép Vàng"));
             
-        collections.add(new Collection("al_truyen_thuyet", "Truyền Thuyết Vực Thẳm", 10000, 5000, 
+        collections.add(new Collection("al_truyen_thuyet", "Truyền Thuyết Sông Hồ", 10000, 5000, 
             "Cá Lăng Khổng Lồ", "Thủy Quái Sông Trà"));
             
         // --- BÃI BIỂN ---
@@ -51,10 +51,10 @@ public class CollectionDatabase {
         collections.add(new Collection("bb_xa_bo", "Xa Bờ", 1500, 800, 
             "Cá Nục", "Cá Đối", "Cá Trích", "Cá Chim Biển"));
             
-        collections.add(new Collection("bb_sat_thu", "Sát Thủ Đáy Biển", 3000, 1500, 
+        collections.add(new Collection("bb_sat_thu", "Thợ Săn Đáy Biển", 3000, 1500, 
             "Cá Mú", "Cá Bóp", "Cá Thu Hoàng Kim"));
             
-        collections.add(new Collection("bb_vua_bien", "Vua Của Biển", 8000, 4000, 
+        collections.add(new Collection("bb_vua_bien", "Vua Của Biển Cả", 8000, 4000, 
             "Cá Ngừ Đại Dương", "Bạch Tuộc Khổng Lồ"));
 
         // --- ĐẢO XA ---
