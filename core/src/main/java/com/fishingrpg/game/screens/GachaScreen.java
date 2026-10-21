@@ -124,7 +124,7 @@ public class GachaScreen implements Screen {
     }
 
     private static final StandardSetTheme[] STANDARD_SETS = {
-        new StandardSetTheme("Thần Thoại", "Trượng Ánh Sáng", "Dây Chỉ Vàng", "Lưỡi Câu Thần", 7,
+        new StandardSetTheme("Quang Minh", "Trượng Ánh Sáng", "Dây Chỉ Vàng", "Lưỡi Câu Thần", 7,
             new Color(1f, 0.92f, 0.45f, 1f), new Color(0.95f, 0.65f, 0.15f, 1f), new Color(1f, 0.85f, 0.3f, 0.5f), "MYTHIC"),
         new StandardSetTheme("Hoàng Gia", "Cần Câu Bạch Kim", "Tơ Tằm Thượng Hạng", "Móc Cẩm Thạch", 6,
             new Color(1f, 0.85f, 0.3f, 1f), new Color(0.55f, 0.25f, 0.75f, 1f), new Color(1f, 0.9f, 0.4f, 0.4f), "ROYAL"),

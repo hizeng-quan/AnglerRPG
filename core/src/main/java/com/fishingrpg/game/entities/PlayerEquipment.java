@@ -79,7 +79,7 @@ public class PlayerEquipment {
         float total = sumSubstat(equippedRod, type)
                     + sumSubstat(equippedLine, type)
                     + sumSubstat(equippedHook, type);
-        if (isSetBonusActive() && "Thần Thoại".equals(getActiveSetName())) {
+        if (isSetBonusActive() && ("Quang Minh".equals(getActiveSetName()) || "Thần Thoại".equals(getActiveSetName()))) {
             total *= 1.35f;
         }
         return total;

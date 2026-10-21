@@ -453,7 +453,7 @@ public class EquipmentScreen implements Screen {
 
             font.setColor(0.50f, 0.58f, 0.68f, 0.88f);
             font.getData().setScale(0.85f);
-            layout.setText(font, "Mặc cùng 1 bộ Cần, Dây, Lưỡi để mở khóa nội tại thần thoại");
+            layout.setText(font, "Mặc cùng 1 bộ Cần, Dây, Lưỡi để mở khóa nội tại kích hoạt");
             font.draw(game.batch, layout, setPlateX + (setPlateW - layout.width) / 2f, setPlateY + 45f);
             font.getData().setScale(1f);
         }

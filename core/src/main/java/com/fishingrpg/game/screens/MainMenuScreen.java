@@ -629,7 +629,7 @@ public class MainMenuScreen implements Screen {
         subFont.draw(game.batch, "Điều khiển: [↑/↓/W/S] Chọn mục  •  [Enter/Space] Bắt đầu", 25f, 26f);
 
         // Version tag on bottom right
-        String ver = "v0.4.9 • Fishing RPG";
+        String ver = "v0.4.10 • Fishing RPG";
         layout.setText(subFont, ver);
         subFont.draw(game.batch, ver, W - layout.width - 25f, 26f);
         subFont.getData().setScale(1f);

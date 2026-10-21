@@ -72,10 +72,11 @@ public class EquipmentIconRenderer {
                 else drawThoiKhongHook(sr, cx, cy, r, mainCol);
                 break;
 
+            case "Quang Minh":
             case "Thần Thoại":
-                if (type == EquipmentType.ROD) drawThanThoaiRod(sr, cx, cy, r, mainCol);
-                else if (type == EquipmentType.LINE) drawThanThoaiLine(sr, cx, cy, r, mainCol);
-                else drawThanThoaiHook(sr, cx, cy, r, mainCol);
+                if (type == EquipmentType.ROD) drawQuangMinhRod(sr, cx, cy, r, mainCol);
+                else if (type == EquipmentType.LINE) drawQuangMinhLine(sr, cx, cy, r, mainCol);
+                else drawQuangMinhHook(sr, cx, cy, r, mainCol);
                 break;
 
             case "Vệ Quốc Vang Danh":
@@ -2127,55 +2128,235 @@ public class EquipmentIconRenderer {
     }
 
     // =========================================================================
-    // 9. THẦN THOẠI SET
+    // 9. QUANG MINH SET (Formerly Thần Thoại: Solar Deity Scepter, Sun-Thread Spool, Archangel Hook)
     // =========================================================================
-    private static void drawThanThoaiRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Solar Deity sceptre radiating 8 holy sunbeams
-        sr.setColor(1f, 0.85f, 0.25f, 0.35f);
-        sr.circle(cx + r * 0.5f, cy + r * 0.5f, r * 0.45f);
-        // Golden staff
-        sr.setColor(1f, 0.88f, 0.30f, 1f);
-        sr.rectLine(cx - r * 0.7f, cy - r * 0.7f, cx + r * 0.45f, cy + r * 0.45f, 4.5f);
-        // Solar disc
-        float sx = cx + r * 0.5f, sy = cy + r * 0.5f;
+    public static void drawQuangMinhRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Radiant Solar Corona & Golden Aura
+        sr.setColor(1f, 0.88f, 0.25f, 0.16f);
+        sr.circle(cx, cy, r * 0.98f);
+        sr.setColor(1f, 0.95f, 0.50f, 0.25f);
+        sr.circle(cx + r * 0.48f, cy + r * 0.48f, r * 0.52f);
+
+        // 2. Pure White-Gold Celestial Shaft (Thân trượng vàng ròng khảm bạch kim)
+        float x1 = cx - r * 0.72f, y1 = cy - r * 0.72f;
+        float x2 = cx + r * 0.45f, y2 = cy + r * 0.45f;
+        // Burnished gold outer bevel
+        sr.setColor(0.92f, 0.72f, 0.16f, 1f);
+        sr.rectLine(x1, y1, x2, y2, Math.max(4.2f, r * 0.20f));
+        // Luminous ivory-platinum core
+        sr.setColor(1.0f, 0.98f, 0.82f, 1f);
+        sr.rectLine(x1, y1, x2, y2, Math.max(2.2f, r * 0.10f));
+
+        // 3. 4 Ornate Solar Node Rings with embedded Sunstone gems
+        for (float f = 0.22f; f <= 0.82f; f += 0.20f) {
+            float nx = x1 + (x2 - x1) * f;
+            float ny = y1 + (y2 - y1) * f;
+            // Golden node collar
+            sr.setColor(0.85f, 0.65f, 0.12f, 1f);
+            sr.circle(nx, ny, Math.max(3.2f, r * 0.14f));
+            // Inset Ruby / Sunstone jewel
+            sr.setColor(1.0f, 0.35f, 0.20f, 1f);
+            sr.circle(nx, ny, Math.max(1.8f, r * 0.08f));
+            sr.setColor(1f, 1f, 1f, 0.9f);
+            sr.circle(nx + 0.6f, ny + 0.6f, Math.max(0.8f, r * 0.04f));
+        }
+
+        // 4. White Silk Grip & Gold Cross-Lacing (Chuôi trượng bọc lụa trắng ánh kim)
+        float gx = x1 + (x2 - x1) * 0.12f;
+        float gy = y1 + (y2 - y1) * 0.12f;
+        sr.setColor(0.95f, 0.95f, 0.92f, 1f);
+        sr.circle(gx, gy, Math.max(3.8f, r * 0.16f));
+        sr.setColor(1.0f, 0.85f, 0.25f, 1f);
+        sr.rectLine(x1, y1, gx + 2f, gy + 2f, 1.4f);
+
+        // 5. Stylized Angelic Feather Plumes flanking neck
+        float neckX = cx + r * 0.35f, neckY = cy + r * 0.35f;
+        sr.setColor(1f, 0.95f, 0.80f, 0.95f);
+        sr.triangle(neckX, neckY, neckX - r * 0.25f, neckY + r * 0.12f, neckX - r * 0.08f, neckY + r * 0.22f);
+        sr.triangle(neckX, neckY, neckX + r * 0.12f, neckY - r * 0.25f, neckX + r * 0.22f, neckY - r * 0.08f);
+        sr.setColor(0.95f, 0.80f, 0.25f, 1f);
+        sr.rectLine(neckX, neckY, neckX - r * 0.25f, neckY + r * 0.12f, 1.2f);
+        sr.rectLine(neckX, neckY, neckX + r * 0.12f, neckY - r * 0.25f, 1.2f);
+
+        // 6. Grand Solar Corona Headpiece (Đỉnh Trượng Thái Dương Hoàng Kim)
+        float sx = cx + r * 0.52f, sy = cy + r * 0.52f;
+        // Outer radiant ring
+        sr.setColor(0.90f, 0.70f, 0.15f, 1f);
+        sr.circle(sx, sy, r * 0.34f);
+        sr.setColor(1.0f, 0.90f, 0.35f, 1f);
+        sr.circle(sx, sy, r * 0.28f);
+        sr.setColor(0.35f, 0.18f, 0.05f, 1f); // Inner shadow bezel
+        sr.circle(sx, sy, r * 0.20f);
+
+        // 8 Radiating Solar Rays (4 Cardinal + 4 Diagonal)
+        sr.setColor(1f, 0.88f, 0.25f, 1f);
+        float rayL = Math.max(9f, r * 0.40f);
+        float rayS = Math.max(6f, r * 0.26f);
+        // Cardinal
+        sr.rectLine(sx, sy + r * 0.28f, sx, sy + r * 0.28f + rayL, 2.2f);
+        sr.rectLine(sx, sy - r * 0.28f, sx, sy - r * 0.28f - rayL, 2.2f);
+        sr.rectLine(sx + r * 0.28f, sy, sx + r * 0.28f + rayL, sy, 2.2f);
+        sr.rectLine(sx - r * 0.28f, sy, sx - r * 0.28f - rayL, sy, 2.2f);
+        // Diagonal
+        float dOff = (r * 0.28f) * 0.707f;
+        float dRay = rayS * 0.707f;
+        sr.setColor(1f, 0.96f, 0.60f, 1f);
+        sr.rectLine(sx + dOff, sy + dOff, sx + dOff + dRay, sy + dOff + dRay, 1.6f);
+        sr.rectLine(sx - dOff, sy + dOff, sx - dOff - dRay, sy + dOff + dRay, 1.6f);
+        sr.rectLine(sx + dOff, sy - dOff, sx + dOff + dRay, sy - dOff - dRay, 1.6f);
+        sr.rectLine(sx - dOff, sy - dOff, sx - dOff - dRay, sy - dOff - dRay, 1.6f);
+
+        // 7. Central Radiant Sunstone Prism Core
         sr.setColor(1f, 0.95f, 0.45f, 1f);
-        sr.circle(sx, sy, r * 0.22f);
+        sr.circle(sx, sy, r * 0.15f);
         sr.setColor(1f, 1f, 1f, 1f);
-        sr.circle(sx, sy, r * 0.12f);
-        // 4 Cardinal sun rays
-        sr.setColor(1f, 0.85f, 0.2f, 1f);
-        sr.rectLine(sx, sy + 7f, sx, sy + 13f, 2f);
-        sr.rectLine(sx, sy - 7f, sx, sy - 13f, 2f);
-        sr.rectLine(sx + 7f, sy, sx + 13f, sy, 2f);
-        sr.rectLine(sx - 7f, sy, sx - 13f, sy, 2f);
+        float dSize = Math.max(3f, r * 0.12f);
+        sr.rect(sx - dSize, sy - dSize, dSize, dSize, dSize * 2f, dSize * 2f, 1f, 1f, 45f);
+        sr.circle(sx + 0.8f, sy + 0.8f, Math.max(1f, r * 0.05f));
     }
 
-    private static void drawThanThoaiLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Divine golden starlight filament spool
-        sr.setColor(0.95f, 0.75f, 0.20f, 1f);
-        sr.circle(cx, cy, r * 0.75f);
-        sr.setColor(1f, 0.92f, 0.45f, 1f);
+    public static void drawQuangMinhLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Radiant Solar Spool Aura
+        sr.setColor(1f, 0.88f, 0.25f, 0.18f);
+        sr.circle(cx, cy, r * 0.98f);
+        sr.setColor(1f, 0.96f, 0.55f, 0.15f);
+        sr.circle(cx, cy, r * 0.88f);
+
+        // 2. Heavy Antique Celestial Gold Spool Frame (Khung cuộn vàng kim 24K)
+        sr.setColor(0.85f, 0.65f, 0.15f, 1f);
+        sr.circle(cx, cy, r * 0.84f);
+        sr.setColor(1.0f, 0.90f, 0.38f, 1f);
+        sr.circle(cx, cy, r * 0.76f);
+        sr.setColor(0.28f, 0.16f, 0.04f, 1f); // Inner spool chamber
+        sr.circle(cx, cy, r * 0.68f);
+
+        // 3. 12-Toothed Sunburst Cog Rim (Vành răng cưa mặt trời)
+        sr.setColor(1f, 0.88f, 0.30f, 1f);
+        for (int i = 0; i < 12; i++) {
+            float rad = (i * 30f) * MathUtils.degreesToRadians;
+            float px = cx + MathUtils.cos(rad) * r * 0.84f;
+            float py = cy + MathUtils.sin(rad) * r * 0.84f;
+            sr.circle(px, py, Math.max(1.8f, r * 0.07f));
+        }
+
+        // 4. 8 Radiant Sunburst Spokes
+        sr.setColor(0.95f, 0.80f, 0.25f, 0.9f);
+        for (int i = 0; i < 8; i++) {
+            float rad = (i * 45f) * MathUtils.degreesToRadians;
+            float sx = cx + MathUtils.cos(rad) * r * 0.68f;
+            float sy = cy + MathUtils.sin(rad) * r * 0.68f;
+            sr.rectLine(cx, cy, sx, sy, 2f);
+        }
+
+        // 5. SIGNATURE DÂY CHỈ VÀNG (Cuộn sợi chỉ vàng ròng đa tầng phản quang lộng lẫy)
+        sr.setColor(0.88f, 0.65f, 0.12f, 1f); // Deep gold base
         sr.circle(cx, cy, r * 0.55f);
-        sr.setColor(0.45f, 0.28f, 0.08f, 1f);
-        sr.circle(cx, cy, r * 0.32f);
-        // Holy divine star in center
+        sr.setColor(1.0f, 0.88f, 0.30f, 1f); // Vibrant 24K gold strands
+        sr.circle(cx, cy, r * 0.46f);
+        sr.setColor(1.0f, 0.98f, 0.65f, 1f); // Specular highlight ring
+        sr.circle(cx, cy, r * 0.36f);
+        sr.setColor(0.35f, 0.20f, 0.06f, 1f); // Center hub socket
+        sr.circle(cx, cy, r * 0.26f);
+
+        // 6. Central 8-Pointed Star of Dawn & Sunstone Prism
+        sr.setColor(1f, 0.90f, 0.30f, 1f);
+        float starS = Math.max(3.5f, r * 0.15f);
+        sr.rect(cx - starS, cy - starS, starS, starS, starS * 2f, starS * 2f, 1f, 1f, 0f);
+        sr.rect(cx - starS, cy - starS, starS, starS, starS * 2f, starS * 2f, 1f, 1f, 45f);
         sr.setColor(1f, 1f, 1f, 1f);
-        sr.rect(cx - 3f, cy - 3f, 3f, 3f, 6f, 6f, 1f, 1f, 45f);
+        sr.circle(cx, cy, Math.max(2.0f, r * 0.08f));
+
+        // 7. Flowing Golden Thread Filament curling out with Sun-pearl weight
+        sr.setColor(1f, 0.92f, 0.40f, 0.95f);
+        sr.rectLine(cx + r * 0.52f, cy - r * 0.10f, cx + r * 0.82f, cy - r * 0.45f, 1.8f);
+        sr.rectLine(cx + r * 0.82f, cy - r * 0.45f, cx + r * 0.70f, cy - r * 0.75f, 1.4f);
+        // Sun-pearl bead
+        sr.setColor(1f, 0.85f, 0.25f, 1f);
+        sr.circle(cx + r * 0.70f, cy - r * 0.75f, Math.max(2.8f, r * 0.11f));
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(cx + r * 0.71f, cy - r * 0.74f, Math.max(1.2f, r * 0.05f));
     }
 
+    public static void drawQuangMinhHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Holy Archangel Divine Aura
+        sr.setColor(1f, 0.90f, 0.30f, 0.18f);
+        sr.circle(cx, cy, r * 0.95f);
+        sr.setColor(1f, 0.98f, 0.60f, 0.14f);
+        sr.circle(cx, cy, r * 0.82f);
+
+        // 2. Heavy Forged Celestial Gold Shank & J-Bend (Thân móc câu vàng ròng)
+        float shankX = cx - r * 0.18f;
+        float topY = cy + r * 0.55f;
+        float bendY = cy - r * 0.38f;
+        float barbX = cx + r * 0.42f;
+        float tipY = cy + r * 0.22f;
+
+        // Outer warm gold spine
+        sr.setColor(0.90f, 0.70f, 0.15f, 1f);
+        sr.rectLine(shankX, topY, shankX, bendY, Math.max(4.5f, r * 0.18f));
+        sr.rectLine(shankX, bendY, barbX, bendY, Math.max(4.5f, r * 0.18f));
+        sr.rectLine(barbX, bendY, barbX, tipY, Math.max(4.5f, r * 0.18f));
+
+        // Inner luminous white-gold razor edge
+        sr.setColor(1f, 0.98f, 0.78f, 1f);
+        sr.rectLine(shankX + 1f, topY - 2f, shankX + 1f, bendY + 1f, Math.max(2.2f, r * 0.09f));
+        sr.rectLine(shankX + 1f, bendY + 1f, barbX - 1f, bendY + 1f, Math.max(2.2f, r * 0.09f));
+        sr.rectLine(barbX - 1f, bendY + 1f, barbX - 1f, tipY - 2f, Math.max(2.2f, r * 0.09f));
+
+        // 3. SPREAD ANGELIC WINGS ON HOOK SHANK (Đôi cánh thiên thần 3 tầng lông vũ)
+        // Tier 1 (High plume)
+        sr.setColor(1f, 0.95f, 0.82f, 1f);
+        sr.triangle(shankX, cy + r * 0.40f, shankX - r * 0.68f, cy + r * 0.62f, shankX, cy + r * 0.52f);
+        sr.setColor(0.92f, 0.75f, 0.22f, 1f);
+        sr.rectLine(shankX, cy + r * 0.40f, shankX - r * 0.68f, cy + r * 0.62f, 1.4f);
+
+        // Tier 2 (Mid plume)
+        sr.setColor(1f, 0.98f, 0.90f, 1f);
+        sr.triangle(shankX, cy + r * 0.22f, shankX - r * 0.60f, cy + r * 0.40f, shankX, cy + r * 0.36f);
+        sr.setColor(0.92f, 0.75f, 0.22f, 1f);
+        sr.rectLine(shankX, cy + r * 0.22f, shankX - r * 0.60f, cy + r * 0.40f, 1.4f);
+
+        // Tier 3 (Lower plume)
+        sr.setColor(1f, 0.92f, 0.78f, 1f);
+        sr.triangle(shankX, cy + r * 0.06f, shankX - r * 0.45f, cy + r * 0.20f, shankX, cy + r * 0.20f);
+        sr.setColor(0.92f, 0.75f, 0.22f, 1f);
+        sr.rectLine(shankX, cy + r * 0.06f, shankX - r * 0.45f, cy + r * 0.20f, 1.2f);
+
+        // 4. Holy Spearhead Barb (Mũi giáo ngạnh thần thánh sắc nhọn)
+        sr.setColor(1f, 0.90f, 0.30f, 1f);
+        sr.triangle(barbX, tipY, barbX - r * 0.20f, tipY - r * 0.16f, barbX + r * 0.14f, tipY - r * 0.16f);
+        sr.setColor(1f, 1f, 1f, 1f); // Diamond tip gleam
+        sr.triangle(barbX, tipY, barbX - r * 0.08f, tipY - r * 0.10f, barbX + r * 0.08f, tipY - r * 0.10f);
+
+        // 5. Hovering Holy Halo & Eyelet (Vòng hào quang thánh quang)
+        // Golden eyelet ring
+        sr.setColor(0.88f, 0.68f, 0.15f, 1f);
+        sr.circle(shankX, topY, Math.max(4.2f, r * 0.18f));
+        sr.setColor(0.12f, 0.08f, 0.04f, 1f);
+        sr.circle(shankX, topY, Math.max(2.0f, r * 0.09f));
+
+        // Floating Holy Halo Ring
+        float haloY = topY + r * 0.18f;
+        sr.setColor(1f, 0.92f, 0.45f, 0.85f);
+        sr.rect(shankX - r * 0.26f, haloY - 1.5f, r * 0.52f, 3f);
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.rect(shankX - r * 0.18f, haloY - 0.8f, r * 0.36f, 1.6f);
+        // Tiny sunbeams from halo
+        sr.setColor(1f, 0.92f, 0.40f, 0.9f);
+        sr.rectLine(shankX, haloY + 2f, shankX, haloY + 7f, 1.6f);
+        sr.rectLine(shankX - r * 0.22f, haloY + 1f, shankX - r * 0.28f, haloY + 5f, 1.2f);
+        sr.rectLine(shankX + r * 0.22f, haloY + 1f, shankX + r * 0.28f, haloY + 5f, 1.2f);
+    }
+
+    // Compatibility aliases
+    private static void drawThanThoaiRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        drawQuangMinhRod(sr, cx, cy, r, col);
+    }
+    private static void drawThanThoaiLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        drawQuangMinhLine(sr, cx, cy, r, col);
+    }
     private static void drawThanThoaiHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // Winged Archangel Celestial Hook
-        sr.setColor(1f, 0.85f, 0.25f, 1f);
-        sr.rectLine(cx - r * 0.2f, cy + r * 0.6f, cx - r * 0.2f, cy - r * 0.35f, 4.5f);
-        sr.rectLine(cx - r * 0.2f, cy - r * 0.35f, cx + r * 0.4f, cy - r * 0.35f, 4.5f);
-        sr.rectLine(cx + r * 0.4f, cy - r * 0.35f, cx + r * 0.4f, cy + r * 0.25f, 4.5f);
-        // Angelic wings on the shank
-        sr.setColor(1f, 0.95f, 0.80f, 1f);
-        sr.triangle(cx - r * 0.2f, cy + r * 0.2f, cx - r * 0.65f, cy + r * 0.5f, cx - r * 0.2f, cy + r * 0.4f);
-        sr.triangle(cx - r * 0.2f, cy + r * 0.1f, cx - r * 0.55f, cy + r * 0.3f, cx - r * 0.2f, cy + r * 0.25f);
-        // Golden hook spear tip
-        sr.setColor(1f, 1f, 0.7f, 1f);
-        sr.triangle(cx + r * 0.4f, cy + r * 0.25f, cx + r * 0.2f, cy + r * 0.1f, cx + r * 0.55f, cy + r * 0.1f);
+        drawQuangMinhHook(sr, cx, cy, r, col);
     }
 
     // =========================================================================

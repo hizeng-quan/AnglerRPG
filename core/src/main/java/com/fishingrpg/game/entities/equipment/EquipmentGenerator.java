@@ -29,12 +29,13 @@ public class EquipmentGenerator {
         new EqSet("Vực Thẳm", "Trượng Hắc Ám", "Sợi Hắc Mạch", "Móng Vuốt Vực Sâu", 5),
         new EqSet("Hoàng Gia", "Cần Câu Bạch Kim", "Tơ Tằm Thượng Hạng", "Móc Cẩm Thạch", 6),
         new EqSet("Thời Không", "Trượng Thời Gian", "Sợi Dây Xuyên Thấu", "Lưỡi Câu Hư Không", 6),
-        new EqSet("Thần Thoại", "Trượng Ánh Sáng", "Dây Chỉ Vàng", "Lưỡi Câu Thần", 7),
+        new EqSet("Quang Minh", "Trượng Ánh Sáng", "Dây Chỉ Vàng", "Lưỡi Câu Thần", 7),
         new EqSet("Vệ Quốc Vang Danh", "Cần Câu Khởi Nghĩa", "Cước Vệ Quốc", "Lưỡi Sao Vàng", 5), // Same as RARE
         new EqSet("Thần Khí Lạc Hồng", "Trượng Lạc Hồng", "Dây Rồng Thiêng", "Móc Âu Cơ", 15) // HIGHER than Legendary
     };
 
     public static int getSetPoints(String setName) {
+        if ("Thần Thoại".equals(setName)) return 7;
         for (EqSet s : SETS) {
             if (s.setName.equals(setName)) return s.points;
         }
@@ -279,6 +280,7 @@ public class EquipmentGenerator {
             case "Vực Thẳm": return "Set 3 món: Tăng mạnh cơ hội chạm trán BOSS";
             case "Hoàng Gia": return "Set 3 món: +30% Vàng & +30% EXP";
             case "Thời Không": return "Set 3 món: -20% Thời gian hồi chiêu (Cooldown)";
+            case "Quang Minh":
             case "Thần Thoại": return "Set 3 món: +35% Mọi chỉ số phụ";
             case "Vệ Quốc Vang Danh": return "Set 3 món: +29% Cá Hiếm, Kháng đứt dây +10%";
             case "Thần Khí Lạc Hồng": return "Ý Chí Bất Diệt: Vô hiệu hóa kỹ năng Boss, hồi 25% Thể lực!";
