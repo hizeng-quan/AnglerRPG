@@ -270,7 +270,12 @@
     "baseXp": 9,
     "baseGold": 7,
     "map": "bai_bien",
-    "skills": []
+    "skills": [
+      {
+        "id": "an_minh",
+        "isActive": false
+      }
+    ]
   },
   {
     "name": "Cá Cơm",
@@ -296,7 +301,7 @@
     "map": "bai_bien",
     "skills": [
       {
-        "id": "an_minh",
+        "id": "tron_truot",
         "isActive": false
       }
     ]
@@ -330,8 +335,8 @@
     "map": "bai_bien",
     "skills": [
       {
-        "id": "an_minh",
-        "isActive": false
+        "id": "but_toc",
+        "isActive": true
       }
     ]
   },
@@ -364,8 +369,8 @@
     "map": "bai_bien",
     "skills": [
       {
-        "id": "vung_vay",
-        "isActive": false
+        "id": "nhay_vot",
+        "isActive": true
       }
     ]
   },
@@ -381,8 +386,8 @@
     "map": "bai_bien",
     "skills": [
       {
-        "id": "vung_vay",
-        "isActive": false
+        "id": "lan_sau",
+        "isActive": true
       }
     ]
   },
@@ -398,8 +403,8 @@
     "map": "bai_bien",
     "skills": [
       {
-        "id": "nhay_vot",
-        "isActive": true
+        "id": "vo_cung",
+        "isActive": false
       }
     ]
   },
@@ -419,7 +424,7 @@
         "isActive": false
       },
       {
-        "id": "quay_bun",
+        "id": "lan_sau",
         "isActive": true
       }
     ]
@@ -478,12 +483,16 @@
     "map": "bai_bien",
     "skills": [
       {
+        "id": "ben_bi",
+        "isActive": false
+      },
+      {
         "id": "but_toc",
         "isActive": true
       },
       {
-        "id": "nhay_vot",
-        "isActive": true
+        "id": "vung_vay",
+        "isActive": false
       }
     ]
   },
@@ -504,6 +513,10 @@
       },
       {
         "id": "phun_muc_mu",
+        "isActive": true
+      },
+      {
+        "id": "quet_xuc_tu",
         "isActive": true
       },
       {

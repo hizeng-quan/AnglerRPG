@@ -103,6 +103,7 @@ public class EquipmentScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if (Gdx.graphics.getWidth() <= 0 || Gdx.graphics.getHeight() <= 0) return;
         animTimer += delta;
         update(delta);
 
@@ -1342,6 +1343,7 @@ public class EquipmentScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        if (width <= 0 || height <= 0) return;
         viewport.update(width, height, true);
     }
 

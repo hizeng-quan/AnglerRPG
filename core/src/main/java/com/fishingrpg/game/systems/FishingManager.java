@@ -532,7 +532,7 @@ public class FishingManager {
                     if (player.isSetBonusActive() && player.getEquippedRod() != null 
                             && player.getEquippedRod().setName.equals("Thần Khí Lạc Hồng")) {
                         AudioManager.getInstance().playSFX("sfx_skill");
-                        combatMessage = "Ý CHÍ BẤT DIỆT! Vô hiệu hóa " + s.id.replace("_", " ").toUpperCase() + "!";
+                        combatMessage = "Ý CHÍ BẤT DIỆT! Vô hiệu hóa " + com.fishingrpg.game.entities.Fish.getSkillDisplayName(s.id).toUpperCase() + "!";
                         player.addStaminaRegen(player.getMaxStamina() * 0.25f, player.getMaxStamina());
                         if (ftm != null) ftm.addText("MIỄN NHIỄM!", 640f, 450f, Color.CYAN);
                         continue;
@@ -565,24 +565,28 @@ public class FishingManager {
                         fishGiatDienTimer = 2f;
                         combatMessage = "CÁ GIẬT ĐIỆN! Tránh giữ dây!";
                     } else if (s.id.equals("nhay_vot")) {
-                        fishNhayVotTimer = 1f;
-                        combatMessage = "CÁ NHẢY VỌT! Cẩn thận đứt dây!";
-                        player.decreaseTension(player.getCurrentLineTension());
+                        fishNhayVotTimer = 1.8f;
+                        combatMessage = "CÁ NHẢY VỌT! Thả dây kẻo tiếp nước đứt cước!";
+                        player.decreaseTension(player.getCurrentLineTension() * 0.5f);
                     } else if (s.id.equals("song_am")) {
                         fishSongAmTimer = 2f;
                         combatMessage = "SÓNG ÂM! Tension nhiễu loạn!";
                     } else if (s.id.equals("phun_muc_mu")) {
                         fishPhunMucMuTimer = 4f;
                         combatMessage = "PHUN MỰC MÙ! Tối tăm mù mịt!";
+                    } else if (s.id.equals("quet_xuc_tu")) {
+                        player.increaseTension(player.getMaxLineTension() * 0.35f);
+                        player.consumeStamina(25f);
+                        combatMessage = "BẠCH TUỘC QUÉT XÚC TU! Sóng chấn động dữ dội!";
                     } else if (s.id.equals("hut_mau")) {
-                        fishHutMauTimer = 3f;
-                        combatMessage = "HÚT MÁU! Cá đang hút thể lực của bạn!";
+                        fishHutMauTimer = 3.5f;
+                        combatMessage = "MỎ QUẠ CẮN XÉ! Hút thể lực để hồi sinh mệnh!";
                     } else if (s.id.equals("bao_to")) {
                         fishBaoToTimer = 3f;
                         player.increaseTension(player.getMaxLineTension() * 0.4f);
                         combatMessage = "BÃO TỐ! Sấm sét giáng xuống!";
                     }
-                    if (ftm != null) ftm.addText(s.id.replace("_", " ").toUpperCase() + "!", 640f, 450f, Color.YELLOW);
+                    if (ftm != null) ftm.addText(com.fishingrpg.game.entities.Fish.getSkillDisplayName(s.id).toUpperCase() + "!", 640f, 450f, Color.YELLOW);
                 }
             }
         }
@@ -601,8 +605,13 @@ public class FishingManager {
         }
         if (fishNhayVotTimer > 0) {
             fishNhayVotTimer -= delta;
+            if (isSpaceDown) {
+                player.increaseTension(15f * delta);
+            }
             if (fishNhayVotTimer <= 0) {
-                player.increaseTension(player.getMaxLineTension() * 0.9f); // Rơi xuống tăng 90% tension
+                player.increaseTension(player.getMaxLineTension() * 0.35f); // Tiếp nước: giật 35% tension (đã nerf từ 90%!)
+                combatMessage = "CÁ TIẾP NƯỚC! Dây bị giật mạnh!";
+                com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerFishSkillVFX("nhay_vot", 640f, 360f);
             }
         }
         if (fishSongAmTimer > 0) {
@@ -613,7 +622,7 @@ public class FishingManager {
         if (fishHutMauTimer > 0) {
             fishHutMauTimer -= delta;
             player.consumeStamina(20f * delta);
-            currentFish.takeDamage(-currentFish.getMaxHp() * 0.05f * delta); // Hồi 5% mỗi giây * 3 = 15%
+            currentFish.takeDamage(-currentFish.getMaxHp() * 0.04f * delta); // Hồi 4% mỗi giây
         }
         if (fishBaoToTimer > 0) {
             fishBaoToTimer -= delta;
@@ -708,8 +717,12 @@ public class FishingManager {
             float dmg = player.getBasePullDamage() * dmgMult * delta;
             if (fishCuongNoTimer > 0) {
                 dmg = 0f;
-            } else if (currentFish.getPassiveSkill("tron_truot") != null) {
-                dmg *= 0.8f;
+            } else {
+                if (currentFish.getPassiveSkill("tron_truot") != null) dmg *= 0.80f;
+                if (currentFish.getPassiveSkill("ben_bi") != null)     dmg *= 0.85f;
+                if (currentFish.getPassiveSkill("vo_cung") != null)    dmg *= 0.80f;
+                if (currentFish.getPassiveSkill("an_minh") != null && currentFish.getState() == com.fishingrpg.game.entities.Fish.State.IDLE) dmg *= 0.75f;
+                if (fishNhayVotTimer > 0) dmg *= 0.50f;
             }
             currentFish.takeDamage(dmg);
             accumDamage += dmg;
@@ -717,7 +730,11 @@ public class FishingManager {
             slackTimer = 0f;
         } else {
             // Slack: không giữ dây → tension tự giảm
-            player.decreaseTension((20f + player.getMaxLineTension() * 0.1f) * delta);
+            float tensionDec = (20f + player.getMaxLineTension() * 0.1f) * delta;
+            if (currentFish.getPassiveSkill("xuc_tu") != null) {
+                tensionDec *= 0.7f; // Xúc tu quấn chặt làm dây chùng chậm hơn 30%
+            }
+            player.decreaseTension(tensionDec);
             
             if (player.getCurrentLineTension() <= 0f) {
                 slackTimer += delta;

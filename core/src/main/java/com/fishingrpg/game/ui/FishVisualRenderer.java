@@ -122,6 +122,12 @@ public class FishVisualRenderer {
             case "Cá Thu Hoàng Kim":
                 drawCaThuHoangKim(sr, cx, cy, scale, wag, timer);
                 break;
+            case "Cá Ngừ Đại Dương":
+                drawCaNguDaiDuong(sr, cx, cy, scale, wag);
+                break;
+            case "Bạch Tuộc Khổng Lồ":
+                drawBachTuocKhongLo(sr, cx, cy, scale, wag, timer);
+                break;
             default:
                 drawGenericFish(sr, cx, cy, scale, wag, rarityColor);
                 break;
@@ -2888,6 +2894,274 @@ public class FishVisualRenderer {
         sr.circle(cx + 38f * s, cy + 4.5f * s, 2.6f * s);
         sr.setColor(1f, 1f, 1f, 1f);
         sr.circle(cx + 39.4f * s, cy + 5.8f * s, 1.4f * s);
+    }
+
+    // =========================================================================
+    // 29. CÁ NGỪ ĐẠI DƯƠNG (Giant Bluefin/Yellowfin Tuna: Colossal Torpedo, Electric Yellow Finlets)
+    // =========================================================================
+    public static void drawCaNguDaiDuong(ShapeRenderer sr, float cx, float cy, float s, float wag) {
+        float baseX = cx - 48f * s;
+        float baseY = cy;
+        float finWag = wag * 3.0f * s;
+        float tipX = cx - 82f * s + wag * 1.5f * s;
+        float notchX = cx - 62f * s + wag * 0.7f * s;
+
+        // 1. Colossal Lunate Sickle Caudal Fin (Vây đuôi hình bán nguyệt sắc bén - gốc cố định trên thân)
+        sr.setColor(0.10f, 0.22f, 0.38f, 0.95f); // Deep oceanic indigo spine
+        sr.triangle(baseX, baseY, tipX, cy + 34f * s + finWag, notchX, cy + 2f * s + finWag * 0.5f);
+        sr.triangle(baseX, baseY, tipX, cy - 34f * s + finWag, notchX, cy - 2f * s + finWag * 0.5f);
+        // Electric Yellow Finlet Trailing Margins
+        sr.setColor(1.0f, 0.88f, 0.20f, 1f);
+        sr.triangle(baseX - 2f * s, baseY, tipX + 4f * s, cy + 30f * s + finWag, notchX - 2f * s, cy + 2f * s + finWag * 0.5f);
+        sr.triangle(baseX - 2f * s, baseY, tipX + 4f * s, cy - 30f * s + finWag, notchX - 2f * s, cy - 2f * s + finWag * 0.5f);
+        // Razor leading edges
+        sr.setColor(0.06f, 0.14f, 0.25f, 1f);
+        sr.rectLine(baseX, baseY, tipX, cy + 34f * s + finWag, 1.8f * s);
+        sr.rectLine(baseX, baseY, tipX, cy - 34f * s + finWag, 1.8f * s);
+
+        // 2. SIGNATURE ROW OF 9 ELECTRIC-YELLOW FINLETS (9 đôi vây phụ vàng chói viền đen - cố định trên thân)
+        for (int f = 0; f < 9; f++) {
+            float fx = cx - 26f * s - f * 2.6f * s;
+            sr.setColor(1.0f, 0.88f, 0.18f, 1f);
+            sr.triangle(fx, cy + 4.5f * s, fx - 2.8f * s, cy + 11.5f * s, fx - 3.8f * s, cy + 4.5f * s);
+            sr.triangle(fx, cy - 4.5f * s, fx - 2.8f * s, cy - 11.5f * s, fx - 3.8f * s, cy - 4.5f * s);
+            // Black finlet tips
+            sr.setColor(0.08f, 0.12f, 0.16f, 1f);
+            sr.rectLine(fx, cy + 4.5f * s, fx - 2.8f * s, cy + 11.5f * s, 1.2f * s);
+            sr.rectLine(fx, cy - 4.5f * s, fx - 2.8f * s, cy - 11.5f * s, 1.2f * s);
+        }
+
+        // 3. High Falcate Sickle 2nd Dorsal & Anal Fin (Đôi vây lưỡi liềm vàng rực cao vút)
+        sr.setColor(1.0f, 0.85f, 0.18f, 1f);
+        sr.triangle(cx - 22f * s, cy + 14f * s, cx - 8f * s, cy + 15f * s, cx - 18f * s, cy + 35f * s);
+        sr.triangle(cx - 20f * s, cy - 14f * s, cx - 6f * s, cy - 15f * s, cx - 16f * s, cy - 35f * s);
+        sr.setColor(0.10f, 0.25f, 0.40f, 0.9f);
+        sr.rectLine(cx - 8f * s, cy + 15f * s, cx - 18f * s, cy + 35f * s, 1.6f * s);
+        sr.rectLine(cx - 6f * s, cy - 15f * s, cx - 16f * s, cy - 35f * s, 1.6f * s);
+
+        // 1st Spiny Dorsal (Collapsible dark spine fin)
+        sr.setColor(0.12f, 0.28f, 0.45f, 0.9f);
+        sr.triangle(cx + 6f * s, cy + 17f * s, cx + 26f * s, cy + 15f * s, cx + 14f * s, cy + 34f * s);
+        sr.setColor(1.0f, 0.88f, 0.25f, 0.9f);
+        sr.rectLine(cx + 8f * s, cy + 17f * s, cx + 14f * s, cy + 34f * s, 1.6f * s);
+
+        // 4. MASSIVE FUSIFORM GIANT TORPEDO BODY (Thân ngư lôi khổng lồ cơ bắp đại dương)
+        sr.setColor(0.08f, 0.16f, 0.30f, 1f); // Midnight oceanic navy back
+        sr.ellipse(cx - 50f * s, cy - 20f * s, 106f * s, 42f * s);
+        sr.setColor(0.16f, 0.38f, 0.62f, 1f); // Metallic sapphire-blue midflank
+        sr.ellipse(cx - 48f * s, cy - 19f * s, 102f * s, 38f * s);
+        sr.setColor(0.78f, 0.86f, 0.94f, 1f); // Platinum-silver flank
+        sr.ellipse(cx - 44f * s, cy - 18f * s, 94f * s, 30f * s);
+        sr.setColor(0.96f, 0.98f, 1.0f, 1f); // Pure white belly
+        sr.ellipse(cx - 40f * s, cy - 18f * s, 84f * s, 20f * s);
+
+        // 5. Shimmering Vertical Silver Belly Bars (Vằn sọc bạc óng ánh sống bụng - cố định trên thân)
+        sr.setColor(0.68f, 0.80f, 0.92f, 0.65f);
+        for (int b = 0; b < 7; b++) {
+            float bx = cx + 12f * s - b * 7.5f * s;
+            sr.rectLine(bx, cy - 2f * s, bx - 1.5f * s, cy - 14f * s, 1.8f * s);
+        }
+
+        // Luminous Golden Lateral Line
+        sr.setColor(1.0f, 0.88f, 0.30f, 0.90f);
+        sr.rectLine(cx + 32f * s, cy + 2f * s, cx - 46f * s, cy + 2f * s, 2.6f * s);
+        sr.setColor(1.0f, 0.98f, 0.70f, 0.95f);
+        sr.rectLine(cx + 32f * s, cy + 2.5f * s, cx - 46f * s, cy + 2.5f * s, 1.2f * s);
+
+        // 6. Giant Streamlined Conical Head & Operculum (Đầu nhọn hình nón & nắp mang bạc bóng loáng)
+        sr.setColor(0.14f, 0.28f, 0.46f, 1f);
+        sr.triangle(cx + 32f * s, cy + 15f * s, cx + 62f * s, cy + 1f * s, cx + 32f * s, cy - 12f * s);
+        sr.setColor(0.85f, 0.92f, 0.98f, 1f);
+        sr.triangle(cx + 34f * s, cy + 9f * s, cx + 60f * s, cy + 1f * s, cx + 34f * s, cy - 9f * s);
+
+        // Large shining silver opercular plate
+        sr.setColor(0.72f, 0.84f, 0.94f, 0.9f);
+        sr.circle(cx + 26f * s, cy + 2f * s, 13f * s);
+        sr.setColor(0.10f, 0.20f, 0.32f, 1f);
+        sr.rectLine(cx + 62f * s, cy + 1f * s, cx + 44f * s, cy - 2f * s, 1.8f * s); // Mouth line
+
+        // 7. Long High-Swept Sabre Pectoral Fin (Vây ngực lưỡi kiếm dài vút)
+        sr.setColor(0.15f, 0.30f, 0.48f, 0.95f);
+        sr.triangle(cx + 18f * s, cy - 1f * s, cx - 14f * s, cy - 16f * s, cx + 6f * s, cy - 8f * s);
+        sr.setColor(1.0f, 0.88f, 0.25f, 0.85f);
+        sr.rectLine(cx + 18f * s, cy - 1f * s, cx - 12f * s, cy - 15f * s, 1.5f * s);
+
+        // 8. Intelligent Golden-Ringed Predator Eye (Mắt to tròn viền vàng sáng quắc)
+        sr.setColor(1.0f, 0.85f, 0.20f, 1f);
+        sr.circle(cx + 38f * s, cy + 5f * s, 6.2f * s);
+        sr.setColor(0.08f, 0.12f, 0.18f, 1f);
+        sr.circle(cx + 38f * s, cy + 5f * s, 4.2f * s);
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.circle(cx + 39.5f * s, cy + 6.5f * s, 1.6f * s);
+    }
+
+    // =========================================================================
+    // 30. BẠCH TUỘC KHỔNG LỒ (The Colossal Kraken Boss: Abyssal Vortex, 8 Writhing Tentacles, Demon Eye)
+    // =========================================================================
+    public static void drawBachTuocKhongLo(ShapeRenderer sr, float cx, float cy, float s, float wag, float timer) {
+        float pulse = 0.82f + 0.18f * MathUtils.sin(timer * 6f);
+        float fastPulse = 0.75f + 0.25f * MathUtils.sin(timer * 11f);
+
+        // 1. Mythic Abyssal Inky Vortex & Cyan-Violet Energy Rings (Quầng xoáy vực thẳm đa tầng)
+        // Outer Inky Shadow Nebula
+        sr.setColor(0.12f, 0.04f, 0.18f, 0.28f * pulse);
+        sr.circle(cx, cy, 86f * s, 36);
+        // Deep Abyssal Violet Energy Core
+        sr.setColor(0.38f, 0.08f, 0.45f, 0.24f * pulse);
+        sr.circle(cx, cy, 68f * s, 32);
+        // Bioluminescent Cyan Plasma Ring
+        sr.setColor(0.15f, 0.75f, 0.95f, 0.20f * fastPulse);
+        sr.circle(cx, cy, 52f * s, 28);
+
+        // 6 Orbiting Eldritch Inky Embers & Spores (Bào tử phát quang xoay quanh bạo chúa)
+        for (int i = 0; i < 6; i++) {
+            float angle = timer * 2.2f + i * (MathUtils.PI / 3f);
+            float orbitR = (64f + (i % 2) * 14f) * s;
+            float ex = cx + MathUtils.cos(angle) * orbitR;
+            float ey = cy + MathUtils.sin(angle) * (orbitR * 0.7f);
+            sr.setColor(0.35f, 0.85f, 1.0f, 0.85f * fastPulse);
+            sr.circle(ex, ey, (3.0f + (i % 2) * 1.5f) * s);
+            sr.setColor(1.0f, 1.0f, 1.0f, 0.95f);
+            sr.circle(ex, ey, 1.2f * s);
+        }
+
+        // 2. 8 WRITHING GIANT SINUOUS TENTACLES (8 Đại Xúc Tu Khổng Lồ Uốn Lượn - Gốc cố định ở tâm thân)
+        float coreX = cx - 4f * s;
+        float coreY = cy - 8f * s;
+
+        // 8 Tentacle definition arrays: [base angle, mid dx, mid dy, tip dx, tip dy, tip wag phase]
+        float[][] tDef = {
+            // Upper left grasping tentacle (Vươn cao sang trái)
+            {-32f, 28f, -68f, 54f, 0.0f},
+            // Upper center curling tentacle (Cuộn trên đỉnh đầu)
+            {-8f, 38f, -22f, 68f, 1.2f},
+            // Upper right lunging tentacle (Phóng thẳng sang phải trên)
+            {28f, 32f, 64f, 52f, 2.4f},
+            // Far right predatory striking tentacle (Vút dài sang phải)
+            {34f, 8f, 78f, 16f, 3.6f},
+            // Lower right sweeping tentacle (Quét ngang bên phải dưới)
+            {30f, -18f, 66f, -38f, 4.8f},
+            // Bottom center deep anchor tentacle (Xúc tu mỏ neo sâu)
+            {8f, -32f, 14f, -66f, 6.0f},
+            // Bottom left coiled crushing tentacle (Xúc tu xoắn siết bên trái dưới)
+            {-24f, -28f, -48f, -58f, 7.2f},
+            // Far left massive whip tentacle (Đại xúc tu roi da xé nước bên trái)
+            {-36f, -8f, -76f, -14f, 8.4f}
+        };
+
+        for (int t = 0; t < 8; t++) {
+            float[] td = tDef[t];
+            float tWag = MathUtils.sin(timer * 4.5f + td[4]) * 5.5f * s + wag * 2.5f * s;
+            float midX = coreX + td[0] * s;
+            float midY = coreY + td[1] * s;
+            float endX = coreX + td[2] * s + tWag;
+            float endY = coreY + td[3] * s + tWag;
+
+            // Base tentacle muscular trunk (Thân xúc tu bọc cơ bắp tím thẫm)
+            sr.setColor(0.28f, 0.08f, 0.22f, 1f);
+            sr.rectLine(coreX, coreY, midX, midY, Math.max(5.5f, 11f * s));
+            sr.rectLine(midX, midY, endX, endY, Math.max(3.5f, 7f * s));
+
+            // Sinuous crimson inner belly
+            sr.setColor(0.65f, 0.16f, 0.32f, 0.95f);
+            sr.rectLine(coreX, coreY, midX, midY, Math.max(3.2f, 6.5f * s));
+            sr.rectLine(midX, midY, endX, endY, Math.max(2.0f, 4.0f * s));
+
+            // Glowing Bioluminescent Cyan Suction Cups (Hàng giác hút phát quang neon cyan)
+            sr.setColor(0.25f, 0.88f, 1.0f, 0.95f * pulse);
+            float scX1 = coreX + (midX - coreX) * 0.5f;
+            float scY1 = coreY + (midY - coreY) * 0.5f;
+            float scX2 = midX + (endX - midX) * 0.45f;
+            float scY2 = midY + (endY - midY) * 0.45f;
+            sr.circle(scX1, scY1, 3.2f * s);
+            sr.circle(scX2, scY2, 2.6f * s);
+            sr.circle(endX, endY, 2.0f * s); // Suction tip
+            // White core in suction cups
+            sr.setColor(1f, 1f, 1f, 0.95f);
+            sr.circle(scX1, scY1, 1.4f * s);
+            sr.circle(scX2, scY2, 1.1f * s);
+        }
+
+        // 3. MASSIVE ARMORED ABYSSAL CEPHALOPOD CRANIUM / MANTLE (Đầu mũ bạo chúa khổng lồ bọc giáp đá ngầm)
+        float headX = cx - 12f * s;
+        float headY = cy + 18f * s;
+
+        // Dark abyssal indigo-violet mantle dome
+        sr.setColor(0.16f, 0.05f, 0.24f, 1f);
+        sr.ellipse(headX - 32f * s, headY - 26f * s, 64f * s, 54f * s);
+        // Volcanic crimson mantle mid-layer
+        sr.setColor(0.38f, 0.10f, 0.28f, 1f);
+        sr.ellipse(headX - 28f * s, headY - 24f * s, 56f * s, 48f * s);
+        // Deep purple-rose mantle highlights
+        sr.setColor(0.56f, 0.16f, 0.38f, 1f);
+        sr.ellipse(headX - 24f * s, headY - 22f * s, 48f * s, 40f * s);
+
+        // Prehistoric Barnacle / Coral Horn Spikes on Mantle (Gai giáp san hô sừng sắc nhọn)
+        sr.setColor(0.85f, 0.78f, 0.65f, 1f);
+        float[][] horns = { {-24f, 26f, 9f}, {-10f, 36f, 12f}, {8f, 32f, 10f}, {-32f, 10f, 8f} };
+        for (float[] h : horns) {
+            float hx = headX + h[0] * s;
+            float hy = headY + h[1] * s;
+            sr.triangle(hx - 3f * s, hy - 2f * s, hx + 3f * s, hy - 2f * s, hx, hy + h[2] * s);
+            sr.setColor(0.35f, 0.85f, 1.0f, 0.9f);
+            sr.circle(hx, hy + h[2] * s, 1.4f * s); // Glowing horn tip
+            sr.setColor(0.85f, 0.78f, 0.65f, 1f);
+        }
+
+        // Bioluminescent Eldritch Runic Spots across Mantle (Đốm hoa văn cổ ngữ phát quang)
+        sr.setColor(0.35f, 0.85f, 1.0f, 0.85f * pulse);
+        for (int r = 0; r < 7; r++) {
+            float rx = headX + (-18f + r * 6.5f) * s;
+            float ry = headY + (MathUtils.sin(r * 1.2f) * 12f) * s;
+            sr.circle(rx, ry, 2.5f * s);
+            sr.setColor(1f, 1f, 1f, 0.9f);
+            sr.circle(rx, ry, 1.2f * s);
+            sr.setColor(0.35f, 0.85f, 1.0f, 0.85f * pulse);
+        }
+
+        // 4. TERRIFYING ELDER-GOD PREDATOR EYE (Mắt ma quỷ cổ đại vực thẳm rực sáng)
+        float eyeX = cx + 14f * s;
+        float eyeY = cy + 6f * s;
+
+        // Sunken abyssal eye socket & violet veins
+        sr.setColor(0.08f, 0.02f, 0.12f, 1f);
+        sr.circle(eyeX, eyeY, 9.5f * s);
+        // Blazing molten gold-amber iris
+        sr.setColor(1.0f, 0.82f, 0.15f, 1f);
+        sr.circle(eyeX, eyeY, 7.4f * s);
+        // Radiant cyan iris halo ring
+        sr.setColor(0.20f, 0.85f, 1.0f, 0.95f * pulse);
+        sr.circle(eyeX, eyeY, 5.2f * s);
+
+        // Sinister Horizontal Rectangular Octopus Slit Pupil (Đồng tử ngang ma quái)
+        sr.setColor(0.04f, 0.02f, 0.06f, 1f);
+        sr.rect(eyeX - 4.5f * s, eyeY - 1.4f * s, 9.0f * s, 2.8f * s);
+
+        // Blinding diamond specular glint
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(eyeX + 2.2f * s, eyeY + 2.2f * s, 1.8f * s);
+
+        // Secondary Temporal Parietal Eye (Mắt phụ phát quang trên thái dương)
+        sr.setColor(0.35f, 0.85f, 1.0f, 0.95f * fastPulse);
+        sr.circle(headX + 4f * s, headY + 12f * s, 3.8f * s);
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(headX + 4f * s, headY + 12f * s, 1.6f * s);
+
+        // 5. CAVERNOUS BLACK CHITIN BEAK (Mỏ quái vật sừng đen tử thần ở gốc xúc tu)
+        sr.setColor(0.06f, 0.04f, 0.08f, 1f);
+        sr.circle(coreX + 4f * s, coreY - 2f * s, 7.5f * s);
+        // Upper beak hook (pointing down)
+        sr.setColor(0.12f, 0.10f, 0.14f, 1f);
+        sr.triangle(coreX + 1f * s, coreY + 3f * s, coreX + 9f * s, coreY + 3f * s, coreX + 5f * s, coreY - 7f * s);
+        // Ivory razor sharp beak cutting edge
+        sr.setColor(0.95f, 0.92f, 0.82f, 1f);
+        sr.rectLine(coreX + 1f * s, coreY + 3f * s, coreX + 5f * s, coreY - 7f * s, 1.6f * s);
+        sr.rectLine(coreX + 9f * s, coreY + 3f * s, coreX + 5f * s, coreY - 7f * s, 1.6f * s);
+
+        // Dripping Venomous Ink Drops
+        sr.setColor(0.10f, 0.02f, 0.18f, 0.95f);
+        sr.circle(coreX + 5f * s, coreY - 12f * s, 2.2f * s);
+        sr.circle(coreX + 8f * s, coreY - 16f * s, 1.6f * s);
     }
 
     // =========================================================================

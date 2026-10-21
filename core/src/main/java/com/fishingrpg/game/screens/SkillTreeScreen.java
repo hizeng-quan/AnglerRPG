@@ -138,6 +138,7 @@ public class SkillTreeScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if (Gdx.graphics.getWidth() <= 0 || Gdx.graphics.getHeight() <= 0) return;
         animTimer += delta;
         player.update(delta);
         if (player.justFilledStamina) {
@@ -1000,52 +1001,61 @@ public class SkillTreeScreen implements Screen {
 
         switch (id) {
             // ==================== NHÁNH SỨC MẠNH (8 skills) ====================
-            case "keo_manh": { // Kéo Mạnh: Muscular Flexing Arm / Bicep & Tension Fishing Line (Bắp tay cơ bắp & Dây câu căng lửa)
-                // 1. Fiery Muscle Aura & Power Sparks
+            case "keo_manh": { // Kéo Mạnh: Heavy Titanium Battle Hook & Kinetic Pull Surge
+                // 1. Double Kinetic Pull Chevrons (Hai mũi tên xung lực kéo bộc phá hướng lên)
                 sr.setColor(gold);
-                sr.triangle(cx - 5f * s, cy + 9f * s, cx - 1f * s, cy + 14f * s, cx + 1f * s, cy + 8f * s);
-                sr.triangle(cx + 8f * s, cy + 10f * s, cx + 13f * s, cy + 13f * s, cx + 9f * s, cy + 6f * s);
-                sr.circle(cx - 8f * s, cy + 5f * s, 1.4f * s);
-                sr.circle(cx + 10f * s, cy - 2f * s, 1.2f * s);
-
-                // 2. High-Tension Golden Fishing Line Cutting Across
-                sr.setColor(gold);
-                sr.rectLine(cx - 12f * s, cy + 13f * s, cx + 5f * s, cy + 6f * s, 2.0f * s);
-                sr.rectLine(cx + 5f * s, cy + 6f * s, cx + 13f * s, cy - 12f * s, 2.0f * s);
+                // Lower chevron
+                sr.triangle(cx - 9f * s, cy + 3f * s, cx - 13f * s, cy - 2f * s, cx - 11f * s, cy - 2f * s);
+                sr.triangle(cx - 9f * s, cy + 3f * s, cx - 5f * s, cy - 2f * s, cx - 7f * s, cy - 2f * s);
+                // Upper chevron (leading pull)
                 sr.setColor(white);
-                sr.rectLine(cx - 11f * s, cy + 12.5f * s, cx + 4.5f * s, cy + 6f * s, 1.0f * s);
+                sr.triangle(cx - 6f * s, cy + 8f * s, cx - 10f * s, cy + 3.5f * s, cx - 8.5f * s, cy + 3.5f * s);
+                sr.triangle(cx - 6f * s, cy + 8f * s, cx - 2f * s, cy + 3.5f * s, cx - 3.5f * s, cy + 3.5f * s);
 
-                // 3. Deltoid Shoulder & Upper Arm Base
-                sr.setColor(c);
-                sr.rectLine(cx - 11f * s, cy - 8f * s, cx - 4f * s, cy - 8f * s, 6.5f * s);
-                sr.circle(cx - 9f * s, cy - 7f * s, 4.2f * s); // Deltoid cap
-
-                // 4. Tricep & Forearm angling up to fist
-                sr.setColor(c);
-                sr.circle(cx - 4.5f * s, cy - 5.5f * s, 5.0f * s); // Tricep
-                sr.rectLine(cx - 7f * s, cy - 6f * s, cx + 2f * s, cy + 5f * s, 7.0f * s); // Forearm
-
-                // 5. Bulging Peak Bicep (Bắp tay cuồn cuộn nổi khối)
-                sr.setColor(cLight);
-                sr.circle(cx - 1.2f * s, cy + 1.2f * s, 6.0f * s);
+                // 2. High-Tension Braided Line Taut to Eyelet (Sợi dây cước hoàng kim căng đứt sóng)
                 sr.setColor(gold);
-                sr.circle(cx - 0.8f * s, cy + 2.5f * s, 3.2f * s); // Peak muscle highlight
-
-                // 6. Armored Wrist Gauntlet & Clenched Fist
-                sr.setColor(c);
-                sr.rectLine(cx + 1f * s, cy + 3.5f * s, cx + 4f * s, cy + 7.5f * s, 6.5f * s);
-                sr.setColor(cLight);
-                sr.circle(cx + 4.2f * s, cy + 6.8f * s, 4.6f * s);
-
-                // Knuckle Ridge & Thumb Wrapped Tight Around Line
+                sr.rectLine(cx - 15f * s, cy + 15f * s, cx - 5f * s, cy + 5f * s, 2.2f * s);
                 sr.setColor(white);
-                sr.circle(cx + 2.0f * s, cy + 4.8f * s, 2.2f * s); // Thumb
-                sr.rectLine(cx + 2.5f * s, cy + 9.0f * s, cx + 7.5f * s, cy + 7.2f * s, 2.2f * s); // Knuckles
+                sr.rectLine(cx - 14f * s, cy + 14f * s, cx - 5f * s, cy + 5f * s, 1.2f * s);
 
-                // 7. Muscular Striation Shade Lines
-                sr.setColor(0.06f, 0.08f, 0.14f, 0.85f);
-                sr.rectLine(cx - 3.8f * s, cy - 1f * s, cx + 0.5f * s, cy + 3.8f * s, 1.6f * s);
-                sr.rectLine(cx - 7f * s, cy - 5f * s, cx - 2f * s, cy - 3f * s, 1.4f * s);
+                // 3. Heavy Titanium Fishing Hook (Lưỡi câu trợ lực titan uốn cong dũng mãnh)
+                // Eyelet Ring at top of hook shank
+                sr.setColor(gold);
+                sr.circle(cx - 5f * s, cy + 5f * s, 3.2f * s);
+                sr.setColor(0.09f, 0.12f, 0.19f, 1f);
+                sr.circle(cx - 5f * s, cy + 5f * s, 1.6f * s);
+
+                // Straight Hook Shank running down-right
+                sr.setColor(c);
+                sr.rectLine(cx - 5f * s, cy + 3.5f * s, cx + 2f * s, cy - 5.5f * s, 3.4f * s);
+                sr.setColor(white);
+                sr.rectLine(cx - 4.5f * s, cy + 3.5f * s, cx + 2f * s, cy - 5.5f * s, 1.4f * s);
+
+                // Sweeping Hook Bend (Vòm uốn cong lưỡi câu)
+                sr.setColor(c);
+                sr.circle(cx + 3.5f * s, cy - 5f * s, 5.2f * s);
+                sr.setColor(0.09f, 0.12f, 0.19f, 1f);
+                sr.circle(cx + 3.2f * s, cy - 4.5f * s, 3.0f * s);
+
+                // Hook Throat & Point rising up on the right
+                sr.setColor(gold);
+                sr.rectLine(cx + 6f * s, cy - 6f * s, cx + 9f * s, cy + 1.5f * s, 3.2f * s);
+
+                // Razor-Sharp Barb & Needle Point (Ngạnh sắc bén & Mũi câu xé nước)
+                sr.setColor(white);
+                // Main needle point
+                sr.triangle(cx + 7.5f * s, cy + 0.5f * s, cx + 9f * s, cy + 6.5f * s, cx + 10.5f * s, cy + 0.5f * s);
+                // Inward-facing barb
+                sr.setColor(gold);
+                sr.triangle(cx + 7.5f * s, cy + 1.5f * s, cx + 5.2f * s, cy - 0.5f * s, cx + 8.2f * s, cy - 0.5f * s);
+
+                // 4. Explosive Kinetic Haul Sparks (Tia lửa lực kéo bộc phát)
+                sr.setColor(gold);
+                sr.circle(cx + 10.5f * s, cy + 7.5f * s, 1.5f * s);
+                sr.circle(cx + 12f * s, cy + 3f * s, 1.2f * s);
+                sr.circle(cx - 6f * s, cy + 11f * s, 1.3f * s);
+                sr.setColor(white);
+                sr.circle(cx + 9f * s, cy + 6.5f * s, 1.0f * s);
                 break;
             }
 
@@ -1314,147 +1324,274 @@ public class SkillTreeScreen implements Screen {
             }
 
             // ==================== NHÁNH NHANH NHẸN (6 skills) ====================
-            case "giu_day": { // Giữ Dây: Heavy Fishing Reel Spool & Brake Clamp
-                // Outer Spool Flanges
-                sr.setColor(c);
-                sr.rect(cx - 8f * s, cy + 7f * s, 16f * s, 3.5f * s);
-                sr.rect(cx - 8f * s, cy - 10.5f * s, 16f * s, 3.5f * s);
-                sr.rect(cx - 5f * s, cy - 8f * s, 10f * s, 16f * s);
-                
-                // Coiled Braided Fishing Line
-                sr.setColor(gold);
-                sr.rect(cx - 6.5f * s, cy - 6f * s, 13f * s, 12f * s);
-                sr.setColor(new Color(0.8f, 0.65f, 0.2f, 1f));
-                sr.rectLine(cx - 6.5f * s, cy + 2f * s, cx + 6.5f * s, cy + 2f * s, 1.5f * s);
-                sr.rectLine(cx - 6.5f * s, cy - 2f * s, cx + 6.5f * s, cy - 2f * s, 1.5f * s);
-                
-                // Mechanical Drag Clamp
+            case "giu_day": { // Giữ Dây: Aerolite Tournament Spool & Tension Brake Arcs
+                // 1. Dual Outer Magnetic Tension Field Arcs (Vòng đai từ trường trợ lực thanh thoát)
                 sr.setColor(cLight);
-                sr.rectLine(cx - 11f * s, cy, cx + 11f * s, cy, 3.2f * s);
-                sr.setColor(white);
-                sr.circle(cx, cy, 3f * s);
+                sr.circle(cx, cy, 12f * s);
                 sr.setColor(0.09f, 0.12f, 0.19f, 1f);
-                sr.circle(cx, cy, 1.4f * s);
-                break;
-            }
-
-            case "nhanh_tay": { // Nhanh Tay: Triple Swift Speed Arrows (Đầy đủ đầu mũi tên)
-                // 1. Top Arrow
-                sr.setColor(cLight);
-                sr.rectLine(cx - 11f * s, cy + 6.5f * s, cx + 5f * s, cy + 6.5f * s, 2.6f * s);
-                sr.triangle(cx + 5f * s, cy + 9.5f * s, cx + 11f * s, cy + 6.5f * s, cx + 5f * s, cy + 3.5f * s);
-                
-                // 2. Middle Arrow (Longest, leading arrow)
-                sr.setColor(white);
-                sr.rectLine(cx - 8f * s, cy, cx + 8.5f * s, cy, 3.2f * s);
-                sr.setColor(gold);
-                sr.triangle(cx + 8.5f * s, cy + 4.5f * s, cx + 15f * s, cy, cx + 8.5f * s, cy - 4.5f * s);
-                
-                // 3. Bottom Arrow (Complete with sharp arrowhead!)
-                sr.setColor(cLight);
-                sr.rectLine(cx - 11f * s, cy - 6.5f * s, cx + 5f * s, cy - 6.5f * s, 2.6f * s);
-                sr.triangle(cx + 5f * s, cy - 3.5f * s, cx + 11f * s, cy - 6.5f * s, cx + 5f * s, cy - 9.5f * s);
-                
-                // 4. Trailing wind speed lines
-                sr.setColor(c);
-                sr.rectLine(cx - 14f * s, cy + 6.5f * s, cx - 12f * s, cy + 6.5f * s, 1.8f * s);
-                sr.rectLine(cx - 13f * s, cy, cx - 9.5f * s, cy, 2.2f * s);
-                sr.rectLine(cx - 14f * s, cy - 6.5f * s, cx - 12f * s, cy - 6.5f * s, 1.8f * s);
-                break;
-            }
-
-            case "hoi_phuc_nhanh": { // Hồi Phục Nhanh: Rebirth Energy Vortex & Stamina Flask
-                sr.setColor(c);
                 sr.circle(cx, cy, 10.5f * s);
-                sr.setColor(0.09f, 0.12f, 0.19f, 1f);
-                sr.circle(cx, cy, 7.5f * s);
-                
-                // Two directional arrowheads along the ring
-                sr.setColor(cLight);
-                sr.triangle(cx - 10f * s, cy - 1f * s, cx - 6f * s, cy + 6f * s, cx - 12f * s, cy + 6f * s);
-                sr.triangle(cx + 10f * s, cy + 1f * s, cx + 6f * s, cy - 6f * s, cx + 12f * s, cy - 6f * s);
-                
-                // Stamina Dewdrop in center
-                sr.setColor(gold);
-                sr.circle(cx, cy - 1.5f * s, 4.2f * s);
-                sr.triangle(cx - 4.2f * s, cy - 1.5f * s, cx + 4.2f * s, cy - 1.5f * s, cx, cy + 6f * s);
+
+                // 2. Slender Chamfered Spool Flanges (Vành ống cuộn aerolite thanh mảnh)
+                sr.setColor(c);
+                sr.rect(cx - 8.5f * s, cy + 6.5f * s, 17f * s, 2.8f * s);
+                sr.rect(cx - 8.5f * s, cy - 9.3f * s, 17f * s, 2.8f * s);
+                // Rim highlights
                 sr.setColor(white);
-                sr.circle(cx + 1f * s, cy - 1f * s, 1.6f * s);
+                sr.rectLine(cx - 8f * s, cy + 9.3f * s, cx + 8f * s, cy + 9.3f * s, 1.2f * s);
+                sr.rectLine(cx - 8f * s, cy - 6.5f * s, cx + 8f * s, cy - 6.5f * s, 1.2f * s);
+
+                // 3. Braided Fluorocarbon Line Core (Lõi dây cước vàng óng bện chặt)
+                sr.setColor(gold);
+                sr.rect(cx - 6f * s, cy - 5.5f * s, 12f * s, 11f * s);
+                // Delicate winding groove lines
+                sr.setColor(new Color(0.82f, 0.62f, 0.18f, 1f));
+                sr.rectLine(cx - 6f * s, cy + 2.5f * s, cx + 6f * s, cy + 2.5f * s, 1.1f * s);
+                sr.rectLine(cx - 6f * s, cy - 0.5f * s, cx + 6f * s, cy - 0.5f * s, 1.1f * s);
+                sr.rectLine(cx - 6f * s, cy - 3.5f * s, cx + 6f * s, cy - 3.5f * s, 1.1f * s);
+
+                // 4. Sleek Aerodynamic Brake Calipers (Cùm phanh carbon thanh gọn)
+                sr.setColor(cLight);
+                sr.rectLine(cx - 10.5f * s, cy, cx - 6f * s, cy, 2.2f * s);
+                sr.rectLine(cx + 6f * s, cy, cx + 10.5f * s, cy, 2.2f * s);
+                sr.setColor(white);
+                sr.rect(cx - 11f * s, cy - 2f * s, 2f * s, 4f * s);
+                sr.rect(cx + 9f * s, cy - 2f * s, 2f * s, 4f * s);
+
+                // 5. Central Stainless Axle Spindle & Star Drag Core
+                sr.setColor(cLight);
+                sr.circle(cx, cy, 3.8f * s);
+                sr.setColor(white);
+                sr.circle(cx, cy, 2.0f * s);
+                sr.setColor(0.09f, 0.12f, 0.19f, 1f);
+                sr.circle(cx, cy, 1.0f * s);
+
+                // 6. Tension Energy Sparks
+                sr.setColor(gold);
+                sr.circle(cx - 9.5f * s, cy + 8f * s, 1.2f * s);
+                sr.circle(cx + 9.5f * s, cy - 8f * s, 1.2f * s);
                 break;
             }
 
-            case "phan_xa": { // Phản Xạ: Predator Reflex Eye & Electric Arc
-                // Outer Eye Sclera Outline
+            case "nhanh_tay": { // Nhanh Tay: Triple Supersonic Wind Blades & Mach Cone
+                // 1. Slender Mach Shockwave Cone (Nón xung kích siêu thanh thanh thoát)
+                sr.setColor(gold);
+                sr.triangle(cx + 14f * s, cy, cx - 11f * s, cy + 11f * s, cx - 11f * s, cy + 9f * s);
+                sr.triangle(cx + 14f * s, cy, cx - 11f * s, cy - 11f * s, cx - 11f * s, cy - 9f * s);
+
+                // 2. High-Velocity Aerodynamic Slipstream Ribbons (Dải khí động xé gió)
                 sr.setColor(c);
-                sr.circle(cx, cy, 10f * s);
+                sr.rectLine(cx - 15f * s, cy + 5f * s, cx - 3f * s, cy + 5f * s, 1.5f * s);
+                sr.rectLine(cx - 16f * s, cy, cx, cy, 2.0f * s);
+                sr.rectLine(cx - 15f * s, cy - 5f * s, cx - 3f * s, cy - 5f * s, 1.5f * s);
+                sr.setColor(white);
+                sr.rectLine(cx - 12f * s, cy + 5f * s, cx - 5f * s, cy + 5f * s, 0.9f * s);
+                sr.rectLine(cx - 13f * s, cy, cx - 2f * s, cy, 1.0f * s);
+                sr.rectLine(cx - 12f * s, cy - 5f * s, cx - 5f * s, cy - 5f * s, 0.9f * s);
+
+                // 3. Top Flanking Aero Blade (Phi tiễn trên)
+                sr.setColor(cLight);
+                sr.triangle(cx - 3f * s, cy + 8f * s, cx + 8f * s, cy + 5f * s, cx - 3f * s, cy + 2f * s);
+                sr.setColor(white);
+                sr.triangle(cx, cy + 6.8f * s, cx + 8f * s, cy + 5f * s, cx, cy + 3.2f * s);
+
+                // 4. Bottom Flanking Aero Blade (Phi tiễn dưới)
+                sr.setColor(cLight);
+                sr.triangle(cx - 3f * s, cy - 2f * s, cx + 8f * s, cy - 5f * s, cx - 3f * s, cy - 8f * s);
+                sr.setColor(white);
+                sr.triangle(cx, cy - 3.2f * s, cx + 8f * s, cy - 5f * s, cx, cy - 6.8f * s);
+
+                // 5. Central Apex Supersonic Dart (Mũi tên siêu thanh dẫn đầu vươn xa)
+                sr.setColor(c);
+                sr.triangle(cx, cy + 4.5f * s, cx + 15.5f * s, cy, cx, cy - 4.5f * s);
+                sr.setColor(gold);
+                sr.triangle(cx + 3.5f * s, cy + 3.2f * s, cx + 15.5f * s, cy, cx + 3.5f * s, cy - 3.2f * s);
+                sr.setColor(white);
+                sr.triangle(cx + 8f * s, cy + 1.8f * s, cx + 15.5f * s, cy, cx + 8f * s, cy - 1.8f * s);
+
+                // 6. Supersonic Needle Tip Sparkles
+                sr.setColor(gold);
+                sr.circle(cx + 14.5f * s, cy, 1.4f * s);
+                sr.circle(cx + 7.5f * s, cy + 5f * s, 1.1f * s);
+                sr.circle(cx + 7.5f * s, cy - 5f * s, 1.1f * s);
+                break;
+            }
+
+            case "hoi_phuc_nhanh": { // Hồi Phục Nhanh: Slender Celestial Wind Helix & Vitality Dewdrop
+                // 1. Slender Outer Wind Orbit Ring
+                sr.setColor(c);
+                sr.circle(cx, cy, 12f * s);
                 sr.setColor(0.09f, 0.12f, 0.19f, 1f);
-                sr.circle(cx, cy + 6f * s, 9f * s);
-                sr.circle(cx, cy - 6f * s, 9f * s);
-                
-                // Brilliant Golden Iris
+                sr.circle(cx, cy, 10.4f * s);
+
+                // 2. Dual Flowing Celestial Wind Spirals (Dải lụa gió thiên giới uốn lượn)
+                sr.setColor(cLight);
+                sr.triangle(cx - 9.5f * s, cy - 2f * s, cx - 5.5f * s, cy + 7f * s, cx - 11.5f * s, cy + 5f * s);
+                sr.triangle(cx + 9.5f * s, cy + 2f * s, cx + 5.5f * s, cy - 7f * s, cx + 11.5f * s, cy - 5f * s);
+                // Sweeping vortex arcs
+                sr.setColor(white);
+                sr.rectLine(cx - 7.5f * s, cy + 6f * s, cx - 1f * s, cy + 10f * s, 1.4f * s);
+                sr.rectLine(cx + 7.5f * s, cy - 6f * s, cx + 1f * s, cy - 10f * s, 1.4f * s);
+
+                // 3. Central Luminous Vitality Dewdrop (Giọt ngọc tinh hoa hồi phục thanh thoát)
+                sr.setColor(cLight);
+                sr.circle(cx, cy - 1.8f * s, 5.5f * s);
+                sr.triangle(cx - 5.2f * s, cy - 1.8f * s, cx + 5.2f * s, cy - 1.8f * s, cx, cy + 7.5f * s);
+
+                // 4. Inner Radiant Core (Ngọn lửa tinh tú hoàng kim phát sáng)
+                sr.setColor(gold);
+                sr.circle(cx, cy - 2f * s, 3.4f * s);
+                sr.triangle(cx - 3.2f * s, cy - 2f * s, cx + 3.2f * s, cy - 2f * s, cx, cy + 4.8f * s);
+
+                // 5. Specular Crystalline Light Highlight (Ánh ngọc phản chiếu)
+                sr.setColor(white);
+                sr.circle(cx + 1.6f * s, cy + 0.5f * s, 1.5f * s);
+                sr.circle(cx + 2.2f * s, cy - 2.2f * s, 1.0f * s);
+
+                // 6. Ascending Vitality Sparks (Hạt năng lượng bay bổng nhẹ nhàng)
+                sr.setColor(cLight);
+                sr.circle(cx, cy + 11f * s, 1.4f * s);
+                sr.setColor(gold);
+                sr.circle(cx - 4f * s, cy + 8f * s, 1.1f * s);
+                sr.circle(cx + 4f * s, cy + 8f * s, 1.1f * s);
+                break;
+            }
+
+            case "phan_xa": { // Phản Xạ: Aerodynamic Predator Reflex Wings & Lightning Synapse
+                // 1. Swept Aerodynamic Reflex Wings (Đôi cánh phản xạ lướt gió thanh thoát)
+                sr.setColor(c);
+                // Upper sweeping wing arc
+                sr.triangle(cx - 13f * s, cy - 1f * s, cx, cy + 10f * s, cx + 13f * s, cy + 5f * s);
+                // Lower sweeping wing arc
+                sr.triangle(cx - 13f * s, cy + 1f * s, cx, cy - 10f * s, cx + 13f * s, cy - 5f * s);
+                // Dark aerodynamic inner cut creating sleek almond contour
+                sr.setColor(0.09f, 0.12f, 0.19f, 1f);
+                sr.ellipse(cx - 9.5f * s, cy - 5.5f * s, 19f * s, 11f * s);
+
+                // 2. Luminous Cyan Precision Wing Edges
+                sr.setColor(cLight);
+                sr.rectLine(cx - 12f * s, cy, cx, cy + 7.5f * s, 1.6f * s);
+                sr.rectLine(cx, cy + 7.5f * s, cx + 12f * s, cy + 4.5f * s, 1.6f * s);
+                sr.rectLine(cx - 12f * s, cy, cx, cy - 7.5f * s, 1.6f * s);
+                sr.rectLine(cx, cy - 7.5f * s, cx + 12f * s, cy - 4.5f * s, 1.6f * s);
+
+                // 3. Radiant Golden-Amber Reflex Iris (Đồng tử phản xạ hoàng kim rực sáng)
                 sr.setColor(gold);
                 sr.circle(cx, cy, 5.5f * s);
-                
-                // Vertical Predator Slit Pupil
-                sr.setColor(0.09f, 0.12f, 0.19f, 1f);
-                sr.triangle(cx, cy + 5f * s, cx - 1.5f * s, cy, cx + 1.5f * s, cy);
-                sr.triangle(cx, cy - 5f * s, cx - 1.5f * s, cy, cx + 1.5f * s, cy);
-                
-                // Electric Lightning Strike across the eye
-                sr.setColor(white);
-                sr.rectLine(cx - 11f * s, cy + 8f * s, cx - 4f * s, cy + 2f * s, 2f * s);
-                sr.rectLine(cx - 4f * s, cy + 2f * s, cx + 4f * s, cy + 5f * s, 2f * s);
-                sr.rectLine(cx + 4f * s, cy + 5f * s, cx + 11f * s, cy - 4f * s, 2f * s);
-                sr.circle(cx + 1.8f * s, cy + 2f * s, 1.4f * s);
-                break;
-            }
+                sr.setColor(new Color(0.9f, 0.55f, 0.15f, 1f));
+                sr.circle(cx, cy, 3.8f * s);
 
-            case "nhip_nhang": { // Nhịp Nhàng: Harmonious Golden Eighth Notes & Soundwave
-                sr.setColor(c);
-                sr.circle(cx, cy, 11f * s);
-                sr.setColor(0.09f, 0.12f, 0.19f, 1f);
-                sr.circle(cx, cy, 9f * s);
-                
-                // Twin Note Heads
+                // 4. Piercing Vertical Predator Pupil (Con ngươi săn mồi sắc lạnh)
+                sr.setColor(0.08f, 0.10f, 0.16f, 1f);
+                sr.triangle(cx, cy + 4.8f * s, cx - 1.4f * s, cy, cx + 1.4f * s, cy);
+                sr.triangle(cx, cy - 4.8f * s, cx - 1.4f * s, cy, cx + 1.4f * s, cy);
+
+                // 5. Razor-Sharp Lightning Reflex Synapse (Tia chớp phản xạ nanosecond)
+                sr.setColor(white);
+                sr.rectLine(cx - 10f * s, cy + 8f * s, cx - 2.5f * s, cy + 2f * s, 2.0f * s);
+                sr.rectLine(cx - 2.5f * s, cy + 2f * s, cx + 3.5f * s, cy + 4f * s, 2.0f * s);
+                sr.rectLine(cx + 3.5f * s, cy + 4f * s, cx + 10f * s, cy - 7f * s, 2.0f * s);
+
+                // 6. Specular Catchlight & Reflex Sparkles
+                sr.circle(cx + 1.2f * s, cy + 2.2f * s, 1.4f * s);
                 sr.setColor(gold);
-                sr.circle(cx - 5.5f * s, cy - 4.5f * s, 4.2f * s);
-                sr.circle(cx + 4.5f * s, cy - 2f * s, 4.2f * s);
-                
-                // Upright Note Stems
-                sr.setColor(cLight);
-                sr.rectLine(cx - 2.5f * s, cy - 4.5f * s, cx - 2.5f * s, cy + 8f * s, 2.8f * s);
-                sr.rectLine(cx + 7.5f * s, cy - 2f * s, cx + 7.5f * s, cy + 10.5f * s, 2.8f * s);
-                
-                // Connecting Heavy Beam Banner
-                sr.setColor(white);
-                sr.rectLine(cx - 3.5f * s, cy + 8f * s, cx + 8.5f * s, cy + 10.5f * s, 3.5f * s);
-                
-                sr.circle(cx - 8f * s, cy + 6f * s, 1.2f * s);
-                sr.circle(cx + 9f * s, cy + 3f * s, 1.4f * s);
+                sr.circle(cx + 12.5f * s, cy + 5f * s, 1.2f * s);
+                sr.circle(cx - 12.5f * s, cy, 1.2f * s);
                 break;
             }
 
-            case "luot_day": { // Lướt Dây: Ocean Wave Crest & Hydrofoil Skim
-                // Curving Tidal Wave
+            case "nhip_nhang": { // Nhịp Nhàng: Iconic Linked Beamed Eighth Notes & Soundwave Ripples
+                // 1. Harmonious Concentric Soundwave Ripples (Sóng âm điều hòa thanh thoát)
                 sr.setColor(c);
-                sr.circle(cx - 2f * s, cy - 2f * s, 10f * s);
+                sr.circle(cx, cy, 12f * s);
                 sr.setColor(0.09f, 0.12f, 0.19f, 1f);
-                sr.circle(cx - 2f * s, cy + 4.5f * s, 9f * s);
-                
-                // Sea Foam Crest on Wave Lip
-                sr.setColor(white);
-                sr.circle(cx + 6f * s, cy + 3.5f * s, 2.8f * s);
-                sr.circle(cx + 3.5f * s, cy + 6f * s, 2.2f * s);
-                
-                // Hydrofoil Skimming Fin
+                sr.circle(cx, cy, 10.6f * s);
                 sr.setColor(cLight);
-                sr.triangle(cx - 9f * s, cy - 3f * s, cx + 7f * s, cy + 6.5f * s, cx + 11f * s, cy + 2f * s);
-                
-                // Water spray droplets
+                sr.circle(cx, cy, 9.4f * s);
+                sr.setColor(0.09f, 0.12f, 0.19f, 1f);
+                sr.circle(cx, cy, 8.2f * s);
+
+                // Delicate musical stave ribbons in background (khuông nhạc uốn lượn)
+                sr.setColor(c);
+                sr.rectLine(cx - 11f * s, cy - 1f * s, cx + 11f * s, cy + 3.5f * s, 1.0f * s);
+                sr.rectLine(cx - 10f * s, cy - 5f * s, cx + 10f * s, cy - 0.5f * s, 1.0f * s);
+
+                // 2. Twin Tilted Golden Note Heads (Cặp đầu nốt nhạc hoàng kim nổi bật rõ ràng)
+                // Left lower note head (tilted ~30 deg)
+                sr.setColor(gold);
+                sr.ellipse(cx - 8.5f * s, cy - 8f * s, 6.2f * s, 4.8f * s);
                 sr.setColor(white);
-                sr.circle(cx + 10f * s, cy + 6.5f * s, 1.6f * s);
-                sr.circle(cx + 7.5f * s, cy + 9.5f * s, 1.2f * s);
-                sr.circle(cx + 12f * s, cy + 4f * s, 1.2f * s);
+                sr.circle(cx - 6.5f * s, cy - 6.2f * s, 1.2f * s); // Specular glint
+
+                // Right higher note head (tilted ~30 deg)
+                sr.setColor(gold);
+                sr.ellipse(cx + 1.8f * s, cy - 5f * s, 6.2f * s, 4.8f * s);
+                sr.setColor(white);
+                sr.circle(cx + 3.8f * s, cy - 3.2f * s, 1.2f * s); // Specular glint
+
+                // 3. Slender Upright Note Stems (Hai thân nốt nhạc thanh thoát vươn cao)
+                sr.setColor(cLight);
+                // Left stem
+                sr.rectLine(cx - 3.0f * s, cy - 6.5f * s, cx - 3.0f * s, cy + 8.5f * s, 2.2f * s);
+                // Right stem
+                sr.rectLine(cx + 7.3f * s, cy - 3.5f * s, cx + 7.3f * s, cy + 11.5f * s, 2.2f * s);
+
+                // 4. Double Connecting Beams (Thanh xà kép nối nốt móc đôi - Nét đặc trưng âm nhạc)
+                // Primary upper beam
+                sr.setColor(white);
+                sr.rectLine(cx - 4.0f * s, cy + 8.5f * s, cx + 8.5f * s, cy + 11.5f * s, 2.8f * s);
+                // Secondary lower beam (tạo chuẩn mực nốt móc đôi ♫)
+                sr.setColor(cLight);
+                sr.rectLine(cx - 4.0f * s, cy + 5.2f * s, cx + 8.5f * s, cy + 8.2f * s, 2.0f * s);
+
+                // 5. Floating Melody Sparkles & Rhythm Stars (Ngôi sao giai điệu thanh thoát)
+                sr.setColor(gold);
+                sr.circle(cx - 8.5f * s, cy + 6.5f * s, 1.4f * s);
+                sr.circle(cx + 9.5f * s, cy + 5.5f * s, 1.3f * s);
+                sr.circle(cx + 2f * s, cy + 13.5f * s, 1.2f * s);
+                sr.setColor(white);
+                sr.circle(cx + 8f * s, cy + 12f * s, 1.2f * s);
+                break;
+            }
+
+            case "luot_day": { // Lướt Dây: Hydrofoil Wave-Skimmer & Surfing Slipstream
+                // 1. Graceful Tidal Wave Curl (Ngọn sóng biếc uốn lượn mềm mại thanh thoát)
+                sr.setColor(c);
+                sr.triangle(cx - 12f * s, cy - 9f * s, cx + 11f * s, cy - 9f * s, cx + 10f * s, cy + 3f * s);
+                sr.ellipse(cx - 5f * s, cy - 9f * s, 16f * s, 14f * s);
+                // Wave barrel hollow
+                sr.setColor(0.09f, 0.12f, 0.19f, 1f);
+                sr.ellipse(cx - 6f * s, cy - 3f * s, 12f * s, 9f * s);
+
+                // 2. Luminous Wave Lip Curve (Dải sóng ngọc lấp lánh cuộn vòm)
+                sr.setColor(cLight);
+                sr.rectLine(cx - 10f * s, cy - 6f * s, cx + 5f * s, cy + 4f * s, 2.0f * s);
+                sr.rectLine(cx + 5f * s, cy + 4f * s, cx + 9f * s, cy + 1.5f * s, 1.8f * s);
+
+                // 3. Frothing Seafoam Crest Droplets (Bọt sóng bạc trắng cuộn trào trên đỉnh sóng)
+                sr.setColor(white);
+                sr.circle(cx + 8.5f * s, cy + 3f * s, 2.0f * s);
+                sr.circle(cx + 6f * s, cy + 5.5f * s, 1.6f * s);
+                sr.circle(cx + 3f * s, cy + 6.5f * s, 1.3f * s);
+
+                // 4. Aerodynamic Hydrofoil Surfing Blade (Lưỡi kiếm lướt sóng hydrofoil mạ vàng xé nước)
+                sr.setColor(gold);
+                // Swept hydrofoil blade
+                sr.triangle(cx - 9f * s, cy - 4f * s, cx + 8f * s, cy + 7f * s, cx + 12f * s, cy + 2f * s);
+                sr.setColor(white);
+                // Razor planing leading edge
+                sr.rectLine(cx - 9f * s, cy - 4f * s, cx + 8f * s, cy + 7f * s, 1.8f * s);
+
+                // 5. Twin Aerodynamic Slipstream Rooster-Tails (Hai dải rẽ sóng thanh thoát tung bọt)
+                sr.setColor(cLight);
+                sr.rectLine(cx - 7f * s, cy - 6f * s, cx - 13f * s, cy - 8.5f * s, 1.8f * s);
+                sr.rectLine(cx - 4f * s, cy - 7f * s, cx - 9f * s, cy - 10.5f * s, 1.5f * s);
+
+                // 6. Glistening Spray Sparks (Hạt nước lấp lánh bay bổng)
+                sr.setColor(white);
+                sr.circle(cx + 10.5f * s, cy + 7.5f * s, 1.4f * s);
+                sr.circle(cx + 12.5f * s, cy + 4f * s, 1.2f * s);
+                sr.setColor(gold);
+                sr.circle(cx - 12f * s, cy - 7f * s, 1.1f * s);
                 break;
             }
 
@@ -1782,7 +1919,10 @@ public class SkillTreeScreen implements Screen {
         sr.rect(x + w - thickness, y, thickness, h);
     }
 
-    @Override public void resize(int w, int h) { viewport.update(w, h, true); }
+    @Override public void resize(int w, int h) {
+        if (w <= 0 || h <= 0) return;
+        viewport.update(w, h, true);
+    }
 
     @Override public void show() {
         AudioManager.getInstance().playBGM("bgm_menu");

@@ -101,6 +101,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if (Gdx.graphics.getWidth() <= 0 || Gdx.graphics.getHeight() <= 0) return;
         update(delta);
         if (game.getScreen() != this) return;
         draw();
@@ -629,7 +630,7 @@ public class MainMenuScreen implements Screen {
         subFont.draw(game.batch, "Điều khiển: [↑/↓/W/S] Chọn mục  •  [Enter/Space] Bắt đầu", 25f, 26f);
 
         // Version tag on bottom right
-        String ver = "v0.4.11 • Fishing RPG";
+        String ver = "v0.4.13 • Fishing RPG";
         layout.setText(subFont, ver);
         subFont.draw(game.batch, ver, W - layout.width - 25f, 26f);
         subFont.getData().setScale(1f);
@@ -662,6 +663,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void resize(int w, int h) {
+        if (w <= 0 || h <= 0) return;
         viewport.update(w, h, true);
     }
 

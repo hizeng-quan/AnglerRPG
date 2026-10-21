@@ -172,6 +172,7 @@ public class MapScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if (Gdx.graphics.getWidth() <= 0 || Gdx.graphics.getHeight() <= 0) return;
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             goBackToHub();
             return;
@@ -671,6 +672,7 @@ public class MapScreen implements Screen {
 
     @Override
     public void resize(int w, int h) {
+        if (w <= 0 || h <= 0) return;
         viewport.update(w, h, true);
     }
 

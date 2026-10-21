@@ -147,6 +147,7 @@ public class CatalogScreen implements Screen, InputProcessor {
 
     @Override
     public void render(float delta) {
+        if (Gdx.graphics.getWidth() <= 0 || Gdx.graphics.getHeight() <= 0) return;
         animTime += delta;
         if (toastTimer > 0) toastTimer -= delta;
 
@@ -183,11 +184,13 @@ public class CatalogScreen implements Screen, InputProcessor {
         Rectangle scissor = new Rectangle();
         Rectangle clipBounds = new Rectangle(40f, 20f, W - 80f, H - 190f);
         ScissorStack.calculateScissors(camera, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight(), game.batch.getTransformMatrix(), clipBounds, scissor);
-        ScissorStack.pushScissors(scissor);
+        boolean hasScissors = ScissorStack.pushScissors(scissor);
 
         drawCollectionCards();
 
-        ScissorStack.popScissors();
+        if (hasScissors) {
+            ScissorStack.popScissors();
+        }
 
         // 3. Draw Header, Biome Tabs, and Top Navigation
         drawHeaderAndTabs();
@@ -354,7 +357,8 @@ public class CatalogScreen implements Screen, InputProcessor {
             // Right header status / claim button
             if (claimed) {
                 font.setColor(0.3f, 0.95f, 0.5f, 1f);
-                font.draw(game.batch, "✓ ĐÃ HOÀN TẤT", cx + cardW - 140f, cy - 12f);
+                layout.setText(font, "✓ ĐÃ HOÀN TẤT");
+                font.draw(game.batch, layout, cx + cardW - 15f - layout.width, cy - 12f);
             } else if (completed) {
                 font.setColor(0.1f, 0.1f, 0.15f, 1f);
                 font.getData().setScale(0.9f);
@@ -369,7 +373,9 @@ public class CatalogScreen implements Screen, InputProcessor {
             } else {
                 font.setColor(0.85f, 0.75f, 0.4f, 0.9f);
                 font.getData().setScale(0.85f);
-                font.draw(game.batch, "Thưởng: +" + c.rewardGold + "V • +" + c.rewardXp + "XP", cx + cardW - 200f, cy - 12f);
+                String rewStr = "Thưởng: +" + c.rewardGold + "V • +" + c.rewardXp + "XP";
+                layout.setText(font, rewStr);
+                font.draw(game.batch, layout, cx + cardW - 15f - layout.width, cy - 12f);
             }
 
             // Fish Slot texts
@@ -703,16 +709,7 @@ public class CatalogScreen implements Screen, InputProcessor {
         } else {
             for (int si = 0; si < hoveredFish.getSkills().size(); si++) {
                 String sid = hoveredFish.getSkills().get(si).id;
-                String sname = sid;
-                if (sid.equals("vung_vay")) sname = "Vùng vẫy";
-                else if (sid.equals("ben_bi")) sname = "Bền bỉ";
-                else if (sid.equals("tron_truot")) sname = "Trơn trượt";
-                else if (sid.equals("lan_sau")) sname = "Lặn sâu";
-                else if (sid.equals("quay_bun")) sname = "Quẫy bùn";
-                else if (sid.equals("but_toc")) sname = "Bứt tốc";
-                else if (sid.equals("song_than")) sname = "Sóng thần";
-                else if (sid.equals("cuong_no")) sname = "Cuồng nộ";
-                skillsStr += sname;
+                skillsStr += Fish.getSkillDisplayName(sid);
                 if (si < hoveredFish.getSkills().size() - 1) skillsStr += ", ";
             }
         }
@@ -959,7 +956,10 @@ public class CatalogScreen implements Screen, InputProcessor {
         AudioManager.getInstance().playBGM("bgm_menu");
         Gdx.input.setInputProcessor(this);
     }
-    @Override public void resize(int w, int h) { viewport.update(w, h, true); }
+    @Override public void resize(int w, int h) {
+        if (w <= 0 || h <= 0) return;
+        viewport.update(w, h, true);
+    }
     @Override public void pause() {}
     @Override public void resume() {}
     @Override public void hide() {

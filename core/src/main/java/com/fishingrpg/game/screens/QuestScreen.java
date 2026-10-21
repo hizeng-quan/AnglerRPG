@@ -122,6 +122,7 @@ public class QuestScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if (Gdx.graphics.getWidth() <= 0 || Gdx.graphics.getHeight() <= 0) return;
         animTime += delta;
         if (toastTimer > 0) toastTimer -= delta;
 
@@ -437,7 +438,7 @@ public class QuestScreen implements Screen {
         Rectangle scissor = new Rectangle();
         Rectangle clipBounds = new Rectangle(panelX, clipY, panelW, clipH);
         ScissorStack.calculateScissors(camera, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight(), game.batch.getTransformMatrix(), clipBounds, scissor);
-        ScissorStack.pushScissors(scissor);
+        boolean hasScissors = ScissorStack.pushScissors(scissor);
 
         List<Quest> list = (currentTab == 0) ? qm.dailyQuests : (currentTab == 1) ? qm.weeklyQuests : qm.achievements;
         List<Quest> displayList = new ArrayList<>(list);
@@ -617,7 +618,9 @@ public class QuestScreen implements Screen {
         font.getData().setScale(1f);
         game.batch.end();
 
-        ScissorStack.popScissors();
+        if (hasScissors) {
+            ScissorStack.popScissors();
+        }
     }
 
     private int getUnclaimedCountForTab(int tabIndex) {
@@ -846,7 +849,10 @@ public class QuestScreen implements Screen {
         sr.rect(x + w - thickness, y, thickness, h);
     }
 
-    @Override public void resize(int w, int h) { viewport.update(w, h, true); }
+    @Override public void resize(int w, int h) {
+        if (w <= 0 || h <= 0) return;
+        viewport.update(w, h, true);
+    }
     @Override public void pause() {}
     @Override public void resume() {}
     @Override public void dispose() { sr.dispose(); }

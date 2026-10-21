@@ -188,6 +188,7 @@ public class GachaScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if (Gdx.graphics.getWidth() <= 0 || Gdx.graphics.getHeight() <= 0) return;
         animTimer += delta;
         if (messageTimer > 0) messageTimer -= delta;
         
@@ -1902,6 +1903,7 @@ public class GachaScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        if (width <= 0 || height <= 0) return;
         viewport.update(width, height, true);
     }
 

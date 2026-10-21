@@ -273,6 +273,15 @@ public class CombatVFXManager {
                         MathUtils.random(-40f, 40f), -MathUtils.random(250f, 450f),
                         MathUtils.random(3f, 7f), MathUtils.random(0.3f, 0.7f), new Color(0.75f, 0.45f, 1f, 1f), 1));
             }
+        } else if (skillId.equals("quet_xuc_tu")) {
+            // Massive cyan & violet shockwave ripples radiating outward from Kraken slam
+            for (int i = 0; i < 35; i++) {
+                float ang = MathUtils.random(0f, MathUtils.PI2);
+                float spd = MathUtils.random(100f, 280f);
+                particles.add(new Particle(cx, cy, MathUtils.cos(ang) * spd, MathUtils.sin(ang) * spd,
+                        MathUtils.random(5f, 11f), MathUtils.random(0.5f, 0.9f),
+                        (i % 2 == 0) ? new Color(0.2f, 0.95f, 0.9f, 0.95f) : new Color(0.7f, 0.2f, 0.95f, 0.95f), 0));
+            }
         }
     }
 
@@ -349,6 +358,16 @@ public class CombatVFXManager {
                     float a = rot + k * (MathUtils.PI2 / 3f);
                     sr.circle(e.cx + MathUtils.cos(a) * 45f, e.cy + MathUtils.sin(a) * 45f, 9f * alpha);
                 }
+            } else if (e.id.equals("luot_day")) {
+                // Hydrofoil wave skim & surging cyan rooster-tail spray
+                float waveSpan = progress * 160f;
+                sr.setColor(0.20f, 0.85f, 1f, 0.70f * alpha);
+                sr.rectLine(e.cx - waveSpan, e.cy - 12f, e.cx + waveSpan, e.cy + 12f, 6f * (1f - progress));
+                sr.setColor(1f, 1f, 1f, 0.85f * alpha);
+                sr.circle(e.cx + waveSpan * 0.7f, e.cy + 18f * (1f - progress), 8f * (1f - progress));
+                sr.circle(e.cx - waveSpan * 0.7f, e.cy - 18f * (1f - progress), 8f * (1f - progress));
+                sr.setColor(1f, 0.85f, 0.35f, 0.9f * alpha);
+                sr.triangle(e.cx + waveSpan * 0.8f, e.cy + 10f, e.cx + waveSpan * 0.85f + 14f, e.cy, e.cx + waveSpan * 0.6f, e.cy - 8f);
             } else if (e.id.equals("loi_nguyen_troi_buoc")) {
                 // Eldritch purple binding chains
                 sr.setColor(0.65f, 0.20f, 0.85f, 0.85f * alpha);

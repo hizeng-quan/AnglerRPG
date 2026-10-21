@@ -160,6 +160,7 @@ public class ShopScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if (Gdx.graphics.getWidth() <= 0 || Gdx.graphics.getHeight() <= 0) return;
         animTimer += delta;
         player.update(delta);
         if (player.justFilledStamina) {
@@ -785,7 +786,10 @@ public class ShopScreen implements Screen {
         sr.rect(x + w - thickness, y, thickness, h);
     }
 
-    @Override public void resize(int w, int h) { viewport.update(w, h, true); }
+    @Override public void resize(int w, int h) {
+        if (w <= 0 || h <= 0) return;
+        viewport.update(w, h, true);
+    }
     @Override public void pause() {}
     @Override public void resume() {}
     @Override public void hide() {

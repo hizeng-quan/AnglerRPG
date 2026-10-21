@@ -98,6 +98,7 @@ public class EventScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if (Gdx.graphics.getWidth() <= 0 || Gdx.graphics.getHeight() <= 0) return;
         animTimer += delta;
         if (messageTimer > 0) messageTimer -= delta;
 
@@ -1461,7 +1462,10 @@ public class EventScreen implements Screen {
         f.draw(game.batch, text, x + (w - layout.width) / 2f, y + (h + layout.height) / 2f);
     }
 
-    @Override public void resize(int width, int height) { viewport.update(width, height, true); }
+    @Override public void resize(int width, int height) {
+        if (width <= 0 || height <= 0) return;
+        viewport.update(width, height, true);
+    }
     @Override public void pause() {}
     @Override public void resume() {}
     @Override public void hide() {}

@@ -131,7 +131,34 @@ public class Fish implements Catchable {
         return id.equals("quay_bun") || id.equals("but_toc") || id.equals("lan_sau") ||
                id.equals("song_than") || id.equals("cuong_no") || id.equals("phun_muc") ||
                id.equals("giat_dien") || id.equals("nhay_vot") || id.equals("song_am") ||
-               id.equals("phun_muc_mu") || id.equals("hut_mau") || id.equals("bao_to");
+               id.equals("phun_muc_mu") || id.equals("hut_mau") || id.equals("bao_to") ||
+               id.equals("quet_xuc_tu");
+    }
+
+    public static String getSkillDisplayName(String id) {
+        if (id == null) return "";
+        switch (id) {
+            case "vung_vay":     return "Vùng vẫy";
+            case "ben_bi":       return "Bền bỉ";
+            case "tron_truot":   return "Trơn trượt";
+            case "an_minh":      return "Ẩn mình";
+            case "vo_cung":      return "Vỏ cứng";
+            case "lan_sau":      return "Lặn sâu";
+            case "quay_bun":     return "Quẫy bùn";
+            case "but_toc":      return "Bứt tốc";
+            case "nhay_vot":     return "Nhảy vọt";
+            case "song_than":    return "Sóng thần";
+            case "cuong_no":     return "Cuồng nộ";
+            case "phun_muc":     return "Phun mực";
+            case "phun_muc_mu":  return "Phun mực mù";
+            case "giat_dien":    return "Giật điện";
+            case "song_am":      return "Sóng âm";
+            case "bao_to":       return "Bão tố";
+            case "xuc_tu":       return "Xúc tu siết";
+            case "quet_xuc_tu":  return "Quét xúc tu";
+            case "hut_mau":      return "Hút máu";
+            default:             return id.replace("_", " ");
+        }
     }
 
     // =========================================================================
@@ -153,7 +180,8 @@ public class Fish implements Catchable {
                 stateTimer = MathUtils.random(1.5f, 3.5f);
             } else {
                 state = State.IDLE;
-                stateTimer = MathUtils.random(2f, 4f) + extraIdleTime;
+                float anMinhBonus = (getPassiveSkill("an_minh") != null) ? 1.5f : 0f;
+                stateTimer = MathUtils.random(2f, 4f) + extraIdleTime + anMinhBonus;
             }
         }
     }
