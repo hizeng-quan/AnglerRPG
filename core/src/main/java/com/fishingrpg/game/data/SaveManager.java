@@ -201,9 +201,54 @@ public class SaveManager {
         if (file == null || !file.exists()) return false;
         try {
             String content = java.nio.file.Files.readString(file.toPath(), java.nio.charset.StandardCharsets.UTF_8);
+            if (content.trim().startsWith("<?xml") || file.getName().endsWith(".bak")) {
+                return importFromXmlFile(file, player);
+            }
             return importDataFromString(content, player);
         } catch (Exception e) {
             Gdx.app.error(TAG, "Error reading import file: " + file.getPath(), e);
+            return false;
+        }
+    }
+
+    public static boolean importFromXmlFile(java.io.File file, Player player) {
+        try {
+            java.util.Properties props = new java.util.Properties();
+            try (java.io.FileInputStream in = new java.io.FileInputStream(file)) {
+                props.loadFromXML(in);
+            }
+            Preferences savePrefs = Gdx.app.getPreferences(PREF_NAME);
+            savePrefs.clear();
+            for (String key : props.stringPropertyNames()) {
+                savePrefs.putString(key, props.getProperty(key));
+            }
+            savePrefs.flush();
+
+            // Tự động tìm nạp kèm file kỷ lục AnglerRPG_Records.bak trong cùng thư mục
+            java.io.File recFile = new java.io.File(file.getParentFile(), "AnglerRPG_Records.bak");
+            if (!recFile.exists()) {
+                recFile = new java.io.File(file.getParentFile(), "AnglerRPG_Records");
+            }
+            if (recFile.exists()) {
+                java.util.Properties recProps = new java.util.Properties();
+                try (java.io.FileInputStream in = new java.io.FileInputStream(recFile)) {
+                    recProps.loadFromXML(in);
+                }
+                Preferences recPrefs = Gdx.app.getPreferences("AnglerRPG_Records");
+                recPrefs.clear();
+                for (String key : recProps.stringPropertyNames()) {
+                    recPrefs.putString(key, recProps.getProperty(key));
+                }
+                recPrefs.flush();
+            }
+
+            if (player != null) {
+                loadPlayer(player);
+            }
+            Gdx.app.log(TAG, "Loaded .bak XML save file successfully!");
+            return true;
+        } catch (Exception e) {
+            Gdx.app.error(TAG, "Failed to import from XML .bak", e);
             return false;
         }
     }

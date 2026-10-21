@@ -20,6 +20,18 @@
   - Sửa lỗi `ClassCastException` khi nạp dữ liệu: Tái cấu trúc cơ chế giải mã bằng `JsonReader` & `JsonValue`, đọc mượt mà cả cấu trúc JSON thuần túy lẫn đối tượng bọc giá trị (`value`).
   - Hỗ trợ cơ chế dự phòng thông minh (Fallback): Tự động nạp từ `angler_save.json` trong thư mục game hoặc từ nội dung Clipboard nếu người dùng sao chép dữ liệu từ nơi khác.
   - Sau khi nạp thành công, tự động cập nhật ngay toàn bộ thông tin người chơi trong phiên chơi.
+- **Nút "RESET DỮ LIỆU" & Hộp Thoại Xác Nhận Khóa 10 Giây (`MainMenuScreen.java`)**:
+  - Thêm nút quản lý tiến trình **"RESET DỮ LIỆU"** với phong cách viền đỏ thẫm obsidian cao cấp, hài hòa với giao diện Menu chính.
+  - **Hộp thoại xác nhận an toàn với bộ đếm ngược 10 giây (10-Second Lock Modal)**:
+    - Khi bấm vào "RESET DỮ LIỆU", giao diện hiển thị bảng cảnh báo an toàn nổi trên nền phủ tối làm mờ mượt mà.
+    - Cảnh báo rõ ràng việc xóa toàn bộ dữ liệu cấp độ, kinh nghiệm, vàng, kim cương, trang bị, kỹ năng và kỷ lục câu cá để trở về Cấp 1.
+    - **Nút "ĐỒNG Ý" bị khóa và hiển thị thời gian đếm ngược**: `ĐỒNG Ý (10s) ... ĐỒNG Ý (1s)`. Trong 10 giây này, người chơi không thể bấm xác nhận, ngăn chặn 100% tình trạng bấm nhầm.
+    - Thanh đo tiến trình (Progress Bar) động thể hiện trực quan thời gian 10 giây đang trôi qua.
+    - Sau khi hết 10 giây, nút xác nhận chuyển sang trạng thái mở khóa rực sáng **"✓ ĐỒNG Ý XÓA"**.
+    - Nút **"✕ HỦY BỎ"** luôn sẵn sàng ở bất kỳ thời điểm nào (kể cả phím `ESC`) để người chơi hủy thao tác an toàn.
+  - **Cơ chế sao lưu an toàn tự động**:
+    - Trước khi xóa dữ liệu, hệ thống tự động xuất một bản sao lưu an toàn ra file `angler_save_before_reset.json`.
+    - Sau đó làm sạch dữ liệu trong Preferences (`SaveManager.clearSave()`), khởi tạo đối tượng Người chơi mới Cấp 1 và lưu trạng thái khởi điểm sạch sẽ.
 - **Biểu ngữ phản hồi đồ họa (Status Banner)**:
   - Thiết kế thanh thông báo kính mờ (Glassmorphism) phát quang hiển thị trực quan thông điệp thành công (viền xanh lục) hoặc cảnh báo lỗi (viền đỏ) kèm hiệu ứng âm thanh SFX.
 - **Khắc phục triệt để lỗi game vẫn chạy ngầm sau khi đóng**:
