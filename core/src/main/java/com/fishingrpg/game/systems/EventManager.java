@@ -25,8 +25,8 @@ public class EventManager {
         Calendar cal = Calendar.getInstance(TimeZone.getDefault());
         cal.set(2026, Calendar.DECEMBER, 31, 23, 59, 59);
         long end = cal.getTimeInMillis();
-        if (end <= TimeUtils.millis()) {
-            end = TimeUtils.millis() + 60L * 24 * 60 * 60 * 1000L;
+        if (end <= TimeSyncService.getCurrentTimeMillis()) {
+            end = TimeSyncService.getCurrentTimeMillis() + 60L * 24 * 60 * 60 * 1000L;
         }
         EVENT_END_TIMESTAMP = end;
     }
@@ -60,16 +60,16 @@ public class EventManager {
     private static final List<EventQuestTemplate> EVENT_QUEST_POOL = new ArrayList<>();
     static {
         EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_catch", "Hào Khí Đánh Bắt", "Câu thành công 5 con cá", 5, 300, 0, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_perfect", "Tay Cần Lạc Hồng", "Đạt PERFECT khi quăng cần 2 lần", 2, 0, 15, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_perfect", "Tay Cần Lạc Hồng", "Đạt PERFECT khi quăng cần 2 lần", 2, 0, 5, null, 0));
         EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_spend", "Giao Thương Hội Làng", "Tiêu 150 Vàng trong ngày", 150, 300, 0, null, 0));
         EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_gacha", "Vận May Sự Kiện", "Quay Gacha 1 lần", 1, 0, 0, "Vé Quay", 1));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_rare", "Cá Quý Đại Dương", "Câu 1 con cá Rare trở lên", 1, 0, 15, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_rare", "Cá Quý Đại Dương", "Câu 1 con cá Rare trở lên", 1, 0, 5, null, 0));
         EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_skill", "Khí Phách Ngư Dân", "Dùng 3 lần Kỹ năng khi câu cá", 3, 250, 0, null, 0));
         EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_catch_3", "Ra Khơi Quyết Thắng", "Câu thành công 3 con cá", 3, 200, 0, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_perfect_1", "Bách Phát Bách Trúng", "Đạt PERFECT 1 lần khi quăng cần", 1, 0, 10, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_perfect_1", "Bách Phát Bách Trúng", "Đạt PERFECT 1 lần khi quăng cần", 1, 0, 3, null, 0));
         EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_spend_100", "Trù Bị Ngư Cụ", "Tiêu 100 Vàng tại Tiệm Tạp Hóa", 100, 200, 0, null, 0));
         EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_skill_2", "Tuyệt Kỹ Ngư Gia", "Dùng 2 lần Kỹ năng trong lúc câu", 2, 200, 0, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_rare_boss", "Chiến Tích Vang Danh", "Bắt 1 con cá Rare trở lên", 1, 0, 20, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_rare_boss", "Chiến Tích Vang Danh", "Bắt 1 con cá Rare trở lên", 1, 0, 8, null, 0));
         EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_catch_7", "Ngư Phủ Tinh Anh", "Câu thành công 7 con cá", 7, 400, 0, null, 0));
     }
 
@@ -93,7 +93,7 @@ public class EventManager {
     }
 
     public void checkAndResetDailyMissions() {
-        long currentDayStart = getStartOfDay(TimeUtils.millis());
+        long currentDayStart = getStartOfDay(TimeSyncService.getCurrentTimeMillis());
         if (player.getLastEventMissionResetTimestamp() < currentDayStart || eventQuests.isEmpty()) {
             player.setLastEventMissionResetTimestamp(currentDayStart);
             resetEventQuests();
@@ -128,8 +128,8 @@ public class EventManager {
         milestoneClaimedToday = true;
         player.addEventPoints(1);
         player.gainGold(500);
-        player.addDiamonds(20);
-        return "Nhận Mốc 4/6: +1 Điểm Sự Kiện, +500 Vàng, +20 KC!";
+        player.addDiamonds(10);
+        return "Nhận Mốc 4/6: +1 Điểm Sự Kiện, +500 Vàng, +10 KC!";
     }
 
     public String claimQuestReward(Quest q) {
@@ -177,7 +177,7 @@ public class EventManager {
     }
 
     public boolean hasClaimedLoginToday() {
-        long currentDayStart = getStartOfDay(TimeUtils.millis());
+        long currentDayStart = getStartOfDay(TimeSyncService.getCurrentTimeMillis());
         return player.getLastLoginTimestamp() >= currentDayStart;
     }
 
@@ -186,29 +186,29 @@ public class EventManager {
         if (day > 25) day = 25;
         switch (day) {
             case 1:  return new DailyReward(1, "500 Vàng", "+500 Vàng", false);
-            case 2:  return new DailyReward(2, "15 Kim Cương", "+15 KC", false);
+            case 2:  return new DailyReward(2, "10 Kim Cương", "+10 KC", false);
             case 3:  return new DailyReward(3, "3x Mồi Thơm", "x3 Mồi Thơm", false);
             case 4:  return new DailyReward(4, "1,000 Vàng", "+1000 Vàng", false);
             case 5:  return new DailyReward(5, "Mốc 5 Ngày", "+1 Điểm SK, +1 Vé Quay", true);
             case 6:  return new DailyReward(6, "1,200 Vàng", "+1200 Vàng", false);
-            case 7:  return new DailyReward(7, "20 Kim Cương", "+20 KC", false);
+            case 7:  return new DailyReward(7, "15 Kim Cương", "+15 KC", false);
             case 8:  return new DailyReward(8, "3x Bánh Mì", "x3 Bánh Mì", false);
             case 9:  return new DailyReward(9, "1,500 Vàng", "+1500 Vàng", false);
             case 10: return new DailyReward(10, "Mốc 10 Ngày", "+1 Điểm SK, +2 Vé Quay", true);
             case 11: return new DailyReward(11, "2,000 Vàng", "+2000 Vàng", false);
-            case 12: return new DailyReward(12, "25 Kim Cương", "+25 KC", false);
+            case 12: return new DailyReward(12, "15 Kim Cương", "+15 KC", false);
             case 13: return new DailyReward(13, "5x Mồi Rủi Ro", "x5 Mồi Rủi Ro", false);
             case 14: return new DailyReward(14, "2,500 Vàng", "+2500 Vàng", false);
             case 15: return new DailyReward(15, "Mốc 15 Ngày", "+2 Điểm SK, +1 Vé Cao Cấp", true);
             case 16: return new DailyReward(16, "3,000 Vàng", "+3000 Vàng", false);
-            case 17: return new DailyReward(17, "30 Kim Cương", "+30 KC", false);
+            case 17: return new DailyReward(17, "20 Kim Cương", "+20 KC", false);
             case 18: return new DailyReward(18, "3,500 Vàng", "+3500 Vàng", false);
-            case 19: return new DailyReward(19, "35 Kim Cương", "+35 KC", false);
+            case 19: return new DailyReward(19, "20 Kim Cương", "+20 KC", false);
             case 20: return new DailyReward(20, "Mốc 20 Ngày", "+2 Điểm SK, +2 Vé Cao Cấp", true);
             case 21: return new DailyReward(21, "4,000 Vàng", "+4000 Vàng", false);
-            case 22: return new DailyReward(22, "40 Kim Cương", "+40 KC", false);
+            case 22: return new DailyReward(22, "25 Kim Cương", "+25 KC", false);
             case 23: return new DailyReward(23, "5,000 Vàng", "+5000 Vàng", false);
-            case 24: return new DailyReward(24, "50 Kim Cương", "+50 KC", false);
+            case 24: return new DailyReward(24, "30 Kim Cương", "+30 KC", false);
             case 25: return new DailyReward(25, "Đại Mốc 25 Ngày", "+3 Điểm SK, Cần Vệ Quốc", true);
             default: return new DailyReward(day, "1,000 Vàng", "+1000 Vàng", false);
         }
@@ -218,7 +218,7 @@ public class EventManager {
         checkAndResetDailyMissions();
         if (hasClaimedLoginToday()) return null;
 
-        long currentDayStart = getStartOfDay(TimeUtils.millis());
+        long currentDayStart = getStartOfDay(TimeSyncService.getCurrentTimeMillis());
         player.setLastLoginTimestamp(currentDayStart);
 
         int currentDays = player.getTotalLoginDaysThisMonth();
@@ -228,29 +228,29 @@ public class EventManager {
         DailyReward r = getDailyReward(nextDay);
         switch (nextDay) {
             case 1:  player.gainGold(500); break;
-            case 2:  player.addDiamonds(15); break;
+            case 2:  player.addDiamonds(10); break;
             case 3:  player.addItem("Mồi Thơm", 3); break;
             case 4:  player.gainGold(1000); break;
             case 5:  player.addEventPoints(1); player.addGachaTickets(1); break;
             case 6:  player.gainGold(1200); break;
-            case 7:  player.addDiamonds(20); break;
+            case 7:  player.addDiamonds(15); break;
             case 8:  player.addItem("Bánh Mì", 3); break;
             case 9:  player.gainGold(1500); break;
             case 10: player.addEventPoints(1); player.addGachaTickets(2); break;
             case 11: player.gainGold(2000); break;
-            case 12: player.addDiamonds(25); break;
+            case 12: player.addDiamonds(15); break;
             case 13: player.addItem("Mồi Rủi Ro", 5); break;
             case 14: player.gainGold(2500); break;
             case 15: player.addEventPoints(2); player.addPremiumTickets(1); break;
             case 16: player.gainGold(3000); break;
-            case 17: player.addDiamonds(30); break;
+            case 17: player.addDiamonds(20); break;
             case 18: player.gainGold(3500); break;
-            case 19: player.addDiamonds(35); break;
+            case 19: player.addDiamonds(20); break;
             case 20: player.addEventPoints(2); player.addPremiumTickets(2); break;
             case 21: player.gainGold(4000); break;
-            case 22: player.addDiamonds(40); break;
+            case 22: player.addDiamonds(25); break;
             case 23: player.gainGold(5000); break;
-            case 24: player.addDiamonds(50); break;
+            case 24: player.addDiamonds(30); break;
             case 25: 
                 player.addEventPoints(3); 
                 player.addPremiumTickets(3); 
@@ -275,7 +275,7 @@ public class EventManager {
     }
 
     public String getEventTimeRemaining() {
-        long now = TimeUtils.millis();
+        long now = TimeSyncService.getCurrentTimeMillis();
         long diff = EVENT_END_TIMESTAMP - now;
         if (diff <= 0) return "SỰ KIỆN KẾT THÚC";
         

@@ -112,14 +112,26 @@ public class AudioManager {
     }
 
     public void playSFX(String sfxName) {
-        if (isSfxMuted) return;
+        if (isSfxMuted || sfxName == null) return;
+        
+        // Convenience aliases for legacy sound names
+        if ("button_click".equals(sfxName)) sfxName = "sfx_button";
+        if ("victory".equals(sfxName)) sfxName = "sfx_success";
         
         if (!sfxMap.containsKey(sfxName)) {
             try {
-                Sound sound = Gdx.audio.newSound(Gdx.files.internal("audio/sfx/" + sfxName + ".wav"));
-                sfxMap.put(sfxName, sound);
+                com.badlogic.gdx.files.FileHandle fh = Gdx.files.internal("audio/sfx/" + sfxName + ".wav");
+                if (fh.exists()) {
+                    Sound sound = Gdx.audio.newSound(fh);
+                    sfxMap.put(sfxName, sound);
+                } else {
+                    Gdx.app.log("AudioManager", "SFX not found on disk: " + sfxName);
+                    sfxMap.put(sfxName, null);
+                    return;
+                }
             } catch (Exception e) {
                 Gdx.app.error("AudioManager", "Could not load SFX: " + sfxName, e);
+                sfxMap.put(sfxName, null);
                 return;
             }
         }
@@ -199,10 +211,10 @@ public class AudioManager {
     
     public void dispose() {
         for (Music m : bgmMap.values()) {
-            m.dispose();
+            if (m != null) m.dispose();
         }
         for (Sound s : sfxMap.values()) {
-            s.dispose();
+            if (s != null) s.dispose();
         }
         bgmMap.clear();
         sfxMap.clear();

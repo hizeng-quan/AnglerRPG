@@ -62,13 +62,22 @@ public class EquipmentGenerator {
 
         Rarity rarity = rollRarity(guaranteeRare, player);
         EquipmentType type = EquipmentType.values()[MathUtils.random(0, 2)];
-        EqSet set = SETS[MathUtils.random(0, SETS.length - 1)];
+        // Standard Gacha strictly excludes Limited sets
+        EqSet set;
+        do {
+            set = SETS[MathUtils.random(0, SETS.length - 1)];
+        } while (set.setName.equals("Thần Khí Lạc Hồng") || set.setName.equals("Vệ Quốc Vang Danh"));
         
         Equipment eq = new Equipment();
         eq.type = type;
         eq.rarity = rarity;
         eq.setName = set.setName;
         eq.level = 1; // Unused, keeping for save compatibility
+        
+        // Strict safety check: Set Lạc Hồng always has fixed rarity LIMITED_PREMIUM
+        if ("Thần Khí Lạc Hồng".equals(eq.setName)) {
+            eq.rarity = Rarity.LIMITED_PREMIUM;
+        }
         
         int mult = set.points + getRarityPoints(rarity);
         
@@ -161,9 +170,25 @@ public class EquipmentGenerator {
         EqSet set = null;
         
         if (rarity == Rarity.LIMITED_PREMIUM) {
-            for (EqSet s : SETS) {
-                if (s.setName.equals("Thần Khí Lạc Hồng")) {
-                    set = s; break;
+            // 50% Rate-up đúng Set Thần Khí Lạc Hồng, 50% còn lại là các Set 6★ khác (Quang Minh, Thời Không, Hoàng Gia)
+            if (MathUtils.randomBoolean(0.5f)) {
+                for (EqSet s : SETS) {
+                    if (s.setName.equals("Thần Khí Lạc Hồng")) {
+                        set = s; break;
+                    }
+                }
+            } else {
+                String[] offBannerSets = {"Quang Minh", "Thời Không", "Hoàng Gia"};
+                String picked = offBannerSets[MathUtils.random(0, offBannerSets.length - 1)];
+                for (EqSet s : SETS) {
+                    if (s.setName.equals(picked)) {
+                        set = s; break;
+                    }
+                }
+            }
+            if (set == null) {
+                for (EqSet s : SETS) {
+                    if (s.setName.equals("Thần Khí Lạc Hồng")) { set = s; break; }
                 }
             }
         } else {
@@ -178,6 +203,11 @@ public class EquipmentGenerator {
         eq.rarity = rarity;
         eq.setName = set.setName;
         eq.level = 1;
+        
+        // Strict safety rule: Set Lạc Hồng ONLY exists with fixed rarity LIMITED_PREMIUM (6★ explosion)
+        if ("Thần Khí Lạc Hồng".equals(eq.setName)) {
+            eq.rarity = Rarity.LIMITED_PREMIUM;
+        }
         
         int mult = set.points + getRarityPoints(eq.rarity);
         

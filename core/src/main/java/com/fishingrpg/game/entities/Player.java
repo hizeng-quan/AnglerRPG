@@ -33,6 +33,7 @@ public class Player {
     private QuestManager questManager;
     private String currentMap = "ao_lang";
     private java.util.HashSet<String> claimedCollections = new java.util.HashSet<>();
+    private java.util.HashSet<String> claimedFishCatalog = new java.util.HashSet<>();
 
     private String[] equippedActives = new String[4];
     private String[] equippedPassives = new String[2];
@@ -273,6 +274,11 @@ public class Player {
     public java.util.HashSet<String> getClaimedCollections() { return claimedCollections; }
     public void claimCollection(String collectionId) { claimedCollections.add(collectionId); }
     public void setClaimedCollections(java.util.HashSet<String> collections) { this.claimedCollections = collections; }
+
+    public java.util.HashSet<String> getClaimedFishCatalog() { return claimedFishCatalog; }
+    public void claimFishCatalog(String fishName) { claimedFishCatalog.add(fishName); }
+    public boolean isFishCatalogClaimed(String fishName) { return claimedFishCatalog.contains(fishName); }
+    public void setClaimedFishCatalog(java.util.HashSet<String> set) { this.claimedFishCatalog = set != null ? set : new java.util.HashSet<>(); }
 
     private float castRarityBoost = 0f;
     public float getCastRarityBoost() { return castRarityBoost; }

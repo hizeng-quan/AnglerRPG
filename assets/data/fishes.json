@@ -1,111 +1,36 @@
 [
   {
     "name": "Cá Rô Đồng",
-    "maxHp": 40.0,
-    "pullStrength": 8.0,
+    "maxHp": 75.0,
+    "pullStrength": 10.0,
     "rarity": "COMMON",
     "baseWeightKg": 0.3,
     "baseLengthCm": 18.0,
-    "baseXp": 5,
-    "baseGold": 3,
+    "baseXp": 8,
+    "baseGold": 6,
     "map": "ao_lang",
     "skills": []
   },
   {
     "name": "Cá Diếc",
-    "maxHp": 30.0,
-    "pullStrength": 6.0,
+    "maxHp": 65.0,
+    "pullStrength": 8.0,
     "rarity": "COMMON",
     "baseWeightKg": 0.2,
     "baseLengthCm": 15.0,
-    "baseXp": 4,
-    "baseGold": 2,
+    "baseXp": 6,
+    "baseGold": 5,
     "map": "ao_lang",
     "skills": []
   },
   {
     "name": "Cá Chép",
-    "maxHp": 80.0,
+    "maxHp": 95.0,
     "pullStrength": 14.0,
     "rarity": "COMMON",
     "baseWeightKg": 1.5,
     "baseLengthCm": 35.0,
-    "baseXp": 12,
-    "baseGold": 8,
-    "map": "ao_lang",
-    "skills": [
-      {
-        "id": "ben_bi",
-        "isActive": false
-      }
-    ]
-  },
-  {
-    "name": "Cá Mè",
-    "maxHp": 50.0,
-    "pullStrength": 10.0,
-    "rarity": "COMMON",
-    "baseWeightKg": 1.0,
-    "baseLengthCm": 25.0,
-    "baseXp": 8,
-    "baseGold": 5,
-    "map": "ao_lang",
-    "skills": [
-      {
-        "id": "tron_truot",
-        "isActive": false
-      }
-    ]
-  },
-  {
-    "name": "Cá Mương",
-    "maxHp": 25.0,
-    "pullStrength": 5.0,
-    "rarity": "COMMON",
-    "baseWeightKg": 0.1,
-    "baseLengthCm": 10.0,
-    "baseXp": 3,
-    "baseGold": 2,
-    "map": "ao_lang",
-    "skills": []
-  },
-  {
-    "name": "Cá Lóc Nhí",
-    "maxHp": 35.0,
-    "pullStrength": 7.0,
-    "rarity": "COMMON",
-    "baseWeightKg": 0.25,
-    "baseLengthCm": 16.0,
-    "baseXp": 4,
-    "baseGold": 3,
-    "map": "ao_lang",
-    "skills": []
-  },
-  {
-    "name": "Cá Trê",
-    "maxHp": 60.0,
-    "pullStrength": 18.0,
-    "rarity": "UNCOMMON",
-    "baseWeightKg": 0.8,
-    "baseLengthCm": 28.0,
-    "baseXp": 18,
-    "baseGold": 14,
-    "map": "ao_lang",
-    "skills": [
-      {
-        "id": "vung_vay",
-        "isActive": false
-      }
-    ]
-  },
-  {
-    "name": "Cá Trôi",
-    "maxHp": 70.0,
-    "pullStrength": 15.0,
-    "rarity": "UNCOMMON",
-    "baseWeightKg": 1.2,
-    "baseLengthCm": 32.0,
-    "baseXp": 15,
+    "baseXp": 16,
     "baseGold": 12,
     "map": "ao_lang",
     "skills": [
@@ -116,38 +41,113 @@
     ]
   },
   {
+    "name": "Cá Mè",
+    "maxHp": 80.0,
+    "pullStrength": 12.0,
+    "rarity": "COMMON",
+    "baseWeightKg": 1.0,
+    "baseLengthCm": 25.0,
+    "baseXp": 12,
+    "baseGold": 8,
+    "map": "ao_lang",
+    "skills": [
+      {
+        "id": "tron_truot",
+        "isActive": false
+      }
+    ]
+  },
+  {
+    "name": "Cá Mương",
+    "maxHp": 55.0,
+    "pullStrength": 7.0,
+    "rarity": "COMMON",
+    "baseWeightKg": 0.1,
+    "baseLengthCm": 10.0,
+    "baseXp": 5,
+    "baseGold": 4,
+    "map": "ao_lang",
+    "skills": []
+  },
+  {
+    "name": "Cá Lóc Nhí",
+    "maxHp": 70.0,
+    "pullStrength": 9.0,
+    "rarity": "COMMON",
+    "baseWeightKg": 0.25,
+    "baseLengthCm": 16.0,
+    "baseXp": 7,
+    "baseGold": 5,
+    "map": "ao_lang",
+    "skills": []
+  },
+  {
+    "name": "Cá Trê",
+    "maxHp": 130.0,
+    "pullStrength": 22.0,
+    "rarity": "UNCOMMON",
+    "baseWeightKg": 0.8,
+    "baseLengthCm": 28.0,
+    "baseXp": 26,
+    "baseGold": 20,
+    "map": "ao_lang",
+    "skills": [
+      {
+        "id": "vung_vay",
+        "isActive": false
+      }
+    ]
+  },
+  {
+    "name": "Cá Trôi",
+    "maxHp": 150.0,
+    "pullStrength": 19.0,
+    "rarity": "UNCOMMON",
+    "baseWeightKg": 1.2,
+    "baseLengthCm": 32.0,
+    "baseXp": 24,
+    "baseGold": 18,
+    "map": "ao_lang",
+    "skills": [
+      {
+        "id": "ben_bi",
+        "isActive": false
+      }
+    ]
+  },
+  {
     "name": "Cá Trắm Cỏ",
-    "maxHp": 90.0,
-    "pullStrength": 16.0,
+    "maxHp": 165.0,
+    "pullStrength": 20.0,
     "rarity": "UNCOMMON",
     "baseWeightKg": 2.0,
     "baseLengthCm": 40.0,
-    "baseXp": 20,
-    "baseGold": 15,
+    "baseXp": 30,
+    "baseGold": 24,
     "map": "ao_lang",
     "skills": []
   },
   {
     "name": "Cá Chim Trắng",
-    "maxHp": 65.0,
-    "pullStrength": 14.0,
+    "maxHp": 140.0,
+    "pullStrength": 18.0,
     "rarity": "UNCOMMON",
     "baseWeightKg": 1.1,
     "baseLengthCm": 30.0,
-    "baseXp": 16,
-    "baseGold": 13,
+    "baseXp": 24,
+    "baseGold": 18,
     "map": "ao_lang",
     "skills": []
   },
   {
     "name": "Cá Lóc Bông",
-    "maxHp": 120.0,
-    "pullStrength": 25.0,
+    "maxHp": 240.0,
+    "pullStrength": 30.0,
     "rarity": "RARE",
     "baseWeightKg": 3.5,
     "baseLengthCm": 55.0,
-    "baseXp": 40,
-    "baseGold": 35,
+    "baseXp": 65,
+    "baseGold": 55,
     "map": "ao_lang",
     "skills": [
       {
@@ -162,13 +162,13 @@
   },
   {
     "name": "Cá Trê Lai",
-    "maxHp": 150.0,
-    "pullStrength": 22.0,
+    "maxHp": 250.0,
+    "pullStrength": 26.0,
     "rarity": "RARE",
     "baseWeightKg": 4.0,
     "baseLengthCm": 60.0,
-    "baseXp": 35,
-    "baseGold": 30,
+    "baseXp": 60,
+    "baseGold": 50,
     "map": "ao_lang",
     "skills": [
       {
@@ -183,13 +183,13 @@
   },
   {
     "name": "Cá Chép Vàng",
-    "maxHp": 200.0,
-    "pullStrength": 35.0,
+    "maxHp": 360.0,
+    "pullStrength": 42.0,
     "rarity": "EPIC",
     "baseWeightKg": 5.0,
     "baseLengthCm": 70.0,
-    "baseXp": 80,
-    "baseGold": 100,
+    "baseXp": 130,
+    "baseGold": 160,
     "map": "ao_lang",
     "skills": [
       {
@@ -204,13 +204,13 @@
   },
   {
     "name": "Cá Lăng Khổng Lồ",
-    "maxHp": 250.0,
-    "pullStrength": 40.0,
+    "maxHp": 400.0,
+    "pullStrength": 46.0,
     "rarity": "EPIC",
     "baseWeightKg": 8.0,
     "baseLengthCm": 85.0,
-    "baseXp": 90,
-    "baseGold": 120,
+    "baseXp": 150,
+    "baseGold": 190,
     "map": "ao_lang",
     "skills": [
       {
@@ -225,7 +225,7 @@
   },
   {
     "name": "Thủy Quái Sông Trà",
-    "maxHp": 600.0,
+    "maxHp": 850.0,
     "pullStrength": 80.0,
     "rarity": "BOSS",
     "baseWeightKg": 45.0,
@@ -250,25 +250,25 @@
   },
   {
     "name": "Cá Chỉ Vàng",
-    "maxHp": 45.0,
-    "pullStrength": 15.0,
+    "maxHp": 105.0,
+    "pullStrength": 18.0,
     "rarity": "COMMON",
     "baseWeightKg": 0.15,
     "baseLengthCm": 15.0,
-    "baseXp": 8,
-    "baseGold": 6,
+    "baseXp": 12,
+    "baseGold": 10,
     "map": "bai_bien",
     "skills": []
   },
   {
     "name": "Cá Đục",
-    "maxHp": 55.0,
-    "pullStrength": 12.0,
+    "maxHp": 120.0,
+    "pullStrength": 16.0,
     "rarity": "COMMON",
     "baseWeightKg": 0.25,
     "baseLengthCm": 18.0,
-    "baseXp": 9,
-    "baseGold": 7,
+    "baseXp": 14,
+    "baseGold": 12,
     "map": "bai_bien",
     "skills": [
       {
@@ -279,25 +279,25 @@
   },
   {
     "name": "Cá Cơm",
-    "maxHp": 30.0,
-    "pullStrength": 10.0,
+    "maxHp": 85.0,
+    "pullStrength": 14.0,
     "rarity": "COMMON",
     "baseWeightKg": 0.05,
     "baseLengthCm": 8.0,
-    "baseXp": 5,
-    "baseGold": 4,
+    "baseXp": 8,
+    "baseGold": 7,
     "map": "bai_bien",
     "skills": []
   },
   {
     "name": "Cá Mòi",
-    "maxHp": 40.0,
-    "pullStrength": 14.0,
+    "maxHp": 95.0,
+    "pullStrength": 16.0,
     "rarity": "COMMON",
     "baseWeightKg": 0.1,
     "baseLengthCm": 12.0,
-    "baseXp": 7,
-    "baseGold": 5,
+    "baseXp": 11,
+    "baseGold": 9,
     "map": "bai_bien",
     "skills": [
       {
@@ -308,13 +308,13 @@
   },
   {
     "name": "Cá Lẹp",
-    "maxHp": 50.0,
-    "pullStrength": 16.0,
+    "maxHp": 110.0,
+    "pullStrength": 18.0,
     "rarity": "COMMON",
     "baseWeightKg": 0.2,
     "baseLengthCm": 16.0,
-    "baseXp": 8,
-    "baseGold": 6,
+    "baseXp": 13,
+    "baseGold": 11,
     "map": "bai_bien",
     "skills": [
       {
@@ -325,13 +325,13 @@
   },
   {
     "name": "Cá Bạc Má",
-    "maxHp": 60.0,
-    "pullStrength": 18.0,
+    "maxHp": 130.0,
+    "pullStrength": 20.0,
     "rarity": "COMMON",
     "baseWeightKg": 0.3,
     "baseLengthCm": 20.0,
-    "baseXp": 10,
-    "baseGold": 8,
+    "baseXp": 16,
+    "baseGold": 14,
     "map": "bai_bien",
     "skills": [
       {
@@ -342,13 +342,13 @@
   },
   {
     "name": "Cá Nục",
-    "maxHp": 90.0,
-    "pullStrength": 25.0,
+    "maxHp": 210.0,
+    "pullStrength": 28.0,
     "rarity": "UNCOMMON",
     "baseWeightKg": 0.6,
     "baseLengthCm": 35.0,
-    "baseXp": 25,
-    "baseGold": 20,
+    "baseXp": 40,
+    "baseGold": 34,
     "map": "bai_bien",
     "skills": [
       {
@@ -359,13 +359,13 @@
   },
   {
     "name": "Cá Đối",
-    "maxHp": 85.0,
-    "pullStrength": 22.0,
+    "maxHp": 200.0,
+    "pullStrength": 26.0,
     "rarity": "UNCOMMON",
     "baseWeightKg": 0.5,
     "baseLengthCm": 30.0,
-    "baseXp": 22,
-    "baseGold": 18,
+    "baseXp": 35,
+    "baseGold": 30,
     "map": "bai_bien",
     "skills": [
       {
@@ -376,13 +376,13 @@
   },
   {
     "name": "Cá Trích",
-    "maxHp": 75.0,
-    "pullStrength": 20.0,
+    "maxHp": 190.0,
+    "pullStrength": 25.0,
     "rarity": "UNCOMMON",
     "baseWeightKg": 0.4,
     "baseLengthCm": 25.0,
-    "baseXp": 20,
-    "baseGold": 15,
+    "baseXp": 32,
+    "baseGold": 26,
     "map": "bai_bien",
     "skills": [
       {
@@ -393,13 +393,13 @@
   },
   {
     "name": "Cá Chim Biển",
-    "maxHp": 110.0,
-    "pullStrength": 28.0,
+    "maxHp": 220.0,
+    "pullStrength": 30.0,
     "rarity": "UNCOMMON",
     "baseWeightKg": 1.0,
     "baseLengthCm": 40.0,
-    "baseXp": 30,
-    "baseGold": 25,
+    "baseXp": 48,
+    "baseGold": 40,
     "map": "bai_bien",
     "skills": [
       {
@@ -410,13 +410,13 @@
   },
   {
     "name": "Cá Mú",
-    "maxHp": 200.0,
-    "pullStrength": 45.0,
+    "maxHp": 340.0,
+    "pullStrength": 50.0,
     "rarity": "RARE",
     "baseWeightKg": 4.5,
     "baseLengthCm": 65.0,
-    "baseXp": 60,
-    "baseGold": 50,
+    "baseXp": 100,
+    "baseGold": 85,
     "map": "bai_bien",
     "skills": [
       {
@@ -431,13 +431,13 @@
   },
   {
     "name": "Cá Bóp",
-    "maxHp": 250.0,
-    "pullStrength": 50.0,
+    "maxHp": 380.0,
+    "pullStrength": 55.0,
     "rarity": "RARE",
     "baseWeightKg": 6.0,
     "baseLengthCm": 80.0,
-    "baseXp": 70,
-    "baseGold": 60,
+    "baseXp": 115,
+    "baseGold": 100,
     "map": "bai_bien",
     "skills": [
       {
@@ -452,13 +452,13 @@
   },
   {
     "name": "Cá Thu Hoàng Kim",
-    "maxHp": 400.0,
-    "pullStrength": 80.0,
+    "maxHp": 550.0,
+    "pullStrength": 90.0,
     "rarity": "EPIC",
     "baseWeightKg": 15.0,
     "baseLengthCm": 120.0,
-    "baseXp": 150,
-    "baseGold": 200,
+    "baseXp": 240,
+    "baseGold": 320,
     "map": "bai_bien",
     "skills": [
       {
@@ -473,13 +473,13 @@
   },
   {
     "name": "Cá Ngừ Đại Dương",
-    "maxHp": 500.0,
-    "pullStrength": 95.0,
+    "maxHp": 640.0,
+    "pullStrength": 100.0,
     "rarity": "EPIC",
     "baseWeightKg": 25.0,
     "baseLengthCm": 150.0,
-    "baseXp": 180,
-    "baseGold": 250,
+    "baseXp": 280,
+    "baseGold": 400,
     "map": "bai_bien",
     "skills": [
       {
@@ -498,7 +498,7 @@
   },
   {
     "name": "Bạch Tuộc Khổng Lồ",
-    "maxHp": 1200.0,
+    "maxHp": 2200.0,
     "pullStrength": 150.0,
     "rarity": "BOSS",
     "baseWeightKg": 100.0,
@@ -523,37 +523,37 @@
   },
   {
     "name": "Cá Ngựa Vằn",
-    "maxHp": 150.0,
-    "pullStrength": 40.0,
+    "maxHp": 210.0,
+    "pullStrength": 44.0,
     "rarity": "COMMON",
     "baseWeightKg": 1.5,
     "baseLengthCm": 40.0,
-    "baseXp": 25,
-    "baseGold": 20,
+    "baseXp": 38,
+    "baseGold": 32,
     "map": "dao_xa",
     "skills": []
   },
   {
     "name": "Cá Hề",
-    "maxHp": 120.0,
-    "pullStrength": 35.0,
+    "maxHp": 180.0,
+    "pullStrength": 40.0,
     "rarity": "COMMON",
     "baseWeightKg": 0.8,
     "baseLengthCm": 30.0,
-    "baseXp": 20,
-    "baseGold": 15,
+    "baseXp": 30,
+    "baseGold": 25,
     "map": "dao_xa",
     "skills": []
   },
   {
     "name": "Cá Đuối Nhỏ",
-    "maxHp": 200.0,
-    "pullStrength": 50.0,
+    "maxHp": 260.0,
+    "pullStrength": 52.0,
     "rarity": "COMMON",
     "baseWeightKg": 3.0,
     "baseLengthCm": 50.0,
-    "baseXp": 35,
-    "baseGold": 30,
+    "baseXp": 52,
+    "baseGold": 48,
     "map": "dao_xa",
     "skills": [
       {
@@ -564,13 +564,13 @@
   },
   {
     "name": "Mực Ống",
-    "maxHp": 180.0,
-    "pullStrength": 45.0,
+    "maxHp": 240.0,
+    "pullStrength": 48.0,
     "rarity": "COMMON",
     "baseWeightKg": 2.0,
     "baseLengthCm": 45.0,
-    "baseXp": 30,
-    "baseGold": 25,
+    "baseXp": 46,
+    "baseGold": 40,
     "map": "dao_xa",
     "skills": [
       {
@@ -581,13 +581,13 @@
   },
   {
     "name": "Cá Nóc",
-    "maxHp": 160.0,
-    "pullStrength": 38.0,
+    "maxHp": 220.0,
+    "pullStrength": 42.0,
     "rarity": "COMMON",
     "baseWeightKg": 1.2,
     "baseLengthCm": 35.0,
-    "baseXp": 28,
-    "baseGold": 22,
+    "baseXp": 42,
+    "baseGold": 35,
     "map": "dao_xa",
     "skills": [
       {
@@ -598,25 +598,25 @@
   },
   {
     "name": "Cá Phèn",
-    "maxHp": 140.0,
-    "pullStrength": 42.0,
+    "maxHp": 200.0,
+    "pullStrength": 44.0,
     "rarity": "COMMON",
     "baseWeightKg": 1.0,
     "baseLengthCm": 32.0,
-    "baseXp": 22,
-    "baseGold": 18,
+    "baseXp": 34,
+    "baseGold": 28,
     "map": "dao_xa",
     "skills": []
   },
   {
     "name": "Cá Mặt Trăng",
-    "maxHp": 300.0,
-    "pullStrength": 70.0,
+    "maxHp": 370.0,
+    "pullStrength": 75.0,
     "rarity": "UNCOMMON",
     "baseWeightKg": 8.0,
     "baseLengthCm": 80.0,
-    "baseXp": 60,
-    "baseGold": 50,
+    "baseXp": 95,
+    "baseGold": 80,
     "map": "dao_xa",
     "skills": [
       {
@@ -627,13 +627,13 @@
   },
   {
     "name": "Cá Cờ",
-    "maxHp": 280.0,
+    "maxHp": 350.0,
     "pullStrength": 85.0,
     "rarity": "UNCOMMON",
     "baseWeightKg": 6.0,
     "baseLengthCm": 90.0,
-    "baseXp": 65,
-    "baseGold": 55,
+    "baseXp": 100,
+    "baseGold": 88,
     "map": "dao_xa",
     "skills": [
       {
@@ -644,13 +644,13 @@
   },
   {
     "name": "Rùa Biển",
-    "maxHp": 350.0,
-    "pullStrength": 65.0,
+    "maxHp": 420.0,
+    "pullStrength": 70.0,
     "rarity": "UNCOMMON",
     "baseWeightKg": 12.0,
     "baseLengthCm": 100.0,
-    "baseXp": 70,
-    "baseGold": 60,
+    "baseXp": 110,
+    "baseGold": 96,
     "map": "dao_xa",
     "skills": [
       {
@@ -665,13 +665,13 @@
   },
   {
     "name": "Cá Chuồn",
-    "maxHp": 250.0,
+    "maxHp": 320.0,
     "pullStrength": 80.0,
     "rarity": "UNCOMMON",
     "baseWeightKg": 4.0,
     "baseLengthCm": 70.0,
-    "baseXp": 55,
-    "baseGold": 45,
+    "baseXp": 85,
+    "baseGold": 72,
     "map": "dao_xa",
     "skills": [
       {
@@ -682,13 +682,13 @@
   },
   {
     "name": "Cá Mập Cáo",
-    "maxHp": 600.0,
+    "maxHp": 680.0,
     "pullStrength": 140.0,
     "rarity": "RARE",
     "baseWeightKg": 35.0,
     "baseLengthCm": 180.0,
-    "baseXp": 150,
-    "baseGold": 120,
+    "baseXp": 240,
+    "baseGold": 200,
     "map": "dao_xa",
     "skills": [
       {
@@ -703,13 +703,13 @@
   },
   {
     "name": "Cá Kiếm",
-    "maxHp": 550.0,
-    "pullStrength": 160.0,
+    "maxHp": 620.0,
+    "pullStrength": 150.0,
     "rarity": "RARE",
     "baseWeightKg": 28.0,
     "baseLengthCm": 200.0,
-    "baseXp": 140,
-    "baseGold": 110,
+    "baseXp": 220,
+    "baseGold": 180,
     "map": "dao_xa",
     "skills": [
       {
@@ -724,13 +724,13 @@
   },
   {
     "name": "Cá Voi Lưng Gù",
-    "maxHp": 1500.0,
-    "pullStrength": 250.0,
+    "maxHp": 1300.0,
+    "pullStrength": 240.0,
     "rarity": "EPIC",
     "baseWeightKg": 200.0,
     "baseLengthCm": 800.0,
-    "baseXp": 400,
-    "baseGold": 500,
+    "baseXp": 620,
+    "baseGold": 800,
     "map": "dao_xa",
     "skills": [
       {
@@ -745,13 +745,13 @@
   },
   {
     "name": "Mực Khổng Lồ",
-    "maxHp": 1200.0,
-    "pullStrength": 300.0,
+    "maxHp": 1100.0,
+    "pullStrength": 260.0,
     "rarity": "EPIC",
     "baseWeightKg": 150.0,
     "baseLengthCm": 500.0,
-    "baseXp": 350,
-    "baseGold": 450,
+    "baseXp": 550,
+    "baseGold": 700,
     "map": "dao_xa",
     "skills": [
       {
@@ -766,7 +766,7 @@
   },
   {
     "name": "Thần Biển Leviathan",
-    "maxHp": 3500.0,
+    "maxHp": 5500.0,
     "pullStrength": 450.0,
     "rarity": "BOSS",
     "baseWeightKg": 500.0,
