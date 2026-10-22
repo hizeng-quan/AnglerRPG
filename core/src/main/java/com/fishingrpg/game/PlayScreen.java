@@ -41,8 +41,7 @@ public class PlayScreen implements Screen {
     private final boolean[] activeSkillInputs = new boolean[4];
     
     private FloatingTextManager floatingTextManager;
-    private float shakeTimer = 0f;
-    private float shakeIntensity = 0f;
+    private final com.fishingrpg.game.systems.vfx.ScreenShakeController screenShake = new com.fishingrpg.game.systems.vfx.ScreenShakeController(WORLD_WIDTH / 2f, WORLD_HEIGHT / 2f);
     private final com.fishingrpg.game.ui.PatchNotesDialog patchNotesDialog;
     private final com.fishingrpg.game.ui.SettingsDialog settingsDialog;
 
@@ -57,6 +56,7 @@ public class PlayScreen implements Screen {
         this.hud = new GameHUD(shapeRenderer, font, this);
         this.floatingTextManager = new FloatingTextManager();
         this.fishingManager.setFloatingTextManager(this.floatingTextManager);
+        this.fishingManager.setScreenShake(this.screenShake);
         this.patchNotesDialog = new com.fishingrpg.game.ui.PatchNotesDialog(game);
         this.settingsDialog = new com.fishingrpg.game.ui.SettingsDialog(game);
         this.settingsDialog.setListener(this::syncPlayerState);
@@ -117,24 +117,13 @@ public class PlayScreen implements Screen {
         
         if (fishingManager.bossSkillJustUsed) {
             fishingManager.bossSkillJustUsed = false;
-            shakeTimer = 1.0f;
-            shakeIntensity = 15f;
+            screenShake.shakeHeavy();
         }
         if (fishingManager.state == FishingManager.State.COMBAT && player.getCurrentLineTension() / player.getMaxLineTension() > 0.85f) {
-            if (shakeTimer <= 0.1f) {
-                shakeTimer = 0.1f;
-                shakeIntensity = 5f;
-            }
-        }
-        float origX = camera.position.x;
-        float origY = camera.position.y;
-        if (shakeTimer > 0) {
-            shakeTimer -= delta;
-            camera.position.x += com.badlogic.gdx.math.MathUtils.random(-shakeIntensity, shakeIntensity);
-            camera.position.y += com.badlogic.gdx.math.MathUtils.random(-shakeIntensity, shakeIntensity);
+            screenShake.addTrauma(0.04f);
         }
 
-        camera.update();
+        screenShake.update(delta, camera);
         game.batch.setProjectionMatrix(camera.combined);
         shapeRenderer.setProjectionMatrix(camera.combined);
 
@@ -182,8 +171,6 @@ public class PlayScreen implements Screen {
             hud.drawText(game.batch, player, fishingManager.currentCatch, fishingManager.combatMessage, fishingManager.resultLine);
             floatingTextManager.updateAndRender(delta, game.batch, font);
             game.batch.end();
-            
-            camera.position.set(origX, origY, 0); // Restore camera after rendering
         }
 
         if (messageTimer > 0 && message != null) {

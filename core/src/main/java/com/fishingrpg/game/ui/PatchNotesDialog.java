@@ -106,10 +106,11 @@ public class PatchNotesDialog {
             .addPoint("Lưu trữ bền vững trạng thái đã nhận thưởng cá vào SaveManager, hoàn toàn tương thích ngược.")
         );
 
-        patchNotesItems.add(new UpdateItem("ÂM THANH", "Khắc Phục Lỗi SFX Button & Nạp Âm Thanh An Toàn", fixBadgeColor)
-            .addPoint("Sinh tệp âm thanh click chuột cơ khí cao cấp assets/audio/sfx/sfx_button.wav (44.1kHz, 16-bit PCM).")
-            .addPoint("Cải tiến AudioManager với cơ chế nạp an toàn: kiểm tra file tồn tại, cache null để triệt tiêu vĩnh viễn crash và spam log lỗi.")
-            .addPoint("Bổ sung cơ chế alias tự động cho các sound effect tương thích ngược.")
+        patchNotesItems.add(new UpdateItem("ÂM THANH", "Bộ Tổng Hợp Âm Thanh Thủ Tục ZzFX & Fallback RAM", fixBadgeColor)
+            .addPoint("Tích hợp thuật toán ZzFX trực tiếp vào Java 17, tự tổng hợp sóng âm thanh (Sine, Triangle, Saw, Tan, Noise) trong RAM.")
+            .addPoint("Nặng 0 KB tài nguyên đĩa, đóng gói chuẩn WAV 16-bit PCM nạp thẳng vào OpenAL Sound Engine của LibGDX.")
+            .addPoint("Lưới an toàn tự động: Khi file âm thanh trên đĩa bị thiếu hoặc lỗi, game tự động phân tích và sinh âm thanh tức thì (Click, Catch, Bite, Cast, Coin, Skill, Level Up, Splash...).")
+            .addPoint("Triệt tiêu vĩnh viễn nguy cơ văng game FileNotFoundException hay spam log lỗi.")
         );
 
         patchNotesItems.add(new UpdateItem("GIAO DIỆN", "Tối Ưu Thẻ Nhiệm Vụ Sự Kiện Gọn Gàng & Thoáng Đãng", newBadgeColor)
@@ -250,19 +251,34 @@ public class PatchNotesDialog {
         // =====================================================================
         // --- TAB 1: KẾ HOẠCH & LỘ TRÌNH (SẮP TỚI) ---
         // =====================================================================
+        roadmapItems.add(new UpdateItem("ĐÃ RA MẮT", "Bộ Tổng Hợp Âm Thanh ZzFX & Auto-Updater (v0.4.21)", new Color(0.35f, 0.85f, 0.50f, 1f))
+            .addPoint("Đã hoàn thành module tự động cập nhật game online 1-click từ GitHub Releases.")
+            .addPoint("Đã hoàn thành đồng bộ thời gian thực chuẩn quốc tế (TimeSyncService) chống hack tua giờ.")
+            .addPoint("Đã hoàn thành bộ tổng hợp âm thanh thủ tục ZzFX trong RAM, chống thiếu file âm thanh 100%.")
+        );
+
+        roadmapItems.add(new UpdateItem("ĐÃ RA MẮT", "Cố Định 6★ Lạc Hồng & Đại Tu Cá Thường (v0.4.20)", new Color(0.35f, 0.85f, 0.50f, 1f))
+            .addPoint("Đã hoàn thành cố định phẩm cấp 6★ Set Lạc Hồng, cân bằng 42 loài cá và kinh tế Kim Cương.")
+        );
+
         roadmapItems.add(new UpdateItem("ĐÃ RA MẮT", "Đại Tu Cân Bằng Game & Tiến Trình EXP (v0.4.19)", new Color(0.35f, 0.85f, 0.50f, 1f))
             .addPoint("Đã hoàn thành sửa tiến trình EXP mượt mà, tăng máu 3 Boss thế giới, đặt trần thưởng Cửa Hàng và cân bằng Gacha.")
         );
 
-        roadmapItems.add(new UpdateItem("ĐÃ RA MẮT", "Đại Tu Ngoại Hình Toàn Diện Set Thời Không (v0.4.18)", new Color(0.35f, 0.85f, 0.50f, 1f))
-            .addPoint("Đã hoàn thành làm mới toàn diện đồ họa 3 món set Thời Không và tích hợp công cụ kiểm duyệt Vector Studio.")
-        );
-
-        roadmapItems.add(new UpdateItem("ĐÃ RA MẮT", "Hệ Thống Cài Đặt & Quản Lý Dữ Liệu (v0.4.17)", new Color(0.35f, 0.85f, 0.50f, 1f))
-            .addPoint("Đã hoàn thành đưa nút Setting vào HUD, điều chỉnh âm thanh, chế độ hiển thị và quản lý file lưu.")
-        );
-
         roadmapItems.add(UpdateItem.versionHeader("MỤC TIÊU PHÁT TRIỂN TIẾP THEO"));
+
+        roadmapItems.add(new UpdateItem("ĐANG TRIỂN KHAI", "Easing & Screen Shake Controller (Game Juice)", new Color(1f, 0.75f, 0.25f, 1f))
+            .addPoint("Nội suy chuyển động mượt mà (Easing/Bounce/Elastic) cho các bảng thông báo, popup nhận thưởng.")
+            .addPoint("Hiệu ứng rung chấn màn hình (Screen Shake) chân thực khi cá kéo mạnh, đứt cước hoặc quăng cần trúng Boss.")
+        );
+
+        roadmapItems.add(new UpdateItem("KẾ HOẠCH", "Gameplay Ability System (GAS) Bộ 4 Kỹ Năng QWER", new Color(0.40f, 0.75f, 1f, 1f))
+            .addPoint("Chuẩn hóa toàn diện logic kỹ năng, thời gian hồi chiêu (Cooldown) và hiệu ứng trạng thái Buff/Debuff.")
+        );
+
+        roadmapItems.add(new UpdateItem("KẾ HOẠCH", "Simplex Noise GLSL Water Shader Khúc Xạ Mặt Nước", new Color(0.40f, 0.75f, 1f, 1f))
+            .addPoint("Nâng cấp mặt nước biển sống động với hiệu ứng sóng lấp lánh (Caustics) và khúc xạ ánh hoàng hôn.")
+        );
 
         roadmapItems.add(new UpdateItem("TÍNH NĂNG MỚI", "Hệ Thống Bang Hội & Đua Top Câu Cá", new Color(1f, 0.55f, 0.35f, 1f))
             .addPoint("Phát triển bảng xếp hạng thời gian thực theo từng bản đồ.")
