@@ -162,3 +162,48 @@ Thumbs.db
 ## You could also add that configuration to the text in nativeimage.gradle .
 ## You should delete or comment out the next line if you have configuration in a different resource-config.json .
 **/resource-config.json
+
+## =========================================================================
+## SECURITY & PRIVACY (Bảo mật tài khoản, save game, API keys & Cache)
+## =========================================================================
+
+## User Saves & Local Player Progress
+angler_save*.json
+save_*.json
+*.sav
+*.save
+*.save.json
+
+## Python Caches, Virtual Environments & Simulation Scratch
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+.pytest_cache/
+
+## Secrets, Credentials & Local Configs
+.env
+.env.*
+*.key
+*.pem
+*.pfx
+*.p12
+*secret*
+*token*
+*credentials*
+
+## Updater & Auto-patch temp files
+update.bat
+update.sh
+update_apply.bat
+update_apply.sh
+*.tmp
+updater_temp/
+*.part
+AnglerRPG-update.tmp
+AnglerRPG.jar

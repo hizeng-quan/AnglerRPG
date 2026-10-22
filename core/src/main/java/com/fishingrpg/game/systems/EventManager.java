@@ -25,8 +25,8 @@ public class EventManager {
         Calendar cal = Calendar.getInstance(TimeZone.getDefault());
         cal.set(2026, Calendar.DECEMBER, 31, 23, 59, 59);
         long end = cal.getTimeInMillis();
-        if (end <= TimeUtils.millis()) {
-            end = TimeUtils.millis() + 60L * 24 * 60 * 60 * 1000L;
+        if (end <= TimeSyncService.getCurrentTimeMillis()) {
+            end = TimeSyncService.getCurrentTimeMillis() + 60L * 24 * 60 * 60 * 1000L;
         }
         EVENT_END_TIMESTAMP = end;
     }
@@ -93,7 +93,7 @@ public class EventManager {
     }
 
     public void checkAndResetDailyMissions() {
-        long currentDayStart = getStartOfDay(TimeUtils.millis());
+        long currentDayStart = getStartOfDay(TimeSyncService.getCurrentTimeMillis());
         if (player.getLastEventMissionResetTimestamp() < currentDayStart || eventQuests.isEmpty()) {
             player.setLastEventMissionResetTimestamp(currentDayStart);
             resetEventQuests();
@@ -177,7 +177,7 @@ public class EventManager {
     }
 
     public boolean hasClaimedLoginToday() {
-        long currentDayStart = getStartOfDay(TimeUtils.millis());
+        long currentDayStart = getStartOfDay(TimeSyncService.getCurrentTimeMillis());
         return player.getLastLoginTimestamp() >= currentDayStart;
     }
 
@@ -218,7 +218,7 @@ public class EventManager {
         checkAndResetDailyMissions();
         if (hasClaimedLoginToday()) return null;
 
-        long currentDayStart = getStartOfDay(TimeUtils.millis());
+        long currentDayStart = getStartOfDay(TimeSyncService.getCurrentTimeMillis());
         player.setLastLoginTimestamp(currentDayStart);
 
         int currentDays = player.getTotalLoginDaysThisMonth();
@@ -275,7 +275,7 @@ public class EventManager {
     }
 
     public String getEventTimeRemaining() {
-        long now = TimeUtils.millis();
+        long now = TimeSyncService.getCurrentTimeMillis();
         long diff = EVENT_END_TIMESTAMP - now;
         if (diff <= 0) return "SỰ KIỆN KẾT THÚC";
         

@@ -76,6 +76,10 @@ public class FishingRPG extends Game {
         regularGen.dispose();
         boldGen.dispose();
 
+        // Khởi động dịch vụ đồng bộ thời gian thực chuẩn & kiểm tra bản cập nhật mới ngầm
+        com.fishingrpg.game.systems.TimeSyncService.init();
+        com.fishingrpg.game.systems.updater.AutoUpdater.getInstance().checkForUpdates(null);
+
         this.setScreen(new MainMenuScreen(this));
     }
 

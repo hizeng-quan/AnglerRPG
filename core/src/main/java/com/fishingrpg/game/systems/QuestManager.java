@@ -34,7 +34,7 @@ public class QuestManager {
     }
 
     public void checkResets() {
-        long currentTime = System.currentTimeMillis();
+        long currentTime = TimeSyncService.getCurrentTimeMillis();
         java.util.Calendar now = java.util.Calendar.getInstance();
         now.setTimeInMillis(currentTime);
         

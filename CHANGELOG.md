@@ -34,6 +34,41 @@
   - Nếu tệp không tìm thấy, nạp giá trị `null` vào bộ đệm `sfxMap` để ngăn chặn hoàn toàn việc văng ngoại lệ và spam log lỗi ở từng khung hình.
   - Hỗ trợ cơ chế ánh xạ tự động (Alias): `"button_click"` -> `"sfx_button"`, `"victory"` -> `"sfx_success"`.
 
+### 🏮 Tối Ưu Hóa Giao Diện Thẻ Nhiệm Vụ Sự Kiện ([EventScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/EventScreen.java))
+- **Lược Bỏ Text & Hộp Thưởng Đơn Lẻ**:
+  - Xóa bỏ hộp viền vàng và text hiển thị phần thưởng đơn lẻ (+300 Vàng, +15 KC, +1 Vé Quay...) ở góc phải trên từng thẻ nhiệm vụ sự kiện, tránh gây rối mắt và chật chội.
+  - Mở rộng không gian hiển thị tiêu đề nhiệm vụ tràn viền thẻ, giúp tên nhiệm vụ hiển thị rõ ràng, thoáng đãng và thẩm mỹ hơn.
+
+### 🚀 Trình Cập Nhật Tự Động Trực Tuyến & Khởi Động Lại 1-Click ([AutoUpdater.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/updater/AutoUpdater.java), [UpdateDialog.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/UpdateDialog.java), [Launcher.bat](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/Launcher.bat))
+- **Kiểm Tra Bản Phát Hành Bất Đồng Bộ (GitHub Releases API)**:
+  - Tự động kết nối kiểm tra phiên bản mới từ GitHub Releases qua luồng nền (Daemon thread), không gây đơ/lag giao diện game khi khởi động.
+  - So sánh phiên bản chuẩn Semantic Versioning (`isNewerVersion`).
+  - Hỗ trợ tải trực tiếp qua HTTP redirect (AWS S3 CDN của GitHub Releases) với thanh tiến độ hiển thị phần trăm trực quan.
+- **Tự Động Áp Dụng Bản Vá & Tái Khởi Chạy Game**:
+  - Khi tải xong bản cập nhật, tự động sinh script thay thế (`update_apply.bat` trên Windows, `update_apply.sh` trên Unix/macOS) để ghi đè file JAR mới và khởi chạy lại game chỉ trong 1 click.
+- **Hộp Thoại Quản Lý Bản Cập Nhật In-Game (UpdateDialog)**:
+  - Giao diện thiết kế chuẩn Dark UI, hỗ trợ xem ghi chú phát hành, nút tải cập nhật tự động, nút tải thủ công qua trình duyệt và nút đóng/kiểm tra lại.
+  - Phím tắt `[U]` hoặc click chuột vào góc phải dưới màn hình chính (MainMenuScreen) để mở bảng cập nhật bất cứ lúc nào.
+- **Trình Khởi Chạy Tiện Lợi (Launcher.bat)**:
+  - Bổ sung file `Launcher.bat` ở thư mục gốc giúp người chơi mở game 1 chạm, tự động kiểm tra môi trường Java (JRE 11+) và áp dụng bản vá đang chờ.
+
+### ⏰ Đồng Bộ Thời Gian Thực Chuẩn Quốc Tế & Chống Hack Giờ ([TimeSyncService.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/TimeSyncService.java), [EventManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/EventManager.java), [QuestManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/QuestManager.java))
+- **Đồng Bộ Thời Gian Chuẩn Quốc Tế (Network Time Protocol / HTTP Date)**:
+  - Tự động truy vấn Header Date từ các cụm máy chủ toàn cầu (Google, Cloudflare, GitHub API) ngay khi mở game.
+  - Sử dụng đồng hồ đơn điệu `System.nanoTime()` Monotonic Clock để tính thời gian trôi qua, triệt tiêu hoàn toàn khả năng người chơi tua ngược hoặc tua nhanh đồng hồ Windows để hack chu kỳ điểm danh, nhiệm vụ ngày/tuần hay sự kiện.
+- **Tích Hợp Toàn Diện Hệ Thống**:
+  - Thay thế toàn bộ các điểm truy vấn giờ địa phương trong `EventManager` và `QuestManager` sang `TimeSyncService.getCurrentTimeMillis()`.
+
+### 🛡️ Rà Soát Bảo Mật & Ẩn Tệp Tin Riêng Tư Trên GitHub ([.gitignore](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/.gitignore))
+- **Bảo Vệ Tệp Lưu Dữ Liệu Người Chơi**:
+  - Ẩn toàn bộ `angler_save*.json`, `save_*.json`, `*.sav`, `*.save`, `*.save.json` để người chơi/lập trình viên không vô tình đẩy dữ liệu lưu cá nhân lên kho lưu trữ công khai GitHub.
+- **Loại Bỏ Bộ Đệm & Môi Trường Ảo**:
+  - Chặn triệt để `__pycache__/`, `*.py[cod]`, `venv/`, `.venv/`, `.pytest_cache/`.
+- **Bảo Vệ Thông Tin Nhạy Cảm**:
+  - Chặn các file cấu hình môi trường bí mật `.env*`, chứng chỉ `*.key`, `*.pem`, `*secret*`, `*token*`, `*credentials*`.
+- **Cách Ly Tệp Tạm Của Auto-Updater**:
+  - Bổ sung `update_apply.bat`, `update_apply.sh`, `AnglerRPG-update.tmp`, `AnglerRPG.jar` vào `.gitignore`.
+
 ---
 
 ## 📅 [2026-10-23] - Phiên bản v0.4.20 (Cố Định 6★ Lạc Hồng, Cân Bằng 42 Loài Cá Thường & Đại Tu Kinh Tế Kim Cương)

@@ -16,6 +16,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.fishingrpg.game.FishingRPG;
 import com.fishingrpg.game.PlayScreen;
 import com.fishingrpg.game.systems.AudioManager;
+import com.fishingrpg.game.systems.updater.AutoUpdater;
+import com.fishingrpg.game.systems.updater.GameVersion;
+import com.fishingrpg.game.ui.UpdateDialog;
 
 public class MainMenuScreen implements Screen {
 
@@ -36,6 +39,7 @@ public class MainMenuScreen implements Screen {
 
     private final OrthographicCamera camera;
     private final Viewport viewport;
+    private final UpdateDialog updateDialog;
 
     private int selected = -1;
     private float timer = 0f;
@@ -81,6 +85,8 @@ public class MainMenuScreen implements Screen {
         this.viewport = new FitViewport(W, H, camera);
         this.camera.position.set(W / 2f, H / 2f, 0);
         this.camera.update();
+
+        this.updateDialog = new UpdateDialog(game);
 
         // Initialize stars
         for (int i = 0; i < STAR_COUNT; i++) {
@@ -155,6 +161,24 @@ public class MainMenuScreen implements Screen {
 
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         viewport.unproject(mousePos);
+
+        if (updateDialog != null && updateDialog.isOpen()) {
+            updateDialog.handleInput(mousePos);
+            return;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.U)) {
+            updateDialog.open();
+            return;
+        }
+
+        // Click vào góc phải dưới (khu vực phiên bản / cập nhật) để mở bảng cập nhật
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            if (mousePos.y >= 5f && mousePos.y <= 45f && mousePos.x >= W - 520f && mousePos.x <= W) {
+                updateDialog.open();
+                return;
+            }
+        }
 
         float btnX = (W - BTN_W) / 2f;
         boolean mouseMoved = Gdx.input.getDeltaX() != 0 || Gdx.input.getDeltaY() != 0;
@@ -251,6 +275,12 @@ public class MainMenuScreen implements Screen {
         drawButtonTexts();
         drawFooterInfo();
         game.batch.end();
+
+        if (updateDialog != null && updateDialog.isOpen()) {
+            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            viewport.unproject(mousePos);
+            updateDialog.render(Gdx.graphics.getDeltaTime(), mousePos);
+        }
     }
 
     // =========================================================================
@@ -668,12 +698,24 @@ public class MainMenuScreen implements Screen {
         // Controls guide on bottom left
         subFont.setColor(0.55f, 0.68f, 0.82f, 0.75f);
         subFont.getData().setScale(0.78f);
-        subFont.draw(game.batch, "Điều khiển: [↑/↓/W/S] Chọn mục  •  [Enter/Space] Bắt đầu", 25f, 26f);
+        subFont.draw(game.batch, "Điều khiển: [↑/↓/W/S] Chọn mục  •  [Enter/Space] Bắt đầu  •  [U] Cập nhật", 25f, 26f);
 
         // Version tag on bottom right
-        String ver = "v0.4.18 • Fishing RPG";
+        String ver = GameVersion.getDisplayVersion() + " • Fishing RPG";
         layout.setText(subFont, ver);
-        subFont.draw(game.batch, ver, W - layout.width - 25f, 26f);
+        float verX = W - layout.width - 25f;
+        float verY = 26f;
+        subFont.setColor(0.65f, 0.78f, 0.90f, 0.85f);
+        subFont.draw(game.batch, ver, verX, verY);
+
+        // Nếu có bản cập nhật mới, hiển thị nhấp nháy nổi bật
+        if (AutoUpdater.getInstance().isUpdateAvailable()) {
+            float pulse = (MathUtils.sin(timer * 4f) + 1f) * 0.5f;
+            subFont.setColor(1f, 0.75f + 0.25f * pulse, 0.20f, 0.95f);
+            String updateBadge = "★ CÓ BẢN MỚI " + AutoUpdater.getInstance().getLatestVersion() + " (BẤM ĐỂ CẬP NHẬT) ★  ";
+            layout.setText(subFont, updateBadge);
+            subFont.draw(game.batch, updateBadge, verX - layout.width, verY);
+        }
         subFont.getData().setScale(1f);
     }
 

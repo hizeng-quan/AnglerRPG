@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class PatchNotesDialog {
 
-    public static final String CURRENT_VERSION = "v0.4.19";
+    public static final String CURRENT_VERSION = "v0.4.21";
     private static final String PREF_LAST_SEEN_VERSION = "last_seen_patch_notes_version";
 
     private final FishingRPG game;
@@ -110,6 +110,22 @@ public class PatchNotesDialog {
             .addPoint("Sinh tệp âm thanh click chuột cơ khí cao cấp assets/audio/sfx/sfx_button.wav (44.1kHz, 16-bit PCM).")
             .addPoint("Cải tiến AudioManager với cơ chế nạp an toàn: kiểm tra file tồn tại, cache null để triệt tiêu vĩnh viễn crash và spam log lỗi.")
             .addPoint("Bổ sung cơ chế alias tự động cho các sound effect tương thích ngược.")
+        );
+
+        patchNotesItems.add(new UpdateItem("GIAO DIỆN", "Tối Ưu Thẻ Nhiệm Vụ Sự Kiện Gọn Gàng & Thoáng Đãng", newBadgeColor)
+            .addPoint("Lược bỏ các hộp phần thưởng đơn lẻ gây chật chội trên 6 thẻ nhiệm vụ sự kiện.")
+            .addPoint("Tiêu đề nhiệm vụ được mở rộng toàn chiều ngang thẻ, hiển thị rõ ràng và thẩm mỹ hơn.")
+        );
+
+        patchNotesItems.add(new UpdateItem("AUTO-UPDATER", "Module Tự Động Cập Nhật Trực Tuyến & Tự Động Khởi Động Lại", new Color(0.35f, 0.85f, 1f, 1f))
+            .addPoint("Tự động kết nối GitHub Releases API kiểm tra phiên bản mới ngầm không gây gián đoạn.")
+            .addPoint("Tải và thay thế file JAR, tự động chạy script khởi động lại game chỉ với 1 click [TẢI & CẬP NHẬT NGAY].")
+            .addPoint("Hỗ trợ mở trực tiếp GitHub Releases để tải thủ công nếu người chơi mong muốn.")
+        );
+
+        patchNotesItems.add(new UpdateItem("THỜI GIAN THỰC", "Đồng Bộ Giờ Chuẩn Máy Chủ & Chống Gian Lận Đổi Giờ", new Color(1f, 0.65f, 0.25f, 1f))
+            .addPoint("Đồng bộ thời gian thực chuẩn quốc tế (Google/Cloudflare/NTP) qua TimeSyncService ngầm.")
+            .addPoint("Sử dụng đồng hồ đơn điệu Monotonic nanoTime: Triệt tiêu vĩnh viễn việc đổi giờ máy tính Windows để hack sự kiện/điểm danh.")
         );
 
         // ===== PHIÊN BẢN v0.4.20 =====

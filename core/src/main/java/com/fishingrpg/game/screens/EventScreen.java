@@ -496,16 +496,6 @@ public class EventScreen implements Screen {
             sr.setColor(q.claimed ? new Color(0.3f, 0.4f, 0.5f, 0.5f) : (q.isCompleted() ? new Color(0.3f, 0.9f, 0.5f, 1f) : new Color(0.95f, 0.65f, 0.2f, 1f)));
             sr.rect(qx, qy, 5f, cardH);
 
-            // Reward pill background on top right
-            float pillW = 160f;
-            float pillH = 26f;
-            float pillX = qx + cardW - pillW - 14f;
-            float pillY = qy + cardH - 32f;
-            sr.setColor(0.18f, 0.14f, 0.08f, 0.9f);
-            sr.rect(pillX, pillY, pillW, pillH);
-            sr.setColor(0.85f, 0.65f, 0.25f, 0.7f);
-            drawBoxBorder(pillX, pillY, pillW, pillH, 1.2f);
-
             // Progress bar
             float qpbX = qx + 18f;
             float qpbY = qy + 14f;
@@ -875,11 +865,6 @@ public class EventScreen implements Screen {
             float qx = startX + col * (cardW + cardGapX);
             float qy = gridStartY - row * (cardH + cardGapY) - cardH;
 
-            float pillW = 160f;
-            float pillH = 26f;
-            float pillX = qx + cardW - pillW - 14f;
-            float pillY = qy + cardH - 32f;
-
             float qpbX = qx + 18f;
             float qpbY = qy + 14f;
             float qpbW = cardW - 155f;
@@ -889,20 +874,15 @@ public class EventScreen implements Screen {
             float btnX = qx + cardW - btnW - 14f;
             float btnY = qy + 12f;
 
-            // Line 1 Left: Quest Title
+            // Line 1: Quest Title (Clean, prominent across the card)
             font.setColor(q.claimed ? new Color(0.6f, 0.7f, 0.8f, 0.8f) : new Color(1f, 0.88f, 0.35f, 1f));
             font.getData().setScale(0.88f);
             layout.setText(font, q.title);
-            float maxTitleW = pillX - qx - 28f;
+            float maxTitleW = cardW - 36f;
             if (layout.width > maxTitleW) {
                 font.getData().setScale(0.88f * (maxTitleW / layout.width));
             }
             font.draw(game.batch, q.title, qx + 18f, qy + cardH - 14f);
-
-            // Line 1 Right: Reward Pill Text
-            font.setColor(1f, 0.85f, 0.3f, 1f);
-            font.getData().setScale(0.76f);
-            drawCenteredText(font, q.getRewardSummary(), pillX, pillY, pillW, pillH);
 
             // Line 2: Description (Clean, concise - NO redundant "Tiến độ mục tiêu" text!)
             font.setColor(0.78f, 0.85f, 0.92f, 0.9f);
