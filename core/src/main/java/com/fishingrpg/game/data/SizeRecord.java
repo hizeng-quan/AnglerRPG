@@ -25,8 +25,28 @@ public class SizeRecord {
         return prefs().getFloat(fishName + KEY_LENGTH, 0f);
     }
 
+    private static Preferences cachedPrefs;
+    private static final java.util.Set<String> caughtFishCache = new java.util.HashSet<>();
+    private static boolean cacheInitialized = false;
+
+    private static void initCacheIfNeeded() {
+        if (!cacheInitialized && prefs() != null) {
+            caughtFishCache.clear();
+            for (FishDatabase.FishTemplate ft : FishDatabase.getAllFishes()) {
+                if (prefs().getBoolean(ft.name + KEY_CAUGHT, false)) {
+                    caughtFishCache.add(ft.name);
+                }
+            }
+            cacheInitialized = true;
+        }
+    }
+
     /** Ca co tung duoc cau lan nao chua. */
     public static boolean isFirstCatch(String fishName) {
+        initCacheIfNeeded();
+        if (cacheInitialized) {
+            return !caughtFishCache.contains(fishName);
+        }
         return !prefs().getBoolean(fishName + KEY_CAUGHT, false);
     }
 
@@ -36,7 +56,8 @@ public class SizeRecord {
      */
     public static boolean checkAndUpdate(String fishName, float weightKg, float lengthCm) {
         Preferences p = prefs();
-        boolean first  = !p.getBoolean(fishName + KEY_CAUGHT, false);
+        initCacheIfNeeded();
+        boolean first  = isFirstCatch(fishName);
         
         float wRecord = p.getFloat(fishName + KEY_WEIGHT, 0f);
         float lRecord = p.getFloat(fishName + KEY_LENGTH, 0f);
@@ -52,12 +73,24 @@ public class SizeRecord {
         }
         p.putBoolean(fishName + KEY_CAUGHT, true);
         p.flush();
+        if (cacheInitialized) {
+            caughtFishCache.add(fishName);
+        }
         return first || newWRecord || newLRecord;
     }
 
     // -------------------------------------------------------------------------
 
-    private static Preferences prefs() {
-        return Gdx.app.getPreferences(PREFS_NAME);
+    public static Preferences prefs() {
+        if (cachedPrefs == null && Gdx.app != null) {
+            cachedPrefs = Gdx.app.getPreferences(PREFS_NAME);
+        }
+        return cachedPrefs != null ? cachedPrefs : Gdx.app.getPreferences(PREFS_NAME);
+    }
+
+    public static void clearCache() {
+        cachedPrefs = null;
+        caughtFishCache.clear();
+        cacheInitialized = false;
     }
 }

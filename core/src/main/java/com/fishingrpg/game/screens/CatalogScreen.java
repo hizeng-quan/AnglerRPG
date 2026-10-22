@@ -69,6 +69,13 @@ public class CatalogScreen implements Screen, InputProcessor {
     private Fish hoveredFish = null;
     private String hoveredFishName = null;
     private float mouseX, mouseY;
+    private final Vector3 mousePos = new Vector3();
+
+    // Cached collection statistics to eliminate per-frame heavy recalculations
+    private int cachedAvailableClaimCount = 0;
+    private int cachedTotalCaughtCount = 0;
+    private final int[] cachedCompletedInBiome = new int[3];
+    private final int[] cachedTotalColInBiome = new int[3];
 
     // Notification toast
     private String toastMsg = null;
@@ -87,7 +94,7 @@ public class CatalogScreen implements Screen, InputProcessor {
         this.player = player;
         this.allCollections = CollectionDatabase.getAllCollections();
 
-        sr = new ShapeRenderer();
+        sr = game.shapeRenderer;
         font = game.font;
         titleFont = game.titleFont;
         layout = new GlyphLayout();
@@ -143,6 +150,28 @@ public class CatalogScreen implements Screen, InputProcessor {
             if (!SizeRecord.isFirstCatch(ft.name)) caught++;
         }
         return caught;
+    }
+
+    private void refreshCollectionStats() {
+        cachedAvailableClaimCount = getAvailableClaimCount();
+        cachedTotalCaughtCount = getTotalCaughtCount();
+        String[] tabPrefix = {"al_", "bb_", "dx_"};
+        for (int i = 0; i < 3; i++) {
+            int total = 0;
+            int comp = 0;
+            for (CollectionDatabase.Collection c : allCollections) {
+                if (c.id.startsWith(tabPrefix[i])) {
+                    total++;
+                    int caught = 0;
+                    for (String fn : c.fishNames) {
+                        if (!SizeRecord.isFirstCatch(fn)) caught++;
+                    }
+                    if (caught == c.fishNames.size()) comp++;
+                }
+            }
+            cachedTotalColInBiome[i] = total;
+            cachedCompletedInBiome[i] = comp;
+        }
     }
 
     @Override
@@ -447,7 +476,7 @@ public class CatalogScreen implements Screen, InputProcessor {
         drawRectOutline(sr, 25f, H - 60f, 130f, 44f, 1.5f);
 
         // Claim All Button (if any available)
-        int availableClaim = getAvailableClaimCount();
+        int availableClaim = cachedAvailableClaimCount;
         if (availableClaim > 0) {
             float pulse = 0.8f + 0.2f * MathUtils.sin(animTime * 5f);
             sr.setColor(hoverClaimAll ? new Color(1f, 0.85f, 0.3f, 1f) : new Color(0.9f * pulse, 0.7f * pulse, 0.1f * pulse, 1f));
@@ -521,7 +550,7 @@ public class CatalogScreen implements Screen, InputProcessor {
         } else {
             font.setColor(0.4f, 0.85f, 1f, 1f);
             font.getData().setScale(0.85f);
-            int caughtTotal = getTotalCaughtCount();
+            int caughtTotal = cachedTotalCaughtCount;
             int totalFishes = FishDatabase.getAllFishes().size();
             String progText = "Đã Bắt: " + caughtTotal + " / " + totalFishes + " Loài";
             layout.setText(font, progText);
@@ -530,25 +559,13 @@ public class CatalogScreen implements Screen, InputProcessor {
 
         // Biome Tab Texts
         String[] tabNames = {"AO LÀNG", "BÃI BIỂN", "ĐẢO XA"};
-        String[] tabPrefix = {"al_", "bb_", "dx_"};
 
         for (int i = 0; i < 3; i++) {
             boolean active = (currentTab == i);
             float tx = tabStartX + i * (tabW + tabSpacing);
 
-            // Count completed collections in this biome
-            int totalColInBiome = 0;
-            int completedInBiome = 0;
-            for (CollectionDatabase.Collection c : allCollections) {
-                if (c.id.startsWith(tabPrefix[i])) {
-                    totalColInBiome++;
-                    int caught = 0;
-                    for (String fn : c.fishNames) {
-                        if (!SizeRecord.isFirstCatch(fn)) caught++;
-                    }
-                    if (caught == c.fishNames.size()) completedInBiome++;
-                }
-            }
+            int totalColInBiome = cachedTotalColInBiome[i];
+            int completedInBiome = cachedCompletedInBiome[i];
 
             font.setColor(active ? Color.WHITE : new Color(0.7f, 0.8f, 0.9f, 0.85f));
             font.getData().setScale(0.95f);
@@ -790,13 +807,14 @@ public class CatalogScreen implements Screen, InputProcessor {
     }
 
     private void updateInput(float delta) {
-        Vector3 m = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        viewport.unproject(m);
-        mouseX = m.x;
-        mouseY = m.y;
+        mousePos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        viewport.unproject(mousePos);
+        mouseX = mousePos.x;
+        mouseY = mousePos.y;
+        Vector3 m = mousePos;
 
         hoverBack = (m.x >= 25f && m.x <= 155f && m.y >= H - 60f && m.y <= H - 16f);
-        hoverClaimAll = (m.x >= W - 240f && m.x <= W - 25f && m.y >= H - 60f && m.y <= H - 16f && getAvailableClaimCount() > 0);
+        hoverClaimAll = (m.x >= W - 240f && m.x <= W - 25f && m.y >= H - 60f && m.y <= H - 16f && cachedAvailableClaimCount > 0);
 
         // Biome tab hovers
         float tabW = 220f;
@@ -822,7 +840,6 @@ public class CatalogScreen implements Screen, InputProcessor {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || (hoverBack && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))) {
             AudioManager.getInstance().playSound("button_click");
             game.setScreen(previousScreen);
-            dispose();
             return;
         }
 
@@ -901,6 +918,7 @@ public class CatalogScreen implements Screen, InputProcessor {
         player.gainXp(c.rewardXp);
         SaveManager.savePlayer(player);
         AudioManager.getInstance().playSound("victory");
+        refreshCollectionStats();
         toastMsg = "Đã nhận thưởng " + c.name + ": +" + c.rewardGold + " Vàng, +" + c.rewardXp + " XP!";
         toastTimer = TOAST_DURATION;
     }
@@ -930,6 +948,7 @@ public class CatalogScreen implements Screen, InputProcessor {
         if (count > 0) {
             SaveManager.savePlayer(player);
             AudioManager.getInstance().playSound("victory");
+            refreshCollectionStats();
             toastMsg = "Nhận thành công " + count + " bộ sưu tập: +" + totalGold + " Vàng, +" + totalXp + " XP!";
             toastTimer = TOAST_DURATION;
         }
@@ -955,6 +974,7 @@ public class CatalogScreen implements Screen, InputProcessor {
     @Override public void show() {
         AudioManager.getInstance().playBGM("bgm_menu");
         Gdx.input.setInputProcessor(this);
+        refreshCollectionStats();
     }
     @Override public void resize(int w, int h) {
         if (w <= 0 || h <= 0) return;
@@ -968,7 +988,6 @@ public class CatalogScreen implements Screen, InputProcessor {
         }
     }
     @Override public void dispose() {
-        sr.dispose();
     }
 
     // InputProcessor methods

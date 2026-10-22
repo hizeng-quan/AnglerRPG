@@ -68,13 +68,17 @@ public class ShopScreen implements Screen {
     private float[] moteRadius = new float[MOTE_COUNT];
     private float[] moteAlpha = new float[MOTE_COUNT];
 
+    private final Vector3 mousePos = new Vector3();
+    private static final Color BACKDROP_TOP = new Color(0.24f, 0.16f, 0.10f, 1f);
+    private static final Color BACKDROP_BOT = new Color(0.14f, 0.09f, 0.06f, 1f);
+
     public ShopScreen(FishingRPG game, Player player, Screen previousScreen) {
         this.game = game;
         this.player = player;
         this.previousScreen = previousScreen;
         this.allShopItems = com.fishingrpg.game.data.ItemDatabase.getShopItems();
 
-        sr = new ShapeRenderer();
+        sr = game.shapeRenderer;
         font = game.font;
         titleFont = game.titleFont != null ? game.titleFont : game.font;
         layout = new GlyphLayout();
@@ -181,7 +185,7 @@ public class ShopScreen implements Screen {
             }
         }
 
-        ScreenUtils.clear(new Color(0.12f, 0.08f, 0.05f, 1f));
+        ScreenUtils.clear(0.12f, 0.08f, 0.05f, 1f);
         camera.update();
         sr.setProjectionMatrix(camera.combined);
         game.batch.setProjectionMatrix(camera.combined);
@@ -189,16 +193,14 @@ public class ShopScreen implements Screen {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-        Vector3 m = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        viewport.unproject(m);
+        mousePos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        viewport.unproject(mousePos);
+        Vector3 m = mousePos;
 
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
         // Warm Wooden Store Backdrop
-        sr.rect(0, 0, W, H,
-            new Color(0.14f, 0.09f, 0.06f, 1f), new Color(0.14f, 0.09f, 0.06f, 1f),
-            new Color(0.24f, 0.16f, 0.10f, 1f), new Color(0.24f, 0.16f, 0.10f, 1f)
-        );
+        sr.rect(0, 0, W, H, BACKDROP_BOT, BACKDROP_BOT, BACKDROP_TOP, BACKDROP_TOP);
 
         // Wood plank divider lines
         sr.setColor(0.08f, 0.05f, 0.03f, 0.7f);
@@ -615,13 +617,13 @@ public class ShopScreen implements Screen {
     private void update(float delta) {
         if (messageTimer > 0) messageTimer -= delta;
 
-        Vector3 m = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        viewport.unproject(m);
+        mousePos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        viewport.unproject(mousePos);
+        Vector3 m = mousePos;
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hoverBack)) {
             AudioManager.getInstance().playSFX("sfx_button");
             game.setScreen(previousScreen);
-            dispose();
             return;
         }
 
@@ -721,7 +723,6 @@ public class ShopScreen implements Screen {
                 if (clickBuy && !isSoldOut) {
                     if (player.consumeGold(currentPrice)) {
                         AudioManager.getInstance().playSFX("sfx_button");
-                        player.getQuestManager().addProgress("spend", currentPrice);
                         if (!skillId.isEmpty()) {
                             com.fishingrpg.game.skills.Skill s = player.getSkillTree().getSkill(skillId);
                             if (s != null && s.getLevel() == 0) {
@@ -798,7 +799,6 @@ public class ShopScreen implements Screen {
 
     @Override
     public void dispose() {
-        sr.dispose();
     }
 }
 

@@ -60,6 +60,26 @@ public class SkillTreeScreen implements Screen {
     private final float[] starSpeed = new float[STAR_COUNT];
     private final float[] starPhase = new float[STAR_COUNT];
 
+    private final Vector3 mousePos = new Vector3();
+    private final Rectangle clipBounds = new Rectangle(0, 140, 880, 508);
+    private final Rectangle scissors = new Rectangle();
+
+    private static final Color BG_BOT = new Color(0.02f, 0.03f, 0.07f, 1f);
+    private static final Color BG_TOP = new Color(0.06f, 0.04f, 0.12f, 1f);
+
+    private static final Color BRANCH_0_COLOR = new Color(1f, 0.6f, 0.25f, 1f);
+    private static final Color BRANCH_1_COLOR = new Color(0.25f, 0.8f, 1f, 1f);
+    private static final Color BRANCH_2_COLOR = new Color(0.3f, 0.95f, 0.55f, 1f);
+    private static final Color BRANCH_3_COLOR = new Color(0.85f, 0.45f, 1f, 1f);
+    private static final Color BRANCH_DEFAULT_COLOR = new Color(0.7f, 0.8f, 0.9f, 1f);
+
+    private static final Color[] HEADER_COLORS = {
+        BRANCH_0_COLOR,
+        BRANCH_1_COLOR,
+        BRANCH_2_COLOR,
+        BRANCH_3_COLOR
+    };
+
     class NodeBounds {
         String id; float x; float y; float w; float h; int branch; // 0: Str, 1: Agi, 2: Luck, 3: Secret
         NodeBounds(String id, float x, float y, float w, float h, int branch) {
@@ -111,7 +131,7 @@ public class SkillTreeScreen implements Screen {
         this.game = game;
         this.player = player;
         this.previousScreen = previousScreen;
-        this.sr = new ShapeRenderer();
+        this.sr = game.shapeRenderer;
         this.font = game.font;
         this.titleFont = game.titleFont != null ? game.titleFont : game.font;
         this.layout = new GlyphLayout();
@@ -159,8 +179,9 @@ public class SkillTreeScreen implements Screen {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         
-        Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        viewport.unproject(mouse);
+        mousePos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        viewport.unproject(mousePos);
+        Vector3 mouse = mousePos;
 
         hoverBack = (mouse.x >= 25 && mouse.x <= 155 && mouse.y >= H - 62 && mouse.y <= H - 20);
 
@@ -168,10 +189,7 @@ public class SkillTreeScreen implements Screen {
         // UPGRADED COSMIC NEBULA & STARFIELD BACKGROUND
         // ==========================================
         sr.begin(ShapeRenderer.ShapeType.Filled);
-        sr.rect(0, 0, W, H,
-            new Color(0.02f, 0.03f, 0.07f, 1f), new Color(0.02f, 0.03f, 0.07f, 1f),
-            new Color(0.06f, 0.04f, 0.12f, 1f), new Color(0.06f, 0.04f, 0.12f, 1f)
-        );
+        sr.rect(0, 0, W, H, BG_BOT, BG_BOT, BG_TOP, BG_TOP);
 
         // Rotating Sacred Astrolabe Rune Rings
         float astroCX = 440f;
@@ -235,8 +253,7 @@ public class SkillTreeScreen implements Screen {
         
         // Tree area clipping
         sr.begin(ShapeRenderer.ShapeType.Filled);
-        Rectangle clipBounds = new Rectangle(0, 140, 880, 508);
-        Rectangle scissors = new Rectangle();
+        clipBounds.set(0, 140, 880, 508);
         ScissorStack.calculateScissors(camera, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight(), game.batch.getTransformMatrix(), clipBounds, scissors);
         
         if (ScissorStack.pushScissors(scissors)) {
@@ -307,8 +324,9 @@ public class SkillTreeScreen implements Screen {
     }
 
     private void update() {
-        Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        viewport.unproject(mouse);
+        mousePos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        viewport.unproject(mousePos);
+        Vector3 mouse = mousePos;
 
         boolean inTreeArea = mouse.x < 880f && mouse.y > 140f && mouse.y < 648f;
         
@@ -380,7 +398,6 @@ public class SkillTreeScreen implements Screen {
                 AudioManager.getInstance().playSFX("sfx_button");
                 com.fishingrpg.game.data.SaveManager.savePlayer(player);
                 game.setScreen(previousScreen);
-                dispose();
                 return;
             }
             
@@ -410,7 +427,6 @@ public class SkillTreeScreen implements Screen {
             AudioManager.getInstance().playSFX("sfx_button");
             com.fishingrpg.game.data.SaveManager.savePlayer(player);
             game.setScreen(previousScreen);
-            dispose();
         }
     }
 
@@ -501,16 +517,10 @@ public class SkillTreeScreen implements Screen {
 
     private void drawBranchDecorations() {
         float[] headerYs = {1040f, 620f, 200f, -220f};
-        Color[] headerColors = {
-            new Color(1f, 0.6f, 0.25f, 1f),
-            new Color(0.25f, 0.8f, 1f, 1f),
-            new Color(0.3f, 0.95f, 0.55f, 1f),
-            new Color(0.85f, 0.45f, 1f, 1f)
-        };
         
         for (int i = 0; i < 4; i++) {
             float hy = headerYs[i] + panY;
-            Color col = headerColors[i];
+            Color col = HEADER_COLORS[i];
             
             // Background banner plate
             sr.setColor(col.r, col.g, col.b, 0.12f);
@@ -528,11 +538,11 @@ public class SkillTreeScreen implements Screen {
 
     private Color getBranchColor(int branch) {
         switch (branch) {
-            case 0: return new Color(1f, 0.6f, 0.25f, 1f);
-            case 1: return new Color(0.25f, 0.8f, 1f, 1f);
-            case 2: return new Color(0.3f, 0.95f, 0.55f, 1f);
-            case 3: return new Color(0.85f, 0.45f, 1f, 1f);
-            default: return new Color(0.7f, 0.8f, 0.9f, 1f);
+            case 0: return BRANCH_0_COLOR;
+            case 1: return BRANCH_1_COLOR;
+            case 2: return BRANCH_2_COLOR;
+            case 3: return BRANCH_3_COLOR;
+            default: return BRANCH_DEFAULT_COLOR;
         }
     }
 
@@ -1963,6 +1973,5 @@ public class SkillTreeScreen implements Screen {
         if (previousInputProcessor != null) {
             Gdx.input.setInputProcessor(previousInputProcessor);
         }
-        sr.dispose();
     }
 }

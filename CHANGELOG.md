@@ -4,6 +4,92 @@
 
 ---
 
+## 📅 [2026-10-22] - Phiên bản v0.4.17 (Hệ Thống Cài Đặt Settings, Tùy Biến Keybinds, Kéo Thả Âm Lượng Độc Lập, Phím F11 & Khắc Phục Lỗi UI)
+
+### 🎛️ Nâng Cấp Hệ Thống Cài Đặt & Quản Lý Dữ Liệu ([SettingsDialog.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/SettingsDialog.java))
+- **Khắc phục triệt để lỗi chữ bị đè xuyên Modal Xóa Dữ Liệu**:
+  - Khi mở Modal Cảnh Báo Xóa Dữ Liệu (`showResetModal == true`), tự động ẩn toàn bộ các dòng chữ và nút bấm của Tab Dữ Liệu bên dưới.
+  - Phủ thêm lớp màn mờ làm tối toàn màn hình (`alpha = 0.88f`), loại bỏ 100% hiện tượng các nút "XUẤT DỮ LIỆU", "NẠP DỮ LIỆU" lọt thỏm vào giữa thông báo cảnh báo đỏ.
+- **Đồng bộ chuẩn xác 100% Hitbox nút bấm Tab Dữ Liệu**:
+  - Đồng bộ hóa các hằng số tọa độ Y giữa xử lý input (`handleInput`) và render (`drawDataTabShapes`, `drawDataTabTexts`), chấm dứt hoàn toàn hiện tượng lệch 35px khi người chơi nhấp chuột vào nút Xóa dữ liệu.
+- **Âm thanh Drag Thả Mượt Mà & Tắt Âm Độc Lập**:
+  - Tách biệt hoàn toàn trạng thái Tắt Âm (`isBgmMuted` và `isSfxMuted`) trong [AudioManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/AudioManager.java). Giờ đây người chơi có thể tắt nhạc nền mà vẫn nghe rõ hiệu ứng tiếng quăng cần/kéo cá, hoặc ngược lại.
+  - Cho phép giữ và kéo chuột (Drag) trực tiếp trên thanh âm lượng để điều chỉnh tỉ lệ % âm lượng tức thì.
+- **Tính Năng Thay Đổi Toàn Bộ 14 Phím Bấm & Cơ Chế Chống Trùng Phím (Anti-Collision)**:
+  - Tạo mới [KeybindManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/KeybindManager.java) quản lý và lưu cấu hình phím vào `Preferences` (`FishingRPG_Keybinds`).
+  - Hỗ trợ đổi phím cho cả 14 thao tác: **Kéo Dây / Giằng Co**, **4 ô Kỹ Năng** và **toàn bộ 9 ô Phím Tắt Nhanh (Quickslot 1 đến 9)**.
+  - **Cơ Chế Bảo Vệ Tránh Trùng Keybind**: Tự động phát hiện khi phím mới bị trùng với một thao tác khác, phát âm thanh cảnh báo lỗi `sfx_fail`, hiển thị thông báo đỏ và chặn không cho gán trùng.
+  - **Bố Cục Danh Sách Cuộn Dọc Duy Nhất (Single-Column Scrollable List)**: Thay thế bố cục 2 cột bằng một danh sách cuộn dọc liền mạch duy nhất, tích hợp thanh cuộn mượt mà hỗ trợ kéo thả chuột (drag), con lăn bánh xe và phím mũi tên Lên/Xuống.
+  - **Nâng Cấp Giao Diện Chuẩn Vibe Game Fantasy RPG**:
+    - Khung viền kép hoàng gia mạ vàng, 4 góc đính họa tiết Corner Ornaments 2 tầng với đá quý.
+    - Hàng thẻ phím bấm làm bằng kính Obsidian Glass cao cấp với dải phản quang specular, hiệu ứng viền neon cyan/amber khi hover.
+    - Nút bấm phím hiển thị nhãn phím rõ ràng, khi bấm chờ gán phím mới sẽ phát sáng aura vàng pulsing nổi bật.
+    - Tab Âm Thanh nâng cấp thành bàn trộn âm: Khung thẻ Obsidian độc lập cho BGM và SFX, thanh trượt âm lượng rộng 160px có rãnh khấc chia độ (25%, 50%, 75%), núm trượt kim loại mạ vàng phát sáng, nút bật/tắt rune màu Emerald/Crimson.
+    - Tab Hiển Thị nâng cấp thành 2 thẻ lựa chọn Toàn Màn Hình & Cửa Sổ lớn có badge `[✓ ĐANG KÍCH HOẠT]`, kèm mẹo phím F11.
+    - Tab Dữ Liệu nâng cấp thành 3 thẻ tùy chọn lớn với mã màu riêng biệt (Xuất = Sapphire, Nạp = Gold, Xóa = Ruby).
+  - Tích hợp nút **"ĐẶT LẠI MẶC ĐỊNH"** để khôi phục cấu hình ban đầu chỉ bằng một cú nhấp.
+  - Tự động đồng bộ tên phím tùy biến lên thanh slot kỹ năng trong COMBAT, badge góc trên bên trái của từng ô Quickslot và các thông báo cắn câu.
+- **Phím Tắt F11 Toàn Cục**:
+  - Tích hợp bộ lắng nghe phím F11 tại [FishingRPG.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/FishingRPG.java), cho phép chuyển đổi nhanh giữa Toàn Màn Hình và Cửa Sổ 1280x720 tại bất kỳ màn hình nào trong game.
+- **Tối Giản Hóa Giao Diện & Làm Sạch Chú Thích Cài Đặt**:
+  - Xóa bỏ toàn bộ các dòng chữ chú thích cách sử dụng rườm rà ở dưới đáy của cả 4 tab trong Cài đặt (Âm thanh, Hiển thị, Phím bấm, Dữ liệu), giúp giao diện thông thoáng, tinh gọn và sang trọng.
+  - Rà soát và xóa bỏ các tên phím cứng để trong ngoặc đơn (như "phím Space", "(1-9)") trong HUD và tin tức, đổi thành nhãn chung "thanh Phím Tắt" và tên phím động.
+  - Ngẫu nhiên hóa bản tin News Ticker xuất hiện ban đầu khi mở Game HUD, chấm dứt tình trạng lúc nào cũng bắt đầu bằng "Tin vực biển: Xuất hiện một luồng cá...".
+
+### 🎛️ Nút Cài Đặt [⚙] Trên Game HUD
+- **Vị trí chuẩn xác theo yêu cầu**: Đặt tại `X = 1220f, Y = 610f, Size = 40x40`, nằm ngay bên dưới nút Thông tin `ⓘ` (`X = 1220f, Y = 660f`).
+- **Thiết kế Vector Icon Bánh Răng**: Tạo hình bánh răng 8 nan tỏa và trục rỗng sắc sảo, có hiệu ứng xoay nhẹ và đổi màu highlight khi hover.
+- **Giới hạn hiển thị chuyên biệt**: Chỉ xuất hiện trong Game HUD trạng thái rảnh rỗi (`State.IDLE`), tự động ẩn đi khi người chơi bước vào màn hình câu cá để giữ giao diện thông thoáng.
+
+### 🧹 Tối Giản Hóa Menu Chính ([MainMenuScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/MainMenuScreen.java))
+- **Loại bỏ toàn bộ các nút thừa**: Bỏ hoàn toàn các nút "XUẤT DỮ LIỆU", "NẠP DỮ LIỆU", "RESET DỮ LIỆU" cùng các modal cảnh báo trước đây ở Menu chính.
+- **Menu chính chỉ còn 2 lựa chọn cốt lõi**:
+  1. `"BẮT ĐẦU CÂU"`: Vào ngay bến cảng câu cá.
+  2. `"THOÁT"`: Đóng ứng dụng an toàn.
+- Toàn bộ tính năng quản lý và sao lưu dữ liệu nay đã được quy tụ tập trung trong cửa sổ Cài Đặt.
+
+---
+
+## 📅 [2026-10-22] - Phiên bản v0.4.16 (Khắc Phục Triệt Để Crash Bộ Nhớ, Sửa Phím QWER, Sửa Điều Hướng Bản Đồ & Thêm Bảng Tin Cập Nhật Trực Quan)
+
+### 🛡️ Khắc Phục Triệt Để Lỗi Crash Bộ Nhớ Native (JNI DirectByteBuffer Heap Exception)
+- **Tái cấu trúc Quản lý ShapeRenderer Tập trung (Singleton Resource Architecture)**:
+  - Khởi tạo một đối tượng `ShapeRenderer` dùng chung duy nhất trong [FishingRPG.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/FishingRPG.java) xuyên suốt vòng đời trò chơi.
+  - Loại bỏ hoàn toàn 10 vị trí cấp phát `new ShapeRenderer()` và giải phóng `sr.dispose()` riêng lẻ tại các màn hình (`EquipmentScreen`, `GachaScreen`, `ShopScreen`, `SkillTreeScreen`, `QuestScreen`, `EventScreen`, `CatalogScreen`, `MapScreen`, `MainMenuScreen`, `PlayScreen`).
+  - Chấm dứt 100% hiện tượng vỡ cấu trúc bộ nhớ Windows Heap (`ntdll.dll!RtlAllocateHeap` và `msvcrt.dll!memcpy` gây mã lỗi `0xc0000005 ACCESS_VIOLATION`) khi người chơi đóng mở qua lại giữa Gacha, Trang Bị, Cửa Hàng và HUD.
+- **Sửa Lỗi Use-After-Free trong `EquipmentScreen.java`**:
+  - Bổ sung lệnh bảo vệ `if (game.getScreen() != this) return;` ngay sau hàm `update(delta)`.
+  - Loại bỏ các lệnh gọi `dispose()` thủ công khi ấn nút `← QUAY LẠI` hoặc phím `ESC`, ngăn chặn việc OpenGL vẽ trên tài nguyên đã bị hủy.
+- **Bổ sung Bộ đệm Chống Nuốt Click (Input Debounce Buffer)**:
+  - Bổ sung kiểm tra `framesToSkip <= 0` cho các nút bấm mở Cửa hàng, Túi đồ, Kỹ năng, Gacha, Sự kiện, Trang bị trên HUD trong [PlayScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/PlayScreen.java), ngăn click từ màn hình trước bị lọt xuyên vào HUD.
+
+### 🎮 Sửa Lỗi Phím Kỹ Năng Q / W / E / R & Tự Động Gắn Kỹ Năng Cho Người Chơi Mới
+- **Tự động mở khóa và trang bị kỹ năng khởi đầu**:
+  - Trong [Player.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/entities/Player.java) và [SaveManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/data/SaveManager.java), hệ thống đảm bảo kỹ năng chủ động cơ bản [Kéo Mạnh] (`keo_manh`) luôn đạt ít nhất Cấp 1 và được tự động gán vào ô phím [Q] (Slot 0) cho tài khoản mới hoặc tài khoản chưa gắn kỹ năng.
+- **Bổ sung Phản Hồi Chữ Nổi (Floating Text) Trực Quan**:
+  - Khi người chơi bấm phím Q, W, E, R vào ô chưa gắn kỹ năng, hiển thị thông báo chữ nổi màu vàng ngay giữa màn hình: `"Ô [Q/W/E/R] chưa gắn kỹ năng!"`.
+  - Khi kỹ năng đang trong thời gian hồi chiêu, hiển thị chữ nổi thông báo thời gian còn lại (VD: `"Kéo Mạnh đang hồi (2.5s)!"`).
+  - Khi người chơi không đủ Thể lực để thi triển chiêu thức, hiển thị cảnh báo đỏ nổi bật: `"Không đủ Thể lực!"`.
+
+### 🚪 Chuẩn Hóa Hệ Thống Điều Hướng 3 Cấp Độ (Zero-Loop Hierarchy)
+- **Phân định rõ ràng chức năng nút quay lại theo trạng thái**:
+  - **Khi ở Màn hình chơi (Đang câu / Giằng co / Chuẩn bị quăng)**: Nút góc trên bên trái hiển thị nhãn `← BẢN ĐỒ`. Nhấn nút này (hoặc phím `ESC`) sẽ lưu game và quay trở lại **Màn Hình Chọn Bản Đồ (`MapScreen`)** để đổi bãi câu.
+  - **Khi ở Màn hình chọn bản đồ (`MapScreen`)**: Nhấn nút `← QUAY LẠI` (hoặc phím `ESC`) sẽ quay trở về **Game HUD / Trung tâm Hub (`PlayScreen` ở `State.IDLE`)**.
+  - **Khi ở Game HUD (`PlayScreen` ở `State.IDLE`)**: Nút góc trên bên trái hiển thị nhãn `← MENU`. Nhấn nút này (hoặc phím `ESC`) sẽ lưu game và quay trở về **Menu Chính (`MainMenuScreen`)**.
+  - Xóa bỏ triệt để 100% tình trạng văng nhầm màn hình hoặc bị kẹt trong vòng lặp điều hướng.
+
+### 📢 Bản Tin Thông Báo Cập Nhật & Nút Thông Tin [ⓘ] Góc Phải Game HUD
+- **Bỏ nút Bản Tin tại Menu chính**: Menu chính tối giản với 5 lựa chọn cốt lõi (Bắt đầu câu, Xuất, Nạp, Reset, Thoát).
+- **Thiết kế nút Thông tin [ⓘ] hình vuông tại góc trên bên phải Game HUD**:
+  - Chuyển sang góc trên bên phải (`X = 1220f, Y = 660f`), thiết kế hình vuông 40x40 pixel chuẩn icon với logo chữ `ⓘ` (Information) tinh tế, bỏ nhãn chữ "BẢN TIN" để giao diện thoáng đãng.
+  - **Cơ chế chấm thông báo thông minh (Unread Dot Indicator)**: Chỉ hiện chấm đỏ phát sáng khi có bản cập nhật mới chưa đọc. Khi người chơi nhấn vào xem, chấm đỏ sẽ tự động biến mất hoàn toàn.
+  - **Chỉ xuất hiện trong Game HUD (`State.IDLE`)**: Tự động ẩn đi khi người chơi bước vào màn hình câu cá thực sự.
+- **Đồng bộ màu sắc các mục trong bản tin**:
+  - Toàn bộ các dòng `[SỬA LỖI]` được quy chuẩn về cùng một mã màu xanh ngọc đồng nhất (`Color(0.25f, 0.85f, 0.50f, 1f)`), giúp bố cục bảng tin hài hòa và chuyên nghiệp.
+- **Khắc phục triệt để lỗi khung nội dung bị trắng**: Tích hợp camera chuẩn và Vertical Bounds Culling hiển thị 100% nội dung chữ sắc nét.
+
+---
+
 ## 📅 [2026-10-21] - Phiên bản v0.4.15 (Sửa Lỗi Nút Menu, Thêm Nút Xuất/Nạp Dữ Liệu & Đóng Gói .EXE Windows)
 
 ### 🚪 Sửa Lỗi Nút Thoát Ra Menu Ở Game Lại Ra Màn Hình Bản Đồ (`PlayScreen.java`)

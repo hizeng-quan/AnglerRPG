@@ -38,14 +38,17 @@ public class PlayScreen implements Screen {
     private float timer = 0f;
     // Cached Vector3 để tránh allocate mời frame
     private final com.badlogic.gdx.math.Vector3 mousePos = new com.badlogic.gdx.math.Vector3();
+    private final boolean[] activeSkillInputs = new boolean[4];
     
     private FloatingTextManager floatingTextManager;
     private float shakeTimer = 0f;
     private float shakeIntensity = 0f;
+    private final com.fishingrpg.game.ui.PatchNotesDialog patchNotesDialog;
+    private final com.fishingrpg.game.ui.SettingsDialog settingsDialog;
 
     public PlayScreen(FishingRPG game) {
         this.game = game;
-        this.shapeRenderer = new ShapeRenderer();
+        this.shapeRenderer = game.shapeRenderer;
         this.font = game.font;
         this.camera = new OrthographicCamera();
         this.viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
@@ -54,6 +57,16 @@ public class PlayScreen implements Screen {
         this.hud = new GameHUD(shapeRenderer, font, this);
         this.floatingTextManager = new FloatingTextManager();
         this.fishingManager.setFloatingTextManager(this.floatingTextManager);
+        this.patchNotesDialog = new com.fishingrpg.game.ui.PatchNotesDialog(game);
+        this.settingsDialog = new com.fishingrpg.game.ui.SettingsDialog(game);
+        this.settingsDialog.setListener(this::syncPlayerState);
+    }
+
+    public void syncPlayerState() {
+        this.player = game.player;
+        if (this.fishingManager != null) {
+            this.fishingManager.setPlayer(this.player);
+        }
     }
 
     @Override
@@ -67,6 +80,20 @@ public class PlayScreen implements Screen {
             };
         }
         framesToSkip = 5; // Prevent accidental double clicks when entering screen
+        Gdx.input.setInputProcessor(new com.badlogic.gdx.InputAdapter() {
+            @Override
+            public boolean scrolled(float amountX, float amountY) {
+                if (settingsDialog != null && settingsDialog.isOpen()) {
+                    settingsDialog.handleScroll(amountY);
+                    return true;
+                }
+                if (patchNotesDialog != null && patchNotesDialog.isOpen()) {
+                    patchNotesDialog.handleScroll(amountY);
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -112,7 +139,7 @@ public class PlayScreen implements Screen {
         shapeRenderer.setProjectionMatrix(camera.combined);
 
         if (fishingManager.state == FishingManager.State.IDLE) {
-            ScreenUtils.clear(new Color(0.1f, 0.4f, 0.6f, 1f));
+            ScreenUtils.clear(0.1f, 0.4f, 0.6f, 1f);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             hud.drawIdleShapes(player);
             shapeRenderer.end();
@@ -164,6 +191,14 @@ public class PlayScreen implements Screen {
             com.fishingrpg.game.ui.NotificationUI.drawNotification(shapeRenderer, game.batch, game.font, message, messageTimer, 2f, WORLD_WIDTH, WORLD_HEIGHT);
             Gdx.gl.glDisable(GL20.GL_BLEND);
         }
+
+        if (patchNotesDialog != null && patchNotesDialog.isOpen()) {
+            patchNotesDialog.render(shapeRenderer, game.batch, font, game.titleFont != null ? game.titleFont : font, game.smallFont != null ? game.smallFont : font, timer, camera);
+        }
+
+        if (settingsDialog != null && settingsDialog.isOpen()) {
+            settingsDialog.render(shapeRenderer, game.batch, font, game.titleFont != null ? game.titleFont : font, game.smallFont != null ? game.smallFont : font, timer, camera);
+        }
     }
 
     private void update(float delta) {
@@ -178,11 +213,21 @@ public class PlayScreen implements Screen {
         
         mousePos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         viewport.unproject(mousePos);
+
+        if (settingsDialog != null && settingsDialog.isOpen()) {
+            settingsDialog.update(delta);
+            if (settingsDialog.handleInput(mousePos)) return;
+        }
+
+        if (patchNotesDialog != null && patchNotesDialog.isOpen()) {
+            if (patchNotesDialog.handleInput(mousePos)) return;
+        }
+
         hud.updateHover(mousePos, fishingManager.state);
 
         String clickedItem = hud.getClickedInventoryItem(mousePos, fishingManager.state);
         boolean itemClicked = false;
-        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && clickedItem != null) {
+        if (framesToSkip <= 0 && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && clickedItem != null) {
             useItem(clickedItem);
             itemClicked = true;
         }
@@ -210,7 +255,7 @@ public class PlayScreen implements Screen {
         for (Map.Entry<String, Integer> entry : player.getInventory().entrySet()) {
             String name = entry.getKey();
             if (entry.getValue() <= 0 || name.equals("Vàng")) continue;
-            int keyCode = Input.Keys.NUM_1 + i;
+            int keyCode = com.fishingrpg.game.systems.KeybindManager.getInstance().getQuickslotKey(i);
             if (i < 9 && Gdx.input.isKeyJustPressed(keyCode)) {
                 useItem(name);
                 break;
@@ -218,7 +263,7 @@ public class PlayScreen implements Screen {
             i++;
         }
 
-        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+        if (framesToSkip <= 0 && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             if (hud.isShopClicked(mousePos, fishingManager.state)) {
                 game.setScreen(new com.fishingrpg.game.screens.ShopScreen(game, player, this));
                 // do not dispose yet, because ShopScreen will return back to this screen
@@ -252,26 +297,54 @@ public class PlayScreen implements Screen {
         }
 
         boolean menuClicked = framesToSkip <= 0 && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isMenuClicked(mousePos, fishingManager.state);
-        boolean isSpaceDown = framesToSkip <= 0 && (Gdx.input.isKeyPressed(Input.Keys.SPACE) || (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && hud.isCangHovered()));
-        boolean isSpaceJust = framesToSkip <= 0 && (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isCangHovered()));
+        int pullKey = com.fishingrpg.game.systems.KeybindManager.getInstance().getPullKey();
+        boolean isSpaceDown = framesToSkip <= 0 && (Gdx.input.isKeyPressed(pullKey) || (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && hud.isCangHovered()));
+        boolean isSpaceJust = framesToSkip <= 0 && (Gdx.input.isKeyJustPressed(pullKey) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isCangHovered()));
 
-        boolean[] activeSkillInputs = new boolean[4];
+        activeSkillInputs[0] = false;
+        activeSkillInputs[1] = false;
+        activeSkillInputs[2] = false;
+        activeSkillInputs[3] = false;
         if (framesToSkip <= 0) {
-            activeSkillInputs[0] = Gdx.input.isKeyJustPressed(Input.Keys.Q) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(0));
-            activeSkillInputs[1] = Gdx.input.isKeyJustPressed(Input.Keys.W) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(1));
-            activeSkillInputs[2] = Gdx.input.isKeyJustPressed(Input.Keys.E) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(2));
-            activeSkillInputs[3] = Gdx.input.isKeyJustPressed(Input.Keys.R) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(3));
+            com.fishingrpg.game.systems.KeybindManager km = com.fishingrpg.game.systems.KeybindManager.getInstance();
+            activeSkillInputs[0] = Gdx.input.isKeyJustPressed(km.getSkillKey(0)) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(0));
+            activeSkillInputs[1] = Gdx.input.isKeyJustPressed(km.getSkillKey(1)) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(1));
+            activeSkillInputs[2] = Gdx.input.isKeyJustPressed(km.getSkillKey(2)) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(2));
+            activeSkillInputs[3] = Gdx.input.isKeyJustPressed(km.getSkillKey(3)) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(3));
         }
 
-        if (framesToSkip <= 0 && menuClicked) {
-            com.fishingrpg.game.data.SaveManager.savePlayer(player);
-            game.setScreen(new MainMenuScreen(game));
+        boolean settingClicked = framesToSkip <= 0 && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isSettingClicked(mousePos, fishingManager.state);
+        if (settingClicked) {
+            settingsDialog.open();
             return;
         }
 
-        if (framesToSkip <= 0 && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+        boolean newsClicked = framesToSkip <= 0 && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isNewsClicked(mousePos, fishingManager.state);
+        if (newsClicked) {
+            patchNotesDialog.open();
+            return;
+        }
+
+        boolean escPressed = framesToSkip <= 0 && Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE);
+
+        if (menuClicked || escPressed) {
+            if (settingsDialog != null && settingsDialog.isOpen()) {
+                settingsDialog.close();
+                return;
+            }
+            if (patchNotesDialog != null && patchNotesDialog.isOpen()) {
+                patchNotesDialog.close();
+                return;
+            }
             com.fishingrpg.game.data.SaveManager.savePlayer(player);
-            game.setScreen(new MainMenuScreen(game));
+            if (fishingManager.state == FishingManager.State.IDLE) {
+                // Game HUD: Quay lại Menu chính
+                game.setScreen(new MainMenuScreen(game));
+                dispose();
+            } else {
+                // Màn hình chơi câu cá: Quay lại Màn hình chọn bản đồ
+                game.setScreen(new com.fishingrpg.game.screens.MapScreen(game, this));
+            }
             return;
         }
 
@@ -487,12 +560,14 @@ public class PlayScreen implements Screen {
     @Override public void hide() {
         // Lưu khi rời màn hình (thay vì save mỗi lần câu)
         com.fishingrpg.game.data.SaveManager.savePlayer(player);
+        Gdx.input.setInputProcessor(null);
     }
-    @Override public void dispose() { shapeRenderer.dispose(); }
+    @Override public void dispose() {}
 
     public Viewport getViewport() { return viewport; }
     public OrthographicCamera getCamera() { return camera; }
     public FishingManager getFishingManager() { return fishingManager; }
     public Player getPlayer() { return player; }
     public FishingRPG getGame() { return game; }
+    public boolean isNewsUnread() { return patchNotesDialog != null && patchNotesDialog.isUnread(); }
 }

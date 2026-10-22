@@ -12,13 +12,42 @@ public class AudioManager {
     private ObjectMap<String, Sound> sfxMap;
     
     private String currentBGM;
-    private boolean isMuted = false;
+    private boolean isBgmMuted = false;
+    private boolean isSfxMuted = false;
     private float bgmVolume = 0.5f;
-    private float sfxVolume = 1.0f;
+    private float sfxVolume = 0.8f;
+
+    private static final String PREF_AUDIO = "FishingRPG_Audio";
+    private static final String KEY_BGM_VOL = "bgm_vol";
+    private static final String KEY_SFX_VOL = "sfx_vol";
+    private static final String KEY_BGM_MUTED = "bgm_muted";
+    private static final String KEY_SFX_MUTED = "sfx_muted";
 
     private AudioManager() {
         bgmMap = new ObjectMap<>();
         sfxMap = new ObjectMap<>();
+        loadPreferences();
+    }
+
+    private void loadPreferences() {
+        try {
+            com.badlogic.gdx.Preferences prefs = Gdx.app.getPreferences(PREF_AUDIO);
+            bgmVolume = prefs.getFloat(KEY_BGM_VOL, 0.5f);
+            sfxVolume = prefs.getFloat(KEY_SFX_VOL, 0.8f);
+            isBgmMuted = prefs.getBoolean(KEY_BGM_MUTED, prefs.getBoolean("is_muted", false));
+            isSfxMuted = prefs.getBoolean(KEY_SFX_MUTED, prefs.getBoolean("is_muted", false));
+        } catch (Throwable ignored) {}
+    }
+
+    private void savePreferences() {
+        try {
+            com.badlogic.gdx.Preferences prefs = Gdx.app.getPreferences(PREF_AUDIO);
+            prefs.putFloat(KEY_BGM_VOL, bgmVolume);
+            prefs.putFloat(KEY_SFX_VOL, sfxVolume);
+            prefs.putBoolean(KEY_BGM_MUTED, isBgmMuted);
+            prefs.putBoolean(KEY_SFX_MUTED, isSfxMuted);
+            prefs.flush();
+        } catch (Throwable ignored) {}
     }
 
     public static AudioManager getInstance() {
@@ -31,8 +60,8 @@ public class AudioManager {
     private String targetBGM;
 
     public void playBGM(String bgmName) {
-        if (isMuted) return;
         targetBGM = bgmName;
+        if (isBgmMuted) return;
 
         if (currentBGM == null) {
             startMusic(targetBGM);
@@ -60,7 +89,7 @@ public class AudioManager {
                         Gdx.app.postRunnable(new Runnable() {
                             @Override
                             public void run() {
-                                if (targetBGM != null && !isMuted) {
+                                if (targetBGM != null && !isBgmMuted) {
                                     startMusic(targetBGM);
                                 }
                             }
@@ -83,7 +112,7 @@ public class AudioManager {
     }
 
     public void playSFX(String sfxName) {
-        if (isMuted) return;
+        if (isSfxMuted) return;
         
         if (!sfxMap.containsKey(sfxName)) {
             try {
@@ -112,11 +141,60 @@ public class AudioManager {
         }
     }
 
-    public void setMuted(boolean muted) {
-        this.isMuted = muted;
+    public void setBgmMuted(boolean muted) {
+        this.isBgmMuted = muted;
         if (muted) {
             stopBGM();
+        } else if (targetBGM != null) {
+            startMusic(targetBGM);
         }
+        savePreferences();
+    }
+
+    public boolean isBgmMuted() {
+        return isBgmMuted;
+    }
+
+    public void setSfxMuted(boolean muted) {
+        this.isSfxMuted = muted;
+        savePreferences();
+    }
+
+    public boolean isSfxMuted() {
+        return isSfxMuted;
+    }
+
+    public void setMuted(boolean muted) {
+        setBgmMuted(muted);
+        setSfxMuted(muted);
+    }
+
+    public boolean isMuted() {
+        return isBgmMuted && isSfxMuted;
+    }
+
+    public float getBgmVolume() {
+        return bgmVolume;
+    }
+
+    public void setBgmVolume(float vol) {
+        this.bgmVolume = Math.max(0f, Math.min(1f, vol));
+        if (currentBGM != null && bgmMap.containsKey(currentBGM)) {
+            Music m = bgmMap.get(currentBGM);
+            if (m != null) {
+                m.setVolume(this.bgmVolume);
+            }
+        }
+        savePreferences();
+    }
+
+    public float getSfxVolume() {
+        return sfxVolume;
+    }
+
+    public void setSfxVolume(float vol) {
+        this.sfxVolume = Math.max(0f, Math.min(1f, vol));
+        savePreferences();
     }
     
     public void dispose() {

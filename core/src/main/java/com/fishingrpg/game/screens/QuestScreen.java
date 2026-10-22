@@ -74,6 +74,26 @@ public class QuestScreen implements Screen {
     private final float[] emberSpeed = new float[20];
     private final float[] emberSize = new float[20];
 
+    // Caches to eliminate per-frame allocations and sorting
+    private final Vector3 mousePos = new Vector3();
+    private final Rectangle scissor = new Rectangle();
+    private final Rectangle clipBounds = new Rectangle();
+    private final List<Quest> cachedDisplayList = new ArrayList<>();
+    private boolean questListDirty = true;
+    private static final Comparator<Quest> QUEST_COMPARATOR = (q1, q2) -> {
+        int s1 = q1.claimed ? 2 : (q1.isCompleted() ? 0 : 1);
+        int s2 = q2.claimed ? 2 : (q2.isCompleted() ? 0 : 1);
+        return Integer.compare(s1, s2);
+    };
+
+    private void refreshDisplayList() {
+        List<Quest> list = (currentTab == 0) ? qm.dailyQuests : (currentTab == 1) ? qm.weeklyQuests : qm.achievements;
+        cachedDisplayList.clear();
+        cachedDisplayList.addAll(list);
+        cachedDisplayList.sort(QUEST_COMPARATOR);
+        questListDirty = false;
+    }
+
     public QuestScreen(FishingRPG game, PlayScreen playScreen, Player player) {
         this.game = game;
         this.playScreen = playScreen;
@@ -82,7 +102,7 @@ public class QuestScreen implements Screen {
 
         this.camera = new OrthographicCamera();
         this.viewport = new FitViewport(W, H, camera);
-        this.sr = new ShapeRenderer();
+        this.sr = game.shapeRenderer;
         this.font = game.font;
         this.titleFont = game.titleFont;
         this.layout = new GlyphLayout();
@@ -98,6 +118,7 @@ public class QuestScreen implements Screen {
     @Override
     public void show() {
         AudioManager.getInstance().playBGM("bgm_menu");
+        questListDirty = true;
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean scrolled(float amountX, float amountY) {
@@ -435,21 +456,14 @@ public class QuestScreen implements Screen {
         float clipY = 20f;
         float clipH = (currentTab < 2) ? H - 215f : H - 115f;
 
-        Rectangle scissor = new Rectangle();
-        Rectangle clipBounds = new Rectangle(panelX, clipY, panelW, clipH);
+        clipBounds.set(panelX, clipY, panelW, clipH);
         ScissorStack.calculateScissors(camera, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight(), game.batch.getTransformMatrix(), clipBounds, scissor);
         boolean hasScissors = ScissorStack.pushScissors(scissor);
 
-        List<Quest> list = (currentTab == 0) ? qm.dailyQuests : (currentTab == 1) ? qm.weeklyQuests : qm.achievements;
-        List<Quest> displayList = new ArrayList<>(list);
-        displayList.sort(new Comparator<Quest>() {
-            @Override
-            public int compare(Quest q1, Quest q2) {
-                int s1 = q1.claimed ? 2 : (q1.isCompleted() ? 0 : 1);
-                int s2 = q2.claimed ? 2 : (q2.isCompleted() ? 0 : 1);
-                return Integer.compare(s1, s2);
-            }
-        });
+        if (questListDirty) {
+            refreshDisplayList();
+        }
+        List<Quest> displayList = cachedDisplayList;
 
         float startY = (currentTab < 2 ? H - 195f : H - 95f) + scrollY;
 
@@ -638,21 +652,19 @@ public class QuestScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             AudioManager.getInstance().playSound("button_click");
             game.setScreen(playScreen);
-            dispose();
             return true;
         }
 
-        Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        viewport.unproject(mouse);
-        float mx = mouse.x;
-        float my = mouse.y;
+        mousePos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        viewport.unproject(mousePos);
+        float mx = mousePos.x;
+        float my = mousePos.y;
 
         // Back button hover
         hoverBack = (mx >= 35f && mx <= 245f && my >= H - 85f && my <= H - 37f);
         if (hoverBack && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             AudioManager.getInstance().playSound("button_click");
             game.setScreen(playScreen);
-            dispose();
             return true;
         }
 
@@ -664,6 +676,7 @@ public class QuestScreen implements Screen {
                 if (currentTab != i) {
                     currentTab = i;
                     scrollY = 0;
+                    questListDirty = true;
                     AudioManager.getInstance().playSound("button_click");
                 }
             }
@@ -701,16 +714,10 @@ public class QuestScreen implements Screen {
         float clipH = (currentTab < 2) ? H - 215f : H - 115f;
 
         if (my >= clipY && my <= clipY + clipH && mx >= panelX && mx <= panelX + panelW) {
-            List<Quest> list = (currentTab == 0) ? qm.dailyQuests : (currentTab == 1) ? qm.weeklyQuests : qm.achievements;
-            List<Quest> displayList = new ArrayList<>(list);
-            displayList.sort(new Comparator<Quest>() {
-                @Override
-                public int compare(Quest q1, Quest q2) {
-                    int s1 = q1.claimed ? 2 : (q1.isCompleted() ? 0 : 1);
-                    int s2 = q2.claimed ? 2 : (q2.isCompleted() ? 0 : 1);
-                    return Integer.compare(s1, s2);
-                }
-            });
+            if (questListDirty) {
+                refreshDisplayList();
+            }
+            List<Quest> displayList = cachedDisplayList;
 
             float startY = (currentTab < 2 ? H - 195f : H - 95f) + scrollY;
 
@@ -759,6 +766,7 @@ public class QuestScreen implements Screen {
 
     private void claimSingleQuest(Quest q) {
         q.claimed = true;
+        questListDirty = true;
         if (currentTab == 0) qm.dailyPoints += q.rewardPoints;
         if (currentTab == 1) qm.weeklyPoints += q.rewardPoints;
         player.addDiamonds(q.rewardDiamonds);
@@ -787,6 +795,7 @@ public class QuestScreen implements Screen {
             toastMsg = "MỞ RƯƠNG TUẦN: +100 KC, +1000 Vàng, +1000 XP!";
         }
         toastTimer = TOAST_DURATION;
+        questListDirty = true;
         SaveManager.savePlayer(player);
         AudioManager.getInstance().playSound("victory");
     }
@@ -825,6 +834,7 @@ public class QuestScreen implements Screen {
         }
 
         if (count > 0) {
+            questListDirty = true;
             SaveManager.savePlayer(player);
             AudioManager.getInstance().playSound("victory");
             toastMsg = "Đã nhận " + count + " mục thưởng (" + totalDiamonds + " Kim Cương)!";
@@ -855,5 +865,5 @@ public class QuestScreen implements Screen {
     }
     @Override public void pause() {}
     @Override public void resume() {}
-    @Override public void dispose() { sr.dispose(); }
+    @Override public void dispose() {}
 }

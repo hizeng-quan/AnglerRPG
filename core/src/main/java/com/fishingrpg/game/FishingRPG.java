@@ -2,17 +2,20 @@ package com.fishingrpg.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.fishingrpg.game.entities.Player;
 import com.fishingrpg.game.screens.MainMenuScreen;
 
 public class FishingRPG extends Game {
 
     public SpriteBatch batch;
+    public ShapeRenderer shapeRenderer;
     public Player player;
     public BitmapFont smallFont;
     public BitmapFont font;
@@ -22,6 +25,7 @@ public class FishingRPG extends Game {
     @Override
     public void create() {
         batch = new SpriteBatch();
+        shapeRenderer = new ShapeRenderer();
         player = new Player();
         com.fishingrpg.game.data.SaveManager.loadPlayer(player);
 
@@ -77,13 +81,22 @@ public class FishingRPG extends Game {
 
     @Override
     public void render() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F11)) {
+            if (Gdx.graphics.isFullscreen()) {
+                Gdx.graphics.setWindowedMode(1280, 720);
+            } else {
+                Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+            }
+        }
         super.render();
     }
 
     @Override
     public void dispose() {
         com.fishingrpg.game.data.SaveManager.savePlayer(player);
+        com.fishingrpg.game.systems.AudioManager.getInstance().dispose();
         batch.dispose();
+        if (shapeRenderer != null) shapeRenderer.dispose();
         if (smallFont != null) smallFont.dispose();
         if (font != null) font.dispose();
         if (titleFont != null) titleFont.dispose();

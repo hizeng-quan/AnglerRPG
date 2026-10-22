@@ -100,6 +100,10 @@ public class FishingManager {
         this.player = player;
     }
     
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+    
     public void setFloatingTextManager(FloatingTextManager ftm) {
         this.ftm = ftm;
     }
@@ -800,16 +804,25 @@ public class FishingManager {
     private float accumTimer = 0f;
 
     private void handleSkills(boolean[] activeInputs, boolean isSpaceDown, float delta) {
+        String[] hotkeyNames = {"Q", "W", "E", "R"};
         for (int i = 0; i < 4; i++) {
             if (activeInputs[i]) {
                 String skillId = player.getEquippedActives()[i];
-                if (skillId != null && player.getSkillTree().getSkill(skillId) != null && player.getSkillTree().getSkill(skillId).isUnlocked()) {
-                    float cdMult = 1f;
-                    if (player.isSetBonusActive() && player.getEquippedRod() != null && player.getEquippedRod().setName.equals("Thời Không")) {
-                        cdMult = 0.8f;
-                    }
-                    useActiveSkill(skillId, cdMult);
+                if (skillId == null) {
+                    if (ftm != null) ftm.addText("Ô [" + hotkeyNames[i] + "] chưa gắn kỹ năng!", 640f + MathUtils.random(-25, 25), 380f, Color.YELLOW);
+                    AudioManager.getInstance().playSFX("sfx_button");
+                    continue;
                 }
+                if (player.getSkillTree().getSkill(skillId) == null || !player.getSkillTree().getSkill(skillId).isUnlocked()) {
+                    if (ftm != null) ftm.addText("Kỹ năng chưa mở khóa!", 640f + MathUtils.random(-25, 25), 380f, Color.ORANGE);
+                    AudioManager.getInstance().playSFX("sfx_button");
+                    continue;
+                }
+                float cdMult = 1f;
+                if (player.isSetBonusActive() && player.getEquippedRod() != null && player.getEquippedRod().setName.equals("Thời Không")) {
+                    cdMult = 0.8f;
+                }
+                useActiveSkill(skillId, cdMult);
             }
         }
         
@@ -825,8 +838,13 @@ public class FishingManager {
     private void useActiveSkill(String skillId, float cdMult) {
         float dmgMult = 1f;
         if (phaGiapTimer > 0) dmgMult += phaGiapDebuff;
+        boolean skillUsed = false;
 
-        if (skillId.equals("keo_manh") && keoManhCooldown <= 0) {
+        if (skillId.equals("keo_manh")) {
+            if (keoManhCooldown > 0) {
+                if (ftm != null) ftm.addText("Kéo Mạnh đang hồi (" + String.format(java.util.Locale.US, "%.1fs", keoManhCooldown) + ")!", 640f, 380f, Color.GRAY);
+                return;
+            }
             float cost = player.getSkillTree().getKeoManhStaminaCost();
             float dmg = player.getSkillTree().getKeoManhDamage();
             
@@ -840,7 +858,6 @@ public class FishingManager {
             }
             
             if (player.consumeStamina(cost)) {
-                
                 float fishDef = 1f;
                 if (currentFish.getPassiveSkill("vo_cung") != null) fishDef -= 0.3f;
                 if (currentFish.getPassiveSkill("vay_cung") != null) fishDef -= 0.5f;
@@ -853,12 +870,18 @@ public class FishingManager {
                 AudioManager.getInstance().playSFX("sfx_skill");
                 com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerPlayerSkillVFX("keo_manh", 640f, 340f);
                 keoManhCooldown = 3f * cdMult;
+                skillUsed = true;
+            } else {
+                if (ftm != null) ftm.addText("Không đủ Thể lực (-" + (int)cost + ")!", 640f, 380f, new Color(1f, 0.45f, 0.4f, 1f));
             }
-        } else if (skillId.equals("giat_kep") && giatKepCooldown <= 0) {
+        } else if (skillId.equals("giat_kep")) {
+            if (giatKepCooldown > 0) {
+                if (ftm != null) ftm.addText("Giật Kép đang hồi (" + String.format(java.util.Locale.US, "%.1fs", giatKepCooldown) + ")!", 640f, 380f, Color.GRAY);
+                return;
+            }
             float cost = 40f;
             float dmg = player.getSkillTree().getKeoManhDamage() * player.getSkillTree().getGiatKepDamageMult();
             if (player.consumeStamina(cost)) {
-                
                 float fishDef = 1f;
                 if (currentFish.getPassiveSkill("vo_cung") != null) fishDef -= 0.3f;
                 if (currentFish.getPassiveSkill("vay_cung") != null) fishDef -= 0.5f;
@@ -871,16 +894,27 @@ public class FishingManager {
                 AudioManager.getInstance().playSFX("sfx_skill");
                 com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerPlayerSkillVFX("giat_kep", 640f, 360f);
                 giatKepCooldown = 5f * cdMult;
+                skillUsed = true;
+            } else {
+                if (ftm != null) ftm.addText("Không đủ Thể lực (-40)!", 640f, 380f, new Color(1f, 0.45f, 0.4f, 1f));
             }
-        } else if (skillId.equals("duong_suc") && duongSucCooldown <= 0 && duongSucChannelTimer <= 0) {
+        } else if (skillId.equals("duong_suc")) {
+            if (duongSucCooldown > 0 || duongSucChannelTimer > 0) {
+                if (ftm != null) ftm.addText("Dưỡng Sức đang hồi (" + String.format(java.util.Locale.US, "%.1fs", duongSucCooldown) + ")!", 640f, 380f, Color.GRAY);
+                return;
+            }
             duongSucChannelTimer = player.getSkillTree().getDuongSucChannelTime();
             duongSucCooldown = 10f * cdMult;
             com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerPlayerSkillVFX("duong_suc", 640f, 360f);
-        } else if (skillId.equals("pha_giap") && phaGiapCooldown <= 0) {
+            skillUsed = true;
+        } else if (skillId.equals("pha_giap")) {
+            if (phaGiapCooldown > 0) {
+                if (ftm != null) ftm.addText("Phá Giáp đang hồi (" + String.format(java.util.Locale.US, "%.1fs", phaGiapCooldown) + ")!", 640f, 380f, Color.GRAY);
+                return;
+            }
             float hpDmg = player.getSkillTree().getPhaGiapDamage();
-            float stamCost = 30f; // Tốn 30 thể lực
+            float stamCost = 30f;
             if (player.consumeStamina(stamCost)) {
-                
                 float fishDef = 1f;
                 if (currentFish.getPassiveSkill("vo_cung") != null) fishDef -= 0.3f;
                 if (currentFish.getPassiveSkill("vay_cung") != null) fishDef -= 0.5f;
@@ -894,19 +928,34 @@ public class FishingManager {
                 AudioManager.getInstance().playSFX("sfx_skill");
                 com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerPlayerSkillVFX("pha_giap", 640f, 360f);
                 phaGiapCooldown = 20f * cdMult;
+                skillUsed = true;
+            } else {
+                if (ftm != null) ftm.addText("Không đủ Thể lực (-30)!", 640f, 380f, new Color(1f, 0.45f, 0.4f, 1f));
             }
-        } else if (skillId.equals("luot_day") && luotDayCooldown <= 0) {
+        } else if (skillId.equals("luot_day")) {
+            if (luotDayCooldown > 0) {
+                if (ftm != null) ftm.addText("Lướt Dây đang hồi (" + String.format(java.util.Locale.US, "%.1fs", luotDayCooldown) + ")!", 640f, 380f, Color.GRAY);
+                return;
+            }
             luotDayTimer = player.getSkillTree().getLuotDayDuration();
             combatMessage = "LƯỚT DÂY! (Làm yếu lực kéo của cá)";
             luotDayCooldown = 15f * cdMult;
             com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerPlayerSkillVFX("luot_day", 640f, 360f);
-        } else if (skillId.equals("loi_nguyen_troi_buoc") && troiBuocCooldown <= 0) {
+            skillUsed = true;
+        } else if (skillId.equals("loi_nguyen_troi_buoc")) {
+            if (troiBuocCooldown > 0) {
+                if (ftm != null) ftm.addText("Trói Buộc đang hồi (" + String.format(java.util.Locale.US, "%.1fs", troiBuocCooldown) + ")!", 640f, 380f, Color.GRAY);
+                return;
+            }
             troiBuocTimer = player.getSkillTree().getLoiNguyenTroiBuocDuration();
             combatMessage = "TRÓI BUỘC! Cá không thể di chuyển!";
             troiBuocCooldown = 25f * cdMult;
             com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerPlayerSkillVFX("loi_nguyen_troi_buoc", 640f, 360f);
+            skillUsed = true;
         }
         
-        player.getQuestManager().addProgress("skill", 1);
+        if (skillUsed) {
+            player.getQuestManager().addProgress("skill", 1);
+        }
     }
 }

@@ -21,13 +21,25 @@ public class PlayerProgression {
     private long lastLoginTimestamp = 0;
     private long lastEventMissionResetTimestamp = 0;
 
+    public static final int MAX_LEVEL = 100;
+
     public static int xpRequired(int level) {
+        if (level >= MAX_LEVEL) return Integer.MAX_VALUE;
         int[] bases = {1, 2, 5};
         int idx = level - 1;
         if (idx < 0) idx = 0;
+        int exponent = (idx / 3) + 1;
+        if (exponent > 8) {
+            return 1_000_000_000;
+        }
         int base = bases[idx % 3];
-        int multiplier = (int) Math.pow(10, (idx / 3) + 1);
-        return base * multiplier;
+        long mult = 1L;
+        for (int i = 0; i < exponent; i++) mult *= 10L;
+        long required = (long) base * mult;
+        if (required > 1_000_000_000L || required <= 0) {
+            return 1_000_000_000;
+        }
+        return (int) required;
     }
 
     public int gainXp(int xp, float equipmentExpBonus, String activeSetName, QuestManager questManager, Runnable onLevelUpCallback) {
@@ -41,7 +53,7 @@ public class PlayerProgression {
         int levelsGained = 0;
         int threshold;
         
-        while (currentXp >= (threshold = xpRequired(level))) {
+        while (level < MAX_LEVEL && (threshold = xpRequired(level)) > 0 && currentXp >= threshold) {
             currentXp -= threshold;
             level++;
             levelsGained++;
@@ -50,6 +62,9 @@ public class PlayerProgression {
             addDiamonds(5);
             if (questManager != null) questManager.addProgress("level", 1);
             if (onLevelUpCallback != null) onLevelUpCallback.run();
+        }
+        if (level >= MAX_LEVEL) {
+            currentXp = 0;
         }
         return levelsGained;
     }
@@ -60,7 +75,14 @@ public class PlayerProgression {
             amount = (int)(amount * bonus);
             if (questManager != null) questManager.addProgress("gold", amount);
         }
-        gold = Math.max(0, gold + amount);
+        long newGold = (long) gold + amount;
+        if (newGold > Integer.MAX_VALUE) {
+            gold = Integer.MAX_VALUE;
+        } else if (newGold < 0) {
+            gold = 0;
+        } else {
+            gold = (int) newGold;
+        }
     }
 
     public void incrementFishCaught() { 

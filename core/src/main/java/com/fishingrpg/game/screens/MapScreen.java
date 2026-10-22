@@ -54,12 +54,22 @@ public class MapScreen implements Screen {
     private float[] partAlpha = new float[PARTICLE_COUNT];
     private InputAdapter inputAdapter;
 
+    private final Vector3 mousePos = new Vector3();
+    private static final Color BG_TOP = new Color(0.06f, 0.12f, 0.20f, 1f);
+    private static final Color BG_BOT = new Color(0.02f, 0.05f, 0.09f, 1f);
+    private static final Color LVL_BAR_DONE = new Color(0.25f, 0.85f, 0.45f, 1f);
+    private static final Color LVL_BAR_PROG = new Color(0.3f, 0.65f, 0.95f, 1f);
+    private static final Color FISH_BAR_DONE = new Color(0.25f, 0.85f, 0.45f, 1f);
+    private static final Color FISH_BAR_PROG = new Color(0.95f, 0.70f, 0.2f, 1f);
+    private static final Color BORDER_UNLOCKED = new Color(0.20f, 0.35f, 0.50f, 0.7f);
+    private static final Color BORDER_LOCKED = new Color(0.16f, 0.20f, 0.26f, 0.7f);
+
     public MapScreen(FishingRPG game, PlayScreen playScreen) {
         this.game = game;
         this.playScreen = playScreen;
         this.player = playScreen.getPlayer();
 
-        sr = new ShapeRenderer();
+        sr = game.shapeRenderer;
         layout = new GlyphLayout();
 
         camera = new OrthographicCamera();
@@ -88,8 +98,9 @@ public class MapScreen implements Screen {
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                 if (button != Input.Buttons.LEFT) return false;
-                Vector3 m = new Vector3(screenX, screenY, 0);
-                viewport.unproject(m);
+                mousePos.set(screenX, screenY, 0);
+                viewport.unproject(mousePos);
+                Vector3 m = mousePos;
 
                 if (hoverBack || (m.x >= 25 && m.x <= 155 && m.y >= H - 65 && m.y <= H - 20)) {
                     goBackToHub();
@@ -191,13 +202,14 @@ public class MapScreen implements Screen {
             }
         }
 
-        ScreenUtils.clear(new Color(0.04f, 0.07f, 0.12f, 1f));
+        ScreenUtils.clear(0.04f, 0.07f, 0.12f, 1f);
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
         sr.setProjectionMatrix(camera.combined);
 
-        Vector3 m = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        viewport.unproject(m);
+        mousePos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        viewport.unproject(mousePos);
+        Vector3 m = mousePos;
 
         // Back button hit area
         hoverBack = (m.x >= 25 && m.x <= 155 && m.y >= H - 65 && m.y <= H - 20);
@@ -209,10 +221,7 @@ public class MapScreen implements Screen {
         sr.begin(ShapeRenderer.ShapeType.Filled);
         
         // Deep nautical gradient
-        sr.rect(0, 0, W, H,
-            new Color(0.02f, 0.05f, 0.09f, 1f), new Color(0.02f, 0.05f, 0.09f, 1f),
-            new Color(0.06f, 0.12f, 0.20f, 1f), new Color(0.06f, 0.12f, 0.20f, 1f)
-        );
+        sr.rect(0, 0, W, H, BG_BOT, BG_BOT, BG_TOP, BG_TOP);
 
         // Decorative subtle ocean grid / compass lines
         sr.setColor(0.2f, 0.5f, 0.7f, 0.04f);
@@ -308,7 +317,7 @@ public class MapScreen implements Screen {
                 sr.setColor(0.4f, 0.85f, 1f, 0.9f);
                 drawRectOutline(sr, cx, drawY, cardWidth, cardHeight, 3);
             } else {
-                sr.setColor(unlocked ? new Color(0.20f, 0.35f, 0.50f, 0.7f) : new Color(0.16f, 0.20f, 0.26f, 0.7f));
+                sr.setColor(unlocked ? BORDER_UNLOCKED : BORDER_LOCKED);
                 drawRectOutline(sr, cx, drawY, cardWidth, cardHeight, 2);
             }
 
@@ -323,7 +332,7 @@ public class MapScreen implements Screen {
             sr.setColor(0.06f, 0.09f, 0.14f, 1f);
             drawRoundedRect(sr, barX, barY1, barW, barH, 4);
             float lvlP = MathUtils.clamp((float)player.getLevel() / Math.max(1, map.requiredLevel), 0f, 1f);
-            sr.setColor(lvlP >= 1f ? new Color(0.25f, 0.85f, 0.45f, 1f) : new Color(0.3f, 0.65f, 0.95f, 1f));
+            sr.setColor(lvlP >= 1f ? LVL_BAR_DONE : LVL_BAR_PROG);
             if (lvlP > 0) {
                 drawRoundedRect(sr, barX + 1, barY1 + 1, (barW - 2) * lvlP, barH - 2, 3);
             }
@@ -334,7 +343,7 @@ public class MapScreen implements Screen {
                 drawRoundedRect(sr, barX, barY2, barW, barH, 4);
                 int caught = getCaughtFishCountForMap(map.prevMapId);
                 float fishP = MathUtils.clamp((float)caught / map.requiredFishCount, 0f, 1f);
-                sr.setColor(fishP >= 1f ? new Color(0.25f, 0.85f, 0.45f, 1f) : new Color(0.95f, 0.70f, 0.2f, 1f));
+                sr.setColor(fishP >= 1f ? FISH_BAR_DONE : FISH_BAR_PROG);
                 if (fishP > 0) {
                     drawRoundedRect(sr, barX + 1, barY2 + 1, (barW - 2) * fishP, barH - 2, 3);
                 }
@@ -686,7 +695,6 @@ public class MapScreen implements Screen {
 
     @Override
     public void dispose() {
-        sr.dispose();
     }
 }
 

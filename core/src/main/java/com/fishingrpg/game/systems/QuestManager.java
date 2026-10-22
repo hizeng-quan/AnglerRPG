@@ -55,12 +55,14 @@ public class QuestManager {
             resetWeeklyQuests();
             lastWeeklyResetTime = currentTime;
         }
+        syncProgressWithPlayer();
     }
 
     private transient com.fishingrpg.game.entities.Player player;
 
     public void setPlayer(com.fishingrpg.game.entities.Player player) {
         this.player = player;
+        syncProgressWithPlayer();
     }
 
     public static class QuestTemplate {
@@ -208,8 +210,24 @@ public class QuestManager {
         updateList(dailyQuests, "d_" + prefix, amount);
         updateList(weeklyQuests, "w_" + prefix, amount);
         updateList(achievements, "a_" + prefix, amount);
+        if ("catch".equals(prefix)) {
+            updateList(achievements, "a_fish", amount);
+        }
         if (player != null && player.getEventManager() != null) {
             player.getEventManager().addProgress(prefix, amount);
+        }
+    }
+
+    public void syncProgressWithPlayer() {
+        if (player == null) return;
+        int lvl = player.getLevel();
+        for (Quest q : achievements) {
+            if (q.id.startsWith("a_level_") && !q.isCompleted()) {
+                if (lvl >= q.target) {
+                    q.progress = q.target;
+                    if (callback != null) callback.onQuestCompleted(q);
+                }
+            }
         }
     }
 

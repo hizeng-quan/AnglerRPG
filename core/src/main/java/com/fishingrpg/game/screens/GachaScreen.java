@@ -89,6 +89,12 @@ public class GachaScreen implements Screen {
     private boolean hoverModalScrollDown = false;
     private float mouseX = 0f;
     private float mouseY = 0f;
+    private final Vector3 mousePos = new Vector3();
+
+    private static final Color BG_NORM_BOT = new Color(0.02f, 0.04f, 0.10f, 1f);
+    private static final Color BG_NORM_TOP = new Color(0.08f, 0.12f, 0.24f, 1f);
+    private static final Color BG_EVT_BOT = new Color(0.08f, 0.02f, 0.04f, 1f);
+    private static final Color BG_EVT_TOP = new Color(0.22f, 0.06f, 0.08f, 1f);
 
     // Centered dock and button element coordinates
     private float dockDiaIconX, dockDiaTxtX;
@@ -164,7 +170,7 @@ public class GachaScreen implements Screen {
         this.viewport = new FitViewport(W, H, camera);
         this.camera.position.set(W / 2f, H / 2f, 0);
 
-        this.sr = new ShapeRenderer();
+        this.sr = game.shapeRenderer;
         this.font = game.font;
         this.titleFont = game.titleFont != null ? game.titleFont : game.font;
         this.layout = new GlyphLayout();
@@ -213,7 +219,7 @@ public class GachaScreen implements Screen {
         handleInput();
         if (game.getScreen() != this) return;
 
-        ScreenUtils.clear(new Color(0.04f, 0.05f, 0.09f, 1f));
+        ScreenUtils.clear(0.04f, 0.05f, 0.09f, 1f);
 
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
@@ -298,10 +304,7 @@ public class GachaScreen implements Screen {
         // 1. Dynamic Background
         if (!isEventBanner) {
             // Royal Sapphire / Cosmic theme
-            sr.rect(0, 0, W, H,
-                new Color(0.02f, 0.04f, 0.10f, 1f), new Color(0.02f, 0.04f, 0.10f, 1f),
-                new Color(0.08f, 0.12f, 0.24f, 1f), new Color(0.08f, 0.12f, 0.24f, 1f)
-            );
+            sr.rect(0, 0, W, H, BG_NORM_BOT, BG_NORM_BOT, BG_NORM_TOP, BG_NORM_TOP);
             // Drifting stars
             for (int i = 0; i < STAR_COUNT; i++) {
                 float pulse = 0.5f + 0.5f * MathUtils.sin(animTimer * 2f + i);
@@ -310,10 +313,7 @@ public class GachaScreen implements Screen {
             }
         } else {
             // Lạc Hồng Ruby / Imperial Bronze theme
-            sr.rect(0, 0, W, H,
-                new Color(0.08f, 0.02f, 0.04f, 1f), new Color(0.08f, 0.02f, 0.04f, 1f),
-                new Color(0.22f, 0.06f, 0.08f, 1f), new Color(0.22f, 0.06f, 0.08f, 1f)
-            );
+            sr.rect(0, 0, W, H, BG_EVT_BOT, BG_EVT_BOT, BG_EVT_TOP, BG_EVT_TOP);
 
             // Watermark rotating Dong Son drum sunburst in center background
             float drumCX = W / 2f;
@@ -1601,10 +1601,10 @@ public class GachaScreen implements Screen {
     }
 
     private void handleInput() {
-        Vector3 m = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        viewport.unproject(m);
-        mouseX = m.x;
-        mouseY = m.y;
+        mousePos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        viewport.unproject(mousePos);
+        mouseX = mousePos.x;
+        mouseY = mousePos.y;
 
         // Hover tracking
         hoverBack = (mouseX >= 25f && mouseX <= 145f && mouseY >= H - 62f && mouseY <= H - 20f);
@@ -1674,7 +1674,6 @@ public class GachaScreen implements Screen {
             } else {
                 AudioManager.getInstance().playSFX("sfx_button");
                 game.setScreen(previousScreen);
-                dispose();
             }
             return;
         }
@@ -1725,7 +1724,6 @@ public class GachaScreen implements Screen {
             if (hoverBack) {
                 AudioManager.getInstance().playSFX("sfx_button");
                 game.setScreen(previousScreen);
-                dispose();
                 return;
             }
 
@@ -1816,7 +1814,6 @@ public class GachaScreen implements Screen {
             }
             AudioManager.getInstance().playSFX("sfx_button");
             player.addPremiumTickets(-amount);
-            player.getEventManager().onEventGachaPulled(); // Quest / Mission tracking
         }
         
         player.getQuestManager().addProgress("gacha", amount);
@@ -1917,6 +1914,5 @@ public class GachaScreen implements Screen {
     @Override
     public void dispose() {
         Gdx.input.setInputProcessor(null);
-        sr.dispose();
     }
 }

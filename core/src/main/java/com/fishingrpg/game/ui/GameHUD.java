@@ -63,6 +63,16 @@ public class GameHUD {
     private static final float BTN_MENU_Y = H - 60f;
     private static final float BTN_MENU_W = 100f, BTN_MENU_H = 40f;
 
+    // Information / News Button (Square button with 'i' logo in top-right corner of Game HUD)
+    public static final float BTN_INFO_SIZE = 40f;
+    public static final float BTN_INFO_X = W - 20f - BTN_INFO_SIZE; // 1220f
+    public static final float BTN_INFO_Y = H - 60f; // 660f
+
+    // Settings Button (Square button with cog/gear logo directly below Info button)
+    public static final float BTN_SETTING_SIZE = 40f;
+    public static final float BTN_SETTING_X = BTN_INFO_X; // 1220f
+    public static final float BTN_SETTING_Y = BTN_INFO_Y - BTN_SETTING_SIZE - 10f; // 610f
+
     // Top Navigation Buttons (7 buttons)
     private static final float TOP_BTN_W = 120f, TOP_BTN_H = 65f;
     private static final float TOP_BTN_Y = H - 85f;
@@ -79,6 +89,8 @@ public class GameHUD {
     // Hover States
     private boolean hoverCast = false;
     private boolean hoverMenu = false;
+    private boolean hoverNews = false;
+    private boolean hoverSetting = false;
     private boolean hoverQuest = false;
     private boolean hoverEquipment = false;
     private boolean hoverSkills = false;
@@ -99,7 +111,7 @@ public class GameHUD {
     private static final String[] TICKER_MESSAGES = {
         "Tin vực biển: Xuất hiện luồng cá Bạo Chúa ngoài khơi Đảo Hoàng Hôn vào ban đêm!",
         "Mẹo hay: Sử dụng [Mồi Thơm] giúp cá cắn câu nhanh gấp 3 lần và tiết kiệm thời gian!",
-        "Lời khuyên: Canh chuẩn thanh giằng co phím Space để không bị đứt dây câu quý giá.",
+        "Lời khuyên: Canh chuẩn thanh giằng co kéo cá để không bị đứt dây câu quý giá.",
         "Kỷ lục: Ngư dân kỳ cựu vừa trục vớt thành công [Rương Báu Hoàng Gia] chứa 500 Kim Cương!",
         "Thiên phú: Nhánh [Sức Mạnh] giúp rút ngắn thời gian giằng co với các loài thủy quái hung dữ.",
         "May mắn: Nâng cấp [Ngư Dân Tinh Anh] sẽ tăng mạnh cơ hội bắt được cá Huyền Thoại!",
@@ -108,7 +120,7 @@ public class GameHUD {
         "Sự kiện: Điểm danh hàng ngày và hoàn thành nhiệm vụ tuần để nhận Rương Ngọc Quý!",
         "Cần câu: Cần cấp cao không chỉ tăng sát thương mà còn tăng độ bền bỉ của dây câu.",
         "Kỹ năng: Chiêu thức [Trói Buộc] có thể đóng băng cá tức thời khi thanh Tension sắp đạt đỉnh!",
-        "Hồi phục: Khi cạn thể lực, hãy dùng [Bánh Mì] hoặc [Thuốc Hồi Stamina] tại Phím Tắt (1-9)."
+        "Hồi phục: Khi cạn thể lực, hãy dùng [Bánh Mì] hoặc [Thuốc Hồi Stamina] tại thanh Phím Tắt."
     };
 
     private static final float TICKER_X = 215f;
@@ -117,7 +129,7 @@ public class GameHUD {
     private static final float TICKER_H = 28f;
     private static final float TICKER_SPEED = 70f;
     private float tickerOffset = TICKER_W - 150f;
-    private int tickerMsgIndex = 0;
+    private int tickerMsgIndex = MathUtils.random(0, TICKER_MESSAGES.length - 1);
     private final Rectangle tickerClipBounds = new Rectangle();
     private final Rectangle tickerScissors = new Rectangle();
 
@@ -127,6 +139,7 @@ public class GameHUD {
         this.layout = new GlyphLayout();
         this.screen = screen;
         this.titleFont = (screen.getGame() != null && screen.getGame().titleFont != null) ? screen.getGame().titleFont : font;
+        this.tickerMsgIndex = MathUtils.random(0, TICKER_MESSAGES.length - 1);
     }
 
     public void updateHover(Vector3 m, State state) {
@@ -136,6 +149,14 @@ public class GameHUD {
 
         hoverMenu = m.x >= BTN_MENU_X && m.x <= BTN_MENU_X + BTN_MENU_W &&
                     m.y >= BTN_MENU_Y && m.y <= BTN_MENU_Y + BTN_MENU_H;
+
+        hoverNews = (state == State.IDLE) &&
+                    m.x >= BTN_INFO_X && m.x <= BTN_INFO_X + BTN_INFO_SIZE &&
+                    m.y >= BTN_INFO_Y && m.y <= BTN_INFO_Y + BTN_INFO_SIZE;
+
+        hoverSetting = (state == State.IDLE) &&
+                       m.x >= BTN_SETTING_X && m.x <= BTN_SETTING_X + BTN_SETTING_SIZE &&
+                       m.y >= BTN_SETTING_Y && m.y <= BTN_SETTING_Y + BTN_SETTING_SIZE;
 
         hoverQuest     = state == State.IDLE && m.x >= 230 && m.x <= 350 && m.y >= TOP_BTN_Y && m.y <= TOP_BTN_Y + TOP_BTN_H;
         hoverEquipment = state == State.IDLE && m.x >= 370 && m.x <= 490 && m.y >= TOP_BTN_Y && m.y <= TOP_BTN_Y + TOP_BTN_H;
@@ -180,6 +201,9 @@ public class GameHUD {
         return hoverCast;
     }
     public boolean isMenuClicked(Vector3 m, State state) { return hoverMenu; }
+    public boolean isNewsClicked(Vector3 m, State state) { return state == State.IDLE && hoverNews; }
+    public boolean isSettingClicked(Vector3 m, State state) { return state == State.IDLE && hoverSetting; }
+    public boolean isSettingHovered() { return hoverSetting; }
     public boolean isShopClicked(Vector3 m, State state) { return hoverShop; }
     public boolean isCatalogClicked(Vector3 m, State state) { return hoverCatalog; }
     public boolean isSkillsClicked(Vector3 m, State state) { return hoverSkills; }
@@ -246,8 +270,10 @@ public class GameHUD {
         // 4. Primary "RA KHƠI CÂU CÁ" button in IDLE
         drawCastButton("RA KHƠI CÂU CÁ");
 
-        // 5. Back to Menu Button
+        // 5. Back to Menu Button, News Button & Settings Button (Only in IDLE HUD)
         drawMenuBtn();
+        drawIdleNewsBtn();
+        drawIdleSettingBtn();
 
         // 6. Player Profile & Resource Dashboard (Bottom Left)
         drawPlayerProfileCardShapes(player);
@@ -924,6 +950,103 @@ public class GameHUD {
         sr.rectLine(arrX - 6f, arrY, arrX - 1f, arrY - 5f, 2f);
     }
 
+    private void drawIdleNewsBtn() {
+        // Square Information Button [ⓘ] in the top-right corner of Game HUD
+        sr.setColor(hoverNews ? new Color(0.18f, 0.26f, 0.38f, 0.98f) : new Color(0.10f, 0.14f, 0.22f, 0.92f));
+        sr.rect(BTN_INFO_X, BTN_INFO_Y, BTN_INFO_SIZE, BTN_INFO_SIZE);
+
+        // Glossy top highlight stripe
+        sr.setColor(1f, 1f, 1f, hoverNews ? 0.32f : 0.15f);
+        sr.rect(BTN_INFO_X + 2f, BTN_INFO_Y + BTN_INFO_SIZE - 3f, BTN_INFO_SIZE - 4f, 2f);
+
+        // Outer chassis border
+        sr.setColor(hoverNews ? new Color(0.45f, 0.85f, 1f, 1f) : new Color(0.35f, 0.55f, 0.75f, 0.8f));
+        drawBoxBorder(BTN_INFO_X, BTN_INFO_Y, BTN_INFO_SIZE, BTN_INFO_SIZE, 1.5f);
+
+        float cx = BTN_INFO_X + BTN_INFO_SIZE / 2f;
+        float cy = BTN_INFO_Y + BTN_INFO_SIZE / 2f;
+
+        // Circular ring around 'i'
+        sr.setColor(hoverNews ? new Color(0.55f, 0.95f, 1f, 0.9f) : new Color(0.40f, 0.75f, 0.95f, 0.7f));
+        int segments = 24;
+        float r = 13.5f;
+        for (int s = 0; s < segments; s++) {
+            float a1 = (float)(s * 2 * Math.PI / segments);
+            float a2 = (float)((s + 1) * 2 * Math.PI / segments);
+            sr.rectLine(cx + r * MathUtils.cos(a1), cy + r * MathUtils.sin(a1),
+                        cx + r * MathUtils.cos(a2), cy + r * MathUtils.sin(a2), 1.5f);
+        }
+
+        // 'i' glyph: Dot on top
+        sr.setColor(hoverNews ? new Color(1f, 0.92f, 0.45f, 1f) : new Color(0.85f, 0.95f, 1f, 0.95f));
+        sr.circle(cx, cy + 6f, 2.2f);
+
+        // 'i' glyph: Vertical stem with serif base and hook
+        sr.rectLine(cx, cy - 6.5f, cx, cy + 1.5f, 2.6f);
+        sr.rectLine(cx - 3f, cy - 6.5f, cx + 3f, cy - 6.5f, 2f);
+        sr.rectLine(cx - 2.5f, cy + 0.2f, cx, cy + 1.5f, 1.8f);
+
+        // Radiant notification dot (ONLY when there is unread update notes!)
+        if (screen != null && screen.isNewsUnread()) {
+            float dotX = BTN_INFO_X + BTN_INFO_SIZE - 4f;
+            float dotY = BTN_INFO_Y + BTN_INFO_SIZE - 4f;
+            float dotPulse = 0.5f + 0.5f * MathUtils.sin(timer * 6f);
+            sr.setColor(1f, 0.25f, 0.25f, 0.8f + 0.2f * dotPulse);
+            sr.circle(dotX, dotY, 4f);
+            sr.setColor(1f, 0.85f, 0.3f, 0.9f);
+            sr.circle(dotX, dotY, 1.8f);
+        }
+    }
+
+    private void drawIdleSettingBtn() {
+        // Square Settings Button [⚙] directly below Information Button in Game HUD
+        sr.setColor(hoverSetting ? new Color(0.18f, 0.26f, 0.38f, 0.98f) : new Color(0.10f, 0.14f, 0.22f, 0.92f));
+        sr.rect(BTN_SETTING_X, BTN_SETTING_Y, BTN_SETTING_SIZE, BTN_SETTING_SIZE);
+
+        // Glossy top highlight stripe
+        sr.setColor(1f, 1f, 1f, hoverSetting ? 0.32f : 0.15f);
+        sr.rect(BTN_SETTING_X + 2f, BTN_SETTING_Y + BTN_SETTING_SIZE - 3f, BTN_SETTING_SIZE - 4f, 2f);
+
+        // Outer chassis border
+        sr.setColor(hoverSetting ? new Color(0.45f, 0.85f, 1f, 1f) : new Color(0.35f, 0.55f, 0.75f, 0.8f));
+        drawBoxBorder(BTN_SETTING_X, BTN_SETTING_Y, BTN_SETTING_SIZE, BTN_SETTING_SIZE, 1.5f);
+
+        float cx = BTN_SETTING_X + BTN_SETTING_SIZE / 2f;
+        float cy = BTN_SETTING_Y + BTN_SETTING_SIZE / 2f;
+
+        // Gear Teeth (8 spokes radiating outwards)
+        sr.setColor(hoverSetting ? new Color(1f, 0.92f, 0.45f, 1f) : new Color(0.85f, 0.95f, 1f, 0.95f));
+        float baseAngle = hoverSetting ? (timer * 2.5f) : 0f;
+        int spokes = 8;
+        float spokeLen = 13.5f;
+        float hubRadius = 6.5f;
+
+        for (int i = 0; i < spokes; i++) {
+            float angle = baseAngle + (float)(i * Math.PI / 4.0);
+            float cosA = MathUtils.cos(angle);
+            float sinA = MathUtils.sin(angle);
+            sr.rectLine(cx + hubRadius * cosA, cy + hubRadius * sinA,
+                        cx + spokeLen * cosA, cy + spokeLen * sinA, 3.2f);
+        }
+
+        // Circular rim connecting spokes
+        int rimSegments = 24;
+        for (int s = 0; s < rimSegments; s++) {
+            float a1 = (float)(s * 2 * Math.PI / rimSegments);
+            float a2 = (float)((s + 1) * 2 * Math.PI / rimSegments);
+            sr.rectLine(cx + 8.5f * MathUtils.cos(a1), cy + 8.5f * MathUtils.sin(a1),
+                        cx + 8.5f * MathUtils.cos(a2), cy + 8.5f * MathUtils.sin(a2), 2.2f);
+        }
+
+        // Hollow center axle (drawn in background color to create inner circle)
+        sr.setColor(hoverSetting ? new Color(0.18f, 0.26f, 0.38f, 0.98f) : new Color(0.10f, 0.14f, 0.22f, 0.92f));
+        sr.circle(cx, cy, 3.8f);
+
+        // Inner axle pin
+        sr.setColor(hoverSetting ? new Color(1f, 0.92f, 0.45f, 1f) : new Color(0.85f, 0.95f, 1f, 0.95f));
+        sr.circle(cx, cy, 1.6f);
+    }
+
     // =========================================================================
     // PLAYER DASHBOARD & RESOURCE BAR (BOTTOM LEFT)
     // =========================================================================
@@ -1170,7 +1293,13 @@ public class GameHUD {
 
         if (tickerOffset < -layout.width) {
             tickerOffset = clipW + 15f;
-            tickerMsgIndex = (tickerMsgIndex + 1 + MathUtils.random(1, TICKER_MESSAGES.length - 2)) % TICKER_MESSAGES.length;
+            int nextIdx = tickerMsgIndex;
+            if (TICKER_MESSAGES.length > 1) {
+                while (nextIdx == tickerMsgIndex) {
+                    nextIdx = MathUtils.random(0, TICKER_MESSAGES.length - 1);
+                }
+            }
+            tickerMsgIndex = nextIdx;
             currentMsg = TICKER_MESSAGES[tickerMsgIndex];
             layout.setText(font, currentMsg);
         }
@@ -1290,7 +1419,7 @@ public class GameHUD {
         if (player == null) return;
 
         font.setColor(1f, 0.88f, 0.3f, 1f);
-        drawCenteredText(font, "PHÍM TẮT (1-9)", INV_X, INV_Y + INV_PANEL_H - 28f, INV_PANEL_W, 28f);
+        drawCenteredText(font, "PHÍM TẮT NHANH", INV_X, INV_Y + INV_PANEL_H - 28f, INV_PANEL_W, 28f);
 
         int i = 0;
         for (Map.Entry<String, Integer> entry : player.getInventory().entrySet()) {
@@ -1301,12 +1430,13 @@ public class GameHUD {
             float x = INV_X + INV_PADDING + col * (INV_SLOT_SIZE + INV_PADDING);
             float y = INV_Y + INV_PANEL_H - 28f - INV_PADDING - (row + 1) * INV_SLOT_SIZE - row * INV_PADDING;
 
-            // Top-left: [1] hotkey in bright cyan
+            // Top-left: dynamic quickslot hotkey badge in bright cyan
             font.setColor(0.35f, 0.9f, 1f, 1f);
-            font.getData().setScale(0.70f);
-            String hotkeyStr = "[" + (i + 1) + "]";
+            String hotkeyStr = "[" + com.fishingrpg.game.systems.KeybindManager.getInstance().getQuickslotKeyDisplayName(i) + "]";
+            font.getData().setScale(hotkeyStr.length() > 3 ? 0.55f : 0.70f);
             layout.setText(font, hotkeyStr);
             font.draw(batch, layout, x + 2f + (20f - layout.width) / 2f, y + INV_SLOT_SIZE - 17f + (15f + layout.height) / 2f);
+            font.getData().setScale(1f);
 
             // Top-right skill book status badge text
             if (name.startsWith("Sách: ")) {
@@ -2224,7 +2354,8 @@ public class GameHUD {
                 bannerBorderCol = new Color(1f, 0.70f, 0.22f, 1f);
             } else {
                 isTired = true;
-                bannerText = "►► CÁ ĐANG MỆT! GIỮ [SPACE] KÉO CẦN! ►►";
+                String pullKeyName = com.fishingrpg.game.systems.KeybindManager.getInstance().getKeyDisplayName(com.fishingrpg.game.systems.KeybindManager.ACTION_PULL);
+                bannerText = "►► CÁ ĐANG MỆT! GIỮ [" + pullKeyName + "] KÉO CẦN! ►►";
                 bannerBgCol = new Color(0.08f, 0.58f, 0.32f, 0.92f);
                 bannerBorderCol = new Color(0.35f, 1f, 0.65f, 1f);
             }
@@ -2279,10 +2410,10 @@ public class GameHUD {
             drawCenteredText(font, bannerText, bannerX, bannerY, bannerW, bannerH);
         }
 
-        // 5. Active Skills Text & Hotkeys (Q, W, E, R)
+        // 5. Active Skills Text & Hotkeys (Dynamic Keybinds)
         if (screen.fishingManager.state == State.COMBAT) {
             String[] actives = player.getEquippedActives();
-            String[] keys = {"[Q]", "[W]", "[E]", "[R]"};
+            com.fishingrpg.game.systems.KeybindManager km = com.fishingrpg.game.systems.KeybindManager.getInstance();
             for (int i = 0; i < 4; i++) {
                 float x = BTN_ACTIVES_X + i * (BTN_SLOT_SIZE + BTN_SLOT_SPACING);
                 float y = BTN_ACTIVES_Y;
@@ -2291,9 +2422,10 @@ public class GameHUD {
                 float cd = (skillId != null) ? getCooldown(skillId) : 0f;
 
                 // Hotkey badge text centered inside bottom pill
-                font.getData().setScale(0.68f);
+                String keyLabel = "[" + km.getSkillKeyDisplayName(i) + "]";
+                font.getData().setScale(keyLabel.length() > 4 ? 0.56f : 0.68f);
                 font.setColor(0.45f, 0.85f, 1f, 1f);
-                drawCenteredText(font, keys[i], x + (size - 32f) / 2f, y + 2f, 32f, 16f);
+                drawCenteredText(font, keyLabel, x + (size - 32f) / 2f, y + 2f, 32f, 16f);
                 font.getData().setScale(1f);
 
                 if (skillId != null) {
@@ -2466,7 +2598,7 @@ public class GameHUD {
             font.draw(batch, castLabel, textX, textY);
         }
 
-        // Menu Back button -> BẢN ĐỒ
+        // Menu Back button -> BẢN ĐỒ (Khi đang trong màn hình chơi câu cá)
         String mapLabel = "BẢN ĐỒ";
         layout.setText(font, mapLabel);
         float mbx = BTN_MENU_X + 16f + (BTN_MENU_W - 16f - layout.width) / 2f;
@@ -2475,6 +2607,7 @@ public class GameHUD {
         font.draw(batch, mapLabel, mbx + 1f, mby - 1f);
         font.setColor(hoverMenu ? new Color(1f, 0.92f, 0.4f, 1f) : Color.WHITE);
         font.draw(batch, mapLabel, mbx, mby);
+
         drawInventoryText(batch, player);
     }
 
@@ -2580,7 +2713,8 @@ public class GameHUD {
 
                 // Prompt Callout Subtext below emblem
                 font.getData().setScale(0.85f);
-                String bitePrompt = "✦ CẮN CÂU! GIẬT [SPACE] NGAY! ✦";
+                String pullKeyName = com.fishingrpg.game.systems.KeybindManager.getInstance().getKeyDisplayName(com.fishingrpg.game.systems.KeybindManager.ACTION_PULL);
+                String bitePrompt = "✦ CẮN CÂU! GIẬT [" + pullKeyName + "] NGAY! ✦";
                 layout.setText(font, bitePrompt);
                 float px = bobX - layout.width / 2f;
                 float py = badgeY + 44f;

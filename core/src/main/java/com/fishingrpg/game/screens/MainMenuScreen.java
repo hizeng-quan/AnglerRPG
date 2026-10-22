@@ -22,20 +22,11 @@ public class MainMenuScreen implements Screen {
     private static final float W = 1280f;
     private static final float H = 720f;
 
-    private static final String[] ITEMS = { "BẮT ĐẦU CÂU", "XUẤT DỮ LIỆU", "NẠP DỮ LIỆU", "RESET DỮ LIỆU", "THOÁT" };
+    private static final String[] ITEMS = { "BẮT ĐẦU CÂU", "THOÁT" };
     private static final float BTN_W = 380f;
     private static final float BTN_H = 46f;
-    private static final float BTN_START_Y = 280f;
-    private static final float BTN_SPACING = 56f;
-
-    private String statusMessage = null;
-    private float statusTimer = 0f;
-    private boolean statusIsSuccess = true;
-
-    // Reset confirmation modal state
-    private boolean showResetModal = false;
-    private float resetCountdown = 10f;
-    private int modalHoveredButton = -1; // 0: Cancel, 1: Confirm
+    private static final float BTN_START_Y = 245f;
+    private static final float BTN_SPACING = 58f;
 
     private final FishingRPG game;
     private final ShapeRenderer sr;
@@ -70,10 +61,19 @@ public class MainMenuScreen implements Screen {
     private final float[] fishSpeed = new float[4];
     private final float[] fishSize = new float[4];
 
+    // Precomputed sky gradient band colors to avoid per-frame allocations
+    private static final int SKY_BANDS = 14;
+    private final Color[] skyBandC1 = new Color[SKY_BANDS];
+    private final Color[] skyBandC2 = new Color[SKY_BANDS];
+
+    private static final Color OCEAN_C1 = new Color(0.04f, 0.08f, 0.18f, 1f);
+    private static final Color OCEAN_C2 = new Color(0.08f, 0.15f, 0.28f, 1f);
+    private static final Color SHORE_C1 = new Color(0.12f, 0.11f, 0.15f, 1f);
+    private static final Color SHORE_C2 = new Color(0.20f, 0.16f, 0.20f, 1f);
+
     public MainMenuScreen(FishingRPG game) {
         this.game = game;
-        this.sr = new ShapeRenderer();
-
+        this.sr = game.shapeRenderer;
         this.subFont = game.font;
         this.menuFont = game.titleFont;
 
@@ -103,6 +103,20 @@ public class MainMenuScreen implements Screen {
         for (int i = 0; i < fishX.length; i++) {
             resetFish(i, true);
         }
+
+        // Precompute atmospheric sky gradient band colors
+        for (int b = 0; b < SKY_BANDS; b++) {
+            float t = (float) b / SKY_BANDS;
+            if (t < 0.4f) {
+                float subT = t / 0.4f;
+                skyBandC1[b] = new Color(0.48f, 0.22f, 0.24f, 1f).lerp(new Color(0.24f, 0.12f, 0.25f, 1f), subT);
+                skyBandC2[b] = new Color(0.48f, 0.22f, 0.24f, 1f).lerp(new Color(0.24f, 0.12f, 0.25f, 1f), (float)(b + 1) / SKY_BANDS / 0.4f);
+            } else {
+                float subT = (t - 0.4f) / 0.6f;
+                skyBandC1[b] = new Color(0.24f, 0.12f, 0.25f, 1f).lerp(new Color(0.04f, 0.06f, 0.15f, 1f), subT);
+                skyBandC2[b] = new Color(0.24f, 0.12f, 0.25f, 1f).lerp(new Color(0.04f, 0.06f, 0.15f, 1f), Math.min(1f, subT + 1f / (SKY_BANDS * 0.6f)));
+            }
+        }
     }
 
     private void resetFish(int i, boolean anywhere) {
@@ -122,10 +136,6 @@ public class MainMenuScreen implements Screen {
 
     private void update(float delta) {
         timer += delta;
-        if (statusTimer > 0f) {
-            statusTimer -= delta;
-            if (statusTimer <= 0f) statusMessage = null;
-        }
 
         // Update motes drifting upward
         for (int i = 0; i < MOTE_COUNT; i++) {
@@ -145,67 +155,6 @@ public class MainMenuScreen implements Screen {
 
         Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
         viewport.unproject(mousePos);
-
-        // Reset confirmation modal active interaction
-        if (showResetModal) {
-            if (resetCountdown > 0f) {
-                resetCountdown = Math.max(0f, resetCountdown - delta);
-            }
-
-            float modalW = 620f;
-            float modalH = 350f;
-            float modalX = (W - modalW) / 2f;
-            float modalY = (H - modalH) / 2f;
-
-            float btnModalW = 230f;
-            float btnModalH = 46f;
-            float btnModalY = modalY + 22f;
-            float btnCancelX = modalX + 45f;
-            float btnConfirmX = modalX + modalW - 45f - btnModalW;
-
-            boolean hoverCancel = mousePos.x >= btnCancelX && mousePos.x <= btnCancelX + btnModalW &&
-                                  mousePos.y >= btnModalY && mousePos.y <= btnModalY + btnModalH;
-            boolean hoverConfirm = mousePos.x >= btnConfirmX && mousePos.x <= btnConfirmX + btnModalW &&
-                                   mousePos.y >= btnModalY && mousePos.y <= btnModalY + btnModalH;
-
-            int newModalHovered = -1;
-            if (hoverCancel) {
-                newModalHovered = 0;
-            } else if (hoverConfirm && resetCountdown <= 0f) {
-                newModalHovered = 1;
-            }
-
-            boolean mouseMoved = Gdx.input.getDeltaX() != 0 || Gdx.input.getDeltaY() != 0;
-            if (mouseMoved && newModalHovered != modalHoveredButton && newModalHovered != -1) {
-                AudioManager.getInstance().playSFX("sfx_button");
-            }
-            modalHoveredButton = newModalHovered;
-
-            if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-                if (hoverCancel) {
-                    AudioManager.getInstance().playSFX("sfx_button");
-                    showResetModal = false;
-                    return;
-                }
-                if (hoverConfirm) {
-                    if (resetCountdown <= 0f) {
-                        performReset();
-                        return;
-                    } else {
-                        AudioManager.getInstance().playSFX("sfx_fail");
-                    }
-                }
-            }
-
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-                AudioManager.getInstance().playSFX("sfx_button");
-                showResetModal = false;
-                return;
-            }
-
-            // Block any background interaction while modal is active
-            return;
-        }
 
         float btnX = (W - BTN_W) / 2f;
         boolean mouseMoved = Gdx.input.getDeltaX() != 0 || Gdx.input.getDeltaY() != 0;
@@ -258,164 +207,11 @@ public class MainMenuScreen implements Screen {
         Gdx.app.postRunnable(() -> {
             if (item == 0) {
                 game.setScreen(new PlayScreen(game));
-                dispose();
-            } else if (item == 1) {
-                handleExport();
-            } else if (item == 2) {
-                handleImport();
-            } else if (item == 3) {
-                openResetModal();
             } else {
                 Gdx.app.exit();
                 System.exit(0);
             }
         });
-    }
-
-    private void openResetModal() {
-        showResetModal = true;
-        resetCountdown = 10.0f;
-        modalHoveredButton = -1;
-        AudioManager.getInstance().playSFX("sfx_button");
-    }
-
-    private void performReset() {
-        showResetModal = false;
-        try {
-            // Safety auto-backup of current state before wiping
-            try {
-                com.fishingrpg.game.data.SaveManager.savePlayer(game.player);
-                java.io.File backupFile = new java.io.File("angler_save_before_reset.json");
-                com.fishingrpg.game.data.SaveManager.exportToFile(backupFile);
-            } catch (Throwable t) {
-                Gdx.app.log("MainMenu", "Auto-backup before reset: " + t.getMessage());
-            }
-
-            // Wipe save preferences and records
-            com.fishingrpg.game.data.SaveManager.clearSave();
-
-            // Create fresh new Player and save baseline
-            game.player = new com.fishingrpg.game.entities.Player();
-            com.fishingrpg.game.data.SaveManager.savePlayer(game.player);
-
-            statusMessage = "✓ ĐÃ RESET DỮ LIỆU! Người chơi trở về Cấp 1 (Đã tự động sao lưu).";
-            statusTimer = 6.0f;
-            statusIsSuccess = true;
-            AudioManager.getInstance().playSFX("sfx_success");
-        } catch (Exception e) {
-            Gdx.app.error("MainMenu", "Reset failed", e);
-            statusMessage = "✕ Lỗi khi đặt lại dữ liệu: " + e.getMessage();
-            statusTimer = 5.0f;
-            statusIsSuccess = false;
-            AudioManager.getInstance().playSFX("sfx_fail");
-        }
-    }
-
-    private void handleExport() {
-        try {
-            com.fishingrpg.game.data.SaveManager.savePlayer(game.player);
-            java.io.File file = new java.io.File("angler_save.json");
-            com.fishingrpg.game.data.SaveManager.exportToFile(file);
-            String json = com.fishingrpg.game.data.SaveManager.exportDataToString();
-            Gdx.app.getClipboard().setContents(json);
-
-            statusMessage = "✓ Đã xuất thành công: 'angler_save.json' & Clipboard!";
-            statusTimer = 5.0f;
-            statusIsSuccess = true;
-            AudioManager.getInstance().playSFX("sfx_success");
-        } catch (Exception e) {
-            Gdx.app.error("MainMenu", "Export failed", e);
-            statusMessage = "✕ Lỗi xuất dữ liệu: " + e.getMessage();
-            statusTimer = 5.0f;
-            statusIsSuccess = false;
-            AudioManager.getInstance().playSFX("sfx_fail");
-        }
-    }
-
-    private void handleImport() {
-        Thread importThread = new Thread(() -> {
-            String jsonContent = null;
-            String sourceName = "";
-
-            java.awt.FileDialog fd = null;
-            try {
-                fd = new java.awt.FileDialog((java.awt.Frame) null, "Chọn file lưu trữ AnglerRPG (*.json, *.bak)", java.awt.FileDialog.LOAD);
-                fd.setFile("*.json;*.bak");
-                fd.setAlwaysOnTop(true);
-                fd.setVisible(true);
-                String f = fd.getFile();
-                String d = fd.getDirectory();
-                if (f != null && d != null) {
-                    java.io.File selected = new java.io.File(d, f);
-                    if (selected.exists() && com.fishingrpg.game.data.SaveManager.importFromFile(selected, game.player)) {
-                        sourceName = selected.getName();
-                        jsonContent = "OK";
-                    }
-                }
-            } catch (Throwable t) {
-                Gdx.app.log("MainMenu", "Native FileDialog fallback: " + t.getMessage());
-            } finally {
-                if (fd != null) {
-                    try { fd.dispose(); } catch (Throwable ignored) {}
-                }
-            }
-
-            // Fallback 1: check local angler_save_restored.json
-            if (jsonContent == null) {
-                java.io.File restored = new java.io.File("angler_save_restored.json");
-                if (restored.exists() && com.fishingrpg.game.data.SaveManager.importFromFile(restored, game.player)) {
-                    sourceName = "angler_save_restored.json";
-                    jsonContent = "OK";
-                }
-            }
-
-            // Fallback 2: check local angler_save.json
-            if (jsonContent == null) {
-                java.io.File local = new java.io.File("angler_save.json");
-                if (local.exists() && com.fishingrpg.game.data.SaveManager.importFromFile(local, game.player)) {
-                    sourceName = "angler_save.json";
-                    jsonContent = "OK";
-                }
-            }
-
-            // Fallback 3: check user home .prefs/AnglerRPG_Save.bak
-            if (jsonContent == null) {
-                java.io.File bakFile = new java.io.File(System.getProperty("user.home") + "/.prefs/AnglerRPG_Save.bak");
-                if (bakFile.exists() && com.fishingrpg.game.data.SaveManager.importFromFile(bakFile, game.player)) {
-                    sourceName = "AnglerRPG_Save.bak";
-                    jsonContent = "OK";
-                }
-            }
-
-            // Fallback 4: check clipboard
-            if (jsonContent == null) {
-                try {
-                    String clip = Gdx.app.getClipboard().getContents();
-                    if (clip != null && clip.contains("playerData") && com.fishingrpg.game.data.SaveManager.importDataFromString(clip, game.player)) {
-                        sourceName = "Clipboard";
-                        jsonContent = "OK";
-                    }
-                } catch (Exception ignored) {}
-            }
-
-            final String fJson = jsonContent;
-            final String fSource = sourceName;
-            Gdx.app.postRunnable(() -> {
-                if (fJson != null) {
-                    statusMessage = "✓ Nạp thành công từ " + fSource + " (Cấp " + game.player.getLevel() + " • " + game.player.getGold() + " Vàng)!";
-                    statusTimer = 5.0f;
-                    statusIsSuccess = true;
-                    AudioManager.getInstance().playSFX("sfx_success");
-                } else {
-                    statusMessage = "✕ Không tìm thấy dữ liệu hợp lệ (Hãy sao chép vào Clipboard hoặc lưu file 'angler_save.json')!";
-                    statusTimer = 5.0f;
-                    statusIsSuccess = false;
-                    AudioManager.getInstance().playSFX("sfx_fail");
-                }
-            });
-        });
-        importThread.setDaemon(true);
-        importThread.start();
     }
 
     private void draw() {
@@ -441,7 +237,6 @@ public class MainMenuScreen implements Screen {
         drawFloatingMotes();
         drawLogoEmblemShapes();
         drawButtonsShapes();
-        drawStatusMessageShape();
         sr.end();
 
         // 2. Line details: Waves, seabirds, and crest accents
@@ -454,27 +249,8 @@ public class MainMenuScreen implements Screen {
         game.batch.begin();
         drawTypographicLogoAndTexts();
         drawButtonTexts();
-        drawStatusMessageText();
         drawFooterInfo();
         game.batch.end();
-
-        // 4. Modal Layer: Rendered STRICTLY on top of entire screen when active
-        if (showResetModal) {
-            Gdx.gl.glEnable(GL20.GL_BLEND);
-            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-            sr.begin(ShapeRenderer.ShapeType.Filled);
-            drawResetModalShapes();
-            sr.end();
-
-            sr.begin(ShapeRenderer.ShapeType.Line);
-            drawResetModalLines();
-            sr.end();
-
-            game.batch.begin();
-            drawResetModalTexts();
-            game.batch.end();
-        }
     }
 
     // =========================================================================
@@ -483,26 +259,11 @@ public class MainMenuScreen implements Screen {
     private void drawAtmosphericSky() {
         // Multi-stop vertical twilight gradient
         float horizonY = 260f;
-        int bands = 14;
-        float bandH = (H - horizonY) / bands;
+        float bandH = (H - horizonY) / SKY_BANDS;
 
-        for (int b = 0; b < bands; b++) {
+        for (int b = 0; b < SKY_BANDS; b++) {
             float y1 = horizonY + b * bandH;
-            float t = (float)b / bands;
-
-            Color c1, c2;
-            if (t < 0.4f) {
-                // Horizon warm sunset glow (amber-coral to deep violet)
-                float subT = t / 0.4f;
-                c1 = new Color(0.48f, 0.22f, 0.24f, 1f).lerp(new Color(0.24f, 0.12f, 0.25f, 1f), subT);
-                c2 = new Color(0.48f, 0.22f, 0.24f, 1f).lerp(new Color(0.24f, 0.12f, 0.25f, 1f), (float)(b + 1) / bands / 0.4f);
-            } else {
-                // Upper twilight into midnight navy
-                float subT = (t - 0.4f) / 0.6f;
-                c1 = new Color(0.24f, 0.12f, 0.25f, 1f).lerp(new Color(0.04f, 0.06f, 0.15f, 1f), subT);
-                c2 = new Color(0.24f, 0.12f, 0.25f, 1f).lerp(new Color(0.04f, 0.06f, 0.15f, 1f), Math.min(1f, subT + 1f / (bands * 0.6f)));
-            }
-            sr.rect(0, y1, W, bandH + 1f, c1, c1, c2, c2);
+            sr.rect(0, y1, W, bandH + 1f, skyBandC1[b], skyBandC1[b], skyBandC2[b], skyBandC2[b]);
         }
 
         // Faint twinkling stars in upper atmosphere
@@ -590,8 +351,7 @@ public class MainMenuScreen implements Screen {
 
         // Ocean depth gradient
         sr.rect(0, shorelineY, W, horizonY - shorelineY,
-            new Color(0.04f, 0.08f, 0.18f, 1f), new Color(0.04f, 0.08f, 0.18f, 1f),
-            new Color(0.08f, 0.15f, 0.28f, 1f), new Color(0.08f, 0.15f, 0.28f, 1f)
+            OCEAN_C1, OCEAN_C1, OCEAN_C2, OCEAN_C2
         );
 
         // Shimmering reflective sunset column below the sun
@@ -609,8 +369,7 @@ public class MainMenuScreen implements Screen {
     private void drawShorelineAndPier() {
         // Curved wet sand shoal
         sr.rect(0, 0, W, 95f,
-            new Color(0.12f, 0.11f, 0.15f, 1f), new Color(0.12f, 0.11f, 0.15f, 1f),
-            new Color(0.20f, 0.16f, 0.20f, 1f), new Color(0.20f, 0.16f, 0.20f, 1f)
+            SHORE_C1, SHORE_C1, SHORE_C2, SHORE_C2
         );
 
         // Wet tide foam creeping along shore
@@ -768,35 +527,36 @@ public class MainMenuScreen implements Screen {
         for (int i = 0; i < ITEMS.length; i++) {
             float btnY = BTN_START_Y - i * BTN_SPACING;
             boolean isSel = (i == selected);
+            boolean isExit = (i == 1);
 
             if (isSel) {
                 // Outer radiant glow
                 float pulse = 0.5f + 0.5f * MathUtils.sin(timer * 5f);
-                if (i == 3) {
-                    sr.setColor(1f, 0.35f, 0.30f, 0.22f + 0.12f * pulse);
+                if (isExit) {
+                    sr.setColor(1f, 0.40f, 0.35f, 0.22f + 0.12f * pulse);
                 } else {
-                    sr.setColor(1f, 0.85f, 0.35f, 0.22f + 0.12f * pulse);
+                    sr.setColor(1f, 0.85f, 0.35f, 0.25f + 0.15f * pulse);
                 }
                 drawRoundedRect(sr, btnX - 6f, btnY - 6f, BTN_W + 12f, BTN_H + 12f, 16);
 
                 // Button plate background
-                if (i == 3) {
-                    sr.setColor(0.24f, 0.08f, 0.12f, 0.96f);
+                if (isExit) {
+                    sr.setColor(0.24f, 0.10f, 0.14f, 0.96f);
                 } else {
                     sr.setColor(0.12f, 0.18f, 0.32f, 0.96f);
                 }
                 drawRoundedRect(sr, btnX, btnY, BTN_W, BTN_H, 12);
 
                 // High-polish border
-                if (i == 3) {
-                    sr.setColor(1f, 0.45f, 0.40f, 1f);
+                if (isExit) {
+                    sr.setColor(1f, 0.50f, 0.45f, 1f);
                 } else {
                     sr.setColor(1f, 0.88f, 0.35f, 1f);
                 }
                 drawRectOutline(sr, btnX, btnY, BTN_W, BTN_H, 2.5f);
 
                 // Side accent indicator bars
-                if (i == 3) {
+                if (isExit) {
                     sr.setColor(1f, 0.65f, 0.60f, 1f);
                 } else {
                     sr.setColor(1f, 0.92f, 0.5f, 1f);
@@ -805,42 +565,22 @@ public class MainMenuScreen implements Screen {
                 sr.rect(btnX + BTN_W - 16f, btnY + 12f, 4f, BTN_H - 24f);
             } else {
                 // Glassmorphism translucent obsidian plate
-                if (i == 3) {
-                    sr.setColor(0.12f, 0.06f, 0.08f, 0.88f);
+                if (isExit) {
+                    sr.setColor(0.10f, 0.07f, 0.10f, 0.88f);
                 } else {
                     sr.setColor(0.06f, 0.09f, 0.16f, 0.88f);
                 }
                 drawRoundedRect(sr, btnX, btnY, BTN_W, BTN_H, 12);
 
                 // Subtle metallic border
-                if (i == 3) {
-                    sr.setColor(0.55f, 0.25f, 0.28f, 0.70f);
+                if (isExit) {
+                    sr.setColor(0.45f, 0.25f, 0.30f, 0.65f);
                 } else {
                     sr.setColor(0.25f, 0.40f, 0.60f, 0.70f);
                 }
                 drawRectOutline(sr, btnX, btnY, BTN_W, BTN_H, 1.5f);
             }
         }
-    }
-
-    private void drawStatusMessageShape() {
-        if (statusMessage == null || statusTimer <= 0f) return;
-        float alpha = Math.min(1f, statusTimer / 0.5f);
-        float bannerY = 338f;
-        layout.setText(subFont, statusMessage);
-        float bannerW = Math.max(480f, layout.width + 48f);
-        float bannerH = 40f;
-        float bannerX = (W - bannerW) / 2f;
-
-        sr.setColor(0.04f, 0.08f, 0.16f, 0.94f * alpha);
-        drawRoundedRect(sr, bannerX, bannerY, bannerW, bannerH, 10);
-
-        if (statusIsSuccess) {
-            sr.setColor(0.20f, 0.88f, 0.50f, 0.85f * alpha);
-        } else {
-            sr.setColor(0.95f, 0.32f, 0.32f, 0.85f * alpha);
-        }
-        drawRectOutline(sr, bannerX, bannerY, bannerW, bannerH, 1.8f);
     }
 
     // =========================================================================
@@ -887,6 +627,7 @@ public class MainMenuScreen implements Screen {
         for (int i = 0; i < ITEMS.length; i++) {
             float btnY = BTN_START_Y - i * BTN_SPACING;
             boolean isSel = (i == selected);
+            boolean isExit = (i == 1);
 
             String text = isSel ? ("►  " + ITEMS[i] + "  ◄") : ITEMS[i];
 
@@ -899,8 +640,8 @@ public class MainMenuScreen implements Screen {
                     btnY + (BTN_H + layout.height) / 2f - 2f
                 );
 
-                if (i == 3) {
-                    menuFont.setColor(1f, 0.60f, 0.55f, 1f);
+                if (isExit) {
+                    menuFont.setColor(1f, 0.70f, 0.65f, 1f);
                 } else {
                     menuFont.setColor(1f, 0.96f, 0.78f, 1f);
                 }
@@ -909,8 +650,8 @@ public class MainMenuScreen implements Screen {
                     btnY + (BTN_H + layout.height) / 2f
                 );
             } else {
-                if (i == 3) {
-                    menuFont.setColor(0.90f, 0.65f, 0.65f, 0.88f);
+                if (isExit) {
+                    menuFont.setColor(0.85f, 0.68f, 0.72f, 0.88f);
                 } else {
                     menuFont.setColor(0.70f, 0.82f, 0.92f, 0.88f);
                 }
@@ -921,26 +662,6 @@ public class MainMenuScreen implements Screen {
                 );
             }
         }
-    }
-
-    private void drawStatusMessageText() {
-        if (statusMessage == null || statusTimer <= 0f) return;
-        float alpha = Math.min(1f, statusTimer / 0.5f);
-        float bannerY = 338f;
-        float bannerH = 40f;
-        layout.setText(subFont, statusMessage);
-        float bannerX = (W - layout.width) / 2f;
-        float textY = bannerY + (bannerH + layout.height) / 2f;
-
-        subFont.setColor(0.01f, 0.02f, 0.04f, 0.8f * alpha);
-        subFont.draw(game.batch, statusMessage, bannerX + 1.2f, textY - 1.2f);
-
-        if (statusIsSuccess) {
-            subFont.setColor(0.55f, 1f, 0.75f, alpha);
-        } else {
-            subFont.setColor(1f, 0.75f, 0.75f, alpha);
-        }
-        subFont.draw(game.batch, statusMessage, bannerX, textY);
     }
 
     private void drawFooterInfo() {
@@ -956,185 +677,9 @@ public class MainMenuScreen implements Screen {
         subFont.getData().setScale(1f);
     }
 
-    // =========================================================================
-    // RESET CONFIRMATION MODAL RENDERING
-    // =========================================================================
-    private void drawResetModalShapes() {
-        // 1. Fullscreen dark backdrop overlay
-        sr.setColor(0.02f, 0.03f, 0.07f, 0.88f);
-        sr.rect(0, 0, W, H);
 
-        float modalW = 620f;
-        float modalH = 350f;
-        float modalX = (W - modalW) / 2f;
-        float modalY = (H - modalH) / 2f;
 
-        // 2. Soft outer glow around modal
-        sr.setColor(0.6f, 0.1f, 0.1f, 0.18f);
-        drawRoundedRect(sr, modalX - 6f, modalY - 6f, modalW + 12f, modalH + 12f, 18);
 
-        // 3. Dark obsidian card body
-        sr.setColor(0.06f, 0.08f, 0.13f, 0.98f);
-        drawRoundedRect(sr, modalX, modalY, modalW, modalH, 14);
-
-        // 4. Header plate (Crimson accent)
-        sr.setColor(0.25f, 0.06f, 0.08f, 0.95f);
-        drawRoundedRect(sr, modalX + 4f, modalY + modalH - 54f, modalW - 8f, 50f, 10);
-
-        // 5. Warning content box
-        sr.setColor(0.10f, 0.05f, 0.08f, 0.85f);
-        drawRoundedRect(sr, modalX + 24f, modalY + 98f, modalW - 48f, 184f, 8);
-
-        // 6. 10-Second countdown progress bar
-        float barX = modalX + 24f;
-        float barY = modalY + 84f;
-        float barW = modalW - 48f;
-        float barH = 6f;
-
-        // Progress bar background track
-        sr.setColor(0.14f, 0.16f, 0.22f, 0.9f);
-        drawRoundedRect(sr, barX, barY, barW, barH, 3);
-
-        // Progress bar fill
-        float progress = MathUtils.clamp((10f - resetCountdown) / 10f, 0f, 1f);
-        if (resetCountdown > 0f) {
-            sr.setColor(1f, 0.70f, 0.20f, 0.95f);
-            drawRoundedRect(sr, barX, barY, Math.max(6f, barW * progress), barH, 3);
-        } else {
-            sr.setColor(0.25f, 0.85f, 0.45f, 0.95f);
-            drawRoundedRect(sr, barX, barY, barW, barH, 3);
-        }
-
-        // 7. Buttons: Cancel and Confirm
-        float btnModalW = 230f;
-        float btnModalH = 46f;
-        float btnModalY = modalY + 22f;
-        float btnCancelX = modalX + 45f;
-        float btnConfirmX = modalX + modalW - 45f - btnModalW;
-
-        // Cancel Button
-        if (modalHoveredButton == 0) {
-            sr.setColor(0.14f, 0.28f, 0.44f, 0.98f);
-            drawRoundedRect(sr, btnCancelX, btnModalY, btnModalW, btnModalH, 10);
-            sr.setColor(0.40f, 0.80f, 1f, 1f);
-            drawRectOutline(sr, btnCancelX, btnModalY, btnModalW, btnModalH, 2f);
-        } else {
-            sr.setColor(0.08f, 0.13f, 0.20f, 0.92f);
-            drawRoundedRect(sr, btnCancelX, btnModalY, btnModalW, btnModalH, 10);
-            sr.setColor(0.22f, 0.36f, 0.52f, 0.8f);
-            drawRectOutline(sr, btnCancelX, btnModalY, btnModalW, btnModalH, 1.5f);
-        }
-
-        // Confirm Button
-        if (resetCountdown > 0f) {
-            // Locked appearance
-            sr.setColor(0.10f, 0.11f, 0.14f, 0.85f);
-            drawRoundedRect(sr, btnConfirmX, btnModalY, btnModalW, btnModalH, 10);
-            sr.setColor(0.24f, 0.25f, 0.28f, 0.55f);
-            drawRectOutline(sr, btnConfirmX, btnModalY, btnModalW, btnModalH, 1.5f);
-        } else {
-            // Unlocked active appearance
-            if (modalHoveredButton == 1) {
-                sr.setColor(0.95f, 0.18f, 0.18f, 1f);
-                drawRoundedRect(sr, btnConfirmX - 2f, btnModalY - 2f, btnModalW + 4f, btnModalH + 4f, 11);
-                sr.setColor(1f, 0.80f, 0.30f, 1f);
-                drawRectOutline(sr, btnConfirmX - 2f, btnModalY - 2f, btnModalW + 4f, btnModalH + 4f, 2.5f);
-            } else {
-                sr.setColor(0.72f, 0.14f, 0.16f, 0.95f);
-                drawRoundedRect(sr, btnConfirmX, btnModalY, btnModalW, btnModalH, 10);
-                sr.setColor(0.95f, 0.35f, 0.32f, 0.9f);
-                drawRectOutline(sr, btnConfirmX, btnModalY, btnModalW, btnModalH, 2f);
-            }
-        }
-    }
-
-    private void drawResetModalLines() {
-        float modalW = 620f;
-        float modalH = 350f;
-        float modalX = (W - modalW) / 2f;
-        float modalY = (H - modalH) / 2f;
-
-        // Outer pulsing red/amber border
-        float pulse = 0.5f + 0.5f * MathUtils.sin(timer * 3f);
-        sr.setColor(0.85f, 0.25f, 0.25f, 0.70f + 0.30f * pulse);
-        drawRectOutline(sr, modalX, modalY, modalW, modalH, 2f);
-
-        // Content box subtle inner outline
-        sr.setColor(0.42f, 0.16f, 0.18f, 0.5f);
-        drawRectOutline(sr, modalX + 24f, modalY + 98f, modalW - 48f, 184f, 1.2f);
-    }
-
-    private void drawResetModalTexts() {
-        float modalW = 620f;
-        float modalH = 350f;
-        float modalX = (W - modalW) / 2f;
-        float modalY = (H - modalH) / 2f;
-
-        // 1. Header Title
-        String title = "✦  CẢNH BÁO ĐẶT LẠI DỮ LIỆU  ✦";
-        layout.setText(menuFont, title);
-        menuFont.setColor(0.01f, 0.02f, 0.04f, 0.9f);
-        menuFont.draw(game.batch, title, modalX + (modalW - layout.width) / 2f + 1.5f, modalY + modalH - 18.5f);
-        menuFont.setColor(1f, 0.42f, 0.38f, 1f);
-        menuFont.draw(game.batch, title, modalX + (modalW - layout.width) / 2f, modalY + modalH - 17f);
-
-        // 2. Warning Description Lines
-        float textX = modalX + 44f;
-        float startY = modalY + modalH - 76f;
-        float lineSpacing = 26f;
-
-        subFont.setColor(1f, 0.90f, 0.88f, 1f);
-        subFont.draw(game.batch, "Hành động này sẽ XÓA TOÀN BỘ dữ liệu tiến trình hiện tại:", textX, startY);
-
-        subFont.setColor(0.84f, 0.88f, 0.92f, 0.92f);
-        subFont.draw(game.batch, "• Toàn bộ Cấp độ, Kinh nghiệm, Vàng, Kim cương và Điểm sự kiện", textX, startY - lineSpacing);
-        subFont.draw(game.batch, "• Toàn bộ Cần câu, Dây câu, Lưỡi câu, Kỹ năng & Bộ sưu tập cá", textX, startY - lineSpacing * 2f);
-        subFont.draw(game.batch, "• Bạn sẽ bắt đầu lại từ Cấp 1 như một người chơi mới hoàn toàn.", textX, startY - lineSpacing * 3f);
-
-        // 3. Countdown / Status prompt
-        if (resetCountdown > 0f) {
-            int sec = (int) Math.ceil(resetCountdown);
-            String note = "► Vui lòng chờ " + sec + " giây để có thể nhấn nút Đồng ý...";
-            subFont.setColor(1f, 0.82f, 0.28f, 1f);
-            subFont.draw(game.batch, note, textX, startY - lineSpacing * 4.2f);
-        } else {
-            String note = "► Nút Đồng ý đã mở khóa! Hãy cân nhắc kỹ trước khi bấm.";
-            subFont.setColor(0.35f, 1f, 0.60f, 1f);
-            subFont.draw(game.batch, note, textX, startY - lineSpacing * 4.2f);
-        }
-
-        // 4. Buttons text
-        float btnModalW = 230f;
-        float btnModalH = 46f;
-        float btnModalY = modalY + 22f;
-        float btnCancelX = modalX + 45f;
-        float btnConfirmX = modalX + modalW - 45f - btnModalW;
-
-        // Cancel Text
-        String cancelTxt = "✕  HỦY BỎ";
-        layout.setText(subFont, cancelTxt);
-        subFont.setColor(0.88f, 0.95f, 1f, 1f);
-        subFont.draw(game.batch, cancelTxt,
-            btnCancelX + (btnModalW - layout.width) / 2f,
-            btnModalY + (btnModalH + layout.height) / 2f
-        );
-
-        // Confirm Text
-        String confirmTxt;
-        if (resetCountdown > 0f) {
-            int sec = (int) Math.ceil(resetCountdown);
-            confirmTxt = "ĐỒNG Ý (" + sec + "s)";
-            subFont.setColor(0.55f, 0.58f, 0.62f, 0.8f);
-        } else {
-            confirmTxt = "✓  ĐỒNG Ý XÓA";
-            subFont.setColor(1f, 1f, 1f, 1f);
-        }
-        layout.setText(subFont, confirmTxt);
-        subFont.draw(game.batch, confirmTxt,
-            btnConfirmX + (btnModalW - layout.width) / 2f,
-            btnModalY + (btnModalH + layout.height) / 2f
-        );
-    }
 
     // =========================================================================
     // UTILITY SHAPE HELPERS
@@ -1159,6 +704,7 @@ public class MainMenuScreen implements Screen {
     @Override
     public void show() {
         AudioManager.getInstance().playBGM("bgm_menu");
+        Gdx.input.setInputProcessor(null);
     }
 
     @Override
@@ -1169,10 +715,19 @@ public class MainMenuScreen implements Screen {
 
     @Override public void pause() {}
     @Override public void resume() {}
-    @Override public void hide() {}
+    @Override public void hide() {
+        Gdx.input.setInputProcessor(null);
+    }
+
+    public OrthographicCamera getCamera() {
+        return camera;
+    }
+
+    public Viewport getViewport() {
+        return viewport;
+    }
 
     @Override
     public void dispose() {
-        sr.dispose();
     }
 }

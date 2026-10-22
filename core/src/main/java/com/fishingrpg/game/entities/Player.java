@@ -63,7 +63,17 @@ public class Player {
         this.questManager = new QuestManager();
         this.questManager.setPlayer(this);
         this.questManager.initIfEmpty();
+        ensureDefaultSkills();
         applySkillBonuses();
+    }
+
+    public void ensureDefaultSkills() {
+        if (skillTree != null && skillTree.getSkill("keo_manh") != null && !skillTree.getSkill("keo_manh").isUnlocked()) {
+            skillTree.getSkill("keo_manh").setCurrentLevel(1);
+        }
+        if (equippedActives != null && equippedActives[0] == null) {
+            equippedActives[0] = "keo_manh";
+        }
     }
 
     // =========================================================================
@@ -109,14 +119,13 @@ public class Player {
     public boolean consumeGold(int amount) { 
         if (progression.getGold() >= amount) {
             progression.setGold(progression.getGold() - amount);
-            eventManager.onGoldSpent(amount);
+            if (questManager != null) questManager.addProgress("spend", amount);
             return true;
         }
         return false;
     }
     public void incrementFishCaught() { 
         progression.incrementFishCaught();
-        eventManager.onFishCaught();
     }
 
     public int getLevel()              { return progression.getLevel(); }

@@ -42,6 +42,7 @@ public class ItemDatabase {
         registerItem(new ItemData("Sách: Trói Buộc", "Học/Đột phá kỹ năng Trói Buộc (+1 Lv hoặc +1 SP)", ItemUsageType.PRE_COMBAT, 2200), false);
         registerItem(new ItemData("Sách: Trái Tim ĐD", "Học/Đột phá kỹ năng Trái Tim Đại Dương (+1 Lv hoặc +1 SP)", ItemUsageType.PRE_COMBAT, 2500), false);
         items.put("Trà Thảo Mộc", getItem("Trà Thảo Mộc Định Thần"));
+        items.put("Nước Bức Phá", getItem("Nước Bứt Phá"));
     }
     
     private static void registerItem(ItemData item, boolean inShop) {

@@ -64,6 +64,8 @@ public class EquipmentScreen implements Screen {
     private Equipment hoveredEq = null;
     private float hoverX = 0, hoverY = 0;
     private List<Equipment> cachedFilteredInventory = new ArrayList<>();
+    private boolean inventoryDirty = true;
+    private final Vector3 mousePos = new Vector3();
 
     private boolean hoverBack = false;
     private boolean hoverGearDock = false;
@@ -87,7 +89,7 @@ public class EquipmentScreen implements Screen {
         this.viewport = new FitViewport(W, H, camera);
         this.camera.position.set(W / 2f, H / 2f, 0);
 
-        this.sr = new ShapeRenderer();
+        this.sr = game.shapeRenderer;
         this.font = game.font;
         this.titleFont = game.titleFont != null ? game.titleFont : game.font;
         this.layout = new GlyphLayout();
@@ -106,6 +108,7 @@ public class EquipmentScreen implements Screen {
         if (Gdx.graphics.getWidth() <= 0 || Gdx.graphics.getHeight() <= 0) return;
         animTimer += delta;
         update(delta);
+        if (game.getScreen() != this) return;
 
         // Update ambient floating particles
         for (int i = 0; i < PARTICLE_COUNT; i++) {
@@ -117,13 +120,14 @@ public class EquipmentScreen implements Screen {
             }
         }
 
-        ScreenUtils.clear(new Color(0.03f, 0.05f, 0.08f, 1f));
+        ScreenUtils.clear(0.03f, 0.05f, 0.08f, 1f);
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
         sr.setProjectionMatrix(camera.combined);
 
-        Vector3 m = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        viewport.unproject(m);
+        mousePos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        viewport.unproject(mousePos);
+        Vector3 m = mousePos;
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -675,10 +679,14 @@ public class EquipmentScreen implements Screen {
     }
 
     private void update(float delta) {
-        Vector3 m = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-        viewport.unproject(m);
+        mousePos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        viewport.unproject(mousePos);
+        Vector3 m = mousePos;
 
-        cachedFilteredInventory = getFilteredInventory();
+        if (inventoryDirty || cachedFilteredInventory == null) {
+            cachedFilteredInventory = getFilteredInventory();
+            inventoryDirty = false;
+        }
 
         // Handle hovering
         hoveredEq = null;
@@ -739,12 +747,14 @@ public class EquipmentScreen implements Screen {
             // QoL: Unequip All button click
             if (hoverUnequipAll) {
                 unequipAll();
+                inventoryDirty = true;
                 return;
             }
 
             // QoL: Auto-Equip button click
             if (hoverAutoEquip) {
                 autoEquipBest();
+                inventoryDirty = true;
                 return;
             }
 
@@ -763,6 +773,7 @@ public class EquipmentScreen implements Screen {
                         AudioManager.getInstance().playSFX("sfx_button");
                         currentTab = tabs[t];
                         scrollOffset = 0;
+                        inventoryDirty = true;
                         return;
                     }
                 }
@@ -783,6 +794,7 @@ public class EquipmentScreen implements Screen {
                         AudioManager.getInstance().playSFX("sfx_button");
                         currentSort = sortModes[s];
                         scrollOffset = 0;
+                        inventoryDirty = true;
                         return;
                     }
                 }
@@ -798,17 +810,23 @@ public class EquipmentScreen implements Screen {
                 float rodBtnY = leftY + leftH - 165f + 15f;
                 if (m.y >= rodBtnY && m.y <= rodBtnY + uBtnH && player.getEquippedRod() != null) {
                     AudioManager.getInstance().playSFX("sfx_button");
-                    player.unequip(EquipmentType.ROD); return;
+                    player.unequip(EquipmentType.ROD);
+                    inventoryDirty = true;
+                    return;
                 }
                 float lineBtnY = leftY + leftH - 295f + 15f;
                 if (m.y >= lineBtnY && m.y <= lineBtnY + uBtnH && player.getEquippedLine() != null) {
                     AudioManager.getInstance().playSFX("sfx_button");
-                    player.unequip(EquipmentType.LINE); return;
+                    player.unequip(EquipmentType.LINE);
+                    inventoryDirty = true;
+                    return;
                 }
                 float hookBtnY = leftY + leftH - 425f + 15f;
                 if (m.y >= hookBtnY && m.y <= hookBtnY + uBtnH && player.getEquippedHook() != null) {
                     AudioManager.getInstance().playSFX("sfx_button");
-                    player.unequip(EquipmentType.HOOK); return;
+                    player.unequip(EquipmentType.HOOK);
+                    inventoryDirty = true;
+                    return;
                 }
             }
 
@@ -825,6 +843,7 @@ public class EquipmentScreen implements Screen {
                         } else {
                             player.equip(eq);
                         }
+                        inventoryDirty = true;
                         return;
                     }
                 }
@@ -1355,6 +1374,5 @@ public class EquipmentScreen implements Screen {
 
     @Override
     public void dispose() {
-        sr.dispose();
     }
 }

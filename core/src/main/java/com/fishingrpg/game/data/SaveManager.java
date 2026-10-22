@@ -102,6 +102,7 @@ public class SaveManager {
         Preferences recs = Gdx.app.getPreferences("AnglerRPG_Records");
         recs.clear();
         recs.flush();
+        SizeRecord.clearCache();
         Gdx.app.log(TAG, "All player save data and records have been cleared.");
     }
 
@@ -185,6 +186,7 @@ public class SaveManager {
                 }
                 recPrefs.flush();
             }
+            SizeRecord.clearCache();
 
             if (player != null) {
                 loadPlayer(player);
@@ -241,6 +243,7 @@ public class SaveManager {
                 }
                 recPrefs.flush();
             }
+            SizeRecord.clearCache();
 
             if (player != null) {
                 loadPlayer(player);
@@ -330,6 +333,7 @@ public class SaveManager {
         } catch (Exception e) {
             Gdx.app.error(TAG, "Error parsing equipped slots — keeping defaults.", e);
         }
+        player.ensureDefaultSkills();
 
         // --- Claimed collections ---
         try {
@@ -388,22 +392,24 @@ public class SaveManager {
                 }
             }
 
-            // Re-apply new formula for old equipment
-            for (Equipment eq : player.getEquipmentInventory()) {
-                int mult = EquipmentGenerator.getSetPoints(eq.setName)
-                         + EquipmentGenerator.getRarityPoints(eq.rarity);
-                if (eq.type == EquipmentType.ROD) {
-                    eq.mainStat1 = 10f + mult * 2f;
-                    eq.mainStat2 = 50f + mult * 15f;
-                } else if (eq.type == EquipmentType.LINE) {
-                    eq.mainStat1 = 50f + mult * 20f;
-                    eq.mainStat2 = 2f  + mult * 0.4f;
-                } else if (eq.type == EquipmentType.HOOK) {
-                    eq.mainStat1 = 5f  + mult * 1.0f;
-                    eq.mainStat2 = 10f + mult * 2.0f;
-                }
-                for (Substat sub : eq.substats) {
-                    sub.value = Math.max(1f, Math.round(2f + mult / 2f));
+            // Re-apply new formula only for legacy save versions (< 3)
+            if (savedVersion < 3) {
+                for (Equipment eq : player.getEquipmentInventory()) {
+                    int mult = EquipmentGenerator.getSetPoints(eq.setName)
+                             + EquipmentGenerator.getRarityPoints(eq.rarity);
+                    if (eq.type == EquipmentType.ROD) {
+                        eq.mainStat1 = 10f + mult * 2f;
+                        eq.mainStat2 = 50f + mult * 15f;
+                    } else if (eq.type == EquipmentType.LINE) {
+                        eq.mainStat1 = 100f + mult * 25f;
+                        eq.mainStat2 = 2f  + mult * 0.4f;
+                    } else if (eq.type == EquipmentType.HOOK) {
+                        eq.mainStat1 = 5f  + mult * 1.0f;
+                        eq.mainStat2 = 10f + mult * 2.0f;
+                    }
+                    for (Substat sub : eq.substats) {
+                        sub.value = Math.max(1f, Math.round(2f + mult / 2f));
+                    }
                 }
             }
 

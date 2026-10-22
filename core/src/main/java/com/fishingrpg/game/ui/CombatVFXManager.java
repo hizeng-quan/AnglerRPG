@@ -471,4 +471,9 @@ public class CombatVFXManager {
             }
         }
     }
+
+    public void clear() {
+        particles.clear();
+        effects.clear();
+    }
 }

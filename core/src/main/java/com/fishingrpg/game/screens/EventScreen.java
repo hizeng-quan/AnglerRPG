@@ -61,6 +61,13 @@ public class EventScreen implements Screen {
     // Vector3 cache for mouse coordinate conversion
     private final Vector3 mousePos = new Vector3();
 
+    private static final Color BG_TOP = new Color(0.12f, 0.07f, 0.16f, 1f);
+    private static final Color BG_BOT = new Color(0.08f, 0.03f, 0.05f, 1f);
+    private static final Color BORDER_CRIMSON = new Color(0.95f, 0.35f, 0.38f, 1f);
+    private static final Color BORDER_PURPLE = new Color(0.75f, 0.45f, 0.95f, 1f);
+    private static final Color BORDER_GOLD = new Color(1f, 0.82f, 0.3f, 1f);
+    private static final Color BORDER_YELLOW = new Color(0.95f, 0.8f, 0.25f, 1f);
+
     public EventScreen(FishingRPG game, Screen previousScreen) {
         this.game = game;
         this.player = game.player;
@@ -69,7 +76,7 @@ public class EventScreen implements Screen {
         this.camera = new OrthographicCamera();
         this.viewport = new FitViewport(W, H, camera);
         this.camera.position.set(W / 2f, H / 2f, 0);
-        this.sr = new ShapeRenderer();
+        this.sr = game.shapeRenderer;
         this.font = game.font;
         this.titleFont = game.titleFont != null ? game.titleFont : game.font;
         this.layout = new GlyphLayout();
@@ -165,11 +172,7 @@ public class EventScreen implements Screen {
 
     private void drawBackgroundShapes() {
         // Deep imperial festive gradient: Midnight crimson ruby to royal indigo
-        sr.rect(0, 0, W, H,
-                new Color(0.08f, 0.03f, 0.05f, 1f),
-                new Color(0.08f, 0.03f, 0.05f, 1f),
-                new Color(0.12f, 0.07f, 0.16f, 1f),
-                new Color(0.12f, 0.07f, 0.16f, 1f));
+        sr.rect(0, 0, W, H, BG_BOT, BG_BOT, BG_TOP, BG_TOP);
 
         // Majestic Dong Son Bronze Drum Watermark in background center
         float drumCX = W / 2f;
@@ -1427,13 +1430,13 @@ public class EventScreen implements Screen {
 
     private Color getShopItemBorderColor(int index) {
         if (index <= 2) {
-            return new Color(0.95f, 0.35f, 0.38f, 1f); // Crimson for limited gear
+            return BORDER_CRIMSON;
         } else if (index == 3) {
-            return new Color(0.75f, 0.45f, 0.95f, 1f); // Purple
+            return BORDER_PURPLE;
         } else if (index == 4) {
-            return new Color(1f, 0.82f, 0.3f, 1f); // Gold
+            return BORDER_GOLD;
         } else {
-            return new Color(0.95f, 0.8f, 0.25f, 1f);
+            return BORDER_YELLOW;
         }
     }
 
@@ -1443,7 +1446,6 @@ public class EventScreen implements Screen {
         } else {
             game.setScreen(new MainMenuScreen(game));
         }
-        dispose();
     }
 
     private boolean isMouseOver(float x, float y, float w, float h) {
@@ -1472,6 +1474,5 @@ public class EventScreen implements Screen {
 
     @Override
     public void dispose() {
-        sr.dispose();
     }
 }
