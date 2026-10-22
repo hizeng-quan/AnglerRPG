@@ -95,6 +95,7 @@ public class FishingManager {
 
     public boolean bossSkillJustUsed = false;
     private FloatingTextManager ftm;
+    private com.fishingrpg.game.systems.vfx.ScreenShakeController screenShake;
 
     public FishingManager(Player player) {
         this.player = player;
@@ -106,6 +107,10 @@ public class FishingManager {
     
     public void setFloatingTextManager(FloatingTextManager ftm) {
         this.ftm = ftm;
+    }
+
+    public void setScreenShake(com.fishingrpg.game.systems.vfx.ScreenShakeController screenShake) {
+        this.screenShake = screenShake;
     }
 
     public void startCasting() {
@@ -203,6 +208,10 @@ public class FishingManager {
 
     public void triggerBite() {
         AudioManager.getInstance().playSFX("sfx_bite");
+        if (screenShake != null) {
+            screenShake.shakeMedium();
+            screenShake.triggerHitStop(0.045f);
+        }
         state = State.BITE;
         float pBonus = 0f;
         if (player.isSkillEquipped("nhanh_tay")) {
@@ -297,7 +306,9 @@ public class FishingManager {
                 isLineBroken = true;
                 combatMessage = failReason;
                 resultLine = "";
+                if (screenShake != null) screenShake.shakeHeavy();
             } else {
+                if (screenShake != null) screenShake.shakeLight();
                 float xpMod = 1f;
                 if (player.getExpBuffCharges() > 0) {
                     player.consumeExpBuffCharge();
@@ -563,6 +574,7 @@ public class FishingManager {
                     }
 
                     AudioManager.getInstance().playSFX("sfx_skill");
+                    if (screenShake != null) screenShake.shakeHeavy();
                     com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerFishSkillVFX(s.id, 640f, 360f);
                     if (s.id.equals("but_toc")) {
                         fishButTocTimer = 3f;
@@ -962,6 +974,7 @@ public class FishingManager {
         }
         
         if (skillUsed) {
+            if (screenShake != null) screenShake.shakeMedium();
             player.getQuestManager().addProgress("skill", 1);
         }
     }

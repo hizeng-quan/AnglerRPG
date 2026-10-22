@@ -61,6 +61,16 @@
 - **Tích Hợp Toàn Diện Hệ Thống**:
   - Thay thế toàn bộ các điểm truy vấn giờ địa phương trong `EventManager` và `QuestManager` sang `TimeSyncService.getCurrentTimeMillis()`.
 
+### 💥 Bộ Điều Khiển Rung Chấn Màn Hình & "Game Juice" ([ScreenShakeController.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/vfx/ScreenShakeController.java), [JuiceAnimator.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/vfx/JuiceAnimator.java), [PlayScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/PlayScreen.java))
+- **Hệ Thống Rung Chấn Màn Hình Trauma-Based (Squirrel Eiserloh GDC Standard)**:
+  - Thay thế cơ chế rung ngẫu nhiên cũ (bị lỗi trôi tâm camera) bằng mô hình Trauma `[0.0, 1.0]`. Năng lượng rung phi tuyến `shake = trauma^2` mang lại cảm giác chân thực: rung nhẹ tinh tế khi máy câu chạy, rung dữ dội khi Boss tung skill hay đứt cước.
+  - Kết hợp đồng thời rung tịnh tiến `(X, Y)` và rung góc nghiêng `Angle`, tạo cảm giác chấn động vật lý 3D rõ rệt.
+  - Hồi quy vị trí tâm gốc tuyệt đối (Zero Camera Drift), không bao giờ bị lệch khung hình sau va chạm.
+- **Hiệu Ứng Khựng Đòn Đanh Thép (Hit-Stop / Micro-freeze)**:
+  - Khi cá đớp phao (`BITE`) hoặc quăng trúng nhịp: Game tự động khựng lại 45 mili-giây, tạo cảm giác giật cần chắc tay và nặng đòn như các tựa game đối kháng/hành động đỉnh cao.
+- **Bộ Nội Suy Easing & Bouncy Animation (JuiceAnimator)**:
+  - Cung cấp các đường cong nội suy nảy đàn hồi (SwingOut, ElasticOut, BounceOut, Punch Scale, Pulse) cho popup phần thưởng, thông báo và hiệu ứng hào quang.
+
 ### 🛡️ Rà Soát Bảo Mật & Ẩn Tệp Tin Riêng Tư Trên GitHub ([.gitignore](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/.gitignore))
 - **Bảo Vệ Tệp Lưu Dữ Liệu Người Chơi**:
   - Ẩn toàn bộ `angler_save*.json`, `save_*.json`, `*.sav`, `*.save`, `*.save.json` để người chơi/lập trình viên không vô tình đẩy dữ liệu lưu cá nhân lên kho lưu trữ công khai GitHub.
