@@ -4,6 +4,131 @@
 
 ---
 
+## 📅 [2026-10-23] - Phiên bản v0.4.21 (Thưởng Kim Cương Sổ Tay Thủy Tộc & Sửa Lỗi Âm Thanh SFX)
+
+### 📖 Bổ Sung Thưởng Kim Cương Sổ Tay Thủy Tộc ([CollectionDatabase.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/data/CollectionDatabase.java), [CatalogScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/CatalogScreen.java), [Player.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/entities/Player.java), [SaveManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/data/SaveManager.java))
+- **Thưởng Hoàn Thành 15 Bộ Sưu Tập**:
+  - Bổ sung trường `rewardDiamonds` cho toàn bộ 15 bộ sưu tập cá trên cả 3 bản đồ:
+    - **Ao Làng**: Dân Dã Ao Làng (10 KC), Gương Mặt Quen Thuộc (15 KC), Kình Ngư Nước Ngọt (20 KC), Sát Thủ Đầm Lầy (35 KC), Truyền Thuyết Sông Hồ (60 KC). Tổng: **140 KC**.
+    - **Bãi Biển**: Ven Bờ (15 KC), Bập Bềnh (20 KC), Xa Bờ (25 KC), Thợ Săn Đáy Biển (40 KC), Vua Của Biển Cả (70 KC). Tổng: **170 KC**.
+    - **Đảo Xa**: Rạn San Hô (20 KC), Sinh Vật Độc Lạ (25 KC), Cư Dân Đại Dương (35 KC), Hung Thần Răng Cưa (50 KC), Thần Thoại Biển Khơi (100 KC). Tổng: **230 KC**.
+    - Tổng cộng thưởng hoàn thành tất cả các bộ sưu tập: **540 Kim Cương**.
+- **Thưởng Khám Phá Lần Đầu Từng Loài Cá (Catalog Discovery Diamonds)**:
+  - Khi câu được một loài cá mới, ô cá trong Sổ Tay sẽ mở khóa huy hiệu phát sáng `+X 💎 NHẬN`:
+    - **Common**: +2 KC
+    - **Uncommon**: +3 KC
+    - **Rare**: +5 KC
+    - **Epic**: +10 KC
+    - **Boss**: +25 KC
+  - Người chơi có thể nhấp chuột trực tiếp vào ô cá để nhận thưởng riêng lẻ hoặc sử dụng nút **★ NHẬN TẤT CẢ ★** ở góc phải để nhận toàn bộ thưởng cá và bộ sưu tập một chạm.
+  - Sau khi nhận, ô cá hiển thị nhãn xanh lá `✓ Đã lưu sổ`. Trạng thái nhận thưởng cá `claimedFishCatalog` được lưu bền vững vào `SaveManager`.
+- **Nâng Cấp Giao Diện Sổ Tay**:
+  - Bổ sung thanh dock hiển thị số dư tài nguyên **Vàng** và **Kim Cương** trực tiếp trên màn hình Sổ Tay, giúp người chơi thấy số dư tăng lên tức thì khi bấm nhận thưởng.
+
+### 🔊 Khắc Phục Lỗi Âm Thanh SFX Button ([AudioManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/AudioManager.java), [sfx_button.wav](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/audio/sfx/sfx_button.wav))
+- **Sinh Tệp Âm Thanh Chuẩn**:
+  - Khắc phục lỗi `GdxRuntimeException: File not found: audio\sfx\sfx_button.wav` khi bấm các nút giao diện UI.
+  - Sinh tệp âm thanh click chuột cơ khí cao cấp `assets/audio/sfx/sfx_button.wav` (44.1kHz, 16-bit PCM).
+- **Cơ Chế Tải Âm Thanh An Toàn (Defensive Audio Loading)**:
+  - Kiểm tra sự tồn tại của tệp âm thanh trước khi nạp bằng `fh.exists()`.
+  - Nếu tệp không tìm thấy, nạp giá trị `null` vào bộ đệm `sfxMap` để ngăn chặn hoàn toàn việc văng ngoại lệ và spam log lỗi ở từng khung hình.
+  - Hỗ trợ cơ chế ánh xạ tự động (Alias): `"button_click"` -> `"sfx_button"`, `"victory"` -> `"sfx_success"`.
+
+---
+
+## 📅 [2026-10-23] - Phiên bản v0.4.20 (Cố Định 6★ Lạc Hồng, Cân Bằng 42 Loài Cá Thường & Đại Tu Kinh Tế Kim Cương)
+
+### 👑 Cố Định Phẩm Cấp Set Thần Khí Lạc Hồng & Khóa Roll Không Nổ ([EquipmentGenerator.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/entities/equipment/EquipmentGenerator.java), [SaveManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/data/SaveManager.java))
+- **Cố Định Độ Hiếm 6★ (LIMITED_PREMIUM)**:
+  - Khắc phục triệt để lỗi Set Thần Khí Lạc Hồng xuất hiện ở các phẩm cấp thấp (Common, Uncommon, Rare, Epic).
+  - Thiết lập ràng buộc bất biến (Hard Invariant): Bất kỳ trang bị nào thuộc Set Thần Khí Lạc Hồng đều luôn cố định ở phẩm cấp cao nhất 6★ (`Rarity.LIMITED_PREMIUM`).
+- **Khóa Chặt Khỏi Roll Không Nổ**:
+  - Loại bỏ hoàn toàn Set Thần Khí Lạc Hồng và Set Vệ Quốc Vang Danh khỏi Vòng quay Thường (`rollGacha`).
+  - Trong Vòng quay Sự Kiện (`rollGachaLimited`): Set Lạc Hồng chỉ có thể xuất hiện khi **NỔ VÀNG 6★** (`Rarity.LIMITED_PREMIUM`). Tuyệt đối không lọt vào các lượt roll thường / roll xịt (Common, Uncommon, Rare, Epic).
+- **Tự Động Nâng Cấp Kho Đồ**: Bộ nạp dữ liệu (`SaveManager`) tự động kiểm tra và nâng cấp toàn bộ trang bị Lạc Hồng trong túi đồ người chơi về chuẩn 6★ `LIMITED_PREMIUM`.
+
+### 🐟 Đại Tu Cân Bằng Toàn Diện 42 Loài Cá Thường ([fishes.json](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/data/fishes.json))
+- **Mục Tiêu & Tiêu Chuẩn Trải Nghiệm Đối Kháng**:
+  - Khắc phục hiện tượng cá thường bị người chơi có trang bị trung cấp giật chết chỉ trong 1–2 giây, khôi phục trải nghiệm câu cá chân thực và căng thẳng.
+  - Chuẩn hóa thời gian giằng co (Target TTK):
+    - **COMMON (Phổ thông)**: Đạt **8s – 14s** (vừa đủ cảm nhận nhịp kéo và thanh lực căng).
+    - **UNCOMMON (Hiếm vừa)**: Đạt **15s – 22s** (đòi hỏi người chơi kiểm soát nhả/nhấp phím Space qua 1 chu kỳ cá vùng vẫy).
+    - **RARE (Hiếm)**: Đạt **22s – 32s** (yêu cầu quản lý thể lực và sức bền dây cước chặt chẽ).
+    - **EPIC (Sử thi)**: Đạt **35s – 50s** (trận đấu cam go, phát huy tối đa kỹ năng trang bị).
+- **Chi Tiết Điều Chỉnh Chỉ Số Cả 3 Bản Đồ**:
+  - **Bản đồ 1 - Ao Làng (ao_lang)**:
+    - *Common*: Cá Mương (HP 25 -> 55, TTK ~7s), Cá Diếc (HP 30 -> 65, TTK ~9s), Cá Lóc Nhí (HP 35 -> 70, TTK ~10s), Cá Rô Đồng (HP 40 -> 75, TTK ~11s), Cá Mè (HP 50 -> 80, TTK ~15s), Cá Chép (HP 80 -> 95, TTK ~18s).
+    - *Uncommon*: Cá Trê (HP 60 -> 130, TTK ~14s), Cá Chim Trắng (HP 65 -> 140, TTK ~15s), Cá Trôi (HP 70 -> 150, TTK ~20s), Cá Trắm Cỏ (HP 90 -> 165, TTK ~19s).
+    - *Rare*: Cá Lóc Bông (HP 120 -> 240, TTK ~25s), Cá Trê Lai (HP 150 -> 250, TTK ~31s).
+    - *Epic*: Cá Chép Vàng (HP 200 -> 360, TTK ~36s), Cá Lăng Khổng Lồ (HP 250 -> 400, TTK ~39s).
+  - **Bản đồ 2 - Bãi Biển (bai_bien)**:
+    - *Common*: Cá Cơm (HP 30 -> 85), Cá Mòi (HP 40 -> 95), Cá Chỉ Vàng (HP 45 -> 105), Cá Lẹp (HP 50 -> 110), Cá Đục (HP 55 -> 120), Cá Bạc Má (HP 60 -> 130).
+    - *Uncommon*: Cá Trích (HP 75 -> 190), Cá Đối (HP 85 -> 200), Cá Nục (HP 90 -> 210), Cá Chim Biển (HP 110 -> 220).
+    - *Rare*: Cá Mú (HP 200 -> 340), Cá Bóp (HP 250 -> 380).
+    - *Epic*: Cá Thu Hoàng Kim (HP 400 -> 550), Cá Ngừ Đại Dương (HP 500 -> 640).
+  - **Bản đồ 3 - Đảo Xa (dao_xa)**:
+    - *Common*: Cá Hề (HP 120 -> 180), Cá Phèn (HP 140 -> 200), Cá Ngựa Vằn (HP 150 -> 210), Cá Nóc (HP 160 -> 220), Mực Ống (HP 180 -> 240), Cá Đuối Nhỏ (HP 200 -> 260).
+    - *Uncommon*: Cá Chuồn (HP 250 -> 320), Cá Cờ (HP 280 -> 350), Cá Mặt Trăng (HP 300 -> 370), Rùa Biển (HP 350 -> 420).
+    - *Rare*: Cá Kiếm (HP 550 -> 620), Cá Mập Cáo (HP 600 -> 680).
+    - *Epic*: Mực Khổng Lồ (HP 1,200 -> 1,100, TTK ~55s), Cá Voi Lưng Gù (HP 1,500 -> 1,300, TTK ~77s).
+- **Cân Bằng Kinh Tế Vàng & EXP Tương Xứng**:
+  - Nâng phần thưởng Vàng và EXP cho toàn bộ 42 loài cá theo tỷ lệ độ khó tương ứng, bảo đảm công sức giằng co lâu hơn mang lại lợi ích tài nguyên vượt trội cho người chơi.
+
+### 💎 Cân Bằng Toàn Diện Nguồn Kiếm Kim Cương (Chống Lạm Phát Currency)
+- **Vấn Đề Trước Đây**:
+  - Tỷ lệ rơi Kim Cương (KC) từ câu cá hiếm đạt 100%, mỗi 10 con cá câu được thưởng thêm 5 KC, Rương ngày thưởng 20 KC, Rương tuần 100 KC, Nhiệm vụ sự kiện cho tới 55 KC/ngày và bảng Thành tựu trao tới 10,000 KC.
+  - Hậu quả: Người chơi F2P tích lũy hơn 5,000 – 7,000 KC/tháng (đủ quay 250 – 350 lượt, tương đương 3 – 4 chu kỳ bảo hiểm Pity 80), làm mất hoàn toàn độ quý hiếm của tài nguyên và vòng quay Gacha.
+- **Giải Pháp & Thông Số Chuẩn Hóa**:
+  - **Rơi Từ Câu Cá ([FishingManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/FishingManager.java))**:
+    - Cá Rare: Giảm từ 100% xuống **20% tỷ lệ rơi 1 KC** (tạo cảm giác bất ngờ khi bắt được cá quý).
+    - Cá Epic: 50% rơi 1 KC, 50% rơi 2 KC (trước đây 2–3 KC cố định).
+    - Boss: Chuẩn hóa rơi **3 – 5 KC** (trần nhân thêm từ Lưới tối đa +2 KC).
+  - **Nội Tại Cấp Độ & Cần Thủ ([PlayerProgression.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/entities/PlayerProgression.java))**:
+    - Thăng cấp thường: Thưởng **+2 KC**; riêng mỗi mốc 5 cấp (Lv.5, 10, 15, 20...) thưởng lớn **+10 KC**.
+    - Cần thủ kiên trì: Chuyển mốc nhận thưởng thành **mỗi 25 con cá câu thành công thưởng +3 KC** (giảm tỷ lệ lạm phát từ 0.5 KC/cá xuống 0.12 KC/cá).
+  - **Rương Nhiệm Vụ Hằng Ngày & Tuần ([QuestScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/QuestScreen.java))**:
+    - Rương Ngày (100 điểm): Chuẩn hóa **10 KC**, tăng bù lên 250 Vàng và 250 XP (trước đây 20 KC).
+    - Rương Tuần (100 điểm): Chuẩn hóa **40 KC**, tăng bù lên 1,500 Vàng và 1,500 XP (trước đây 100 KC).
+  - **Nhiệm Vụ Sự Kiện & Điểm Danh ([EventManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/EventManager.java))**:
+    - Nhiệm vụ sự kiện riêng lẻ: Điều chỉnh từ 10–20 KC xuống **3–8 KC**.
+    - Rương Mốc 4/6 Nhiệm vụ sự kiện: Chuẩn hóa **10 KC** (trước đây 20 KC).
+    - Điểm danh 25 ngày trong tháng: Tổng thưởng 135 KC (trước đây 215 KC), kết hợp vé quay thường và vé cao cấp.
+  - **Bảng Thành Tựu ([QuestManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/QuestManager.java))**:
+    - Tinh chỉnh toàn diện hệ số thưởng từ 5 KC (mốc sơ cấp) đến 300 – 600 KC (cho các mốc tối thượng 5,000 cá, 1,000,000 vàng, 1,000 lượt gacha), thay thế mức vô lý 2,000 – 10,000 KC trước đây.
+- **Hiệu Quả Thực Nghiệm**:
+  - Thu nhập Kim Cương F2P trung bình đạt **1,700 – 2,300 KC/tháng (~85 – 115 lượt quay sự kiện)**, tương ứng đúng **1 đến 1.2 chu kỳ Pity 80 mỗi tháng**. Đảm bảo giá trị cao cấp của trang bị Thần Khí Lạc Hồng và kích thích động lực cày cuốc dài hạn.
+
+---
+
+## 📅 [2026-10-23] - Phiên bản v0.4.19 (Đại Tu Cân Bằng Tiến Trình EXP, Kinh Tế Cửa Hàng & Sức Mạnh Boss)
+
+### 📈 Đại Tu Tiến Trình EXP & Mở Khóa Bản Đồ ([PlayerProgression.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/entities/PlayerProgression.java))
+- **Khắc phục Bức Tường EXP (EXP Wall Bug)**:
+  - Công thức cũ nhân 10 mỗi 3 cấp khiến lượng EXP lên cấp 20 bị đẩy lên tới 20,000,000 XP (đòi hỏi câu hơn 363,000 con cá, tương đương 18 năm cày cuốc).
+  - Thay thế hoàn toàn bằng công thức đa thức tăng trưởng mượt mà: $XP(\text{Level}) = 35 \times \text{Level}^{1.65} + 40$.
+- **Tiến Trình Mở Khóa Bản Đồ Khoa Học**:
+  - **Mở Bãi Biển (Map 2 - Lv.10)**: Cần tích lũy 5,485 XP (~200 con cá tại Ao Làng, khoảng 3–5 ngày chơi).
+  - **Mở Đảo Xa (Map 3 - Lv.20)**: Cần tích lũy ~35,345 XP (~575 con cá tại Bãi Biển, khoảng 7–14 ngày cày cuốc).
+
+### 🐉 Tăng Máu & Độ Giằng Co Cho 3 Boss Thế Giới ([fishes.json](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/data/fishes.json))
+- **Thủy Quái Sông Trà (Boss Ao Làng - Map 1)**: Máu tăng từ 600 HP lên **850 HP** (Thời gian câu trung bình đạt 104s với đồ Thợ Săn).
+- **Bạch Tuộc Khổng Lồ (Boss Bãi Biển - Map 2)**: Máu tăng từ 1,200 HP lên **2,200 HP**.
+- **Thần Biển Leviathan (Boss Đảo Xa - Map 3)**: Máu tăng từ 3,500 HP lên **5,500 HP** (Thời gian câu với đồ Thần Khí Lạc Hồng đạt 164s kịch tính, không còn bị sốc sát thương chết trong vài giây).
+
+### 💰 Cân Bằng Cửa Hàng & Kiểm Soát Lạm Phát Vàng ([FishingManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/FishingManager.java))
+- **Đặt Trần Thưởng Cho Lưới Đánh Cá**:
+  - Tiền thưởng Vàng nhân thêm khi bắt được cá tối đa không vượt quá **400 Vàng**.
+  - Kim Cương thưởng thêm tối đa không vượt quá **5 KC**, xóa bỏ hoàn toàn lỗ hổng farm 16,000 Vàng và 40 KC mỗi lượt kéo Boss tại Đảo Xa.
+- **Đặt Trần Thưởng Cho Bùa Hoàng Kim**:
+  - Tiền thưởng Vàng +50% được khống chế trần tối đa **500 Vàng** mỗi lần câu.
+
+### 🎰 Chuẩn Hóa Cơ Chế Rate-Up 50% Gacha Sự Kiện ([EquipmentGenerator.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/entities/equipment/EquipmentGenerator.java))
+- Khi quay trúng phẩm cấp 6★ (Thần Khí): Tỷ lệ ra đúng Set Thần Khí Lạc Hồng chiếm **50%**. Ba món sự kiện (Trượng Lạc Hồng, Dây Rồng Thiêng, Móc Âu Cơ) có xác suất chia đều chính xác **33.33%** mỗi món.
+- 50% còn lại là các Set 6★ tiêu chuẩn (Quang Minh, Thời Không, Hoàng Gia).
+- Bảo hiểm Pity 80 lượt chắc chắn nhận 1 trang bị 6★.
+
+---
+
 ## 📅 [2026-10-22] - Phiên bản v0.4.18 (Đại Tu Ngoại Hình Toàn Diện Set Thời Không & Khởi Động Vector Studio MCP Pipeline)
 
 ### ⏳ Đại Tu Ngoại Hình Toàn Diện Bộ Trang Bị Thời Không ([EquipmentIconRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/EquipmentIconRenderer.java))
@@ -40,9 +165,21 @@
   - `cleanup_pipeline_files`: **Bước cuối cùng của pipeline** - Tự động dọn dẹp các file preview so sánh cũ (`old_*`), file nháp tạm (`temp_*`, `test_*`, `draft_*`) và tài nguyên trung gian sau khi đã áp dụng code chuẩn xác vào game.
 - **Visual Quality Gate (100/100 Điểm)**:
   - Cả 3 asset `rod_thoi_khong`, `line_thoi_khong`, `hook_thoi_khong` đều đã vượt qua bộ kiểm duyệt với điểm số tuyệt đối 100/100 PASSED.
-- **Antigravity Customization Skills & Guidelines**:
-  - Bổ sung quy trình 5 bước hoàn chỉnh trong `vector-graphics-designer` và lệnh `clean` trong `game-graphics-pipeline`.
-  - Bộ quy tắc thiết kế `graphics_guidelines.md` định hình chuẩn mực thẩm mỹ Fantasy RPG và giữ gìn repository luôn sạch đẹp.
+### 📊 Khởi Động Hạ Tầng Mô Phỏng & Cân Bằng Game (Game Data & Balance Pipeline)
+- **Tích Hợp Thư Viện Toán Học & Mô Phỏng Mã Nguồn Mở**:
+  - `SimPy` & `NumPy`: Mô phỏng sự kiện thời gian thực (Monte Carlo Combat Tension) đo đạc TTK (Time-To-Catch) và tỷ lệ đứt dây câu giữa mọi loại cá vs trang bị.
+  - `Mesa` & `Pandas`: Mô hình hóa tiến trình kinh tế đa tác tử (Agent-Based Lifecycle Model) theo dõi dòng chảy Vàng, Kim Cương, lạm phát và số lượt gacha sau 30-90 ngày.
+  - `SciPy` & `SymPy`: Giải bài toán tối ưu hóa phi tuyến tính, tự động fit đường cong máu cá (Fish HP Power-Law Curve) và sát thương cần câu thỏa mãn target TTK chuẩn.
+- **Bộ Công Cụ CLI & MCP Server ([scripts/balance/](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/scripts/balance))**:
+  - `data_extractor.py`: Tự động trích xuất dữ liệu gốc trực tiếp từ `fishes.json` và code Java (`EquipmentGenerator.java`, `QuestManager.java`).
+  - `combat_simulator.py`: Mô phỏng 500+ trận kéo cá, tính toán Win Rate, Mean TTK, Median TTK, Line Snap Rate.
+  - `gacha_simulator.py`: Giải bài toán Coupon Collector với bảo hiểm Pity 80 và 50% Rate-up.
+  - `economy_model.py`: Mô phỏng tác tử người chơi (Casual, Grinder, Hardcore).
+  - `curve_solver.py`: Tự động tìm bộ tham số HP và sát thương lý tưởng.
+  - `balance_cli.py`: Giao diện dòng lệnh hợp nhất cho toàn bộ tác vụ cân bằng.
+- **Antigravity Customization Plugin & Skill**:
+  - Tạo mới MCP Server `balance-studio` ([.agents/plugins/balance-studio/](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/.agents/plugins/balance-studio)).
+  - Bổ sung Skill [game-balance-pipeline](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/.agents/skills/game-balance-pipeline/SKILL.md) và bộ quy chuẩn [balance_guidelines.md](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/.agents/rules/balance_guidelines.md).
 
 ---
 

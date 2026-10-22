@@ -25,21 +25,11 @@ public class PlayerProgression {
 
     public static int xpRequired(int level) {
         if (level >= MAX_LEVEL) return Integer.MAX_VALUE;
-        int[] bases = {1, 2, 5};
-        int idx = level - 1;
-        if (idx < 0) idx = 0;
-        int exponent = (idx / 3) + 1;
-        if (exponent > 8) {
-            return 1_000_000_000;
-        }
-        int base = bases[idx % 3];
-        long mult = 1L;
-        for (int i = 0; i < exponent; i++) mult *= 10L;
-        long required = (long) base * mult;
-        if (required > 1_000_000_000L || required <= 0) {
-            return 1_000_000_000;
-        }
-        return (int) required;
+        // Công thức đa thức mượt mà cân bằng: XP(Level) = 35 * Level^1.65 + 40
+        // Lv 1: 75 XP | Lv 10: 1,600 XP (Tổng tích lũy lên Lv 10: 5,485 XP ~ 200 con cá Ao Làng)
+        // Lv 20: 4,950 XP (Tổng tích lũy lên Lv 20: ~35,345 XP ~ 575 con cá Bãi Biển)
+        int val = (int) (35.0 * Math.pow(level, 1.65) + 40.0);
+        return val >= 100 ? (val / 10) * 10 : val;
     }
 
     public int gainXp(int xp, float equipmentExpBonus, String activeSetName, QuestManager questManager, Runnable onLevelUpCallback) {
@@ -59,7 +49,12 @@ public class PlayerProgression {
             levelsGained++;
             
             skillPoints++;
-            addDiamonds(5);
+            // Thưởng cấp: Mỗi mốc 5 cấp (5, 10, 15, 20...) thưởng 10 KC, các cấp thường thưởng 2 KC
+            if (level % 5 == 0) {
+                addDiamonds(10);
+            } else {
+                addDiamonds(2);
+            }
             if (questManager != null) questManager.addProgress("level", 1);
             if (onLevelUpCallback != null) onLevelUpCallback.run();
         }
@@ -87,7 +82,8 @@ public class PlayerProgression {
 
     public void incrementFishCaught() { 
         fishCaught++; 
-        if (fishCaught % 10 == 0) addDiamonds(5);
+        // Thưởng kiên trì cần thủ: Mỗi 25 con cá câu thành công thưởng +3 KC (trước đây mỗi 10 con +5 KC)
+        if (fishCaught % 25 == 0) addDiamonds(3);
     }
 
     // Getters / Setters

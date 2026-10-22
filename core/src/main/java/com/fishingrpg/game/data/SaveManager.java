@@ -54,6 +54,7 @@ public class SaveManager {
 
         prefs.putString("inventory",         json.toJson(player.getInventory()));
         prefs.putString("claimedCollections",json.toJson(player.getClaimedCollections()));
+        prefs.putString("claimedFishCatalog",json.toJson(player.getClaimedFishCatalog()));
         prefs.putString("equippedActives",   json.toJson(player.getEquippedActives()));
         prefs.putString("equippedPassives",  json.toJson(player.getEquippedPassives()));
         prefs.putString("currentMap",        player.getCurrentMap());
@@ -343,6 +344,14 @@ public class SaveManager {
             Gdx.app.error(TAG, "Error parsing claimedCollections.", e);
         }
 
+        // --- Claimed fish catalog entries ---
+        try {
+            HashSet claimedFish = json.fromJson(HashSet.class, prefs.getString("claimedFishCatalog", "[]"));
+            if (claimedFish != null) player.setClaimedFishCatalog(claimedFish);
+        } catch (Exception e) {
+            Gdx.app.error(TAG, "Error parsing claimedFishCatalog.", e);
+        }
+
         // --- Quest Manager ---
         try {
             String questJson = prefs.getString("questManager", null);
@@ -388,7 +397,12 @@ public class SaveManager {
                 ArrayList<Equipment> eqInv = json.fromJson(ArrayList.class, Equipment.class, eqInvJson);
                 if (eqInv != null) {
                     player.getEquipmentInventory().clear();
-                    player.getEquipmentInventory().addAll(eqInv);
+                    for (Equipment eq : eqInv) {
+                        if (eq != null && ("Thần Khí Lạc Hồng".equals(eq.setName) || "Lạc Hồng".equals(eq.setName))) {
+                            eq.rarity = com.fishingrpg.game.entities.equipment.Rarity.LIMITED_PREMIUM;
+                        }
+                        player.getEquipmentInventory().add(eq);
+                    }
                 }
             }
 

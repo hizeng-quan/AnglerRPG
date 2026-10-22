@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "balance-studio": {
+      "command": "python",
+      "args": [
+        "${workspaceFolder}/.agents/plugins/balance-studio/server/balance_studio_mcp.py"
+      ],
+      "env": {
+        "PYTHONIOENCODING": "utf-8"
+      }
+    }
+  }
+}

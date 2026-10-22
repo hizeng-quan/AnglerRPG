@@ -304,19 +304,20 @@ public class FishingManager {
                     xpMod = 1.5f;
                 }
                 
-                float goldMod = 1f;
+                int baseGold = currentCatch.getGoldValue();
+                int goldBonus = 0;
                 if (player.getGoldBuffCharges() > 0) {
                     player.consumeGoldBuffCharge();
-                    goldMod = 1.5f;
+                    // Bùa Hoàng Kim: +50% Vàng, đặt trần thưởng thêm tối đa 500 Vàng
+                    goldBonus += Math.min((int)(baseGold * 0.5f), 500);
                 }
                 
                 if (player.isSetBonusActive() && player.getEquippedRod() != null && player.getEquippedRod().setName.equals("Hoàng Gia")) {
-                    xpMod += 0.3f;
-                    goldMod += 0.3f;
+                    goldBonus += (int)(baseGold * 0.3f);
                 }
                 
                 int xp = (int)(currentCatch.getXpValue() * xpMod);
-                int gold = (int)(currentCatch.getGoldValue() * goldMod);
+                int gold = baseGold + goldBonus;
                 
                 int multiplier = 1;
                 if (player.isFishingNetActive()) {
@@ -331,22 +332,28 @@ public class FishingManager {
                 if (currentCatch.getType() == CatchableType.CONSUMABLE) {
                     player.addItem(currentCatch.getName(), multiplier);
                 } else {
-                    player.gainGold(gold * multiplier); // Multiply gold if multi-catch? Let's assume net gives multiple instances of the catch.
+                    // Lưới Đánh Cá: Nhân lượng cá bắt được, đặt trần thưởng Vàng thêm tối đa 400 Vàng
+                    int netExtraGold = (multiplier > 1) ? Math.min(gold * (multiplier - 1), 400) : 0;
+                    player.gainGold(gold + netExtraGold);
                     
                     if (currentCatch instanceof com.fishingrpg.game.entities.Fish) {
                         com.fishingrpg.game.entities.Fish f = (com.fishingrpg.game.entities.Fish) currentCatch;
                         com.fishingrpg.game.entities.Fish.Rarity rarity = f.getRarity();
                         int diamonds = 0;
                         if (rarity == com.fishingrpg.game.entities.Fish.Rarity.RARE) {
-                            diamonds = 1;
+                            // 20% tỷ lệ rơi 1 KC (trước đây 100% rơi)
+                            if (MathUtils.randomBoolean(0.20f)) diamonds = 1;
                         } else if (rarity == com.fishingrpg.game.entities.Fish.Rarity.EPIC) {
-                            diamonds = MathUtils.random(2, 3);
+                            // 100% tỷ lệ rơi 1 KC, 50% cơ hội rơi thêm 1 KC (1-2 KC)
+                            diamonds = MathUtils.randomBoolean(0.50f) ? 2 : 1;
                         } else if (rarity == com.fishingrpg.game.entities.Fish.Rarity.BOSS) {
-                            diamonds = MathUtils.random(5, 10);
+                            // Boss luôn rơi 3 - 5 KC (trước đây 5-10 KC)
+                            diamonds = MathUtils.random(3, 5);
                         }
                         
                         if (diamonds > 0) {
-                            diamonds *= multiplier;
+                            int extraDiamonds = (multiplier > 1) ? Math.min(diamonds * (multiplier - 1), 2) : 0;
+                            diamonds += extraDiamonds;
                             player.addDiamonds(diamonds);
                             combatMessage += " [+" + diamonds + " KC]";
                             lastCatchDiamonds = diamonds;

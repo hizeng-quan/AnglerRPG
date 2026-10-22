@@ -27,9 +27,15 @@
 | **GRP-01** | Đồ họa | Pipeline Đồ Họa Vector: Visual Quality Gate & CLI Runner (.agents/skills) | **P1 (Quan trọng)** | ✅ Đã hoàn thành |
 | **GRP-02** | Đồ họa | Bổ Sung Bước Dọn Dẹp Sau Khi Tích Hợp (Post-Apply Cleanup) Vào Pipeline | **P1 (Quan trọng)** | ✅ Đã hoàn thành |
 | **SET-07** | Đồ họa | Đại Tu Ngoại Hình Toàn Bộ Set Trang Bị Thời Không (Trượng, Dây, Lưỡi) | **P1 (Quan trọng)** | ✅ Đã hoàn thành |
-| **BAL-01** | Cân bằng | Cân bằng phần thưởng Kim Cương từ Nhiệm vụ | **P2 (Cân bằng)** | ⚖️ Chờ điều chỉnh |
-| **BAL-02** | Cân bằng | Cân bằng Sức mạnh Cá vs Trang bị (Kéo dài độ giằng co) | **P2 (Cân bằng)** | ⚖️ Chờ điều chỉnh |
-| **BAL-03** | Cân bằng | Cân bằng Tỷ lệ Quay Gacha Sự Kiện | **P2 (Cân bằng)** | ⚖️ Chờ điều chỉnh |
+| **BAL-00** | Cân bằng | Thiết Lập Hạ Tầng Pipeline Mô Phỏng & Cân Bằng Game (Mesa, SimPy, SciPy, SymPy) | **P1 (Quan trọng)** | ✅ Đã hoàn thành |
+| **BAL-01** | Cân bằng | Cân bằng Kinh Tế, Cửa Hàng & Đặt Trần Lợi Nhuận Cho Lưới/Bùa | **P2 (Cân bằng)** | ✅ Đã hoàn thành |
+| **BAL-02** | Cân bằng | Cân bằng Sức mạnh Máu Cá & 3 Boss Thế Giới (850 HP, 2200 HP, 5500 HP) | **P2 (Cân bằng)** | ✅ Đã hoàn thành |
+| **BAL-03** | Cân bằng | Cân bằng Vòng quay Sự Kiện (Rate-up 50% & Chia đều 33.3% 3 món Lạc Hồng) | **P2 (Cân bằng)** | ✅ Đã hoàn thành |
+| **BAL-04** | Cân bằng | Cân bằng Tiến trình EXP & Mở khóa Bản đồ (Bỏ cấp số nhân x10) | **P1 (Quan trọng)** | ✅ Đã hoàn thành |
+| **BAL-05** | Cân bằng | Cố Định Rarity 6★ Thần Khí Lạc Hồng & Khóa Chặt Khỏi Roll Không Nổ | **P1 (Quan trọng)** | ✅ Đã hoàn thành |
+| **BAL-06** | Cân bằng | Đại Tu Cân Bằng Chỉ Số 42 Loài Cá Thường (Common, Uncommon, Rare, Epic) Cả 3 Bản Đồ | **P1 (Quan trọng)** | ✅ Đã hoàn thành |
+| **BAL-07** | Cân bằng | Cân Bằng Toàn Diện Nguồn Kiếm Kim Cương (Cá Hiếm, Rương Ngày/Tuần, Sự Kiện, Thành Tựu) | **P1 (Quan trọng)** | ✅ Đã hoàn thành |
+| **BAL-08** | Tính năng | Bổ Sung Thưởng Kim Cương Sổ Tay Thủy Tộc (Fish Catalog) & Khắc Phục Lỗi SFX sfx_button | **P1 (Quan trọng)** | ✅ Đã hoàn thành |
 
 ---
 
@@ -235,6 +241,60 @@
     - Giữ mốc bảo hiểm 80 lượt chắc chắn có 1 món 6★.
     - Đảm bảo tỷ lệ quay hiển thị chính xác trong bảng xác suất (Loot Table Modal).
 
+### 4. BAL-05: Cố Định Rarity 6★ Thần Khí Lạc Hồng & Khóa Chặt Khỏi Roll Không Nổ
+- **Vấn đề:** Set Thần Khí Lạc Hồng trước đây có nguy cơ xuất hiện ngẫu nhiên trong Vòng quay Thường (`rollGacha`) với phẩm cấp rác (Common, Uncommon, Rare) hoặc lọt vào các lượt quay không nổ của sự kiện, gây phá vỡ tính độc bản và cao cấp của set Thần Khí.
+- **Giải pháp:**
+  - Thiết lập bất biến mã hóa: Mọi món đồ thuộc Set Lạc Hồng luôn cố định phẩm cấp 6★ `Rarity.LIMITED_PREMIUM`.
+  - Loại bỏ hoàn toàn Set Lạc Hồng khỏi danh sách quay của Vòng quay Thường.
+  - Trong Vòng quay Sự Kiện: Set Lạc Hồng chỉ có thể xuất hiện khi nổ 6★ (`LIMITED_PREMIUM`). Tuyệt đối không lọt vào roll thường/roll xịt.
+  - Tự động chuẩn hóa và nâng cấp độ hiếm cho mọi món Lạc Hồng trong rương đồ người chơi khi nạp save game.
+
+### 5. BAL-06: Đại Tu Cân Bằng Chỉ Số 42 Loài Cá Thường Cả 3 Bản Đồ
+- **Vấn đề:** Chỉ số Máu (HP) của cá Common/Uncommon trước đây quá thấp (25 - 50 HP), khiến người chơi khi trang bị cần câu bậc trung có thể giật chết cá chỉ trong 1 - 2 giây, làm mất đi tính tương tác giằng co.
+- **Giải pháp:**
+  - Chuẩn hóa TTK theo từng cấp độ: Common (8 - 14s), Uncommon (15 - 22s), Rare (22 - 32s), Epic (35 - 50s).
+  - Tăng chỉ số Máu và Lực kéo cho toàn bộ 42 loài cá thuộc Ao Làng, Bãi Biển và Đảo Xa.
+  - Tăng tỷ lệ thưởng Vàng và EXP tương xứng với độ khó và thời gian giằng co.
+
+### 6. BAL-07: Cân Bằng Toàn Diện Nguồn Kiếm Kim Cương (Chống Lạm Phát Currency)
+- **Vấn đề:** Kim Cương (KC) là tiền tệ cao cấp phục vụ Gacha, nhưng trước đây bị lạm phát nghiêm trọng từ mọi nguồn (Cá hiếm rơi 100%, mỗi 10 con cá thưởng 5 KC, Rương ngày 20 KC, Rương tuần 100 KC, Nhiệm vụ sự kiện 55 KC/ngày, Thành tựu thưởng tới 10,000 KC). Người chơi F2P kiếm được hơn 5,000 – 7,000 KC/tháng (tương đương 3 – 4 chu kỳ bảo hiểm Pity), khiến gacha mất hoàn toàn giá trị quý hiếm.
+- **Giải pháp đã thực hiện:**
+  - **Rơi từ Câu Cá (`FishingManager`):** Cá Rare giảm từ 100% xuống 20% tỷ lệ rơi 1 KC; cá Epic rơi 1–2 KC; Boss rơi 3–5 KC (trần nhân lưới thưởng thêm tối đa 2 KC).
+  - **Nội tại Tiến trình (`PlayerProgression`):** Thưởng thăng cấp 2 KC (riêng mốc 5 cấp thưởng 10 KC); mốc câu cá chuyển thành mỗi 25 con cá thưởng +3 KC (thay vì 10 con +5 KC).
+  - **Rương Nhiệm vụ (`QuestScreen`):** Rương Ngày chuẩn hóa 10 KC (thay vì 20); Rương Tuần chuẩn hóa 40 KC (thay vì 100).
+  - **Sự Kiện (`EventManager`):** Nhiệm vụ sự kiện giảm từ 10–20 KC xuống 3–8 KC; Mốc 4/6 thưởng 10 KC (thay vì 20); Điểm danh tháng tổng 135 KC (thay vì 215).
+  - **Thành Tựu (`QuestManager`):** Tinh chỉnh toàn bộ bậc thành tựu từ 5 KC đến tối đa 500–600 KC cho mốc tối thượng cuối game (thay vì 2,000 – 10,000 KC).
+  - **Kết quả:** Đưa lượng Kim Cương F2P trung bình về mức chuẩn **1,700 – 2,300 KC/tháng (~85 – 118 lượt quay)**, đạt chính xác 1–1.2 chu kỳ Pity/tháng.
+
+---
+
+### 9. BAL-08: Bổ Sung Thưởng Kim Cương Sổ Tay Thủy Tộc (Fish Catalog) & Khắc Phục Lỗi Âm Thanh SFX
+- **Vấn đề:** 
+  1. Trong Sổ Tay Thủy Tộc (`CatalogScreen`), các bộ sưu tập trước đây chỉ thưởng Vàng và XP, chưa có nguồn thưởng Kim Cương milestone một lần (one-time completion reward) đặc trưng của các tựa game RPG sưu tập.
+  2. Bị lỗi âm thanh `[AudioManager] Could not load SFX: sfx_button` do thiếu tệp `assets/audio/sfx/sfx_button.wav`, đồng thời `AudioManager` không có cơ chế cache null khiến ngoại lệ bị quăng và log lỗi bị spam liên tục mỗi khi tương tác chuột.
+- **Giải pháp đã thực hiện:**
+  - **Thưởng Hoàn Thành Bộ Sưu Tập (`CollectionDatabase` & `CatalogScreen`):**
+    - Bổ sung trường `rewardDiamonds` cho toàn bộ 15 bộ sưu tập cả 3 bản đồ:
+      * **Ao Làng:** 10, 15, 20, 35, 60 KC (Tổng 140 KC).
+      * **Bãi Biển:** 15, 20, 25, 40, 70 KC (Tổng 170 KC).
+      * **Đảo Xa:** 20, 25, 35, 50, 100 KC (Tổng 230 KC).
+      * Tổng thưởng trọn đời từ hoàn thành 15 bộ sưu tập: **540 Kim Cương**.
+  - **Thưởng Khám Phá Lần Đầu Từng Loài Cá:**
+    - Mỗi khi câu được loài cá mới lần đầu, ô cá trong Sổ Tay mở khóa tag phát sáng `+X 💎 NHẬN`:
+      * Common: +2 KC
+      * Uncommon: +3 KC
+      * Rare: +5 KC
+      * Epic: +10 KC
+      * Boss: +25 KC
+    - Người chơi có thể bấm trực tiếp vào từng ô cá để nhận hoặc bấm nút **★ NHẬN TẤT CẢ ★** ở góc trên bên phải để nhận đồng loạt toàn bộ thưởng cá và bộ sưu tập.
+  - **Giao Diện Sổ Tay & Lưu Trữ Dữ Liệu:**
+    - Bổ sung thanh dock hiển thị số dư Vàng và Kim Cương trực tiếp trên thanh công cụ Sổ Tay.
+    - Lưu trạng thái `claimedFishCatalog` vào Save/Load của `SaveManager.java` an toàn và tương thích ngược.
+  - **Khắc Phục Lỗi Âm Thanh SFX (`AudioManager`):**
+    - Sinh tệp âm thanh click chuột cơ khí cao cấp `assets/audio/sfx/sfx_button.wav` (44.1kHz, 16-bit PCM).
+    - Cải tiến `AudioManager.java` kiểm tra tệp bằng `fh.exists()`, cache `null` vào `sfxMap` khi không tìm thấy để triệt tiêu vĩnh viễn việc ném `GdxRuntimeException` và spam log.
+    - Bổ sung alias tự động tương thích: `"button_click"` -> `"sfx_button"`, `"victory"` -> `"sfx_success"`.
+
 ---
 
 ## 📅 LỘ TRÌNH THỰC HIỆN ĐỀ XUẤT (EXECUTION ROADMAP)
@@ -252,10 +312,15 @@ gantt
     Keybind Remapping                  :p2_2, after p2_1, 2d
     Fullscreen / Windowed switch       :p2_3, after p2_2, 1d
     Chuyển Xuất/Nạp và Đặt tên Timestamp:p2_4, after p2_3, 1d
-    section Phase 3 - Cân bằng Game (P2)
-    Cân bằng Kinh tế và Nhiệm vụ       :p3_1, after p2_4, 2d
-    Cân bằng Máu cá và Sức mạnh Trang bị:p3_2, after p3_1, 2d
-    Cân bằng Vòng quay Sự kiện         :p3_3, after p3_2, 1d
+    section Phase 3 - Cân bằng Game (P1/P2)
+    Pipeline Mô phỏng Số liệu BAL-00    :done, p3_0, 2026-10-22, 1d
+    Cân bằng Kinh tế và Cửa hàng BAL-01 :done, p3_1, 2026-10-23, 1d
+    Cân bằng Máu cá và Boss BAL-02      :done, p3_2, 2026-10-23, 1d
+    Cân bằng Vòng quay Sự kiện BAL-03   :done, p3_3, 2026-10-23, 1d
+    Cân bằng Tiến trình EXP BAL-04      :done, p3_4, 2026-10-23, 1d
+    Cố định 6★ Set Lạc Hồng BAL-05      :done, p3_5, 2026-10-23, 1d
+    Cân bằng 42 Loài Cá Thường BAL-06   :done, p3_6, 2026-10-23, 1d
+    Cân bằng Nguồn Kim Cương BAL-07     :done, p3_7, 2026-10-23, 1d
 ```
 
 ---

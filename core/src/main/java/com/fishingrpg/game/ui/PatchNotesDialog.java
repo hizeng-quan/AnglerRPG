@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class PatchNotesDialog {
 
-    public static final String CURRENT_VERSION = "v0.4.18";
+    public static final String CURRENT_VERSION = "v0.4.19";
     private static final String PREF_LAST_SEEN_VERSION = "last_seen_patch_notes_version";
 
     private final FishingRPG game;
@@ -91,8 +91,76 @@ public class PatchNotesDialog {
         // --- TAB 0: BẢN TIN CẬP NHẬT THEO TỪNG PHIÊN BẢN ---
         // =====================================================================
 
-        // ===== PHIÊN BẢN v0.4.18 (MỚI NHẤT) =====
-        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.4.18 (MỚI NHẤT - ĐẠI TU NGOẠI HÌNH SET THỜI KHÔNG & VECTOR PIPELINE)"));
+        // ===== PHIÊN BẢN v0.4.21 (MỚI NHẤT) =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.4.21 (MỚI NHẤT - THƯỞNG KIM CƯƠNG SỔ TAY & SỬA LỖI ÂM THANH)"));
+
+        patchNotesItems.add(new UpdateItem("SỔ TAY", "Bổ Sung Thưởng Kim Cương 15 Bộ Sưu Tập Cá", newBadgeColor)
+            .addPoint("Bổ sung thưởng Kim Cương milestone cho cả 15 bộ sưu tập cá: Ao Làng (140 KC), Bãi Biển (170 KC), Đảo Xa (230 KC).")
+            .addPoint("Tổng thưởng trọn đời khi sưu tập đủ các bộ cá trong game: 540 Kim Cương.")
+            .addPoint("Bổ sung thanh dock hiển thị số dư Vàng và Kim Cương trực tiếp trên thanh công cụ Sổ Tay.")
+        );
+
+        patchNotesItems.add(new UpdateItem("KHÁM PHÁ CÁ", "Thưởng Kim Cương Khám Phá Lần Đầu & Nhận Tất Cả", dataBadgeColor)
+            .addPoint("Khi bắt được loài cá mới: Ô cá trong Sổ Tay mở tag phát sáng nhận KC: Common (+2), Uncommon (+3), Rare (+5), Epic (+10), Boss (+25).")
+            .addPoint("Bấm chuột trực tiếp vào từng ô cá để nhận hoặc dùng nút '★ NHẬN TẤT CẢ ★' gom trọn toàn bộ thưởng cá và bộ sưu tập một chạm.")
+            .addPoint("Lưu trữ bền vững trạng thái đã nhận thưởng cá vào SaveManager, hoàn toàn tương thích ngược.")
+        );
+
+        patchNotesItems.add(new UpdateItem("ÂM THANH", "Khắc Phục Lỗi SFX Button & Nạp Âm Thanh An Toàn", fixBadgeColor)
+            .addPoint("Sinh tệp âm thanh click chuột cơ khí cao cấp assets/audio/sfx/sfx_button.wav (44.1kHz, 16-bit PCM).")
+            .addPoint("Cải tiến AudioManager với cơ chế nạp an toàn: kiểm tra file tồn tại, cache null để triệt tiêu vĩnh viễn crash và spam log lỗi.")
+            .addPoint("Bổ sung cơ chế alias tự động cho các sound effect tương thích ngược.")
+        );
+
+        // ===== PHIÊN BẢN v0.4.20 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.4.20 (CỐ ĐỊNH 6★ LẠC HỒNG & ĐẠI TU CÁ THƯỜNG)"));
+
+        patchNotesItems.add(new UpdateItem("GACHA", "Cố Định Phẩm Cấp Set Lạc Hồng & Khóa Roll Xịt", fixBadgeColor)
+            .addPoint("Set Thần Khí Lạc Hồng luôn có phẩm cấp cố định 6★ (LIMITED_PREMIUM). Tuyệt đối không xuất hiện ở các phẩm cấp thấp hơn.")
+            .addPoint("Khóa hoàn toàn Set Lạc Hồng khỏi vòng quay Thường; trong vòng quay Sự Kiện, Lạc Hồng chỉ có thể xuất hiện khi NỔ VÀNG 6★.")
+            .addPoint("Hệ thống SaveManager tự động đồng bộ và nâng cấp mọi trang bị Lạc Hồng hiện có trong túi đồ người chơi về chuẩn 6★.")
+        );
+
+        patchNotesItems.add(new UpdateItem("CÂN BẰNG CÁ", "Đại Tu Toàn Diện 42 Loài Cá Thường Cả 3 Bản Đồ", dataBadgeColor)
+            .addPoint("Tăng Máu và Lực kéo cho cá Common, Uncommon, Rare, Epic trên cả 3 Map (Ao Làng, Bãi Biển, Đảo Xa).")
+            .addPoint("Chuẩn hóa TTK giằng co: Common (8-14s), Uncommon (15-22s), Rare (22-32s), Epic (35-50s); không còn bị kéo chết trong 1-2 giây.")
+            .addPoint("Tăng mạnh phần thưởng Vàng và EXP tương xứng với độ khó và công sức kéo cá của cần thủ.")
+        );
+
+        patchNotesItems.add(new UpdateItem("KINH TẾ KC", "Cân Bằng Toàn Diện Nguồn Kim Cương (Chống Lạm Phát)", newBadgeColor)
+            .addPoint("Cá Rare: Tỷ lệ rơi KC giảm về 20% (1 KC); cá Epic rơi 1-2 KC; Boss rơi 3-5 KC.")
+            .addPoint("Nội tại cấp & cần thủ: Cấp thường +2 KC (mốc 5 cấp thưởng +10 KC); mỗi 25 cá câu thành công thưởng +3 KC.")
+            .addPoint("Rương nhiệm vụ: Rương Ngày chuẩn hóa 10 KC (+250V, +250XP); Rương Tuần chuẩn hóa 40 KC (+1500V, +1500XP).")
+            .addPoint("Sự kiện & Thành tựu: Điều chỉnh thưởng KC hợp lý, đảm bảo thu nhập F2P đạt ~1-1.2 chu kỳ Pity 80 mỗi tháng.")
+        );
+
+        // ===== PHIÊN BẢN v0.4.19 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.4.19 (CÂN BẰNG EXP, KINH TẾ & COMBAT)"));
+
+        patchNotesItems.add(new UpdateItem("TIẾN TRÌNH", "Đại Tu Bức Tường EXP & Mở Khóa Bản Đồ", newBadgeColor)
+            .addPoint("Khắc phục triệt để lỗi cấp số nhân x10 của công thức EXP cũ; chuyển sang công thức đa thức mượt mà XP(Level) = 35 * Level^1.65 + 40.")
+            .addPoint("Tiến trình mở khóa bản đồ hợp lý: Đạt Lv.10 mở Bãi Biển sau ~200 con cá (~3-5 ngày) và đạt Lv.20 mở Đảo Xa sau ~575 con cá (~1-2 tuần cày cuốc).")
+        );
+
+        patchNotesItems.add(new UpdateItem("CÂN BẰNG BOSS", "Tăng Máu & Độ Giằng Co Cho 3 Boss Thế Giới", fixBadgeColor)
+            .addPoint("Thủy Quái Sông Trà (Ao Làng): Máu tăng từ 600 HP lên 850 HP.")
+            .addPoint("Bạch Tuộc Khổng Lồ (Bãi Biển): Máu tăng từ 1.200 HP lên 2.200 HP.")
+            .addPoint("Thần Biển Leviathan (Đảo Xa): Máu tăng từ 3.500 HP lên 5.500 HP.")
+            .addPoint("Kéo dài thời gian đối kháng câu Boss lên 45s - 90s, loại bỏ hoàn toàn hiện tượng Boss bị sốc sát thương chết trong vài giây.")
+        );
+
+        patchNotesItems.add(new UpdateItem("KINH TẾ & SHOP", "Đặt Trần Thưởng Cho Lưới & Bùa Hoàng Kim", dataBadgeColor)
+            .addPoint("Lưới Đánh Cá: Tiền thưởng Vàng nhân thêm tối đa 400 Vàng, Kim Cương thưởng thêm tối đa 5 KC, ngăn chặn lạm phát tiền ở Map Đảo Xa.")
+            .addPoint("Bùa Hoàng Kim: Đặt trần thưởng tối đa 500 Vàng trong 5 lượt buff.")
+        );
+
+        patchNotesItems.add(new UpdateItem("GACHA", "Chuẩn Hóa Tỷ Lệ Rate-Up 50% Banner Sự Kiện", newBadgeColor)
+            .addPoint("Khi nổ trang bị 6★: 50% tỷ lệ ra đúng Set Thần Khí Lạc Hồng (chia đều 33.3% cho Cần, Dây, Lưỡi); 50% còn lại thuộc các Set 6★ khác.")
+            .addPoint("Minh bạch mốc bảo hiểm Pity 80 lượt và bảo đảm tỷ lệ nhận trọn bộ 3 món công bằng cho người chơi.")
+        );
+
+        // ===== PHIÊN BẢN v0.4.18 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.4.18 (ĐẠI TU NGOẠI HÌNH SET THỜI KHÔNG & VECTOR PIPELINE)"));
 
         patchNotesItems.add(new UpdateItem("ĐỒ HỌA", "Đại Tu Ngoại Hình Toàn Diện Bộ Trang Bị Thời Không", newBadgeColor)
             .addPoint("Trượng Thời Gian (Chrono Staff): Thiết kế thiên văn hoàng đạo Astrolabe với bánh răng 12 khắc giờ, kim la bàn xoay, lõi tinh thể ngọc lam và hào quang tinh vân vũ trụ.")
@@ -166,7 +234,9 @@ public class PatchNotesDialog {
         // =====================================================================
         // --- TAB 1: KẾ HOẠCH & LỘ TRÌNH (SẮP TỚI) ---
         // =====================================================================
-        roadmapItems.add(UpdateItem.versionHeader("CÁC TÍNH NĂNG ĐÃ HOÀN THÀNH"));
+        roadmapItems.add(new UpdateItem("ĐÃ RA MẮT", "Đại Tu Cân Bằng Game & Tiến Trình EXP (v0.4.19)", new Color(0.35f, 0.85f, 0.50f, 1f))
+            .addPoint("Đã hoàn thành sửa tiến trình EXP mượt mà, tăng máu 3 Boss thế giới, đặt trần thưởng Cửa Hàng và cân bằng Gacha.")
+        );
 
         roadmapItems.add(new UpdateItem("ĐÃ RA MẮT", "Đại Tu Ngoại Hình Toàn Diện Set Thời Không (v0.4.18)", new Color(0.35f, 0.85f, 0.50f, 1f))
             .addPoint("Đã hoàn thành làm mới toàn diện đồ họa 3 món set Thời Không và tích hợp công cụ kiểm duyệt Vector Studio.")
@@ -178,10 +248,9 @@ public class PatchNotesDialog {
 
         roadmapItems.add(UpdateItem.versionHeader("MỤC TIÊU PHÁT TRIỂN TIẾP THEO"));
 
-        roadmapItems.add(new UpdateItem("CÂN BẰNG", "Cân Bằng Thử Thách & Phần Thưởng", new Color(1f, 0.55f, 0.35f, 1f))
-            .addPoint("Cân bằng phần thưởng kiếm được từ nhiệm vụ (hạn chế việc đang quá dễ kiếm kim cương để quay).")
-            .addPoint("Cân bằng sức mạnh cá và trang bị (điều chỉnh lại việc trang bị đang quá mạnh so với cá).")
-            .addPoint("Cân bằng tỷ lệ quay của phần sự kiện: Các vật phẩm thuộc sự kiện có tỷ lệ quay ra ngang bằng với vật phẩm thường ở vòng quay sự kiện.")
+        roadmapItems.add(new UpdateItem("TÍNH NĂNG MỚI", "Hệ Thống Bang Hội & Đua Top Câu Cá", new Color(1f, 0.55f, 0.35f, 1f))
+            .addPoint("Phát triển bảng xếp hạng thời gian thực theo từng bản đồ.")
+            .addPoint("Thêm các giải đấu câu cá cuối tuần và hoạt động săn Thần Biển Leviathan theo tổ đội.")
         );
     }
 

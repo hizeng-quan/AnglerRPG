@@ -66,6 +66,7 @@ public class CatalogScreen implements Screen, InputProcessor {
 
     // Hover interactions
     private String hoveredClaimCollectionId = null;
+    private String hoveredClaimFishName = null;
     private Fish hoveredFish = null;
     private String hoveredFishName = null;
     private float mouseX, mouseY;
@@ -128,7 +129,19 @@ public class CatalogScreen implements Screen, InputProcessor {
         scrollY = 0f;
     }
 
-    private int getAvailableClaimCount() {
+    public static int getFishDiscoveryDiamonds(Fish.Rarity rarity) {
+        if (rarity == null) return 2;
+        switch (rarity) {
+            case COMMON: return 2;
+            case UNCOMMON: return 3;
+            case RARE: return 5;
+            case EPIC: return 10;
+            case BOSS: return 25;
+            default: return 2;
+        }
+    }
+
+    private int getAvailableCollectionClaimCount() {
         int count = 0;
         for (CollectionDatabase.Collection c : allCollections) {
             if (!player.getClaimedCollections().contains(c.id)) {
@@ -142,6 +155,20 @@ public class CatalogScreen implements Screen, InputProcessor {
             }
         }
         return count;
+    }
+
+    private int getAvailableFishClaimCount() {
+        int count = 0;
+        for (FishDatabase.FishTemplate ft : FishDatabase.getAllFishes()) {
+            if (!SizeRecord.isFirstCatch(ft.name) && !player.isFishCatalogClaimed(ft.name)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private int getAvailableClaimCount() {
+        return getAvailableCollectionClaimCount() + getAvailableFishClaimCount();
     }
 
     private int getTotalCaughtCount() {
@@ -340,6 +367,17 @@ public class CatalogScreen implements Screen, InputProcessor {
                     // Unique Vector Fish Illustration matching FishVisualRenderer!
                     FishVisualRenderer.drawFish(sr, fishName, fx + slotW / 2f, slotY + 98f, 0.52f, animTime + j, rarityCol);
 
+                    // Unclaimed Fish Discovery Reward Badge
+                    boolean isFishClaimed = player.isFishCatalogClaimed(fishName);
+                    if (!isFishClaimed) {
+                        float pulse = 0.75f + 0.25f * MathUtils.sin(animTime * 6f + j);
+                        boolean isHover = fishName.equals(hoveredClaimFishName);
+                        sr.setColor(isHover ? new Color(0.12f, 0.65f, 0.85f, 0.95f) : new Color(0.06f, 0.35f, 0.45f * pulse, 0.9f));
+                        drawRoundedRect(sr, fx + 5f, slotY + 6f, slotW - 10f, 22f, 4f);
+                        sr.setColor(0.35f, 0.95f, 1f, isHover ? 1f : pulse);
+                        drawRectOutline(sr, fx + 5f, slotY + 6f, slotW - 10f, 22f, 1.2f);
+                    }
+
                 } else {
                     // Mystery Locked Slot
                     sr.setColor(0.06f, 0.08f, 0.12f, 0.95f);
@@ -394,15 +432,15 @@ public class CatalogScreen implements Screen, InputProcessor {
                 layout.setText(font, "NHẬN THƯỞNG");
                 font.draw(game.batch, layout, cx + cardW - 150f + (135f - layout.width) / 2f, cy - 18f);
 
-                font.setColor(1f, 0.85f, 0.2f, 1f);
-                font.getData().setScale(0.8f);
-                String rewStr = "+" + c.rewardGold + " Vàng  +" + c.rewardXp + " XP";
+                font.setColor(0.35f, 0.95f, 1f, 1f);
+                font.getData().setScale(0.78f);
+                String rewStr = "+" + c.rewardDiamonds + " KC  +" + c.rewardGold + "V  +" + c.rewardXp + "XP";
                 layout.setText(font, rewStr);
                 font.draw(game.batch, layout, cx + cardW - 150f + (135f - layout.width) / 2f, cy - 43f);
             } else {
-                font.setColor(0.85f, 0.75f, 0.4f, 0.9f);
-                font.getData().setScale(0.85f);
-                String rewStr = "Thưởng: +" + c.rewardGold + "V • +" + c.rewardXp + "XP";
+                font.setColor(0.35f, 0.95f, 1f, 0.95f);
+                font.getData().setScale(0.82f);
+                String rewStr = "Thưởng: +" + c.rewardDiamonds + " KC • +" + c.rewardGold + "V • +" + c.rewardXp + "XP";
                 layout.setText(font, rewStr);
                 font.draw(game.batch, layout, cx + cardW - 15f - layout.width, cy - 12f);
             }
@@ -428,13 +466,28 @@ public class CatalogScreen implements Screen, InputProcessor {
 
                     // Fish Name (Centered neatly at bottom, records shown on hover)
                     font.setColor(Color.WHITE);
-                    font.getData().setScale(0.82f);
+                    font.getData().setScale(0.78f);
                     layout.setText(font, fishName);
                     if (layout.width > slotW - 8f) {
-                        font.getData().setScale(0.82f * ((slotW - 8f) / layout.width));
+                        font.getData().setScale(0.78f * ((slotW - 8f) / layout.width));
                         layout.setText(font, fishName);
                     }
-                    font.draw(game.batch, layout, fx + (slotW - layout.width) / 2f, slotY + 28f);
+                    font.draw(game.batch, layout, fx + (slotW - layout.width) / 2f, slotY + 45f);
+
+                    boolean isFishClaimed = player.isFishCatalogClaimed(fishName);
+                    if (!isFishClaimed) {
+                        int dRew = getFishDiscoveryDiamonds(ft.getRarity());
+                        font.setColor(1f, 0.95f, 0.35f, 1f);
+                        font.getData().setScale(0.74f);
+                        String rewTxt = "+" + dRew + " 💎 NHẬN";
+                        layout.setText(font, rewTxt);
+                        font.draw(game.batch, layout, fx + (slotW - layout.width) / 2f, slotY + 22f);
+                    } else {
+                        font.setColor(0.35f, 0.9f, 0.5f, 0.85f);
+                        font.getData().setScale(0.70f);
+                        layout.setText(font, "✓ Đã lưu sổ");
+                        font.draw(game.batch, layout, fx + (slotW - layout.width) / 2f, slotY + 20f);
+                    }
                 } else {
                     // Locked Fish labels
                     font.setColor(0.4f, 0.45f, 0.55f, 0.8f);
@@ -525,10 +578,31 @@ public class CatalogScreen implements Screen, InputProcessor {
             }
         }
 
+        // Currency Display Pill on right of tabs
+        float curW = 215f;
+        float curH = 46f;
+        float curX = W - curW - 25f;
+        float curY = H - 138f;
+        sr.setColor(0.08f, 0.13f, 0.18f, 0.95f);
+        drawRoundedRect(sr, curX, curY, curW, curH, 8f);
+        sr.setColor(0.2f, 0.40f, 0.55f, 0.8f);
+        drawRectOutline(sr, curX, curY, curW, curH, 1.2f);
+
         sr.end();
 
         // Header Texts
         game.batch.begin();
+
+        // Currency Display Text
+        font.setColor(1f, 0.88f, 0.25f, 1f);
+        font.getData().setScale(0.82f);
+        String goldStr = "Vàng: " + String.format(java.util.Locale.US, "%,d", player.getGold());
+        font.draw(game.batch, goldStr, curX + 14f, curY + 34f);
+
+        font.setColor(0.35f, 0.95f, 1f, 1f);
+        font.getData().setScale(0.82f);
+        String diaStr = "KC: " + String.format(java.util.Locale.US, "%,d", player.getDiamonds());
+        font.draw(game.batch, diaStr, curX + 14f, curY + 16f);
 
         // Back Button Text
         font.setColor(hoverBack ? Color.WHITE : new Color(0.85f, 0.9f, 0.95f, 0.9f));
@@ -830,7 +904,7 @@ public class CatalogScreen implements Screen, InputProcessor {
             if (hoverTabs[i] && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
                 if (currentTab != i) {
                     currentTab = i;
-                    AudioManager.getInstance().playSound("button_click");
+                    AudioManager.getInstance().playSFX("sfx_button");
                     updateVisibleCollections();
                 }
             }
@@ -838,19 +912,20 @@ public class CatalogScreen implements Screen, InputProcessor {
 
         // Back button click
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || (hoverBack && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT))) {
-            AudioManager.getInstance().playSound("button_click");
+            AudioManager.getInstance().playSFX("sfx_button");
             game.setScreen(previousScreen);
             return;
         }
 
         // Claim All button click
         if (hoverClaimAll && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-            claimAllCollections();
+            claimAllCatalog();
             return;
         }
 
         // Cards and Fish hover detection
         hoveredClaimCollectionId = null;
+        hoveredClaimFishName = null;
         hoveredFish = null;
         hoveredFishName = null;
 
@@ -901,6 +976,14 @@ public class CatalogScreen implements Screen, InputProcessor {
                 if (isCaught && m.x >= fx && m.x <= fx + slotW && m.y >= slotY && m.y <= slotY + slotH) {
                     hoveredFish = FishDatabase.getFishByName(fishName);
                     hoveredFishName = fishName;
+
+                    if (!player.isFishCatalogClaimed(fishName)) {
+                        hoveredClaimFishName = fishName;
+                        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+                            claimSingleFish(fishName, hoveredFish);
+                            return;
+                        }
+                    }
                 }
             }
         }
@@ -912,21 +995,37 @@ public class CatalogScreen implements Screen, InputProcessor {
         if (scrollY > maxScrollY && maxScrollY > 0) scrollY = maxScrollY;
     }
 
+    private void claimSingleFish(String fishName, Fish ft) {
+        if (player.isFishCatalogClaimed(fishName)) return;
+        Fish.Rarity rarity = ft != null ? ft.getRarity() : Fish.Rarity.COMMON;
+        int dRew = getFishDiscoveryDiamonds(rarity);
+        player.claimFishCatalog(fishName);
+        player.addDiamonds(dRew);
+        SaveManager.savePlayer(player);
+        AudioManager.getInstance().playSFX("sfx_success");
+        refreshCollectionStats();
+        toastMsg = "Sổ Tay Ngư Phủ: Đã ghi nhận [" + fishName + "]! Thưởng +" + dRew + " Kim Cương!";
+        toastTimer = TOAST_DURATION;
+    }
+
     private void claimSingleCollection(CollectionDatabase.Collection c) {
         player.claimCollection(c.id);
         player.gainGold(c.rewardGold);
         player.gainXp(c.rewardXp);
+        player.addDiamonds(c.rewardDiamonds);
         SaveManager.savePlayer(player);
-        AudioManager.getInstance().playSound("victory");
+        AudioManager.getInstance().playSFX("sfx_success");
         refreshCollectionStats();
-        toastMsg = "Đã nhận thưởng " + c.name + ": +" + c.rewardGold + " Vàng, +" + c.rewardXp + " XP!";
+        toastMsg = "Đã nhận thưởng " + c.name + ": +" + c.rewardGold + "V, +" + c.rewardXp + "XP, +" + c.rewardDiamonds + " KC!";
         toastTimer = TOAST_DURATION;
     }
 
-    private void claimAllCollections() {
+    private void claimAllCatalog() {
         int totalGold = 0;
         int totalXp = 0;
-        int count = 0;
+        int totalDiamonds = 0;
+        int colCount = 0;
+        int fishCount = 0;
 
         for (CollectionDatabase.Collection c : allCollections) {
             if (!player.getClaimedCollections().contains(c.id)) {
@@ -938,18 +1037,30 @@ public class CatalogScreen implements Screen, InputProcessor {
                     player.claimCollection(c.id);
                     player.gainGold(c.rewardGold);
                     player.gainXp(c.rewardXp);
+                    player.addDiamonds(c.rewardDiamonds);
                     totalGold += c.rewardGold;
                     totalXp += c.rewardXp;
-                    count++;
+                    totalDiamonds += c.rewardDiamonds;
+                    colCount++;
                 }
             }
         }
 
-        if (count > 0) {
+        for (FishDatabase.FishTemplate ft : FishDatabase.getAllFishes()) {
+            if (!SizeRecord.isFirstCatch(ft.name) && !player.isFishCatalogClaimed(ft.name)) {
+                int dRew = getFishDiscoveryDiamonds(ft.rarity);
+                player.claimFishCatalog(ft.name);
+                player.addDiamonds(dRew);
+                totalDiamonds += dRew;
+                fishCount++;
+            }
+        }
+
+        if (colCount > 0 || fishCount > 0) {
             SaveManager.savePlayer(player);
-            AudioManager.getInstance().playSound("victory");
+            AudioManager.getInstance().playSFX("sfx_success");
             refreshCollectionStats();
-            toastMsg = "Nhận thành công " + count + " bộ sưu tập: +" + totalGold + " Vàng, +" + totalXp + " XP!";
+            toastMsg = "Nhận thành công (" + colCount + " Bộ, " + fishCount + " Loài): +" + totalDiamonds + " KC, +" + totalGold + "V, +" + totalXp + "XP!";
             toastTimer = TOAST_DURATION;
         }
     }

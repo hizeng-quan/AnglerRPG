@@ -418,7 +418,7 @@ public class QuestScreen implements Screen {
 
             font.setColor(1f, 0.85f, 0.3f, 1f);
             font.getData().setScale(0.75f);
-            String chestRewardPreview = currentTab == 0 ? "(Rương Ngày: +20 KC, +200 Vàng, +200 XP)" : "(Rương Tuần: +100 KC, +1000 Vàng, +1000 XP)";
+            String chestRewardPreview = currentTab == 0 ? "(Rương Ngày: +10 KC, +250 Vàng, +250 XP)" : "(Rương Tuần: +40 KC, +1500 Vàng, +1500 XP)";
             layout.setText(font, chestRewardPreview);
             if (layout.width > maxPreviewW) {
                 font.getData().setScale(0.75f * (maxPreviewW / layout.width));
@@ -783,16 +783,16 @@ public class QuestScreen implements Screen {
     private void claimMilestoneChest() {
         if (currentTab == 0) {
             qm.dailyChestClaimed = true;
-            player.addDiamonds(20);
-            player.gainGold(200);
-            player.gainXp(200);
-            toastMsg = "MỞ RƯƠNG NGÀY: +20 KC, +200 Vàng, +200 XP!";
+            player.addDiamonds(10);
+            player.gainGold(250);
+            player.gainXp(250);
+            toastMsg = "MỞ RƯƠNG NGÀY: +10 KC, +250 Vàng, +250 XP!";
         } else {
             qm.weeklyChestClaimed = true;
-            player.addDiamonds(100);
-            player.gainGold(1000);
-            player.gainXp(1000);
-            toastMsg = "MỞ RƯƠNG TUẦN: +100 KC, +1000 Vàng, +1000 XP!";
+            player.addDiamonds(40);
+            player.gainGold(1500);
+            player.gainXp(1500);
+            toastMsg = "MỞ RƯƠNG TUẦN: +40 KC, +1500 Vàng, +1500 XP!";
         }
         toastTimer = TOAST_DURATION;
         questListDirty = true;
@@ -819,17 +819,17 @@ public class QuestScreen implements Screen {
         // Also claim chest if ready
         if (currentTab == 0 && qm.dailyPoints >= 100 && !qm.dailyChestClaimed) {
             qm.dailyChestClaimed = true;
-            player.addDiamonds(20);
-            player.gainGold(200);
-            player.gainXp(200);
-            totalDiamonds += 20;
+            player.addDiamonds(10);
+            player.gainGold(250);
+            player.gainXp(250);
+            totalDiamonds += 10;
             count++;
         } else if (currentTab == 1 && qm.weeklyPoints >= 100 && !qm.weeklyChestClaimed) {
             qm.weeklyChestClaimed = true;
-            player.addDiamonds(100);
-            player.gainGold(1000);
-            player.gainXp(1000);
-            totalDiamonds += 100;
+            player.addDiamonds(40);
+            player.gainGold(1500);
+            player.gainXp(1500);
+            totalDiamonds += 40;
             count++;
         }
 
