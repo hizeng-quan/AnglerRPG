@@ -207,3 +207,4 @@ updater_temp/
 *.part
 AnglerRPG-update.tmp
 AnglerRPG.jar
+*.zip

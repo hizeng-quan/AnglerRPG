@@ -96,6 +96,11 @@ public class FishingManager {
     public boolean bossSkillJustUsed = false;
     private FloatingTextManager ftm;
     private com.fishingrpg.game.systems.vfx.ScreenShakeController screenShake;
+    private final com.fishingrpg.game.systems.gas.AbilitySystemComponent abilitySystem = new com.fishingrpg.game.systems.gas.AbilitySystemComponent();
+
+    public com.fishingrpg.game.systems.gas.AbilitySystemComponent getAbilitySystem() {
+        return abilitySystem;
+    }
 
     public FishingManager(Player player) {
         this.player = player;
@@ -241,6 +246,7 @@ public class FishingManager {
         boolean isFirst = SizeRecord.isFirstCatch(currentFish.getName());
         currentFish.setFirstCatch(isFirst);
         player.resetForNewEncounter();
+        abilitySystem.clearEffects();
 
         isLineBroken = false;
         rewardDone = false;
@@ -277,6 +283,7 @@ public class FishingManager {
         if (!rewardDone) {
             rewardDone = true;
             lastEncounterSuccess = success;
+            abilitySystem.clearEffects();
             
             if (success) {
                 player.recordSuccessfulCatch();
@@ -524,6 +531,15 @@ public class FishingManager {
                 }
                 break;
             case COMBAT:
+                com.fishingrpg.game.systems.gas.AbilityContext gasCtx = new com.fishingrpg.game.systems.gas.AbilityContext(player, currentFish, this, ftm, screenShake);
+                abilitySystem.update(delta, gasCtx);
+                keoManhCooldown = abilitySystem.getCooldown("keo_manh");
+                giatKepCooldown = abilitySystem.getCooldown("giat_kep");
+                duongSucCooldown = abilitySystem.getCooldown("duong_suc");
+                phaGiapCooldown = abilitySystem.getCooldown("pha_giap");
+                luotDayCooldown = abilitySystem.getCooldown("luot_day");
+                troiBuocCooldown = abilitySystem.getCooldown("loi_nguyen_troi_buoc");
+
                 if (duongSucChannelTimer > 0) {
                     duongSucChannelTimer -= delta;
                     combatMessage = "ĐANG VẬN SỨC... (" + String.format("%.1f", duongSucChannelTimer) + "s)";
@@ -722,10 +738,10 @@ public class FishingManager {
                 }
             }
             
-            if (luotDayTimer > 0) {
-                pull /= player.getSkillTree().getLuotDayMultiplier(); // Reduce pull strength
+            if (luotDayTimer > 0 || abilitySystem.hasEffect("effect_luot_day")) {
+                pull *= abilitySystem.getFishPullMultiplier();
             }
-            if (troiBuocTimer > 0) pull = 0f; // Stopped
+            if (troiBuocTimer > 0 || abilitySystem.isFishFrozen()) pull = 0f; // Stopped
             
             // Nhip Nhang: if holding space, chance to negate pull
             if (isSpaceDown && player.isSkillEquipped("nhip_nhang")) {
@@ -754,7 +770,7 @@ public class FishingManager {
             }
             
             // Deal damage
-            float dmgMult = 1f;
+            float dmgMult = abilitySystem.getDamageMultiplier();
             if (phaGiapTimer > 0) dmgMult += phaGiapDebuff;
             if (player.getWhetstoneCharges() > 0) dmgMult += 0.25f; // Đá mài tăng +25% sát thương kéo
             float dmg = player.getBasePullDamage() * dmgMult * delta;
@@ -824,6 +840,7 @@ public class FishingManager {
 
     private void handleSkills(boolean[] activeInputs, boolean isSpaceDown, float delta) {
         String[] hotkeyNames = {"Q", "W", "E", "R"};
+        com.fishingrpg.game.systems.gas.AbilityContext gasCtx = new com.fishingrpg.game.systems.gas.AbilityContext(player, currentFish, this, ftm, screenShake);
         for (int i = 0; i < 4; i++) {
             if (activeInputs[i]) {
                 String skillId = player.getEquippedActives()[i];
@@ -832,16 +849,16 @@ public class FishingManager {
                     AudioManager.getInstance().playSFX("sfx_button");
                     continue;
                 }
-                if (player.getSkillTree().getSkill(skillId) == null || !player.getSkillTree().getSkill(skillId).isUnlocked()) {
-                    if (ftm != null) ftm.addText("Kỹ năng chưa mở khóa!", 640f + MathUtils.random(-25, 25), 380f, Color.ORANGE);
-                    AudioManager.getInstance().playSFX("sfx_button");
-                    continue;
-                }
                 float cdMult = 1f;
                 if (player.isSetBonusActive() && player.getEquippedRod() != null && player.getEquippedRod().setName.equals("Thời Không")) {
                     cdMult = 0.8f;
                 }
-                useActiveSkill(skillId, cdMult);
+                // Thử kích hoạt qua hệ thống GAS chuẩn hóa
+                boolean activated = abilitySystem.tryActivateAbility(skillId, gasCtx, cdMult);
+                if (!activated && !abilitySystem.hasEffect(skillId)) {
+                    // Fallback to legacy implementation if not yet migrated
+                    useActiveSkill(skillId, cdMult);
+                }
             }
         }
         

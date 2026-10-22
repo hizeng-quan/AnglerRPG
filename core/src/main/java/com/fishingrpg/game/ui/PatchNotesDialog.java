@@ -251,6 +251,11 @@ public class PatchNotesDialog {
         // =====================================================================
         // --- TAB 1: KẾ HOẠCH & LỘ TRÌNH (SẮP TỚI) ---
         // =====================================================================
+        roadmapItems.add(new UpdateItem("ĐÃ RA MẮT", "Game Juice, Screen Shake & GAS System (v0.4.211)", new Color(0.35f, 0.85f, 0.50f, 1f))
+            .addPoint("Đã hoàn thành bộ điều khiển rung chấn Trauma Screen Shake & Easing Game Juice.")
+            .addPoint("Đã hoàn thành Gameplay Ability System (GAS) chuẩn hóa bộ 4 kỹ năng QWER, Cooldown & Buff/Debuff.")
+        );
+
         roadmapItems.add(new UpdateItem("ĐÃ RA MẮT", "Bộ Tổng Hợp Âm Thanh ZzFX & Auto-Updater (v0.4.21)", new Color(0.35f, 0.85f, 0.50f, 1f))
             .addPoint("Đã hoàn thành module tự động cập nhật game online 1-click từ GitHub Releases.")
             .addPoint("Đã hoàn thành đồng bộ thời gian thực chuẩn quốc tế (TimeSyncService) chống hack tua giờ.")
@@ -261,22 +266,9 @@ public class PatchNotesDialog {
             .addPoint("Đã hoàn thành cố định phẩm cấp 6★ Set Lạc Hồng, cân bằng 42 loài cá và kinh tế Kim Cương.")
         );
 
-        roadmapItems.add(new UpdateItem("ĐÃ RA MẮT", "Đại Tu Cân Bằng Game & Tiến Trình EXP (v0.4.19)", new Color(0.35f, 0.85f, 0.50f, 1f))
-            .addPoint("Đã hoàn thành sửa tiến trình EXP mượt mà, tăng máu 3 Boss thế giới, đặt trần thưởng Cửa Hàng và cân bằng Gacha.")
-        );
-
         roadmapItems.add(UpdateItem.versionHeader("MỤC TIÊU PHÁT TRIỂN TIẾP THEO"));
 
-        roadmapItems.add(new UpdateItem("ĐANG TRIỂN KHAI", "Easing & Screen Shake Controller (Game Juice)", new Color(1f, 0.75f, 0.25f, 1f))
-            .addPoint("Nội suy chuyển động mượt mà (Easing/Bounce/Elastic) cho các bảng thông báo, popup nhận thưởng.")
-            .addPoint("Hiệu ứng rung chấn màn hình (Screen Shake) chân thực khi cá kéo mạnh, đứt cước hoặc quăng cần trúng Boss.")
-        );
-
-        roadmapItems.add(new UpdateItem("KẾ HOẠCH", "Gameplay Ability System (GAS) Bộ 4 Kỹ Năng QWER", new Color(0.40f, 0.75f, 1f, 1f))
-            .addPoint("Chuẩn hóa toàn diện logic kỹ năng, thời gian hồi chiêu (Cooldown) và hiệu ứng trạng thái Buff/Debuff.")
-        );
-
-        roadmapItems.add(new UpdateItem("KẾ HOẠCH", "Simplex Noise GLSL Water Shader Khúc Xạ Mặt Nước", new Color(0.40f, 0.75f, 1f, 1f))
+        roadmapItems.add(new UpdateItem("ĐANG TRIỂN KHAI", "Simplex Noise GLSL Water Shader Khúc Xạ Mặt Nước", new Color(1f, 0.75f, 0.25f, 1f))
             .addPoint("Nâng cấp mặt nước biển sống động với hiệu ứng sóng lấp lánh (Caustics) và khúc xạ ánh hoàng hôn.")
         );
 
