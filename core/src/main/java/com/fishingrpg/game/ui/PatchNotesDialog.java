@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class PatchNotesDialog {
 
-    public static final String CURRENT_VERSION = "v0.4.17";
+    public static final String CURRENT_VERSION = "v0.4.18";
     private static final String PREF_LAST_SEEN_VERSION = "last_seen_patch_notes_version";
 
     private final FishingRPG game;
@@ -91,8 +91,24 @@ public class PatchNotesDialog {
         // --- TAB 0: BẢN TIN CẬP NHẬT THEO TỪNG PHIÊN BẢN ---
         // =====================================================================
 
-        // ===== PHIÊN BẢN v0.4.17 (MỚI NHẤT) =====
-        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.4.17 (MỚI NHẤT - CÀI ĐẶT, KEYBINDS & SỬA LỖI UI)"));
+        // ===== PHIÊN BẢN v0.4.18 (MỚI NHẤT) =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.4.18 (MỚI NHẤT - ĐẠI TU NGOẠI HÌNH SET THỜI KHÔNG & VECTOR PIPELINE)"));
+
+        patchNotesItems.add(new UpdateItem("ĐỒ HỌA", "Đại Tu Ngoại Hình Toàn Diện Bộ Trang Bị Thời Không", newBadgeColor)
+            .addPoint("Trượng Thời Gian (Chrono Staff): Thiết kế thiên văn hoàng đạo Astrolabe với bánh răng 12 khắc giờ, kim la bàn xoay, lõi tinh thể ngọc lam và hào quang tinh vân vũ trụ.")
+            .addPoint("Sợi Dây Xuyên Thấu (Transdimensional Line): Cấu trúc cuộn dây Tachyon vi mô lồng đôi, 8 vòng tròn năng lượng cộng hưởng gradient và chùm vệt photon lượng tử xuyên không gian.")
+            .addPoint("Lưỡi Câu Hư Không (Void Singularity Hook): Đường cong không-thời gian dạng vòng vô cực Möbius Topology, lưỡi thép Titanium sắc bén và hố đen Singularity tím thẫm phát quang.")
+            .addPoint("Căn chỉnh hoàn hảo tâm điểm (cx, cy) và kích thước chuẩn xác, loại bỏ hoàn toàn lỗi hình ảnh lệch khung hoặc tràn viền icon.")
+        );
+
+        patchNotesItems.add(new UpdateItem("CÔNG CỤ", "Tích Hợp Vector Studio MCP & Graphics Pipeline", newBadgeColor)
+            .addPoint("Tích hợp Vector Studio MCP Server hỗ trợ thiết kế, kiểm duyệt và chuyển đổi SVG sang mã lệnh LibGDX ShapeRenderer.")
+            .addPoint("Thiết lập bộ quy chuẩn đồ họa (Graphics Guidelines) và Visual Quality Gate tự động hóa 100/100 điểm.")
+            .addPoint("Bổ sung bước Dọn dẹp sau khi tích hợp (Post-apply Cleanup): Tự động xóa bỏ các file ảnh nháp so sánh cũ, file thử nghiệm và tài nguyên trung gian sau khi đã áp dụng code vào game.")
+        );
+
+        // ===== PHIÊN BẢN v0.4.17 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.4.17 (CÀI ĐẶT, KEYBINDS & SỬA LỖI UI)"));
 
         patchNotesItems.add(new UpdateItem("TÍNH NĂNG", "Tùy Chỉnh Toàn Bộ Keybinds & Chống Trùng Phím", newBadgeColor)
             .addPoint("Hỗ trợ đổi phím cho cả 14 thao tác: Kéo dây, 4 ô Kỹ năng và toàn bộ 9 ô Phím Tắt Nhanh (Quickslot).")
@@ -151,6 +167,10 @@ public class PatchNotesDialog {
         // --- TAB 1: KẾ HOẠCH & LỘ TRÌNH (SẮP TỚI) ---
         // =====================================================================
         roadmapItems.add(UpdateItem.versionHeader("CÁC TÍNH NĂNG ĐÃ HOÀN THÀNH"));
+
+        roadmapItems.add(new UpdateItem("ĐÃ RA MẮT", "Đại Tu Ngoại Hình Toàn Diện Set Thời Không (v0.4.18)", new Color(0.35f, 0.85f, 0.50f, 1f))
+            .addPoint("Đã hoàn thành làm mới toàn diện đồ họa 3 món set Thời Không và tích hợp công cụ kiểm duyệt Vector Studio.")
+        );
 
         roadmapItems.add(new UpdateItem("ĐÃ RA MẮT", "Hệ Thống Cài Đặt & Quản Lý Dữ Liệu (v0.4.17)", new Color(0.35f, 0.85f, 0.50f, 1f))
             .addPoint("Đã hoàn thành đưa nút Setting vào HUD, điều chỉnh âm thanh, chế độ hiển thị và quản lý file lưu.")

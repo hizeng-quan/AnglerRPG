@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- 1. Cosmic Temporal Rift Aura -->
+  <circle cx="64" cy="64" r="56" fill="rgba(124, 58, 237, 0.16)" />
+  <circle cx="78" cy="50" r="38" fill="rgba(56, 189, 248, 0.18)" />
+
+  <!-- 2. Celestial Astrolabe Ring (Background Headpiece) -->
+  <circle cx="82" cy="46" r="24" fill="none" stroke="#d97706" stroke-width="2.5" />
+  <circle cx="82" cy="46" r="21" fill="#0b0d19" stroke="#fbbf24" stroke-width="1.2" />
+  <!-- 8 Clockwork Gear Teeth -->
+  <circle cx="82" cy="21" r="2.5" fill="#fbbf24" />
+  <circle cx="82" cy="71" r="2.5" fill="#fbbf24" />
+  <circle cx="57" cy="46" r="2.5" fill="#fbbf24" />
+  <circle cx="107" cy="46" r="2.5" fill="#fbbf24" />
+  <circle cx="64" cy="28" r="2.2" fill="#f59e0b" />
+  <circle cx="100" cy="64" r="2.2" fill="#f59e0b" />
+  <circle cx="64" cy="64" r="2.2" fill="#f59e0b" />
+  <circle cx="100" cy="28" r="2.2" fill="#f59e0b" />
+
+  <!-- 3. Astrolabe Celestial Dial Face & Clock Hands -->
+  <circle cx="82" cy="46" r="14" fill="#1e1b4b" stroke="#38bdf8" stroke-width="1" />
+  <!-- Orbital Rings -->
+  <circle cx="82" cy="46" r="9" fill="none" stroke="#7c3aed" stroke-width="1" />
+  <!-- Clock Hands (Gold) -->
+  <line x1="82" y1="46" x2="91" y2="42" stroke="#fef08a" stroke-width="2" />
+  <line x1="82" y1="46" x2="77" y2="38" stroke="#fbbf24" stroke-width="2.2" />
+  <circle cx="82" cy="46" r="3" fill="#ffffff" />
+
+  <!-- 4. Main Diagonal Scepter Staff Shaft (From bottom-left to top-right) -->
+  <!-- Dark Titanium Under-Spine -->
+  <polygon points="26,106 32,100 86,46 80,52" fill="#0f172a" stroke="#0284c7" stroke-width="1.2" />
+  <!-- High-tech Cyan Plasma Channel -->
+  <line x1="30" y1="102" x2="82" y2="50" stroke="#38bdf8" stroke-width="2.2" />
+  <line x1="30" y1="102" x2="82" y2="50" stroke="#ffffff" stroke-width="1" />
+
+  <!-- Gold Node Rings along the staff -->
+  <circle cx="44" cy="88" r="4.5" fill="#fbbf24" stroke="#d97706" stroke-width="1" />
+  <circle cx="44" cy="88" r="2" fill="#0f172a" />
+  <circle cx="62" cy="70" r="5" fill="#fbbf24" stroke="#d97706" stroke-width="1" />
+  <circle cx="62" cy="70" r="2.5" fill="#38bdf8" />
+
+  <!-- Amethyst Magnetic Spirals -->
+  <line x1="37" y1="92" x2="43" y2="98" stroke="#c084fc" stroke-width="2" />
+  <line x1="55" y1="74" x2="61" y2="80" stroke="#c084fc" stroke-width="2" />
+  <line x1="73" y1="56" x2="79" y2="62" stroke="#c084fc" stroke-width="2" />
+
+  <!-- 5. Grip & Pommel Counterweight (Bottom-Left) -->
+  <rect x="20" y="96" width="14" height="14" rx="3" fill="#1e1b4b" stroke="#7c3aed" stroke-width="1.5" transform="rotate(-45 27 103)" />
+  <circle cx="21" cy="109" r="6" fill="#fbbf24" stroke="#d97706" stroke-width="1.5" />
+  <circle cx="21" cy="109" r="3.2" fill="#38bdf8" />
+
+  <!-- 6. Floating Crystal Finial (Top-Right of Astrolabe) -->
+  <!-- Floating Diamond Hourglass Gem -->
+  <polygon points="98,30 106,30 102,38" fill="#38bdf8" />
+  <polygon points="98,46 106,46 102,38" fill="#7c3aed" />
+  <circle cx="102" cy="38" r="2.2" fill="#ffffff" />
+  <!-- Gold Bracket Frame -->
+  <line x1="97" y1="30" x2="107" y2="30" stroke="#fbbf24" stroke-width="1.5" />
+  <line x1="97" y1="46" x2="107" y2="46" stroke="#fbbf24" stroke-width="1.5" />
+
+  <!-- 7. Specular Glints & Starlight Particles -->
+  <circle cx="102" cy="28" r="2.5" fill="#ffffff" />
+  <circle cx="82" cy="46" r="2.2" fill="#ffffff" />
+  <circle cx="62" cy="69" r="1.8" fill="#ffffff" />
+  <circle cx="20" cy="108" r="1.5" fill="#ffffff" />
+  <!-- Floating Stardust -->
+  <circle cx="48" cy="40" r="1.5" fill="#38bdf8" />
+  <circle cx="96" cy="68" r="1.5" fill="#c084fc" />
+  <circle cx="34" cy="74" r="1.2" fill="#fef08a" />
+</svg>

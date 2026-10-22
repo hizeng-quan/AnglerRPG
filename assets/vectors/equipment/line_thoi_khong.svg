@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- 1. Spacetime Distortion Vortex Aura -->
+  <circle cx="64" cy="64" r="56" fill="rgba(124, 58, 237, 0.18)" />
+  <circle cx="64" cy="64" r="46" fill="rgba(56, 189, 248, 0.16)" />
+
+  <!-- 2. Celestial Astrolabe Spool Outer Gear Rim (Brass Gold) -->
+  <circle cx="64" cy="64" r="42" fill="#0f172a" stroke="#d97706" stroke-width="2.5" />
+  <!-- 12 Precision Gear Notches -->
+  <circle cx="64" cy="21" r="3" fill="#fbbf24" />
+  <circle cx="85" cy="27" r="2.8" fill="#fbbf24" />
+  <circle cx="101" cy="43" r="2.8" fill="#fbbf24" />
+  <circle cx="107" cy="64" r="3" fill="#fbbf24" />
+  <circle cx="101" cy="85" r="2.8" fill="#fbbf24" />
+  <circle cx="85" cy="101" r="2.8" fill="#fbbf24" />
+  <circle cx="64" cy="107" r="3" fill="#fbbf24" />
+  <circle cx="43" cy="101" r="2.8" fill="#fbbf24" />
+  <circle cx="27" cy="85" r="2.8" fill="#fbbf24" />
+  <circle cx="21" cy="64" r="3" fill="#fbbf24" />
+  <circle cx="27" cy="43" r="2.8" fill="#fbbf24" />
+  <circle cx="43" cy="27" r="2.8" fill="#fbbf24" />
+
+  <!-- 3. Tachyon Spool Thread Core (Nested Winding Rings) -->
+  <circle cx="64" cy="64" r="35" fill="#1e1b4b" stroke="#7c3aed" stroke-width="1.8" />
+  <!-- Cyan Plasma Filament Coil -->
+  <circle cx="64" cy="64" r="28" fill="none" stroke="#38bdf8" stroke-width="2.5" />
+  <!-- Amethyst Secondary Coil -->
+  <circle cx="64" cy="64" r="23" fill="none" stroke="#c084fc" stroke-width="2" />
+  <!-- Pure Starlight Inner Coil -->
+  <circle cx="64" cy="64" r="18" fill="none" stroke="#fef08a" stroke-width="1.8" />
+
+  <!-- 4. Radial Astrolabe Sunburst Spokes (6 Gold Spokes) -->
+  <line x1="64" y1="36" x2="64" y2="22" stroke="#fbbf24" stroke-width="2" />
+  <line x1="64" y1="92" x2="64" y2="106" stroke="#fbbf24" stroke-width="2" />
+  <line x1="39" y1="50" x2="27" y2="43" stroke="#fbbf24" stroke-width="2" />
+  <line x1="89" y1="78" x2="101" y2="85" stroke="#fbbf24" stroke-width="2" />
+  <line x1="39" y1="78" x2="27" y2="85" stroke="#fbbf24" stroke-width="2" />
+  <line x1="89" y1="50" x2="101" y2="43" stroke="#fbbf24" stroke-width="2" />
+
+  <!-- 5. Spacetime Singularity Black Hole & Accretion Flare (Center) -->
+  <circle cx="64" cy="64" r="13" fill="#030712" stroke="#38bdf8" stroke-width="1.5" />
+  <circle cx="64" cy="64" r="7" fill="#fbbf24" />
+  <circle cx="64" cy="64" r="3.5" fill="#ffffff" />
+
+  <!-- 6. Transdimensional Infinity Ribbon (Mobius Warp Loop) -->
+  <!-- Upper Loop -->
+  <ellipse cx="50" cy="56" rx="16" ry="10" fill="none" stroke="#38bdf8" stroke-width="2" transform="rotate(-25 50 56)" />
+  <!-- Lower Loop -->
+  <ellipse cx="78" cy="72" rx="16" ry="10" fill="none" stroke="#c084fc" stroke-width="2" transform="rotate(-25 78 72)" />
+
+  <!-- 7. Trailing Dimensional Warp Thread (Leading off spool) -->
+  <polyline points="96,52 110,40 118,48 124,36" fill="none" stroke="#38bdf8" stroke-width="2.5" />
+  <circle cx="124" cy="36" r="3" fill="#ffffff" />
+
+  <!-- 8. Brilliant Specular Glints -->
+  <circle cx="56" cy="38" r="2.5" fill="#ffffff" />
+  <circle cx="64" cy="62" r="1.8" fill="#ffffff" />
+  <circle cx="74" cy="88" r="2" fill="#ffffff" />
+  <circle cx="94" cy="52" r="1.5" fill="#ffffff" />
+</svg>
