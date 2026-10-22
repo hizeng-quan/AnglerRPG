@@ -4,6 +4,48 @@
 
 ---
 
+## 📅 [2026-10-22] - Phiên bản v0.4.18 (Đại Tu Ngoại Hình Toàn Diện Set Thời Không & Khởi Động Vector Studio MCP Pipeline)
+
+### ⏳ Đại Tu Ngoại Hình Toàn Diện Bộ Trang Bị Thời Không ([EquipmentIconRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/EquipmentIconRenderer.java))
+- **Trượng Thời Gian (Chrono Staff)**:
+  - **Khắc phục lỗi hiển thị**: Phiên bản cũ vòng hào quang bị vẽ quá khổ (`r * 1.30f`) và cụm đầu gậy bị lệch tâm (`cx + r * 0.55f`) khiến hình ảnh tràn và biến dạng ngoài khung icon.
+  - **Thiết kế mới Chuẩn Thiên Văn Hoàng Đạo (Astrolabe Design)**:
+    - Căn chỉnh tâm điểm tuyệt đối `(cx, cy)` với tỷ lệ mở rộng `scale = (r * 2f) / 128f`.
+    - Trục cán gậy hợp kim thời không màu Titanium tím thẫm (`#1B122C`), bọc vòng bảo hộ và khớp nối mạ vàng hoàng gia (`#F5D061`).
+    - Bánh răng thiên văn 12 nan hoa xoay quanh tâm, gợi nhắc 12 khắc giờ trong vũ trụ.
+    - Kim la bàn đồng hồ thời gian vát góc nhọn phát quang.
+    - Lõi thời không quả cầu pha lê ngọc lam (Cyan Opal `#45F3FF`) đính ở đầu trượng, bao bọc bởi 2 vòng hào quang tinh vân pulsing (`#8B5CF6`).
+- **Sợi Dây Xuyên Thấu (Transdimensional Line)**:
+  - **Khắc phục lỗi hiển thị**: Phiên bản cũ chỉ là các vòng tròn đồng tâm phẳng, không có hình khối cuộn dây cước hay điểm nhấn thị giác.
+  - **Thiết kế mới Cuộn Dây Tachyon Lồng Đôi (Tachyon Spool & Quantum Conduit)**:
+    - Khung lõi chỉ bạc Titanium dạng đĩa quay thiên hà với 4 nan trục chữ thập.
+    - 8 vòng sóng năng lượng cộng hưởng gradient đa sắc từ tím đậm (`#6D28D9`) sang xanh neon (`#06B6D4`) và trắng tinh khôi (`#FFFFFF`).
+    - Chùm vệt phân rã photon lượng tử xuyên không gian đan chéo góc 45°, biểu trưng cho sợi dây xuyên qua các chiều không-thời gian.
+    - Vòng vành ngoài mạ vàng cơ khí bấm giờ, có các khấc chia tọa độ thời gian sắc nét.
+- **Lưỡi Câu Hư Không (Void Singularity Hook)**:
+  - **Khắc phục lỗi hiển thị**: Phiên bản cũ có vòng tròn aura đen che phủ gần hết chi tiết lưỡi câu, tỷ lệ ngạnh và thân lưỡi bị lệch.
+  - **Thiết kế mới Đường Cong Không-Thời Gian Möbius (Möbius Topology & Singularity Core)**:
+    - Thân lưỡi câu uốn lượn theo hình học vi phân Topology của dải Mobius với đường uốn kép mềm mại.
+    - Ngạnh móc đôi sắc nhọn mạ Chrome sáng bóng, đầu mũi kim cương Titanium sắc bén.
+    - Hố đen kỳ dị (Void Singularity) ngự trị ở mắt xỏ dây, phát ra hào quang cực tím (`#7C3AED` và `#C084FC`) hút ánh sáng xung quanh.
+    - Các hạt bụi thời gian (Starlight Motes) lấp lánh li ti tỏa ra từ thân lưỡi câu.
+- **Tương Thích Mọi Giao Diện**:
+  - Tối ưu hóa cho cả 3 chế độ hiển thị: Icon 40x40 trong túi đồ, Icon phóng đại 2X (bán kính 38f) trong Modal Chi Tiết Gacha, và hiển thị trên thanh trang bị [EquipmentScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/EquipmentScreen.java).
+
+### 🎨 Tích Hợp Antigravity Vector Studio MCP Server & Pipeline Đồ Họa
+- **Custom MCP Server cho Vector Graphics ([.agents/plugins/vector-studio/](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/.agents/plugins/vector-studio))**:
+  - `render_vector_preview`: Biên dịch trực tiếp SVG thành hình ảnh PNG xem trước tức thì độ phân giải cao.
+  - `audit_vector_artwork`: Kiểm tra tự động 6 tiêu chuẩn nghiêm ngặt (tọa độ gốc viewBox 128x128, tỷ lệ co giãn, độ tương phản màu, phân tầng layer, tối ưu số lượng phần tử).
+  - `svg_to_libgdx_code`: Tự động biên dịch mã XML SVG thành hàm Java LibGDX ShapeRenderer chuẩn xác từng pixel.
+  - `cleanup_pipeline_files`: **Bước cuối cùng của pipeline** - Tự động dọn dẹp các file preview so sánh cũ (`old_*`), file nháp tạm (`temp_*`, `test_*`, `draft_*`) và tài nguyên trung gian sau khi đã áp dụng code chuẩn xác vào game.
+- **Visual Quality Gate (100/100 Điểm)**:
+  - Cả 3 asset `rod_thoi_khong`, `line_thoi_khong`, `hook_thoi_khong` đều đã vượt qua bộ kiểm duyệt với điểm số tuyệt đối 100/100 PASSED.
+- **Antigravity Customization Skills & Guidelines**:
+  - Bổ sung quy trình 5 bước hoàn chỉnh trong `vector-graphics-designer` và lệnh `clean` trong `game-graphics-pipeline`.
+  - Bộ quy tắc thiết kế `graphics_guidelines.md` định hình chuẩn mực thẩm mỹ Fantasy RPG và giữ gìn repository luôn sạch đẹp.
+
+---
+
 ## 📅 [2026-10-22] - Phiên bản v0.4.17 (Hệ Thống Cài Đặt Settings, Tùy Biến Keybinds, Kéo Thả Âm Lượng Độc Lập, Phím F11 & Khắc Phục Lỗi UI)
 
 ### 🎛️ Nâng Cấp Hệ Thống Cài Đặt & Quản Lý Dữ Liệu ([SettingsDialog.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/SettingsDialog.java))

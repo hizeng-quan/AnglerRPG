@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "vector-studio": {
+      "command": "python",
+      "args": [
+        "c:/Users/Quan/IdeaProjects/AnglerRPG/.agents/plugins/vector-studio/server/vector_studio_mcp.py"
+      ],
+      "env": {
+        "PYTHONIOENCODING": "utf-8"
+      }
+    }
+  }
+}

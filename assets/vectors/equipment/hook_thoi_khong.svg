@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- 1. Dimensional Void Singularity Aura -->
+  <circle cx="64" cy="64" r="56" fill="rgba(124, 58, 237, 0.16)" />
+  <circle cx="56" cy="68" r="42" fill="rgba(56, 189, 248, 0.18)" />
+
+  <!-- 2. Crown Eyelet: Chrono Clockwork Astrolabe Ring (Top) -->
+  <circle cx="48" cy="28" r="14" fill="#0f172a" stroke="#fbbf24" stroke-width="2.5" />
+  <circle cx="48" cy="28" r="8" fill="#1e1b4b" stroke="#d97706" stroke-width="1.2" />
+  <circle cx="48" cy="28" r="4" fill="#38bdf8" />
+  <circle cx="48" cy="28" r="2" fill="#ffffff" />
+  <!-- Eyelet Gear Teeth (4 cardinal ticks) -->
+  <circle cx="48" cy="13" r="2.2" fill="#fbbf24" />
+  <circle cx="48" cy="43" r="2.2" fill="#fbbf24" />
+  <circle cx="33" cy="28" r="2.2" fill="#fbbf24" />
+  <circle cx="63" cy="28" r="2.2" fill="#fbbf24" />
+
+  <!-- Hanging Pendulum Charm (Swinging left) -->
+  <line x1="40" y1="36" x2="24" y2="58" stroke="#fbbf24" stroke-width="1.5" />
+  <polygon points="24,58 18,66 24,76 30,66" fill="#7c3aed" stroke="#c084fc" stroke-width="1.2" />
+  <circle cx="24" cy="67" r="2.5" fill="#38bdf8" />
+  <circle cx="24" cy="66" r="1.2" fill="#ffffff" />
+
+  <!-- 3. Heavy Void Obsidian Hook Body (Main Spine) -->
+  <!-- Dark under-shadow spine -->
+  <path d="M 48 42 L 48 76 C 48 94 62 106 80 106 C 96 106 106 94 106 78 L 106 58" fill="none" stroke="#030712" stroke-width="8" stroke-linecap="round" />
+  <!-- Void Obsidian Body -->
+  <path d="M 48 42 L 48 76 C 48 94 62 106 80 106 C 96 106 106 94 106 78 L 106 58" fill="none" stroke="#1e1b4b" stroke-width="5" stroke-linecap="round" />
+  <!-- Luminous Chrono Conduit Center -->
+  <path d="M 48 44 L 48 76 C 48 92 60 103 80 103 C 94 103 103 92 103 78 L 103 60" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" />
+
+  <!-- 4. Luminous Chrono-Runes (Shank ticks) -->
+  <circle cx="48" cy="50" r="3.2" fill="#38bdf8" />
+  <circle cx="48" cy="50" r="1.5" fill="#ffffff" />
+  <circle cx="48" cy="62" r="3.2" fill="#38bdf8" />
+  <circle cx="48" cy="62" r="1.5" fill="#ffffff" />
+  <circle cx="48" cy="74" r="3.2" fill="#38bdf8" />
+  <circle cx="48" cy="74" r="1.5" fill="#ffffff" />
+
+  <!-- 5. Dimensional Rift Crescent Barb & Razor Hook Point -->
+  <!-- Starlight Crescent Barb (Pointing down-inward) -->
+  <polygon points="106,62 106,42 90,56" fill="#a855f7" stroke="#ffffff" stroke-width="1.2" />
+  <!-- Razor Sharp Singularity Hook Tip -->
+  <polygon points="102,46 106,30 110,46" fill="#fbbf24" stroke="#ffffff" stroke-width="1.2" />
+  <circle cx="106" cy="30" r="2.5" fill="#ffffff" />
+
+  <!-- 6. Accretion Swirl & Specular Glints -->
+  <circle cx="80" cy="106" r="2.2" fill="#ffffff" />
+  <circle cx="106" cy="58" r="2.5" fill="#ffffff" />
+  <circle cx="48" cy="26" r="2" fill="#ffffff" />
+  <circle cx="92" cy="54" r="1.5" fill="#ffffff" />
+</svg>
