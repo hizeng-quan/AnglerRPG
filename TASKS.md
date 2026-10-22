@@ -39,6 +39,10 @@
 | **UPD-01** | Tính năng | Module Auto-Updater Tự Động Cập Nhật Trực Tuyến & Tự Động Khởi Động Lại 1-Click | **P1 (Quan trọng)** | ✅ Đã hoàn thành |
 | **TIM-01** | Tính năng | Dịch Vụ Đồng Bộ Thời Gian Thực Chuẩn Quốc Tế & Chống Gian Lận Tua Giờ (TimeSyncService) | **P1 (Quan trọng)** | ✅ Đã hoàn thành |
 | **SEC-01** | Bảo mật  | Rà Soát & Ẩn Toàn Bộ File Nhạy Cảm, Save Game, Cache, Credentials Khỏi GitHub | **P1 (Bảo mật)**   | ✅ Đã hoàn thành |
+| **AUD-01** | Âm thanh | Bộ Tổng Hợp Âm Thanh Thủ Tục ZzFX Java Synthesizer & Fallback Safety Net Không Cần File | **P1 (Quan trọng)** | ✅ Đã hoàn thành (Bước 1) |
+| **VFX-01** | Trải nghiệm| Easing & Screen Shake Controller ("Game Juice" Rung Giật Màn Hình & Popup Nảy Mượt) | **P1 (Trải nghiệm)**| 📋 Kế hoạch (Bước 2) |
+| **GAS-01** | Gameplay | Gameplay Ability System (GAS) Chuẩn Hóa Bộ 4 Kỹ Năng QWER, Cooldown & Hiệu Ứng Buff/Debuff | **P1 (Gameplay)**   | 📋 Kế hoạch (Bước 3) |
+| **SHD-01** | Đồ họa   | Simplex Noise GLSL Water Shader: Mặt Nước Sóng Lấp Lánh & Khúc Xạ Ánh Sáng Chân Thực | **P2 (Đồ họa)**     | 📋 Kế hoạch (Bước 4) |
 
 ---
 

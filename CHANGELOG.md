@@ -25,14 +25,16 @@
 - **Nâng Cấp Giao Diện Sổ Tay**:
   - Bổ sung thanh dock hiển thị số dư tài nguyên **Vàng** và **Kim Cương** trực tiếp trên màn hình Sổ Tay, giúp người chơi thấy số dư tăng lên tức thì khi bấm nhận thưởng.
 
-### 🔊 Khắc Phục Lỗi Âm Thanh SFX Button ([AudioManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/AudioManager.java), [sfx_button.wav](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/audio/sfx/sfx_button.wav))
-- **Sinh Tệp Âm Thanh Chuẩn**:
-  - Khắc phục lỗi `GdxRuntimeException: File not found: audio\sfx\sfx_button.wav` khi bấm các nút giao diện UI.
-  - Sinh tệp âm thanh click chuột cơ khí cao cấp `assets/audio/sfx/sfx_button.wav` (44.1kHz, 16-bit PCM).
-- **Cơ Chế Tải Âm Thanh An Toàn (Defensive Audio Loading)**:
-  - Kiểm tra sự tồn tại của tệp âm thanh trước khi nạp bằng `fh.exists()`.
-  - Nếu tệp không tìm thấy, nạp giá trị `null` vào bộ đệm `sfxMap` để ngăn chặn hoàn toàn việc văng ngoại lệ và spam log lỗi ở từng khung hình.
-  - Hỗ trợ cơ chế ánh xạ tự động (Alias): `"button_click"` -> `"sfx_button"`, `"victory"` -> `"sfx_success"`.
+### 🔊 Bộ Tổng Hợp Âm Thanh Thủ Tục ZzFX & Khắc Phục Lỗi Âm Thanh Triệt Để ([ZzFX.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/ZzFX.java), [AudioManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/AudioManager.java), [sfx_button.wav](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/audio/sfx/sfx_button.wav))
+- **Tích Hợp ZzFX Procedural Sound Synthesizer (Java 17 / OpenAL)**:
+  - Port trọn vẹn thuật toán sinh sóng âm thanh lượng tử toán học ZzFX (Sine, Triangle, Sawtooth, Tan, Bitnoise, White Noise) trực tiếp vào RAM client game.
+  - Tự động sinh mảng sóng âm thanh, đóng gói chuẩn WAV 16-bit PCM Little-Endian và nạp vào OpenAL Sound Engine của LibGDX qua `MemoryFileHandle` ảo.
+  - Nặng **0 KB** tài nguyên ngoài đĩa, không tốn I/O đọc ổ cứng, tốc độ sinh trong vài mili-giây.
+- **Lưới An Toàn Tự Động (Procedural Fallback Safety Net)**:
+  - Khi gọi bất kỳ âm thanh nào qua `AudioManager.playSFX(name)`: Nếu tệp WAV trên đĩa cứng bị thiếu hoặc bị xóa, hệ thống **tự động phân tích tên gọi và sinh âm thanh thủ tục tương ứng ngay lập tức** (Button Click, Catch Success, Fail/Escape, Cast, Bite, Pull, Splash, Coin/Diamond, Skill, Level Up, Reel Click, Alert, Explosion).
+  - Triệt tiêu vĩnh viễn nguy cơ văng game `FileNotFoundException` hoặc spam log lỗi ở từng frame.
+- **Hỗ Trợ Phát Âm Thanh Thủ Tục Trực Tiếp**:
+  - Bổ sung `AudioManager.getInstance().playZzFX(preset)` và `playZzFX(preset, pitch)` cho phép tùy biến cao độ âm thanh động (pitch-shifting) theo trọng lượng cá và cấp độ kỹ năng.
 
 ### 🏮 Tối Ưu Hóa Giao Diện Thẻ Nhiệm Vụ Sự Kiện ([EventScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/EventScreen.java))
 - **Lược Bỏ Text & Hộp Thưởng Đơn Lẻ**:

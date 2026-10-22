@@ -125,12 +125,27 @@ public class AudioManager {
                     Sound sound = Gdx.audio.newSound(fh);
                     sfxMap.put(sfxName, sound);
                 } else {
-                    Gdx.app.log("AudioManager", "SFX not found on disk: " + sfxName);
+                    // Fallback thông minh: Tự động tổng hợp âm thanh ZzFX trong RAM khi không tìm thấy file trên đĩa
+                    Sound procedural = ZzFX.createSoundByName(sfxName);
+                    if (procedural != null) {
+                        sfxMap.put(sfxName, procedural);
+                        procedural.play(sfxVolume);
+                        return;
+                    }
                     sfxMap.put(sfxName, null);
                     return;
                 }
             } catch (Exception e) {
-                Gdx.app.error("AudioManager", "Could not load SFX: " + sfxName, e);
+                // Nếu nạp file WAV bị lỗi, kích hoạt fallback ZzFX đảm bảo không bao giờ crash game
+                try {
+                    Sound procedural = ZzFX.createSoundByName(sfxName);
+                    if (procedural != null) {
+                        sfxMap.put(sfxName, procedural);
+                        procedural.play(sfxVolume);
+                        return;
+                    }
+                } catch (Exception ignored) {}
+                Gdx.app.error("AudioManager", "Could not load or synthesize SFX: " + sfxName, e);
                 sfxMap.put(sfxName, null);
                 return;
             }
@@ -139,6 +154,38 @@ public class AudioManager {
         Sound sound = sfxMap.get(sfxName);
         if (sound != null) {
             sound.play(sfxVolume);
+        }
+    }
+
+    /**
+     * Phát âm thanh thủ tục ZzFX trực tiếp theo Preset với bộ nhớ đệm RAM.
+     */
+    public void playZzFX(ZzFX.Preset preset) {
+        if (isSfxMuted || preset == null) return;
+        String key = "zzfx_" + preset.name();
+        if (!sfxMap.containsKey(key)) {
+            Sound sound = ZzFX.createPresetSound(preset);
+            sfxMap.put(key, sound);
+        }
+        Sound sound = sfxMap.get(key);
+        if (sound != null) {
+            sound.play(sfxVolume);
+        }
+    }
+
+    /**
+     * Phát âm thanh thủ tục ZzFX kèm biến thiên cao độ (Pitch variation) tạo cảm giác sống động.
+     */
+    public void playZzFX(ZzFX.Preset preset, float pitch) {
+        if (isSfxMuted || preset == null) return;
+        String key = "zzfx_" + preset.name();
+        if (!sfxMap.containsKey(key)) {
+            Sound sound = ZzFX.createPresetSound(preset);
+            sfxMap.put(key, sound);
+        }
+        Sound sound = sfxMap.get(key);
+        if (sound != null) {
+            sound.play(sfxVolume, Math.max(0.5f, Math.min(2.0f, pitch)), 0f);
         }
     }
 
