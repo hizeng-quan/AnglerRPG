@@ -71,6 +71,17 @@
 - **Bộ Nội Suy Easing & Bouncy Animation (JuiceAnimator)**:
   - Cung cấp các đường cong nội suy nảy đàn hồi (SwingOut, ElasticOut, BounceOut, Punch Scale, Pulse) cho popup phần thưởng, thông báo và hiệu ứng hào quang.
 
+### ⚡ Hệ Thống Kỹ Năng Gameplay Ability System (GAS) ([AbilitySystemComponent.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/gas/AbilitySystemComponent.java), [GameplayAbility.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/gas/GameplayAbility.java), [GameplayEffect.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/gas/GameplayEffect.java))
+- **Chuẩn Hóa Kiến Trúc Kỹ Năng Theo Chuẩn Công Nghiệp (Unreal Engine GAS Pattern)**:
+  - Tách rời toàn bộ logic kỹ năng khỏi vòng lặp câu cá thành các đối tượng `GameplayAbility` độc lập (`KeoManhAbility`, `PhaGiapAbility`, `LuotDayAbility`, `TroiBuocAbility`, `GiatKepAbility`, `DuongSucAbility`, `NemXaAbility`).
+  - Mỗi kỹ năng tự đóng gói logic kiểm tra điều kiện, chi phí thể lực, công thức sát thương, hoạt ảnh VFX và rung chấn màn hình.
+- **Hệ Thống Hiệu Ứng Trạng Thái (GameplayEffect - Buffs & Debuffs)**:
+  - Quản lý tập trung mọi hiệu ứng tăng/giảm sát thương, giảm lực kéo cá, đóng băng cá và hồi phục thể lực theo chu kỳ thời gian (Periodic ticks).
+  - Tự động tiêu biến và giải phóng khi hết thời gian hoặc kết thúc trận câu.
+- **Quản Lý Hồi Chiêu Động & Tương Thích Tuyệt Đối**:
+  - `AbilitySystemComponent` (ASC) tự động đếm lùi thời gian hồi chiêu từng khung hình, loại bỏ hàng chục biến timer/cooldown rời rạc trước đây.
+  - Tương thích 100% với hệ thống gán phím QWER, thanh HUD hiển thị và bộ trang bị Thời Không (-20% Cooldown).
+
 ### 🛡️ Rà Soát Bảo Mật & Ẩn Tệp Tin Riêng Tư Trên GitHub ([.gitignore](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/.gitignore))
 - **Bảo Vệ Tệp Lưu Dữ Liệu Người Chơi**:
   - Ẩn toàn bộ `angler_save*.json`, `save_*.json`, `*.sav`, `*.save`, `*.save.json` để người chơi/lập trình viên không vô tình đẩy dữ liệu lưu cá nhân lên kho lưu trữ công khai GitHub.

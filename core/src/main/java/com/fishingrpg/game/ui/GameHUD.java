@@ -3128,7 +3128,9 @@ public class GameHUD {
     }
 
     private float getCooldown(String skillId) {
-        if (skillId == null) return 0f;
+        if (skillId == null || screen == null || screen.fishingManager == null) return 0f;
+        float cd = screen.fishingManager.getAbilitySystem().getCooldown(skillId);
+        if (cd > 0f) return cd;
         if (skillId.equals("keo_manh")) return screen.fishingManager.keoManhCooldown;
         if (skillId.equals("giat_kep")) return screen.fishingManager.giatKepCooldown;
         if (skillId.equals("duong_suc")) return screen.fishingManager.duongSucCooldown;
