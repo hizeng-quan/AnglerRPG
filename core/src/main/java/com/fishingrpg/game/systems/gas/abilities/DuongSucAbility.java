@@ -17,7 +17,7 @@ public class DuongSucAbility extends GameplayAbility {
 
     @Override
     public float getBaseCooldown(AbilityContext ctx) {
-        return 10f;
+        return 9.0f;
     }
 
     @Override
@@ -30,6 +30,7 @@ public class DuongSucAbility extends GameplayAbility {
         GameplayEffect effect = new GameplayEffect("effect_duong_suc", "Dưỡng Sức", channelTime)
                 .setStaminaRegenPerSec(regenPerSec);
         ctx.fishingManager.getAbilitySystem().applyEffect(effect);
+        ctx.fishingManager.duongSucChannelTimer = channelTime;
 
         ctx.fishingManager.combatMessage = "DƯỠNG SỨC! Đang hồi phục thể lực nhanh chóng!";
         ctx.audio.playSFX("sfx_success");

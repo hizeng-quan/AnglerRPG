@@ -17,7 +17,7 @@ public class TroiBuocAbility extends GameplayAbility {
 
     @Override
     public float getBaseCooldown(AbilityContext ctx) {
-        return 25f;
+        return 16.0f;
     }
 
     @Override
@@ -29,6 +29,7 @@ public class TroiBuocAbility extends GameplayAbility {
                 .setFreezeFish(true)
                 .setFishPullMultiplier(0f);
         ctx.fishingManager.getAbilitySystem().applyEffect(effect);
+        ctx.fishingManager.troiBuocTimer = duration;
 
         ctx.fishingManager.combatMessage = "TRÓI BUỘC! Cá bị phong ấn không thể di chuyển!";
         ctx.audio.playSFX("sfx_skill");

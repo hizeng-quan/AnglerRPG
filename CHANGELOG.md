@@ -4,6 +4,136 @@
 
 ---
 
+## 📅 [2026-10-26] - Phiên bản v0.4.24 (Mã Hóa File Save Chống Sửa Đổi, Chốt Hạn Sự Kiện Lạc Hồng 28/10 & Cơ Chế Chuyển Giao Mùa Halloween)
+
+### 🛡️ Bảo Mật File Save & Chống Gian Lận Dữ Liệu ([SaveManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/data/SaveManager.java), [SettingsDialog.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/SettingsDialog.java))
+- **Mã Hóa Toàn Diện File Save Bằng Thuật Toán AES-256**:
+  - Khắc phục nguy cơ người chơi mở file lưu trữ bằng Notepad hoặc Text Editor để tự ý sửa Vàng, Kim Cương, Cấp độ, Điểm kỹ năng hoặc Trang bị gacha.
+  - Áp dụng thuật toán mã hóa khối chuẩn công nghiệp `AES/CBC/PKCS5Padding` với khóa bí mật 256-bit được sinh từ hàm băm SHA-256 kết hợp muối (Salt) dự án.
+  - Mỗi lần xuất file đều tự động tạo một Vector khởi tạo (IV) ngẫu nhiên 16-byte (`SecureRandom`), đảm bảo cùng một dữ liệu xuất ở hai thời điểm khác nhau sẽ cho ra hai chuỗi mã hóa hoàn toàn khác biệt.
+- **Hệ Thống Kiểm Tra Tính Toàn Vẹn & Báo Động Can Thiệp (Tamper Detection)**:
+  - Tính toán mã băm SHA-256 (32 bytes) của dữ liệu JSON gốc và đóng gói trực tiếp vào phần đầu payload trước khi mã hóa Base64 (`ANGLER_SECURE_SAVE_v1:`).
+  - Khi nạp dữ liệu: Sau khi giải mã AES, hệ thống tự động băm lại chuỗi văn bản và so sánh đối chiếu bằng `MessageDigest.isEqual` (chống tấn công Timing Attack).
+  - Nếu phát hiện bất kỳ ký tự nào bị sửa đổi dù chỉ 1 bit, hệ thống sẽ lập tức từ chối nạp, ghi nhật ký cảnh báo và hiển thị thông báo lỗi trên UI: *"Không tìm thấy dữ liệu hợp lệ (Dữ liệu bị lỗi hoặc đã qua chỉnh sửa)!"*.
+- **Chuẩn Hóa Đuôi File Mở Rộng `.sav` & Sao Chép Clipboard Tiện Lợi**:
+  - Đổi tên tệp xuất mặc định sang định dạng `.sav` (`angler_save_yyyyMMdd_HHmmss.sav` và bản fallback `angler_save.sav`), hạn chế việc hệ điều hành tự động gán mở file bằng Notepad.
+  - Chuỗi dữ liệu sao chép vào Clipboard cũng là chuỗi đã được mã hóa an toàn.
+  - FileDialog trong Cài Đặt hỗ trợ bộ lọc mở rộng `*.sav;*.json;*.bak`.
+- **Tương Thích Ngược & An Toàn Tuyệt Đối**:
+  - Bộ giải mã thông minh nhận diện định dạng: Nếu người chơi nạp file `.json` hoặc file `.bak` cũ (từ các bản v0.4.23 trở về trước), game vẫn tự động tiếp nhận mượt mà và sẽ tự động nâng cấp sang định dạng mã hóa mới ở lần xuất tiếp theo.
+
+### ⏳ Chốt Hạn Sự Kiện Lạc Hồng & Cơ Chế Khóa An Toàn ([EventManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/EventManager.java), [EventScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/EventScreen.java))
+- **Ấn Định Thời Gian Bế Mạc Sự Kiện Lạc Hồng**:
+  - Thiết lập thời điểm kết thúc chính thức của Sự kiện Lạc Hồng vào đúng **23:59:59 ngày 28/10/2026**.
+  - Đồng hồ đếm ngược tại Header sự kiện tự động tính toán thời gian còn lại (ngày/giờ) theo thời gian thực đồng bộ chống tua giờ.
+- **Cơ Chế Khóa Cửa Hàng & Chống Đổi Đồ Khi Hết Hạn**:
+  - Sau thời khắc 23:59:59 ngày 28/10, phương thức `EventManager.isEventActive()` chuyển sang `false`.
+  - Toàn bộ các nút đổi vật phẩm trong Cửa Hàng Sự Kiện (Set Vệ Quốc, Vé quay, Vàng) tự động chuyển sang màu xám mờ và hiển thị nhãn: `"ĐÃ ĐÓNG (HẾT HẠN)"`.
+  - Lệnh mua `buyShopItem` kích hoạt kiểm tra an toàn, chặn mọi thao tác đổi và hiển thị thông báo: *"Sự kiện Lạc Hồng đã kết thúc! Cửa hàng đã đóng cửa."*.
+- **Tự Động Quy Đổi Điểm Sự Kiện Tồn Đọng Sang Vàng (Grace Transition)**:
+  - Nhằm bảo vệ công sức cày cuốc của cần thủ, khi sự kiện kết thúc, toàn bộ Điểm Sự Kiện còn dư sẽ được tự động quy đổi thành Vàng với tỉ lệ ưu đãi: **1 Điểm SK = 1,000 Vàng**, nạp thẳng vào túi đồ người chơi và reset điểm về 0 để chuẩn bị cho mùa sự kiện mới.
+  - Trong giai đoạn chuyển giao từ 29/10 đến 30/10, Header sự kiện hiển thị thông báo: *"ĐÃ KẾT THÚC (Halloween sau: Xd Yh)"*.
+
+---
+
+## 📅 [2026-10-25] - Phiên bản v0.4.23 (Sửa Lỗi Giao Diện Tiền Tệ, Cooldown, Cơ Chế Kéo Dây, Hệ Thống Phím Bấm, Chi Tiết Skill Cá & Kho Nhiệm Vụ Mới)
+
+### 📖 Sổ Tay Thủy Tộc - Cơ Chế Kỹ Năng Của Cá & Giao Diện Tiền Tệ ([CatalogScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/CatalogScreen.java), [Fish.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/entities/Fish.java), [EquipmentIconRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/EquipmentIconRenderer.java))
+- **Hiển Thị Chi Tiết Cơ Chế Kỹ Năng Của Từng Loài Cá**:
+  - Bổ sung hệ thống mô tả chi tiết hiệu ứng (`Fish.getSkillDescription`) cho toàn bộ 20 kỹ năng thủy tộc trong game (Quẫy bùn, Lặn sâu, Cuồng nộ, Bứt tốc, Sóng thần, Giật điện, Nhảy vọt, Phun mực mù, Sóng âm, Quét xúc tu, Hút máu, Bão tố, và các nội tại Vỏ cứng, Bền bỉ, Trơn trượt, Ẩn mình, Xúc tu siết).
+  - Tự động co giãn chiều cao tooltip thẻ cá theo số lượng kỹ năng của cá, hiển thị bullet vàng kèm tên kỹ năng và mô tả tác động trực quan.
+- **Giãn Cách Dòng Hiển Thị Tiền Tệ**:
+  - Khắc phục lỗi icon Đồng Vàng và Kim Cương bị dính sát đè lên nhau và chữ số bị chèn dòng trong dock tiền tệ Sổ Tay Thủy Tộc.
+  - Tăng chiều cao khung dock lên 54px, phân chia 2 hàng Vàng và Kim Cương với khoảng cách 24px thoáng đãng và bổ sung đường kẻ phân cách tinh tế.
+- **Đồng Nhất Mỹ Thuật Icon Đồng Vàng**:
+  - Cập nhật `EquipmentIconRenderer.drawGoldCoinIcon`: loại bỏ lỗ vuông ở tâm, đồng nhất mỹ thuật với icon đồng tiền vàng tròn tại Tiệm Tạp Hóa (Shop) và HUD với các lớp kim loại bóng, viền nổi và điểm phản quang lấp lánh.
+
+### 📜 Đổi Mới Kho Nhiệm Vụ Hằng Ngày & Hằng Tuần (Quest Bank Rework) ([QuestManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/QuestManager.java), [FishingManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/FishingManager.java), [PlayScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/PlayScreen.java), [Player.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/entities/Player.java))
+- **Kho Nhiệm Vụ Đa Dạng - Triệt Tiêu Trùng Lặp Yêu Cầu**:
+  - Loại bỏ hoàn toàn tình trạng các nhiệm vụ trùng lặp mục tiêu (như câu 3, câu 5, câu 7 cá cùng lúc).
+  - Xây dựng 12 danh mục nhiệm vụ Hằng Ngày phong phú và độc nhất:
+    1. *Ngư Phủ Cần Mẫn*: Câu 5 con cá bất kỳ.
+    2. *Canh Góc Chuẩn Xác*: Đạt PERFECT khi quăng cần 3 lần.
+    3. *Săn Cá Quý Hiếm*: Câu được 1 cá bậc Rare trở lên.
+    4. *Khiêu Chiến Thủy Quái*: Đánh bại 1 Thủy Quái Boss thế giới.
+    5. *Vận Dụng Tuyệt Kỹ*: Sử dụng kỹ năng 4 lần khi câu cá.
+    6. *Dưỡng Sức Tiếp Năng*: Dùng 2 vật phẩm tiêu hao hỗ trợ.
+    7. *Làm Sạch Vùng Nước*: Trục vớt 1 rác thải hoặc rương báu trôi dạt.
+    8. *Chiến Lợi Nặng Ký*: Bắt 1 cá có trọng lượng từ 10kg trở lên.
+    9. *Kỹ Thuật Điêu Luyện*: Câu thành công 1 cá mà lực căng dây không vượt quá 85%.
+    10. *Giao Thương Hội Quán*: Tiêu 150 Vàng tại Tiệm Tạp Hóa.
+    11. *Vận Mệnh Biển Cả*: Quay Gacha 1 lần.
+    12. *Hải Trình Viễn Du*: Đổi vùng nước câu sang bản đồ khác.
+  - Cập nhật 7 danh mục nhiệm vụ Hằng Tuần thử thách và chuyên sâu (Câu 40 cá, 15 Perfect, 3 Boss, 4 Epic+, 2 Kình Ngư 20kg+, 20 Kỹ năng, Tiêu 1.500 Vàng).
+
+### ⏱️ Cây Kỹ Năng - Xóa Ký Tự Ô Vuông & Bố Cục Cooldown ([SkillTreeScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/SkillTreeScreen.java))
+- **Xóa Ký Tự Lỗi Font**:
+  - Loại bỏ ký tự emoji đồng hồ `⏱` không có trong atlas font Bitmap, thay bằng dấu chấm bullet thanh lịch `•` (`• Thời gian hồi chiêu:`).
+- **Tránh Chữ Đè Lên Nút Nâng Cấp**:
+  - Điều chỉnh khoảng cách hiển thị hiệu ứng kỹ năng (`curY`) và cố định dòng thông tin Cooldown nằm an toàn ở phía trên nút Nâng Cấp/Mở Khóa, triệt tiêu hoàn toàn lỗi chữ bị nút xanh đè lên.
+  - Căn chỉnh dòng nhắc số sách kỹ năng có trong túi nằm cách nút bấm 10px gọn gàng.
+
+### ⌨️ Đại Tu Hệ Thống Phím Bấm & Cơ Chế Hoán Đổi Tự Động ([KeybindManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/KeybindManager.java), [SettingsDialog.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/SettingsDialog.java), [PlayScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/PlayScreen.java))
+- **Tự Động Hoán Đổi Phím Khi Trùng (Auto-Swap)**:
+  - Khắc phục triệt để lỗi không đổi được keybind trong Cài Đặt do cơ chế chặn trùng phím: Khi người chơi gán một phím đã được hành động khác sử dụng, hệ thống sẽ tự động hoán đổi phím giữa 2 hành động thay vì hủy thao tác.
+  - Hiển thị thông báo xác nhận hoán đổi rõ ràng (ví dụ: *"Đã gán phím [W] cho Kỹ Năng 1 (hoán đổi [Q] sang Kỹ Năng 2)"*).
+- **Quét Phím Dự Phòng Cho Bộ Gõ Tiếng Việt (IME/Unikey Compatibility)**:
+  - Bổ sung vòng lặp quét phím phần cứng trực tiếp `Gdx.input.isKeyJustPressed` trong `SettingsDialog` khi đang chờ gán phím, bảo đảm bắt được phím 100% kể cả khi bộ gõ Unikey/EVKey nuốt sự kiện `InputProcessor.keyDown`.
+- **Bảo Vệ Khôi Phục Phím & Đa Dạng Cách Dùng Skill**:
+  - Trong `KeybindManager`: Tự động phục hồi về phím mặc định nếu mã phím trong file Preferences bị lỗi hoặc bằng 0.
+  - Trong `PlayScreen`: Bổ sung kiểm tra dự phòng phím Q, W, E, R gốc và cho phép kích hoạt kỹ năng bằng cách click chuột trái trực tiếp vào ô kỹ năng trên thanh HUD.
+
+### 🎣 Cân Bằng Lực Căng Dây & Cơ Chế Giằng Co ([FishingManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/FishingManager.java))
+- **Lực Căng Dây Khi Kéo (Reeling Tension Feedback)**:
+  - Giải quyết thắc mắc của người chơi về việc giữ SPACE kéo dây nhưng thanh Tension không tăng:
+    - Trước đây: Việc kéo dây chỉ tính tăng Tension khi cá ở trạng thái `PULLING`. Khi cá ở trạng thái `IDLE`, kéo dây gây sát thương nhưng Tension không hề tăng.
+    - Bây giờ: Khi giữ SPACE kéo cá, lực căng dây luôn tăng nhẹ theo nhịp quay cần (`14f + 0.025f * MaxTension`) ngay cả khi cá đang IDLE, và tăng nhanh khi cá đang giằng co PULLING (`26f + 0.055f * MaxTension`), mang lại phản hồi lực căng chân thực.
+- **Giới Hạn Sàn Kháng Lực Kéo (Fish Pull Floor)**:
+  - Đặt giới hạn sàn tối thiểu 25% cho lực kéo của cá sau khi áp dụng chỉ số giảm lực kéo và kháng đứt dây (`totalPullMult = Math.max(0.25f, ...)`).
+  - Ngăn chặn tình trạng trang bị cấp cao triệt tiêu toàn bộ lực kéo của cá xuống 1% khiến thanh lực căng gần như đứng yên, giúp các trận câu luôn có tính tương tác giằng co thú vị.
+
+---
+
+## 📅 [2026-10-25] - Phiên bản v0.4.22 (Sửa Lỗi Kỹ Năng, Cân Bằng Thành Tựu & Tinh Chỉnh Giao Diện)
+
+### ⚔️ Khắc Phục Lỗi Kỹ Năng Chiến Đấu ([FishingManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/FishingManager.java), [DuongSucAbility.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/gas/abilities/DuongSucAbility.java), [TroiBuocAbility.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/gas/abilities/TroiBuocAbility.java))
+- **Dưỡng Sức (Channeling Space Fix)**:
+  - Khắc phục triệt để lỗi người chơi vẫn có thể bấm/giữ SPACE gây sát thương làm giảm HP cá trong lúc đang vận sức hồi thể lực.
+  - Đồng bộ trạng thái vận sức giữa `duongSucChannelTimer` và GAS Gameplay Effect (`effect_duong_suc`); khi đang vận sức, toàn bộ sát thương space bị triệt tiêu hoàn toàn và không kích hoạt điều kiện sẩy cá do chùng dây.
+- **Trói Buộc (Reeling Tension Fix)**:
+  - Khắc phục triệt để lỗi khi cá đang bị dính hiệu ứng Trói Buộc (đóng băng lực kéo) mà người chơi bấm giữ SPACE kéo dây thì lực căng (Tension) vẫn bị tăng lên.
+  - Thiết lập lực kéo cá bằng 0 và tỷ lệ gia tăng lực căng bằng 0 khi cá đang chịu hiệu ứng `isTroiBuoc` / `abilitySystem.isFishFrozen()`.
+
+### 🏆 Cân Bằng Lại Phần Thưởng 48 Mốc Thành Tựu ([QuestManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/QuestManager.java))
+- **Điều Chỉnh Định Mức Thưởng Kim Cương Hợp Lý (2 - 30 KC)**:
+  - Cân bằng lại toàn bộ 48 mốc thành tựu trong cả 8 nhóm (Câu cá, Perfect Cast, Cá Rare, Kiếm Vàng, Tiêu Vàng, Gacha, Kỹ năng, Cấp độ) theo quy chuẩn kinh tế của game (Tier 1: 2-3 KC, Tier 2: 4-5 KC, Tier 3: 6-8 KC, Tier 4: 10-15 KC, Tier 5: 18-25 KC, Max Tier: 25-30 KC), giải quyết tình trạng lạm phát phần thưởng 400 - 600 KC.
+  - Sửa lỗi mốc thành tựu *Sát Thủ Biển Sâu* (`a_fish_5000`) bị sai mục tiêu từ 500 thành chuẩn 5.000 con cá.
+  - Cập nhật hàm `initAchievements()` để tự động đồng bộ phần thưởng, tiêu đề và mô tả mới cho cả các tệp lưu game cũ (`SaveManager`).
+
+### 🏮 Hợp Nhất Thưởng Nhiệm Vụ Sự Kiện Vào Rương Mốc ([EventManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/EventManager.java), [EventScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/EventScreen.java))
+- **Bỏ Phần Thưởng Đơn Lẻ & Nút Nhận Riêng**:
+  - Loại bỏ hoàn toàn phần thưởng đơn lẻ và nút nhận riêng lẻ trên 6 thẻ nhiệm vụ sự kiện hàng ngày.
+  - Thẻ nhiệm vụ chuyển đổi trực quan thành huy hiệu trạng thái cố định (`✓ ĐÃ XONG` khi hoàn thành, `ĐANG LÀM` khi chưa xong).
+  - Toàn bộ giá trị phần thưởng sự kiện hàng ngày được quy về Rương Mốc Sự Kiện (hoàn thành 4/6 nhiệm vụ để mở rương).
+
+### 📖 Chú Thích Kỹ Năng Động Theo Cấp & Vị Trí Cooldown ([Skill.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/skills/Skill.java), [SkillTree.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/skills/SkillTree.java), [SkillTreeScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/SkillTreeScreen.java), [GameHUD.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/GameHUD.java))
+- **Chỉ Số Kỹ Năng Tự Động Thay Đổi Theo Cấp**:
+  - Viết lại toàn bộ phần mô tả kỹ năng trong `SkillTree.java`, loại bỏ các con số cố định bị gán tĩnh (như 2s, x2/2.5/3, 10s, 0.5s/cấp).
+  - Tách biệt rõ ràng phần mô tả tính năng tổng quan và phần thông số hiệu ứng được tính toán động chính xác theo cấp độ hiện tại (`getCurrentLevelEffectString()`).
+- **Chuyển Thông Tin Cooldown Xuống Dưới**:
+  - Trên giao diện Cây Kỹ Năng (`SkillTreeScreen`): Gỡ bỏ chữ `• Hồi chiêu:` ở badge đầu trang; đưa thông tin thời gian hồi chiêu xuống phía dưới cùng của khối hiệu ứng.
+  - Trên thanh HUD chiến đấu (`GameHUD`): Đưa chỉ số Hồi chiêu (`⏱ Hồi chiêu`) và Tiêu hao thể lực (`⚡ Tốn Thể lực`) xuống đáy khung tooltip hover.
+
+### 🎨 Tinh Chỉnh Giao Diện & Văn Bản Trang Bị ([EquipmentScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/EquipmentScreen.java), [CatalogScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/CatalogScreen.java), [EquipmentIconRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/EquipmentIconRenderer.java))
+- **Tinh Giản Văn Bản Trang Bị**:
+  - Đổi *"Độ bền dây (Max Tension):"* thành *"Độ bền dây:"* gọn gàng trên cả danh sách trang bị và popover tổng hợp chỉ số.
+  - Loại bỏ từ *"xịn"* khỏi cụm *"Tỉ lệ cá hiếm / xịn:"* thành *"Tỉ lệ cá hiếm:"*.
+- **Icon Vector Tiền Tệ Trong Sổ Tay (Catalog)**:
+  - Thêm phương thức vector `drawGoldCoinIcon` chuẩn mỹ thuật trong `EquipmentIconRenderer`.
+  - Thay thế chữ *"Vàng:"* và *"KC:"* bằng icon vector Đồng Vàng và Kim Cương trực tiếp trên thanh dock số dư tài nguyên của Sổ Tay Thủy Tộc.
+
+---
+
 ## 📅 [2026-10-23] - Phiên bản v0.4.21 (Thưởng Kim Cương Sổ Tay Thủy Tộc & Sửa Lỗi Âm Thanh SFX)
 
 ### 📖 Bổ Sung Thưởng Kim Cương Sổ Tay Thủy Tộc ([CollectionDatabase.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/data/CollectionDatabase.java), [CatalogScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/CatalogScreen.java), [Player.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/entities/Player.java), [SaveManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/data/SaveManager.java))
@@ -81,6 +211,18 @@
 - **Quản Lý Hồi Chiêu Động & Tương Thích Tuyệt Đối**:
   - `AbilitySystemComponent` (ASC) tự động đếm lùi thời gian hồi chiêu từng khung hình, loại bỏ hàng chục biến timer/cooldown rời rạc trước đây.
   - Tương thích 100% với hệ thống gán phím QWER, thanh HUD hiển thị và bộ trang bị Thời Không (-20% Cooldown).
+- **Làm Mới Hồi Chiêu Tức Thì Sau Mỗi Lần Câu (Instant Cooldown Reset)**:
+  - Tất cả kỹ năng (Kéo Mạnh, Giật Kép, Phá Giáp, Lướt Dây, Trói Buộc, Dưỡng Sức) được tự động hồi lại 100% (cooldown về 0) ngay khi kết thúc trận câu hoặc bắt đầu lượt câu mới, không bao giờ bị dính thời gian hồi chiêu từ trận trước.
+- **Cân Bằng Thời Gian Hồi Chiêu Dựa Trên Sức Mạnh Thực Chiến**:
+  - **Kéo Mạnh**: Điều chỉnh về **`3.5s`** (đòn sát thương chính, căn nhịp kéo thường bằng Space).
+  - **Giật Kép**: Tăng từ `5.0s` lên **`8.0s`** (sát thương bộc phá x3.0 cực lớn, cần tính toán thời điểm dùng).
+  - **Phá Giáp**: Giảm từ `20.0s` xuống **`14.0s`** (hiệu ứng debuff 10s, downtime 4s, vừa đủ kích hoạt 2 lần trong trận đánh Boss lớn).
+  - **Lướt Dây**: Giảm từ `15.0s` xuống **`12.0s`** (thời gian hiệu lực 5-7s, xen kẽ nhịp phòng ngự an toàn).
+  - **Trói Buộc**: Giảm từ `25.0s` xuống **`16.0s`** (khống chế cứng phong ấn cá, dùng ngắt chiêu Boss hoặc cứu dây).
+  - **Dưỡng Sức**: Cân bằng chuẩn **`9.0s`** (vận sức 1-2s hồi 50 Thể lực, hồi sức bền bỉ khi câu cá lớn).
+- **Bổ Sung Thông Tin Cooldown & Tooltip Trực Quan**:
+  - Hiển thị nhãn `⏱ Hồi chiêu: X.Xs` trực tiếp trong bảng chi tiết kỹ năng của `SkillTreeScreen`.
+  - Bổ sung popover tooltip khi rê chuột vào các ô kỹ năng `[Q]`, `[W]`, `[E]`, `[R]` trong màn hình chiến đấu câu cá, hiển thị đầy đủ Tên, Phím tắt, Hồi chiêu, Chi phí Thể lực và Mô tả chi tiết.
 
 ### 🛡️ Rà Soát Bảo Mật & Ẩn Tệp Tin Riêng Tư Trên GitHub ([.gitignore](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/.gitignore))
 - **Bảo Vệ Tệp Lưu Dữ Liệu Người Chơi**:

@@ -897,13 +897,13 @@ public class SkillTreeScreen implements Screen {
             font.draw(game.batch, selectedSkill.description, pX + 25f, pH - 135f, pW - 50f, Align.left, true);
 
             // Current effect
-            float curY = pH - 240f;
+            float curY = pH - 200f;
             if (selectedSkill.isUnlocked()) {
                 font.setColor(0.4f, 1f, 0.65f, 1f);
                 font.draw(game.batch, "❖ Hiệu ứng hiện tại:", pX + 25f, curY);
                 font.setColor(Color.WHITE);
-                font.draw(game.batch, selectedSkill.getCurrentLevelEffectString(), pX + 25f, curY - 25f, pW - 50f, Align.left, true);
-                curY -= 65f;
+                font.draw(game.batch, selectedSkill.getCurrentLevelEffectString(), pX + 25f, curY - 22f, pW - 50f, Align.left, true);
+                curY -= 54f;
             }
 
             // Next level effect
@@ -911,20 +911,32 @@ public class SkillTreeScreen implements Screen {
                 font.setColor(0.4f, 0.85f, 1f, 1f);
                 font.draw(game.batch, "❖ Cấp tiếp theo:", pX + 25f, curY);
                 font.setColor(Color.WHITE);
-                font.draw(game.batch, selectedSkill.getNextLevelEffectString(), pX + 25f, curY - 25f, pW - 50f, Align.left, true);
+                font.draw(game.batch, selectedSkill.getNextLevelEffectString(), pX + 25f, curY - 22f, pW - 50f, Align.left, true);
+                curY -= 54f;
             }
 
-            // Upgrade Button Text
+            // Book indicator text anchored cleanly above upgrade button
             String bName = getBookNameForSkill(selectedSkill.id);
             boolean hasBook = bName != null && player.getItemCount(bName) > 0;
             boolean canUpSP = tree.canUpgrade(selectedSkill.id, player.getSkillPoints());
 
+            float bookY = upgradeBtn.y + upgradeBtn.height + 10f;
             if (hasBook) {
                 font.setColor(1f, 0.85f, 0.25f, 1f);
                 font.getData().setScale(0.82f);
-                font.draw(game.batch, "★ Trong túi có: " + player.getItemCount(bName) + " " + bName + " (Có thể dùng thay SP)", pX + 25f, curY - 75f);
+                font.draw(game.batch, "★ Trong túi có: " + player.getItemCount(bName) + " " + bName + " (Có thể dùng thay SP)", pX + 25f, bookY);
                 font.getData().setScale(1f);
             }
+
+            // Cooldown info placed safely above buttons/book info without any overlap or missing glyphs
+            if (selectedSkill.type == Skill.SkillType.ACTIVE && selectedSkill.getCooldown() > 0) {
+                float minCdY = hasBook ? (bookY + 24f) : (upgradeBtn.y + upgradeBtn.height + 16f);
+                float cdY = Math.max(curY, minCdY);
+                font.setColor(0.45f, 0.85f, 1f, 1f);
+                font.draw(game.batch, "• Thời gian hồi chiêu: " + String.format(java.util.Locale.US, "%.1fs", selectedSkill.getCooldown()), pX + 25f, cdY);
+            }
+
+            // Upgrade Button Text
 
             if (!selectedSkill.isMaxed()) {
                 String cost;

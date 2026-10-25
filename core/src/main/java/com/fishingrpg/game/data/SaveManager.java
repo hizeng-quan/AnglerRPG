@@ -108,10 +108,122 @@ public class SaveManager {
     }
 
     // =========================================================================
+    // Encryption & Anti-Tamper Security
+    // =========================================================================
+
+    public static final String ENCRYPTION_HEADER = "ANGLER_SECURE_SAVE_v1:";
+    private static final String SECRET_SALT = "AnglerRPG_MasterSecretKey_2026#TamperProof!@X9";
+
+    /**
+     * Mã hóa chuỗi JSON dữ liệu bằng AES/CBC/PKCS5Padding kết hợp mã kiểm tra băm SHA-256
+     * để chống gian lận và ngăn chặn người chơi can thiệp chỉnh sửa file save thủ công.
+     */
+    public static String encryptData(String plainText) {
+        if (plainText == null || plainText.isEmpty()) return plainText;
+        try {
+            byte[] plainBytes = plainText.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+
+            // 1. Tính toán SHA-256 Checksum của dữ liệu gốc để kiểm tra tính toàn vẹn
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("SHA-256");
+            byte[] checksum = md.digest(plainBytes);
+
+            // 2. Tạo khóa AES-256 bí mật từ SECRET_SALT
+            byte[] keyBytes = md.digest(SECRET_SALT.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            javax.crypto.spec.SecretKeySpec keySpec = new javax.crypto.spec.SecretKeySpec(keyBytes, "AES");
+
+            // 3. Khởi tạo vector ngẫu nhiên IV 16-byte cho chế độ mã hóa CBC
+            byte[] iv = new byte[16];
+            new java.security.SecureRandom().nextBytes(iv);
+            javax.crypto.spec.IvParameterSpec ivSpec = new javax.crypto.spec.IvParameterSpec(iv);
+
+            // 4. Mã hóa AES
+            javax.crypto.Cipher cipher = javax.crypto.Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(javax.crypto.Cipher.ENCRYPT_MODE, keySpec, ivSpec);
+            byte[] cipherBytes = cipher.doFinal(plainBytes);
+
+            // 5. Đóng gói payload: [IV (16 bytes)] + [Checksum (32 bytes)] + [Ciphertext]
+            byte[] combined = new byte[16 + 32 + cipherBytes.length];
+            System.arraycopy(iv, 0, combined, 0, 16);
+            System.arraycopy(checksum, 0, combined, 16, 32);
+            System.arraycopy(cipherBytes, 0, combined, 48, cipherBytes.length);
+
+            // 6. Mã hóa Base64 và đính kèm Header nhận dạng
+            String b64 = java.util.Base64.getEncoder().encodeToString(combined);
+            return ENCRYPTION_HEADER + b64;
+        } catch (Exception e) {
+            logError("Lỗi mã hóa dữ liệu save", e);
+            return plainText;
+        }
+    }
+
+    private static void logError(String msg, Throwable t) {
+        try {
+            if (Gdx.app != null) {
+                if (t != null) Gdx.app.error(TAG, msg, t);
+                else Gdx.app.error(TAG, msg);
+                return;
+            }
+        } catch (Throwable ignored) {}
+        System.err.println("[" + TAG + "] " + msg);
+        if (t != null) t.printStackTrace();
+    }
+
+    /**
+     * Giải mã dữ liệu save đã được mã hóa. Nếu dữ liệu bị chỉnh sửa (sai checksum hoặc lỗi giải mã),
+     * phương thức sẽ trả về null và ghi cảnh báo phát hiện can thiệp (Tamper Detection).
+     */
+    public static String decryptData(String input) {
+        if (input == null) return null;
+        String trimmed = input.trim();
+        if (!trimmed.startsWith(ENCRYPTION_HEADER)) {
+            // Định dạng JSON hoặc XML cũ (hỗ trợ tương thích ngược)
+            return trimmed;
+        }
+
+        try {
+            String b64 = trimmed.substring(ENCRYPTION_HEADER.length()).trim();
+            byte[] combined = java.util.Base64.getDecoder().decode(b64);
+            if (combined.length < 48 + 16) {
+                logError("Payload lưu trữ không hợp lệ: Kích thước quá ngắn!", null);
+                return null;
+            }
+
+            byte[] iv = new byte[16];
+            byte[] expectedChecksum = new byte[32];
+            byte[] cipherBytes = new byte[combined.length - 48];
+
+            System.arraycopy(combined, 0, iv, 0, 16);
+            System.arraycopy(combined, 16, expectedChecksum, 0, 32);
+            System.arraycopy(combined, 48, cipherBytes, 0, cipherBytes.length);
+
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("SHA-256");
+            byte[] keyBytes = md.digest(SECRET_SALT.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            javax.crypto.spec.SecretKeySpec keySpec = new javax.crypto.spec.SecretKeySpec(keyBytes, "AES");
+            javax.crypto.spec.IvParameterSpec ivSpec = new javax.crypto.spec.IvParameterSpec(iv);
+
+            javax.crypto.Cipher cipher = javax.crypto.Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(javax.crypto.Cipher.DECRYPT_MODE, keySpec, ivSpec);
+            byte[] decryptedBytes = cipher.doFinal(cipherBytes);
+
+            // Kiểm tra Checksum SHA-256 phát hiện can thiệp chỉnh sửa
+            byte[] actualChecksum = md.digest(decryptedBytes);
+            if (!java.security.MessageDigest.isEqual(expectedChecksum, actualChecksum)) {
+                logError("CẢNH BÁO: Phát hiện can thiệp! Checksum file save không trùng khớp.", null);
+                return null;
+            }
+
+            return new String(decryptedBytes, java.nio.charset.StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            logError("Không thể giải mã dữ liệu save (File bị hỏng hoặc đã bị chỉnh sửa trái phép)", e);
+            return null;
+        }
+    }
+
+    // =========================================================================
     // Export / Import Save Data
     // =========================================================================
 
-    public static String exportDataToString() {
+    public static String exportPlainDataToString() {
         Preferences savePrefs = Gdx.app.getPreferences(PREF_NAME);
         Preferences recsPrefs = Gdx.app.getPreferences("AnglerRPG_Records");
 
@@ -149,17 +261,27 @@ public class SaveManager {
         }
     }
 
+    public static String exportDataToString() {
+        String plainJson = exportPlainDataToString();
+        return encryptData(plainJson);
+    }
+
     public static java.io.File exportToFile(java.io.File targetFile) throws java.io.IOException {
         if (targetFile == null) {
-            targetFile = new java.io.File("angler_save.json");
+            targetFile = new java.io.File("angler_save.sav");
         }
-        String jsonStr = exportDataToString();
-        java.nio.file.Files.writeString(targetFile.toPath(), jsonStr, java.nio.charset.StandardCharsets.UTF_8);
+        String encryptedData = exportDataToString();
+        java.nio.file.Files.writeString(targetFile.toPath(), encryptedData, java.nio.charset.StandardCharsets.UTF_8);
         return targetFile;
     }
 
-    public static boolean importDataFromString(String jsonStr, Player player) {
-        if (jsonStr == null || jsonStr.trim().isEmpty()) return false;
+    public static boolean importDataFromString(String inputStr, Player player) {
+        if (inputStr == null || inputStr.trim().isEmpty()) return false;
+        String jsonStr = decryptData(inputStr);
+        if (jsonStr == null) {
+            Gdx.app.error(TAG, "Dữ liệu lưu trữ không thể nạp: File đã bị can thiệp hoặc sai định dạng!");
+            return false;
+        }
         try {
             com.badlogic.gdx.utils.JsonReader reader = new com.badlogic.gdx.utils.JsonReader();
             com.badlogic.gdx.utils.JsonValue root = reader.parse(jsonStr);

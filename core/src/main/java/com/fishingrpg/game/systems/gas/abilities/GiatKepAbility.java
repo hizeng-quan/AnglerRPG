@@ -18,7 +18,7 @@ public class GiatKepAbility extends GameplayAbility {
 
     @Override
     public float getBaseCooldown(AbilityContext ctx) {
-        return 5f;
+        return 8.0f;
     }
 
     @Override

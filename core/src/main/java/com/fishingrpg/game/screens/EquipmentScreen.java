@@ -979,12 +979,12 @@ public class EquipmentScreen implements Screen {
             };
         } else if (eq.type == EquipmentType.LINE) {
             return new String[]{
-                String.format("Độ bền dây (Max Tension): +%.1f", eq.mainStat1),
+                String.format("Độ bền dây: +%.1f", eq.mainStat1),
                 String.format("Kháng đứt dây: +%.1f", eq.mainStat2)
             };
         } else {
             return new String[]{
-                String.format("Tỉ lệ cá hiếm / xịn: +%.1f%%", eq.mainStat1),
+                String.format("Tỉ lệ cá hiếm: +%.1f%%", eq.mainStat1),
                 String.format("Tỉ lệ giữ lại mồi: +%.1f%%", eq.mainStat2)
             };
         }
@@ -996,7 +996,7 @@ public class EquipmentScreen implements Screen {
         } else if (eq.type == EquipmentType.LINE) {
             return String.format("Lực căng: +%.0f, Kháng đứt: +%.1f", eq.mainStat1, eq.mainStat2);
         } else {
-            return String.format("Tỉ lệ cá xịn: +%.1f%%, Giữ mồi: +%.1f%%", eq.mainStat1, eq.mainStat2);
+            return String.format("Tỉ lệ cá hiếm: +%.1f%%, Giữ mồi: +%.1f%%", eq.mainStat1, eq.mainStat2);
         }
     }
 
@@ -1081,7 +1081,7 @@ public class EquipmentScreen implements Screen {
         lineY -= spacing;
 
         font.setColor(0.95f, 0.95f, 1f, 1f);
-        font.draw(game.batch, "• Độ Bền Dây (Max Tension):", x + 20f, lineY);
+        font.draw(game.batch, "• Độ Bền Dây:", x + 20f, lineY);
         font.setColor(0.3f, 1f, 0.6f, 1f);
         font.draw(game.batch, String.valueOf((int)player.getMaxLineTension()), valX, lineY);
         lineY -= spacing;
@@ -1094,7 +1094,7 @@ public class EquipmentScreen implements Screen {
         lineY -= spacing;
 
         font.setColor(0.95f, 0.95f, 1f, 1f);
-        font.draw(game.batch, "• Tỉ Lệ Cá Hiếm / Xịn:", x + 20f, lineY);
+        font.draw(game.batch, "• Tỉ Lệ Cá Hiếm:", x + 20f, lineY);
         font.setColor(0.4f, 0.85f, 1f, 1f);
         float rareB = player.getEquippedHook() != null ? player.getEquippedHook().mainStat1 : 0f;
         font.draw(game.batch, String.format("+%.1f%%", rareB), valX, lineY);

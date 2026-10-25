@@ -89,18 +89,18 @@ public class QuestManager {
 
     private static final List<QuestTemplate> DAILY_POOL = new ArrayList<>();
     static {
-        DAILY_POOL.add(new QuestTemplate("d_catch", "Thợ Câu Chăm Chỉ", "Câu thành công 5 con cá", 5, 25, 0));
-        DAILY_POOL.add(new QuestTemplate("d_perfect", "Tay Câu Cừ Khôi", "Đạt PERFECT khi quăng cần 3 lần", 3, 25, 0));
-        DAILY_POOL.add(new QuestTemplate("d_gacha", "Thử Vận May", "Quay Gacha 1 lần", 1, 25, 0));
-        DAILY_POOL.add(new QuestTemplate("d_spend", "Mua Sắm", "Tiêu 100 Vàng tại Tiệm Tạp Hóa", 100, 25, 0));
-        DAILY_POOL.add(new QuestTemplate("d_rare", "Thợ Săn Đồ Hiếm", "Câu 1 con cá Rare trở lên", 1, 25, 0));
-        DAILY_POOL.add(new QuestTemplate("d_skill", "Nâng Cao Tay Nghề", "Sử dụng Kỹ năng 5 lần", 5, 25, 0));
-        DAILY_POOL.add(new QuestTemplate("d_catch_3", "Khởi Động Ngày Mới", "Câu thành công 3 con cá", 3, 25, 0));
-        DAILY_POOL.add(new QuestTemplate("d_perfect_2", "Canh Góc Chuẩn", "Đạt PERFECT khi quăng cần 2 lần", 2, 25, 0));
-        DAILY_POOL.add(new QuestTemplate("d_spend_200", "Thương Nhân Hào Phóng", "Tiêu 200 Vàng trong ngày", 200, 25, 0));
-        DAILY_POOL.add(new QuestTemplate("d_skill_3", "Thuần Thục Kỹ Năng", "Sử dụng Kỹ năng 3 lần", 3, 25, 0));
-        DAILY_POOL.add(new QuestTemplate("d_catch_7", "Bội Thu Ngày Mới", "Câu thành công 7 con cá", 7, 25, 0));
-        DAILY_POOL.add(new QuestTemplate("d_rare_2", "Săn Cá Khủng", "Câu 2 con cá Rare trở lên", 2, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_catch", "Ngư Phủ Cần Mẫn", "Câu thành công 5 con cá bất kỳ", 5, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_perfect", "Canh Góc Chuẩn Xác", "Đạt PERFECT khi quăng cần 3 lần", 3, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_rare", "Săn Cá Quý Hiếm", "Câu được 1 con cá bậc Rare trở lên", 1, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_boss", "Khiêu Chiến Thủy Quái", "Đánh bại 1 Thủy Quái Boss thế giới", 1, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_skill", "Vận Dụng Tuyệt Kỹ", "Sử dụng kỹ năng chiến đấu 4 lần", 4, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_item", "Dưỡng Sức Tiếp Năng", "Sử dụng 2 vật phẩm tiêu hao hỗ trợ", 2, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_trash", "Làm Sạch Vùng Nước", "Trục vớt được 1 rác thải hoặc rương báu", 1, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_heavy", "Chiến Lợi Nặng Ký", "Câu được 1 con cá nặng từ 10kg trở lên", 1, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_clean", "Kỹ Thuật Điêu Luyện", "Bắt 1 cá mà không để Tension vượt 85%", 1, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_spend", "Giao Thương Hội Quán", "Tiêu 150 Vàng tại Tiệm Tạp Hóa", 150, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_gacha", "Vận Mệnh Biển Cả", "Thử vận may 1 lần tại Vòng Quay Gacha", 1, 25, 0));
+        DAILY_POOL.add(new QuestTemplate("d_travel", "Hải Trình Viễn Du", "Đổi vùng nước câu sang bản đồ khác", 1, 25, 0));
     }
 
     private void resetDailyQuests() {
@@ -121,83 +121,88 @@ public class QuestManager {
         weeklyPoints = 0;
         weeklyChestClaimed = false;
 
-        weeklyQuests.add(new Quest("w_catch", Quest.Type.WEEKLY, "Vua Biển Cả", "Câu thành công 50 con cá", 50, 25, 0));
-        weeklyQuests.add(new Quest("w_perfect", Quest.Type.WEEKLY, "Chuyên Gia", "Đạt PERFECT khi quăng cần 20 lần", 20, 25, 0));
-        weeklyQuests.add(new Quest("w_gacha", Quest.Type.WEEKLY, "Người Chơi Hệ Gacha", "Quay Gacha 10 lần", 10, 25, 0));
-        weeklyQuests.add(new Quest("w_spend", Quest.Type.WEEKLY, "Đại Gia Tiêu Tiền", "Tiêu 2000 Vàng", 2000, 25, 0));
-        weeklyQuests.add(new Quest("w_rare", Quest.Type.WEEKLY, "Huyền Thoại", "Câu 1 con cá Legendary", 1, 25, 0));
-        weeklyQuests.add(new Quest("w_level", Quest.Type.WEEKLY, "Thăng Tiến", "Lên 1 Level", 1, 25, 0));
+        weeklyQuests.add(new Quest("w_catch", Quest.Type.WEEKLY, "Vua Biển Cả", "Câu thành công 40 con cá", 40, 25, 0));
+        weeklyQuests.add(new Quest("w_perfect", Quest.Type.WEEKLY, "Xạ Thủ Cần Câu", "Đạt PERFECT khi quăng cần 15 lần", 15, 25, 0));
+        weeklyQuests.add(new Quest("w_boss", Quest.Type.WEEKLY, "Kẻ Diệt Thủy Quái", "Đánh bại 3 Thủy Quái Boss", 3, 25, 0));
+        weeklyQuests.add(new Quest("w_rare", Quest.Type.WEEKLY, "Săn Tìm Huyền Thoại", "Câu được 4 cá bậc Epic trở lên", 4, 25, 0));
+        weeklyQuests.add(new Quest("w_heavy", Quest.Type.WEEKLY, "Kình Ngư Khổng Lồ", "Câu 2 con cá nặng từ 20kg trở lên", 2, 25, 0));
+        weeklyQuests.add(new Quest("w_skill", Quest.Type.WEEKLY, "Bậc Thầy Bí Kỹ", "Sử dụng kỹ năng 20 lần trong chiến đấu", 20, 25, 0));
+        weeklyQuests.add(new Quest("w_spend", Quest.Type.WEEKLY, "Đại Gia Vùng Vịnh", "Tiêu 1.500 Vàng tại Tiệm Tạp Hóa", 1500, 25, 0));
     }
 
     private void initAchievements() {
         List<Quest> allAch = new ArrayList<>();
         // 1. Catch Fish
-        allAch.add(new Quest("a_fish_1", Quest.Type.ACHIEVEMENT, "Bước Đầu", "Câu thành công 1 con cá", 1, 0, 5));
-        allAch.add(new Quest("a_fish_10", Quest.Type.ACHIEVEMENT, "Làm Quen", "Câu thành công 10 con cá", 10, 0, 10));
-        allAch.add(new Quest("a_fish_50", Quest.Type.ACHIEVEMENT, "Thợ Câu Mới Nổi", "Câu thành công 50 con cá", 50, 0, 25));
-        allAch.add(new Quest("a_fish_100", Quest.Type.ACHIEVEMENT, "Khởi Đầu Gian Nan", "Câu thành công 100 con cá", 100, 0, 50));
-        allAch.add(new Quest("a_fish_500", Quest.Type.ACHIEVEMENT, "Chuyên Gia Đánh Bắt", "Câu thành công 500 con cá", 500, 0, 100));
-        allAch.add(new Quest("a_fish_1000", Quest.Type.ACHIEVEMENT, "Lão Ngư", "Câu thành công 1000 con cá", 1000, 0, 200));
-        allAch.add(new Quest("a_fish_5000", Quest.Type.ACHIEVEMENT, "Sát Thủ Biển Sâu", "Câu thành công 5000 con cá", 500, 0, 400));
+        allAch.add(new Quest("a_fish_1", Quest.Type.ACHIEVEMENT, "Bước Đầu", "Câu thành công 1 con cá", 1, 0, 2));
+        allAch.add(new Quest("a_fish_10", Quest.Type.ACHIEVEMENT, "Làm Quen", "Câu thành công 10 con cá", 10, 0, 3));
+        allAch.add(new Quest("a_fish_50", Quest.Type.ACHIEVEMENT, "Thợ Câu Mới Nổi", "Câu thành công 50 con cá", 50, 0, 5));
+        allAch.add(new Quest("a_fish_100", Quest.Type.ACHIEVEMENT, "Khởi Đầu Gian Nan", "Câu thành công 100 con cá", 100, 0, 8));
+        allAch.add(new Quest("a_fish_500", Quest.Type.ACHIEVEMENT, "Chuyên Gia Đánh Bắt", "Câu thành công 500 con cá", 500, 0, 12));
+        allAch.add(new Quest("a_fish_1000", Quest.Type.ACHIEVEMENT, "Lão Ngư", "Câu thành công 1.000 con cá", 1000, 0, 18));
+        allAch.add(new Quest("a_fish_5000", Quest.Type.ACHIEVEMENT, "Sát Thủ Biển Sâu", "Câu thành công 5.000 con cá", 5000, 0, 25));
 
         // 2. Perfect Cast
-        allAch.add(new Quest("a_perfect_1", Quest.Type.ACHIEVEMENT, "Canh Góc Tốt", "Đạt PERFECT 1 lần", 1, 0, 5));
-        allAch.add(new Quest("a_perfect_10", Quest.Type.ACHIEVEMENT, "Quen Tay", "Đạt PERFECT 10 lần", 10, 0, 15));
-        allAch.add(new Quest("a_perfect_50", Quest.Type.ACHIEVEMENT, "Bách Phát Bách Trúng", "Đạt PERFECT 50 lần", 50, 0, 40));
-        allAch.add(new Quest("a_perfect_100", Quest.Type.ACHIEVEMENT, "Hoàn Mỹ", "Đạt PERFECT 100 lần", 100, 0, 80));
-        allAch.add(new Quest("a_perfect_200", Quest.Type.ACHIEVEMENT, "Thần Đồng Cần Thủ", "Đạt PERFECT 200 lần", 200, 0, 150));
-        allAch.add(new Quest("a_perfect_500", Quest.Type.ACHIEVEMENT, "Đỉnh Cao Kỹ Năng", "Đạt PERFECT 500 lần", 500, 0, 300));
+        allAch.add(new Quest("a_perfect_1", Quest.Type.ACHIEVEMENT, "Canh Góc Tốt", "Đạt PERFECT 1 lần", 1, 0, 2));
+        allAch.add(new Quest("a_perfect_10", Quest.Type.ACHIEVEMENT, "Quen Tay", "Đạt PERFECT 10 lần", 10, 0, 3));
+        allAch.add(new Quest("a_perfect_50", Quest.Type.ACHIEVEMENT, "Bách Phát Bách Trúng", "Đạt PERFECT 50 lần", 50, 0, 6));
+        allAch.add(new Quest("a_perfect_100", Quest.Type.ACHIEVEMENT, "Hoàn Mỹ", "Đạt PERFECT 100 lần", 100, 0, 10));
+        allAch.add(new Quest("a_perfect_200", Quest.Type.ACHIEVEMENT, "Thần Đồng Cần Thủ", "Đạt PERFECT 200 lần", 200, 0, 15));
+        allAch.add(new Quest("a_perfect_500", Quest.Type.ACHIEVEMENT, "Đỉnh Cao Kỹ Năng", "Đạt PERFECT 500 lần", 500, 0, 25));
 
         // 3. Catch Rare Fish
-        allAch.add(new Quest("a_rare_1", Quest.Type.ACHIEVEMENT, "May Mắn Đầu Tiên", "Câu 1 cá Rare trở lên", 1, 0, 10));
-        allAch.add(new Quest("a_rare_10", Quest.Type.ACHIEVEMENT, "Săn Mồi Khủng", "Câu 10 cá Rare", 10, 0, 30));
-        allAch.add(new Quest("a_rare_50", Quest.Type.ACHIEVEMENT, "Sát Thủ Cá Hiếm", "Câu 50 cá Rare", 50, 0, 80));
-        allAch.add(new Quest("a_rare_200", Quest.Type.ACHIEVEMENT, "Kẻ Được Chọn", "Câu 200 cá Rare", 200, 0, 200));
-        allAch.add(new Quest("a_rare_500", Quest.Type.ACHIEVEMENT, "Vua Biển Cả", "Câu 500 cá Rare", 500, 0, 400));
+        allAch.add(new Quest("a_rare_1", Quest.Type.ACHIEVEMENT, "May Mắn Đầu Tiên", "Câu 1 cá Hiếm (Rare) trở lên", 1, 0, 3));
+        allAch.add(new Quest("a_rare_10", Quest.Type.ACHIEVEMENT, "Săn Mồi Khủng", "Câu 10 cá Hiếm (Rare) trở lên", 10, 0, 5));
+        allAch.add(new Quest("a_rare_50", Quest.Type.ACHIEVEMENT, "Sát Thủ Cá Hiếm", "Câu 50 cá Hiếm (Rare) trở lên", 50, 0, 10));
+        allAch.add(new Quest("a_rare_200", Quest.Type.ACHIEVEMENT, "Kẻ Được Chọn", "Câu 200 cá Hiếm (Rare) trở lên", 200, 0, 18));
+        allAch.add(new Quest("a_rare_500", Quest.Type.ACHIEVEMENT, "Vua Biển Cả", "Câu 500 cá Hiếm (Rare) trở lên", 500, 0, 30));
 
         // 4. Earn Gold
-        allAch.add(new Quest("a_gold_1000", Quest.Type.ACHIEVEMENT, "Những Đồng Tiền Đầu Tiên", "Kiếm được 1000 Vàng", 1000, 0, 10));
-        allAch.add(new Quest("a_gold_10k", Quest.Type.ACHIEVEMENT, "Làm Giàu Không Khó", "Kiếm được 10.000 Vàng", 10000, 0, 25));
-        allAch.add(new Quest("a_gold_50k", Quest.Type.ACHIEVEMENT, "Túi Tiền Rủng Rỉnh", "Kiếm được 50.000 Vàng", 50000, 0, 60));
-        allAch.add(new Quest("a_gold_200k", Quest.Type.ACHIEVEMENT, "Đại Gia", "Kiếm được 200.000 Vàng", 200000, 0, 150));
-        allAch.add(new Quest("a_gold_500k", Quest.Type.ACHIEVEMENT, "Chúa Tể Tiền Bạc", "Kiếm được 500.000 Vàng", 500000, 0, 250));
-        allAch.add(new Quest("a_gold_1m", Quest.Type.ACHIEVEMENT, "Tỷ Phú Biển Khơi", "Kiếm được 1.000.000 Vàng", 1000000, 0, 500));
+        allAch.add(new Quest("a_gold_1000", Quest.Type.ACHIEVEMENT, "Những Đồng Tiền Đầu Tiên", "Kiếm được 1.000 Vàng", 1000, 0, 2));
+        allAch.add(new Quest("a_gold_10k", Quest.Type.ACHIEVEMENT, "Làm Giàu Không Khó", "Kiếm được 10.000 Vàng", 10000, 0, 4));
+        allAch.add(new Quest("a_gold_50k", Quest.Type.ACHIEVEMENT, "Túi Tiền Rủng Rỉnh", "Kiếm được 50.000 Vàng", 50000, 0, 8));
+        allAch.add(new Quest("a_gold_200k", Quest.Type.ACHIEVEMENT, "Đại Gia", "Kiếm được 200.000 Vàng", 200000, 0, 14));
+        allAch.add(new Quest("a_gold_500k", Quest.Type.ACHIEVEMENT, "Chúa Tể Tiền Bạc", "Kiếm được 500.000 Vàng", 500000, 0, 20));
+        allAch.add(new Quest("a_gold_1m", Quest.Type.ACHIEVEMENT, "Tỷ Phú Biển Khơi", "Kiếm được 1.000.000 Vàng", 1000000, 0, 30));
 
         // 5. Spend Gold
-        allAch.add(new Quest("a_spend_1000", Quest.Type.ACHIEVEMENT, "Chi Tiêu Hợp Lý", "Tiêu 1000 Vàng", 1000, 0, 10));
-        allAch.add(new Quest("a_spend_10k", Quest.Type.ACHIEVEMENT, "Đầu Tư Nâng Cấp", "Tiêu 10.000 Vàng", 10000, 0, 25));
-        allAch.add(new Quest("a_spend_50k", Quest.Type.ACHIEVEMENT, "Khách Vip", "Tiêu 50.000 Vàng", 50000, 0, 60));
-        allAch.add(new Quest("a_spend_100k", Quest.Type.ACHIEVEMENT, "Thương Gia", "Tiêu 100.000 Vàng", 100000, 0, 120));
-        allAch.add(new Quest("a_spend_500k", Quest.Type.ACHIEVEMENT, "Đốt Tiền Không Phanh", "Tiêu 500.000 Vàng", 500000, 0, 300));
+        allAch.add(new Quest("a_spend_1000", Quest.Type.ACHIEVEMENT, "Chi Tiêu Hợp Lý", "Tiêu 1.000 Vàng", 1000, 0, 2));
+        allAch.add(new Quest("a_spend_10k", Quest.Type.ACHIEVEMENT, "Đầu Tư Nâng Cấp", "Tiêu 10.000 Vàng", 10000, 0, 4));
+        allAch.add(new Quest("a_spend_50k", Quest.Type.ACHIEVEMENT, "Khách VIP", "Tiêu 50.000 Vàng", 50000, 0, 8));
+        allAch.add(new Quest("a_spend_100k", Quest.Type.ACHIEVEMENT, "Thương Gia", "Tiêu 100.000 Vàng", 100000, 0, 14));
+        allAch.add(new Quest("a_spend_500k", Quest.Type.ACHIEVEMENT, "Đốt Tiền Không Phanh", "Tiêu 500.000 Vàng", 500000, 0, 25));
 
         // 6. Quay Gacha (gacha)
-        allAch.add(new Quest("a_gacha_1", Quest.Type.ACHIEVEMENT, "Vận May Khởi Đầu", "Quay Gacha 1 lần", 1, 0, 5));
-        allAch.add(new Quest("a_gacha_10", Quest.Type.ACHIEVEMENT, "Thử Thách Vận May", "Quay Gacha 10 lần", 10, 0, 15));
-        allAch.add(new Quest("a_gacha_50", Quest.Type.ACHIEVEMENT, "Lún Sâu", "Quay Gacha 50 lần", 50, 0, 50));
-        allAch.add(new Quest("a_gacha_100", Quest.Type.ACHIEVEMENT, "Tín Đồ Gacha", "Quay Gacha 100 lần", 100, 0, 100));
-        allAch.add(new Quest("a_gacha_500", Quest.Type.ACHIEVEMENT, "Con Nghiện Gacha", "Quay Gacha 500 lần", 500, 0, 250));
-        allAch.add(new Quest("a_gacha_1000", Quest.Type.ACHIEVEMENT, "Hủy Diệt Nhân Phẩm", "Quay Gacha 1000 lần", 1000, 0, 500));
+        allAch.add(new Quest("a_gacha_1", Quest.Type.ACHIEVEMENT, "Vận May Khởi Đầu", "Quay Gacha 1 lần", 1, 0, 2));
+        allAch.add(new Quest("a_gacha_10", Quest.Type.ACHIEVEMENT, "Thử Thách Vận May", "Quay Gacha 10 lần", 10, 0, 4));
+        allAch.add(new Quest("a_gacha_50", Quest.Type.ACHIEVEMENT, "Lún Sâu", "Quay Gacha 50 lần", 50, 0, 8));
+        allAch.add(new Quest("a_gacha_100", Quest.Type.ACHIEVEMENT, "Tín Đồ Gacha", "Quay Gacha 100 lần", 100, 0, 12));
+        allAch.add(new Quest("a_gacha_500", Quest.Type.ACHIEVEMENT, "Con Nghiện Gacha", "Quay Gacha 500 lần", 500, 0, 20));
+        allAch.add(new Quest("a_gacha_1000", Quest.Type.ACHIEVEMENT, "Hủy Diệt Nhân Phẩm", "Quay Gacha 1.000 lần", 1000, 0, 30));
 
         // 7. Use Skill
-        allAch.add(new Quest("a_skill_1", Quest.Type.ACHIEVEMENT, "Sử Dụng Kỹ Năng", "Sử dụng Kỹ năng 1 lần", 1, 0, 5));
-        allAch.add(new Quest("a_skill_10", Quest.Type.ACHIEVEMENT, "Dần Quen Tay", "Sử dụng Kỹ năng 10 lần", 10, 0, 15));
-        allAch.add(new Quest("a_skill_50", Quest.Type.ACHIEVEMENT, "Thành Thạo", "Sử dụng Kỹ năng 50 lần", 50, 0, 40));
-        allAch.add(new Quest("a_skill_100", Quest.Type.ACHIEVEMENT, "Bậc Thầy Kỹ Năng", "Sử dụng Kỹ năng 100 lần", 100, 0, 80));
-        allAch.add(new Quest("a_skill_500", Quest.Type.ACHIEVEMENT, "Phù Thủy Đại Dương", "Sử dụng Kỹ năng 500 lần", 500, 0, 250));
+        allAch.add(new Quest("a_skill_1", Quest.Type.ACHIEVEMENT, "Sử Dụng Kỹ Năng", "Sử dụng Kỹ năng 1 lần", 1, 0, 2));
+        allAch.add(new Quest("a_skill_10", Quest.Type.ACHIEVEMENT, "Dần Quen Tay", "Sử dụng Kỹ năng 10 lần", 10, 0, 3));
+        allAch.add(new Quest("a_skill_50", Quest.Type.ACHIEVEMENT, "Thành Thạo", "Sử dụng Kỹ năng 50 lần", 50, 0, 6));
+        allAch.add(new Quest("a_skill_100", Quest.Type.ACHIEVEMENT, "Bậc Thầy Kỹ Năng", "Sử dụng Kỹ năng 100 lần", 100, 0, 10));
+        allAch.add(new Quest("a_skill_500", Quest.Type.ACHIEVEMENT, "Phù Thủy Đại Dương", "Sử dụng Kỹ năng 500 lần", 500, 0, 20));
 
         // 8. Level Up
-        allAch.add(new Quest("a_level_2", Quest.Type.ACHIEVEMENT, "Mới Vào Nghề", "Đạt Level 2", 2, 0, 10));
-        allAch.add(new Quest("a_level_5", Quest.Type.ACHIEVEMENT, "Người Mới", "Đạt Level 5", 5, 0, 20));
-        allAch.add(new Quest("a_level_10", Quest.Type.ACHIEVEMENT, "Cao Thủ", "Đạt Level 10", 10, 0, 50));
-        allAch.add(new Quest("a_level_20", Quest.Type.ACHIEVEMENT, "Chuyên Gia", "Đạt Level 20", 20, 0, 100));
-        allAch.add(new Quest("a_level_50", Quest.Type.ACHIEVEMENT, "Huyền Thoại Biển Khơi", "Đạt Level 50", 50, 0, 300));
-        allAch.add(new Quest("a_level_100", Quest.Type.ACHIEVEMENT, "Phá Đảo", "Đạt Level 100", 100, 0, 600));
+        allAch.add(new Quest("a_level_2", Quest.Type.ACHIEVEMENT, "Mới Vào Nghề", "Đạt Cấp 2", 2, 0, 2));
+        allAch.add(new Quest("a_level_5", Quest.Type.ACHIEVEMENT, "Người Mới", "Đạt Cấp 5", 5, 0, 4));
+        allAch.add(new Quest("a_level_10", Quest.Type.ACHIEVEMENT, "Cao Thủ", "Đạt Cấp 10", 10, 0, 8));
+        allAch.add(new Quest("a_level_20", Quest.Type.ACHIEVEMENT, "Chuyên Gia", "Đạt Cấp 20", 20, 0, 12));
+        allAch.add(new Quest("a_level_50", Quest.Type.ACHIEVEMENT, "Huyền Thoại Biển Khơi", "Đạt Cấp 50", 50, 0, 20));
+        allAch.add(new Quest("a_level_100", Quest.Type.ACHIEVEMENT, "Phá Đảo", "Đạt Cấp 100", 100, 0, 30));
         
         for (Quest q : allAch) {
             boolean found = false;
             for (Quest existing : achievements) {
                 if (existing.id.equals(q.id)) {
                     found = true;
+                    existing.rewardDiamonds = q.rewardDiamonds;
+                    existing.target = q.target;
+                    existing.description = q.description;
+                    existing.title = q.title;
                     break;
                 }
             }

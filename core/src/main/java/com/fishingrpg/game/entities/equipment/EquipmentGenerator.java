@@ -30,8 +30,8 @@ public class EquipmentGenerator {
         new EqSet("Hoàng Gia", "Cần Câu Bạch Kim", "Tơ Tằm Thượng Hạng", "Móc Cẩm Thạch", 6),
         new EqSet("Thời Không", "Trượng Thời Gian", "Sợi Dây Xuyên Thấu", "Lưỡi Câu Hư Không", 6),
         new EqSet("Quang Minh", "Trượng Ánh Sáng", "Dây Chỉ Vàng", "Lưỡi Câu Thần", 7),
-        new EqSet("Vệ Quốc Vang Danh", "Cần Câu Khởi Nghĩa", "Cước Vệ Quốc", "Lưỡi Sao Vàng", 5), // Same as RARE
-        new EqSet("Thần Khí Lạc Hồng", "Trượng Lạc Hồng", "Dây Rồng Thiêng", "Móc Âu Cơ", 15) // HIGHER than Legendary
+        new EqSet("Vệ Quốc Vang Danh", "Cần Câu Khởi Nghĩa", "Cước Vệ Quốc", "Lưỡi Sao Vàng", 4), // Same as RARE
+        new EqSet("Thần Khí Lạc Hồng", "Trượng Lạc Hồng", "Dây Rồng Thiêng", "Móc Âu Cơ", 8) // Supreme 6★
     };
 
     public static int getSetPoints(String setName) {
@@ -46,11 +46,11 @@ public class EquipmentGenerator {
         switch(rarity) {
             case COMMON: return 0;
             case UNCOMMON: return 2;
-            case RARE: return 5;
-            case EPIC: return 9;
-            case LEGENDARY: return 15;
-            case LIMITED_EVENT: return 5;
-            case LIMITED_PREMIUM: return 15;
+            case RARE: return 4;
+            case EPIC: return 7;
+            case LEGENDARY: return 10;
+            case LIMITED_EVENT: return 4;
+            case LIMITED_PREMIUM: return 10;
             default: return 0;
         }
     }
@@ -85,28 +85,28 @@ public class EquipmentGenerator {
             case ROD:
                 eq.id = "rod_" + set.setName.replaceAll(" ", "_").toLowerCase() + "_" + MathUtils.random(10000);
                 eq.name = set.rodName;
-                eq.mainStat1 = 10f + mult * 2f; // Base damage
-                eq.mainStat2 = 50f + mult * 15f; // Max stamina
+                eq.mainStat1 = 10f + mult * 1.2f; // Base damage (Nerfed from 2.0f)
+                eq.mainStat2 = 50f + mult * 8f;   // Max stamina (Nerfed from 15f)
                 break;
             case LINE:
                 eq.id = "line_" + set.setName.replaceAll(" ", "_").toLowerCase() + "_" + MathUtils.random(10000);
                 eq.name = set.lineName;
-                eq.mainStat1 = 100f + mult * 25f; // Max tension
-                eq.mainStat2 = 2f + mult * 0.4f; // Kháng đứt dây
+                eq.mainStat1 = 100f + mult * 15f; // Max tension (Nerfed from 25f)
+                eq.mainStat2 = 2f + mult * 0.22f; // Kháng đứt dây (Nerfed from 0.4f)
                 break;
             case HOOK:
                 eq.id = "hook_" + set.setName.replaceAll(" ", "_").toLowerCase() + "_" + MathUtils.random(10000);
                 eq.name = set.hookName;
-                eq.mainStat1 = 5f + mult * 1.0f; // Tỷ lệ cá xịn (%)
-                eq.mainStat2 = 10f + mult * 2.0f; // Tỷ lệ giữ mồi (%)
+                eq.mainStat1 = 5f + mult * 0.6f;  // Tỷ lệ cá hiếm (%)
+                eq.mainStat2 = 10f + mult * 1.2f; // Tỷ lệ giữ mồi (%)
                 break;
         }
 
         // Substats
         for (int i = 0; i < rarity.substatCount; i++) {
             Substat.Type subType = Substat.Type.values()[MathUtils.random(0, Substat.Type.values().length - 1)];
-            float subVal = (MathUtils.random(1f, 3f) + (mult / 2f));
-            eq.substats.add(new Substat(subType, Math.round(subVal)));
+            float subVal = (MathUtils.random(1f, 2.5f) + (mult / 4f));
+            eq.substats.add(new Substat(subType, Math.max(1, Math.round(subVal))));
         }
 
         return eq;
@@ -215,28 +215,28 @@ public class EquipmentGenerator {
             case ROD:
                 eq.id = "rod_" + set.setName.replaceAll(" ", "_").toLowerCase() + "_" + MathUtils.random(10000);
                 eq.name = set.rodName;
-                eq.mainStat1 = 10f + mult * 2f; // Base damage
-                eq.mainStat2 = 50f + mult * 15f; // Max stamina
+                eq.mainStat1 = 10f + mult * 1.2f; // Base damage
+                eq.mainStat2 = 50f + mult * 8f;   // Max stamina
                 break;
             case LINE:
                 eq.id = "line_" + set.setName.replaceAll(" ", "_").toLowerCase() + "_" + MathUtils.random(10000);
                 eq.name = set.lineName;
-                eq.mainStat1 = 100f + mult * 25f; // Max tension
-                eq.mainStat2 = 2f + mult * 0.4f; // Kháng đứt dây
+                eq.mainStat1 = 100f + mult * 15f; // Max tension
+                eq.mainStat2 = 2f + mult * 0.22f; // Kháng đứt dây
                 break;
             case HOOK:
                 eq.id = "hook_" + set.setName.replaceAll(" ", "_").toLowerCase() + "_" + MathUtils.random(10000);
                 eq.name = set.hookName;
-                eq.mainStat1 = 5f + mult * 1.0f; // Tỷ lệ cá xịn (%)
-                eq.mainStat2 = 10f + mult * 2.0f; // Tỷ lệ giữ mồi (%)
+                eq.mainStat1 = 5f + mult * 0.6f;  // Tỷ lệ cá hiếm (%)
+                eq.mainStat2 = 10f + mult * 1.2f; // Tỷ lệ giữ mồi (%)
                 break;
         }
 
         // Substats
         for (int i = 0; i < eq.rarity.substatCount; i++) {
             Substat.Type subType = Substat.Type.values()[MathUtils.random(0, Substat.Type.values().length - 1)];
-            float subVal = (MathUtils.random(1f, 3f) + (mult / 2f));
-            eq.substats.add(new Substat(subType, Math.round(subVal)));
+            float subVal = (MathUtils.random(1f, 2.5f) + (mult / 4f));
+            eq.substats.add(new Substat(subType, Math.max(1, Math.round(subVal))));
         }
 
         return eq;
@@ -263,27 +263,27 @@ public class EquipmentGenerator {
             case ROD:
                 eq.id = "rod_" + set.setName.replaceAll(" ", "_").toLowerCase() + "_" + MathUtils.random(10000);
                 eq.name = set.rodName;
-                eq.mainStat1 = 10f + mult * 2f; 
-                eq.mainStat2 = 50f + mult * 15f; 
+                eq.mainStat1 = 10f + mult * 1.2f; 
+                eq.mainStat2 = 50f + mult * 8f; 
                 break;
             case LINE:
                 eq.id = "line_" + set.setName.replaceAll(" ", "_").toLowerCase() + "_" + MathUtils.random(10000);
                 eq.name = set.lineName;
-                eq.mainStat1 = 100f + mult * 25f; 
-                eq.mainStat2 = 2f + mult * 0.4f; 
+                eq.mainStat1 = 100f + mult * 15f; 
+                eq.mainStat2 = 2f + mult * 0.22f; 
                 break;
             case HOOK:
                 eq.id = "hook_" + set.setName.replaceAll(" ", "_").toLowerCase() + "_" + MathUtils.random(10000);
                 eq.name = set.hookName;
-                eq.mainStat1 = 5f + mult * 1.0f; 
-                eq.mainStat2 = 10f + mult * 2.0f; 
+                eq.mainStat1 = 5f + mult * 0.6f; 
+                eq.mainStat2 = 10f + mult * 1.2f; 
                 break;
         }
 
         for (int i = 0; i < eq.rarity.substatCount; i++) {
             Substat.Type subType = Substat.Type.values()[MathUtils.random(0, Substat.Type.values().length - 1)];
-            float subVal = (MathUtils.random(1f, 3f) + (mult / 2f));
-            eq.substats.add(new Substat(subType, Math.round(subVal)));
+            float subVal = (MathUtils.random(1f, 2.5f) + (mult / 4f));
+            eq.substats.add(new Substat(subType, Math.max(1, Math.round(subVal))));
         }
 
         return eq;

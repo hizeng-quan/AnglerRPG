@@ -19,7 +19,7 @@ public class KeoManhAbility extends GameplayAbility {
 
     @Override
     public float getBaseCooldown(AbilityContext ctx) {
-        return 3.0f;
+        return 3.5f;
     }
 
     @Override

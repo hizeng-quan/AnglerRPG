@@ -15,7 +15,9 @@ public class EventManager {
     private transient Player player;
     
     // Event specific constants
+    public static final String CURRENT_EVENT_ID = "lac_hong_2026";
     public static final long EVENT_END_TIMESTAMP;
+    public static final long HALLOWEEN_START_TIMESTAMP;
     
     // 6 Daily Event Quests & Milestone
     public final List<Quest> eventQuests = new ArrayList<>();
@@ -23,12 +25,16 @@ public class EventManager {
 
     static {
         Calendar cal = Calendar.getInstance(TimeZone.getDefault());
-        cal.set(2026, Calendar.DECEMBER, 31, 23, 59, 59);
-        long end = cal.getTimeInMillis();
-        if (end <= TimeSyncService.getCurrentTimeMillis()) {
-            end = TimeSyncService.getCurrentTimeMillis() + 60L * 24 * 60 * 60 * 1000L;
-        }
-        EVENT_END_TIMESTAMP = end;
+        cal.set(2026, Calendar.OCTOBER, 28, 23, 59, 59);
+        EVENT_END_TIMESTAMP = cal.getTimeInMillis();
+
+        Calendar calHlw = Calendar.getInstance(TimeZone.getDefault());
+        calHlw.set(2026, Calendar.OCTOBER, 30, 0, 0, 0);
+        HALLOWEEN_START_TIMESTAMP = calHlw.getTimeInMillis();
+    }
+
+    public static boolean isEventActive() {
+        return TimeSyncService.getCurrentTimeMillis() <= EVENT_END_TIMESTAMP;
     }
 
     public static class EventQuestTemplate {
@@ -59,18 +65,18 @@ public class EventManager {
 
     private static final List<EventQuestTemplate> EVENT_QUEST_POOL = new ArrayList<>();
     static {
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_catch", "Hào Khí Đánh Bắt", "Câu thành công 5 con cá", 5, 300, 0, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_perfect", "Tay Cần Lạc Hồng", "Đạt PERFECT khi quăng cần 2 lần", 2, 0, 5, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_spend", "Giao Thương Hội Làng", "Tiêu 150 Vàng trong ngày", 150, 300, 0, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_gacha", "Vận May Sự Kiện", "Quay Gacha 1 lần", 1, 0, 0, "Vé Quay", 1));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_rare", "Cá Quý Đại Dương", "Câu 1 con cá Rare trở lên", 1, 0, 5, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_skill", "Khí Phách Ngư Dân", "Dùng 3 lần Kỹ năng khi câu cá", 3, 250, 0, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_catch_3", "Ra Khơi Quyết Thắng", "Câu thành công 3 con cá", 3, 200, 0, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_perfect_1", "Bách Phát Bách Trúng", "Đạt PERFECT 1 lần khi quăng cần", 1, 0, 3, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_spend_100", "Trù Bị Ngư Cụ", "Tiêu 100 Vàng tại Tiệm Tạp Hóa", 100, 200, 0, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_skill_2", "Tuyệt Kỹ Ngư Gia", "Dùng 2 lần Kỹ năng trong lúc câu", 2, 200, 0, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_rare_boss", "Chiến Tích Vang Danh", "Bắt 1 con cá Rare trở lên", 1, 0, 8, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_catch_7", "Ngư Phủ Tinh Anh", "Câu thành công 7 con cá", 7, 400, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_catch", "Hào Khí Đánh Bắt", "Câu thành công 5 con cá", 5, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_perfect", "Tay Cần Lạc Hồng", "Đạt PERFECT khi quăng cần 2 lần", 2, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_spend", "Giao Thương Hội Làng", "Tiêu 150 Vàng trong ngày", 150, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_gacha", "Vận May Sự Kiện", "Quay Gacha 1 lần", 1, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_rare", "Cá Quý Đại Dương", "Câu 1 con cá Rare trở lên", 1, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_skill", "Khí Phách Ngư Dân", "Dùng 3 lần Kỹ năng khi câu cá", 3, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_catch_3", "Ra Khơi Quyết Thắng", "Câu thành công 3 con cá", 3, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_perfect_1", "Bách Phát Bách Trúng", "Đạt PERFECT 1 lần khi quăng cần", 1, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_spend_100", "Trù Bị Ngư Cụ", "Tiêu 100 Vàng tại Tiệm Tạp Hóa", 100, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_skill_2", "Tuyệt Kỹ Ngư Gia", "Dùng 2 lần Kỹ năng trong lúc câu", 2, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_rare_boss", "Chiến Tích Vang Danh", "Bắt 1 con cá Rare trở lên", 1, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_catch_7", "Ngư Phủ Tinh Anh", "Câu thành công 7 con cá", 7, 0, 0, null, 0));
     }
 
     public static class DailyReward {
@@ -93,10 +99,25 @@ public class EventManager {
     }
 
     public void checkAndResetDailyMissions() {
+        checkEventTransition();
         long currentDayStart = getStartOfDay(TimeSyncService.getCurrentTimeMillis());
         if (player.getLastEventMissionResetTimestamp() < currentDayStart || eventQuests.isEmpty()) {
             player.setLastEventMissionResetTimestamp(currentDayStart);
             resetEventQuests();
+        }
+    }
+
+    public void checkEventTransition() {
+        if (!isEventActive()) {
+            // Khi sự kiện kết thúc:
+            // Tự động thu hồi & quy đổi điểm sự kiện tồn đọng sang Vàng đền bù (1 Điểm SK = 1,000 Vàng)
+            if (player.getEventPoints() > 0) {
+                int leftover = player.getEventPoints();
+                int compensation = leftover * 1000;
+                player.setEventPoints(0);
+                player.gainGold(compensation);
+                com.badlogic.gdx.Gdx.app.log("EventManager", "Sự kiện Lạc Hồng kết thúc: Đã quy đổi " + leftover + " Điểm SK thành " + compensation + " Vàng!");
+            }
         }
     }
 
@@ -267,9 +288,6 @@ public class EventManager {
         if (!hasClaimedLoginToday() && player.getTotalLoginDaysThisMonth() < 25) {
             return true;
         }
-        for (Quest q : eventQuests) {
-            if (q.isCompleted() && !q.claimed) return true;
-        }
         if (canClaimMilestone()) return true;
         return false;
     }
@@ -277,7 +295,15 @@ public class EventManager {
     public String getEventTimeRemaining() {
         long now = TimeSyncService.getCurrentTimeMillis();
         long diff = EVENT_END_TIMESTAMP - now;
-        if (diff <= 0) return "SỰ KIỆN KẾT THÚC";
+        if (diff <= 0) {
+            if (now < HALLOWEEN_START_TIMESTAMP) {
+                long remHlw = HALLOWEEN_START_TIMESTAMP - now;
+                long d = remHlw / (24 * 60 * 60 * 1000L);
+                long h = (remHlw % (24 * 60 * 60 * 1000L)) / (60 * 60 * 1000L);
+                return "ĐÃ KẾT THÚC (Halloween sau: " + (d > 0 ? (d + "d ") : "") + h + "h)";
+            }
+            return "SỰ KIỆN KẾT THÚC";
+        }
         
         long days = diff / (24 * 60 * 60 * 1000L);
         long hours = (diff % (24 * 60 * 60 * 1000L)) / (60 * 60 * 1000L);

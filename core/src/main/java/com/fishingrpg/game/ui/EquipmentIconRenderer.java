@@ -140,6 +140,30 @@ public class EquipmentIconRenderer {
         sr.circle(cx, cy + hh - 1.5f, Math.max(1f, r * 0.11f));
     }
 
+    public static void drawGoldCoinIcon(ShapeRenderer sr, float cx, float cy, float r) {
+        // 1. Warm golden aura
+        sr.setColor(0.95f, 0.72f, 0.15f, 0.22f);
+        sr.circle(cx, cy, r * 1.30f);
+
+        // 2. Outer rim of the gold coin
+        sr.setColor(0.85f, 0.65f, 0.12f, 1f);
+        sr.circle(cx, cy, r);
+
+        // 3. Main coin body (Radiant polished gold)
+        sr.setColor(1.0f, 0.85f, 0.22f, 1f);
+        sr.circle(cx, cy, r * 0.82f);
+
+        // 4. Inner embossed ring
+        sr.setColor(0.88f, 0.68f, 0.15f, 1f);
+        sr.circle(cx, cy, r * 0.65f);
+        sr.setColor(1.0f, 0.88f, 0.28f, 1f);
+        sr.circle(cx, cy, r * 0.52f);
+
+        // 5. Specular glint on upper-left rim
+        sr.setColor(1f, 1f, 0.85f, 0.9f);
+        sr.circle(cx - r * 0.3f, cy + r * 0.3f, Math.max(1f, r * 0.22f));
+    }
+
     public static void drawNormalTicketIcon(ShapeRenderer sr, float cx, float cy, float w, float h) {
         // 1. Warm Golden ticket base
         sr.setColor(0.95f, 0.70f, 0.20f, 1f);

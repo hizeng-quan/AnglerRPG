@@ -45,7 +45,7 @@ public class SkillTree {
             new float[]{ 15f, 30f }, new String[]{"keo_manh"}));
             
         // 6. Pha giap (2 cap) -- Active (Can Bao Kich)
-        add(new Skill("pha_giap", "Phá Giáp", "Gây sát thương nhỏ, khiến cá nhận thêm sát thương mọi nguồn trong 10s.", 
+        add(new Skill("pha_giap", "Phá Giáp", "Đâm thủng phòng ngự, gây sát thương và khiến cá nhận thêm sát thương từ mọi nguồn trong thời gian ngắn.", 
             Skill.SkillType.ACTIVE, 2, new int[]{3, 4}, 
             new float[]{ 10f, 20f }, new float[]{ 20f, 40f }, new String[]{"bao_kich"}));
 
@@ -123,32 +123,32 @@ public class SkillTree {
 
         // --- NHÓM KỸ NĂNG BÍ MẬT --- (Requires Book)
         // 1. Duong Suc (3 cap) -- Active
-        add(new Skill("duong_suc", "Dưỡng Sức", "Vận sức 2s hồi 50 Thể lực (10/s). Cấp cao giảm t/g vận. Yêu cầu Sách Kỹ Năng.", 
+        add(new Skill("duong_suc", "Dưỡng Sức", "Tập trung vận sức để hồi phục Thể lực. Trong lúc vận sức không thể kéo dây câu.", 
             Skill.SkillType.ACTIVE, 3, new int[]{0, 2, 3}, 
             new float[]{ 2f, 1.5f, 1f }, new float[]{ 50f, 50f, 50f }, new String[]{}, true));
             
         // 2. Giat Kep (3 cap) -- Active
-        add(new Skill("giat_kep", "Giật Kép", "Gây sát thương x2/2.5/3 nhưng tốn thêm Thể lực. Cần Sách mở.", 
+        add(new Skill("giat_kep", "Giật Kép", "Tung đòn giật kép cực mạnh với hệ số sát thương vượt trội nhưng tốn thêm Thể lực.", 
             Skill.SkillType.ACTIVE, 3, new int[]{0, 2, 3}, 
             new float[]{ 2f, 2.5f, 3f }, null, new String[]{}, true));
             
         // 3. Mat Dai Bang (2 cap) -- Passive
-        add(new Skill("mat_dai_bang", "Mắt Đại Bàng", "Mở rộng vùng Perfect khi quăng cần. Cần Sách mở.", 
+        add(new Skill("mat_dai_bang", "Mắt Đại Bàng", "Tầm nhìn săn mồi sắc bén, mở rộng vùng Perfect khi quăng cần.", 
             Skill.SkillType.PASSIVE, 2, new int[]{0, 3}, 
             new float[]{ 1.5f, 2.0f }, null, new String[]{}, true));
             
         // 4. Thuan Hoa (3 cap) -- Passive
-        add(new Skill("thuan_hoa", "Thuần Hóa", "Khi cá chuyển trạng thái IDLE, kéo dài thời gian nghỉ ngơi thêm 1s/1.5s/2s. Cần Sách mở.", 
+        add(new Skill("thuan_hoa", "Thuần Hóa", "Thuần hóa linh tính của cá, kéo dài thời gian cá rơi vào trạng thái nghỉ ngơi (IDLE).", 
             Skill.SkillType.PASSIVE, 3, new int[]{0, 3, 4}, 
             new float[]{ 1f, 1.5f, 2.0f }, null, new String[]{}, true));
             
         // 5. Loi nguyen troi buoc (3 cap) -- Active
-        add(new Skill("loi_nguyen_troi_buoc", "Trói Buộc", "Đóng băng cá (không tăng Tension) trong 0.5s/cấp. Cần Sách mở.", 
+        add(new Skill("loi_nguyen_troi_buoc", "Trói Buộc", "Trói buộc cổ xưa, đóng băng hoàn toàn lực kéo của cá khiến dây không tăng lực căng.", 
             Skill.SkillType.ACTIVE, 3, new int[]{0, 3, 4}, 
             new float[]{ 0.5f, 1f, 1.5f }, null, new String[]{}, true));
             
         // 6. Trai tim dai duong (2 cap) -- Passive
-        add(new Skill("trai_tim_dai_duong", "Trái Tim Đại Dương", "Khi chuẩn bị đứt dây, có tỷ lệ cứu. Cần Sách mở.", 
+        add(new Skill("trai_tim_dai_duong", "Trái Tim Đại Dương", "Phép màu từ đại dương sâu thẳm, mang lại cơ hội ngăn chặn dây câu bị đứt khi quá tải.", 
             Skill.SkillType.PASSIVE, 2, new int[]{0, 4}, 
             new float[]{ 5f, 12f }, null, new String[]{}, true));
     }

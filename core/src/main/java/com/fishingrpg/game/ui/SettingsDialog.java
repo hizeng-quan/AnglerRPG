@@ -146,6 +146,23 @@ public class SettingsDialog {
         }
     }
 
+    private void applyKeyBinding(int targetAction, int keycode) {
+        if (targetAction < 0 || keycode <= 0 || keycode == Input.Keys.ESCAPE) return;
+        KeybindManager km = KeybindManager.getInstance();
+        int oldKey = km.getKeyCode(targetAction);
+        int conflict = km.setKeyCodeWithSwap(targetAction, keycode);
+        if (conflict != -1) {
+            keybindMessage = "Đã gán phím [" + KeybindManager.formatKeyName(keycode) + "] cho " + KeybindManager.ACTION_NAMES[targetAction]
+                + " (hoán đổi [" + KeybindManager.formatKeyName(oldKey) + "] sang " + KeybindManager.ACTION_NAMES[conflict] + ")!";
+        } else {
+            keybindMessage = "Đã gán phím [" + KeybindManager.formatKeyName(keycode) + "] cho " + KeybindManager.ACTION_NAMES[targetAction] + "!";
+        }
+        keybindMsgTimer = 3.5f;
+        keybindMsgSuccess = true;
+        AudioManager.getInstance().playSFX("sfx_button");
+        cancelKeyBinding();
+    }
+
     private void startKeyBinding(int action) {
         this.waitingKeyAction = action;
         this.previousInputProcessor = Gdx.input.getInputProcessor();
@@ -158,28 +175,8 @@ public class SettingsDialog {
                     AudioManager.getInstance().playSFX("sfx_button");
                     return true;
                 }
-                if (keycode != Input.Keys.UNKNOWN) {
-                    int targetAction = waitingKeyAction;
-                    KeybindManager km = KeybindManager.getInstance();
-                    int conflict = km.findConflictAction(targetAction, keycode);
-                    if (conflict != -1) {
-                        // Anti-collision protection triggered!
-                        keybindMessage = "Trùng phím! Phím [" + KeybindManager.formatKeyName(keycode) + "] đã gán cho " + KeybindManager.ACTION_NAMES[conflict] + "!";
-                        keybindMsgTimer = 4.0f;
-                        keybindMsgSuccess = false;
-                        AudioManager.getInstance().playSFX("sfx_fail");
-                        cancelKeyBinding();
-                        return true;
-                    }
-
-                    boolean success = km.setKeyCode(targetAction, keycode);
-                    if (success) {
-                        keybindMessage = "Đã gán phím [" + KeybindManager.formatKeyName(keycode) + "] cho " + KeybindManager.ACTION_NAMES[targetAction] + "!";
-                        keybindMsgTimer = 3.0f;
-                        keybindMsgSuccess = true;
-                        AudioManager.getInstance().playSFX("sfx_button");
-                    }
-                    cancelKeyBinding();
+                if (keycode > 0) {
+                    applyKeyBinding(waitingKeyAction, keycode);
                     return true;
                 }
                 return false;
@@ -199,6 +196,16 @@ public class SettingsDialog {
         }
         if (showResetModal && resetCountdown > 0f) {
             resetCountdown = Math.max(0f, resetCountdown - delta);
+        }
+        if (waitingKeyAction != -1) {
+            // Backup direct hardware key polling in case InputProcessor is bypassed by IME or Unikey
+            for (int k = 1; k < 256; k++) {
+                if (k == Input.Keys.ESCAPE) continue;
+                if (Gdx.input.isKeyJustPressed(k)) {
+                    applyKeyBinding(waitingKeyAction, k);
+                    break;
+                }
+            }
         }
     }
 
@@ -561,19 +568,23 @@ public class SettingsDialog {
             SaveManager.savePlayer(game.player);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
             String ts = sdf.format(new Date());
-            String filename = "angler_save_" + ts + ".json";
+            String filename = "angler_save_" + ts + ".sav";
 
             File fileTs = new File(filename);
             SaveManager.exportToFile(fileTs);
 
             // Also keep standard fallback file
-            File fileStd = new File("angler_save.json");
+            File fileStd = new File("angler_save.sav");
             SaveManager.exportToFile(fileStd);
 
-            String json = SaveManager.exportDataToString();
-            Gdx.app.getClipboard().setContents(json);
+            // Also maintain angler_save.json for backward compatibility
+            File fileLegacy = new File("angler_save.json");
+            SaveManager.exportToFile(fileLegacy);
 
-            statusMessage = "Thành công: Đã xuất '" + filename + "' & Clipboard!";
+            String encryptedPayload = SaveManager.exportDataToString();
+            Gdx.app.getClipboard().setContents(encryptedPayload);
+
+            statusMessage = "Thành công: Đã xuất mã hóa '" + filename + "' & Clipboard!";
             statusTimer = 6.0f;
             statusIsSuccess = true;
             AudioManager.getInstance().playSFX("sfx_success");
@@ -593,8 +604,8 @@ public class SettingsDialog {
 
             java.awt.FileDialog fd = null;
             try {
-                fd = new java.awt.FileDialog((java.awt.Frame) null, "Chọn file lưu trữ AnglerRPG (*.json, *.bak)", java.awt.FileDialog.LOAD);
-                fd.setFile("*.json;*.bak");
+                fd = new java.awt.FileDialog((java.awt.Frame) null, "Chọn file lưu trữ AnglerRPG (*.sav, *.json, *.bak)", java.awt.FileDialog.LOAD);
+                fd.setFile("*.sav;*.json;*.bak");
                 fd.setAlwaysOnTop(true);
                 fd.setVisible(true);
                 String f = fd.getFile();
@@ -616,6 +627,13 @@ public class SettingsDialog {
 
             // Fallbacks
             if (jsonContent == null) {
+                File stdSav = new File("angler_save.sav");
+                if (stdSav.exists() && SaveManager.importFromFile(stdSav, game.player)) {
+                    sourceName = "angler_save.sav";
+                    jsonContent = "OK";
+                }
+            }
+            if (jsonContent == null) {
                 File std = new File("angler_save.json");
                 if (std.exists() && SaveManager.importFromFile(std, game.player)) {
                     sourceName = "angler_save.json";
@@ -625,7 +643,7 @@ public class SettingsDialog {
             if (jsonContent == null) {
                 try {
                     String clip = Gdx.app.getClipboard().getContents();
-                    if (clip != null && clip.contains("playerData") && SaveManager.importDataFromString(clip, game.player)) {
+                    if (clip != null && (clip.contains(SaveManager.ENCRYPTION_HEADER) || clip.contains("playerData")) && SaveManager.importDataFromString(clip, game.player)) {
                         sourceName = "Clipboard";
                         jsonContent = "OK";
                     }
@@ -642,7 +660,7 @@ public class SettingsDialog {
                     statusIsSuccess = true;
                     AudioManager.getInstance().playSFX("sfx_success");
                 } else {
-                    statusMessage = "Không tìm thấy dữ liệu hợp lệ (Hãy sao chép vào Clipboard hoặc lưu file .json)!";
+                    statusMessage = "Không tìm thấy dữ liệu hợp lệ (Dữ liệu bị lỗi hoặc đã qua chỉnh sửa)!";
                     statusTimer = 5.0f;
                     statusIsSuccess = false;
                     AudioManager.getInstance().playSFX("sfx_fail");
