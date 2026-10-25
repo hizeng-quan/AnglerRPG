@@ -4,6 +4,38 @@
 
 ---
 
+## 📅 [2026-10-26] - Phiên bản v0.4.24 (Mã Hóa File Save Chống Sửa Đổi, Chốt Hạn Sự Kiện Lạc Hồng 28/10 & Cơ Chế Chuyển Giao Mùa Halloween)
+
+### 🛡️ Bảo Mật File Save & Chống Gian Lận Dữ Liệu ([SaveManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/data/SaveManager.java), [SettingsDialog.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/SettingsDialog.java))
+- **Mã Hóa Toàn Diện File Save Bằng Thuật Toán AES-256**:
+  - Khắc phục nguy cơ người chơi mở file lưu trữ bằng Notepad hoặc Text Editor để tự ý sửa Vàng, Kim Cương, Cấp độ, Điểm kỹ năng hoặc Trang bị gacha.
+  - Áp dụng thuật toán mã hóa khối chuẩn công nghiệp `AES/CBC/PKCS5Padding` với khóa bí mật 256-bit được sinh từ hàm băm SHA-256 kết hợp muối (Salt) dự án.
+  - Mỗi lần xuất file đều tự động tạo một Vector khởi tạo (IV) ngẫu nhiên 16-byte (`SecureRandom`), đảm bảo cùng một dữ liệu xuất ở hai thời điểm khác nhau sẽ cho ra hai chuỗi mã hóa hoàn toàn khác biệt.
+- **Hệ Thống Kiểm Tra Tính Toàn Vẹn & Báo Động Can Thiệp (Tamper Detection)**:
+  - Tính toán mã băm SHA-256 (32 bytes) của dữ liệu JSON gốc và đóng gói trực tiếp vào phần đầu payload trước khi mã hóa Base64 (`ANGLER_SECURE_SAVE_v1:`).
+  - Khi nạp dữ liệu: Sau khi giải mã AES, hệ thống tự động băm lại chuỗi văn bản và so sánh đối chiếu bằng `MessageDigest.isEqual` (chống tấn công Timing Attack).
+  - Nếu phát hiện bất kỳ ký tự nào bị sửa đổi dù chỉ 1 bit, hệ thống sẽ lập tức từ chối nạp, ghi nhật ký cảnh báo và hiển thị thông báo lỗi trên UI: *"Không tìm thấy dữ liệu hợp lệ (Dữ liệu bị lỗi hoặc đã qua chỉnh sửa)!"*.
+- **Chuẩn Hóa Đuôi File Mở Rộng `.sav` & Sao Chép Clipboard Tiện Lợi**:
+  - Đổi tên tệp xuất mặc định sang định dạng `.sav` (`angler_save_yyyyMMdd_HHmmss.sav` và bản fallback `angler_save.sav`), hạn chế việc hệ điều hành tự động gán mở file bằng Notepad.
+  - Chuỗi dữ liệu sao chép vào Clipboard cũng là chuỗi đã được mã hóa an toàn.
+  - FileDialog trong Cài Đặt hỗ trợ bộ lọc mở rộng `*.sav;*.json;*.bak`.
+- **Tương Thích Ngược & An Toàn Tuyệt Đối**:
+  - Bộ giải mã thông minh nhận diện định dạng: Nếu người chơi nạp file `.json` hoặc file `.bak` cũ (từ các bản v0.4.23 trở về trước), game vẫn tự động tiếp nhận mượt mà và sẽ tự động nâng cấp sang định dạng mã hóa mới ở lần xuất tiếp theo.
+
+### ⏳ Chốt Hạn Sự Kiện Lạc Hồng & Cơ Chế Khóa An Toàn ([EventManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/EventManager.java), [EventScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/EventScreen.java))
+- **Ấn Định Thời Gian Bế Mạc Sự Kiện Lạc Hồng**:
+  - Thiết lập thời điểm kết thúc chính thức của Sự kiện Lạc Hồng vào đúng **23:59:59 ngày 28/10/2026**.
+  - Đồng hồ đếm ngược tại Header sự kiện tự động tính toán thời gian còn lại (ngày/giờ) theo thời gian thực đồng bộ chống tua giờ.
+- **Cơ Chế Khóa Cửa Hàng & Chống Đổi Đồ Khi Hết Hạn**:
+  - Sau thời khắc 23:59:59 ngày 28/10, phương thức `EventManager.isEventActive()` chuyển sang `false`.
+  - Toàn bộ các nút đổi vật phẩm trong Cửa Hàng Sự Kiện (Set Vệ Quốc, Vé quay, Vàng) tự động chuyển sang màu xám mờ và hiển thị nhãn: `"ĐÃ ĐÓNG (HẾT HẠN)"`.
+  - Lệnh mua `buyShopItem` kích hoạt kiểm tra an toàn, chặn mọi thao tác đổi và hiển thị thông báo: *"Sự kiện Lạc Hồng đã kết thúc! Cửa hàng đã đóng cửa."*.
+- **Tự Động Quy Đổi Điểm Sự Kiện Tồn Đọng Sang Vàng (Grace Transition)**:
+  - Nhằm bảo vệ công sức cày cuốc của cần thủ, khi sự kiện kết thúc, toàn bộ Điểm Sự Kiện còn dư sẽ được tự động quy đổi thành Vàng với tỉ lệ ưu đãi: **1 Điểm SK = 1,000 Vàng**, nạp thẳng vào túi đồ người chơi và reset điểm về 0 để chuẩn bị cho mùa sự kiện mới.
+  - Trong giai đoạn chuyển giao từ 29/10 đến 30/10, Header sự kiện hiển thị thông báo: *"ĐÃ KẾT THÚC (Halloween sau: Xd Yh)"*.
+
+---
+
 ## 📅 [2026-10-25] - Phiên bản v0.4.23 (Sửa Lỗi Giao Diện Tiền Tệ, Cooldown, Cơ Chế Kéo Dây, Hệ Thống Phím Bấm, Chi Tiết Skill Cá & Kho Nhiệm Vụ Mới)
 
 ### 📖 Sổ Tay Thủy Tộc - Cơ Chế Kỹ Năng Của Cá & Giao Diện Tiền Tệ ([CatalogScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/CatalogScreen.java), [Fish.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/entities/Fish.java), [EquipmentIconRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/EquipmentIconRenderer.java))

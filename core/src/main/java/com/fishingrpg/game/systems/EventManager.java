@@ -15,7 +15,9 @@ public class EventManager {
     private transient Player player;
     
     // Event specific constants
+    public static final String CURRENT_EVENT_ID = "lac_hong_2026";
     public static final long EVENT_END_TIMESTAMP;
+    public static final long HALLOWEEN_START_TIMESTAMP;
     
     // 6 Daily Event Quests & Milestone
     public final List<Quest> eventQuests = new ArrayList<>();
@@ -23,12 +25,16 @@ public class EventManager {
 
     static {
         Calendar cal = Calendar.getInstance(TimeZone.getDefault());
-        cal.set(2026, Calendar.DECEMBER, 31, 23, 59, 59);
-        long end = cal.getTimeInMillis();
-        if (end <= TimeSyncService.getCurrentTimeMillis()) {
-            end = TimeSyncService.getCurrentTimeMillis() + 60L * 24 * 60 * 60 * 1000L;
-        }
-        EVENT_END_TIMESTAMP = end;
+        cal.set(2026, Calendar.OCTOBER, 28, 23, 59, 59);
+        EVENT_END_TIMESTAMP = cal.getTimeInMillis();
+
+        Calendar calHlw = Calendar.getInstance(TimeZone.getDefault());
+        calHlw.set(2026, Calendar.OCTOBER, 30, 0, 0, 0);
+        HALLOWEEN_START_TIMESTAMP = calHlw.getTimeInMillis();
+    }
+
+    public static boolean isEventActive() {
+        return TimeSyncService.getCurrentTimeMillis() <= EVENT_END_TIMESTAMP;
     }
 
     public static class EventQuestTemplate {
@@ -93,10 +99,25 @@ public class EventManager {
     }
 
     public void checkAndResetDailyMissions() {
+        checkEventTransition();
         long currentDayStart = getStartOfDay(TimeSyncService.getCurrentTimeMillis());
         if (player.getLastEventMissionResetTimestamp() < currentDayStart || eventQuests.isEmpty()) {
             player.setLastEventMissionResetTimestamp(currentDayStart);
             resetEventQuests();
+        }
+    }
+
+    public void checkEventTransition() {
+        if (!isEventActive()) {
+            // Khi sự kiện kết thúc:
+            // Tự động thu hồi & quy đổi điểm sự kiện tồn đọng sang Vàng đền bù (1 Điểm SK = 1,000 Vàng)
+            if (player.getEventPoints() > 0) {
+                int leftover = player.getEventPoints();
+                int compensation = leftover * 1000;
+                player.setEventPoints(0);
+                player.gainGold(compensation);
+                com.badlogic.gdx.Gdx.app.log("EventManager", "Sự kiện Lạc Hồng kết thúc: Đã quy đổi " + leftover + " Điểm SK thành " + compensation + " Vàng!");
+            }
         }
     }
 
@@ -274,7 +295,15 @@ public class EventManager {
     public String getEventTimeRemaining() {
         long now = TimeSyncService.getCurrentTimeMillis();
         long diff = EVENT_END_TIMESTAMP - now;
-        if (diff <= 0) return "SỰ KIỆN KẾT THÚC";
+        if (diff <= 0) {
+            if (now < HALLOWEEN_START_TIMESTAMP) {
+                long remHlw = HALLOWEEN_START_TIMESTAMP - now;
+                long d = remHlw / (24 * 60 * 60 * 1000L);
+                long h = (remHlw % (24 * 60 * 60 * 1000L)) / (60 * 60 * 1000L);
+                return "ĐÃ KẾT THÚC (Halloween sau: " + (d > 0 ? (d + "d ") : "") + h + "h)";
+            }
+            return "SỰ KIỆN KẾT THÚC";
+        }
         
         long days = diff / (24 * 60 * 60 * 1000L);
         long hours = (diff % (24 * 60 * 60 * 1000L)) / (60 * 60 * 1000L);

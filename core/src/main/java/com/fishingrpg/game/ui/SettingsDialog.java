@@ -568,19 +568,23 @@ public class SettingsDialog {
             SaveManager.savePlayer(game.player);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
             String ts = sdf.format(new Date());
-            String filename = "angler_save_" + ts + ".json";
+            String filename = "angler_save_" + ts + ".sav";
 
             File fileTs = new File(filename);
             SaveManager.exportToFile(fileTs);
 
             // Also keep standard fallback file
-            File fileStd = new File("angler_save.json");
+            File fileStd = new File("angler_save.sav");
             SaveManager.exportToFile(fileStd);
 
-            String json = SaveManager.exportDataToString();
-            Gdx.app.getClipboard().setContents(json);
+            // Also maintain angler_save.json for backward compatibility
+            File fileLegacy = new File("angler_save.json");
+            SaveManager.exportToFile(fileLegacy);
 
-            statusMessage = "Thành công: Đã xuất '" + filename + "' & Clipboard!";
+            String encryptedPayload = SaveManager.exportDataToString();
+            Gdx.app.getClipboard().setContents(encryptedPayload);
+
+            statusMessage = "Thành công: Đã xuất mã hóa '" + filename + "' & Clipboard!";
             statusTimer = 6.0f;
             statusIsSuccess = true;
             AudioManager.getInstance().playSFX("sfx_success");
@@ -600,8 +604,8 @@ public class SettingsDialog {
 
             java.awt.FileDialog fd = null;
             try {
-                fd = new java.awt.FileDialog((java.awt.Frame) null, "Chọn file lưu trữ AnglerRPG (*.json, *.bak)", java.awt.FileDialog.LOAD);
-                fd.setFile("*.json;*.bak");
+                fd = new java.awt.FileDialog((java.awt.Frame) null, "Chọn file lưu trữ AnglerRPG (*.sav, *.json, *.bak)", java.awt.FileDialog.LOAD);
+                fd.setFile("*.sav;*.json;*.bak");
                 fd.setAlwaysOnTop(true);
                 fd.setVisible(true);
                 String f = fd.getFile();
@@ -623,6 +627,13 @@ public class SettingsDialog {
 
             // Fallbacks
             if (jsonContent == null) {
+                File stdSav = new File("angler_save.sav");
+                if (stdSav.exists() && SaveManager.importFromFile(stdSav, game.player)) {
+                    sourceName = "angler_save.sav";
+                    jsonContent = "OK";
+                }
+            }
+            if (jsonContent == null) {
                 File std = new File("angler_save.json");
                 if (std.exists() && SaveManager.importFromFile(std, game.player)) {
                     sourceName = "angler_save.json";
@@ -632,7 +643,7 @@ public class SettingsDialog {
             if (jsonContent == null) {
                 try {
                     String clip = Gdx.app.getClipboard().getContents();
-                    if (clip != null && clip.contains("playerData") && SaveManager.importDataFromString(clip, game.player)) {
+                    if (clip != null && (clip.contains(SaveManager.ENCRYPTION_HEADER) || clip.contains("playerData")) && SaveManager.importDataFromString(clip, game.player)) {
                         sourceName = "Clipboard";
                         jsonContent = "OK";
                     }
@@ -649,7 +660,7 @@ public class SettingsDialog {
                     statusIsSuccess = true;
                     AudioManager.getInstance().playSFX("sfx_success");
                 } else {
-                    statusMessage = "Không tìm thấy dữ liệu hợp lệ (Hãy sao chép vào Clipboard hoặc lưu file .json)!";
+                    statusMessage = "Không tìm thấy dữ liệu hợp lệ (Dữ liệu bị lỗi hoặc đã qua chỉnh sửa)!";
                     statusTimer = 5.0f;
                     statusIsSuccess = false;
                     AudioManager.getInstance().playSFX("sfx_fail");

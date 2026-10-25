@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class PatchNotesDialog {
 
-    public static final String CURRENT_VERSION = "v0.4.23";
+    public static final String CURRENT_VERSION = "v0.4.24";
     private static final String PREF_LAST_SEEN_VERSION = "last_seen_patch_notes_version";
 
     private final FishingRPG game;
@@ -91,8 +91,29 @@ public class PatchNotesDialog {
         // --- TAB 0: BẢN TIN CẬP NHẬT THEO TỪNG PHIÊN BẢN ---
         // =====================================================================
 
-        // ===== PHIÊN BẢN v0.4.23 (MỚI NHẤT) =====
-        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.4.23 (MỚI NHẤT - TIỀN TỆ SỔ TAY, HOÁN ĐỔI PHÍM & CƠ CHẾ KÉO CÁ)"));
+        // ===== PHIÊN BẢN v0.4.24 (MỚI NHẤT) =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.4.24 (MỚI NHẤT - MÃ HÓA SAVE FILE & HẠN SỰ KIỆN 28/10)"));
+
+        patchNotesItems.add(new UpdateItem("BẢO MẬT", "Mã Hóa File Save Quân Sự (AES-256) & Chống Can Thiệp Băm SHA-256", new Color(0.95f, 0.35f, 0.35f, 1f))
+            .addPoint("Mã hóa toàn diện chuỗi dữ liệu xuất file save bằng thuật toán AES-256 kết hợp mã kiểm tra băm SHA-256.")
+            .addPoint("Khóa triệt để việc mở file bằng Notepad/Text Editor để sửa Vàng, Kim Cương, Cấp độ hay Trang bị; phát hiện can thiệp sẽ lập tức từ chối nạp.")
+            .addPoint("Đổi định dạng file xuất mặc định sang chuẩn .sav (angler_save_*.sav), hỗ trợ sao chép chuỗi mã hóa vào Clipboard an toàn.")
+            .addPoint("Duy trì khả năng tương thích ngược hoàn hảo với các file .json hoặc bản sao lưu trước đây của người chơi.")
+        );
+
+        patchNotesItems.add(new UpdateItem("SỰ KIỆN", "Điều Chỉnh Thời Hạn Sự Kiện Lạc Hồng Đến Hết 28/10", new Color(1f, 0.75f, 0.25f, 1f))
+            .addPoint("Ấn định thời điểm bế mạc Sự kiện Lạc Hồng vào đúng 23:59:59 ngày 28/10/2026 theo giờ chuẩn hệ thống.")
+            .addPoint("Đồng hồ đếm ngược hiển thị chính xác thời gian còn lại trước khi sự kiện chính thức khép lại.")
+        );
+
+        patchNotesItems.add(new UpdateItem("CHUYỂN GIAO", "Cơ Chế Khóa An Toàn Cửa Hàng & Quy Đổi Điểm SK Tồn Đọng", new Color(0.35f, 0.85f, 0.5f, 1f))
+            .addPoint("Khi sự kiện kết thúc: Cửa Hàng Sự Kiện tự động khóa nút đổi vật phẩm ('ĐÃ ĐÓNG (HẾT HẠN)') để bảo vệ tính công bằng.")
+            .addPoint("Tự động bảo lưu giá trị nỗ lực của cần thủ: Toàn bộ Điểm Sự Kiện tồn đọng được quy đổi thành Vàng (1 Điểm SK = 1,000 Vàng).")
+            .addPoint("Sẵn sàng hạ tầng dữ liệu và chuẩn bị khởi tranh Sự Kiện Halloween Đêm Hội Ma Quái vào ngày 30/10.")
+        );
+
+        // ===== PHIÊN BẢN v0.4.23 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.4.23 (TIỀN TỆ SỔ TAY, HOÁN ĐỔI PHÍM & CƠ CHẾ KÉO CÁ)"));
 
         patchNotesItems.add(new UpdateItem("SỔ TAY", "Mô Tả Chi Tiết Cơ Chế 20 Kỹ Năng Của Cá Trong Sổ Tay", new Color(0.4f, 0.85f, 1f, 1f))
             .addPoint("Bổ sung chú thích đầy đủ hiệu ứng và cơ chế tác động cho toàn bộ 20 kỹ năng chủ động & nội tại của cá.")
@@ -315,6 +336,28 @@ public class PatchNotesDialog {
         // =====================================================================
         // --- TAB 1: KẾ HOẠCH & LỘ TRÌNH (SẮP TỚI) ---
         // =====================================================================
+        roadmapItems.add(UpdateItem.versionHeader("SỰ KIỆN ĐẶC BIỆT: HALLOWEEN 2026 (30/10 - 27/11, 28 NGÀY)"));
+
+        roadmapItems.add(new UpdateItem("SỰ KIỆN", "Đêm Hội Ma Quái Halloween & Tự Động Chuyển Giao 28 Ngày", new Color(1f, 0.55f, 0.15f, 1f))
+            .addPoint("Kéo dài trọn vẹn 28 ngày; tự động chuyển đổi giao diện Event, Shop đồ Halloween và chuỗi Điểm danh 25 Ngày.")
+            .addPoint("2 Set Cần Câu Mới: Set Cày Điểm 'Dạ Hội Bí Ngô' (Shop SK & Điểm danh) và Set 6★ 'Huyết Nguyệt Thần Vương' (Đài Gacha Giới Hạn).")
+            .addPoint("Bộ Cá Halloween: Cá Skeleton (Common), Cá Ma (Epic), Thủy Quái Frankenstein, và Siêu Boss Kình Ngư Thanatos 6666 HP.")
+            .addPoint("Tính năng kẹo ma thuật Trick-or-Treat, Đèn Lồng Bí Ngô chiếu sáng đáy nước và thời tiết Bầu Trời Huyết Nguyệt.")
+        );
+
+        roadmapItems.add(new UpdateItem("GAMEPLAY", "Đại Tu Hệ Thống Kỹ Năng Cá & Hạng Cá Legendary Mới", new Color(0.95f, 0.8f, 0.25f, 1f))
+            .addPoint("Bổ sung bậc phẩm cấp LEGENDARY (Mini-Boss khung viền Vàng Kim) lấp đầy khoảng trống giữa Epic và Boss thế giới.")
+            .addPoint("Chuẩn hóa phân tầng kỹ năng: Common (0-1 Passive), Uncommon (1 Passive), Rare (1 skill), Epic (2 skill), Legendary (3 skill), Boss (3 skill độc nhất).")
+            .addPoint("Đổi mới toàn bộ kỹ năng cũ: Vỏ cứng (giảm sát thương phẳng), Trơn trượt (né đòn miss), Bền bỉ (kéo dài PULLING), Vùng vẫy (dao động kim Tension).")
+            .addPoint("Làm rõ 100% cơ chế Nhảy Vọt: Nhả dây trên không & nhấp kéo ngay khi chạm nước để gây x2 sát thương; giữ dây khi tiếp nước bị phạt sốc đứt cước.")
+            .addPoint("Thiết kế bộ kỹ năng độc bản không trùng lặp cho cả 3 Boss thế giới (Thủy Quái Sông Trà, Bạch Tuộc Khổng Lồ, Thần Biển Leviathan).")
+        );
+
+        roadmapItems.add(new UpdateItem("ĐÃ RA MẮT", "Mã Hóa File Save & Chốt Hạn Sự Kiện 28/10 (v0.4.24)", new Color(0.35f, 0.85f, 0.50f, 1f))
+            .addPoint("Đã hoàn thành mã hóa file save AES-256 kết hợp SHA-256 Checksum chống chỉnh sửa.")
+            .addPoint("Đã chốt hạn Sự kiện Lạc Hồng vào 23:59:59 ngày 28/10; bảo lưu quy đổi Điểm SK sang Vàng và khóa an toàn Shop.")
+        );
+
         roadmapItems.add(new UpdateItem("ĐÃ RA MẮT", "Game Juice, Screen Shake & GAS System (v0.4.211)", new Color(0.35f, 0.85f, 0.50f, 1f))
             .addPoint("Đã hoàn thành bộ điều khiển rung chấn Trauma Screen Shake & Easing Game Juice.")
             .addPoint("Đã hoàn thành Gameplay Ability System (GAS) chuẩn hóa bộ 4 kỹ năng QWER, Cooldown & Buff/Debuff.")
@@ -332,29 +375,29 @@ public class PatchNotesDialog {
 
         roadmapItems.add(UpdateItem.versionHeader("ĐẠI TU ĐỒ HỌA, GIAO DIỆN & HOẠT ẢNH (SERIES v0.5.x)"));
 
-        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 1", "Ngoại Hình 6 Set Trang Bị & Icon Vật Phẩm Shop (v0.5.1)", new Color(0.35f, 0.80f, 1f, 1f))
-            .addPoint("Đại tu toàn bộ 6 Set Cần, Dây, Lưỡi theo chuẩn 4 lớp Vector 3D: Vực Thẳm (4★), Hải Tặc (3★), Băng Giá (2★), Thợ Săn (1★).")
-            .addPoint("Vector hóa 100% vật phẩm Shop: Mồi câu (trùn, tôm, cá, tiên châu), Lưới đánh cá, Bùa may mắn chuông đồng, Đá mài, Vé gacha.")
-            .addPoint("Bộ 8 Huân chương Thành tựu 3D và Phù hiệu Nhiệm vụ phong cách Thần thoại Biển.")
+        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 1", "Ngoại Hình 11 Set Trang Bị & Icon Vật Phẩm (v0.5.1)", new Color(0.35f, 0.80f, 1f, 1f))
+            .addPoint("Nâng cấp Vector Icon toàn bộ 33 món (11 Cần, 11 Dây, 11 Lưỡi) trong 11 Set của EquipmentIconRenderer.")
+            .addPoint("Chuẩn hóa Vector Icon cho toàn bộ vật phẩm trong ItemDatabase: Bánh mì, Thuốc stamina, Nước tăng lực, Bình xịt băng, Trà thảo mộc, Đá mài, Nam châm...")
+            .addPoint("Hoàn thiện icon các Sách Kỹ Năng và vật phẩm Loot câu được từ đáy biển (LootVisualRenderer).")
         );
 
         roadmapItems.add(new UpdateItem("GIAI ĐOẠN 2", "Hiện Đại Hóa UI, Nút Bấm Xúc Giác & Combat Gauges (v0.5.2)", new Color(1f, 0.75f, 0.25f, 1f))
-            .addPoint("Khung viền kỳ ảo bo góc mạ đồng Đông Sơn, nút bấm 3 trạng thái phản hồi âm xúc giác cơ khí.")
-            .addPoint("Thanh máu cá Ghost HP bar tụt dần, Thanh lực căng Gradient rung lắc chớp nháy điện giật khi trên 90%.")
-            .addPoint("Thẻ bài trang bị quét sáng Hologram Shimmer và so sánh chỉ số tức thì (Stat Diff) khi hover.")
+            .addPoint("Khung viền Dialog hiện đại bo góc, nút bấm 3 trạng thái rõ ràng phản hồi âm click cơ khí ZzFX.")
+            .addPoint("Thanh máu cá Ghost HP bar tụt dần theo sát thương, Thanh lực căng Gradient rung lắc chớp nháy khi căng cao.")
+            .addPoint("Thẻ bài trang bị hiển thị khung viền chuẩn hệ Rarity và so sánh chỉ số tức thì (Stat Diff) khi hover.")
         );
 
-        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 3", "Ngoại Hình 45 Loài Cá, 3 Boss & Hiệu Ứng Chiêu Thức VFX (v0.5.3)", new Color(0.25f, 0.85f, 0.50f, 1f))
-            .addPoint("Đại tu 45 loài cá với đổ khối Dual-tone 3D, mắt phản quang con ngươi lấp lánh và vây mềm bán trong suốt.")
-            .addPoint("3 Siêu Boss: Thủy Quái Sông Hồng (mai ngọc râu rồng), Megalodon (sẹo ngang hàm răng 3 tầng), Leviathan (san hô tím phát quang).")
-            .addPoint("Bộ VFX chiêu thức: Dưỡng Sức hoa sen bung nở, Trói Buộc xích hư không, Phá Giáp búa sét, Bão Tố, Quấy Bùn mờ màn hình.")
+        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 3", "Ngoại Hình 45 Loài Cá Vector & Hiệu Ứng Chiêu Thức (v0.5.3)", new Color(0.25f, 0.85f, 0.50f, 1f))
+            .addPoint("Đại tu 45 loài cá trong FishVisualRenderer với tạo khối mềm mại, bóng sáng và vây ngực chuyển động tự nhiên.")
+            .addPoint("3 Siêu Boss: Thủy Quái Sông Trà (vảy rêu phù sa, quẫy đục đáy), Bạch Tuộc Khổng Lồ (xúc tu gai nhọn, túi mực đen), Thần Biển Leviathan (thân rồng viễn cổ, sừng san hô phát quang).")
+            .addPoint("Hoàn thiện bộ VFX chiêu thức cần thủ (Dưỡng Sức, Giật Kép, Trói Buộc) và kỹ năng cá (Quẫy Bùn, Mực Mù, Sóng Thần, Bão Tố).")
         );
 
-        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 4", "Đại Tu Hoạt Ảnh Chuyển Động & Cinematic Gacha SSR (v0.5.4)", new Color(0.95f, 0.45f, 0.75f, 1f))
-            .addPoint("Chuyển động hữu cơ của cá: Đốt sống đa khớp Verlet uốn lượn nhịp nhàng, quẫy đuôi tốc độ cao khi kéo và phóng nhảy khỏi mặt nước.")
-            .addPoint("Bộ hoạt ảnh cần thủ: Quăng cần vung tích lực, cần câu uốn cong vật lý theo lực căng Tension, giật cần cắn câu nổ hiệu ứng HIT.")
-            .addPoint("Cắt cảnh Gacha điện ảnh: Vòng ma pháp đại dương, sao băng đổi màu phẩm cấp và cảnh nổ SSR vỡ kính, Rồng Vàng/Chim Lạc 360°.")
-            .addPoint("Rương báu rung lắc bung tài nguyên, Banner Thăng Cấp nảy bật kèm pháo hoa kim tuyến.")
+        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 4", "Hoạt Ảnh Vòng Quay Gacha Wheel & Thao Tác Kéo Cần (v0.5.4)", new Color(0.95f, 0.45f, 0.75f, 1f))
+            .addPoint("Cải tiến hoạt ảnh cá quẫy đuôi mềm mại, uốn mình đổi hướng khi giằng co kéo dây với cần thủ.")
+            .addPoint("Cần câu uốn cong vật lý co giãn theo lực căng Tension, hiệu ứng rung chấn màn hình giật cần cắn câu.")
+            .addPoint("Nâng cấp hoạt ảnh Vòng Quay Gacha Wheel 12 cung xoay tít gia tốc, đèn led viền chớp sáng & nảy kim.")
+            .addPoint("Hiệu ứng hào quang ánh vàng bùng nổ và lật mở thẻ trang bị khi quay trúng bậc Legendary & Limited Premium.")
         );
     }
 

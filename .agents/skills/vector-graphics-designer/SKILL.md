@@ -23,12 +23,6 @@ Mỗi tài sản đồ họa (Equipment, Fish, UI Ornament) trong game bắt bu�
 4. **Lớp 4 - Điểm sáng chói cực hạn (Specular Glint):**
    - Điểm tròn trắng tinh khiết (`#ffffff`, `alpha = 0.95f`) đặt tại đỉnh chóp hoặc góc phản xạ ánh sáng trên-trái. Đây là yếu tố sống còn tạo độ bóng bẩy chuẩn game RPG.
 
-### Bảng màu chuẩn theo độ hiếm (Rarity Palettes):
-- **Phổ thông (Common - Tập Sự):** Xám bạc kim loại (`#94a3b8`), Xanh thẫm (`#1e293b`), Điểm trắng (`#f8fafc`).
-- **Hiếm (Rare - Băng Giá, Thợ Săn):** Lục bảo (`#10b981`), Xanh băng tuyết (`#38bdf8`), Lam hoàng gia (`#1d4ed8`).
-- **Sử thi (Epic - Hải Tặc, Đại Dương):** Tím thạch anh (`#a855f7`), Lam ngọc sâu (`#0284c7`), Viền vàng (`#f59e0b`).
-- **Huyền thoại (Legendary - Vực Thẳm, Long Vương):** Vàng hoàng gia (`#fbbf24`), Đỏ dung nham (`#ef4444`), Lam vực thẳm (`#0f172a`).
-
 ---
 
 ## 🛠️ 2. Quy trình làm việc với Vector Studio MCP

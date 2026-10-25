@@ -1,6 +1,6 @@
 # KẾ HOẠCH PHÁT TRIỂN & THEO DÕI TÁC VỤ (ROADMAP & TASK TRACKER)
 > **Dự án:** AnglerRPG  
-> **Cập nhật:** 22/10/2026  
+> **Cập nhật:** 26/10/2026  
 > **Trạng thái tài liệu:** Đang hoạt động (Active Tracker)
 
 ---
@@ -9,6 +9,13 @@
 
 | ID | Nhóm công việc | Hạng mục | Mức độ ưu tiên | Trạng thái |
 | :--- | :--- | :--- | :---: | :---: |
+| **SEC-02** | Bảo mật  | Mã hóa file save chống gian lận & can thiệp dữ liệu (AES-256 + SHA-256 Checksum) | **P0 (Bảo mật)**   | ✅ Đã hoàn thành (v0.4.24) |
+| **EVT-01** | Sự kiện  | Chốt hạn Sự kiện Lạc Hồng (28/10) & Khóa an toàn Shop, quy đổi Điểm SK tồn đọng | **P1 (Sự kiện)**  | ✅ Đã hoàn thành (v0.4.24) |
+| **HLW-01** | Sự kiện  | Triển khai Sự Kiện Halloween (30/10 - 27/11, 28 Ngày): Tự động chuyển UI, Shop & Điểm Danh 25 Ngày | **P1 (Sự kiện)**  | 📋 Kế hoạch triển khai |
+| **HLW-02** | Trang bị | 2 Set Cần Câu Mùa Halloween: Set Cày Điểm "Dạ Hội Bí Ngô" & Set 6★ "Huyết Nguyệt" | **P1 (Trang bị)**  | 📋 Kế hoạch triển khai |
+| **HLW-03** | Gameplay | Bộ Cá Halloween (Cá Skeleton Common, Cá Ma Epic, Boss Thanatos 6666 HP, xuất hiện mọi bản đồ) | **P1 (Gameplay)**  | 📋 Kế hoạch triển khai |
+| **HLW-04** | Trải nghiệm| Tính năng Halloween: Kẹo Trick-or-Treat, Đèn Bí Ngô, Bầu Trời Huyết Nguyệt & ZzFX | **P1 (Trải nghiệm)**| 📋 Kế hoạch triển khai |
+| **FSH-04** | Gameplay | Revamp Toàn Bộ Skill Cá, Chuẩn Hóa Phân Tầng Kỹ Năng & Bổ Sung Hạng Cá Legendary (Mini-Boss) | **P1 (Quan trọng)** | 📋 Kế hoạch triển khai |
 | **BUG-01** | Sửa lỗi | Crash khi bấm Quay lại từ màn hình Trang bị (Use-After-Free) | **P0 (Khẩn cấp)** | ✅ Đã khắc phục triệt để |
 | **BUG-02** | Sửa lỗi | Chuẩn hóa hệ thống nút Quay lại Menu & khắc phục lỗi vòng lặp | **P0 (Khẩn cấp)** | ✅ Đã khắc phục triệt để |
 | **BUG-03** | Sửa lỗi | Phím kỹ năng QWER không nhận & thiếu phản hồi trên tài khoản mới | **P0 (Khẩn cấp)** | ✅ Đã khắc phục triệt để |
@@ -54,21 +61,19 @@
 | **FSH-03** | Tính năng| Hiển thị chi tiết cơ chế tác động của 20 kỹ năng cá trong Sổ Tay Thủy Tộc | **P1 (Trải nghiệm)**| ✅ Đã hoàn thành |
 | **QST-02** | Nhiệm vụ | Đại tu kho nhiệm vụ Ngày/Tuần (12 ngày, 7 tuần), triệt tiêu trùng lặp yêu cầu| **P1 (Quan trọng)** | ✅ Đã hoàn thành |
 | **SHD-01** | Đồ họa   | Simplex Noise GLSL Water Shader: Mặt Nước Sóng Lấp Lánh & Khúc Xạ Ánh Sáng Chân Thực | **P2 (Đồ họa)**     | 📋 Kế hoạch (Bước 4) |
-| **EQP-02** | Đồ họa   | Đại tu ngoại hình toàn bộ 6 Set Trang Bị (Cần, Dây, Lưỡi) chuẩn 4 lớp Vector 3D      | **P1 (Đồ họa)**     | 📋 Kế hoạch v0.5.0 |
-| **ICO-03** | Đồ họa   | Vector hóa 100% vật phẩm Tiệm Tạp Hóa (Mồi câu, Lưới, Bùa may mắn, Đá mài, Vé)       | **P1 (Đồ họa)**     | 📋 Kế hoạch v0.5.0 |
-| **ICO-04** | Đồ họa   | Bộ Phù hiệu Vector Nhiệm vụ, Sự kiện & Huân chương Thành tựu 3D Hải Trình             | **P1 (Đồ họa)**     | 📋 Kế hoạch v0.5.0 |
-| **FSH-02** | Đồ họa   | Đại tu ngoại hình 45 loài cá & 3 Siêu Boss Thế Giới (Dual-tone, Mắt 3D, Vây mềm)     | **P1 (Đồ họa)**     | 📋 Kế hoạch v0.5.0 |
-| **ENV-02** | Đồ họa   | Môi trường mặt nước gợn sóng sinh động, rạn san hô, cá bơi nền & Tia nắng (God Rays) | **P1 (Đồ họa)**     | 📋 Kế hoạch v0.5.0 |
-| **UI-05**  | Giao diện| Khung viền kỳ ảo mạ đồng Đông Sơn & Bộ nút bấm xúc giác 3 trạng thái phản hồi âm     | **P1 (Giao diện)**  | 📋 Kế hoạch v0.5.0 |
-| **UI-06**  | Giao diện| Thanh trạng thái chiến đấu động (Ghost HP bar, Gradient Tension bar rung chấn)       | **P1 (Giao diện)**  | 📋 Kế hoạch v0.5.0 |
-| **UI-07**  | Giao diện| Thẻ bài trang bị phát quang ánh kim Hologram & So sánh chỉ số tức thì (Stat Diff)    | **P1 (Giao diện)**  | 📋 Kế hoạch v0.5.0 |
-| **VFX-04** | Kỹ năng  | Bộ hiệu ứng thị giác chiêu thức cần thủ (Dưỡng Sức hoa sen, Trói Buộc xích hư không) | **P1 (Trải nghiệm)**| 📋 Kế hoạch v0.5.0 |
-| **VFX-05** | Kỹ năng  | Bộ hiệu ứng kỹ năng cá & Boss (Bứt Tốc, Quấy Bùn mờ màn hình, Cuồng Nộ, Giật Điện)  | **P1 (Trải nghiệm)**| 📋 Kế hoạch v0.5.0 |
-| **ANM-04** | Hoạt ảnh | Chuyển động hữu cơ của cá (Đốt sống đa khớp Verlet uốn lượn, quẫy đuôi, nhảy vọt)   | **P1 (Hoạt ảnh)**   | 📋 Kế hoạch v0.5.0 |
-| **ANM-05** | Hoạt ảnh | Bộ hoạt ảnh thao tác cần thủ (Quăng cần, Cần uốn cong vật lý khi kéo, Giật cần, Dùng đồ)| **P1 (Hoạt ảnh)**| 📋 Kế hoạch v0.5.0 |
-| **GAC-02** | Gacha    | Hoạt ảnh triệu hồi Gacha điện ảnh (Vòng trận pháp đại dương, sao băng đổi màu phẩm)  | **P1 (Hoạt ảnh)**   | 📋 Kế hoạch v0.5.0 |
-| **GAC-03** | Gacha    | Cắt cảnh nổ bảo vật xịn SSR (Màn hình vỡ kính, Rồng Vàng/Chim Lạc bay lượn, God Rays)| **P1 (Hoạt ảnh)**   | 📋 Kế hoạch v0.5.0 |
-| **ANM-06** | Hoạt ảnh | Hoạt ảnh rương báu bật nắp bung tài nguyên, Banner Thăng Cấp & Pháo hoa kim tuyến   | **P1 (Hoạt ảnh)**   | 📋 Kế hoạch v0.5.0 |
+| **EQP-02** | Đồ họa   | Nâng cấp ngoại hình 11 Set Trang Bị (33 món Cần, Dây, Lưỡi) trong EquipmentIconRenderer| **P1 (Đồ họa)**     | 📋 Kế hoạch v0.5.0 |
+| **ICO-03** | Đồ họa   | Chuẩn hóa Vector Icon toàn bộ vật phẩm Tiệm Tạp Hóa trong ItemDatabase & LootVisualRenderer | **P1 (Đồ họa)**     | 📋 Kế hoạch v0.5.0 |
+| **FSH-02** | Đồ họa   | Đại tu ngoại hình 45 loài cá & 3 Siêu Boss Thế Giới trong FishVisualRenderer          | **P1 (Đồ họa)**     | 📋 Kế hoạch v0.5.0 |
+| **ENV-02** | Đồ họa   | Môi trường mặt nước gợn sóng sinh động, rạn san hô, cá bơi nền & khúc xạ ánh sáng    | **P1 (Đồ họa)**     | 📋 Kế hoạch v0.5.0 |
+| **UI-05**  | Giao diện| Khung viền Dialog hiện đại bo góc & Bộ nút bấm phản hồi âm ZzFX, hiệu ứng hover/pressed| **P1 (Giao diện)**  | 📋 Kế hoạch v0.5.0 |
+| **UI-06**  | Giao diện| Thanh trạng thái chiến đấu động (Ghost HP bar tụt dần, Gradient Tension bar rung giật)| **P1 (Giao diện)**  | 📋 Kế hoạch v0.5.0 |
+| **UI-07**  | Giao diện| Thẻ bài trang bị hiển thị Rarity rõ nét & So sánh chỉ số tức thì (Stat Diff) khi hover| **P1 (Giao diện)**  | 📋 Kế hoạch v0.5.0 |
+| **VFX-04** | Kỹ năng  | Bộ hiệu ứng thị giác chiêu thức cần thủ (Dưỡng Sức, Giật Kép, Trói Buộc, Thuần Hóa)   | **P1 (Trải nghiệm)**| 📋 Kế hoạch v0.5.0 |
+| **VFX-05** | Kỹ năng  | Bộ hiệu ứng kỹ năng cá & Boss (Quẫy Bùn che HUD, Mực Mù, Sóng Thần, Cuồng Nộ, Bão Tố) | **P1 (Trải nghiệm)**| 📋 Kế hoạch v0.5.0 |
+| **ANM-04** | Hoạt ảnh | Chuyển động hữu cơ của cá (đuôi quẫy nhịp nhàng, uốn mình giằng co khi PULLING)       | **P1 (Hoạt ảnh)**   | 📋 Kế hoạch v0.5.0 |
+| **ANM-05** | Hoạt ảnh | Cần câu uốn cong vật lý theo lực căng Tension, hiệu ứng giật cần & bọt nước cắn câu  | **P1 (Hoạt ảnh)**   | 📋 Kế hoạch v0.5.0 |
+| **GAC-02** | Gacha    | Hoạt ảnh Vòng Quay Gacha Wheel 12 cung xoay tít gia tốc, đèn viền chớp nháy & nảy kim  | **P1 (Hoạt ảnh)**   | 📋 Kế hoạch v0.5.0 |
+| **GAC-03** | Gacha    | Hiệu ứng nổ trang bị bậc cao Legendary & Limited Premium (Hào quang bùng nổ, lật thẻ)| **P1 (Hoạt ảnh)**   | 📋 Kế hoạch v0.5.0 |
 
 ---
 
@@ -332,99 +337,304 @@
 
 ## 🎨 PHẦN II: KẾ HOẠCH CHI TIẾT v0.5.0 - ĐẠI TU TOÀN DIỆN ĐỒ HỌA, GIAO DIỆN & HOẠT ẢNH
 
-### 1. Nâng Cấp Ngoại Hình Trang Bị & Icon Hệ Thống (EQP-02, ICO-03, ICO-04)
-- **EQP-02 - Ngoại hình 6 Set Trang Bị (Rods, Lines, Hooks) theo chuẩn 4 lớp Vector 3D:**
-  - *Set Vực Thẳm (4★ Epic Abyssal):* Thân cần chitin đen tuyền nứt phát quang sinh học xanh ngọc (`#06b6d4`), đầu cần vây gai sắc nhọn, dây tơ nhện biển phát sáng, lưỡi câu xương rồng vực sâu ma mị.
-  - *Set Hải Tặc & Hoàng Gia (3★-4★ High Seas):* Cần gỗ sồi bọc vàng cướp biển, đầu mỏ neo rèn đồng cổ, dây tơ tằm bện chỉ vàng, lưỡi câu hoàng gia dát ngọc ruby đỏ.
-  - *Set Băng Giá (2★-3★ Glacial Frost):* Thân cần tinh thể băng lục giác trong suốt phản quang tuyết, dây cước sương giá trắng buốt, lưỡi câu thạch băng vĩnh cửu sắc như dao cạo.
-  - *Set Tập Sự & Thợ Săn (1★-2★ Rustic Coastal):* Cần tre uốn cong mộc mạc quấn dây gai, dây thừng bện tay, lưỡi câu sắt gỉ cổ điển phong cách ngư dân làng chài.
-- **ICO-03 - Vector hóa 100% vật phẩm Tiệm Tạp Hóa (Shop Items & Consumables):**
-  - *Mồi câu (Baits):* Mồi trùn biển uốn lượn, Mồi tôm phát quang biển sâu, Mồi cá con lấp lánh vảy bạc, Mồi Thần Lạc Hồng đóa sen ngậm tiên châu.
-  - *Lưới đánh cá (Nets):* Lưới đay dân dã quấn phao gỗ, Lưới cước tơ tằm trong suốt, Lưới bạc gia cường khoen thép, Lưới vàng hoàng gia dát ngọc.
-  - *Bùa may mắn (Talismans):* Bùa giấy điều son chữ Hán-Nôm linh ứng, Bùa ngọc bội xà cừ phát ánh cầu vồng, Bùa Thần Tài Kim Ngân đính chuông đồng cổ.
-  - *Đá mài, Bình thuốc & Nước tăng lực:* Khối đá mài thạch anh phát tia lửa, Bình hồ lô / lọ thuốc thủy tinh phát bọt khí ma thuật sủi tăm.
-  - *Vé Gacha:* Vé Thường xanh lam kim tuyến, Vé Sự Kiện Hoàng Kim Lạc Hồng viền cánh sen đỏ rực.
-- **ICO-04 - Bộ Phù hiệu Vector Nhiệm vụ, Sự kiện & Huân chương Thành tựu 3D:**
-  - 8 Huân chương Thành tựu 3D phong cách Thần thoại Biển: Huân chương Cần Thủ (2 cần bắt chéo), Huân chương Vua Biển (vương miện sóng nước rồng ngậm ngọc), Huân chương Thợ Săn Kho Báu (núi vàng & kim cương phát sáng), Huân chương Kình Ngư (cá quẫy sóng lớn).
-  - Phù hiệu Nhiệm vụ ngày/tuần: Cuộn giấy da hải trình la bàn cổ, Mỏ neo vinh dự, Rương báu mở nắp phát quang.
+### 1. Nâng Cấp Ngoại Hình Trang Bị & Icon Vật Phẩm (EQP-02, ICO-03)
+- **EQP-02 - Chuẩn hóa & Nâng cấp Vector Icon 11 Set Trang Bị (EquipmentIconRenderer.java):**
+  - Tinh chỉnh nét vẽ vector cho toàn bộ 33 món trang bị (11 Cần, 11 Dây, 11 Lưỡi câu) thuộc 11 Set trang bị hiện có trong `EquipmentGenerator.java`:
+    * *Set Tập Sự (0★ Common):* Cần Câu Tre mộc mạc quấn đốt trúc, Dây Cước Thường cuộn cước thô, Lưỡi Câu Chì đơn giản.
+    * *Set Thợ Săn (1★ Uncommon):* Gậy Phục Kích ngụy trang xanh rêu, Sợi Tơ Kẽm bện kim loại, Móng Vuốt Biển sắc nhọn.
+    * *Set Băng Giá (2★ Rare):* Cần Câu Băng tinh thể băng xanh buốt, Dây Lạnh Cóng phủ sương tuyết, Móc Câu Tuyết hình hoa tuyết băng giá.
+    * *Set Đại Dương (3★):* Trượng Biển Khơi xanh dương đậm, Sợi Thủy Tinh lấp lánh ánh nước, Nanh Thủy Quái cong vút.
+    * *Set Hải Tặc (4★ Epic):* Trụ Cột Buồm gỗ sồi bọc đồng, Xích Neo Nhỏ xích sắt gai góc, Lưỡi Hái Thép rèn đao cướp biển.
+    * *Set Vực Thẳm (5★ Legendary):* Trượng Hắc Ám tím thẫm phát quang, Sợi Hắc Mạch ma mị, Móng Vuốt Vực Sâu gai góc u tối.
+    * *Set Hoàng Gia (6★):* Cần Câu Bạch Kim mạ viền vàng, Tơ Tằm Thượng Hạng ánh tím hoàng gia, Móc Cẩm Thạch khảm ngọc quý.
+    * *Set Thời Không (6★):* Trượng Thời Gian ánh ngọc lam hư không, Sợi Dây Xuyên Thấu đa chiều, Lưỡi Câu Hư Không xoay chuyển thời không.
+    * *Set Quang Minh (7★):* Trượng Ánh Sáng vàng kim rực rỡ, Dây Chỉ Vàng phát quang linh thiêng, Lưỡi Câu Thần ánh hào quang chói lọi.
+    * *Set Vệ Quốc Vang Danh (Limited Event cày):* Cần Câu Khởi Nghĩa đỏ gụ, Cước Vệ Quốc bện sao vàng, Lưỡi Sao Vàng chiến tích oai hùng.
+    * *Set Thần Khí Lạc Hồng (6★ Limited Premium Gacha):* Trượng Lạc Hồng khắc họa tiết chim Lạc đỏ thắm, Dây Rồng Thiêng lượn sóng cuộn, Móc Âu Cơ vàng rực linh thiêng.
+- **ICO-03 - Chuẩn hóa Vector Icon toàn bộ vật phẩm trong ItemDatabase & LootVisualRenderer:**
+  - *Vật phẩm tiêu hao & hồi phục:* Bánh Mì (ổ bánh mì nướng vàng nâu), Thuốc Hồi Stamina (lọ thuốc xanh sủi bọt), Nước Tăng Lực (lon nước năng lượng đỏ vàng), Nước Bứt Phá (bình tam giác ánh cam), Trà Thảo Mộc Định Thần (tách trà bốc khói xanh dịu).
+  - *Đạo cụ chiến đấu & hỗ trợ:* Dây Câu Tốt (cuộn cước xanh gia cường), Bình Xịt Đóng Băng (bình khí nén phủ băng tuyết), Đá Mài Lưỡi Câu (thỏi đá mài vát cạnh), Nam Châm Kho Báu (nam châm chữ U đỏ bạc), Kính Nhìn Xuyên Nước (kính lặn mắt kính trong suốt), Lưới Đánh Cá (lưới đan mắt cáo), Bùa Hoàng Kim (thẻ bùa vàng viền đỏ).
+  - *Mồi câu:* Mồi Thơm (hũ mồi thơm xanh lá), Mồi Rủi Ro (hũ mồi tím cảnh báo đầu lâu).
+  - *Sách Kỹ Năng:* Sách Thông Thái, Sách: Dưỡng Sức, Sách: Giật Kép, Sách: Mắt Đại Bàng, Sách: Thuần Hóa, Sách: Trói Buộc, Sách: Trái Tim ĐD (bìa sách da đóng gáy mạ vàng theo từng hệ).
+  - *Loot rác & kho báu câu được:* Ủng Cao Su Cũ, Chai Nhựa, Lốp Xe, Túi Rác, Bình Cổ, Nhẫn Vàng, Rương Chìm, Kiếm Cổ.
 
 ---
 
 ### 2. Hiện Đại Hóa Giao Diện & UI Game Juice (UI-05, UI-06, UI-07)
-- **UI-05 - Khung Viền Kỳ Ảo & Bộ Nút Bấm Xúc Giác (Fantasy Oceanic Frames & Tactile Buttons):**
-  - Bo góc mềm mại cho toàn bộ Modal/Dialog với viền kim loại đồng thau chạm khắc hoa văn Đông Sơn và sóng biển ở 4 góc.
-  - Nút bấm 3 trạng thái rõ rệt (Normal gradient sâu, Hover viền hào quang phát sáng, Pressed thụt 2px kèm âm thanh cơ khí nảy).
-  - Thanh cuộn (Scrollbar) phong cách cổ điển có con trượt hình mỏ neo/giọt nước.
-- **UI-06 - Thanh Trạng Thái Chiến Đấu Động (Dynamic Combat Gauges & Juice):**
-  - *Thanh Máu Cá (HP Bar):* Bổ sung thanh "Ghost HP" đỏ thẫm tụt dần sau khi trúng đòn, viền nứt phát tia lửa khi máu dưới 20%.
-  - *Thanh Lực Căng (Tension Bar):* Đổi màu theo dải màu liên tục Gradient (Xanh lục an toàn -> Vàng cảnh báo -> Đỏ cam nguy hiểm -> Đỏ tím rung lắc chớp nháy kèm tia điện giật khi trên 90%).
-  - *Thanh Thể Lực (Stamina Bar):* Hiệu ứng bọt khí sủi tăm lấp lánh khi đang hồi thể lực.
-- **UI-07 - Thẻ Bài Trang Bị Phát Quang & So Sánh Chỉ Số Tức Thì (Card Hologram & Stat Diff):**
-  - Hiệu ứng tia sáng quét xiên Hologram (Shimmer Sweep) trên các trang bị 5★ Thời Không và 6★ Lạc Hồng.
-  - So sánh trực tiếp với trang bị đang đeo khi di chuột trong túi đồ (+X màu xanh ngọc, -Y màu đỏ san hô).
+- **UI-05 - Khung Viền Hiện Đại & Bộ Nút Bấm Phản Hồi Xúc Giác:**
+  - Khung viền các Modal/Dialog (Shop, Inventory, Equipment, PatchNotes, Settings) bo góc sắc nét, viền panel phân tầng độ sâu màu tối hiện đại.
+  - Bộ nút bấm 3 trạng thái rõ rệt (Normal, Hover phát sáng viền, Pressed thụt 2px kèm âm click cơ khí từ ZzFX).
+- **UI-06 - Thanh Trạng Thái Chiến Đấu Động (Dynamic Combat Gauges):**
+  - *Thanh Máu Cá (HP Bar):* Bổ sung thanh "Ghost HP" đỏ sẫm tụt dần sau mỗi đòn kéo sát thương, giúp người chơi cảm nhận rõ lực sát thương gây ra.
+  - *Thanh Lực Căng (Tension Bar):* Hiển thị dải Gradient mượt (Xanh lục an toàn -> Vàng cảnh báo -> Đỏ cam nguy hiểm -> Đỏ chớp nháy kèm rung giật khi > 85%).
+  - *Quickslots (Thanh thao tác nhanh):* Hiển thị số lượng vật phẩm và phím tắt (1, 2, 3...) rõ ràng, hiệu ứng sáng viền khi sẵn sàng sử dụng.
+- **UI-07 - Thẻ Bài Trang Bị Chuẩn Hóa Rarity & So Sánh Chỉ Số (Stat Diff):**
+  - Khung viền thẻ bài hiển thị chuẩn màu theo Rarity: Trắng (Common), Xanh lá (Uncommon), Xanh dương (Rare), Tím (Epic), Cam (Legendary), Đỏ (Limited Event), Vàng Kim (Limited Premium).
+  - Hiển thị so sánh trực tiếp chỉ số (Stat Diff: +X xanh lá, -Y đỏ) với trang bị hiện tại khi hover trong túi đồ.
 
 ---
 
-### 3. Ngoại Hình Cá & Môi Trường Đại Dương (FSH-02, ENV-02)
-- **FSH-02 - Đại Tu Ngoại Hình 45 Loài Cá & 3 Siêu Boss Thế Giới:**
-  - Tô màu đổ khối 2 mảng sáng tối (Dual-tone shading) cho toàn bộ 45 loài cá, tạo cảm giác thân cá tròn trịa, bóng mượt dưới nước.
-  - Con ngươi mắt cá có phản quang 3D (đốm sáng trắng + viền mống mắt màu cam/vàng/xanh biếc).
-  - Vây lưng, vây đuôi, vây ngực xòe mềm mại với các tia gân bán trong suốt.
-  - 3 Siêu Boss:
-    * *Thủy Quái Sông Hồng:* Râu rồng dài uốn lượn, mai rùa đá cổ rêu phong bọc ngọc bích, vảy rồng phát sáng cam rực.
-    * *Cá Mập Cổ Đại Megalodon:* Hàm răng 3 hàng sắc nhọn, vết sẹo chiến tích ngang mình, mắt phát ánh đỏ hung tợn.
-    * *Leviathan Vực Thẳm:* Thân rồng biển đen tím khổng lồ, vương miện san hô phát quang sinh học, rãnh thở phụt bọt khí tím.
-- **ENV-02 - Môi Trường Nước Sinh Động & Hiệu Ứng Khúc Xạ (Dynamic Water & Ambient Fauna):**
-  - Mặt nước gợn sóng biến dạng theo hàm điều hòa (Sin/Cos multi-layer water wave).
-  - Rạn san hô và rong biển uốn lượn nhịp nhàng theo dòng chảy đáy biển.
-  - Đàn cá nhỏ bơi lội ngẫu nhiên làm nền, tia nắng mặt trời xiên qua mặt nước (God Rays).
+### 3. Ngoại Hình 45 Loài Cá & Môi Trường Đại Dương (FSH-02, ENV-02)
+- **FSH-02 - Đại Tu Ngoại Hình 45 Loài Cá Trong FishVisualRenderer.java:**
+  - Nâng cấp chi tiết vector, tạo khối và bóng mượt cho toàn bộ 45 loài cá thuộc 3 bản đồ:
+    * *Ao Làng (15 loài):* Cá Rô Đồng, Cá Diếc, Cá Chép, Cá Mè, Cá Mương, Cá Lóc Nhí, Cá Trê, Cá Trôi, Cá Trắm Cỏ, Cá Chim Trắng, Cá Lóc Bông, Cá Trê Lai, Cá Chép Vàng, Cá Lăng Khổng Lồ, và Boss **Thủy Quái Sông Trà**.
+    * *Bãi Biển (15 loài):* Cá Chỉ Vàng, Cá Đục, Cá Cơm, Cá Mòi, Cá Lẹp, Cá Bạc Má, Cá Nục, Cá Đối, Cá Trích, Cá Chim Biển, Cá Mú, Cá Bóp, Cá Thu Hoàng Kim, Cá Ngừ Đại Dương, và Boss **Bạch Tuộc Khổng Lồ**.
+    * *Đảo Xa (15 loài):* Cá Ngựa Vằn, Cá Hề, Cá Đuối Nhỏ, Mực Ống, Cá Nóc, Cá Phèn, Cá Mặt Trăng, Cá Cờ, Rùa Biển, Cá Chuồn, Cá Mập Cáo, Cá Kiếm, Cá Voi Lưng Gù, Mực Khổng Lồ, và Boss **Thần Biển Leviathan**.
+  - Tinh chỉnh đặc trưng cho 3 Siêu Boss Thế Giới:
+    * *Thủy Quái Sông Trà (Ao Làng):* Vảy rêu phù sa bọc ngọc bùn đáy nước, vây gai sắc nhọn, râu dài quẫy đục đáy sông.
+    * *Bạch Tuộc Khổng Lồ (Bãi Biển):* 8 xúc tu gai nhọn khổng lồ bọc giác mút đỏ thẫm, mắt tím ma mị, túi mực đen kịt.
+    * *Thần Biển Leviathan (Đảo Xa):* Thân rồng viễn cổ khổng lồ xanh thẫm, vương miện sừng san hô phát quang, rãnh mang rít gào bão tố.
+- **ENV-02 - Môi Trường Nước & Khúc Xạ Ánh Sáng:**
+  - Hoàn thiện chuyển động sóng nước tự nhiên theo thời gian thực tại `AoLangBackground`, `BaiBienBackground`, và `DaoXaBackground`.
 
 ---
 
 ### 4. Ngoại Hình Kỹ Năng & Hiệu Ứng Chiến Đấu (VFX-04, VFX-05)
-- **VFX-04 - Bộ Hiệu Ứng Chiêu Thức Người Chơi (Player Active Skill VFX):**
-  - *Dưỡng Sức:* Đài sen ngọc nở rộ dưới chân cần thủ, các cánh hoa sen hồng và lá ngọc bay lên xoay tròn hồi phục thể lực.
-  - *Trói Buộc:* Vòng xích hắc ám từ hư không hoặc dây leo rong biển phát quang siết chặt lấy cá, làm rung giật và đóng băng mặt nước xung quanh.
-  - *Phá Giáp:* Búa sét / Mũi kích năng lượng giáng sấm sét thẳng xuống đầu cá, tạo vết nứt vảy phát tia lửa điện và văng mảnh giáp vỡ vụn.
-  - *Lướt Dây:* Cần thủ giật dây tạo luồng gió xoáy và bọt nước xé toạc mặt nước, dây câu hóa thành tia chớp xanh lơ rạch đường dài trắng xóa.
-  - *Kéo Mạnh / Giật Kép:* Vệt chém bán nguyệt song song màu vàng kim xé toạc sóng nước.
-- **VFX-05 - Bộ Hiệu Ứng Kỹ Năng Thủy Quái & Boss (Fish Skills VFX):**
-  - *Bứt Tốc:* Luồng nước xoáy dài sau đuôi cá, bọt khí cuồn cuộn phản chiếu tia sáng.
-  - *Quấy Bùn:* Đám mây bùn đục ngầu loang ra che khuất màn hình, làm mờ thanh HP và che dấu chuyển động của cá.
-  - *Lặn Sâu:* Cá biến thành bóng đen chìm xuống vực sâu kèm các vòng xoáy nước hút vào tâm.
-  - *Sóng Thần:* Cột sóng khổng lồ dâng trào kèm rung chấn màn hình (Camera Shake).
-  - *Cuồng Nộ:* Cá rực lửa đỏ thẫm, mắt đỏ ngầu, gai lưng dựng đứng kèm sóng âm chấn động phát tán theo vòng tròn.
-  - *Giật Điện:* Các tia sét xanh lơ/vàng giật liên hồi từ mang cá lan dọc theo dây câu về phía người chơi.
+- **VFX-04 - Bộ Hiệu Ứng Kỹ Năng Cần Thủ (CombatVFXManager.java):**
+  - Hiệu ứng thị giác rõ ràng cho các chiêu thức: Dưỡng Sức (vòng hồi thể lực xanh ngọc), Giật Kép (vết chém kép sóng nước), Mắt Đại Bàng (hào quang định vị), Trói Buộc (vòng sóng trói cá), Thuần Hóa, Trái Tim Đại Dương.
+- **VFX-05 - Bộ Hiệu Ứng Kỹ Năng Cá & Boss:**
+  - Hoàn thiện hiệu ứng hình ảnh khi cá tung kỹ năng: Quẫy Bùn (che phủ thanh Tension/HUD), Bứt Tốc (luồng bọt nước xoáy tốc độ), Lặn Sâu (giật tăng Tension), Cuồng Nộ (hào quang đỏ rực khi dưới 25% HP), Giật Điện (tia sét tê liệt dọc dây câu), Mực Mù Hút Máu, Sóng Thần, Bão Tố.
 
 ---
 
-### 5. Đại Tu Hoạt Ảnh Thao Tác & Chuyển Động (ANM-04, ANM-05)
-- **ANM-04 - Chuyển Động Hữu Cơ Của Cá (Verlet/Multi-Segment Fish Movement):**
-  - Mô phỏng xương sống uốn lượn nhiều đốt (Multi-segment spine): Đầu -> Thân -> Đuôi vẫy có độ trễ sóng tự nhiên, loại bỏ hoàn toàn cảm giác xoay đuôi cứng nhắc.
-  - Khi cá *IDLE:* Bơi lội lững lờ nhịp nhàng, thỉnh thoảng liệng người nghiêng vây ngực.
-  - Khi cá *PULLING* (Giằng co): Cá quay đầu về hướng ngược lại, đuôi quẫy điên cuồng tần số cao, bọt nước tóe trắng xóa quanh vây.
-  - Khi cá *NHẢY VỌT* (Jump): Cá phóng vút lên khỏi mặt nước, uốn cong mình trên không trung, rơi xuống tạo vòng sóng lan tỏa (Ripple wave).
-- **ANM-05 - Bộ Hoạt Ảnh Thao Tác Cần Thủ (Casting, Reeling, Striking & Consuming):**
-  - *Quăng Cần (Casting Animation):* Cần thủ vung cần ra sau -> Thân cần uốn cong tích lực -> Vung mạnh về phía trước -> Phao câu bay theo quỹ đạo parabol rơi xuống nước -> Vòng sóng nước bung nở (Splash).
-  - *Kéo Cần (Rod Flex Physics & Reeling):* Thân cần câu cong cong chịu tải tỉ lệ thuận với lực căng Tension (Tension càng cao cần càng cong gập), cuộn cước quay tít kèm tiếng lách cách cơ khí.
-  - *Giật Cần (Strike Hookset):* Khi cá cắn câu, hiệu ứng "HIT!" bùng nổ, cần giật ngược lên tạo tiếng rít dây xé gió, camera rung nhẹ tạo cảm giác cắn mồi dính chắc.
-  - *Dùng Vật Phẩm (Consumables Animation):* Uống nước tăng lực / ném bùa -> Hiệu ứng vòng sáng bốc lên toàn thân (Buff aura shimmer).
+### 5. Hoạt Ảnh Chuyển Động & Vòng Quay Gacha (ANM-04, ANM-05, GAC-02, GAC-03)
+- **ANM-04 - Chuyển Động Hữu Cơ Của Cá:**
+  - Cải tiến hoạt ảnh quẫy đuôi mềm mại theo hàm sin/cos trong `FishVisualRenderer.java`, cá uốn mình nghiêng vây khi PULLING giằng co với cần thủ.
+- **ANM-05 - Cần Câu Uốn Cong Vật Lý & Hiệu Ứng Cắn Câu:**
+  - Độ cong thân cần câu co giãn tỷ lệ thuận với lực căng Tension trong `PlayScreen.java`.
+  - Hiệu ứng vòng sóng nước bung nở và rung màn hình nhẹ khi cá cắn câu (Bite).
+- **GAC-02 - Hoạt Ảnh Vòng Quay May Mắn (Gacha Wheel Animation):**
+  - Nâng cấp chuyển động của Bánh xe Vòng Quay May Mắn 12 cung giải thưởng trong `GachaScreen.java`: Quay tít có gia tốc, hãm dần mượt mà, đèn led viền chớp sáng theo nhịp quay, kim chỉ nảy nổ âm thanh tick lách cách.
+- **GAC-03 - Hiệu Ứng Nổ Trang Bị Bậc Cao (Legendary & Limited Premium):**
+  - Khi bánh xe dừng trúng ô trang bị bậc cao (`LEGENDARY` hoặc `LIMITED_PREMIUM` như Thần Khí Lạc Hồng): Hiệu ứng hào quang ánh vàng bùng nổ, lật mở thẻ bài trang bị với viền phát sáng rực rỡ.
 
 ---
 
-### 6. Hoạt Ảnh Gacha Điện Ảnh & Nổ Vật Phẩm Xịn (GAC-02, GAC-03, ANM-06)
-- **GAC-02 - Hoạt Ảnh Triệu Hồi Gacha Điện Ảnh (Cinematic Summoning Vortex):**
-  - Cổng triệu hồi đại dương mở ra giữa biển đêm với vòng tròn ma pháp chiêm tinh xoay tròn.
-  - 10 vì sao băng rơi xuống từ bầu trời đại dương lướt vào trận pháp.
-  - Bầu trời chuyển màu theo phẩm cấp cao nhất của lượt quay:
-    * Lam tuyền (3★) -> Tím hoàng hôn (4★) -> Vàng kim rực rỡ (5★ Thời Không) -> Đỏ son Lạc Long Quân & Cánh Chim Lạc (6★ Thần Khí Lạc Hồng)!
-- **GAC-03 - Hoạt Ảnh Nổ Vật Phẩm Xịn SSR (Cinematic SSR Reveal Cut-in):**
-  - Khi mở ra trang bị 5★ hoặc 6★: Màn hình tối sầm lại, hiệu ứng "Kính vỡ" chớp sáng toàn màn hình.
-  - Chim Lạc vỗ cánh bay lượn quanh bảo vật hoặc Rồng Vàng uốn lượn, các cánh hoa sen nở bung kèm chùm tia sáng God Rays 360 độ.
-  - Tên vật phẩm hiện ra với hiệu ứng dập nổi ánh kim chấn động màn hình cùng tiếng chuông đồng sấm truyền uy nghiêm.
-- **ANM-06 - Hoạt Ảnh Rương Báu, Banner Thăng Cấp & Pháo Hoa (Juicy Rewards):**
-  - Rương báu rung lắc 3 nhịp trước khi nắp rương bật mở, các đồng vàng và kim cương bay vút theo hình cánh cung vào thanh tài nguyên.
-  - Banner "THĂNG CẤP!" nảy bật (Bounce In), các hạt kim tuyến vàng (Confetti) rơi lả tả.
+## 🎃 PHẦN III: KẾ HOẠCH TRIỂN KHAI SỰ KIỆN HALLOWEEN 2026 & BẢO MẬT HỆ THỐNG
+
+### 1. SEC-02: Kiến Trúc Mã Hóa File Save Chống Gian Lận (AES-256 & SHA-256 Tamper Check)
+- **Bối cảnh & Lỗ hổng:** Trước đây hệ thống xuất dữ liệu ra file text JSON thuần túy (`angler_save_*.json`), người chơi có thể dễ dàng mở bằng Notepad để chỉnh sửa các trường tài nguyên nhạy cảm (`gold: 99999999`, `diamonds: 999999`, `level: 100`, v.v.), làm phá vỡ hoàn toàn tính cân bằng kinh tế và độ uy tín của game.
+- **Giải pháp kỹ thuật đã triển khai (v0.4.24):**
+  - **Thuật toán mã hóa chuẩn công nghiệp:** Sử dụng `AES/CBC/PKCS5Padding` tích hợp sẵn trong Java Standard Library (`javax.crypto`), khóa 256-bit được sinh ra thông qua hàm băm SHA-256 kết hợp chuỗi khóa muối bí mật (`SECRET_SALT`).
+  - **Vector khởi tạo động (IV):** Mỗi lần xuất save đều sinh ngẫu nhiên 16 bytes IV (`java.security.SecureRandom`), triệt tiêu hoàn toàn tấn công phân tích mẫu mã hóa (Pattern Analysis Attack).
+  - **Cơ chế chống can thiệp (Tamper Detection):**
+    - Tính toán mã băm SHA-256 (32 bytes) của chuỗi JSON nguyên bản và đính kèm vào phần đầu payload trước khi bọc Base64 với Header nhận dạng `ANGLER_SECURE_SAVE_v1:`.
+    - Khi người chơi nạp file save: Hệ thống giải mã AES, tính toán lại SHA-256 của kết quả và so sánh đối chiếu bằng `MessageDigest.isEqual` (bảo vệ chống tấn công Timing Attack).
+    - Nếu phát hiện bất kỳ bit nào bị sửa đổi thủ công, phương thức giải mã sẽ ngay lập tức trả về `null`, ghi cảnh báo vi phạm và chặn đứng hành vi nạp dữ liệu rác.
+  - **Chuẩn hóa tệp `.sav` & Sao chép Clipboard:**
+    - Xuất file chuẩn đuôi `.sav` (`angler_save_yyyyMMdd_HHmmss.sav`), đồng thời lưu chuỗi mã hóa vào Clipboard và tạo bản fallback.
+    - Hộp thoại nạp file hỗ trợ đa định dạng `*.sav;*.json;*.bak`.
+  - **Tương thích ngược & Phòng vệ đa luồng:**
+    - Nhận diện và tiếp nhận an toàn các file JSON/XML cũ từ các bản v0.4.23 trở về trước, tự động chuyển đổi sang mã hóa ở lần xuất kế tiếp.
+    - Cơ chế logging bắt lỗi `Throwable` phòng thủ, tương thích 100% với cả môi trường đồ họa LibGDX lẫn các bộ kiểm thử đơn vị độc lập.
+
+---
+
+### 2. EVT-01: Chốt Hạn Sự Kiện Lạc Hồng (28/10) & Cơ Chế Chuyển Giao Dọn Dẹp (Grace Transition)
+- **Mục tiêu:** Khép lại chuỗi sự kiện Lạc Hồng đúng hạn, bảo vệ quyền lợi người chơi và dọn sạch dữ liệu tồn đọng để sẵn sàng mở mùa sự kiện mới.
+- **Quy trình triển khai đã hoàn thành (v0.4.24):**
+  - **Ấn định thời hạn bế mạc:** Cố định thời điểm kết thúc Sự kiện Lạc Hồng vào đúng **23:59:59 ngày 28/10/2026** (`EVENT_END_TIMESTAMP`).
+  - **Khóa an toàn Cửa Hàng Sự Kiện:**
+    - Sau 23:59:59 ngày 28/10, hàm `EventManager.isEventActive()` trả về `false`.
+    - Toàn bộ 6 thẻ vật phẩm trong Shop Sự Kiện (Set Vệ Quốc, Vé quay, Vàng) tự động mờ đi, nút đổi hiển thị nhãn: `"ĐÃ ĐÓNG (HẾT HẠN)"`.
+    - Hàm xử lý mua `buyShopItem` kích hoạt rào chắn bảo vệ, từ chối mọi giao dịch và hiển thị Toast nhắc nhở người chơi sự kiện đã kết thúc.
+  - **Bảo lưu nỗ lực - Quy đổi Điểm Sự Kiện tồn đọng (Grace Transition):**
+    - Tránh tình trạng người chơi bị mất trắng điểm khi chưa kịp đổi: Khi sự kiện bế mạc, toàn bộ Điểm Sự Kiện còn dư sẽ được tự động quy đổi thành Vàng với tỉ lệ ưu đãi: **1 Điểm SK = 1,000 Vàng**.
+    - Sau khi đền bù, Điểm Sự Kiện tự động reset về 0 để chuẩn bị đón nhận tài nguyên của sự kiện kế tiếp.
+  - **Giai đoạn chuyển giao (Intermission 29/10 - 30/10):**
+    - Header sự kiện hiển thị đồng hồ đếm ngược trực quan: *"LẠC HỒNG ĐÃ KẾT THÚC (Halloween sau: Xd Yh)"*.
+
+---
+
+### 3. HLW-01: Triển Khai Sự Kiện Halloween 2026 (30/10 - 27/11, 28 Ngày): Cơ Chế Tự Động Chuyển Giao & UI Ma Quái
+- **Thời gian diễn ra:** Kéo dài trọn vẹn **28 Ngày** (Từ **00:00:00 ngày 30/10/2026** đến **23:59:59 ngày 26/11/2026**).
+- **Cơ chế tự động chuyển đổi toàn diện khi đến ngày 30/10 (Auto-Switch Architecture):**
+  - **Màn hình Sự kiện (`EventScreen`):** Tự động nhận diện mốc `TimeSyncService.getCurrentTimeMillis() >= HALLOWEEN_START_TIMESTAMP` để chuyển sang giao diện Halloween:
+    * Header sự kiện chuyển sang: *"ĐÊM HỘI HALLOWEEN"* đính kèm icon Bí Ngô Jack-o'-Lantern rực lửa.
+    * Đổi màu nền, dải Gradient và hiệu ứng hạt sang tông Tím Dạ Quỷ & Cam Bí Ngô, hạt ma trơi bay lượn và đàn dơi lướt qua màn hình.
+  - **Cửa Hàng Quy Đổi Sự Kiện (Event Shop):** Tự động chuyển đổi danh mục hàng sang vật phẩm Halloween:
+    * Mở bán 3 món Set Cần Câu Bí Ngô (Cần, Dây, Móc).
+    * Mở bán Kẹo Ma Thuật Trick-or-Treat, Đèn Lồng Bí Ngô, Vé Quay Cao Cấp và Vé Thường.
+  - **Chuỗi Điểm Danh Đăng Nhập (Login Bonus):** Tự động chuyển đổi sang bảng điểm danh mùa Halloween với **25 Ngày**:
+    * Tự động reset chuỗi ngày điểm danh (`totalLoginDaysThisMonth = 0`) khi bước sang sự kiện mới.
+    * 25 mốc phần thưởng độc quyền mùa Halloween, mốc ngày 25 trao tặng trang bị Cần Câu Bí Ngô.
+  - **Dữ liệu điểm sự kiện:** Tự động reset Điểm Sự Kiện (`eventPoints = 0`) sau khi đã hoàn tất quy đổi đền bù Vàng của mùa Lạc Hồng ở ngày 28/10.
+
+---
+
+### 4. HLW-02: 2 Bộ Trang Bị Cần Câu Mùa Halloween (Set Cày Điểm vs Set Gacha 6★)
+Nhằm tạo sự công bằng giữa người chơi F2P cày cuốc và người chơi quay Gacha may mắn, sự kiện Halloween cung cấp 2 bộ trang bị độc bản:
+
+#### 🎃 Set 1: "Dạ Hội Bí Ngô" (Pumpkin Carnival Set - 4★ Limited Event)
+- **Cách thức sở hữu:** Miễn phí cho toàn bộ người chơi thông qua việc làm Nhiệm vụ sự kiện tích lũy **Điểm Sự Kiện (Event Points)** đổi tại Cửa Hàng Sự Kiện và Chuỗi Điểm Danh 25 Ngày.
+- **Thành phần & Chỉ số cân bằng:**
+  1. *Cần Bí Ngô (Jack-o'-Rod):* Thân cần chế tác từ gỗ gai đại ngàn quấn dây leo bí ngô phát sáng.
+     - Sát thương cơ bản: `34.0f` (Base Pull Damage)
+     - Thể lực tối đa: `210.0f` (Max Stamina)
+  2. *Dây Tơ Nhện (Spider Silk Line):* Sợi tơ dệt từ nhện biển khổng lồ, dai bền khó đứt.
+     - Sức căng tối đa: `400.0f` (Max Tension)
+     - Kháng đứt dây: `6.4f` (Pull Reduction)
+  3. *Móc Kẹo Ma (Ghost Candy Hook):* Lưỡi câu ngụy trang hình viên kẹo xoắn ma quái dụ dỗ thủy tộc.
+     - Tỷ lệ cá hiếm: `+17.0%`
+     - Tỷ lệ giữ mồi: `+34.0%`
+- **Kích hoạt Nội tại Set (Set Bonus - 3 Món):**
+  - *"Ảo Thuật Halloween"*: Tăng **+25%** cơ hội chạm trán các loài Cá Halloween ở mọi vùng nước; Tăng **+20%** lượng EXP nhận được khi câu cá trong suốt mùa lễ hội.
+
+#### 🩸 Set 2: "Huyết Nguyệt Thần Vương" (Blood Moon Monarch Set - 6★ Limited Premium)
+- **Cách thức sở hữu:** Chỉ xuất hiện độc quyền tại **Đài Gacha Sự Kiện Halloween** (Event Banner).
+- **Cơ chế Gacha:**
+  - Cố định phẩm cấp 6★ (`Rarity.LIMITED_PREMIUM`), không xuất hiện ở phẩm cấp thấp.
+  - Tỷ lệ nổ 6★: **1.5%**, trong đó có **50% Rate-up** trúng ngay Set Huyết Nguyệt (chia đều 33.3% cho Trượng, Dây, Móc); 50% còn lại là các Set 6★ Thần Khí khác.
+  - Cơ chế bảo hiểm Pity giữ nguyên mốc 80 lượt chắc chắn nhận bảo vật 6★.
+- **Thành phần & Chỉ số cân bằng:**
+  1. *Trượng Lưỡi Hái Tử Thần (Grim Reaper Scythe Rod):* Cán trượng đúc từ xương rồng hắc ám, đầu cần uốn cong thành lưỡi hái năng lượng huyết sắc đỏ rực.
+     - Sát thương cơ bản: `43.6f`
+     - Thể lực tối đa: `274.0f`
+  2. *Dây Huyết Ma Linh (Blood Spectre Line):* Sợi tơ máu ma mị phát ra sóng âm áp chế tinh thần cá.
+     - Sức căng tối đa: `520.0f`
+     - Kháng đứt dây: `8.16f`
+  3. *Móc Xương Quỷ (Fiend Bone Hook):* Lưỡi móc sắc bén đúc từ ngà quỷ biển ngậm viên đá huyết ngọc.
+     - Tỷ lệ cá hiếm: `+21.8%`
+     - Tỷ lệ giữ mồi: `+43.6%`
+- **Kích hoạt Nội tại Set Tối Thượng (Set Bonus - 3 Món):**
+  - *"Huyết Dạ Thôn Phệ"*: Khi người chơi giữ SPACE kéo dây, mỗi giây tự động hút **3% lượng HP** hiện tại của cá chuyển thành Thể lực hồi phục cho cần thủ; Đồng thời khi quăng cần đạt cú ném **PERFECT**, đòn kéo đầu tiên gây sát thương nổ bạo kích nhân đôi (**x2.0 Damage**)!
+
+---
+
+### 5. HLW-03: Bộ Sưu Tập Cá Halloween (Mọi Bản Đồ) & Siêu Boss Thanatos
+Trong thời gian diễn ra sự kiện, một luồng khí tức ma quái bao phủ đại dương, cho phép cần thủ có cơ hội câu được bộ cá chủ đề Halloween ở **BẤT KỲ BẢN ĐỒ NÀO** (Ao Làng, Bãi Biển, Đảo Xa):
+
+| Tên loài cá | Phẩm cấp | Máu (HP) | Lực kéo | Trọng lượng | Thưởng Vàng | Thưởng EXP | Kỹ năng đặc biệt & Hiệu ứng |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
+| **Cá Skeleton** *(Cá Xương)* | **Common** | **65 HP** | **12.0f** | **0.9 kg** | **70 Vàng** | **25 XP** | *Bộ Xương Khô*: Bộ xương cá hóa thạch phát quang lân tinh nhẹ, quẫy rột rẹt khi kéo. |
+| **Cá Đèn Lồng Jack-o'** | Uncommon | 95 HP | 18.0f | 1.8 kg | 120 Vàng | 45 XP | *Lập Lòe Ma Quái*: Nhấp nháy đèn lồng làm mờ thanh lực căng trong 2 giây. |
+| **Cá Đầu Lâu Huyết Nguyệt** | Rare | 220 HP | 34.0f | 4.5 kg | 320 Vàng | 110 XP | *Cắn Xé Bứt Tốc*: Bứt tốc x1.8 lực kéo trong 3 giây khi máu dưới 50%. |
+| **Cá Dạng Ma** *(Phantom Spectre)* | **Epic** | **580 HP** | **55.0f** | **12.0 kg** | **850 Vàng** | **300 XP** | *Hư Ảo Biến Mất*: Tàng hình 2s né đòn kéo & *Hút Thể Lực* rút 12 thể lực cần thủ. |
+| **Thủy Quái Frankenstein** | Epic | 680 HP | 62.0f | 18.0 kg | 950 Vàng | 350 XP | *Phóng Điện Ma Cà Rồng*: Giật điện làm rút ngay 15 Thể lực của cần thủ. |
+| **Bạch Tuộc Phù Thủy** | Legendary | 1,450 HP | 95.0f | 45.0 kg | 2,500 Vàng | 850 XP | *Mực Mù U Ám & Xúc Tu Quét*: Che khuất 50% tầm nhìn và đảo chiều lực kéo. |
+| **Kình Ngư Tử Thần Thanatos** | **Siêu Boss Thế Giới** | **6,666 HP** | **140.0f** | **120.0 kg** | **10,000 Vàng** | **3,000 XP** | *Tiếng Hú Địa Ngục & Cuồng Nộ Ma Hóa*: Khi máu dưới 30%, tăng 50% kháng đòn kéo. Đánh bại rơi **Rương Ma Quái** (3-5 Vé Gacha, 20-50 Kim Cương, Phù hiệu Thanatos). |
+
+---
+
+### 6. HLW-04: Tính Năng Độc Quyền & Ý Tưởng Sáng Tạo Mùa Halloween
+- **Vật phẩm tiêu hao độc quyền:**
+  - *Kẹo Ma Thuật Trick-or-Treat:* Dùng trước khi câu cá, tăng **+50%** tỷ lệ cắn câu của các loài Cá Halloween trong vòng 15 phút (có thể mua bằng Vàng trong Tiệm Tạp Hóa hoặc câu được từ rác trôi dạt).
+  - *Đèn Lồng Bí Ngô (Pumpkin Lantern):* Chiếu sáng vùng nước tối, giảm **25%** lực giằng co của cá và miễn nhiễm hoàn toàn hiệu ứng làm mù màn hình trong 1 trận câu.
+- **Chuỗi Điểm Danh 25 Ngày "Halloween Spooky Attendance":**
+  - Mở song song cùng sự kiện với 25 phần quà hấp dẫn (Kẹo ma thuật, Vé Gacha thường, Vé Cao Cấp, Kim Cương).
+  - *Mốc đặc biệt Ngày 25:* Tặng trọn vẹn trang bị **Cần Bí Ngô (Jack-o'-Rod)** cho toàn bộ cần thủ đăng nhập đủ ngày.
+- **Thời tiết Bầu Trời Huyết Nguyệt (Blood Moon Ambient):**
+  - Tỉ lệ 20% khi câu cá vào ban đêm, bầu trời sẽ chuyển sang màu đỏ thẫm ma mị kèm mặt trăng máu Blood Moon. Trong thời gian Huyết Nguyệt, tỷ lệ gặp Cá Đầu Lâu & Siêu Boss Thanatos tăng gấp đôi!
+- **Bộ âm thanh ma mị ZzFX Sound System:**
+  - Tích hợp thêm các preset âm thanh thủ tục: Tiếng cười quỷ dị khi cắn câu cá hiếm, tiếng gió hú ma quái khi giằng co Boss Thanatos, và tiếng kẹo nổ vui nhộn khi mở Rương Ma Quái.
+
+---
+
+## 🐟 PHẦN IV: ĐẠI TU TOÀN DIỆN HỆ THỐNG KỸ NĂNG CÁ & BỔ SUNG HẠNG CÁ LEGENDARY (FSH-04)
+
+### 1. Phân Tích Thực Trạng & Các Điểm Nghẽn Trải Nghiệm (Pain Points)
+1. **Thiếu Bậc Phẩm Cấp Legendary (Khung Vàng / Mini-Boss):**
+   - Hiện nay thang phẩm cấp cá nhảy vọt từ Epic (máu 300 - 680 HP) thẳng lên Boss thế giới (2,200 - 5,500 HP).
+   - Khoảng trống sức mạnh và trải nghiệm quá lớn khiến người chơi sau khi vượt qua Epic không có mục tiêu chinh phục trung gian; thiếu các trận chiến "Mini-Boss" kịch tính trước khi đủ đồ khiêu chiến Siêu Boss.
+2. **Kỹ Năng Quá Trùng Lặp & Nghèo Nàn:**
+   - *Bền bỉ* (giảm 15% dmg), *Trơn trượt* (giảm 20% dmg), *Vỏ cứng* (giảm 20% dmg) thực chất đều chỉ là một cơ chế giảm sát thương nhận vào, chỉ đổi tên gọi, gây cảm giác đơn điệu và thiếu bản sắc loài cá.
+   - Kỹ năng *Vùng vẫy* (vung_vay) được định nghĩa là nội tại nhưng cơ chế không rõ ràng, người chơi không cảm nhận được tác động trong lúc kéo dây.
+   - Hầu hết kỹ năng chỉ xoay quanh việc giảm sát thương, thiếu vắng các cơ chế tương tác đa dạng (cắn dây, đổi hướng dòng chảy, làm trơn tay phím, rút thể lực, che tầm nhìn).
+3. **Cơ Chế "Nhảy Vọt" (Aerial Leap) Quá Mơ Hồ:**
+   - Người chơi không nắm được khi cá nhảy vọt thì cần phải làm gì (giữ phím, nhả phím hay bấm nhấp), dẫn tới cảm giác ức chế khi đứt dây bất thình lình.
+4. **Bộ Kỹ Năng Boss Thế Giới Thiếu Tính Độc Bản:**
+   - Cả 3 Boss thế giới trong `fishes.json` gồm **Thủy Quái Sông Trà** (Ao Làng - 850 HP), **Bạch Tuộc Khổng Lồ** (Bãi Biển - 2200 HP), và **Thần Biển Leviathan** (Đảo Xa - 5500 HP) đang bị xài chung hoặc trùng lặp với nhiều skill thường (quẫy bùn, bão tố, vỏ cứng...), làm mất đi độ hoành tráng và tính thử thách đỉnh cao của trận đấu Trùm.
+
+---
+
+### 2. Chuẩn Hóa Phân Tầng Số Lượng Kỹ Năng Theo Cấp Độ Cá (Skill Slotting Formula)
+Thiết lập bộ khung quy chuẩn số lượng và loại kỹ năng bắt buộc theo từng bậc phẩm cấp:
+
+| Cấp độ cá (Rarity) | Số lượng Kỹ năng | Cơ cấu Kỹ năng bắt buộc | Mục tiêu thiết kế gameplay |
+| :--- | :---: | :--- | :--- |
+| **Common (Cá Thường)** | 0 - 1 | Có thể có **0 hoặc 1 Passive nhẹ** (đa số không có skill). | Làm quen thao tác kéo dây cơ bản. |
+| **Uncommon (Cá Hiếm Nhẹ)** | 1 | Chắc chắn có **1 Passive**. | Giới thiệu các thuộc tính cá (nhanh nhẹn, lươn trơn, vỏ cứng). |
+| **Rare (Cá Quý)** | 1 | Chắc chắn có **1 Kỹ năng (Passive hoặc Active)**. | Bắt đầu đòi hỏi người chơi chú ý nhịp giằng co hoặc thanh Tension. |
+| **Epic (Cá Siêu Quý)** | 2 | Chắc chắn có **2 Kỹ năng (1 Passive + 1 Active)**. | Thử thách nhấp nhả nhịp nhàng kết hợp phản xạ khi cá kích hoạt chiêu. |
+| **Legendary (Mini-Boss Mới)** | **3** | Chắc chắn có **1 Passive + 2 Active** *(1 trong 2 Active được thiết kế ĐỘC NHẤT riêng biệt)*. | Cần thủ phải phối hợp kỹ năng nhân vật (QWER), đồ nghề và phản xạ cao. |
+| **Boss (Thủy Quái Thế Giới)** | **3** | Chắc chắn có **1 Passive + 2 Active ĐỘC NHẤT HOÀN TOÀN** *(không bao giờ dùng lại ở cá khác)*. | Trận đấu Trùm điện ảnh nhiều giai đoạn (Phases), mang tính biểu tượng thế giới. |
+
+---
+
+### 3. Thiết Kế Lại Toàn Bộ Cơ Chế Các Kỹ Năng Cũ (Reworking Stale Skills)
+Biến đổi các kỹ năng nhàm chán thành các cơ chế rõ ràng, trực quan và có tính phản đòn (Counter-play):
+
+- **Vỏ Cứng (Carapace / Hard Shell):**
+  - *Cơ chế mới:* **Giảm sát thương phẳng (Flat Damage Reduction)**. Mỗi đòn kéo dây bị trừ trực tiếp `-8` đến `-15` sát thương cơ bản (thay vì giảm theo %).
+  - *Ý nghĩa chiến thuật:* Khắc chế các bộ cần có sát thương nhỏ kéo nhanh; buộc người chơi phải dùng cần câu nặng hoặc đòn bạo kích (Crit) để xuyên giáp.
+- **Trơn Trượt (Slippery / Evasive Scales):**
+  - *Cơ chế mới:* **Tỉ lệ Né Đòn (Evasion)**. Khi bị kéo dây, cá có **20% cơ hội né hoàn toàn đòn kéo** (Hiển thị chữ *"MISS!"* bay lên), lực kéo không gây sát thương và cá không bị hãm tốc.
+- **Bền Bỉ (Tenacity / Deep Endurance):**
+  - *Cơ chế mới:* **Kéo dài chu kỳ giằng co**. Tăng **+40% thời gian cá ở trạng thái PULLING** và rút ngắn **-30% thời gian cá nghỉ IDLE**.
+  - *Ý nghĩa chiến thuật:* Thử thách sự kiên nhẫn và kỹ năng quản lý thể lực của cần thủ, không còn là bản sao giảm sát thương.
+- **Vùng Vẫy (Thrashing Frenzy):**
+  - *Cơ chế mới:* **Dao Động Nhiễu Kim Đo (Tension Jitter)**. Cứ mỗi 3.5 giây, cá quẫy đuôi dữ dội làm kim đo trên thanh Tension rung lắc hỗn loạn biên độ `±15%` trong 1.5 giây.
+  - *Ý nghĩa chiến thuật:* Gây nhiễu phán đoán vùng an toàn/nguy hiểm, đòi hỏi người chơi phải nhìn vào biểu hiện con cá dưới nước thay vì chỉ chăm chăm nhìn thanh bar.
+- **Nhảy Vọt (Aerial Leap) - Làm Rõ Cơ Chế 100%:**
+  - *Cơ chế hoạt động rõ ràng:*
+    1. Khi cá kích hoạt Nhảy Vọt: Cá phóng vút lên khỏi mặt nước 1.5 giây kèm vệt bọt sóng 3D và tiếng splash vang dội.
+    2. Trong 1.5 giây cá ở trên không: Lực căng Tension tụt về 0.
+    3. **QUY TẮC PHẢN XẠ:** Nếu người chơi **VẪN GIỮ SPACE** kéo dây lúc cá chạm nước, cú sốc lực va đập sẽ làm **tăng vọt +45% Tension ngay tức khắc** (rất dễ làm đứt cước)!
+    4. **CÁCH XỬ LÝ (COUNTER-PLAY):** Người chơi phải **NHẢ PHÍM SPACE** khi cá đang bay trên không, và **NHẤP LẠI PHÍM SPACE đúng thời điểm cá vừa tiếp mặt nước** để tạo cú *"Hook Hoàn Hảo"* gây gấp đôi sát thương (**x2.0 Damage**) và làm choáng cá 1 giây!
+
+---
+
+### 4. Phát Triển Bộ Cơ Chế Kỹ Năng Mới Đa Dạng (New Dynamic Skill Archetypes)
+Mở rộng các hướng cản trở mới vượt ra ngoài bài toán sát thương:
+
+1. **Cắn Dây (Line Gnaw):** Cá dùng răng nanh nghiến vào dây cước, tạm thời **giảm 20% giới hạn chịu lực Max Tension** của dây trong 6 giây (vùng đỏ tụt xuống thấp hơn).
+2. **Bơi Đảo Chiều (Zigzag Counter-Pull):** Cá đột ngột quay 180 độ bơi ngược chiều kéo, thanh lực căng tăng tốc nhanh gấp đôi nếu người chơi cố tình giữ kéo dây.
+3. **Tiết Nhớt Trơn Trượt (Mucus Hand):** Cá phóng chất nhờn lên dây truyền vào tay cầm cần thủ, tạo hiệu ứng **trễ phím bấm 0.2s (Input Delay)** trong 3 giây.
+4. **Hút Thể Lực (Stamina Siphon):** Trong lúc giằng co PULLING, mỗi giây rút trực tiếp 8 Thể lực của cần thủ thay vì chỉ tác động lên dây câu.
+5. **Triệu Hồi Bầy Đàn (School Calling):** Gọi 4-6 cá con bơi xung quanh chắn đỡ đòn kéo, người chơi phải kéo dọn sạch cá con hoặc đợi chúng tản ra.
+6. **Sóng Điện Từ (Electro-Pulse):** Phóng luồng điện dọc dây cước, nếu đang giữ kéo dây sẽ bị sốc điện làm rung lắc màn hình mạnh và ngắt phím kéo 1 giây.
+
+---
+
+### 5. Thiết Kế Bộ Kỹ Năng Độc Bản Cho Từng Boss Thế Giới (Unique World Boss Kits)
+Xóa bỏ hoàn toàn việc dùng chung kỹ năng thường; mỗi Boss thế giới sở hữu **1 Passive + 2 Active Skill độc quyền**:
+
+#### 🐲 Boss 1: Thủy Quái Sông Trà (Bản đồ Ao Làng - 850 HP, Lực kéo 80.0f)
+- **Passive Độc Bản: Lớp Bùn Cổ Thạch**
+  - Thủy quái đầm nước ngọt được bao bọc bởi lớp phù sa thạch khoáng cổ ngàn năm: Giảm 20% sát thương nhận vào, miễn nhiễm hoàn toàn hiệu ứng Trói Buộc / Đóng Băng khi HP trên 50%.
+- **Active 1 (Kích hoạt ở 65% HP): Quẫy Bùn Tối Thượng (Cuồng Lốc Sa Bồi)**
+  - Quẫy đuôi làm bùn lầy cuộn trào bắn kín 70% thanh Tension và HUD trong 4.5 giây, các đợt bọt khí sa bồi làm kim lực căng dao động giật cục khó phán đoán.
+- **Active 2 (Kích hoạt ở 25% HP): Cuồng Nộ Thủy Quái**
+  - Gầm vang xé toạc mặt nước đầm lầy, x1.8 lực kéo trong 4 giây, bất tử 3.5 giây và trói cứng thao tác nhả dây trong 1 giây. Đòi hỏi người chơi phải canh thời điểm dùng kỹ năng giảm Tension chuẩn xác.
+
+#### 🐙 Boss 2: Bạch Tuộc Khổng Lồ (Bản đồ Bãi Biển - 2,200 HP, Lực kéo 150.0f)
+- **Passive Độc Bản: Vòng Siết Xúc Tu**
+  - 8 xúc tu khổng lồ bám chặt dây cước: Tốc độ chùng dây khi nhả phím bị giảm 35%, đồng thời mỗi khi dây bị căng trên 80% sẽ phản lại sát thương rút Thể lực của cần thủ.
+- **Active 1 (Kích hoạt ở 60% HP): Mực Mù Hút Máu (Màn Đêm Đại Dương)**
+  - Phun luồng mực đen ma mị bao phủ toàn bộ màn hình khiến vùng chiến đấu tối đen trong 4.5 giây; đồng thời chất độc mỏ quạ rút 6 Thể lực mỗi giây của cần thủ để hồi lại 250 HP cho Bạch Tuộc.
+- **Active 2 (Kích hoạt ở 20% HP): Quét Xúc Tu Cuồng Bạo**
+  - Vung liên hoàn các xúc tu gai quất mạnh vào mặt nước tạo chấn động rung lắc cực mạnh (Trauma 0.8), giật tăng đột ngột +40% Tension và trừ ngay 30 Thể lực nếu người chơi đang ghìm giữ kéo.
+
+#### 🌊 Boss 3: Thần Biển Leviathan (Bản đồ Đảo Xa - 5,500 HP, Lực kéo 450.0f)
+- **Passive Độc Bản: Áp Lực Vực Sâu (Abyssal Pressure)**
+  - Uy áp của Thần Biển ngàn tầm vực thẳm: Giảm 30% hiệu lực của mọi bùa chú/kỹ năng tăng sát thương từ cần thủ, đồng thời tốc độ hồi Thể lực tự nhiên của người chơi bị giảm 40%.
+- **Active 1 (Kích hoạt ở 60% HP): Cuồng Nộ Sóng Thần**
+  - Triệu hồi đại hồng thủy gầm thét, các đợt sóng biển dâng cao dập dồn rút 8 Thể lực/giây và đẩy kim Tension chao đảo dâng cao liên tục theo nhịp sóng.
+- **Active 2 (Kích hoạt ở 20% HP): Bão Tố Diệt Thế**
+  - Sấm sét biển sâu rạch ngang trời kèm cuồng phong dữ dội, rung chấn màn hình cấp độ tối đa (Trauma 1.0). Tăng +100% lực kéo của Leviathan trong 5 giây, kích hoạt chuỗi giằng co sinh tử buộc người chơi phải kích hoạt toàn bộ trang bị và kỹ năng sinh tồn.
+
+---
+
+### 6. Bổ Sung Hạng Cá Mới LEGENDARY (Mini-Boss) & Tích Hợp Sổ Tay Thủy Tộc
+- **Đặc điểm nhận diện:** Khung viền Thẻ bài mạ Vàng Kim Hoàng Gia (`#FFD700`), hiệu ứng hào quang ánh sáng lấp lánh (Golden Shimmer Sweep).
+- **Quy chuẩn sức mạnh:** Máu trung bình `800 - 2,200 HP`, Lực kéo `45 - 100`, phần thưởng Kim Cương khám phá lần đầu trong Sổ Tay là **+20 đến +30 Kim Cương**.
+- **Danh mục 3 loài cá Legendary mới cho cả 3 Bản Đồ:**
+
+| Bản đồ | Tên Cá Legendary | HP | Lực kéo | Cân nặng | Bộ Kỹ Năng Chuẩn Hóa (1 Passive + 2 Active) | Thưởng Sổ Tay |
+| :--- | :--- | :---: | :---: | :---: | :--- | :---: |
+| **Ao Làng** | **Cá Chép Vàng Thần Long** *(Golden Dragon Carp)* | 850 HP | 48.0f | 8.5 kg | • **Passive: Vảy Rồng May Mắn** (Giảm 25% sát thương kéo thường).<br>• **Active 1: Long Vân Đằng Phi** (Nhảy vọt trên mây né đòn 1.5s).<br>• **Active 2 (Độc bản): Kim Quang Hộ Thể** (Tạo khiên vàng hấp thụ 250 dmg trong 4s). | **+20 💎** |
+| **Bãi Biển** | **Cá Mập Đầu Búa Kim Giáp** *(Armored Hammerhead)* | 1,450 HP | 76.0f | 42.0 kg | • **Passive: Thép Đáy Biển** (Giảm 12 sát thương phẳng mỗi đòn).<br>• **Active 1: Cú Húc Đầu Búa** (Húc làm choáng cần thủ ngắt kéo 1s).<br>• **Active 2 (Độc bản): Xoáy Nước Quần Thể** (Tạo xoáy nước tăng 35% lực kéo dòng chảy). | **+25 💎** |
+| **Đảo Xa** | **Cá Kiếm Hắc Kim Hải Vương** *(Obsidian Swordfish)* | 2,150 HP | 98.0f | 88.0 kg | • **Passive: Kiếm Khí Sắc Lẹm** (Mỗi nhịp PULLING bào mòn 1% Max Tension).<br>• **Active 1: Đột Kích Siêu Thanh** (Phóng bứt tốc x2.2 lực kéo trong 3s).<br>• **Active 2 (Độc bản): Xuyên Phá Hư Không** (Cắt ngọt dây câu gây rỉ máu trừ 20 Thể lực). | **+30 💎** |
 
 ---
 

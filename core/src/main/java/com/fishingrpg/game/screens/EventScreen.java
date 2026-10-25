@@ -644,7 +644,7 @@ public class EventScreen implements Screen {
             if (hoverItem) hoveredShopItem = i;
 
             int price = getShopItemPrice(i);
-            boolean canAfford = player.getEventPoints() >= price;
+            boolean canAfford = EventManager.isEventActive() && player.getEventPoints() >= price;
 
             // Card background
             sr.setColor(hoverItem ? new Color(0.15f, 0.19f, 0.28f, 0.98f) : new Color(0.11f, 0.14f, 0.21f, 0.92f));
@@ -1054,7 +1054,10 @@ public class EventScreen implements Screen {
             float btnH = 38f;
 
             font.getData().setScale(0.82f);
-            if (canAfford) {
+            if (!EventManager.isEventActive()) {
+                font.setColor(0.65f, 0.55f, 0.55f, 0.8f);
+                drawCenteredText(font, "ĐÃ ĐÓNG (HẾT HẠN)", btnX, btnY, btnW, btnH);
+            } else if (canAfford) {
                 font.setColor(0.12f, 0.1f, 0.05f, 1f);
                 drawCenteredText(font, "ĐỔI (" + price + " ĐIỂM SK)", btnX, btnY, btnW, btnH);
             } else {
@@ -1268,6 +1271,11 @@ public class EventScreen implements Screen {
     }
 
     private void buyShopItem(int index) {
+        if (!EventManager.isEventActive()) {
+            AudioManager.getInstance().playSFX("sfx_button");
+            showMessage("Sự kiện Lạc Hồng đã kết thúc! Cửa hàng đã đóng cửa.");
+            return;
+        }
         int price = getShopItemPrice(index);
         if (player.getEventPoints() < price) {
             AudioManager.getInstance().playSFX("sfx_button");
