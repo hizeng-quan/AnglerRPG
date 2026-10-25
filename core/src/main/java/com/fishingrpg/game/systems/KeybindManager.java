@@ -93,7 +93,9 @@ public class KeybindManager {
         try {
             Preferences prefs = Gdx.app.getPreferences(PREF_NAME);
             for (int i = 0; i < ACTION_COUNT; i++) {
-                keyCodes[i] = prefs.getInteger(PREF_KEYS[i], DEFAULT_KEYS[i]);
+                int code = prefs.getInteger(PREF_KEYS[i], DEFAULT_KEYS[i]);
+                if (code <= 0) code = DEFAULT_KEYS[i];
+                keyCodes[i] = code;
             }
         } catch (Throwable t) {
             resetDefaults();
@@ -119,7 +121,9 @@ public class KeybindManager {
 
     public int getKeyCode(int action) {
         if (action >= 0 && action < ACTION_COUNT) {
-            return keyCodes[action];
+            int code = keyCodes[action];
+            if (code <= 0) return DEFAULT_KEYS[action];
+            return code;
         }
         return Input.Keys.UNKNOWN;
     }
@@ -139,38 +143,55 @@ public class KeybindManager {
     }
 
     /**
-     * Attempts to set the keycode for an action.
-     * Rejects if newKey is invalid or already bound to another action (anti-collision protection).
-     * @return true if successfully set, false if blocked by collision.
+     * Sets keycode for action and automatically swaps with conflicting action if key is already bound.
+     * @return the conflicting action index that was swapped, or -1 if clean assignment without conflict.
+     */
+    public int setKeyCodeWithSwap(int action, int newKey) {
+        if (action < 0 || action >= ACTION_COUNT) return -1;
+        if (newKey <= 0 || newKey == Input.Keys.ESCAPE) return -1;
+
+        int conflict = findConflictAction(action, newKey);
+        int oldKey = keyCodes[action];
+        if (conflict != -1) {
+            keyCodes[conflict] = (oldKey > 0) ? oldKey : DEFAULT_KEYS[conflict];
+        }
+        keyCodes[action] = newKey;
+        savePreferences();
+        return conflict;
+    }
+
+    /**
+     * Sets the keycode for an action, automatically swapping on conflict.
+     * @return true if successfully set.
      */
     public boolean setKeyCode(int action, int newKey) {
         if (action < 0 || action >= ACTION_COUNT) return false;
-        if (newKey == Input.Keys.UNKNOWN || newKey == Input.Keys.ESCAPE) return false;
+        if (newKey <= 0 || newKey == Input.Keys.ESCAPE) return false;
 
-        int conflict = findConflictAction(action, newKey);
-        if (conflict != -1) {
-            return false; // Collision detected! Protection triggered.
-        }
-
-        keyCodes[action] = newKey;
-        savePreferences();
+        setKeyCodeWithSwap(action, newKey);
         return true;
     }
 
     public int getPullKey() {
-        return keyCodes[ACTION_PULL];
+        int code = keyCodes[ACTION_PULL];
+        if (code <= 0) return DEFAULT_KEYS[ACTION_PULL];
+        return code;
     }
 
     public int getSkillKey(int slot) {
         if (slot >= 0 && slot < 4) {
-            return keyCodes[ACTION_SKILL_1 + slot];
+            int code = keyCodes[ACTION_SKILL_1 + slot];
+            if (code <= 0) return DEFAULT_KEYS[ACTION_SKILL_1 + slot];
+            return code;
         }
         return Input.Keys.UNKNOWN;
     }
 
     public int getQuickslotKey(int slot) {
         if (slot >= 0 && slot < 9) {
-            return keyCodes[ACTION_QUICK_1 + slot];
+            int code = keyCodes[ACTION_QUICK_1 + slot];
+            if (code <= 0) return DEFAULT_KEYS[ACTION_QUICK_1 + slot];
+            return code;
         }
         return Input.Keys.UNKNOWN;
     }

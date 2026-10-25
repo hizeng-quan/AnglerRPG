@@ -322,7 +322,7 @@ Nếu bạn muốn xóa sạch dữ liệu người chơi cũ để trải nghi�
 
 - **Trong Mã Nguồn Java**:
   Bạn có thể gọi trực tiếp phương thức tiện ích:
-  ```java
+  ```text
   com.fishingrpg.game.data.SaveManager.clearSave();
   ```
 

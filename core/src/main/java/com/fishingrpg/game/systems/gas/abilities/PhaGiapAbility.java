@@ -19,7 +19,7 @@ public class PhaGiapAbility extends GameplayAbility {
 
     @Override
     public float getBaseCooldown(AbilityContext ctx) {
-        return 20f;
+        return 14.0f;
     }
 
     @Override

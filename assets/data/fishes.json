@@ -235,15 +235,19 @@
     "map": "ao_lang",
     "skills": [
       {
+        "id": "quay_bun",
+        "isActive": true
+      },
+      {
+        "id": "lan_sau",
+        "isActive": true
+      },
+      {
         "id": "cuong_no",
-        "isActive": false
+        "isActive": true
       },
       {
-        "id": "song_than",
-        "isActive": false
-      },
-      {
-        "id": "but_toc",
+        "id": "vo_cung",
         "isActive": false
       }
     ]

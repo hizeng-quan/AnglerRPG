@@ -269,7 +269,12 @@ public class Player {
     }
     
     public String getCurrentMap() { return currentMap; }
-    public void setCurrentMap(String mapId) { this.currentMap = mapId; }
+    public void setCurrentMap(String mapId) {
+        if (this.currentMap != null && !this.currentMap.equals(mapId)) {
+            if (questManager != null) questManager.addProgress("travel", 1);
+        }
+        this.currentMap = mapId;
+    }
     
     public java.util.HashSet<String> getClaimedCollections() { return claimedCollections; }
     public void claimCollection(String collectionId) { claimedCollections.add(collectionId); }

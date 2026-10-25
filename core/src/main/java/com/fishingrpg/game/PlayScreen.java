@@ -294,10 +294,14 @@ public class PlayScreen implements Screen {
         activeSkillInputs[3] = false;
         if (framesToSkip <= 0) {
             com.fishingrpg.game.systems.KeybindManager km = com.fishingrpg.game.systems.KeybindManager.getInstance();
-            activeSkillInputs[0] = Gdx.input.isKeyJustPressed(km.getSkillKey(0)) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(0));
-            activeSkillInputs[1] = Gdx.input.isKeyJustPressed(km.getSkillKey(1)) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(1));
-            activeSkillInputs[2] = Gdx.input.isKeyJustPressed(km.getSkillKey(2)) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(2));
-            activeSkillInputs[3] = Gdx.input.isKeyJustPressed(km.getSkillKey(3)) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(3));
+            int k0 = km.getSkillKey(0);
+            int k1 = km.getSkillKey(1);
+            int k2 = km.getSkillKey(2);
+            int k3 = km.getSkillKey(3);
+            activeSkillInputs[0] = (k0 > 0 && Gdx.input.isKeyJustPressed(k0)) || (k0 != Input.Keys.Q && Gdx.input.isKeyJustPressed(Input.Keys.Q)) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(0));
+            activeSkillInputs[1] = (k1 > 0 && Gdx.input.isKeyJustPressed(k1)) || (k1 != Input.Keys.W && Gdx.input.isKeyJustPressed(Input.Keys.W)) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(1));
+            activeSkillInputs[2] = (k2 > 0 && Gdx.input.isKeyJustPressed(k2)) || (k2 != Input.Keys.E && Gdx.input.isKeyJustPressed(Input.Keys.E)) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(2));
+            activeSkillInputs[3] = (k3 > 0 && Gdx.input.isKeyJustPressed(k3)) || (k3 != Input.Keys.R && Gdx.input.isKeyJustPressed(Input.Keys.R)) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(3));
         }
 
         boolean settingClicked = framesToSkip <= 0 && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isSettingClicked(mousePos, fishingManager.state);
@@ -373,7 +377,12 @@ public class PlayScreen implements Screen {
             }
         }
 
-        if (consume) player.consumeItem(itemName);
+        if (consume) {
+            player.consumeItem(itemName);
+            if (player.getQuestManager() != null) {
+                player.getQuestManager().addProgress("item", 1);
+            }
+        }
     }
 
     /**

@@ -2444,6 +2444,64 @@ public class GameHUD {
                     }
                 }
             }
+
+            // Draw hover tooltip for active skill in combat
+            for (int i = 0; i < 4; i++) {
+                if (hoverActives[i] && actives[i] != null) {
+                    String skillId = actives[i];
+                    com.fishingrpg.game.skills.Skill s = player.getSkillTree().getSkill(skillId);
+                    if (s != null) {
+                        float slotX = BTN_ACTIVES_X + i * (BTN_SLOT_SIZE + BTN_SLOT_SPACING);
+                        float tipW = 310f;
+                        float tipH = 92f;
+                        float tipX = MathUtils.clamp(slotX + BTN_SLOT_SIZE / 2f - tipW / 2f, 10f, W - tipW - 10f);
+                        float tipY = BTN_ACTIVES_Y + BTN_SLOT_SIZE + 12f;
+
+                        batch.end();
+                        Gdx.gl.glEnable(GL20.GL_BLEND);
+                        sr.begin(ShapeRenderer.ShapeType.Filled);
+                        // Shadow
+                        sr.setColor(0f, 0f, 0f, 0.45f);
+                        sr.rect(tipX + 3f, tipY - 3f, tipW, tipH);
+                        // Obsidian Plate
+                        sr.setColor(0.07f, 0.10f, 0.16f, 0.96f);
+                        sr.rect(tipX, tipY, tipW, tipH);
+                        // Gold Trim Border
+                        sr.setColor(0.85f, 0.65f, 0.25f, 0.90f);
+                        drawBoxBorder(tipX, tipY, tipW, tipH, 1.6f);
+                        sr.end();
+                        Gdx.gl.glDisable(GL20.GL_BLEND);
+                        batch.begin();
+
+                        // Title, Level & Hotkey
+                        font.getData().setScale(0.85f);
+                        font.setColor(1f, 0.85f, 0.35f, 1f);
+                        String titleStr = s.name + (s.isUnlocked() ? (" (Lv." + s.getLevel() + ")") : "") + " [" + km.getSkillKeyDisplayName(i) + "]";
+                        font.draw(batch, titleStr, tipX + 12f, tipY + tipH - 12f);
+
+                        // Description / Level-scaled effect
+                        font.setColor(0.85f, 0.90f, 0.98f, 1f);
+                        font.getData().setScale(0.68f);
+                        String effectDesc = s.isUnlocked() ? s.getCurrentLevelEffectString() : s.description;
+                        font.draw(batch, effectDesc, tipX + 12f, tipY + tipH - 34f, tipW - 24f, com.badlogic.gdx.utils.Align.left, true);
+
+                        // Cooldown & Stamina Cost at the bottom
+                        font.getData().setScale(0.68f);
+                        float cdVal = s.getCooldown();
+                        float stamCost = 0f;
+                        if (skillId.equals("keo_manh")) stamCost = player.getSkillTree().getKeoManhStaminaCost();
+                        else if (skillId.equals("giat_kep")) stamCost = 40f;
+                        else if (skillId.equals("pha_giap")) stamCost = 30f;
+
+                        font.setColor(0.4f, 0.85f, 1f, 1f);
+                        String statsStr = "• Hồi chiêu: " + String.format(java.util.Locale.US, "%.1fs", cdVal)
+                                + (stamCost > 0 ? ("  •  Tiêu hao: " + (int)stamCost + " Thể lực") : "  •  Tiêu hao: 0 Thể lực");
+                        font.draw(batch, statsStr, tipX + 12f, tipY + 18f);
+                        font.getData().setScale(1f);
+                    }
+                    break;
+                }
+            }
         }
 
         // 6. Casting Result Feedback Animation

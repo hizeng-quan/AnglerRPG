@@ -42,7 +42,33 @@
 | **AUD-01** | Âm thanh | Bộ Tổng Hợp Âm Thanh Thủ Tục ZzFX Java Synthesizer & Fallback Safety Net Không Cần File | **P1 (Quan trọng)** | ✅ Đã hoàn thành (Bước 1) |
 | **VFX-01** | Trải nghiệm| Easing & Screen Shake Controller ("Game Juice" Rung Giật Màn Hình & Popup Nảy Mượt) | **P1 (Trải nghiệm)**| ✅ Đã hoàn thành (Bước 2) |
 | **GAS-01** | Gameplay | Gameplay Ability System (GAS) Chuẩn Hóa Bộ 4 Kỹ Năng QWER, Cooldown & Hiệu Ứng Buff/Debuff | **P1 (Gameplay)**   | ✅ Đã hoàn thành (Bước 3) |
+| **BUG-08** | Sửa lỗi  | Lỗi Kỹ năng Dưỡng Sức (space deal dmg) & Trói Buộc (kéo dây vẫn tăng tension) | **P0 (Khẩn cấp)**   | ✅ Đã khắc phục triệt để |
+| **QST-01** | Sự kiện  | Bỏ thưởng đơn lẻ nhiệm vụ sự kiện, chuyển thành huy hiệu trạng thái & gom quà vào Rương Mốc | **P1 (Quan trọng)** | ✅ Đã hoàn thành |
+| **ACH-01** | Cân bằng | Cân bằng phần thưởng 48 mốc thành tựu (2-30 KC), sửa target 5000 và đồng bộ SaveManager | **P1 (Cân bằng)**   | ✅ Đã hoàn thành |
+| **SKL-01** | Kỹ năng  | Viết lại chú thích động theo cấp & đưa thông tin Cooldown/Thể lực xuống đáy tooltip | **P1 (Trải nghiệm)**| ✅ Đã hoàn thành |
+| **UI-03**  | Giao diện| Tinh giản văn bản trang bị (xóa "(Max Tension)", "xịn") & Icon Vector Tiền tệ Catalog | **P1 (Giao diện)**  | ✅ Đã hoàn thành |
+| **UI-04**  | Giao diện| Giãn cách dock tiền tệ Sổ Tay Thủy Tộc & Đồng nhất chuẩn Icon Đồng Vàng | **P1 (Giao diện)**  | ✅ Đã hoàn thành |
+| **SKL-02** | Kỹ năng  | Khắc phục lỗi font ô vuông `[]` & căn chỉnh Cooldown tránh đè nút Nâng Cấp | **P1 (Trải nghiệm)**| ✅ Đã hoàn thành |
+| **KEY-01** | Hệ thống | Cơ chế tự động hoán đổi phím (Auto-Swap) & Quét phím phần khớp IME/Unikey | **P0 (Khẩn cấp)**   | ✅ Đã hoàn thành |
+| **BAL-09** | Cân bằng | Cân bằng lực căng dây khi kéo cá (Reeling Tension) & Sàn kháng lực kéo (25%) | **P1 (Quan trọng)** | ✅ Đã hoàn thành |
+| **FSH-03** | Tính năng| Hiển thị chi tiết cơ chế tác động của 20 kỹ năng cá trong Sổ Tay Thủy Tộc | **P1 (Trải nghiệm)**| ✅ Đã hoàn thành |
+| **QST-02** | Nhiệm vụ | Đại tu kho nhiệm vụ Ngày/Tuần (12 ngày, 7 tuần), triệt tiêu trùng lặp yêu cầu| **P1 (Quan trọng)** | ✅ Đã hoàn thành |
 | **SHD-01** | Đồ họa   | Simplex Noise GLSL Water Shader: Mặt Nước Sóng Lấp Lánh & Khúc Xạ Ánh Sáng Chân Thực | **P2 (Đồ họa)**     | 📋 Kế hoạch (Bước 4) |
+| **EQP-02** | Đồ họa   | Đại tu ngoại hình toàn bộ 6 Set Trang Bị (Cần, Dây, Lưỡi) chuẩn 4 lớp Vector 3D      | **P1 (Đồ họa)**     | 📋 Kế hoạch v0.5.0 |
+| **ICO-03** | Đồ họa   | Vector hóa 100% vật phẩm Tiệm Tạp Hóa (Mồi câu, Lưới, Bùa may mắn, Đá mài, Vé)       | **P1 (Đồ họa)**     | 📋 Kế hoạch v0.5.0 |
+| **ICO-04** | Đồ họa   | Bộ Phù hiệu Vector Nhiệm vụ, Sự kiện & Huân chương Thành tựu 3D Hải Trình             | **P1 (Đồ họa)**     | 📋 Kế hoạch v0.5.0 |
+| **FSH-02** | Đồ họa   | Đại tu ngoại hình 45 loài cá & 3 Siêu Boss Thế Giới (Dual-tone, Mắt 3D, Vây mềm)     | **P1 (Đồ họa)**     | 📋 Kế hoạch v0.5.0 |
+| **ENV-02** | Đồ họa   | Môi trường mặt nước gợn sóng sinh động, rạn san hô, cá bơi nền & Tia nắng (God Rays) | **P1 (Đồ họa)**     | 📋 Kế hoạch v0.5.0 |
+| **UI-05**  | Giao diện| Khung viền kỳ ảo mạ đồng Đông Sơn & Bộ nút bấm xúc giác 3 trạng thái phản hồi âm     | **P1 (Giao diện)**  | 📋 Kế hoạch v0.5.0 |
+| **UI-06**  | Giao diện| Thanh trạng thái chiến đấu động (Ghost HP bar, Gradient Tension bar rung chấn)       | **P1 (Giao diện)**  | 📋 Kế hoạch v0.5.0 |
+| **UI-07**  | Giao diện| Thẻ bài trang bị phát quang ánh kim Hologram & So sánh chỉ số tức thì (Stat Diff)    | **P1 (Giao diện)**  | 📋 Kế hoạch v0.5.0 |
+| **VFX-04** | Kỹ năng  | Bộ hiệu ứng thị giác chiêu thức cần thủ (Dưỡng Sức hoa sen, Trói Buộc xích hư không) | **P1 (Trải nghiệm)**| 📋 Kế hoạch v0.5.0 |
+| **VFX-05** | Kỹ năng  | Bộ hiệu ứng kỹ năng cá & Boss (Bứt Tốc, Quấy Bùn mờ màn hình, Cuồng Nộ, Giật Điện)  | **P1 (Trải nghiệm)**| 📋 Kế hoạch v0.5.0 |
+| **ANM-04** | Hoạt ảnh | Chuyển động hữu cơ của cá (Đốt sống đa khớp Verlet uốn lượn, quẫy đuôi, nhảy vọt)   | **P1 (Hoạt ảnh)**   | 📋 Kế hoạch v0.5.0 |
+| **ANM-05** | Hoạt ảnh | Bộ hoạt ảnh thao tác cần thủ (Quăng cần, Cần uốn cong vật lý khi kéo, Giật cần, Dùng đồ)| **P1 (Hoạt ảnh)**| 📋 Kế hoạch v0.5.0 |
+| **GAC-02** | Gacha    | Hoạt ảnh triệu hồi Gacha điện ảnh (Vòng trận pháp đại dương, sao băng đổi màu phẩm)  | **P1 (Hoạt ảnh)**   | 📋 Kế hoạch v0.5.0 |
+| **GAC-03** | Gacha    | Cắt cảnh nổ bảo vật xịn SSR (Màn hình vỡ kính, Rồng Vàng/Chim Lạc bay lượn, God Rays)| **P1 (Hoạt ảnh)**   | 📋 Kế hoạch v0.5.0 |
+| **ANM-06** | Hoạt ảnh | Hoạt ảnh rương báu bật nắp bung tài nguyên, Banner Thăng Cấp & Pháo hoa kim tuyến   | **P1 (Hoạt ảnh)**   | 📋 Kế hoạch v0.5.0 |
 
 ---
 
@@ -304,30 +330,132 @@
 
 ---
 
+## 🎨 PHẦN II: KẾ HOẠCH CHI TIẾT v0.5.0 - ĐẠI TU TOÀN DIỆN ĐỒ HỌA, GIAO DIỆN & HOẠT ẢNH
+
+### 1. Nâng Cấp Ngoại Hình Trang Bị & Icon Hệ Thống (EQP-02, ICO-03, ICO-04)
+- **EQP-02 - Ngoại hình 6 Set Trang Bị (Rods, Lines, Hooks) theo chuẩn 4 lớp Vector 3D:**
+  - *Set Vực Thẳm (4★ Epic Abyssal):* Thân cần chitin đen tuyền nứt phát quang sinh học xanh ngọc (`#06b6d4`), đầu cần vây gai sắc nhọn, dây tơ nhện biển phát sáng, lưỡi câu xương rồng vực sâu ma mị.
+  - *Set Hải Tặc & Hoàng Gia (3★-4★ High Seas):* Cần gỗ sồi bọc vàng cướp biển, đầu mỏ neo rèn đồng cổ, dây tơ tằm bện chỉ vàng, lưỡi câu hoàng gia dát ngọc ruby đỏ.
+  - *Set Băng Giá (2★-3★ Glacial Frost):* Thân cần tinh thể băng lục giác trong suốt phản quang tuyết, dây cước sương giá trắng buốt, lưỡi câu thạch băng vĩnh cửu sắc như dao cạo.
+  - *Set Tập Sự & Thợ Săn (1★-2★ Rustic Coastal):* Cần tre uốn cong mộc mạc quấn dây gai, dây thừng bện tay, lưỡi câu sắt gỉ cổ điển phong cách ngư dân làng chài.
+- **ICO-03 - Vector hóa 100% vật phẩm Tiệm Tạp Hóa (Shop Items & Consumables):**
+  - *Mồi câu (Baits):* Mồi trùn biển uốn lượn, Mồi tôm phát quang biển sâu, Mồi cá con lấp lánh vảy bạc, Mồi Thần Lạc Hồng đóa sen ngậm tiên châu.
+  - *Lưới đánh cá (Nets):* Lưới đay dân dã quấn phao gỗ, Lưới cước tơ tằm trong suốt, Lưới bạc gia cường khoen thép, Lưới vàng hoàng gia dát ngọc.
+  - *Bùa may mắn (Talismans):* Bùa giấy điều son chữ Hán-Nôm linh ứng, Bùa ngọc bội xà cừ phát ánh cầu vồng, Bùa Thần Tài Kim Ngân đính chuông đồng cổ.
+  - *Đá mài, Bình thuốc & Nước tăng lực:* Khối đá mài thạch anh phát tia lửa, Bình hồ lô / lọ thuốc thủy tinh phát bọt khí ma thuật sủi tăm.
+  - *Vé Gacha:* Vé Thường xanh lam kim tuyến, Vé Sự Kiện Hoàng Kim Lạc Hồng viền cánh sen đỏ rực.
+- **ICO-04 - Bộ Phù hiệu Vector Nhiệm vụ, Sự kiện & Huân chương Thành tựu 3D:**
+  - 8 Huân chương Thành tựu 3D phong cách Thần thoại Biển: Huân chương Cần Thủ (2 cần bắt chéo), Huân chương Vua Biển (vương miện sóng nước rồng ngậm ngọc), Huân chương Thợ Săn Kho Báu (núi vàng & kim cương phát sáng), Huân chương Kình Ngư (cá quẫy sóng lớn).
+  - Phù hiệu Nhiệm vụ ngày/tuần: Cuộn giấy da hải trình la bàn cổ, Mỏ neo vinh dự, Rương báu mở nắp phát quang.
+
+---
+
+### 2. Hiện Đại Hóa Giao Diện & UI Game Juice (UI-05, UI-06, UI-07)
+- **UI-05 - Khung Viền Kỳ Ảo & Bộ Nút Bấm Xúc Giác (Fantasy Oceanic Frames & Tactile Buttons):**
+  - Bo góc mềm mại cho toàn bộ Modal/Dialog với viền kim loại đồng thau chạm khắc hoa văn Đông Sơn và sóng biển ở 4 góc.
+  - Nút bấm 3 trạng thái rõ rệt (Normal gradient sâu, Hover viền hào quang phát sáng, Pressed thụt 2px kèm âm thanh cơ khí nảy).
+  - Thanh cuộn (Scrollbar) phong cách cổ điển có con trượt hình mỏ neo/giọt nước.
+- **UI-06 - Thanh Trạng Thái Chiến Đấu Động (Dynamic Combat Gauges & Juice):**
+  - *Thanh Máu Cá (HP Bar):* Bổ sung thanh "Ghost HP" đỏ thẫm tụt dần sau khi trúng đòn, viền nứt phát tia lửa khi máu dưới 20%.
+  - *Thanh Lực Căng (Tension Bar):* Đổi màu theo dải màu liên tục Gradient (Xanh lục an toàn -> Vàng cảnh báo -> Đỏ cam nguy hiểm -> Đỏ tím rung lắc chớp nháy kèm tia điện giật khi trên 90%).
+  - *Thanh Thể Lực (Stamina Bar):* Hiệu ứng bọt khí sủi tăm lấp lánh khi đang hồi thể lực.
+- **UI-07 - Thẻ Bài Trang Bị Phát Quang & So Sánh Chỉ Số Tức Thì (Card Hologram & Stat Diff):**
+  - Hiệu ứng tia sáng quét xiên Hologram (Shimmer Sweep) trên các trang bị 5★ Thời Không và 6★ Lạc Hồng.
+  - So sánh trực tiếp với trang bị đang đeo khi di chuột trong túi đồ (+X màu xanh ngọc, -Y màu đỏ san hô).
+
+---
+
+### 3. Ngoại Hình Cá & Môi Trường Đại Dương (FSH-02, ENV-02)
+- **FSH-02 - Đại Tu Ngoại Hình 45 Loài Cá & 3 Siêu Boss Thế Giới:**
+  - Tô màu đổ khối 2 mảng sáng tối (Dual-tone shading) cho toàn bộ 45 loài cá, tạo cảm giác thân cá tròn trịa, bóng mượt dưới nước.
+  - Con ngươi mắt cá có phản quang 3D (đốm sáng trắng + viền mống mắt màu cam/vàng/xanh biếc).
+  - Vây lưng, vây đuôi, vây ngực xòe mềm mại với các tia gân bán trong suốt.
+  - 3 Siêu Boss:
+    * *Thủy Quái Sông Hồng:* Râu rồng dài uốn lượn, mai rùa đá cổ rêu phong bọc ngọc bích, vảy rồng phát sáng cam rực.
+    * *Cá Mập Cổ Đại Megalodon:* Hàm răng 3 hàng sắc nhọn, vết sẹo chiến tích ngang mình, mắt phát ánh đỏ hung tợn.
+    * *Leviathan Vực Thẳm:* Thân rồng biển đen tím khổng lồ, vương miện san hô phát quang sinh học, rãnh thở phụt bọt khí tím.
+- **ENV-02 - Môi Trường Nước Sinh Động & Hiệu Ứng Khúc Xạ (Dynamic Water & Ambient Fauna):**
+  - Mặt nước gợn sóng biến dạng theo hàm điều hòa (Sin/Cos multi-layer water wave).
+  - Rạn san hô và rong biển uốn lượn nhịp nhàng theo dòng chảy đáy biển.
+  - Đàn cá nhỏ bơi lội ngẫu nhiên làm nền, tia nắng mặt trời xiên qua mặt nước (God Rays).
+
+---
+
+### 4. Ngoại Hình Kỹ Năng & Hiệu Ứng Chiến Đấu (VFX-04, VFX-05)
+- **VFX-04 - Bộ Hiệu Ứng Chiêu Thức Người Chơi (Player Active Skill VFX):**
+  - *Dưỡng Sức:* Đài sen ngọc nở rộ dưới chân cần thủ, các cánh hoa sen hồng và lá ngọc bay lên xoay tròn hồi phục thể lực.
+  - *Trói Buộc:* Vòng xích hắc ám từ hư không hoặc dây leo rong biển phát quang siết chặt lấy cá, làm rung giật và đóng băng mặt nước xung quanh.
+  - *Phá Giáp:* Búa sét / Mũi kích năng lượng giáng sấm sét thẳng xuống đầu cá, tạo vết nứt vảy phát tia lửa điện và văng mảnh giáp vỡ vụn.
+  - *Lướt Dây:* Cần thủ giật dây tạo luồng gió xoáy và bọt nước xé toạc mặt nước, dây câu hóa thành tia chớp xanh lơ rạch đường dài trắng xóa.
+  - *Kéo Mạnh / Giật Kép:* Vệt chém bán nguyệt song song màu vàng kim xé toạc sóng nước.
+- **VFX-05 - Bộ Hiệu Ứng Kỹ Năng Thủy Quái & Boss (Fish Skills VFX):**
+  - *Bứt Tốc:* Luồng nước xoáy dài sau đuôi cá, bọt khí cuồn cuộn phản chiếu tia sáng.
+  - *Quấy Bùn:* Đám mây bùn đục ngầu loang ra che khuất màn hình, làm mờ thanh HP và che dấu chuyển động của cá.
+  - *Lặn Sâu:* Cá biến thành bóng đen chìm xuống vực sâu kèm các vòng xoáy nước hút vào tâm.
+  - *Sóng Thần:* Cột sóng khổng lồ dâng trào kèm rung chấn màn hình (Camera Shake).
+  - *Cuồng Nộ:* Cá rực lửa đỏ thẫm, mắt đỏ ngầu, gai lưng dựng đứng kèm sóng âm chấn động phát tán theo vòng tròn.
+  - *Giật Điện:* Các tia sét xanh lơ/vàng giật liên hồi từ mang cá lan dọc theo dây câu về phía người chơi.
+
+---
+
+### 5. Đại Tu Hoạt Ảnh Thao Tác & Chuyển Động (ANM-04, ANM-05)
+- **ANM-04 - Chuyển Động Hữu Cơ Của Cá (Verlet/Multi-Segment Fish Movement):**
+  - Mô phỏng xương sống uốn lượn nhiều đốt (Multi-segment spine): Đầu -> Thân -> Đuôi vẫy có độ trễ sóng tự nhiên, loại bỏ hoàn toàn cảm giác xoay đuôi cứng nhắc.
+  - Khi cá *IDLE:* Bơi lội lững lờ nhịp nhàng, thỉnh thoảng liệng người nghiêng vây ngực.
+  - Khi cá *PULLING* (Giằng co): Cá quay đầu về hướng ngược lại, đuôi quẫy điên cuồng tần số cao, bọt nước tóe trắng xóa quanh vây.
+  - Khi cá *NHẢY VỌT* (Jump): Cá phóng vút lên khỏi mặt nước, uốn cong mình trên không trung, rơi xuống tạo vòng sóng lan tỏa (Ripple wave).
+- **ANM-05 - Bộ Hoạt Ảnh Thao Tác Cần Thủ (Casting, Reeling, Striking & Consuming):**
+  - *Quăng Cần (Casting Animation):* Cần thủ vung cần ra sau -> Thân cần uốn cong tích lực -> Vung mạnh về phía trước -> Phao câu bay theo quỹ đạo parabol rơi xuống nước -> Vòng sóng nước bung nở (Splash).
+  - *Kéo Cần (Rod Flex Physics & Reeling):* Thân cần câu cong cong chịu tải tỉ lệ thuận với lực căng Tension (Tension càng cao cần càng cong gập), cuộn cước quay tít kèm tiếng lách cách cơ khí.
+  - *Giật Cần (Strike Hookset):* Khi cá cắn câu, hiệu ứng "HIT!" bùng nổ, cần giật ngược lên tạo tiếng rít dây xé gió, camera rung nhẹ tạo cảm giác cắn mồi dính chắc.
+  - *Dùng Vật Phẩm (Consumables Animation):* Uống nước tăng lực / ném bùa -> Hiệu ứng vòng sáng bốc lên toàn thân (Buff aura shimmer).
+
+---
+
+### 6. Hoạt Ảnh Gacha Điện Ảnh & Nổ Vật Phẩm Xịn (GAC-02, GAC-03, ANM-06)
+- **GAC-02 - Hoạt Ảnh Triệu Hồi Gacha Điện Ảnh (Cinematic Summoning Vortex):**
+  - Cổng triệu hồi đại dương mở ra giữa biển đêm với vòng tròn ma pháp chiêm tinh xoay tròn.
+  - 10 vì sao băng rơi xuống từ bầu trời đại dương lướt vào trận pháp.
+  - Bầu trời chuyển màu theo phẩm cấp cao nhất của lượt quay:
+    * Lam tuyền (3★) -> Tím hoàng hôn (4★) -> Vàng kim rực rỡ (5★ Thời Không) -> Đỏ son Lạc Long Quân & Cánh Chim Lạc (6★ Thần Khí Lạc Hồng)!
+- **GAC-03 - Hoạt Ảnh Nổ Vật Phẩm Xịn SSR (Cinematic SSR Reveal Cut-in):**
+  - Khi mở ra trang bị 5★ hoặc 6★: Màn hình tối sầm lại, hiệu ứng "Kính vỡ" chớp sáng toàn màn hình.
+  - Chim Lạc vỗ cánh bay lượn quanh bảo vật hoặc Rồng Vàng uốn lượn, các cánh hoa sen nở bung kèm chùm tia sáng God Rays 360 độ.
+  - Tên vật phẩm hiện ra với hiệu ứng dập nổi ánh kim chấn động màn hình cùng tiếng chuông đồng sấm truyền uy nghiêm.
+- **ANM-06 - Hoạt Ảnh Rương Báu, Banner Thăng Cấp & Pháo Hoa (Juicy Rewards):**
+  - Rương báu rung lắc 3 nhịp trước khi nắp rương bật mở, các đồng vàng và kim cương bay vút theo hình cánh cung vào thanh tài nguyên.
+  - Banner "THĂNG CẤP!" nảy bật (Bounce In), các hạt kim tuyến vàng (Confetti) rơi lả tả.
+
+---
+
 ## 📅 LỘ TRÌNH THỰC HIỆN ĐỀ XUẤT (EXECUTION ROADMAP)
 
 ```mermaid
 gantt
-    title Lộ trình Triển khai AnglerRPG
+    title Lộ trình Triển khai AnglerRPG v0.5.0 (Đồ Họa, UI & Hoạt Ảnh)
     dateFormat  YYYY-MM-DD
-    section Phase 1 - Sửa lỗi khẩn cấp (P0)
-    Fix crash EquipmentScreen           :active, p1_1, 2026-10-22, 1d
-    Fix phím kỹ năng QWER và Auto-equip :p1_2, after p1_1, 1d
-    Fix nút Quay lại map ở PlayScreen   :p1_3, after p1_2, 1d
-    section Phase 2 - Cài đặt (P1)
-    Cửa sổ Settings và Slider Âm thanh :p2_1, after p1_3, 2d
-    Keybind Remapping                  :p2_2, after p2_1, 2d
-    Fullscreen / Windowed switch       :p2_3, after p2_2, 1d
-    Chuyển Xuất/Nạp và Đặt tên Timestamp:p2_4, after p2_3, 1d
-    section Phase 3 - Cân bằng Game (P1/P2)
-    Pipeline Mô phỏng Số liệu BAL-00    :done, p3_0, 2026-10-22, 1d
-    Cân bằng Kinh tế và Cửa hàng BAL-01 :done, p3_1, 2026-10-23, 1d
-    Cân bằng Máu cá và Boss BAL-02      :done, p3_2, 2026-10-23, 1d
-    Cân bằng Vòng quay Sự kiện BAL-03   :done, p3_3, 2026-10-23, 1d
-    Cân bằng Tiến trình EXP BAL-04      :done, p3_4, 2026-10-23, 1d
-    Cố định 6★ Set Lạc Hồng BAL-05      :done, p3_5, 2026-10-23, 1d
-    Cân bằng 42 Loài Cá Thường BAL-06   :done, p3_6, 2026-10-23, 1d
-    Cân bằng Nguồn Kim Cương BAL-07     :done, p3_7, 2026-10-23, 1d
+    section Giai đoạn Đã Hoàn Thành (v0.4.x)
+    Sửa lỗi Crash, Menu & Keybinds (v0.4.16 - v0.4.23) :done, p1, 2026-10-22, 2026-10-25
+    Cân bằng Kinh tế, Cá & Kim Cương (BAL-00 -> BAL-09) :done, p2, 2026-10-22, 2026-10-25
+    Hạ tầng ZzFX Sound & Screen Shake Juice (AUD-01, VFX-01) :done, p3, 2026-10-23, 2026-10-25
+    section Phase 1 - Ngoại Hình Trang Bị & Icon (v0.5.1)
+    Ngoại hình 6 Set Trang Bị Vector 4 Lớp (EQP-02)        :active, e1, 2026-10-26, 3d
+    Icon Vật Phẩm Shop, Mồi, Lưới, Bùa (ICO-03)           :e2, after e1, 2d
+    Phù Hiệu Nhiệm Vụ & Huân Chương Thành Tựu (ICO-04)    :e3, after e2, 2d
+    section Phase 2 - Giao Diện & UI Game Juice (v0.5.2)
+    Khung Viền Đông Sơn & Nút Bấm Xúc Giác (UI-05)         :u1, after e3, 2d
+    Thanh Chiến Đấu Động Ghost HP & Gradient (UI-06)      :u2, after u1, 2d
+    Thẻ Bài Hologram & So Sánh Trang Bị (UI-07)           :u3, after u2, 1d
+    section Phase 3 - Ngoại Hình Cá & Kỹ Năng VFX (v0.5.3)
+    Đại Tu 45 Loài Cá & 3 Siêu Boss Thế Giới (FSH-02)     :f1, after u3, 3d
+    Mặt Nước Gợn Sóng & Tia Nắng God Rays (ENV-02)         :f2, after f1, 2d
+    VFX Kỹ Năng Người Chơi (Dưỡng Sức, Trói Buộc) (VFX-04) :v1, after f2, 2d
+    VFX Kỹ Năng Cá & Boss (Quấy Bùn, Bão Tố) (VFX-05)     :v2, after v1, 2d
+    section Phase 4 - Đại Tu Hoạt Ảnh & Cinematic Gacha (v0.5.4)
+    Chuyển Động Hữu Cơ Cá Đốt Sống Verlet (ANM-04)        :a1, after v2, 3d
+    Hoạt Ảnh Quăng Cần, Kéo Cần Flex, Giật Cần (ANM-05)   :a2, after a1, 3d
+    Triệu Hồi Gacha Điện Ảnh & Nổ 6★ SSR Cut-in (GAC-02,03):g1, after a2, 3d
+    Rương Báu Bung Quà, Banner Thăng Cấp (ANM-06)         :a3, after g1, 2d
 ```
 
 ---

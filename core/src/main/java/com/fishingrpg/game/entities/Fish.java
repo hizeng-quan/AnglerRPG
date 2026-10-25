@@ -162,6 +162,33 @@ public class Fish implements Catchable {
         }
     }
 
+    public static String getSkillDescription(String id) {
+        if (id == null) return "";
+        switch (id) {
+            case "quay_bun":        return "Quẫy bùn che khuất hoàn toàn thanh Tension (4.5s)";
+            case "lan_sau":         return "Lặn sâu hang đá ngầm, giật tăng đột ngột +30% Tension";
+            case "cuong_no":        return "Dưới 25% máu: Giải khống chế, bất tử 3.5s & x1.8 lực kéo";
+            case "but_toc":         return "Bứt tốc cực mạnh, tăng lực kéo x2 (3s)";
+            case "song_than":       return "Dậy sóng thần dữ dội, tiêu hao thể lực cần thủ liên tục";
+            case "giat_dien":       return "Phóng sét dọc dây câu, choáng váng nếu giữ kéo dây (2s)";
+            case "nhay_vot":        return "Phóng lên không trung, cần nhả dây kẻo tiếp nước đứt cước";
+            case "phun_muc":        return "Phun mực đen loang lổ che khuất tầm nhìn (4s)";
+            case "phun_muc_mu":     return "Màn đêm mực mù che tối hoàn toàn màn hình (4.5s)";
+            case "song_am":         return "Sóng âm chấn động gây nhiễu loạn kim đo Tension (2s)";
+            case "quet_xuc_tu":     return "Quét xúc tu tăng +35% Tension và trừ 25 Thể lực";
+            case "hut_mau":         return "Mỏ quạ cắn xé hút thể lực cần thủ hồi sinh mệnh cá";
+            case "muc_mu_hut_mau":  return "Mực mù che màn đêm & Hút thể lực hồi máu cho cá";
+            case "bao_to":          return "Triệu hồi bão tố biển sâu, sóng giật cực đại";
+            case "vo_cung":         return "Nội tại: Giáp sừng/vảy rùa đá giảm 20% sát thương nhận vào";
+            case "ben_bi":          return "Nội tại: Thể chất dẻo dai giảm 15% sát thương nhận vào";
+            case "tron_truot":      return "Nội tại: Lớp nhớt trơn trượt giảm 20% sát thương nhận vào";
+            case "an_minh":         return "Nội tại: Khi IDLE giảm 25% sát thương nhận vào";
+            case "vung_vay":        return "Nội tại: Thỉnh thoảng quẫy mạnh đổi hướng giằng co";
+            case "xuc_tu":          return "Nội tại: Xúc tu quấn chặt làm dây chùng chậm hơn 30%";
+            default:                return "Kỹ năng đặc biệt của thủy tộc";
+        }
+    }
+
     // =========================================================================
     // Combat API (giu nguyen de PlayScreen khong doi)
     // =========================================================================

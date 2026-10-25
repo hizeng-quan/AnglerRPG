@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class PatchNotesDialog {
 
-    public static final String CURRENT_VERSION = "v0.4.21";
+    public static final String CURRENT_VERSION = "v0.4.23";
     private static final String PREF_LAST_SEEN_VERSION = "last_seen_patch_notes_version";
 
     private final FishingRPG game;
@@ -91,8 +91,72 @@ public class PatchNotesDialog {
         // --- TAB 0: BẢN TIN CẬP NHẬT THEO TỪNG PHIÊN BẢN ---
         // =====================================================================
 
-        // ===== PHIÊN BẢN v0.4.21 (MỚI NHẤT) =====
-        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.4.21 (MỚI NHẤT - THƯỞNG KIM CƯƠNG SỔ TAY & SỬA LỖI ÂM THANH)"));
+        // ===== PHIÊN BẢN v0.4.23 (MỚI NHẤT) =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.4.23 (MỚI NHẤT - TIỀN TỆ SỔ TAY, HOÁN ĐỔI PHÍM & CƠ CHẾ KÉO CÁ)"));
+
+        patchNotesItems.add(new UpdateItem("SỔ TAY", "Mô Tả Chi Tiết Cơ Chế 20 Kỹ Năng Của Cá Trong Sổ Tay", new Color(0.4f, 0.85f, 1f, 1f))
+            .addPoint("Bổ sung chú thích đầy đủ hiệu ứng và cơ chế tác động cho toàn bộ 20 kỹ năng chủ động & nội tại của cá.")
+            .addPoint("Khung mô tả thẻ cá trong Sổ Tay tự động co giãn chiều cao linh hoạt, hiển thị rõ ràng từng kỹ năng.")
+        );
+
+        patchNotesItems.add(new UpdateItem("NHIỆM VỤ", "Đại Tu Kho Nhiệm Vụ Hằng Ngày & Hằng Tuần Đa Dạng", new Color(0.85f, 0.5f, 1f, 1f))
+            .addPoint("Triệt tiêu hoàn toàn trùng lặp yêu cầu; mở rộng 12 danh mục nhiệm vụ Ngày và 7 nhiệm vụ Tuần phong phú.")
+            .addPoint("Bổ sung các mục tiêu mới: Khiêu chiến Boss, bắt Kình ngư nặng ký, kỹ thuật câu giữ dây an toàn, dùng vật phẩm, dọn rác, viễn du.")
+        );
+
+        patchNotesItems.add(new UpdateItem("GIAO DIỆN", "Giãn Cách Dock Tiền Tệ Sổ Tay & Chuẩn Hóa Icon Vàng", fixBadgeColor)
+            .addPoint("Tăng chiều cao khung dock tiền tệ trong Sổ Tay lên 54px, phân cách 2 hàng Vàng và Kim Cương 24px thoáng đãng.")
+            .addPoint("Đồng nhất mỹ thuật Icon Đồng Vàng sang dạng đĩa tròn vàng bóng, viền khắc nổi và phản quang lấp lánh (bỏ lỗ vuông).")
+        );
+
+        patchNotesItems.add(new UpdateItem("KỸ NĂNG", "Khắc Phục Lỗi Font Ô Vuông & Căn Chỉnh Vị Trí Cooldown", new Color(0.4f, 0.85f, 1f, 1f))
+            .addPoint("Loại bỏ emoji đồng hồ gây lỗi ô vuông [] trên máy không có glyph, thay bằng ký tự chấm đầu dòng • thanh lịch.")
+            .addPoint("Cố định dòng Thời gian hồi chiêu và nhắc nhở Sách kỹ năng an toàn bên trên nút Nâng Cấp, không bị che khuất.")
+        );
+
+        patchNotesItems.add(new UpdateItem("HỆ THỐNG", "Tự Động Hoán Đổi Phím (Auto-Swap) & Hỗ Trợ Bộ Gõ Unikey", dataBadgeColor)
+            .addPoint("Khi đổi phím trùng với hành động khác: Hệ thống tự động hoán đổi phím giữa 2 hành động thay vì chặn thao tác.")
+            .addPoint("Bổ sung quét phím phần cứng dự phòng trong Cài Đặt, bảo đảm nhận diện phím 100% khi dùng bộ gõ Unikey/EVKey.")
+            .addPoint("Tự động khôi phục phím mặc định nếu tệp lưu trữ phím bị lỗi hoặc bằng 0; hỗ trợ kích hoạt chiêu bằng click HUD.")
+        );
+
+        patchNotesItems.add(new UpdateItem("CÂN BẰNG", "Lực Căng Dây Khi Kéo Cá & Giới Hạn Sàn Kháng Lực Kéo", newBadgeColor)
+            .addPoint("Kéo dây (giữ SPACE) luôn sinh lực căng cơ bản theo nhịp quay cần kể cả khi cá IDLE (14f + 0.025f*MaxTension).")
+            .addPoint("Khi cá giằng co (PULLING), kéo dây làm tăng vọt lực căng (26f + 0.055f*MaxTension), tạo phản hồi giằng co chân thực.")
+            .addPoint("Khóa sàn kháng lực kéo ở mức tối thiểu 25%, ngăn chặn trang bị cấp cao triệt tiêu toàn bộ lực kéo của cá.")
+        );
+
+        // ===== PHIÊN BẢN v0.4.22 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.4.22 (SỬA LỖI KỸ NĂNG & CÂN BẰNG THÀNH TỰU)"));
+
+        patchNotesItems.add(new UpdateItem("SỬA LỖI", "Khắc Phục Lỗi Kỹ Năng Dưỡng Sức & Trói Buộc", fixBadgeColor)
+            .addPoint("Dưỡng Sức: Khóa triệt để việc bấm/giữ SPACE gây sát thương lên cá trong lúc đang vận sức; không làm sẩy cá do chùng dây.")
+            .addPoint("Trói Buộc: Khi cá chịu hiệu ứng Trói Buộc (loi_nguyen_troi_buoc), kéo dây hoàn toàn không làm tăng lực căng Tension.")
+        );
+
+        patchNotesItems.add(new UpdateItem("CÂN BẰNG", "Điều Chỉnh Phần Thưởng Kim Cương 48 Mốc Thành Tựu", dataBadgeColor)
+            .addPoint("Hạ định mức thưởng Kim Cương về chuẩn cân bằng kinh tế (2 - 30 KC thay vì 400 - 600 KC) trên toàn bộ 8 nhóm thành tựu.")
+            .addPoint("Sửa mốc chỉ tiêu 'Sát Thủ Biển Sâu' từ 500 thành chuẩn 5.000 con cá.")
+            .addPoint("Hệ thống SaveManager tự động đồng bộ mô tả và phần thưởng mới cho cả các bản lưu game cũ.")
+        );
+
+        patchNotesItems.add(new UpdateItem("SỰ KIỆN", "Hợp Nhất Thưởng Nhiệm Vụ Sự Kiện Vào Rương Mốc", newBadgeColor)
+            .addPoint("Loại bỏ phần thưởng đơn lẻ và nút nhận riêng của 6 nhiệm vụ sự kiện hàng ngày.")
+            .addPoint("Thẻ nhiệm vụ chuyển thành dạng huy hiệu trạng thái ('✓ ĐÃ XONG' / 'ĐANG LÀM'), thưởng quy về Rương Mốc 4/6 nhiệm vụ.")
+        );
+
+        patchNotesItems.add(new UpdateItem("KỸ NĂNG", "Chú Thích Động Theo Cấp & Đưa Cooldown Xuống Dưới", new Color(0.4f, 0.85f, 1f, 1f))
+            .addPoint("Viết lại toàn bộ chú thích kỹ năng: Chỉ số hiển thị động chính xác theo cấp độ hiện tại thay vì ghi chú số cố định.")
+            .addPoint("Thông tin Thời gian hồi chiêu (Cooldown) và Tiêu hao thể lực được chuyển xuống phía dưới cùng của hộp mô tả.")
+        );
+
+        patchNotesItems.add(new UpdateItem("GIAO DIỆN", "Icon Vector Sổ Tay & Tinh Chỉnh Văn Bản Trang Bị", new Color(1f, 0.85f, 0.35f, 1f))
+            .addPoint("Sổ Tay (Catalog): Thay thế chữ 'Vàng:' và 'KC:' trên thanh số dư bằng Icon Vector Đồng Vàng và Kim Cương sắc nét.")
+            .addPoint("Trang bị: Tinh giản 'Độ bền dây (Max Tension)' thành 'Độ bền dây' và 'Tỉ lệ cá hiếm / xịn' thành 'Tỉ lệ cá hiếm'.")
+        );
+
+        // ===== PHIÊN BẢN v0.4.21 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.4.21 (THƯỞNG KIM CƯƠNG SỔ TAY & SỬA LỖI ÂM THANH)"));
 
         patchNotesItems.add(new UpdateItem("SỔ TAY", "Bổ Sung Thưởng Kim Cương 15 Bộ Sưu Tập Cá", newBadgeColor)
             .addPoint("Bổ sung thưởng Kim Cương milestone cho cả 15 bộ sưu tập cá: Ao Làng (140 KC), Bãi Biển (170 KC), Đảo Xa (230 KC).")
@@ -266,15 +330,31 @@ public class PatchNotesDialog {
             .addPoint("Đã hoàn thành cố định phẩm cấp 6★ Set Lạc Hồng, cân bằng 42 loài cá và kinh tế Kim Cương.")
         );
 
-        roadmapItems.add(UpdateItem.versionHeader("MỤC TIÊU PHÁT TRIỂN TIẾP THEO"));
+        roadmapItems.add(UpdateItem.versionHeader("ĐẠI TU ĐỒ HỌA, GIAO DIỆN & HOẠT ẢNH (SERIES v0.5.x)"));
 
-        roadmapItems.add(new UpdateItem("ĐANG TRIỂN KHAI", "Simplex Noise GLSL Water Shader Khúc Xạ Mặt Nước", new Color(1f, 0.75f, 0.25f, 1f))
-            .addPoint("Nâng cấp mặt nước biển sống động với hiệu ứng sóng lấp lánh (Caustics) và khúc xạ ánh hoàng hôn.")
+        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 1", "Ngoại Hình 6 Set Trang Bị & Icon Vật Phẩm Shop (v0.5.1)", new Color(0.35f, 0.80f, 1f, 1f))
+            .addPoint("Đại tu toàn bộ 6 Set Cần, Dây, Lưỡi theo chuẩn 4 lớp Vector 3D: Vực Thẳm (4★), Hải Tặc (3★), Băng Giá (2★), Thợ Săn (1★).")
+            .addPoint("Vector hóa 100% vật phẩm Shop: Mồi câu (trùn, tôm, cá, tiên châu), Lưới đánh cá, Bùa may mắn chuông đồng, Đá mài, Vé gacha.")
+            .addPoint("Bộ 8 Huân chương Thành tựu 3D và Phù hiệu Nhiệm vụ phong cách Thần thoại Biển.")
         );
 
-        roadmapItems.add(new UpdateItem("TÍNH NĂNG MỚI", "Hệ Thống Bang Hội & Đua Top Câu Cá", new Color(1f, 0.55f, 0.35f, 1f))
-            .addPoint("Phát triển bảng xếp hạng thời gian thực theo từng bản đồ.")
-            .addPoint("Thêm các giải đấu câu cá cuối tuần và hoạt động săn Thần Biển Leviathan theo tổ đội.")
+        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 2", "Hiện Đại Hóa UI, Nút Bấm Xúc Giác & Combat Gauges (v0.5.2)", new Color(1f, 0.75f, 0.25f, 1f))
+            .addPoint("Khung viền kỳ ảo bo góc mạ đồng Đông Sơn, nút bấm 3 trạng thái phản hồi âm xúc giác cơ khí.")
+            .addPoint("Thanh máu cá Ghost HP bar tụt dần, Thanh lực căng Gradient rung lắc chớp nháy điện giật khi trên 90%.")
+            .addPoint("Thẻ bài trang bị quét sáng Hologram Shimmer và so sánh chỉ số tức thì (Stat Diff) khi hover.")
+        );
+
+        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 3", "Ngoại Hình 45 Loài Cá, 3 Boss & Hiệu Ứng Chiêu Thức VFX (v0.5.3)", new Color(0.25f, 0.85f, 0.50f, 1f))
+            .addPoint("Đại tu 45 loài cá với đổ khối Dual-tone 3D, mắt phản quang con ngươi lấp lánh và vây mềm bán trong suốt.")
+            .addPoint("3 Siêu Boss: Thủy Quái Sông Hồng (mai ngọc râu rồng), Megalodon (sẹo ngang hàm răng 3 tầng), Leviathan (san hô tím phát quang).")
+            .addPoint("Bộ VFX chiêu thức: Dưỡng Sức hoa sen bung nở, Trói Buộc xích hư không, Phá Giáp búa sét, Bão Tố, Quấy Bùn mờ màn hình.")
+        );
+
+        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 4", "Đại Tu Hoạt Ảnh Chuyển Động & Cinematic Gacha SSR (v0.5.4)", new Color(0.95f, 0.45f, 0.75f, 1f))
+            .addPoint("Chuyển động hữu cơ của cá: Đốt sống đa khớp Verlet uốn lượn nhịp nhàng, quẫy đuôi tốc độ cao khi kéo và phóng nhảy khỏi mặt nước.")
+            .addPoint("Bộ hoạt ảnh cần thủ: Quăng cần vung tích lực, cần câu uốn cong vật lý theo lực căng Tension, giật cần cắn câu nổ hiệu ứng HIT.")
+            .addPoint("Cắt cảnh Gacha điện ảnh: Vòng ma pháp đại dương, sao băng đổi màu phẩm cấp và cảnh nổ SSR vỡ kính, Rồng Vàng/Chim Lạc 360°.")
+            .addPoint("Rương báu rung lắc bung tài nguyên, Banner Thăng Cấp nảy bật kèm pháo hoa kim tuyến.")
         );
     }
 

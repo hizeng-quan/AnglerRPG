@@ -59,18 +59,18 @@ public class EventManager {
 
     private static final List<EventQuestTemplate> EVENT_QUEST_POOL = new ArrayList<>();
     static {
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_catch", "Hào Khí Đánh Bắt", "Câu thành công 5 con cá", 5, 300, 0, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_perfect", "Tay Cần Lạc Hồng", "Đạt PERFECT khi quăng cần 2 lần", 2, 0, 5, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_spend", "Giao Thương Hội Làng", "Tiêu 150 Vàng trong ngày", 150, 300, 0, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_gacha", "Vận May Sự Kiện", "Quay Gacha 1 lần", 1, 0, 0, "Vé Quay", 1));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_rare", "Cá Quý Đại Dương", "Câu 1 con cá Rare trở lên", 1, 0, 5, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_skill", "Khí Phách Ngư Dân", "Dùng 3 lần Kỹ năng khi câu cá", 3, 250, 0, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_catch_3", "Ra Khơi Quyết Thắng", "Câu thành công 3 con cá", 3, 200, 0, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_perfect_1", "Bách Phát Bách Trúng", "Đạt PERFECT 1 lần khi quăng cần", 1, 0, 3, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_spend_100", "Trù Bị Ngư Cụ", "Tiêu 100 Vàng tại Tiệm Tạp Hóa", 100, 200, 0, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_skill_2", "Tuyệt Kỹ Ngư Gia", "Dùng 2 lần Kỹ năng trong lúc câu", 2, 200, 0, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_rare_boss", "Chiến Tích Vang Danh", "Bắt 1 con cá Rare trở lên", 1, 0, 8, null, 0));
-        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_catch_7", "Ngư Phủ Tinh Anh", "Câu thành công 7 con cá", 7, 400, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_catch", "Hào Khí Đánh Bắt", "Câu thành công 5 con cá", 5, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_perfect", "Tay Cần Lạc Hồng", "Đạt PERFECT khi quăng cần 2 lần", 2, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_spend", "Giao Thương Hội Làng", "Tiêu 150 Vàng trong ngày", 150, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_gacha", "Vận May Sự Kiện", "Quay Gacha 1 lần", 1, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_rare", "Cá Quý Đại Dương", "Câu 1 con cá Rare trở lên", 1, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_skill", "Khí Phách Ngư Dân", "Dùng 3 lần Kỹ năng khi câu cá", 3, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_catch_3", "Ra Khơi Quyết Thắng", "Câu thành công 3 con cá", 3, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_perfect_1", "Bách Phát Bách Trúng", "Đạt PERFECT 1 lần khi quăng cần", 1, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_spend_100", "Trù Bị Ngư Cụ", "Tiêu 100 Vàng tại Tiệm Tạp Hóa", 100, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_skill_2", "Tuyệt Kỹ Ngư Gia", "Dùng 2 lần Kỹ năng trong lúc câu", 2, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_rare_boss", "Chiến Tích Vang Danh", "Bắt 1 con cá Rare trở lên", 1, 0, 0, null, 0));
+        EVENT_QUEST_POOL.add(new EventQuestTemplate("ev_catch_7", "Ngư Phủ Tinh Anh", "Câu thành công 7 con cá", 7, 0, 0, null, 0));
     }
 
     public static class DailyReward {
@@ -266,9 +266,6 @@ public class EventManager {
         checkAndResetDailyMissions();
         if (!hasClaimedLoginToday() && player.getTotalLoginDaysThisMonth() < 25) {
             return true;
-        }
-        for (Quest q : eventQuests) {
-            if (q.isCompleted() && !q.claimed) return true;
         }
         if (canClaimMilestone()) return true;
         return false;

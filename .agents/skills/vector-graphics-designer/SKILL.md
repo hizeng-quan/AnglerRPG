@@ -53,7 +53,7 @@ Khi cần vẽ một biểu tượng hoặc sinh asset mới:
 
 ### Bước 4: Chuyển đổi sang mã Java LibGDX
 - Sử dụng tool `svg_to_libgdx_code` để sinh ra hàm Java hoàn chỉnh:
-  ```java
+  ```text
   public static void drawCustomIcon(ShapeRenderer sr, float cx, float cy, float r, Color color) {
       // Logic vẽ vector bằng ShapeRenderer
   }

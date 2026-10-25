@@ -17,7 +17,7 @@ public class LuotDayAbility extends GameplayAbility {
 
     @Override
     public float getBaseCooldown(AbilityContext ctx) {
-        return 15f;
+        return 12.0f;
     }
 
     @Override

@@ -437,24 +437,7 @@ public class EventScreen implements Screen {
             drawBoxBorder(mBtnX, mBtnY, mBtnW, mBtnH, 1.2f);
         }
 
-        // Optional Claim All Button (to the left of Milestone Button)
-        boolean hasUnclaimed = false;
-        for (Quest q : eventManager.eventQuests) {
-            if (q.isCompleted() && !q.claimed) {
-                hasUnclaimed = true;
-                break;
-            }
-        }
-        if (hasUnclaimed) {
-            float caW = 160f;
-            float caH = 40f;
-            float caX = mBtnX - caW - 12f;
-            float caY = mBtnY;
-            sr.setColor(0.18f, 0.35f, 0.24f, 0.95f);
-            sr.rect(caX, caY, caW, caH);
-            sr.setColor(0.35f, 0.9f, 0.5f, 0.85f);
-            drawBoxBorder(caX, caY, caW, caH, 1.4f);
-        }
+        // Milestone Banner is self-contained. Individual quest claim buttons and Claim All are removed per design.
 
         // 2. 6 Event Quest Cards (2 columns x 3 rows)
         float cardGapX = 18f;
@@ -513,26 +496,17 @@ public class EventScreen implements Screen {
             sr.setColor(0.25f, 0.35f, 0.48f, 0.65f);
             drawBoxBorder(qpbX, qpbY, qpbW, qpbH, 1f);
 
-            // Claim / Status Button
+            // Status Badge (Non-clickable, rewards are consolidated into the daily Milestone Chest)
             float btnW = 115f;
             float btnH = 36f;
             float btnX = qx + cardW - btnW - 14f;
             float btnY = qy + 12f;
 
-            if (q.claimed) {
-                sr.setColor(0.12f, 0.18f, 0.15f, 0.8f);
+            if (q.claimed || q.isCompleted()) {
+                sr.setColor(0.12f, 0.25f, 0.18f, 0.85f);
                 sr.rect(btnX, btnY, btnW, btnH);
-                sr.setColor(0.25f, 0.5f, 0.35f, 0.5f);
+                sr.setColor(0.3f, 0.8f, 0.45f, 0.8f);
                 drawBoxBorder(btnX, btnY, btnW, btnH, 1.2f);
-            } else if (q.isCompleted()) {
-                float pulse = 0.8f + 0.2f * MathUtils.sin(animTimer * 5f);
-                sr.rect(btnX, btnY, btnW, btnH,
-                        new Color(0.15f, 0.45f * pulse, 0.25f * pulse, 1f),
-                        new Color(0.15f, 0.45f * pulse, 0.25f * pulse, 1f),
-                        new Color(0.25f, 0.85f * pulse, 0.45f * pulse, 1f),
-                        new Color(0.25f, 0.85f * pulse, 0.45f * pulse, 1f));
-                sr.setColor(0.4f, 1f, 0.6f, 1f);
-                drawBoxBorder(btnX, btnY, btnW, btnH, 1.8f);
             } else {
                 sr.setColor(0.12f, 0.16f, 0.24f, 0.8f);
                 sr.rect(btnX, btnY, btnW, btnH);
@@ -901,14 +875,11 @@ public class EventScreen implements Screen {
             layout.setText(font, progText);
             font.draw(game.batch, layout, qpbX + qpbW - layout.width, qpbY + 30f);
 
-            // Line 3 Right: Button Status Label
+            // Line 3 Right: Status Badge
             font.getData().setScale(0.82f);
-            if (q.claimed) {
-                font.setColor(0.4f, 0.85f, 0.55f, 1f);
-                drawCenteredText(font, "✓ ĐÃ NHẬN", btnX, btnY, btnW, btnH);
-            } else if (q.isCompleted()) {
-                font.setColor(Color.WHITE);
-                drawCenteredText(font, "NHẬN", btnX, btnY, btnW, btnH);
+            if (q.claimed || q.isCompleted()) {
+                font.setColor(0.4f, 0.95f, 0.6f, 1f);
+                drawCenteredText(font, "✓ ĐÃ XONG", btnX, btnY, btnW, btnH);
             } else {
                 font.setColor(0.7f, 0.82f, 0.95f, 0.85f);
                 drawCenteredText(font, "ĐANG LÀM", btnX, btnY, btnW, btnH);
@@ -1226,67 +1197,6 @@ public class EventScreen implements Screen {
                 }
 
                 // Click "Nhận tất cả" Button
-                boolean hasUnclaimed = false;
-                for (Quest q : eventManager.eventQuests) {
-                    if (q.isCompleted() && !q.claimed) {
-                        hasUnclaimed = true;
-                        break;
-                    }
-                }
-                if (hasUnclaimed) {
-                    float caW = 160f;
-                    float caH = 40f;
-                    float caX = mBtnX - caW - 12f;
-                    float caY = mBtnY;
-                    if (isMouseOver(caX, caY, caW, caH)) {
-                        int claimedCount = 0;
-                        for (Quest q : eventManager.eventQuests) {
-                            if (q.isCompleted() && !q.claimed) {
-                                eventManager.claimQuestReward(q);
-                                claimedCount++;
-                            }
-                        }
-                        if (eventManager.canClaimMilestone()) {
-                            eventManager.claimMilestone();
-                        }
-                        AudioManager.getInstance().playSFX("sfx_catch");
-                        showMessage("Đã nhận tất cả (" + claimedCount + " nhiệm vụ hoàn thành)!");
-                        return;
-                    }
-                }
-
-                // Click individual quest claim button
-                float cardGapX = 18f;
-                float cardGapY = 12f;
-                float cardW = (containerW - cardGapX) / 2f;
-                float cardH = 110f;
-                float gridStartY = H - 245f;
-
-                for (int i = 0; i < eventManager.eventQuests.size() && i < 6; i++) {
-                    Quest q = eventManager.eventQuests.get(i);
-                    int col = i % 2;
-                    int row = i / 2;
-                    float qx = mStartX + col * (cardW + cardGapX);
-                    float qy = gridStartY - row * (cardH + cardGapY) - cardH;
-
-                    float btnW = 115f;
-                    float btnH = 36f;
-                    float btnX = qx + cardW - btnW - 14f;
-                    float btnY = qy + 12f;
-
-                    if (isMouseOver(btnX, btnY, btnW, btnH)) {
-                        if (q.claimed) {
-                            showMessage("Bạn đã nhận phần thưởng nhiệm vụ này rồi!");
-                        } else if (q.isCompleted()) {
-                            String res = eventManager.claimQuestReward(q);
-                            AudioManager.getInstance().playSFX("sfx_catch");
-                            showMessage(res);
-                        } else {
-                            showMessage("Chưa hoàn thành mục tiêu: " + q.description);
-                        }
-                        return;
-                    }
-                }
             }
 
             // 4. Tab 1: Attendance claim

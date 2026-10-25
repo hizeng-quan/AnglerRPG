@@ -107,34 +107,47 @@ public class Skill {
         return formatEffectString(e1, e2);
     }
     
+    public float getCooldown() {
+        switch (id) {
+            case "keo_manh": return 3.5f;
+            case "giat_kep": return 8.0f;
+            case "pha_giap": return 14.0f;
+            case "luot_day": return 12.0f;
+            case "loi_nguyen_troi_buoc": return 16.0f;
+            case "duong_suc": return 9.0f;
+            case "nem_xa": return 1.0f;
+            default: return 0f;
+        }
+    }
+
     private String formatEffectString(float e1, float e2) {
         switch (id) {
             case "keo_manh": return String.format("Gây %.0f sát thương / Tốn %.0f Thể lực", e1, e2);
-            case "day_thep": return String.format("Tăng thêm %.0f sức chịu đựng dây", e1);
+            case "day_thep": return String.format("Tăng thêm %.0f độ bền dây tối đa", e1);
             case "the_luc_doi_dao": return String.format("Tăng thêm %.0f Thể lực tối đa", e1);
-            case "co_bap_thep": return String.format("Giảm %.0f%% tốc độ tụt Thể lực", e1);
+            case "co_bap_thep": return String.format("Giảm %.0f%% tiêu hao Thể lực khi chiến đấu", e1);
             case "bao_kich": return String.format("Tỷ lệ bạo kích x2 sát thương: %.0f%%", e1);
-            case "pha_giap": return String.format("Gây %.0f sát thương / Suy yếu %.0f giây", e1, e2);
+            case "pha_giap": return String.format("Gây %.0f sát thương / Tăng %.0f%% sát thương nhận vào của cá trong 10s", e1, e2);
             case "giu_day": return String.format("Tự giảm %.0f Tension/giây khi chùng dây", e1);
-            case "nhanh_tay": return String.format("Cửa sổ cắn câu kéo dài thêm %.1f giây", e1);
-            case "hoi_phuc_nhanh": return String.format("Tăng %d Thể lực/giây khi nghỉ ngơi", (int)e1);
-            case "phan_xa": return String.format("Giảm %.0f%% tụt Thể lực (Yêu cầu bấm trong %.1fs)", e2, e1);
-            case "nhip_nhang": return String.format("Tỉ lệ vô hiệu hóa lực cá: %.0f%%", e1);
+            case "nhanh_tay": return String.format("Cửa sổ cắn câu kéo dài thêm +%.1f giây", e1);
+            case "hoi_phuc_nhanh": return String.format("Tăng tốc độ hồi phục Thể lực: +%d/giây", (int)e1);
+            case "phan_xa": return String.format("Giảm %.0f%% tiêu hao Thể lực (Yêu cầu giật cần trong %.1fs đầu)", e2, e1);
+            case "nhip_nhang": return String.format("Tỷ lệ vô hiệu hóa lực kéo của cá: %.0f%%", e1);
             case "luot_day": return String.format("Giảm %.0f%% lực kéo của cá trong %.0f giây", (1 - 1f/e1) * 100f, e2);
-            case "chuyen_gia_moi": return String.format("Tỉ lệ không mất mồi: %.0f%%", e1);
-            case "may_man_co_ban": return String.format("Tỉ lệ cá RARE trở lên: +%.0f%%", e1);
-            case "nhat_mot": return String.format("Tỉ lệ rơi vật phẩm: %.0f%%", e1);
-            case "ngu_dan_tinh_anh": return String.format("Tỉ lệ cá EPIC/BOSS: +%.0f%%", e1);
-            case "tho_san_kho_bau": return String.format("Cơ hội rớt Kho Báu: +%.0f%%", e1);
-            case "nem_xa": return "Đảm bảo đạt Perfect";
-            case "duong_suc": return String.format("Thời gian vận sức: %.1fs", e1);
-            case "giat_kep": return String.format("Hệ số sát thương: x%.1f", e1);
-            case "mat_dai_bang": return String.format("Mở rộng vùng Perfect: x%.1f", e1);
-            case "thuan_hoa": return String.format("Kéo dài thời gian nghỉ ngơi thêm %.1fs", e1);
-            case "loi_nguyen_troi_buoc": return String.format("Đóng băng lực kéo cá %.1f giây", e1);
-            case "trai_tim_dai_duong": return String.format("Tỷ lệ cứu đứt dây: %.0f%%", e1);
-            case "ben_bi": return String.format("Tăng %.0f%% hồi Thể lực sau câu", e1);
-            case "no_bung": return String.format("Tăng %.0f%% hồi Thể lực khi dùng vật phẩm", e1);
+            case "chuyen_gia_moi": return String.format("Tỷ lệ giữ lại mồi không bị mất: %.0f%%", e1);
+            case "may_man_co_ban": return String.format("Tăng tỷ lệ cá Hiếm (Rare) trở lên: +%.0f%%", e1);
+            case "nhat_mot": return String.format("Tỷ lệ rơi thêm vật phẩm ngẫu nhiên: %.0f%%", e1);
+            case "ngu_dan_tinh_anh": return String.format("Tăng tỷ lệ cá Sử Thi / Huyền Thoại: +%.0f%%", e1);
+            case "tho_san_kho_bau": return String.format("Tỷ lệ xuất hiện Rương Kho Báu: +%.0f%%", e1);
+            case "nem_xa": return "Cú quăng cần tiếp theo chắc chắn đạt mức Tuyệt Đối (Perfect)";
+            case "duong_suc": return String.format("Thời gian vận sức: %.1fs (Hồi phục 50 Thể lực)", e1);
+            case "giat_kep": return String.format("Hệ số sát thương: x%.1f (Tiêu hao 40 Thể lực)", e1);
+            case "mat_dai_bang": return String.format("Mở rộng vùng Perfect khi quăng cần: x%.1f", e1);
+            case "thuan_hoa": return String.format("Kéo dài thời gian cá nghỉ ngơi thêm +%.1fs", e1);
+            case "loi_nguyen_troi_buoc": return String.format("Đóng băng hoàn toàn lực kéo cá trong %.1fs", e1);
+            case "trai_tim_dai_duong": return String.format("Tỷ lệ bảo vệ chống đứt dây câu: %.0f%%", e1);
+            case "ben_bi": return String.format("Hồi lại %.0f%% Thể lực sau mỗi lượt câu thành công", e1);
+            case "no_bung": return String.format("Tăng thêm %.0f%% lượng Thể lực hồi từ vật phẩm", e1);
             default:
                 StringBuilder sb = new StringBuilder("Thông số: ");
                 sb.append(String.format("%.1f", e1));
