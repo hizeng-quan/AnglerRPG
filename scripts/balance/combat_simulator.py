@@ -78,7 +78,7 @@ class CombatSimulator:
             if fish_state == "PULLING":
                 pull_mult = 1.5 if is_space_down else 0.8
             else:
-                pull_mult = 0.15 if is_space_down else 0.10
+                pull_mult = 0.03 if is_space_down else 0.0
 
             pull = fish_pull_base * pull_mult
             if "xuc_tu" in skills:
@@ -95,7 +95,7 @@ class CombatSimulator:
                 if fish_state == "PULLING":
                     tension_increase += (26.0 + max_tension * 0.055) * dt
                 else:
-                    tension_increase += (14.0 + max_tension * 0.025) * dt
+                    tension_increase += (10.0 + max_tension * 0.020) * dt
 
                 # Apply damage
                 eff_dmg = base_dmg * dmg_mult

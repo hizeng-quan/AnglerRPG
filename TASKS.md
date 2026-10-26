@@ -61,6 +61,7 @@
 | **KEY-01** | Hệ thống | Cơ chế tự động hoán đổi phím (Auto-Swap) & Quét phím phần khớp IME/Unikey | **P0 (Khẩn cấp)**   | ✅ Đã hoàn thành |
 | **BAL-09** | Cân bằng | Cân bằng lực căng dây khi kéo cá (Reeling Tension) & Sàn kháng lực kéo (25%) | **P1 (Quan trọng)** | ✅ Đã hoàn thành |
 | **BAL-10** | Cân bằng | Tái Cân Bằng Tension: Giảm xả tự nhiên (6+0.04*Max), cá buông kéo 80%, nerf cá mệt IDLE 15%/10% nhịp 1.5-3.5s | **P1 (Cân bằng)**   | ✅ Đã hoàn thành (v0.4.24) |
+| **BAL-11** | Cân bằng | Nerf Lực Cản Cá Trong IDLE: Kéo giảm 0.15x->0.03x, buông 0.10x->0.0x, hạ baseline quay máy câu 10+0.02*Max | **P1 (Cân bằng)**   | ✅ Đã hoàn thành (v0.5.1.1) |
 | **FSH-03** | Tính năng| Hiển thị chi tiết cơ chế tác động của 20 kỹ năng cá trong Sổ Tay Thủy Tộc | **P1 (Trải nghiệm)**| ✅ Đã hoàn thành |
 | **QST-02** | Nhiệm vụ | Đại tu kho nhiệm vụ Ngày/Tuần (12 ngày, 7 tuần), triệt tiêu trùng lặp yêu cầu| **P1 (Quan trọng)** | ✅ Đã hoàn thành |
 | **EQP-02A**| Đồ họa   | Bước 1.1: 12 Icon Trang Bị Bậc 0★-3★ (Tập Sự, Thợ Săn, Băng Giá, Đại Dương) & Đại Tu Full Representation Gacha/Equipment | **P1 (Đồ họa)**     | ✅ Đã hoàn thành (v0.5.1a) |
@@ -68,7 +69,7 @@
 | **EQP-02C**| Đồ họa   | Bước 1.3: 9 Icon Trang Bị Bậc 6★-7★ & Sự Kiện (Quang Minh, Vệ Quốc, Thần Khí Lạc Hồng) | **P1 (Đồ họa)**     | ✅ Đã hoàn thành (v0.5.1c) |
 | **EQP-02D**| Đồ họa   | Đột phá thiết kế độc bản (Strict Non-Repetition Rule) & Bùng nổ hiệu ứng Thần Khí Lạc Hồng (8 Icon)| **P1 (Đồ họa)**     | ✅ Đã hoàn thành (v0.4.24) |
 | **ICO-03A**| Đồ họa   | Bước 1.4: 12 Icon Tiêu Hao & Đạo Cụ Chiến Đấu Tiệm Tạp Hóa (Thuốc, Nước Tăng Lực, Bùa...)| **P1 (Đồ họa)**     | ✅ Đã hoàn thành (v0.4.24) |
-| **ICO-03B**| Đồ họa   | Bước 1.5: 12 Icon Mồi Câu, Sách Kỹ Năng & Loot Rác / Kho Báu Đáy Biển                | **P1 (Đồ họa)**     | ✅ Đã hoàn thành (v0.5.1) |
+| **ICO-03B**| Đồ họa   | Bước 1.5: 12 Icon Mồi Câu, Sách Kỹ Năng & Loot Rác / Kho Báu Đáy Biển                | **P1 (Đồ họa)**     | ✅ Đã hoàn thành (v0.5.1.1) |
 | **UI-05**  | Giao diện| Khung viền Dialog hiện đại bo góc & Bộ nút bấm phản hồi âm ZzFX, hiệu ứng hover/pressed| **P1 (Giao diện)**  | 📋 Kế hoạch (Bước 2 - v0.5.2) |
 | **UI-06**  | Giao diện| Thanh trạng thái chiến đấu động (Ghost HP bar tụt dần, Gradient Tension bar rung giật)| **P1 (Giao diện)**  | 📋 Kế hoạch (Bước 2 - v0.5.2) |
 | **UI-07**  | Giao diện| Thẻ bài trang bị hiển thị Rarity rõ nét & So sánh chỉ số tức thì (Stat Diff) khi hover| **P1 (Giao diện)**  | 📋 Kế hoạch (Bước 2 - v0.5.2) |
