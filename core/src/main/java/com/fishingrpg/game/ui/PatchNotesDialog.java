@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class PatchNotesDialog {
 
-    public static final String CURRENT_VERSION = "v0.5.1";
+    public static final String CURRENT_VERSION = "v0.5.1.1";
     private static final String PREF_LAST_SEEN_VERSION = "last_seen_patch_notes_version";
 
     private final FishingRPG game;
@@ -91,8 +91,8 @@ public class PatchNotesDialog {
         // --- TAB 0: BẢN TIN CẬP NHẬT THEO TỪNG PHIÊN BẢN ---
         // =====================================================================
 
-        // ===== PHIÊN BẢN v0.5.1 (MỚI NHẤT) =====
-        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.1 (MỚI NHẤT - ĐẠI TU 54 ICON VECTOR & PHÓNG TO QUICKSLOT)"));
+        // ===== PHIÊN BẢN v0.5.1.1 (MỚI NHẤT) =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.1.1 (MỚI NHẤT - CÂN BẰNG TENSION IDLE, ĐẠI TU 54 ICON & QUICKSLOT)"));
 
         patchNotesItems.add(new UpdateItem("GIAO DIỆN", "Phóng To Kích Thước Ô Phím Tắt Nhanh (Quickslot Action Bar)", new Color(0.35f, 0.85f, 1f, 1f))
             .addPoint("Tăng kích thước ô Quickslot từ 58px lên 68px (+17% kích thước), mở rộng khung viền 236x264px tạo cảm giác bấm chuột rộng rãi và thoải mái.")
@@ -107,6 +107,12 @@ public class PatchNotesDialog {
             .addPoint("2 Mồi Câu Chuyên Dụng: Mồi Thơm (hũ thủy tinh mồi xanh lá mật ngọt & thẻ gỗ sao), Mồi Rủi Ro (hũ pha lê tím đậm mồi độc đỏ neon & nhãn đầu lâu tử thần).")
             .addPoint("2 Sách Kỹ Năng: Sách Kỹ Năng Chủ Động (bìa da rồng đỏ viền góc vàng & phù hiệu kiếm chiến trận), Sách Kỹ Năng Bị Động / Sách Thông Thái (bìa nhung xanh thẳm viền bạc & mắt toàn tri sao trời).")
             .addPoint("Chính thức hoàn thành 100% Giai đoạn 1 Kế hoạch Phát Triển Đồ Họa: Toàn bộ 54 icon trang bị và vật phẩm trong game đã được lột xác thành vector nguyên bản rực rỡ.")
+        );
+
+        patchNotesItems.add(new UpdateItem("CÂN BẰNG", "Nerf Lực Cản Cá Trong Trạng Thái Mệt (IDLE State Tension Nerf)", new Color(1f, 0.55f, 0.25f, 1f))
+            .addPoint("Giảm mạnh hệ số lực cản của cá khi mệt (IDLE) lúc giữ phím kéo dây từ 0.15x xuống 0.03x (giảm 80% lực cản), giúp cần thủ dồn sát thương hiệu quả.")
+            .addPoint("Triệt tiêu hoàn toàn lực kéo của cá khi mệt lúc buông dây (từ 0.10x về 0.0x), cho phép dây xả tự nhiên với tốc độ tối đa không bị cá ghì giữ.")
+            .addPoint("Hạ nhẹ tốc độ gia tăng Tension cơ sở khi quay máy câu kéo cá mệt (từ 14 + 0.025*Max xuống 10 + 0.020*Max), mang lại nhịp chiến đấu cân bằng và mượt mà hơn.")
         );
 
         // ===== PHIÊN BẢN v0.4.24 =====

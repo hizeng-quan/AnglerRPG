@@ -4,7 +4,15 @@
 
 ---
 
-## 📅 [2026-10-27] - Phiên bản v0.5.1 (Đại Tu Toàn Diện 54 Vector Icon Nguyên Bản & Phóng To Quickslot)
+## 📅 [2026-10-27] - Phiên bản v0.5.1.1 (Hotfix Cân Bằng Tension IDLE, Đại Tu 54 Vector Icon & Phóng To Quickslot)
+
+### ⚖️ Tái Cân Bằng & Giảm Lực Kéo Của Cá Trong Trạng Thái Mệt (IDLE State Tension Nerf - [FishingManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/FishingManager.java))
+- **Nerf Mạnh Lực Cản Cá Trong Nhịp Mệt (IDLE)**:
+  - *Vấn đề*: Trong phiên bản trước, khi cá kiệt sức (IDLE), hệ số lực kéo ngầm vẫn tồn tại ở mức `0.15x` khi giữ Space và `0.10x` khi buông. Đối với các loài cá cấp cao (Cá Mú, Boss), lực kéo này cộng dồn khiến kim Tension tăng quá nhanh khi kéo và tụt rất chậm khi buông dây trong nhịp nghỉ.
+  - *Giải pháp*:
+    - Giảm hệ số lực cản khi kéo dây (`isSpaceDown`) trong trạng thái IDLE từ `0.15x` xuống còn **`0.03x`** (giảm 80% lực cản).
+    - Triệt tiêu hoàn toàn lực kéo khi buông dây (`!isSpaceDown`) trong trạng thái IDLE từ `0.10x` về **`0.0x`** (cá thả trôi, 0% lực kéo), cho phép tốc độ xả tự nhiên `(6f + 0.04f * MaxTension)` phát huy 100% hiệu quả.
+    - Giảm tốc độ gia tăng Tension cơ sở khi quay máy câu trong nhịp IDLE từ `(14f + 0.025f * Max)` xuống `(10f + 0.020f * Max)`.
 
 ### 🖥️ Nâng Cấp Giao Diện Phím Tắt Nhanh ([GameHUD.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/GameHUD.java))
 - **Phóng To Kích Thước Ô Quickslot & Tỷ Lệ Hiển Thị**:

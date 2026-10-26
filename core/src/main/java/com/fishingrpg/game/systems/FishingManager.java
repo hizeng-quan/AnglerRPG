@@ -773,8 +773,8 @@ public class FishingManager {
             // Khi cá vùng vẫy: kéo thì 1.5x, buông sẽ kéo với 80% lực (0.8x)
             pullMult = isSpaceDown ? 1.5f : 0.8f;
         } else {
-            // Khi cá mệt (IDLE): Cá bơi chậm (kéo: 0.15x, buông: 0.10x)
-            pullMult = isSpaceDown ? 0.15f : 0.10f;
+            // Khi cá mệt (IDLE): Nerf mạnh lực cản khi kéo (0.15x -> 0.03x), buông dây cá thả trôi hoàn toàn (0.10x -> 0.0x)
+            pullMult = isSpaceDown ? 0.03f : 0.0f;
         }
         float pull = currentFish.getPullStrength() * pullMult;
         if (currentFish.getPassiveSkill("xuc_tu") != null) {
@@ -827,7 +827,7 @@ public class FishingManager {
                 if (currentFish.getState() == com.fishingrpg.game.entities.Fish.State.PULLING) {
                     tensionIncrease += (26f + player.getMaxLineTension() * 0.055f) * delta;
                 } else {
-                    tensionIncrease += (14f + player.getMaxLineTension() * 0.025f) * delta;
+                    tensionIncrease += (10f + player.getMaxLineTension() * 0.020f) * delta;
                 }
             }
             
