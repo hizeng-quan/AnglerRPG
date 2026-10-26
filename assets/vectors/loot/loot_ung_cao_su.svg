@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="mudAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#475569" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#1e293b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="bootGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="50%" stop-color="#475569"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- LAYER 1: Background Glow -->
+  <g id="background_glow">
+    <circle cx="64" cy="68" r="42" fill="url(#mudAura)"/>
+    <ellipse cx="64" cy="112" rx="34" ry="8" fill="#000000" opacity="0.35"/>
+  </g>
+
+  <!-- LAYER 2: Base Form (Rubber Boot Shaft, Toe & Heavy Cleated Sole) -->
+  <g id="base_form">
+    <!-- Boot Upper Shaft -->
+    <rect x="42" y="24" width="28" height="52" rx="3" fill="url(#bootGrad)"/>
+    <!-- Folded Boot Top Collar -->
+    <rect x="40" y="20" width="32" height="8" rx="2" fill="#1e293b"/>
+    <!-- Curved Ankle & Toe Body -->
+    <circle cx="56" cy="74" r="24" fill="#334155"/>
+    <circle cx="82" cy="80" r="18" fill="#334155"/>
+    <rect x="42" y="70" width="46" height="24" fill="#334155"/>
+    <!-- Heavy Cleated Rubber Sole -->
+    <rect x="38" y="94" width="56" height="10" rx="2" fill="#0f172a"/>
+    <!-- Tread Cleats -->
+    <rect x="42" y="100" width="6" height="5" fill="#020617"/>
+    <rect x="52" y="100" width="6" height="5" fill="#020617"/>
+    <rect x="62" y="100" width="6" height="5" fill="#020617"/>
+    <rect x="72" y="100" width="6" height="5" fill="#020617"/>
+    <rect x="82" y="100" width="6" height="5" fill="#020617"/>
+  </g>
+
+  <!-- LAYER 3: Details & Relief (Leather Stitched Patch, Mud Spatters & Drip) -->
+  <g id="details_and_relief">
+    <!-- Stitched Patch on Shaft -->
+    <rect x="46" y="44" width="16" height="14" rx="1" fill="#78350f"/>
+    <line x1="48" y1="46" x2="60" y2="46" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="48" y1="56" x2="60" y2="56" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="48" y1="46" x2="48" y2="56" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="60" y1="46" x2="60" y2="56" stroke="#d97706" stroke-width="1.2"/>
+    <!-- Mud Speckles -->
+    <circle cx="50" cy="84" r="2" fill="#451a03"/>
+    <circle cx="70" cy="88" r="2.5" fill="#451a03"/>
+    <circle cx="78" cy="74" r="1.5" fill="#451a03"/>
+    <!-- Dripping Water Bead at Toe -->
+    <circle cx="94" cy="98" r="3.5" fill="#38bdf8"/>
+    <polygon points="94,93 91,98 97,98" fill="#38bdf8"/>
+  </g>
+
+  <!-- LAYER 4: Specular Highlights (Rubber Wet Sheen) -->
+  <g id="specular_highlights">
+    <!-- Front Shaft Specular Strip -->
+    <line x1="45" y1="26" x2="45" y2="70" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+    <!-- Toe Curve Glint -->
+    <path d="M 72 74 Q 86 76 88 84" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.7"/>
+    <!-- Water Drip Glint -->
+    <circle cx="93" cy="97" r="1.2" fill="#ffffff"/>
+  </g>
+</svg>

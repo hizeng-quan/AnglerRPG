@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="vaseAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="jadeGlaze" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#2dd4bf"/>
+      <stop offset="50%" stop-color="#0d9488"/>
+      <stop offset="100%" stop-color="#115e59"/>
+    </radialGradient>
+  </defs>
+
+  <!-- LAYER 1: Background Glow -->
+  <g id="background_glow">
+    <circle cx="64" cy="64" r="44" fill="url(#vaseAura)"/>
+    <ellipse cx="64" cy="112" rx="28" ry="7" fill="#000000" opacity="0.4"/>
+  </g>
+
+  <!-- LAYER 2: Base Form (Pedestal, Celadon Jade Belly, Neck & Lip) -->
+  <g id="base_form">
+    <!-- Carved Bronze Pedestal Foot -->
+    <rect x="48" y="96" width="32" height="10" rx="2" fill="#78350f"/>
+    <!-- Spherical Celadon Jade Belly -->
+    <circle cx="64" cy="68" r="30" fill="url(#jadeGlaze)"/>
+    <!-- Tapered Graceful Neck -->
+    <polygon points="52,46 76,46 70,24 58,24" fill="url(#jadeGlaze)"/>
+    <!-- Flared Golden Mouth Lip Rim -->
+    <ellipse cx="64" cy="24" rx="16" ry="5" fill="#facc15"/>
+    <ellipse cx="64" cy="23" rx="12" ry="3.5" fill="#115e59"/>
+  </g>
+
+  <!-- LAYER 3: Details & Relief (Dragon Ear Handles & Golden Belly Band with Rubies) -->
+  <g id="details_and_relief">
+    <!-- Dual Dragon Handles -->
+    <path d="M 52 28 Q 36 38 48 54" fill="none" stroke="#facc15" stroke-width="4" stroke-linecap="round"/>
+    <path d="M 76 28 Q 92 38 80 54" fill="none" stroke="#facc15" stroke-width="4" stroke-linecap="round"/>
+    <!-- Golden Belly Band -->
+    <rect x="36" y="64" width="56" height="8" rx="2" fill="#eab308"/>
+    <!-- Inset Crimson Rubies -->
+    <circle cx="44" cy="68" r="2.5" fill="#dc2626"/>
+    <circle cx="54" cy="68" r="2.5" fill="#dc2626"/>
+    <circle cx="64" cy="68" r="2.5" fill="#dc2626"/>
+    <circle cx="74" cy="68" r="2.5" fill="#dc2626"/>
+    <circle cx="84" cy="68" r="2.5" fill="#dc2626"/>
+  </g>
+
+  <!-- LAYER 4: Specular Highlights (Spherical Jade Sheen & Golden Glint) -->
+  <g id="specular_highlights">
+    <!-- Spherical Belly Crescent Reflection -->
+    <path d="M 44 54 Q 56 44 68 44" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+    <!-- Lip Rim Metallic Highlight -->
+    <ellipse cx="64" cy="22" rx="14" ry="2" fill="#ffffff" opacity="0.6"/>
+    <!-- Sparkle Star on Ruby -->
+    <line x1="60" y1="68" x2="68" y2="68" stroke="#ffffff" stroke-width="1.5"/>
+    <line x1="64" y1="64" x2="64" y2="72" stroke="#ffffff" stroke-width="1.5"/>
+  </g>
+</svg>

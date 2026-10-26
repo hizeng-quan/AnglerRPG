@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="staminaAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#047857" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="staminaLiquid" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#6ee7b7"/>
+      <stop offset="50%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#064e3b"/>
+    </radialGradient>
+  </defs>
+
+  <!-- LAYER 1: Background Glow -->
+  <g id="background_glow">
+    <circle cx="64" cy="72" r="42" fill="url(#staminaAura)"/>
+    <ellipse cx="64" cy="104" rx="26" ry="8" fill="#000000" opacity="0.4"/>
+  </g>
+
+  <!-- LAYER 2: Base Form (Spherical Orb Glass Body & Flask Neck) -->
+  <g id="base_form">
+    <!-- Flask Glass Outer Shell -->
+    <circle cx="64" cy="74" r="32" fill="#0f172a" opacity="0.6"/>
+    <!-- Stamina Emerald Liquid -->
+    <circle cx="64" cy="74" r="28" fill="url(#staminaLiquid)"/>
+    <!-- Glass Bottle Neck -->
+    <rect x="56" y="28" width="16" height="18" rx="2" fill="#334155"/>
+    <rect x="58" y="30" width="12" height="16" fill="#10b981" opacity="0.6"/>
+    <!-- Thick Glass Lip Rim -->
+    <rect x="54" y="24" width="20" height="6" rx="2" fill="#64748b"/>
+    <!-- Wooden Cork Stopper -->
+    <polygon points="56,24 72,24 70,14 58,14" fill="#92400e"/>
+    <line x1="57" y1="18" x2="71" y2="18" stroke="#78350f" stroke-width="1.5"/>
+  </g>
+
+  <!-- LAYER 3: Details & Relief (Leather Cord, Glowing Bubbles, Liquid Meniscus) -->
+  <g id="details_and_relief">
+    <!-- Leather Cord Tied Around Neck -->
+    <rect x="55" y="36" width="18" height="4" rx="1" fill="#78350f"/>
+    <line x1="64" y1="40" x2="60" y2="50" stroke="#92400e" stroke-width="2"/>
+    <circle cx="60" cy="52" r="2.5" fill="#f59e0b"/>
+
+    <!-- Rising Effervescent Energy Bubbles -->
+    <circle cx="56" cy="80" r="3.5" fill="#a7f3d0"/>
+    <circle cx="72" cy="70" r="4.0" fill="#a7f3d0"/>
+    <circle cx="64" cy="64" r="2.5" fill="#a7f3d0"/>
+    <circle cx="60" cy="90" r="2.0" fill="#a7f3d0"/>
+    <circle cx="74" cy="84" r="2.0" fill="#a7f3d0"/>
+    <!-- Bubble inner glow -->
+    <circle cx="55" cy="79" r="1.2" fill="#ffffff"/>
+    <circle cx="71" cy="69" r="1.5" fill="#ffffff"/>
+  </g>
+
+  <!-- LAYER 4: Specular Highlights (Spherical Glass Sheen) -->
+  <g id="specular_highlights">
+    <!-- Arc Glass Reflection (Top-Left) -->
+    <path d="M 44 56 Q 52 46 64 46" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.9"/>
+    <!-- Small secondary glass glint -->
+    <circle cx="42" cy="62" r="1.8" fill="#ffffff"/>
+    <!-- Bottom Rim Caustic Reflection -->
+    <path d="M 52 98 Q 64 102 76 98" fill="none" stroke="#6ee7b7" stroke-width="2" opacity="0.8"/>
+    <!-- Cork Glint -->
+    <circle cx="60" cy="16" r="1.2" fill="#ffffff"/>
+  </g>
+</svg>

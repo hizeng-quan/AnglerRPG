@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="toxicAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#4c1d95" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="toxicLiquid" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#f43f5e"/>
+      <stop offset="50%" stop-color="#e11d48"/>
+      <stop offset="100%" stop-color="#881337"/>
+    </radialGradient>
+  </defs>
+
+  <!-- LAYER 1: Background Glow -->
+  <g id="background_glow">
+    <circle cx="64" cy="64" r="44" fill="url(#toxicAura)"/>
+    <ellipse cx="64" cy="112" rx="28" ry="7" fill="#000000" opacity="0.45"/>
+  </g>
+
+  <!-- LAYER 2: Base Form (Hexagonal Apothecary Jar & Dark Pewter Lid) -->
+  <g id="base_form">
+    <!-- Hexagonal Dark Purple Glass Jar Body -->
+    <rect x="42" y="40" width="44" height="60" rx="4" fill="#2e1065"/>
+    <!-- Glowing Toxic Core Mixture -->
+    <circle cx="64" cy="74" r="18" fill="url(#toxicLiquid)"/>
+    <!-- Dark Pewter Threaded Metal Lid -->
+    <rect x="40" y="30" width="48" height="12" rx="2" fill="#334155"/>
+    <rect x="38" y="28" width="52" height="3" fill="#475569"/>
+  </g>
+
+  <!-- LAYER 3: Details & Relief (Skull Hazard Parchment Label & Effervescent Spores) -->
+  <g id="details_and_relief">
+    <!-- Hazardous Skull Label on Center -->
+    <rect x="48" y="58" width="32" height="30" rx="2" fill="#f8fafc"/>
+    <!-- Skull Icon -->
+    <circle cx="64" cy="69" r="6" fill="#0f172a"/>
+    <rect x="62" y="73" width="4" height="5" fill="#0f172a"/>
+    <circle cx="62" cy="68" r="1.2" fill="#ffffff"/>
+    <circle cx="66" cy="68" r="1.2" fill="#ffffff"/>
+    <!-- Crossbones -->
+    <line x1="56" y1="81" x2="72" y2="81" stroke="#0f172a" stroke-width="2"/>
+    <circle cx="56" cy="81" r="1.5" fill="#0f172a"/>
+    <circle cx="72" cy="81" r="1.5" fill="#0f172a"/>
+    <!-- Ominous Effervescent Spores Rising -->
+    <circle cx="54" cy="22" r="2.5" fill="#c084fc"/>
+    <circle cx="74" cy="18" r="3.0" fill="#f43f5e"/>
+    <circle cx="64" cy="14" r="2.0" fill="#e879f9"/>
+  </g>
+
+  <!-- LAYER 4: Specular Highlights (Sharp Corner Highlights & Skull Glint) -->
+  <g id="specular_highlights">
+    <!-- Left Glass Corner Highlight Strip -->
+    <line x1="45" y1="42" x2="45" y2="98" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.75"/>
+    <!-- Lid Metallic Sheen -->
+    <line x1="42" y1="30" x2="86" y2="30" stroke="#ffffff" stroke-width="1.5" opacity="0.6"/>
+    <!-- Toxic Core Glint -->
+    <circle cx="60" cy="70" r="1.8" fill="#ffffff"/>
+  </g>
+</svg>

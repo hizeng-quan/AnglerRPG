@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- 1. Soft Glacial Blizzard & Celestial Frost Halo Aura -->
+  <circle cx="64" cy="64" r="54" fill="rgba(56, 189, 248, 0.18)" />
+  <circle cx="82" cy="46" r="38" fill="rgba(186, 230, 253, 0.20)" />
+
+  <!-- 2. Sleek, Smooth Faceted Permafrost Crystal Shaft (NO THORNS, NO SPURS) -->
+  <!-- Deep sapphire inner core spine -->
+  <line x1="24" y1="104" x2="86" y2="42" stroke="#0c2d5e" stroke-width="6.0" stroke-linecap="round" />
+  <!-- Radiant glacial cyan crystal body -->
+  <line x1="24" y1="104" x2="86" y2="42" stroke="#0284c7" stroke-width="4.2" stroke-linecap="round" />
+  <!-- Luminous turquoise crystal channel -->
+  <line x1="24" y1="104" x2="86" y2="42" stroke="#38bdf8" stroke-width="2.4" stroke-linecap="round" />
+  <!-- Smooth pristine ice specular edge -->
+  <line x1="25" y1="103" x2="85" y2="43" stroke="#f0f9ff" stroke-width="1.0" stroke-linecap="round" />
+
+  <!-- 3. Sleek Platinum Frost Bands with Smooth Embedded Azure Jewels (Flush with rod) -->
+  <!-- Band 1 -->
+  <line x1="38" y1="93" x2="44" y2="87" stroke="#e0f2fe" stroke-width="3.5" stroke-linecap="round" />
+  <circle cx="41" cy="90" r="1.6" fill="#38bdf8" />
+  <!-- Band 2 -->
+  <line x1="53" y1="78" x2="59" y2="72" stroke="#e0f2fe" stroke-width="3.5" stroke-linecap="round" />
+  <circle cx="56" cy="75" r="1.6" fill="#38bdf8" />
+  <!-- Band 3 -->
+  <line x1="68" y1="63" x2="74" y2="57" stroke="#e0f2fe" stroke-width="3.5" stroke-linecap="round" />
+  <circle cx="71" cy="60" r="1.6" fill="#38bdf8" />
+
+  <!-- 4. Smooth Ice Crystal Line Guides (Rounded Rings, NO spikes) -->
+  <circle cx="52" cy="71" r="3.0" fill="none" stroke="#bae6fd" stroke-width="1.2" />
+  <circle cx="52" cy="71" r="1.2" fill="#0284c7" />
+  <circle cx="67" cy="56" r="2.8" fill="none" stroke="#bae6fd" stroke-width="1.2" />
+  <circle cx="67" cy="56" r="1.1" fill="#0284c7" />
+
+  <!-- 5. Sleek Polished Ice Diamond Pommel (Bottom-Left) -->
+  <polygon points="20,102 26,108 22,112 16,106" fill="#0284c7" stroke="#bae6fd" stroke-width="1" />
+  <circle cx="21" cy="107" r="1.6" fill="#ffffff" />
+
+  <!-- 6. Crown Headpiece: Majestic 6-Pointed Arctic Snowflake Star (Top-Right) -->
+  <circle cx="86" cy="42" r="16" fill="rgba(56, 189, 248, 0.25)" />
+  <!-- 6 Smooth Symmetrical Crystal Rays -->
+  <line x1="86" y1="26" x2="86" y2="58" stroke="#bae6fd" stroke-width="2.2" stroke-linecap="round" />
+  <line x1="72" y1="34" x2="100" y2="50" stroke="#bae6fd" stroke-width="2.2" stroke-linecap="round" />
+  <line x1="72" y1="50" x2="100" y2="34" stroke="#bae6fd" stroke-width="2.2" stroke-linecap="round" />
+
+  <!-- Rhombic Star Ray Diamonds (Smooth, elegant) -->
+  <polygon points="86,26 83,32 89,32" fill="#e0f2fe" />
+  <polygon points="86,58 83,52 89,52" fill="#e0f2fe" />
+  <polygon points="72,34 78,32 76,38" fill="#e0f2fe" />
+  <polygon points="100,50 94,52 96,46" fill="#e0f2fe" />
+  <polygon points="72,50 78,52 76,46" fill="#e0f2fe" />
+  <polygon points="100,34 94,32 96,38" fill="#e0f2fe" />
+
+  <!-- Glowing Central Ice Prism Hexagon & Diamond Core -->
+  <polygon points="86,36 91,39 91,45 86,48 81,45 81,39" fill="#0284c7" stroke="#ffffff" stroke-width="1.2" />
+  <polygon points="86,38 89,42 86,46 83,42" fill="#38bdf8" />
+  <circle cx="86" cy="42" r="2.5" fill="#ffffff" />
+
+  <!-- 7. Specular Glints -->
+  <circle cx="86" cy="26" r="1.8" fill="#ffffff" />
+  <circle cx="100" cy="34" r="1.5" fill="#ffffff" />
+  <circle cx="72" cy="34" r="1.5" fill="#ffffff" />
+  <circle cx="41" cy="90" r="1.0" fill="#ffffff" />
+</svg>

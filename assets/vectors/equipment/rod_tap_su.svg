@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- 1. Sunlit Meadow Rustic Aura -->
+  <circle cx="64" cy="64" r="54" fill="rgba(245, 158, 11, 0.16)" />
+  <circle cx="76" cy="52" r="38" fill="rgba(34, 197, 94, 0.14)" />
+
+  <!-- 2. Main Golden Bamboo Pole (Diagonal) -->
+  <line x1="24" y1="104" x2="94" y2="34" stroke="#451a03" stroke-width="5.5" stroke-linecap="round" />
+  <line x1="24" y1="104" x2="94" y2="34" stroke="#d97706" stroke-width="3.8" stroke-linecap="round" />
+  <line x1="25" y1="103" x2="93" y2="35" stroke="#fef08a" stroke-width="1.2" stroke-linecap="round" />
+
+  <!-- 3. Bamboo Nodes & Dark Ridge Rings -->
+  <!-- Node 1 -->
+  <circle cx="38" cy="90" r="3.2" fill="#78350f" stroke="#fef08a" stroke-width="0.8" />
+  <line x1="35" y1="93" x2="41" y2="87" stroke="#451a03" stroke-width="1.4" />
+  <!-- Node 2 -->
+  <circle cx="53" cy="75" r="3.0" fill="#78350f" stroke="#fef08a" stroke-width="0.8" />
+  <line x1="50" y1="78" x2="56" y2="72" stroke="#451a03" stroke-width="1.4" />
+  <!-- Node 3 -->
+  <circle cx="68" cy="60" r="2.8" fill="#78350f" stroke="#fef08a" stroke-width="0.8" />
+  <line x1="65" y1="63" x2="71" y2="57" stroke="#451a03" stroke-width="1.4" />
+  <!-- Node 4 -->
+  <circle cx="82" cy="46" r="2.5" fill="#78350f" stroke="#fef08a" stroke-width="0.8" />
+  <line x1="79" y1="49" x2="85" y2="43" stroke="#451a03" stroke-width="1.4" />
+
+  <!-- 4. Hemp Cord Grip Wrapping on Handle (Bottom-Left) -->
+  <line x1="24" y1="104" x2="42" y2="86" stroke="#78350f" stroke-width="6.5" stroke-linecap="round" />
+  <line x1="24" y1="104" x2="42" y2="86" stroke="#b45309" stroke-width="4.8" stroke-linecap="round" />
+  <!-- Cross Twine Bindings -->
+  <line x1="26" y1="100" x2="30" y2="104" stroke="#fef08a" stroke-width="1.2" />
+  <line x1="30" y1="96" x2="34" y2="100" stroke="#fef08a" stroke-width="1.2" />
+  <line x1="34" y1="92" x2="38" y2="96" stroke="#fef08a" stroke-width="1.2" />
+  <line x1="38" y1="88" x2="42" y2="92" stroke="#fef08a" stroke-width="1.2" />
+  <!-- Wooden Pommel Butt Cap -->
+  <circle cx="23" cy="105" r="4.2" fill="#451a03" stroke="#d97706" stroke-width="1.2" />
+  <circle cx="22" cy="104" r="1.5" fill="#fef08a" />
+
+  <!-- 5. Brass Line Guides with Red Silk Collars -->
+  <line x1="58" y1="70" x2="62" y2="66" stroke="#dc2626" stroke-width="4.2" stroke-linecap="round" />
+  <circle cx="57" cy="67" r="2.2" fill="#fbbf24" stroke="#78350f" stroke-width="0.8" />
+  <circle cx="57" cy="67" r="1.0" fill="#0f172a" />
+
+  <line x1="74" y1="54" x2="78" y2="50" stroke="#dc2626" stroke-width="3.8" stroke-linecap="round" />
+  <circle cx="73" cy="51" r="2.0" fill="#fbbf24" stroke="#78350f" stroke-width="0.8" />
+  <circle cx="73" cy="51" r="0.9" fill="#0f172a" />
+
+  <!-- 6. Fresh Bamboo Sprout at Tip (Top-Right) -->
+  <circle cx="94" cy="34" r="2.5" fill="#fbbf24" stroke="#d97706" stroke-width="1" />
+  <!-- Sprouting Leaves -->
+  <polygon points="94,34 110,24 102,38" fill="#22c55e" />
+  <polygon points="94,34 104,18 96,30" fill="#4ade80" />
+  <line x1="94" y1="34" x2="106" y2="26" stroke="#bbf7d0" stroke-width="0.8" />
+
+  <!-- 7. Drooping Fine Line & Red-White Cork Float -->
+  <path d="M 94,34 Q 88,60 74,72" fill="none" stroke="#e2e8f0" stroke-width="1.2" stroke-dasharray="3,1" />
+  <!-- Oval Cork Bobber (Top Red, Bottom White) -->
+  <ellipse cx="74" cy="74" rx="4.5" ry="3.5" fill="#dc2626" />
+  <ellipse cx="74" cy="80" rx="4.5" ry="3.5" fill="#f8fafc" />
+  <rect x="69.5" y="73" width="9" height="2" fill="#0f172a" />
+  <line x1="74" y1="68" x2="74" y2="85" stroke="#1e293b" stroke-width="1.2" />
+
+  <!-- 8. Specular Glints -->
+  <circle cx="104" cy="22" r="1.5" fill="#ffffff" />
+  <circle cx="73" cy="73" r="1.2" fill="#ffffff" />
+  <circle cx="23" cy="103" r="1.2" fill="#ffffff" />
+</svg>

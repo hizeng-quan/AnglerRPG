@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- 1. Oceanic Abyssal Swirl Aura -->
+  <circle cx="64" cy="64" r="54" fill="rgba(14, 165, 233, 0.22)" />
+  <circle cx="64" cy="64" r="44" fill="rgba(245, 158, 11, 0.15)" />
+
+  <!-- 2. Nautilus Shell & Deep-Sea Bronze Outer Bezel with 8 Wave Notches -->
+  <circle cx="64" cy="64" r="48" fill="#082f49" />
+  <circle cx="64" cy="64" r="44" fill="#1e293b" stroke="#d97706" stroke-width="2.2" />
+  <!-- 8 Wave Notches Around Circumference -->
+  <circle cx="64" cy="20" r="2.5" fill="#fbbf24" />
+  <circle cx="64" cy="108" r="2.5" fill="#fbbf24" />
+  <circle cx="20" cy="64" r="2.5" fill="#fbbf24" />
+  <circle cx="108" cy="64" r="2.5" fill="#fbbf24" />
+  <circle cx="33" cy="33" r="2.2" fill="#fbbf24" />
+  <circle cx="95" cy="95" r="2.2" fill="#fbbf24" />
+  <circle cx="33" cy="95" r="2.2" fill="#fbbf24" />
+  <circle cx="95" cy="33" r="2.2" fill="#fbbf24" />
+
+  <!-- 3. Fiber-Optic Glass Filament Thread Spool Layers -->
+  <circle cx="64" cy="64" r="37" fill="#0c4a6e" />
+  <circle cx="64" cy="64" r="33" fill="#0284c7" />
+  <circle cx="64" cy="64" r="28" fill="#06b6d4" />
+  <circle cx="64" cy="64" r="24" fill="#22d3ee" />
+  <!-- Concentric Radiant Wave Lines -->
+  <circle cx="64" cy="64" r="30" fill="none" stroke="#bae6fd" stroke-width="1.2" />
+  <circle cx="64" cy="64" r="26" fill="none" stroke="#ffffff" stroke-width="0.8" opacity="0.9" />
+  <!-- 4 Optical Pulse Nodes on Thread -->
+  <circle cx="44" cy="64" r="1.8" fill="#ffffff" />
+  <circle cx="84" cy="64" r="1.8" fill="#ffffff" />
+  <circle cx="64" cy="44" r="1.8" fill="#ffffff" />
+  <circle cx="64" cy="84" r="1.8" fill="#ffffff" />
+
+  <!-- 4. Golden Compass Star Cross & Center Iridescent Ocean Pearl -->
+  <circle cx="64" cy="64" r="17" fill="#082f49" stroke="#d97706" stroke-width="1.2" />
+  <!-- Compass 4-point star -->
+  <polygon points="64,48 67,61 80,64 67,67 64,80 61,67 48,64 61,61" fill="#fbbf24" stroke="#d97706" stroke-width="0.8" />
+  <!-- Giant Ocean Pearl Core -->
+  <circle cx="64" cy="64" r="5" fill="#f8fafc" stroke="#38bdf8" stroke-width="1" />
+  <circle cx="62.5" cy="62.5" r="1.8" fill="#ffffff" />
+
+  <!-- 5. Fine Aquamarine Filament Strand & Specular Glints -->
+  <path d="M 88,44 Q 106,36 108,18" fill="none" stroke="#67e8f9" stroke-width="1.6" />
+  <circle cx="108" cy="18" r="2.0" fill="#ffffff" />
+  <circle cx="64" cy="20" r="1.5" fill="#ffffff" />
+</svg>

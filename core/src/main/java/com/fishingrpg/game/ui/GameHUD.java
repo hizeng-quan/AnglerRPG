@@ -42,10 +42,10 @@ public class GameHUD {
     private static final float BAR_INSET = 4f;
 
     // Quick Slots Action Bar Layout
-    private static final float INV_SLOT_SIZE = 58f;
+    private static final float INV_SLOT_SIZE = 68f;
     private static final float INV_PADDING = 8f;
-    private static final float INV_PANEL_W = 3 * INV_SLOT_SIZE + 4 * INV_PADDING; // 206f
-    private static final float INV_PANEL_H = 3 * INV_SLOT_SIZE + 4 * INV_PADDING + 28f; // 234f
+    private static final float INV_PANEL_W = 3 * INV_SLOT_SIZE + 4 * INV_PADDING; // 236f
+    private static final float INV_PANEL_H = 3 * INV_SLOT_SIZE + 4 * INV_PADDING + 28f; // 264f
     private static final float INV_X = W - INV_PANEL_W - 16f;
     private static final float INV_Y = 16f;
 
@@ -1376,7 +1376,7 @@ public class GameHUD {
 
             // UNIQUE VECTOR ART ICON FOR THE ITEM!
             LootVisualRenderer.drawLoot(sr, name, com.fishingrpg.game.loot.CatchableType.CONSUMABLE,
-                    x + INV_SLOT_SIZE / 2f, y + INV_SLOT_SIZE / 2f - 2f, 0.60f, timer);
+                    x + INV_SLOT_SIZE / 2f, y + INV_SLOT_SIZE / 2f - 2f, 0.70f, timer);
 
             // Special glow & badge backing for skill books
             if (name.startsWith("Sách: ")) {

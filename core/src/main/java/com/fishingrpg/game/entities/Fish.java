@@ -209,13 +209,17 @@ public class Fish implements Catchable {
             } else {
                 state = State.IDLE;
                 float anMinhBonus = (getPassiveSkill("an_minh") != null) ? 1.5f : 0f;
-                stateTimer = MathUtils.random(2f, 4f) + extraIdleTime + anMinhBonus;
+                stateTimer = MathUtils.random(1.5f, 3.5f) + extraIdleTime + anMinhBonus;
             }
         }
     }
     
     public float getCurrentPull() {
         return state == State.PULLING ? pullStrength : 0f;
+    }
+
+    public float getPullStrength() {
+        return pullStrength;
     }
 
     public java.util.ArrayList<FishSkill> getSkills() {
@@ -278,7 +282,6 @@ public class Fish implements Catchable {
 
     public float   getCurrentHp()   { return currentHp;    }
     public float   getMaxHp()       { return maxHp;        }
-    public float   getPullStrength(){ return pullStrength;  }
     public Rarity  getRarity()      { return rarity;       }
     public Color   getRarityColor() { return rarity.getColor(); }
     public float   getBaseWeightKg(){ return baseWeightKg; }

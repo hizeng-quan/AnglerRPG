@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class PatchNotesDialog {
 
-    public static final String CURRENT_VERSION = "v0.4.24";
+    public static final String CURRENT_VERSION = "v0.5.1";
     private static final String PREF_LAST_SEEN_VERSION = "last_seen_patch_notes_version";
 
     private final FishingRPG game;
@@ -91,8 +91,41 @@ public class PatchNotesDialog {
         // --- TAB 0: BẢN TIN CẬP NHẬT THEO TỪNG PHIÊN BẢN ---
         // =====================================================================
 
-        // ===== PHIÊN BẢN v0.4.24 (MỚI NHẤT) =====
-        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.4.24 (MỚI NHẤT - MÃ HÓA SAVE FILE & HẠN SỰ KIỆN 28/10)"));
+        // ===== PHIÊN BẢN v0.5.1 (MỚI NHẤT) =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.1 (MỚI NHẤT - ĐẠI TU 54 ICON VECTOR & PHÓNG TO QUICKSLOT)"));
+
+        patchNotesItems.add(new UpdateItem("GIAO DIỆN", "Phóng To Kích Thước Ô Phím Tắt Nhanh (Quickslot Action Bar)", new Color(0.35f, 0.85f, 1f, 1f))
+            .addPoint("Tăng kích thước ô Quickslot từ 58px lên 68px (+17% kích thước), mở rộng khung viền 236x264px tạo cảm giác bấm chuột rộng rãi và thoải mái.")
+            .addPoint("Tăng tỷ lệ vẽ icon vector trong ô từ scale 0.60x lên 0.70x, giúp toàn bộ vật phẩm tiêu hao và đạo cụ hiển thị to rõ, sắc nét vượt trội.")
+            .addPoint("Tự động co giãn đồng bộ nhãn phím tắt [1]-[9], huy hiệu số lượng xN và thẻ nâng cấp sách kỹ năng HỌC/UP/+SP ở 4 góc ô.")
+        );
+
+        patchNotesItems.add(new UpdateItem("ĐỒ HỌA", "Bước 1.5: 12 Vector Icon Mồi Câu, Sách Kỹ Năng & Loot Đáy Biển", new Color(1f, 0.85f, 0.25f, 1f))
+            .addPoint("Chuẩn hóa toàn diện 12 file vector hình học phân tầng 4 lớp (100/100 điểm audit Quality Gate):")
+            .addPoint("4 Chiến Lợi Phẩm Rác: Ủng Cao Su Cũ (miếng vá khâu chỉ & giọt nước nhỏ), Chai Nhựa (nhãn dán bóc dở & nước đục bọt khí), Lốp Xe (rãnh khía cao su gai & rong rêu bám), Túi Rác (túi nilon thắt tai & dây đỏ rút).")
+            .addPoint("4 Cổ Vật Kho Báu: Bình Cổ (gốm men ngọc quai rồng & đai vàng đính ruby), Nhẫn Vàng (nhẫn vàng khối đính hồng ngọc cushion-cut lấp lánh sao), Rương Chìm (rương gỗ sồi đai sắt tràn vàng ròng & ngọc sapphire), Kiếm Cổ (lưỡi thép khắc phù chú & chuôi rồng ngọc bích tua lụa đỏ).")
+            .addPoint("2 Mồi Câu Chuyên Dụng: Mồi Thơm (hũ thủy tinh mồi xanh lá mật ngọt & thẻ gỗ sao), Mồi Rủi Ro (hũ pha lê tím đậm mồi độc đỏ neon & nhãn đầu lâu tử thần).")
+            .addPoint("2 Sách Kỹ Năng: Sách Kỹ Năng Chủ Động (bìa da rồng đỏ viền góc vàng & phù hiệu kiếm chiến trận), Sách Kỹ Năng Bị Động / Sách Thông Thái (bìa nhung xanh thẳm viền bạc & mắt toàn tri sao trời).")
+            .addPoint("Chính thức hoàn thành 100% Giai đoạn 1 Kế hoạch Phát Triển Đồ Họa: Toàn bộ 54 icon trang bị và vật phẩm trong game đã được lột xác thành vector nguyên bản rực rỡ.")
+        );
+
+        // ===== PHIÊN BẢN v0.4.24 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.4.24 (BƯỚC 1.4 TIÊU HAO, MÃ HÓA SAVE & TÁI CÂN BẰNG TENSION)"));
+
+        patchNotesItems.add(new UpdateItem("CÂN BẰNG", "Tái Cân Bằng Lực Căng Dây (Tension) & Tăng Cường Trải Nghiệm Giằng Co", new Color(1f, 0.45f, 0.2f, 1f))
+            .addPoint("Giảm mạnh tốc độ giảm Tension tự nhiên khi buông dây (từ 20f + 0.10f*Max xuống còn 6f + 0.04f*Max), loại bỏ hoàn toàn hiện tượng kim Tension tụt dốc không phanh.")
+            .addPoint("Buff cá khi vùng vẫy (PULLING): Nếu người chơi buông dây, cá vẫn duy trì kéo với 80% lực (thay vì 40% như trước); khi kéo dây vẫn giữ nguyên 150% lực.")
+            .addPoint("Nerf cá khi kiệt sức (IDLE): Điều chỉnh sức cản bơi ngầm xuống 15% khi kéo và 10% khi buông, nhịp nghỉ mở rộng lên 1.5s - 3.5s giúp cần thủ có thêm khoảng thở dồn sát thương.")
+            .addPoint("Đồng bộ toàn bộ công thức và kiểm chứng qua công cụ mô phỏng Monte Carlo (combat simulator) đạt chuẩn chỉ số TTK và tỷ lệ giằng co theo quy chuẩn dự án.")
+        );
+
+        patchNotesItems.add(new UpdateItem("ĐỒ HỌA", "Bước 1.4: 12 Vector Icon Vật Phẩm Tiêu Hao & Đạo Cụ Tạp Hóa", new Color(0.2f, 0.95f, 0.55f, 1f))
+            .addPoint("Chuẩn hóa toàn diện 12 file vector phân tầng 4 lớp (100/100 điểm kiểm định Quality Gate) cho toàn bộ đạo cụ & tiêu hao tiệm tạp hóa:")
+            .addPoint("Nhóm Tiêu Hao & Hồi Phục: Bánh Mì (khía nướng bơ rắc bột), Thuốc Hồi Stamina (bình cầu ngọc bích sủi bọt khí nắp bần), Nước Tăng Lực (lon nhôm cyber tia sét & giọt sương lạnh), Nước Bứt Phá (bình tam giác giả kim tâm xoáy plasma), Trà Thảo Mộc (tách gốm ngọc đĩa sứ lá trà nổi & khói thơm).")
+            .addPoint("Nhóm Đạo Cụ Chiến Đấu: Dây Câu Tốt (cuộn cước Kevlar gia cường lõi titan), Bình Xịt Đóng Băng (bình khí nén hoa tuyết Cryo khói lạnh), Đá Mài Lưỡi Câu (khối đá mài 2 tầng vát góc phát tia lửa), Nam Châm Kho Báu (nam châm chữ U hút tiền vàng & sóng từ), Kính Nhìn Xuyên Nước (kính lặn radar sonar lưới quét & đốm cá), Lưới Đánh Cá (lưới nón mắt cáo chì chìm & khuyên đồng), Bùa Hoàng Kim (thẻ bùa giấy cổ chu sa đỏ & hạt ngọc bích).")
+            .addPoint("Khắc phục triệt để lỗi biến dạng hình học khi transpile (sửa lỗi hoán vị tọa độ đỉnh y1/y3 và ràng buộc hào quang nền).")
+            .addPoint("Tích hợp hoàn toàn 12 hàm vẽ độc lập vào LootVisualRenderer và hiển thị sắc nét tuyệt đối trên ô túi đồ & cửa hàng.")
+        );
 
         patchNotesItems.add(new UpdateItem("BẢO MẬT", "Mã Hóa File Save Quân Sự (AES-256) & Chống Can Thiệp Băm SHA-256", new Color(0.95f, 0.35f, 0.35f, 1f))
             .addPoint("Mã hóa toàn diện chuỗi dữ liệu xuất file save bằng thuật toán AES-256 kết hợp mã kiểm tra băm SHA-256.")
@@ -110,6 +143,60 @@ public class PatchNotesDialog {
             .addPoint("Khi sự kiện kết thúc: Cửa Hàng Sự Kiện tự động khóa nút đổi vật phẩm ('ĐÃ ĐÓNG (HẾT HẠN)') để bảo vệ tính công bằng.")
             .addPoint("Tự động bảo lưu giá trị nỗ lực của cần thủ: Toàn bộ Điểm Sự Kiện tồn đọng được quy đổi thành Vàng (1 Điểm SK = 1,000 Vàng).")
             .addPoint("Sẵn sàng hạ tầng dữ liệu và chuẩn bị khởi tranh Sự Kiện Halloween Đêm Hội Ma Quái vào ngày 30/10.")
+        );
+
+        patchNotesItems.add(new UpdateItem("GACHA", "Đính Chính Hoạt Ảnh Băng Chuyền Gacha Kiểu CS:GO", new Color(0.95f, 0.45f, 0.75f, 1f))
+            .addPoint("Đính chính tài liệu & Roadmap: Hoạt ảnh quay Gacha là cơ chế băng chuyền con lăn ngang mở hòm CS:GO (Horizontal Roller Reel).")
+            .addPoint("Loại bỏ hoàn toàn các mô tả sai lệch trước đây về 'bánh xe 12 cung' hay 'lật thẻ' (game dùng băng chuyền mở hòm, không có cơ chế lật thẻ).")
+        );
+
+        patchNotesItems.add(new UpdateItem("KỸ NĂNG", "Đại Tu Bố Cục Thẻ Kỹ Năng & Đồng Nhất Phông Chữ", fixBadgeColor)
+            .addPoint("Bỏ dấu chấm ở đầu dòng hồi chiêu ('Thời gian hồi chiêu: Xs'), đặt thẳng hàng dưới nhãn phân loại.")
+            .addPoint("Đồng nhất chuẩn phông chữ sắc nét cho toàn bộ mô tả, nhãn cấp độ và chỉ số hiệu ứng kỹ năng.")
+            .addPoint("Phân bổ khoảng cách các phần thoáng đãng, neo nút Mở Khóa / Nâng Cấp ở đáy bảng; triệt tiêu dính chữ và khoảng trống thừa.")
+        );
+
+        patchNotesItems.add(new UpdateItem("ĐỒ HỌA", "Bước 1.1: 12 Vector Icon 4 Set Trang Bị Cơ Bản 0★-3★", newBadgeColor)
+            .addPoint("Chuẩn hóa toàn diện 12 file SVG gốc và mã nguồn LibGDX cho 4 Set trang bị: Tập Sự, Thợ Săn, Băng Giá, Đại Dương.")
+            .addPoint("Tuân thủ nghiêm ngặt quy chuẩn mỹ thuật Cyber-Fantasy & Deep Ocean 4 lớp, 100% đạt điểm kiểm duyệt tối đa 100/100 Quality Gate.")
+            .addPoint("Tích hợp hiệu ứng phản quang Specular Glint sắc nét, tối ưu hiệu năng đồ họa mượt mà 60 FPS.")
+        );
+
+        patchNotesItems.add(new UpdateItem("ĐỒ HỌA", "Đại Tu Hiển Thị Đầy Đủ (Anti-Squish) & Thiết Kế Lại 3 Móc + Cần Băng", new Color(0.35f, 0.85f, 1f, 1f))
+            .addPoint("Thiết kế lại 3 Móc câu biệt lập phom dáng: Móc Thợ Săn (Móng vuốt dã thú), Móc Băng Giá (Mỏ neo pha lê đối xứng), Móc Đại Dương (Phi lao nanh thủy quái đuôi cá voi).")
+            .addPoint("Thiết kế lại Cần Băng Giá: Gọt sạch toàn bộ gai nhọn thành trượng băng tuyết thanh thoát phẳng mịn.")
+            .addPoint("Đồng nhất bản hiển thị ĐẦY ĐỦ (Full Representation) tại Gacha (Vòng quay cuộn reel r=44f, Loot Table r=34f ô đứng 216x142, Bệ trưng bày r=38f) và Equipment.")
+            .addPoint("Áp dụng Dynamic Stroke Scaling tỉ lệ theo r, chấm dứt hoàn toàn hiện tượng icon bị bóp nghẹt hay bết dính nét.")
+        );
+
+        patchNotesItems.add(new UpdateItem("ĐỒ HỌA", "Bước 1.2: 9 Vector Icon 3 Set Cao Cấp & Huyền Thoại 4★-6★", new Color(0.85f, 0.45f, 1f, 1f))
+            .addPoint("Chuẩn hóa toàn diện 9 file vector hình học 4 lớp (100/100 điểm kiểm định) cho 3 Set: Hải Tặc (4★ Epic), Vực Thẳm (5★ Legendary), Hoàng Gia (6★ Legendary).")
+            .addPoint("Set Hải Tặc: Cột buồm bọc đồng & đèn bão ma quái, Bánh lái thuyền & neo cổ đồng Aztec mắt lục bảo, Lưỡi hái Damascus rãnh máu & đồng 8-Reales.")
+            .addPoint("Set Vực Thẳm: Trượng Obsidian gai góc & mắt quỷ toàn tri Nether Eye, Khung cuộn bát giác 8 sừng quỷ tơ hắc mạch, Móng vuốt rồng vực sâu ngạnh ngược.")
+            .addPoint("Set Hoàng Gia: Quyền trượng bạch kim mạ vàng 24k hoa bách hợp đính hồng ngọc Ruby, Bánh xe tơ tằm 8 cánh cung đình khảm Sapphire, Lưỡi câu cẩm thạch trắng viền vàng ngọc trai giọt nước.")
+            .addPoint("Transpile hoàn toàn 9 hàm vẽ sang hệ thống hình học đa giác đặc (sx, sy, fillTri, fillQuad, drawLine, fillCircle) đồng nhất 100% giữa SVG và in-game.")
+        );
+
+        patchNotesItems.add(new UpdateItem("ĐỒ HỌA", "Đột Phá Thiết Kế Độc Bản & Bùng Nổ Hiệu Ứng Thần Khí Lạc Hồng (Premium)", new Color(1f, 0.45f, 0.75f, 1f))
+            .addPoint("Nguyên Lý Độc Bản (Strict Non-Repetition Rule): Cấm tuyệt đối tái sử dụng phom dáng hoặc khung mẫu cũ; mỗi trang bị sở hữu hình bóng (silhouette) và ngôn ngữ tạo hình hoàn toàn riêng biệt.")
+            .addPoint("Cần Quang Minh vs Cần Lạc Hồng: Cần Quang Minh chuyển sang trục đứng chữ thập (Upright Cruciform) với vương miện Sol Halo lơ lửng và cánh Seraph xòe rộng; Cần Lạc Hồng nghiêng chéo bùng nổ với đầu trượng Trống Đồng Đông Sơn, Chim Lạc ngậm hồng ngọc và thanh long ngọc bích quấn thân.")
+            .addPoint("Dây Cước 3 Bộ Khác Biệt Triệt Để: Dây Quang Minh dáng quả trám khung dệt thiên sứ ôm khối cầu Sunstone; Dây Vệ Quốc ổ quay bát giác 8 mũi giáo chiến trận, khiên sao vàng và cờ lệnh bay; Dây Lạc Hồng bùng nổ Song Long Ouroboros ngọc lục bảo ôm viên Ngọc Rồng Huyết Ngọc Ruby.")
+            .addPoint("Lưỡi Câu 3 Bộ Độc Bản: Lưỡi Quang Minh mỏ neo chữ thập đối xứng thánh thiện 2 ngạnh mũi tên kim cương; Lưỡi Vệ Quốc móng vuốt rồng Trảo Long Khởi Nghĩa sống lưng gai giáp, mắt khuyên sao vàng và dải lụa chiến trận; Lưỡi Lạc Hồng đế Đóa Sen Hồng Âu Cơ tỏa sáng, ngạnh mỏ Chim Lạc mắt hồng ngọc và ngọc Tiên Châu tiên cảnh.")
+            .addPoint("Cập nhật quy chuẩn vector-graphics-designer SKILL.md với điều khoản cấm trùng lặp phom dáng và tiêu chuẩn bùng nổ cho dòng đồ Premium Limited.")
+        );
+
+        patchNotesItems.add(new UpdateItem("ĐỒ HỌA", "Bước 1.3: 9 Vector Icon Set Thần Thoại & Giới Hạn 6★-7★", new Color(1f, 0.85f, 0.25f, 1f))
+            .addPoint("Chuẩn hóa trọn vẹn 9 file vector 4 lớp (100/100 điểm audit) cho 3 Set đỉnh cao: Set Quang Minh (7★ Mythic), Set Vệ Quốc Vang Danh (Limited Event), Set Thần Khí Lạc Hồng (6★ Limited Gacha).")
+            .addPoint("Set Quang Minh: Trượng Thiên Sứ Seraph bạch kim mạ vàng 24K nạm 3 đai ngọc Sunstone, cuộn tơ kim tuyến bánh xe mặt trời 12 răng cưa, Lưỡi câu thánh quang hào quang rực rỡ và 3 lớp cánh thiên thần.")
+            .addPoint("Set Vệ Quốc Vang Danh: Cần khởi nghĩa trúc son ngọc bích nạm 3 đai đồng khắc sao vàng, cờ lệnh ngũ sắc bay trong gió, cước bện sợi tơ đỏ huyết chiến và lưỡi câu móng rồng chiến tích oai hùng.")
+            .addPoint("Set Thần Khí Lạc Hồng: Thần trượng Đông Sơn khảm ngọc lục bảo & trống đồng 14 tia sáng rực lửa với cánh Chim Lạc sải cánh, cước Song Long Chầu Nguyệt ôm viên ngọc rồng Lạc Long Quân, Lưỡi câu tiên mẫu đóa sen Âu Cơ nạm ngọc Tiên Châu.")
+            .addPoint("Transpile hoàn toàn 9 hàm vẽ sang hình học đa giác đặc (fillTri, fillQuad, drawLine, fillCircle) chuẩn xác 100% SVG, hiển thị lộng lẫy và sắc nét tuyệt đối trên mọi bệ hiển thị.")
+        );
+
+        patchNotesItems.add(new UpdateItem("HÌNH HỌC", "Chuyển Thể Đồ Họa Vector Hình Học Nguyên Bản SVG Sang LibGDX", fixBadgeColor)
+            .addPoint("Khắc phục hiện tượng 'vẽ nét gậy que' trong game: Sử dụng thuật toán tam giác hóa đa giác đặc (ShapeRenderer.ShapeType.Filled) bám sát 100% tọa độ file SVG gốc.")
+            .addPoint("Móc Băng Giá: Tái hiện đầy đủ lỗ xỏ lục giác, thân trụ 2 lớp ngọc bích, đôi cánh mỏ neo cong dày pha lê, sao tuyết 5 cánh đặc tâm và chóp mỏ neo đáy sắc sảo.")
+            .addPoint("Sửa triệt để lỗi chữ nhãn 'Cần Câu', 'Dây Cước', 'Lưỡi Câu' đè ngang mép bệ đỡ gacha và xóa bỏ viền vuông xanh trên trục xoay tròn.")
         );
 
         // ===== PHIÊN BẢN v0.4.23 =====
@@ -375,10 +462,30 @@ public class PatchNotesDialog {
 
         roadmapItems.add(UpdateItem.versionHeader("ĐẠI TU ĐỒ HỌA, GIAO DIỆN & HOẠT ẢNH (SERIES v0.5.x)"));
 
-        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 1", "Ngoại Hình 11 Set Trang Bị & Icon Vật Phẩm (v0.5.1)", new Color(0.35f, 0.80f, 1f, 1f))
-            .addPoint("Nâng cấp Vector Icon toàn bộ 33 món (11 Cần, 11 Dây, 11 Lưỡi) trong 11 Set của EquipmentIconRenderer.")
-            .addPoint("Chuẩn hóa Vector Icon cho toàn bộ vật phẩm trong ItemDatabase: Bánh mì, Thuốc stamina, Nước tăng lực, Bình xịt băng, Trà thảo mộc, Đá mài, Nam châm...")
-            .addPoint("Hoàn thiện icon các Sách Kỹ Năng và vật phẩm Loot câu được từ đáy biển (LootVisualRenderer).")
+        roadmapItems.add(new UpdateItem("BƯỚC 1.1", "12 Icon 4 Set Khởi Đầu & Cơ Bản 0★-3★ (ĐÃ HOÀN THÀNH)", new Color(0.25f, 0.85f, 0.50f, 1f))
+            .addPoint("Đã hoàn thành 12 Vector Icon cho 4 Set trang bị khởi đầu (Cần câu, Dây cước, Lưỡi câu).")
+            .addPoint("Bao gồm: Set Tập Sự (0★ Common), Set Thợ Săn (1★ Uncommon), Set Băng Giá (2★ Rare) và Set Đại Dương (3★ Rare/Epic).")
+            .addPoint("100% đạt chuẩn 100/100 Quality Gate và đồng bộ hoàn hảo thư viện SVG gốc.")
+        );
+
+        roadmapItems.add(new UpdateItem("BƯỚC 1.2", "9 Icon 3 Set Cao Cấp & Huyền Thoại 4★-6★ (v0.5.1b)", new Color(0.55f, 0.70f, 1f, 1f))
+            .addPoint("Nâng cấp 9 Vector Icon cho 3 Set trang bị cao cấp rèn đúc tinh xảo (Cần, Dây, Lưỡi).")
+            .addPoint("Bao gồm: Set Hải Tặc (4★ Epic), Set Vực Thẳm (5★ Legendary), Set Hoàng Gia (6★) (loại bỏ Set Thời Không đã hoàn thành ở SET-07).")
+        );
+
+        roadmapItems.add(new UpdateItem("BƯỚC 1.3", "9 Icon 3 Set Thần Thoại & Giới Hạn 6★-7★ (v0.5.1c)", new Color(1f, 0.85f, 0.35f, 1f))
+            .addPoint("Nâng cấp 9 Vector Icon đỉnh cao cho 3 Set Thần Thoại & Giới Hạn độc bản (Cần, Dây, Lưỡi).")
+            .addPoint("Bao gồm: Set Quang Minh (7★ Mythic), Set Vệ Quốc Vang Danh (Limited Event) và Set Thần Khí Lạc Hồng (6★ Limited Premium Gacha).")
+        );
+
+        roadmapItems.add(new UpdateItem("BƯỚC 1.4", "12 Icon Tiêu Hao & Đạo Cụ Tiệm Tạp Hóa (v0.5.1d)", new Color(0.40f, 0.85f, 0.50f, 1f))
+            .addPoint("Chuẩn hóa nét vẽ vector sắc nét cho 5 vật phẩm tiêu hao: Bánh mì, Thuốc hồi stamina, Nước tăng lực, Nước bứt phá, Trà thảo mộc.")
+            .addPoint("Chuẩn hóa 7 đạo cụ câu cá: Dây câu tốt, Bình xịt đóng băng, Đá mài lưỡi, Nam châm kho báu, Kính lặn, Lưới cá, Bùa hoàng kim.")
+        );
+
+        roadmapItems.add(new UpdateItem("BƯỚC 1.5", "12 Icon Mồi, Sách Kỹ Năng & Loot Đáy Biển (v0.5.1e)", new Color(0.85f, 0.50f, 0.95f, 1f))
+            .addPoint("Chuẩn hóa icon Mồi Câu: Mồi Thơm (hũ xanh lá), Mồi Rủi Ro (hũ tím đầu lâu).")
+            .addPoint("Chuẩn hóa biểu tượng 7 Sách Kỹ Năng bọc da kim loại & 8 món chiến lợi phẩm/rác đáy biển (Ủng rách, Bình cổ, Nhẫn vàng, Rương chìm...).")
         );
 
         roadmapItems.add(new UpdateItem("GIAI ĐOẠN 2", "Hiện Đại Hóa UI, Nút Bấm Xúc Giác & Combat Gauges (v0.5.2)", new Color(1f, 0.75f, 0.25f, 1f))
@@ -387,17 +494,23 @@ public class PatchNotesDialog {
             .addPoint("Thẻ bài trang bị hiển thị khung viền chuẩn hệ Rarity và so sánh chỉ số tức thì (Stat Diff) khi hover.")
         );
 
-        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 3", "Ngoại Hình 45 Loài Cá Vector & Hiệu Ứng Chiêu Thức (v0.5.3)", new Color(0.25f, 0.85f, 0.50f, 1f))
+        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 3", "Ngoại Hình 45 Loài Cá Vector & Môi Trường 3 Map (v0.5.3)", new Color(0.25f, 0.85f, 0.50f, 1f))
             .addPoint("Đại tu 45 loài cá trong FishVisualRenderer với tạo khối mềm mại, bóng sáng và vây ngực chuyển động tự nhiên.")
-            .addPoint("3 Siêu Boss: Thủy Quái Sông Trà (vảy rêu phù sa, quẫy đục đáy), Bạch Tuộc Khổng Lồ (xúc tu gai nhọn, túi mực đen), Thần Biển Leviathan (thân rồng viễn cổ, sừng san hô phát quang).")
-            .addPoint("Hoàn thiện bộ VFX chiêu thức cần thủ (Dưỡng Sức, Giật Kép, Trói Buộc) và kỹ năng cá (Quẫy Bùn, Mực Mù, Sóng Thần, Bão Tố).")
+            .addPoint("3 Siêu Boss Thế Giới: Thủy Quái Sông Trà (vảy rêu phù sa), Bạch Tuộc Khổng Lồ (xúc tu gai nhọn, túi mực), Thần Biển Leviathan (thân rồng viễn cổ, sừng san hô).")
+            .addPoint("Hoàn thiện chuyển động sóng nước tự nhiên và khúc xạ ánh sáng đại dương trên cả 3 bản đồ.")
         );
 
-        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 4", "Hoạt Ảnh Vòng Quay Gacha Wheel & Thao Tác Kéo Cần (v0.5.4)", new Color(0.95f, 0.45f, 0.75f, 1f))
-            .addPoint("Cải tiến hoạt ảnh cá quẫy đuôi mềm mại, uốn mình đổi hướng khi giằng co kéo dây với cần thủ.")
+        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 4", "Bộ Hiệu Ứng Kỹ Năng VFX Cần Thủ & Boss Thủy Quái (v0.5.4)", new Color(0.95f, 0.55f, 0.25f, 1f))
+            .addPoint("VFX chiêu thức cần thủ: Dưỡng Sức (vòng hồi ngọc), Giật Kép (sóng chém đôi), Trói Buộc (xích nước), Thuần Hóa, Mắt Đại Bàng.")
+            .addPoint("VFX kỹ năng cá & Boss: Quẫy Bùn (che phủ HUD), Bứt Tốc (bọt xoáy), Lặn Sâu (tăng tension), Cuồng Nộ (hào quang đỏ), Giật Điện, Mực Mù, Sóng Thần, Bão Tố.")
+        );
+
+        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 5", "Hoạt Ảnh Vật Lý, Băng Chuyền CS:GO & Custom Skin Động (v0.5.5)", new Color(0.95f, 0.45f, 0.75f, 1f))
+            .addPoint("Hệ thống Custom Skin Động Cần - Dây - Phao trên PlayScreen: Tùy theo trang bị đang mặc mà ngoại hình cần câu trên màn chơi thay đổi tương ứng (Cần câu cho Cần, Dây câu cho Dây, Phao câu cho Móc).")
+            .addPoint("Cải tiến hoạt ảnh cá quẫy đuôi mềm mại hình sin, uốn mình đổi hướng khi giằng co kéo dây với cần thủ.")
             .addPoint("Cần câu uốn cong vật lý co giãn theo lực căng Tension, hiệu ứng rung chấn màn hình giật cần cắn câu.")
-            .addPoint("Nâng cấp hoạt ảnh Vòng Quay Gacha Wheel 12 cung xoay tít gia tốc, đèn led viền chớp sáng & nảy kim.")
-            .addPoint("Hiệu ứng hào quang ánh vàng bùng nổ và lật mở thẻ trang bị khi quay trúng bậc Legendary & Limited Premium.")
+            .addPoint("Hoàn thiện hoạt ảnh Băng Chuyền Gacha cuộn ngang kiểu CS:GO: Trượt lướt gia tốc pow5Out, kim chỉ vạch giữa & âm thanh tick qua từng món đồ.")
+            .addPoint("Hiệu ứng Nổ Vàng cực đại cho trang bị Huyền Thoại / 6★ Thần Khí: Rung chấn màn hình, hào quang bùng nổ & showcase trang bị (không lật thẻ).")
         );
     }
 

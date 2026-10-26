@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="trashAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#020617" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bagGrad" cx="45%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="60%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </radialGradient>
+  </defs>
+
+  <!-- LAYER 1: Background Glow -->
+  <g id="background_glow">
+    <circle cx="64" cy="68" r="42" fill="url(#trashAura)"/>
+    <ellipse cx="64" cy="112" rx="32" ry="8" fill="#000000" opacity="0.4"/>
+  </g>
+
+  <!-- LAYER 2: Base Form (Bulging Crinkled Bag & Knotted Neck) -->
+  <g id="base_form">
+    <!-- Main Bulging Plastic Body -->
+    <circle cx="64" cy="74" r="30" fill="url(#bagGrad)"/>
+    <circle cx="48" cy="78" r="22" fill="url(#bagGrad)"/>
+    <circle cx="80" cy="78" r="22" fill="url(#bagGrad)"/>
+    <!-- Cinched Bag Neck -->
+    <rect x="54" y="40" width="20" height="12" rx="3" fill="#1e293b"/>
+    <!-- Two Tied Knot Ears -->
+    <polygon points="56,42 42,24 50,38" fill="#334155"/>
+    <polygon points="72,42 86,24 78,38" fill="#334155"/>
+  </g>
+
+  <!-- LAYER 3: Details & Relief (Plastic Folds & Red Drawstring) -->
+  <g id="details_and_relief">
+    <!-- Crease Shadow Folds -->
+    <path d="M 46 64 Q 64 78 82 64" fill="none" stroke="#0f172a" stroke-width="3"/>
+    <path d="M 40 82 Q 64 96 88 82" fill="none" stroke="#0f172a" stroke-width="2.5"/>
+    <!-- Exposed Red Drawstring -->
+    <path d="M 54 46 Q 64 50 74 46" fill="none" stroke="#ef4444" stroke-width="2.5"/>
+    <circle cx="64" cy="48" r="2" fill="#f87171"/>
+  </g>
+
+  <!-- LAYER 4: Specular Highlights (Plastic Stretch Sheen) -->
+  <g id="specular_highlights">
+    <!-- Stretch Wrinkle Highlights -->
+    <path d="M 44 60 Q 64 74 84 60" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
+    <line x1="50" y1="70" x2="60" y2="82" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" opacity="0.7"/>
+    <!-- Knot Ear Glint -->
+    <circle cx="45" cy="27" r="1.5" fill="#ffffff"/>
+  </g>
+</svg>

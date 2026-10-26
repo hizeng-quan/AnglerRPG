@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="sonarAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.35"/>
+      <stop offset="60%" stop-color="#065f46" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#022c22" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="lensGrad" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#a7f3d0"/>
+      <stop offset="50%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </radialGradient>
+    <linearGradient id="goldRim" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#eab308"/>
+      <stop offset="100%" stop-color="#a16207"/>
+    </linearGradient>
+  </defs>
+
+  <!-- LAYER 1: Background Glow -->
+  <g id="background_glow">
+    <ellipse cx="64" cy="64" rx="46" ry="26" fill="url(#sonarAura)"/>
+    <ellipse cx="64" cy="98" rx="40" ry="8" fill="#000000" opacity="0.4"/>
+  </g>
+
+  <!-- LAYER 2: Base Form (Dual-Lens Frame, Rubber Strap & Temples) -->
+  <g id="base_form">
+    <!-- Rubber Headband Strap Flowing Out Backwards -->
+    <path d="M 20 62 Q 10 64 6 72 Q 10 76 20 74" fill="none" stroke="#1e293b" stroke-width="5" stroke-linecap="round"/>
+    <path d="M 108 62 Q 118 64 122 72 Q 118 76 108 74" fill="none" stroke="#1e293b" stroke-width="5" stroke-linecap="round"/>
+
+    <!-- Heavy Black Rubber Goggle Body Frame -->
+    <rect x="22" y="44" width="84" height="40" rx="14" fill="#0f172a"/>
+
+    <!-- Left & Right Gold Bezel Rims -->
+    <circle cx="44" cy="64" r="18" fill="url(#goldRim)"/>
+    <circle cx="84" cy="64" r="18" fill="url(#goldRim)"/>
+
+    <!-- Dual Sonar Lenses (Thấu kính thấu thị mặt nước) -->
+    <circle cx="44" cy="64" r="14" fill="url(#lensGrad)"/>
+    <circle cx="84" cy="64" r="14" fill="url(#lensGrad)"/>
+
+    <!-- Center Nose Bridge Connector -->
+    <rect x="58" y="60" width="12" height="8" rx="2" fill="url(#goldRim)"/>
+  </g>
+
+  <!-- LAYER 3: Details & Relief (Sonar Radar Rings & Crosshair Targets) -->
+  <g id="details_and_relief">
+    <!-- Concentric Sonar Pulse Rings inside Lenses -->
+    <circle cx="44" cy="64" r="9" fill="none" stroke="#ffffff" stroke-width="1.0" opacity="0.6"/>
+    <circle cx="44" cy="64" r="4" fill="none" stroke="#ffffff" stroke-width="1.0" opacity="0.8"/>
+    <circle cx="84" cy="64" r="9" fill="none" stroke="#ffffff" stroke-width="1.0" opacity="0.6"/>
+    <circle cx="84" cy="64" r="4" fill="none" stroke="#ffffff" stroke-width="1.0" opacity="0.8"/>
+
+    <!-- Sonar Target Crosshairs -->
+    <line x1="44" y1="52" x2="44" y2="76" stroke="#ffffff" stroke-width="0.8" opacity="0.7"/>
+    <line x1="32" y1="64" x2="56" y2="64" stroke="#ffffff" stroke-width="0.8" opacity="0.7"/>
+    <line x1="84" y1="52" x2="84" y2="76" stroke="#ffffff" stroke-width="0.8" opacity="0.7"/>
+    <line x1="72" y1="64" x2="96" y2="64" stroke="#ffffff" stroke-width="0.8" opacity="0.7"/>
+
+    <!-- Fish Icon Target Blip in Right Lens -->
+    <ellipse cx="86" cy="62" rx="3.5" ry="1.8" fill="#facc15"/>
+    <polygon points="82,62 79,59 79,65" fill="#facc15"/>
+  </g>
+
+  <!-- LAYER 4: Specular Highlights (Anti-Reflective Optical Glass Sheen) -->
+  <g id="specular_highlights">
+    <!-- Diagonal Glass Glint Across Both Lenses -->
+    <line x1="36" y1="54" x2="48" y2="70" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+    <line x1="76" y1="54" x2="88" y2="70" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+    <!-- Gold Rim Dots -->
+    <circle cx="34" cy="52" r="1.5" fill="#ffffff"/>
+    <circle cx="74" cy="52" r="1.5" fill="#ffffff"/>
+  </g>
+</svg>

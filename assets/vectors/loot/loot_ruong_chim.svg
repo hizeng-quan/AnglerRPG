@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="chestAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#facc15" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#b45309" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="oakWood" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#78350f"/>
+      <stop offset="50%" stop-color="#451a03"/>
+      <stop offset="100%" stop-color="#270e02"/>
+    </linearGradient>
+  </defs>
+
+  <!-- LAYER 1: Background Glow -->
+  <g id="background_glow">
+    <circle cx="64" cy="64" r="44" fill="url(#chestAura)"/>
+    <ellipse cx="64" cy="112" rx="36" ry="8" fill="#000000" opacity="0.45"/>
+  </g>
+
+  <!-- LAYER 2: Base Form (Waterlogged Oak Chest Hull, Arched Lid & Iron Straps) -->
+  <g id="base_form">
+    <!-- Lower Chest Body -->
+    <rect x="28" y="56" width="72" height="42" rx="3" fill="url(#oakWood)"/>
+    <!-- Arched Chest Lid Ajar -->
+    <rect x="26" y="28" width="76" height="24" rx="6" fill="#78350f"/>
+    <!-- Iron Reinforcing Straps -->
+    <rect x="36" y="56" width="10" height="42" fill="#1e293b"/>
+    <rect x="82" y="56" width="10" height="42" fill="#1e293b"/>
+    <rect x="36" y="28" width="10" height="24" fill="#334155"/>
+    <rect x="82" y="28" width="10" height="24" fill="#334155"/>
+  </g>
+
+  <!-- LAYER 3: Details & Relief (Overflowing Gold Coins, Sapphire Gem & Skull Lock) -->
+  <g id="details_and_relief">
+    <!-- Overflowing Gold Doubloons in Gap -->
+    <circle cx="44" cy="52" r="4.5" fill="#facc15"/>
+    <circle cx="52" cy="50" r="5.0" fill="#facc15"/>
+    <circle cx="60" cy="53" r="4.5" fill="#fde047"/>
+    <circle cx="68" cy="51" r="5.0" fill="#facc15"/>
+    <circle cx="76" cy="53" r="4.5" fill="#fde047"/>
+    <circle cx="84" cy="51" r="4.0" fill="#facc15"/>
+    <!-- Glowing Sapphire Gem -->
+    <polygon points="64,44 68,48 64,52 60,48" fill="#06b6d4"/>
+    <!-- Brass Skull Lock on Center -->
+    <circle cx="64" cy="66" r="8" fill="#eab308"/>
+    <rect x="62" y="70" width="4" height="6" fill="#0f172a"/>
+    <circle cx="61" cy="65" r="1.5" fill="#0f172a"/>
+    <circle cx="67" cy="65" r="1.5" fill="#0f172a"/>
+    <!-- Sea Barnacles on Corner -->
+    <circle cx="34" cy="90" r="3.5" fill="#94a3b8"/>
+    <circle cx="92" cy="88" r="4.0" fill="#94a3b8"/>
+  </g>
+
+  <!-- LAYER 4: Specular Highlights (Gold Coin Gleam & Lock Glint) -->
+  <g id="specular_highlights">
+    <!-- Coins Glint -->
+    <circle cx="51" cy="49" r="1.5" fill="#ffffff"/>
+    <circle cx="67" cy="50" r="1.5" fill="#ffffff"/>
+    <circle cx="64" cy="46" r="1.2" fill="#ffffff"/>
+    <!-- Lid Arch Specular Strip -->
+    <line x1="30" y1="32" x2="98" y2="32" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.65"/>
+    <!-- Lock Brass Glint -->
+    <circle cx="66" cy="63" r="1.5" fill="#ffffff"/>
+  </g>
+</svg>

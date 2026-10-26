@@ -72,7 +72,11 @@ Agent hoặc Nhà phát triển có thể kích hoạt pipeline bất kỳ lúc 
 ## 🛡️ 3. Cổng Kiểm Duyệt Hình Ảnh (Visual Quality Gate)
 
 Trước khi thêm bất kỳ asset đồ họa mới nào vào game:
-- **Kiểm tra độ phân giải:** Icons hiển thị sắc nét ở cả 32x32px (HUD) và 160x160px (Gacha Card).
+- **Nguyên tắc Bản Đầy Đủ (Full Representation - Tuyệt đối không bóp méo/thu nhỏ):**
+  * Bản hiển thị trong game phải là bản đầy đủ chi tiết tương xứng với file SVG thiết kế gốc.
+  * Đồng nhất tuyệt đối giữa Gacha (Vòng quay cuộn reel `r >= 42f`, Bảng Loot Table `r >= 34f`, Thẻ kết quả `r >= 36f-50f`, Bệ trưng bày `r >= 38f`) và Equipment (Hòm đồ, Ô trang bị, Tooltip).
+  * Không nhồi nhét icon vào các thanh dẹt lép < 50px hoặc radius tí hon < 30px làm dính bết hình khối.
+- **Tỉ lệ nét vẽ co giãn tự do (Dynamic Proportional Stroke Scaling):** Dùng `Math.max(1.0f, r * k)` cho độ dày nét để đường nét luôn sắc cạnh, thanh thoát, không bị biến dạng khi co giãn.
 - **Kiểm tra tương phản nền tối:** Tất cả các nét vẽ phải nổi bật trên nền Abyss Navy `#030712`.
 - **Độ ổn định khung hình:** Giới hạn không vượt quá 60 vertices cho mỗi icon để bảo toàn 60 FPS khi render lưới 9 quickslots và hàng trăm items trong hòm đồ.
 

@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- 1. High-Tensile Zinc & Camo Forest Aura -->
+  <circle cx="64" cy="64" r="54" fill="rgba(34, 197, 94, 0.16)" />
+  <circle cx="64" cy="64" r="44" fill="rgba(100, 116, 139, 0.16)" />
+
+  <!-- 2. Forged Iron Beast-Trap Rotor Frame with 6 Jaws -->
+  <circle cx="64" cy="64" r="48" fill="#0f172a" />
+  <circle cx="64" cy="64" r="44" fill="#1e293b" stroke="#d97706" stroke-width="1.8" />
+  <!-- 6 Predator Trap Teeth / Spokes -->
+  <polygon points="64,16 61,24 67,24" fill="#fbbf24" />
+  <polygon points="64,112 61,104 67,104" fill="#fbbf24" />
+  <polygon points="22,39 28,45 23,50" fill="#fbbf24" />
+  <polygon points="106,89 100,83 105,78" fill="#fbbf24" />
+  <polygon points="22,89 28,83 23,78" fill="#fbbf24" />
+  <polygon points="106,39 100,45 105,50" fill="#fbbf24" />
+
+  <!-- 3. Braided Zinc-Silk Wire Spool Layers -->
+  <circle cx="64" cy="64" r="38" fill="#022c22" />
+  <circle cx="64" cy="64" r="35" fill="#475569" />
+  <circle cx="64" cy="64" r="31" fill="#94a3b8" />
+  <circle cx="64" cy="64" r="27" fill="#64748b" />
+  <!-- Cross Braided Cable Texture Lines -->
+  <line x1="42" y1="42" x2="86" y2="86" stroke="#cbd5e1" stroke-width="1.2" />
+  <line x1="86" y1="42" x2="42" y2="86" stroke="#cbd5e1" stroke-width="1.2" />
+  <line x1="37" y1="64" x2="91" y2="64" stroke="#e2e8f0" stroke-width="0.8" />
+  <line x1="64" y1="37" x2="64" y2="91" stroke="#e2e8f0" stroke-width="0.8" />
+
+  <!-- 4. Center Octagonal Drag Hub with Tiger-Eye Core -->
+  <circle cx="64" cy="64" r="19" fill="#0f172a" stroke="#d97706" stroke-width="1.4" />
+  <circle cx="64" cy="64" r="14" fill="#b45309" stroke="#fbbf24" stroke-width="1.0" />
+  <circle cx="64" cy="64" r="8" fill="#f59e0b" />
+  <!-- Slit Pupil of Tiger Eye -->
+  <line x1="64" y1="58" x2="64" y2="70" stroke="#1c1917" stroke-width="1.8" />
+  <circle cx="62.5" cy="62.5" r="1.5" fill="#ffffff" />
+
+  <!-- 5. Heavy Bail Arm & Outgoing Tense Cable with Spark -->
+  <line x1="88" y1="46" x2="108" y2="26" stroke="#d97706" stroke-width="2.5" stroke-linecap="round" />
+  <!-- Emerald Roller Bearing -->
+  <circle cx="108" cy="26" r="3.5" fill="#052e16" stroke="#10b981" stroke-width="1.2" />
+  <circle cx="108" cy="26" r="1.5" fill="#34d399" />
+  <!-- Cable Shooting Out to Northeast -->
+  <line x1="108" y1="26" x2="120" y2="14" stroke="#ffffff" stroke-width="1.6" />
+  <polygon points="118,14 122,18 120,12" fill="#34d399" />
+
+  <!-- 6. Specular Glints -->
+  <circle cx="48" cy="46" r="1.6" fill="#ffffff" />
+  <circle cx="118" cy="14" r="1.8" fill="#ffffff" />
+</svg>

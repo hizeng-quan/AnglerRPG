@@ -30,17 +30,17 @@ class CombatSimulator:
             max_tension *= 0.75
 
         khang_dut = line["khang_dut"]
-        pull_reduction = max(0.1, 1.0 - (khang_dut * 2.5) / 100.0)
+        pull_reduction = max(0.25, 1.0 - (khang_dut * 1.5) / 100.0)
 
-        base_dmg = rod["base_pull_damage"]
-        max_stamina = rod["max_stamina"]
+        base_dmg = 20.0 + rod["base_pull_damage"] # Player base 20 + Rod bonus
+        max_stamina = 100.0 + rod["max_stamina"]   # Player base 100 + Rod bonus
         current_stamina = max_stamina
         current_tension = 0.0
         max_tension_reached = 0.0
 
         time = 0.0
         fish_state = "IDLE" # IDLE or PULLING
-        fish_timer = random.uniform(1.2, 2.8)
+        fish_timer = random.uniform(1.2, 2.5)
 
         # Damage reduction passives
         dmg_mult = 1.0
@@ -53,40 +53,49 @@ class CombatSimulator:
             fish_timer -= dt
             if fish_timer <= 0:
                 fish_state = "PULLING" if fish_state == "IDLE" else "IDLE"
-                fish_timer = random.uniform(1.5, 3.5) if fish_state == "PULLING" else random.uniform(1.2, 2.5)
+                fish_timer = random.uniform(1.5, 3.5) if fish_state == "PULLING" else random.uniform(1.5, 3.5)
 
             # Player decision based on strategy
             is_space_down = False
             if player_strategy == "optimal":
-                # Only reel when fish is IDLE or when tension is very safe (<30%)
-                is_space_down = (fish_state == "IDLE") or (current_tension < max_tension * 0.35)
+                # Reel during IDLE as long as tension has safety margin (<85%)
+                # Only reel during PULLING if tension is very low (<25%)
+                is_space_down = (fish_state == "IDLE" and current_tension < max_tension * 0.85) or (fish_state == "PULLING" and current_tension < max_tension * 0.25)
             elif player_strategy == "aggressive":
-                # Spam reel almost constantly
-                is_space_down = current_tension < max_tension * 0.85
+                # Spam reel almost constantly up to 90% tension
+                is_space_down = current_tension < max_tension * 0.90
             elif player_strategy == "casual":
-                # 70% optimal, occasional late release
+                # Casual player: reels during IDLE, occasionally panic reels during PULLING
                 if fish_state == "IDLE":
-                    is_space_down = True
+                    is_space_down = current_tension < max_tension * 0.80
                 else:
-                    is_space_down = random.random() < 0.25
+                    is_space_down = random.random() < 0.20 and current_tension < max_tension * 0.50
 
             # Tension & Damage calculations
             tension_increase = 0.0
 
+            # Fish pull: 1.5x / 0.8x in PULLING, 0.15x / 0.10x in IDLE
             if fish_state == "PULLING":
-                pull = fish_pull_base * (1.5 if is_space_down else 0.4)
-                if "xuc_tu" in skills:
-                    pull *= (1.0 + (time / 10.0) * 0.1)
-                pull *= pull_reduction
-                tension_increase += pull * dt
+                pull_mult = 1.5 if is_space_down else 0.8
+            else:
+                pull_mult = 0.15 if is_space_down else 0.10
+
+            pull = fish_pull_base * pull_mult
+            if "xuc_tu" in skills:
+                pull *= (1.0 + (time / 10.0) * 0.1)
+            pull *= pull_reduction
+            tension_increase += pull * dt
+
+            # Stamina drain: 2.0/s in game
+            current_stamina -= 2.0 * dt
+            if current_stamina <= 0:
+                return {"success": False, "duration": time, "reason": "HẾT THỂ LỰC!", "final_hp": fish_hp, "max_tension_reached": max_tension_reached}
 
             if is_space_down:
-                if current_stamina <= 0:
-                    return {"success": False, "duration": time, "reason": "HẾT THỂ LỰC!", "final_hp": fish_hp, "max_tension_reached": max_tension_reached}
-                current_stamina -= 8.0 * dt # stamina consumption
-
                 if fish_state == "PULLING":
-                    tension_increase += (20.0 + max_tension * 0.05) * dt
+                    tension_increase += (26.0 + max_tension * 0.055) * dt
+                else:
+                    tension_increase += (14.0 + max_tension * 0.025) * dt
 
                 # Apply damage
                 eff_dmg = base_dmg * dmg_mult
@@ -94,14 +103,13 @@ class CombatSimulator:
                 if random.random() < 0.15:
                     eff_dmg *= 1.5
                 fish_hp -= eff_dmg * dt
-
-            # Tension relaxation when releasing Space
-            if not is_space_down:
-                relax_rate = 35.0 if fish_state == "IDLE" else 10.0
-                current_tension = max(0.0, current_tension - relax_rate * dt)
-                current_stamina = min(max_stamina, current_stamina + 12.0 * dt) # stamina regen
-            else:
                 current_tension += tension_increase
+            else:
+                # Slack: natural decay reduced heavily to 6.0 + max_tension * 0.04
+                tension_dec = (6.0 + max_tension * 0.04) * dt
+                if "xuc_tu" in skills:
+                    tension_dec *= 0.7
+                current_tension = max(0.0, current_tension - tension_dec) + tension_increase
 
             max_tension_reached = max(max_tension_reached, current_tension)
 

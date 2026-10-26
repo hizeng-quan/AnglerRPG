@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- 1. Explosive Ancestral Sunburst & Ruby Flame Aura -->
+  <circle cx="86" cy="38" r="40" fill="rgba(220, 38, 38, 0.22)" />
+  <circle cx="86" cy="38" r="30" fill="rgba(250, 204, 21, 0.25)" />
+  <circle cx="54" cy="74" r="34" fill="rgba(16, 185, 129, 0.16)" />
+
+  <!-- 2. Antique Dong Son Bronze War-Staff (Diagonal Combat Stance) -->
+  <line x1="20" y1="108" x2="84" y2="44" stroke="#1c1917" stroke-width="8.5" stroke-linecap="round" />
+  <line x1="20" y1="108" x2="84" y2="44" stroke="#78350f" stroke-width="6.2" stroke-linecap="round" />
+  <line x1="22" y1="106" x2="82" y2="46" stroke="#ca8a04" stroke-width="3.6" stroke-linecap="round" />
+  <line x1="22" y1="106" x2="82" y2="46" stroke="#fef08a" stroke-width="1.2" stroke-linecap="round" />
+
+  <!-- 3. Coiling Emerald Dragon (Lạc Long Quân) Spiraling Around Staff -->
+  <!-- Dragon Body Coils (Deep Emerald Jade with Golden Scales) -->
+  <path d="M 28,100 Q 36,90 42,94 Q 48,98 52,88 Q 56,78 64,82 Q 72,86 76,74 Q 80,62 86,66" fill="none" stroke="#065f46" stroke-width="5.0" stroke-linecap="round" />
+  <path d="M 28,100 Q 36,90 42,94 Q 48,98 52,88 Q 56,78 64,82 Q 72,86 76,74 Q 80,62 86,66" fill="none" stroke="#10b981" stroke-width="3.0" stroke-linecap="round" />
+  <path d="M 28,100 Q 36,90 42,94 Q 48,98 52,88 Q 56,78 64,82 Q 72,86 76,74 Q 80,62 86,66" fill="none" stroke="#facc15" stroke-width="1.0" stroke-linecap="round" />
+  <!-- Dragon Dorsal Spine Spikes -->
+  <polygon points="40,88 44,84 43,91" fill="#facc15" />
+  <polygon points="54,80 58,76 57,83" fill="#facc15" />
+  <polygon points="68,74 72,70 71,77" fill="#facc15" />
+
+  <!-- 4. Dong Son Bronze Drum Headpiece (Trống Đồng Đông Sơn) -->
+  <!-- Outer Bronze Flange Rim -->
+  <circle cx="86" cy="38" r="22" fill="#78350f" stroke="#ca8a04" stroke-width="2.0" />
+  <circle cx="86" cy="38" r="18" fill="#ca8a04" />
+  <circle cx="86" cy="38" r="14" fill="#451a03" />
+  <!-- 12 Explosive Dong Son Sunburst Flame Rays -->
+  <polygon points="86,18 83,26 89,26" fill="#facc15" />
+  <polygon points="106,38 98,35 98,41" fill="#facc15" />
+  <polygon points="86,58 89,50 83,50" fill="#facc15" />
+  <polygon points="66,38 74,41 74,35" fill="#facc15" />
+  <polygon points="100,24 92,30 96,34" fill="#ea580c" />
+  <polygon points="100,52 96,44 92,48" fill="#ea580c" />
+  <polygon points="72,52 80,48 76,44" fill="#ea580c" />
+  <polygon points="72,24 76,34 80,30" fill="#ea580c" />
+  <!-- Central Blazing Ruby Sun Core -->
+  <circle cx="86" cy="38" r="7.0" fill="#dc2626" stroke="#facc15" stroke-width="1.2" />
+  <circle cx="86" cy="38" r="4.0" fill="#f97316" />
+  <circle cx="85" cy="37" r="1.8" fill="#ffffff" />
+
+  <!-- 5. Majestic Chim Lạc Perched Atop Drum (Soaring Ancestral Crane) -->
+  <!-- Left Wing Plumes (Outstretched) -->
+  <polygon points="84,34 62,20 72,12 88,26" fill="#facc15" stroke="#78350f" stroke-width="1.0" />
+  <polygon points="84,33 66,22 74,16 86,26" fill="#fef08a" />
+  <!-- Right Wing Plumes (Soaring High) -->
+  <polygon points="88,32 98,8 108,16 94,30" fill="#facc15" stroke="#78350f" stroke-width="1.0" />
+  <polygon points="88,31 98,12 104,18 92,30" fill="#fef08a" />
+  <!-- Chim Lạc Head, Long Beak & Curved Ruby Crest -->
+  <polygon points="88,30 114,20 118,22 92,34" fill="#fde047" stroke="#78350f" stroke-width="1.0" />
+  <!-- Beak Tip -->
+  <polygon points="114,20 124,16 116,23" fill="#ffffff" stroke="#ca8a04" stroke-width="0.8" />
+  <!-- Swept-back Imperial Ruby Crest -->
+  <polygon points="90,28 78,14 86,22" fill="#dc2626" stroke="#ca8a04" stroke-width="0.8" />
+  <!-- Piercing Ruby Eye -->
+  <circle cx="94" cy="28" r="2.0" fill="#dc2626" />
+  <circle cx="93.5" cy="27.5" r="0.8" fill="#ffffff" />
+  <!-- Streaming Tail Feathers -->
+  <polygon points="82,44 70,62 76,64 86,46" fill="#f59e0b" />
+  <polygon points="80,46 64,68 68,70 82,48" fill="#dc2626" />
+
+  <!-- 6. Grip, Bronze Bell Pommel & Twin War Ribbons -->
+  <rect x="22" y="96" width="16" height="12" rx="2" transform="rotate(-45 30 102)" fill="#065f46" stroke="#ca8a04" stroke-width="1.2" />
+  <!-- Bronze Bell Pommel -->
+  <polygon points="20,108 10,118 16,122 24,112" fill="#ca8a04" stroke="#78350f" stroke-width="1.0" />
+  <circle cx="12" cy="120" r="2.2" fill="#10b981" />
+  <!-- Twin Fluttering Crimson War Ribbons -->
+  <path d="M 14,120 Q 8,124 4,120 Q 2,126 10,126" fill="#dc2626" />
+  <path d="M 18,122 Q 22,128 26,124 Q 28,128 20,128" fill="#ea580c" />
+
+  <!-- 7. Specular Glints -->
+  <circle cx="122" cy="17" r="1.6" fill="#ffffff" />
+  <circle cx="70" cy="14" r="1.4" fill="#ffffff" />
+  <circle cx="102" cy="10" r="1.4" fill="#ffffff" />
+  <circle cx="86" cy="20" r="1.2" fill="#ffffff" />
+  <circle cx="85" cy="36" r="2.0" fill="#ffffff" />
+  <circle cx="43" cy="91" r="1.2" fill="#ffffff" />
+  <circle cx="24" cy="104" r="1.2" fill="#ffffff" />
+</svg>

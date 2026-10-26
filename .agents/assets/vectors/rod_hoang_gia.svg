@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="hoangGiaRodAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.4" />
+      <stop offset="45%" stop-color="#d97706" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#78350f" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- LAYER 1: RADIANT ROYAL AURA -->
+  <circle cx="64" cy="64" r="56" fill="url(#hoangGiaRodAura)" />
+  <polygon points="64,8 74,48 116,40 84,68 112,104 68,88 40,120 44,78 8,64 44,50" fill="#fef08a" opacity="0.12" />
+
+  <!-- LAYER 2: FACET BODY - ROYAL PLATINUM & GOLD SCEPTER ROD -->
+  <!-- Pommel: Golden Crown & Royal Blue Sapphire Orb -->
+  <circle cx="18" cy="110" r="8" fill="#1e3a8a" />
+  <circle cx="18" cy="110" r="6" fill="#2563eb" />
+  <polygon points="14,106 22,106 26,98 20,102 18,94 16,102 10,98" fill="#d97706" />
+  <polygon points="14,106 22,106 20,102 18,103 16,102" fill="#f59e0b" />
+
+  <!-- Royal Grip: Platinum & Gold Filigree -->
+  <polygon points="18,104 24,104 38,90 32,90" fill="#cbd5e1" />
+  <polygon points="20,104 24,104 38,90 34,90" fill="#f8fafc" />
+  <polygon points="18,104 20,104 34,90 32,90" fill="#94a3b8" />
+  <!-- Grip Gold Filigree bands -->
+  <line x1="21" y1="101" x2="26" y2="96" stroke="#f59e0b" stroke-width="2" />
+  <line x1="27" y1="95" x2="32" y2="90" stroke="#f59e0b" stroke-width="2" />
+  <line x1="26" y1="101" x2="21" y2="96" stroke="#d97706" stroke-width="1.5" />
+  <line x1="32" y1="95" x2="27" y2="90" stroke="#d97706" stroke-width="1.5" />
+
+  <!-- Reel Seat / Fleur-de-lis Golden Sovereign Mount -->
+  <circle cx="36" cy="86" r="9" fill="#b45309" />
+  <circle cx="36" cy="86" r="7" fill="#f59e0b" />
+  <polygon points="36,76 39,83 45,84 40,88 41,94 36,90 31,94 32,88 27,84 33,83" fill="#fef08a" />
+  <circle cx="36" cy="86" r="3.5" fill="#1e3a8a" />
+  <circle cx="36" cy="86" r="2" fill="#60a5fa" />
+
+  <!-- Main Shaft: Polished Royal Platinum -->
+  <!-- Lower Section (Thick) -->
+  <polygon points="36,84 42,84 66,60 62,56" fill="#cbd5e1" />
+  <polygon points="38,84 42,84 66,60 64,58" fill="#f8fafc" />
+  <polygon points="36,84 38,84 64,58 62,56" fill="#94a3b8" />
+
+  <!-- Gold Ferrule 1 -->
+  <polygon points="61,59 67,59 69,55 63,55" fill="#f59e0b" />
+  <polygon points="63,55 69,55 70,54 64,54" fill="#fbbf24" />
+
+  <!-- Mid Section -->
+  <polygon points="64,56 68,56 88,36 85,33" fill="#cbd5e1" />
+  <polygon points="66,56 68,56 88,36 86,34" fill="#f8fafc" />
+  <polygon points="64,56 66,56 86,34 85,33" fill="#94a3b8" />
+
+  <!-- Gold Ferrule 2 -->
+  <polygon points="84,35 89,35 91,31 86,31" fill="#f59e0b" />
+  <polygon points="86,31 91,31 92,30 87,30" fill="#fbbf24" />
+
+  <!-- Tip Section (Slender) -->
+  <polygon points="87,32 90,32 106,16 104,14" fill="#e2e8f0" />
+  <polygon points="88,32 90,32 106,16 105,15" fill="#ffffff" />
+  <polygon points="87,32 88,32 105,15 104,14" fill="#94a3b8" />
+
+  <!-- Royal Guides & Golden Line Rings -->
+  <circle cx="58" cy="68" r="4.5" fill="none" stroke="#d97706" stroke-width="2" />
+  <line x1="58" y1="63.5" x2="55" y2="67" stroke="#b45309" stroke-width="2" />
+  <circle cx="78" cy="46" r="3.5" fill="none" stroke="#d97706" stroke-width="1.8" />
+  <line x1="78" y1="42.5" x2="76" y2="45" stroke="#b45309" stroke-width="1.8" />
+
+  <!-- Golden Fishing Line Strand -->
+  <line x1="36" y1="86" x2="58" y2="68" stroke="#fef08a" stroke-width="1.2" />
+  <line x1="58" y1="68" x2="78" y2="46" stroke="#fef08a" stroke-width="1.2" />
+  <line x1="78" y1="46" x2="105" y2="15" stroke="#fef08a" stroke-width="1.2" />
+
+  <!-- LAYER 3: CORE / ROYAL CROWN HEADPIECE & RUBY GEM -->
+  <!-- Golden Fleur-de-lis Tip Finial -->
+  <polygon points="104,18 108,18 114,8 109,12 106,6 103,12 98,8" fill="#d97706" />
+  <polygon points="104,18 108,18 111,12 106,9 101,12" fill="#f59e0b" />
+  <!-- Glowing Royal Ruby Jewel -->
+  <polygon points="106,6 110,10 106,14 102,10" fill="#dc2626" />
+  <polygon points="106,6 109,10 106,13 103,10" fill="#ef4444" />
+  <polygon points="106,7 108,9 106,11 104,9" fill="#f87171" />
+
+  <!-- LAYER 4: SPECULAR GLINTS -->
+  <!-- Ruby Glint -->
+  <circle cx="106" cy="8" r="1.5" fill="#ffffff" />
+  <!-- Crown Sparkle -->
+  <polygon points="106,2 107,6 111,6 108,8 109,12 106,9 103,12 104,8 101,6 105,6" fill="#ffffff" opacity="0.9" />
+  <!-- Ferrule & Guide Glints -->
+  <circle cx="89" cy="31" r="1.5" fill="#ffffff" />
+  <circle cx="66" cy="55" r="1.5" fill="#ffffff" />
+  <!-- Fleur-de-lis Center Glint -->
+  <circle cx="36" cy="84" r="1.8" fill="#ffffff" />
+  <!-- Sapphire Pommel Glint -->
+  <circle cx="16" cy="108" r="1.8" fill="#ffffff" />
+</svg>

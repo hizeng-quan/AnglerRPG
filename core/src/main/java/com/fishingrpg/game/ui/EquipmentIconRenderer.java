@@ -227,6 +227,34 @@ public class EquipmentIconRenderer {
     }
 
     // =========================================================================
+    // SVG PIXEL-PERFECT VECTOR RENDERING HELPERS (ViewBox 128x128 -> Screen)
+    // =========================================================================
+    private static float sx(float cx, float svgX, float s) {
+        return cx + (svgX - 64f) * s;
+    }
+
+    private static float sy(float cy, float svgY, float s) {
+        return cy + (64f - svgY) * s;
+    }
+
+    private static void fillTri(ShapeRenderer sr, float cx, float cy, float s, float x1, float y1, float x2, float y2, float x3, float y3) {
+        sr.triangle(sx(cx, x1, s), sy(cy, y1, s), sx(cx, x2, s), sy(cy, y2, s), sx(cx, x3, s), sy(cy, y3, s));
+    }
+
+    private static void fillQuad(ShapeRenderer sr, float cx, float cy, float s, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
+        fillTri(sr, cx, cy, s, x1, y1, x2, y2, x3, y3);
+        fillTri(sr, cx, cy, s, x1, y1, x3, y3, x4, y4);
+    }
+
+    private static void drawLine(ShapeRenderer sr, float cx, float cy, float s, float x1, float y1, float x2, float y2, float width) {
+        sr.rectLine(sx(cx, x1, s), sy(cy, y1, s), sx(cx, x2, s), sy(cy, y2, s), Math.max(1f, width * s));
+    }
+
+    private static void fillCircle(ShapeRenderer sr, float cx, float cy, float s, float svgX, float svgY, float r) {
+        sr.circle(sx(cx, svgX, s), sy(cy, svgY, s), Math.max(0.8f, r * s));
+    }
+
+    // =========================================================================
     // 1. TẬP SỰ SET
     // =========================================================================
     public static void drawTapSuRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
@@ -703,307 +731,488 @@ public class EquipmentIconRenderer {
     }
 
     public static void drawThoSanHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Predatory Talon Aura
-        sr.setColor(0.32f, 0.72f, 0.38f, 0.20f);
-        sr.circle(cx, cy, r * 1.25f);
-        sr.setColor(0.75f, 0.65f, 0.30f, 0.15f);
-        sr.circle(cx, cy, r * 1.05f);
+        float s = r / 64f;
 
-        // 2. Heavy Brass Ring Eyelet & Predator Fang Talisman (Khuyên đồng & bùa nanh thú)
-        float eyeX = cx - r * 0.22f;
-        float eyeY = cy + r * 0.70f;
-        sr.setColor(0.20f, 0.24f, 0.20f, 1f);
-        sr.circle(eyeX, eyeY, Math.max(4.5f, r * 0.22f));
-        sr.setColor(0.88f, 0.74f, 0.28f, 1f);
-        sr.circle(eyeX, eyeY, Math.max(3.5f, r * 0.16f));
-        sr.setColor(0.08f, 0.11f, 0.14f, 1f);
-        sr.circle(eyeX, eyeY, Math.max(1.8f, r * 0.08f));
+        // 1. Primal Beast Predator Aura
+        sr.setColor(0.13f, 0.77f, 0.37f, 0.16f);
+        fillCircle(sr, cx, cy, s, 64, 64, 54);
+        sr.setColor(0.71f, 0.33f, 0.04f, 0.15f);
+        fillCircle(sr, cx, cy, s, 64, 64, 42);
 
-        // Rawhide wraps binding the eyelet
-        sr.setColor(0.58f, 0.38f, 0.18f, 1f);
-        sr.rect(eyeX - r * 0.12f, eyeY - r * 0.24f, r * 0.24f, r * 0.14f);
-        sr.setColor(0.85f, 0.75f, 0.30f, 1f);
-        sr.rectLine(eyeX - r * 0.12f, eyeY - r * 0.17f, eyeX + r * 0.12f, eyeY - r * 0.17f, 1.5f);
+        // 2. Heavy Primal Bone Socket Mount & Eyelet (Top-Left)
+        // Iron bone socket clamp (polygon 32,24 54,20 62,34 38,40)
+        sr.setColor(0.08f, 0.15f, 0.09f, 1f);
+        fillQuad(sr, cx, cy, s, 32, 24, 54, 20, 62, 34, 38, 40);
+        sr.setColor(0.85f, 0.47f, 0.02f, 1f);
+        drawLine(sr, cx, cy, s, 32, 24, 54, 20, 1.8f);
+        drawLine(sr, cx, cy, s, 54, 20, 62, 34, 1.8f);
+        drawLine(sr, cx, cy, s, 62, 34, 38, 40, 1.8f);
+        drawLine(sr, cx, cy, s, 38, 40, 32, 24, 1.8f);
 
-        // Hanging carved beast fang talisman (Nanh quái thú biển đeo lủng lẳng)
-        sr.setColor(0.92f, 0.90f, 0.80f, 1f);
-        sr.triangle(eyeX - r * 0.08f, eyeY - r * 0.24f, eyeX - r * 0.18f, eyeY - r * 0.50f, eyeX, eyeY - r * 0.24f);
+        // Eyelet circle at (44, 28)
+        sr.setColor(0.01f, 0.02f, 0.09f, 1f);
+        fillCircle(sr, cx, cy, s, 44, 28, 4.0f);
+        sr.setColor(0.98f, 0.75f, 0.14f, 1f);
+        fillCircle(sr, cx, cy, s, 44, 28, 2.5f);
+        sr.setColor(0.01f, 0.02f, 0.09f, 1f);
+        fillCircle(sr, cx, cy, s, 44, 28, 1.6f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 43, 27, 1.4f);
 
-        // 3. Thick Prehistoric Beast Talon Shank (Thân vuốt hóa thạch bọc sống lưng thép)
-        float shankX = cx - r * 0.20f;
-        float bendBottomY = cy - r * 0.42f;
+        // Rawhide leather criss-cross wraps
+        sr.setColor(0.47f, 0.21f, 0.06f, 1f);
+        drawLine(sr, cx, cy, s, 36, 24, 48, 38, 2.2f);
+        drawLine(sr, cx, cy, s, 44, 22, 56, 36, 2.2f);
 
-        // Dark reinforced steel backplate
-        sr.setColor(0.18f, 0.22f, 0.18f, 1f);
-        sr.rectLine(shankX, eyeY - r * 0.20f, shankX, bendBottomY, Math.max(5.5f, r * 0.22f));
+        // Dangling Tiger-Eye Fang Charm
+        sr.setColor(0.99f, 0.94f, 0.54f, 1f);
+        fillTri(sr, cx, cy, s, 56, 36, 60, 52, 64, 36);
+        sr.setColor(0.85f, 0.47f, 0.02f, 1f);
+        drawLine(sr, cx, cy, s, 56, 36, 60, 52, 1.0f);
+        drawLine(sr, cx, cy, s, 60, 52, 64, 36, 1.0f);
+        sr.setColor(0.96f, 0.62f, 0.04f, 1f);
+        fillCircle(sr, cx, cy, s, 60, 40, 1.8f);
 
-        // Ivory fossil talon bone core
-        sr.setColor(0.88f, 0.86f, 0.76f, 1f);
-        sr.rectLine(shankX, eyeY - r * 0.20f, shankX, bendBottomY, Math.max(3.8f, r * 0.15f));
+        // 3. Prehistoric Beast Talon Sickle Body (Massive Raptor Sickle-Claw Curve)
+        // Dark outer armored spine backing
+        sr.setColor(0.08f, 0.15f, 0.09f, 1f);
+        drawLine(sr, cx, cy, s, 44, 38, 62, 41, 7.5f);
+        drawLine(sr, cx, cy, s, 62, 41, 78, 48, 8.5f);
+        drawLine(sr, cx, cy, s, 78, 48, 88, 72, 9.5f);
+        drawLine(sr, cx, cy, s, 88, 72, 92, 90, 9.5f);
+        drawLine(sr, cx, cy, s, 92, 90, 78, 106, 9.0f);
+        drawLine(sr, cx, cy, s, 78, 106, 62, 110, 8.0f);
+        drawLine(sr, cx, cy, s, 62, 110, 46, 104, 6.0f);
 
-        // 3 Reverse Serrated Predator Barbs along the spine (3 ngạnh răng cưa lưng vuốt)
-        sr.setColor(0.28f, 0.34f, 0.28f, 1f);
-        for (int i = 0; i < 3; i++) {
-            float by = eyeY - r * 0.32f - i * r * 0.24f;
-            sr.triangle(shankX, by, shankX - r * 0.24f, by + r * 0.10f, shankX, by + r * 0.12f);
-            sr.setColor(0.85f, 0.88f, 0.82f, 1f);
-            sr.triangle(shankX, by + 1f, shankX - r * 0.18f, by + r * 0.08f, shankX, by + r * 0.10f);
-            sr.setColor(0.28f, 0.34f, 0.28f, 1f);
-        }
+        // Massive Ivory Fossil Bone Body (Solid filled polygon)
+        sr.setColor(0.89f, 0.91f, 0.94f, 1f);
+        fillQuad(sr, cx, cy, s, 44, 38, 62, 41, 64, 50, 54, 42);
+        fillQuad(sr, cx, cy, s, 62, 41, 78, 48, 76, 62, 64, 50);
+        fillQuad(sr, cx, cy, s, 78, 48, 88, 72, 74, 80, 76, 62);
+        fillQuad(sr, cx, cy, s, 88, 72, 92, 90, 72, 95, 74, 80);
+        fillQuad(sr, cx, cy, s, 92, 90, 78, 106, 62, 102, 72, 95);
+        fillQuad(sr, cx, cy, s, 78, 106, 62, 110, 48, 104, 62, 102);
+        fillTri(sr, cx, cy, s, 62, 110, 46, 104, 48, 104);
 
-        // 4. Sweeping U-Bend & Lethal Recurve (Cung uốn cong đáy vuốt quái thú)
-        sr.setColor(0.18f, 0.22f, 0.18f, 1f);
-        sr.rectLine(shankX, bendBottomY, cx + r * 0.45f, bendBottomY + r * 0.08f, Math.max(5.5f, r * 0.22f));
-        sr.setColor(0.88f, 0.86f, 0.76f, 1f);
-        sr.rectLine(shankX, bendBottomY, cx + r * 0.45f, bendBottomY + r * 0.08f, Math.max(3.8f, r * 0.15f));
+        // Warm Amber Ageing Patina overlay
+        sr.setColor(0.99f, 0.95f, 0.78f, 0.85f);
+        fillQuad(sr, cx, cy, s, 52, 43, 76, 50, 72, 62, 60, 54);
+        fillQuad(sr, cx, cy, s, 76, 50, 82, 72, 72, 80, 72, 62);
+        fillQuad(sr, cx, cy, s, 82, 72, 84, 86, 70, 92, 72, 80);
+        fillQuad(sr, cx, cy, s, 84, 86, 76, 98, 62, 96, 70, 92);
 
-        // 5. Razor-Honed Talon Point & Inward Retaining Barb (Mũi móng vuốt cong & ngạnh khóa mồi)
-        float hookTipX = cx + r * 0.50f;
-        float hookTipY = cy + r * 0.38f;
+        // 4. 3 Wicked Prehistoric Serrations on Outer Curve Spine
+        sr.setColor(0.08f, 0.15f, 0.09f, 1f);
+        fillTri(sr, cx, cy, s, 68, 48, 76, 40, 76, 52);
+        fillTri(sr, cx, cy, s, 80, 60, 90, 54, 86, 66);
+        fillTri(sr, cx, cy, s, 86, 76, 98, 72, 90, 82);
+        sr.setColor(0.85f, 0.47f, 0.02f, 1f);
+        drawLine(sr, cx, cy, s, 68, 48, 76, 40, 1.0f);
+        drawLine(sr, cx, cy, s, 80, 60, 90, 54, 1.0f);
+        drawLine(sr, cx, cy, s, 86, 76, 98, 72, 1.0f);
 
-        // Upward talon curve
-        sr.setColor(0.18f, 0.22f, 0.18f, 1f);
-        sr.triangle(cx + r * 0.35f, bendBottomY + r * 0.04f, cx + r * 0.62f, cy + r * 0.10f, hookTipX, hookTipY);
-        // Ivory cutting core
-        sr.setColor(0.88f, 0.86f, 0.76f, 1f);
-        sr.triangle(cx + r * 0.38f, bendBottomY + r * 0.06f, cx + r * 0.56f, cy + r * 0.08f, hookTipX, hookTipY);
+        // 5. Emerald Venom Blood Fuller Groove
+        sr.setColor(0.06f, 0.73f, 0.51f, 1f);
+        drawLine(sr, cx, cy, s, 54, 44, 70, 54, 2.4f);
+        drawLine(sr, cx, cy, s, 70, 54, 78, 74, 2.4f);
+        drawLine(sr, cx, cy, s, 78, 74, 80, 86, 2.2f);
+        drawLine(sr, cx, cy, s, 80, 86, 66, 100, 2.0f);
+        sr.setColor(0.43f, 0.91f, 0.72f, 1f);
+        drawLine(sr, cx, cy, s, 54, 44, 70, 54, 1.1f);
+        drawLine(sr, cx, cy, s, 70, 54, 78, 74, 1.1f);
+        drawLine(sr, cx, cy, s, 78, 74, 80, 86, 1.0f);
+        drawLine(sr, cx, cy, s, 80, 86, 66, 100, 0.9f);
 
-        // Vicious Inward Secondary Barb (Ngạnh móc ngược giữ chặt mồi)
-        sr.setColor(0.92f, 0.94f, 0.90f, 1f);
-        sr.triangle(hookTipX, hookTipY, cx + r * 0.42f, cy + r * 0.18f, cx + r * 0.26f, cy + r * 0.20f);
-
-        // Emerald venomous etching line
-        sr.setColor(0.35f, 1.0f, 0.55f, 0.95f);
-        sr.rectLine(cx + r * 0.38f, bendBottomY + r * 0.15f, hookTipX - r * 0.05f, hookTipY - r * 0.05f, 1.5f);
-
-        // Specular glint on talon tip
-        sr.setColor(1f, 1f, 1f, 1f);
-        sr.circle(hookTipX, hookTipY, Math.max(1.5f, r * 0.06f));
+        // 6. Razor-Sharp Incurved Raptor Sickle Tip
+        sr.setColor(Color.WHITE);
+        fillTri(sr, cx, cy, s, 46, 104, 54, 98, 52, 106);
+        fillCircle(sr, cx, cy, s, 47, 104, 2.2f);
+        fillCircle(sr, cx, cy, s, 90, 72, 1.4f);
+        fillCircle(sr, cx, cy, s, 43, 27, 1.2f);
     }
 
-    // =========================================================================
-    // 3. BĂNG GIÁ SET
     // =========================================================================
     // 3. BĂNG GIÁ SET (Glacial Permafrost Scepter, Absolute-Zero Spool, Cryo Hook)
     // =========================================================================
     public static void drawBangGiaRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Glacial Blizzard & Diamond Frost Aura
-        sr.setColor(0.35f, 0.85f, 1f, 0.22f);
-        sr.circle(cx, cy, r * 0.95f);
-        sr.setColor(0.65f, 0.95f, 1f, 0.18f);
-        sr.circle(cx + r * 0.35f, cy + r * 0.35f, r * 0.55f);
+        float s = r / 64f;
 
-        // 2. Faceted Permafrost Glacier Crystal Shaft (Diagonal)
-        float startX = cx - r * 0.72f, startY = cy - r * 0.72f;
-        float endX = cx + r * 0.45f, endY = cy + r * 0.45f;
+        // 1. Soft Glacial Blizzard & Celestial Frost Halo Aura
+        sr.setColor(0.22f, 0.74f, 0.97f, 0.18f);
+        fillCircle(sr, cx, cy, s, 64, 64, 54);
+        sr.setColor(0.73f, 0.90f, 0.99f, 0.20f);
+        fillCircle(sr, cx, cy, s, 82, 46, 38);
 
-        // Dark deep sapphire crystal spine
-        sr.setColor(0.12f, 0.32f, 0.60f, 1f);
-        sr.rectLine(startX, startY, endX, endY, Math.max(5.5f, r * 0.22f));
+        // 2. Sleek, Smooth Faceted Permafrost Crystal Shaft (NO THORNS, NO SPURS)
+        // Deep sapphire inner core spine
+        sr.setColor(0.05f, 0.18f, 0.37f, 1f);
+        drawLine(sr, cx, cy, s, 24, 104, 86, 42, 6.0f);
+        // Radiant glacial cyan crystal body
+        sr.setColor(0.01f, 0.52f, 0.78f, 1f);
+        drawLine(sr, cx, cy, s, 24, 104, 86, 42, 4.2f);
+        // Luminous turquoise crystal channel
+        sr.setColor(0.22f, 0.74f, 0.97f, 1f);
+        drawLine(sr, cx, cy, s, 24, 104, 86, 42, 2.4f);
+        // Smooth pristine ice specular edge
+        sr.setColor(0.94f, 0.98f, 1f, 1f);
+        drawLine(sr, cx, cy, s, 25, 103, 85, 43, 1.0f);
 
-        // Translucent glacial cyan crystal body
-        sr.setColor(0.65f, 0.90f, 1f, 0.95f);
-        sr.rectLine(startX + 1f, startY + 1f, endX, endY, Math.max(3.8f, r * 0.16f));
+        // 3. Sleek Platinum Frost Bands with Smooth Embedded Azure Jewels (Flush with rod)
+        sr.setColor(0.88f, 0.95f, 1f, 1f);
+        drawLine(sr, cx, cy, s, 38, 93, 44, 87, 3.5f);
+        drawLine(sr, cx, cy, s, 53, 78, 59, 72, 3.5f);
+        drawLine(sr, cx, cy, s, 68, 63, 74, 57, 3.5f);
 
-        // Faceted diamond ice specular highlight
-        sr.setColor(0.92f, 0.98f, 1f, 1f);
-        sr.rectLine(startX + 2f, startY + 2f, endX - r * 0.08f, endY - r * 0.08f, 1.6f);
+        sr.setColor(0.22f, 0.74f, 0.97f, 1f);
+        fillCircle(sr, cx, cy, s, 41, 90, 1.6f);
+        fillCircle(sr, cx, cy, s, 56, 75, 1.6f);
+        fillCircle(sr, cx, cy, s, 71, 60, 1.6f);
 
-        // 3. Platinum-Silver Frost Rune Bands with Cold Crystal Studs
-        for (int b = 0; b < 3; b++) {
-            float frac = 0.22f + b * 0.28f;
-            float bx = startX + (endX - startX) * frac;
-            float by = startY + (endY - startY) * frac;
-            sr.setColor(0.85f, 0.92f, 1f, 1f);
-            sr.rectLine(bx - 3.2f, by + 3.2f, bx + 3.2f, by - 3.2f, Math.max(3.2f, r * 0.12f));
-            sr.setColor(0.25f, 0.75f, 1f, 1f);
-            sr.circle(bx, by, 1.8f);
-        }
+        // 4. Smooth Ice Crystal Line Guides (Rounded Rings, NO spikes)
+        sr.setColor(0.73f, 0.90f, 0.99f, 1f);
+        fillCircle(sr, cx, cy, s, 52, 71, 3.0f);
+        sr.setColor(0.01f, 0.52f, 0.78f, 1f);
+        fillCircle(sr, cx, cy, s, 52, 71, 1.8f);
 
-        // 4. Lateral Jagged Icicle Spurs growing along shaft
-        sr.setColor(0.55f, 0.88f, 1f, 0.95f);
-        sr.triangle(cx - r * 0.15f, cy - r * 0.15f, cx - r * 0.35f, cy + r * 0.05f, cx - r * 0.05f, cy - r * 0.05f);
-        sr.triangle(cx + r * 0.15f, cy + r * 0.15f, cx + r * 0.02f, cy + r * 0.38f, cx + r * 0.25f, cy + r * 0.25f);
-        // Frost spur razor tips
-        sr.setColor(1f, 1f, 1f, 0.95f);
-        sr.rectLine(cx - r * 0.15f, cy - r * 0.15f, cx - r * 0.35f, cy + r * 0.05f, 1.4f);
-        sr.rectLine(cx + r * 0.15f, cy + r * 0.15f, cx + r * 0.02f, cy + r * 0.38f, 1.4f);
+        sr.setColor(0.73f, 0.90f, 0.99f, 1f);
+        fillCircle(sr, cx, cy, s, 67, 56, 2.8f);
+        sr.setColor(0.01f, 0.52f, 0.78f, 1f);
+        fillCircle(sr, cx, cy, s, 67, 56, 1.7f);
 
-        // 5. Crown Headpiece: 6-Pointed Arctic Snowflake Star (Hoa Tuyết Cực Bắc)
-        float hx = endX + r * 0.12f, hy = endY + r * 0.12f;
-        // Outer snowflake aura
-        sr.setColor(0.50f, 0.92f, 1f, 0.35f);
-        sr.circle(hx, hy, r * 0.30f);
-
-        // 6 Symmetric crystalline rays
-        sr.setColor(0.85f, 0.96f, 1f, 1f);
-        for (int a = 0; a < 6; a++) {
-            float ang = a * 60f;
-            float cos = MathUtils.cosDeg(ang);
-            float sin = MathUtils.sinDeg(ang);
-            float rx = hx + cos * r * 0.32f;
-            float ry = hy + sin * r * 0.32f;
-            // Ray spine
-            sr.rectLine(hx, hy, rx, ry, 2f);
-            // Ray branching barbs
-            float bx1 = hx + cos * r * 0.20f;
-            float by1 = hy + sin * r * 0.20f;
-            float bCos = MathUtils.cosDeg(ang + 45f) * r * 0.08f;
-            float bSin = MathUtils.sinDeg(ang + 45f) * r * 0.08f;
-            sr.rectLine(bx1, by1, bx1 + bCos, by1 + bSin, 1.2f);
-            float bCos2 = MathUtils.cosDeg(ang - 45f) * r * 0.08f;
-            float bSin2 = MathUtils.sinDeg(ang - 45f) * r * 0.08f;
-            sr.rectLine(bx1, by1, bx1 + bCos2, by1 + bSin2, 1.2f);
-        }
-
-        // Brilliant pure-white cryogenic diamond core
-        sr.setColor(0.30f, 0.75f, 1f, 1f);
-        sr.circle(hx, hy, r * 0.12f);
+        // 5. Sleek Polished Ice Diamond Pommel (Bottom-Left)
+        sr.setColor(0.01f, 0.52f, 0.78f, 1f);
+        fillQuad(sr, cx, cy, s, 20, 102, 26, 108, 22, 112, 16, 106);
+        sr.setColor(0.73f, 0.90f, 0.99f, 1f);
+        drawLine(sr, cx, cy, s, 20, 102, 26, 108, 1.0f);
+        drawLine(sr, cx, cy, s, 26, 108, 22, 112, 1.0f);
+        drawLine(sr, cx, cy, s, 22, 112, 16, 106, 1.0f);
+        drawLine(sr, cx, cy, s, 16, 106, 20, 102, 1.0f);
         sr.setColor(Color.WHITE);
-        sr.circle(hx, hy, r * 0.07f);
-        sr.circle(hx - 1f, hy + 1f, 1.8f);
+        fillCircle(sr, cx, cy, s, 21, 107, 1.6f);
 
-        // Dangling faceted frost prism pendant
-        sr.setColor(0.70f, 0.90f, 1f, 0.85f);
-        sr.rectLine(hx, hy - r * 0.12f, hx - r * 0.15f, hy - r * 0.38f, 1.5f);
-        sr.setColor(0.85f, 0.98f, 1f, 1f);
-        sr.triangle(hx - r * 0.15f, hy - r * 0.38f, hx - r * 0.22f, hy - r * 0.50f, hx - r * 0.08f, hy - r * 0.50f);
-        sr.triangle(hx - r * 0.22f, hy - r * 0.50f, hx - r * 0.08f, hy - r * 0.50f, hx - r * 0.15f, hy - r * 0.60f);
+        // 6. Crown Headpiece: Majestic 6-Pointed Arctic Snowflake Star (Top-Right)
+        sr.setColor(0.22f, 0.74f, 0.97f, 0.25f);
+        fillCircle(sr, cx, cy, s, 86, 42, 16.0f);
+
+        // 6 Smooth Symmetrical Crystal Rays
+        sr.setColor(0.73f, 0.90f, 0.99f, 1f);
+        drawLine(sr, cx, cy, s, 86, 26, 86, 58, 2.2f);
+        drawLine(sr, cx, cy, s, 72, 34, 100, 50, 2.2f);
+        drawLine(sr, cx, cy, s, 72, 50, 100, 34, 2.2f);
+
+        // Rhombic Star Ray Diamonds
+        sr.setColor(0.88f, 0.95f, 1f, 1f);
+        fillTri(sr, cx, cy, s, 86, 26, 83, 32, 89, 32);
+        fillTri(sr, cx, cy, s, 86, 58, 83, 52, 89, 52);
+        fillTri(sr, cx, cy, s, 72, 34, 78, 32, 76, 38);
+        fillTri(sr, cx, cy, s, 100, 50, 94, 52, 96, 46);
+        fillTri(sr, cx, cy, s, 72, 50, 78, 52, 76, 46);
+        fillTri(sr, cx, cy, s, 100, 34, 94, 32, 96, 38);
+
+        // Glowing Central Ice Prism Hexagon & Diamond Core
+        sr.setColor(0.01f, 0.52f, 0.78f, 1f);
+        fillTri(sr, cx, cy, s, 86, 42, 86, 36, 91, 39);
+        fillTri(sr, cx, cy, s, 86, 42, 91, 39, 91, 45);
+        fillTri(sr, cx, cy, s, 86, 42, 91, 45, 86, 48);
+        fillTri(sr, cx, cy, s, 86, 42, 86, 48, 81, 45);
+        fillTri(sr, cx, cy, s, 86, 42, 81, 45, 81, 39);
+        fillTri(sr, cx, cy, s, 86, 42, 81, 39, 86, 36);
+
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 86, 36, 91, 39, 1.2f);
+        drawLine(sr, cx, cy, s, 91, 39, 91, 45, 1.2f);
+        drawLine(sr, cx, cy, s, 91, 45, 86, 48, 1.2f);
+        drawLine(sr, cx, cy, s, 86, 48, 81, 45, 1.2f);
+        drawLine(sr, cx, cy, s, 81, 45, 81, 39, 1.2f);
+        drawLine(sr, cx, cy, s, 81, 39, 86, 36, 1.2f);
+
+        sr.setColor(0.22f, 0.74f, 0.97f, 1f);
+        fillQuad(sr, cx, cy, s, 86, 38, 89, 42, 86, 46, 83, 42);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 86, 42, 2.5f);
+
+        // Specular Glints
+        fillCircle(sr, cx, cy, s, 86, 26, 1.8f);
+        fillCircle(sr, cx, cy, s, 100, 34, 1.5f);
+        fillCircle(sr, cx, cy, s, 72, 34, 1.5f);
+        fillCircle(sr, cx, cy, s, 41, 90, 1.0f);
     }
 
     public static void drawBangGiaLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Sub-Zero Freezing Mist Aura
-        sr.setColor(0.35f, 0.85f, 1f, 0.22f);
-        sr.circle(cx, cy, r * 0.95f);
-        sr.setColor(0.12f, 0.40f, 0.75f, 0.35f);
-        sr.circle(cx, cy, r * 0.80f);
+        float s = r / 64f;
 
-        // 2. Heavy Carved Permafrost Glacier Wheel Rim
-        sr.setColor(0.40f, 0.78f, 0.95f, 1f);
-        sr.circle(cx, cy, r * 0.76f);
+        // 1. Absolute-Zero Frost Vortex Aura
+        sr.setColor(0.22f, 0.74f, 0.97f, 0.22f);
+        fillCircle(sr, cx, cy, s, 64, 64, 54);
+        sr.setColor(0.15f, 0.39f, 0.92f, 0.18f);
+        fillCircle(sr, cx, cy, s, 64, 64, 44);
 
-        // 6 Diamond Ice Crystal Spurs around circumference
-        for (int i = 0; i < 6; i++) {
-            float ang = i * 60f;
-            float cos = MathUtils.cosDeg(ang);
-            float sin = MathUtils.sinDeg(ang);
-            float px = cx + cos * (r * 0.76f + 2f);
-            float py = cy + sin * (r * 0.76f + 2f);
-            sr.setColor(0.85f, 0.98f, 1f, 1f);
-            sr.circle(px, py, Math.max(2.2f, r * 0.09f));
-            sr.setColor(0.20f, 0.65f, 0.95f, 1f);
-            sr.circle(px, py, Math.max(1.2f, r * 0.05f));
-        }
+        // 2. Hexagonal Frost Crystal Spool Frame with 6 Ice Horns
+        // Outer Hexagon: (64,16 106,40 106,88 64,112 22,88 22,40) in #0f172a
+        sr.setColor(0.06f, 0.09f, 0.16f, 1f);
+        fillTri(sr, cx, cy, s, 64, 64, 64, 16, 106, 40);
+        fillTri(sr, cx, cy, s, 64, 64, 106, 40, 106, 88);
+        fillTri(sr, cx, cy, s, 64, 64, 106, 88, 64, 112);
+        fillTri(sr, cx, cy, s, 64, 64, 64, 112, 22, 88);
+        fillTri(sr, cx, cy, s, 64, 64, 22, 88, 22, 40);
+        fillTri(sr, cx, cy, s, 64, 64, 22, 40, 64, 16);
 
-        // Inner deep sapphire ice trench
-        sr.setColor(0.08f, 0.22f, 0.45f, 1f);
-        sr.circle(cx, cy, r * 0.65f);
+        sr.setColor(0.01f, 0.52f, 0.78f, 1f);
+        drawLine(sr, cx, cy, s, 64, 16, 106, 40, 2.2f);
+        drawLine(sr, cx, cy, s, 106, 40, 106, 88, 2.2f);
+        drawLine(sr, cx, cy, s, 106, 88, 64, 112, 2.2f);
+        drawLine(sr, cx, cy, s, 64, 112, 22, 88, 2.2f);
+        drawLine(sr, cx, cy, s, 22, 88, 22, 40, 2.2f);
+        drawLine(sr, cx, cy, s, 22, 40, 64, 16, 2.2f);
 
-        // 3. Absolute-Zero Superconducting Frost Filament (Cuộn cước băng lam)
-        sr.setColor(0.70f, 0.92f, 1f, 0.95f);
-        sr.circle(cx, cy, r * 0.54f);
-        sr.setColor(0.12f, 0.35f, 0.65f, 1f);
-        sr.circle(cx, cy, r * 0.44f);
-        sr.setColor(0.88f, 0.98f, 1f, 0.95f);
-        sr.circle(cx, cy, r * 0.34f);
+        // Inner Hexagon: (64,22 100,43 100,85 64,106 28,85 28,43) in #1e3a8a
+        sr.setColor(0.12f, 0.23f, 0.54f, 1f);
+        fillTri(sr, cx, cy, s, 64, 64, 64, 22, 100, 43);
+        fillTri(sr, cx, cy, s, 64, 64, 100, 43, 100, 85);
+        fillTri(sr, cx, cy, s, 64, 64, 100, 85, 64, 106);
+        fillTri(sr, cx, cy, s, 64, 64, 64, 106, 28, 85);
+        fillTri(sr, cx, cy, s, 64, 64, 28, 85, 28, 43);
+        fillTri(sr, cx, cy, s, 64, 64, 28, 43, 64, 22);
 
-        // 4 Freezing optical pulse nodes on thread
+        sr.setColor(0.22f, 0.74f, 0.97f, 1f);
+        drawLine(sr, cx, cy, s, 64, 22, 100, 43, 1.4f);
+        drawLine(sr, cx, cy, s, 100, 43, 100, 85, 1.4f);
+        drawLine(sr, cx, cy, s, 100, 85, 64, 106, 1.4f);
+        drawLine(sr, cx, cy, s, 64, 106, 28, 85, 1.4f);
+        drawLine(sr, cx, cy, s, 28, 85, 28, 43, 1.4f);
+        drawLine(sr, cx, cy, s, 28, 43, 64, 22, 1.4f);
+
+        // 6 Radial Ice Crystal Horn Tips
+        sr.setColor(0.73f, 0.90f, 0.99f, 1f);
+        fillTri(sr, cx, cy, s, 64, 16, 60, 8, 68, 8);
+        fillTri(sr, cx, cy, s, 64, 112, 60, 120, 68, 120);
+        fillTri(sr, cx, cy, s, 106, 40, 114, 35, 110, 45);
+        fillTri(sr, cx, cy, s, 106, 88, 114, 93, 110, 83);
+        fillTri(sr, cx, cy, s, 22, 40, 14, 35, 18, 45);
+        fillTri(sr, cx, cy, s, 22, 88, 14, 93, 18, 83);
+
+        // 3. Coiled Superconducting Cryo-Thread
+        sr.setColor(0.01f, 0.52f, 0.78f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 34);
+        sr.setColor(0.22f, 0.74f, 0.97f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 30);
+        sr.setColor(0.49f, 0.83f, 0.99f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 26);
+
+        // Shimmering Crystalline Winding Rings
+        sr.setColor(0.88f, 0.95f, 1f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 32.5f);
+        sr.setColor(0.22f, 0.74f, 0.97f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 31.3f);
+
         sr.setColor(Color.WHITE);
-        sr.circle(cx - r * 0.38f, cy, 2.2f);
-        sr.circle(cx + r * 0.38f, cy, 2.2f);
-        sr.circle(cx, cy - r * 0.38f, 2.2f);
-        sr.circle(cx, cy + r * 0.38f, 2.2f);
+        fillCircle(sr, cx, cy, s, 64, 64, 28.5f);
+        sr.setColor(0.49f, 0.83f, 0.99f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 27.5f);
 
-        // 4. Center Hub: Ornate Hexagonal True-Ice Snowflake Medallion
-        sr.setColor(0.18f, 0.50f, 0.85f, 1f);
-        sr.circle(cx, cy, r * 0.24f);
+        // 4. Center Hexagonal Diamond Ice Core & Snowflake Facets
+        sr.setColor(0.01f, 0.41f, 0.63f, 1f);
+        fillTri(sr, cx, cy, s, 64, 64, 64, 48, 78, 56);
+        fillTri(sr, cx, cy, s, 64, 64, 78, 56, 78, 72);
+        fillTri(sr, cx, cy, s, 64, 64, 78, 72, 64, 80);
+        fillTri(sr, cx, cy, s, 64, 64, 64, 80, 50, 72);
+        fillTri(sr, cx, cy, s, 64, 64, 50, 72, 50, 56);
+        fillTri(sr, cx, cy, s, 64, 64, 50, 56, 64, 48);
 
-        // Snowflake core cross
-        sr.setColor(1f, 1f, 1f, 1f);
-        sr.rectLine(cx - r * 0.18f, cy, cx + r * 0.18f, cy, 1.8f);
-        sr.rectLine(cx, cy - r * 0.18f, cx, cy + r * 0.18f, 1.8f);
-        sr.rectLine(cx - r * 0.12f, cy - r * 0.12f, cx + r * 0.12f, cy + r * 0.12f, 1.4f);
-        sr.rectLine(cx - r * 0.12f, cy + r * 0.12f, cx + r * 0.12f, cy - r * 0.12f, 1.4f);
+        sr.setColor(0.73f, 0.90f, 0.99f, 1f);
+        drawLine(sr, cx, cy, s, 64, 48, 78, 56, 1.4f);
+        drawLine(sr, cx, cy, s, 78, 56, 78, 72, 1.4f);
+        drawLine(sr, cx, cy, s, 78, 72, 64, 80, 1.4f);
+        drawLine(sr, cx, cy, s, 64, 80, 50, 72, 1.4f);
+        drawLine(sr, cx, cy, s, 50, 72, 50, 56, 1.4f);
+        drawLine(sr, cx, cy, s, 50, 56, 64, 48, 1.4f);
 
-        // Sparkling center crystal glint
-        sr.setColor(0.95f, 1f, 1f, 1f);
-        sr.circle(cx, cy, r * 0.07f);
-        sr.circle(cx - 1f, cy + 1f, 1.5f);
+        // Inner Hexagon Core
+        sr.setColor(0.22f, 0.74f, 0.97f, 1f);
+        fillTri(sr, cx, cy, s, 64, 64, 64, 52, 74, 58);
+        fillTri(sr, cx, cy, s, 64, 64, 74, 58, 74, 70);
+        fillTri(sr, cx, cy, s, 64, 64, 74, 70, 64, 76);
+        fillTri(sr, cx, cy, s, 64, 64, 64, 76, 54, 70);
+        fillTri(sr, cx, cy, s, 64, 64, 54, 70, 54, 58);
+        fillTri(sr, cx, cy, s, 64, 64, 54, 58, 64, 52);
+
+        // Center Crystalline Star
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 64, 56, 64, 72, 1.5f);
+        drawLine(sr, cx, cy, s, 57, 60, 71, 68, 1.5f);
+        drawLine(sr, cx, cy, s, 57, 68, 71, 60, 1.5f);
+        fillCircle(sr, cx, cy, s, 64, 64, 2.5f);
+
+        // 5. Dangling Icicle Thread Strand with Frost Droplet
+        sr.setColor(0.88f, 0.95f, 1f, 1f);
+        drawLine(sr, cx, cy, s, 88, 48, 106, 40, 1.8f);
+        drawLine(sr, cx, cy, s, 106, 40, 110, 24, 1.8f);
+        drawLine(sr, cx, cy, s, 110, 24, 98, 16, 1.8f);
+
+        sr.setColor(0.22f, 0.74f, 0.97f, 1f);
+        fillTri(sr, cx, cy, s, 98, 16, 94, 10, 102, 12);
+
+        // Pure Diamond Specular Glints
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 98, 16, 1.8f);
+        fillCircle(sr, cx, cy, s, 64, 8, 1.5f);
+        fillCircle(sr, cx, cy, s, 64, 64, 1.5f);
     }
 
     public static void drawBangGiaHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Cryogenic Frostbite Reaping Aura
-        sr.setColor(0.38f, 0.88f, 1f, 0.25f);
-        sr.circle(cx, cy, r * 0.95f);
-        sr.setColor(0.65f, 0.95f, 1f, 0.18f);
-        sr.circle(cx, cy, r * 0.78f);
+        float s = r / 64f;
 
-        // 2. Heavy Sculpted Permafrost Glacier Shank
-        float shankX = cx - r * 0.22f;
-        float topY = cy + r * 0.62f;
-        float bendY = cy - r * 0.45f;
-        float barbX = cx + r * 0.48f;
-        float barbY = cy + r * 0.28f;
+        // 1. Glacial Mist & Arctic Blizzard Aura
+        sr.setColor(0.22f, 0.74f, 0.97f, 0.20f);
+        fillCircle(sr, cx, cy, s, 64, 64, 54);
+        sr.setColor(0.75f, 0.86f, 1f, 0.18f);
+        fillCircle(sr, cx, cy, s, 64, 64, 42);
 
-        // Dark glacial cobalt reinforcement
-        sr.setColor(0.10f, 0.28f, 0.55f, 1f);
-        sr.rectLine(shankX, topY, shankX, bendY, Math.max(5.5f, r * 0.22f));
-        sr.rectLine(shankX, bendY, barbX, bendY, Math.max(5.5f, r * 0.22f));
+        // 2. Hexagonal Cryo Crystal Eyelet (Top-Center)
+        // Polygon 64,18 74,24 74,36 64,42 54,36 54,24 in #0c2d5e
+        sr.setColor(0.05f, 0.18f, 0.37f, 1f);
+        fillTri(sr, cx, cy, s, 64, 30, 64, 18, 74, 24);
+        fillTri(sr, cx, cy, s, 64, 30, 74, 24, 74, 36);
+        fillTri(sr, cx, cy, s, 64, 30, 74, 36, 64, 42);
+        fillTri(sr, cx, cy, s, 64, 30, 64, 42, 54, 36);
+        fillTri(sr, cx, cy, s, 64, 30, 54, 36, 54, 24);
+        fillTri(sr, cx, cy, s, 64, 30, 54, 24, 64, 18);
 
-        // Faceted cyan ice crystal shank body
-        sr.setColor(0.65f, 0.92f, 1f, 1f);
-        sr.rectLine(shankX, topY, shankX, bendY, Math.max(3.8f, r * 0.15f));
-        sr.rectLine(shankX, bendY, barbX, bendY, Math.max(3.8f, r * 0.15f));
-        sr.rectLine(barbX, bendY, barbX, barbY, Math.max(3.8f, r * 0.15f));
+        sr.setColor(0.22f, 0.74f, 0.97f, 1f);
+        drawLine(sr, cx, cy, s, 64, 18, 74, 24, 1.8f);
+        drawLine(sr, cx, cy, s, 74, 24, 74, 36, 1.8f);
+        drawLine(sr, cx, cy, s, 74, 36, 64, 42, 1.8f);
+        drawLine(sr, cx, cy, s, 64, 42, 54, 36, 1.8f);
+        drawLine(sr, cx, cy, s, 54, 36, 54, 24, 1.8f);
+        drawLine(sr, cx, cy, s, 54, 24, 64, 18, 1.8f);
 
-        // Frost rime highlight along edge
-        sr.setColor(0.92f, 0.98f, 1f, 1f);
-        sr.rectLine(shankX + 1.2f, topY, shankX + 1.2f, bendY, 1.4f);
-        sr.rectLine(shankX + 1.2f, bendY + 1.2f, barbX, bendY + 1.2f, 1.4f);
-
-        // 3. Dual Razor-Sharp Glacier Icicle Barbs
-        // Main sharp tip pointing inward/upward
-        sr.setColor(0.85f, 0.96f, 1f, 1f);
-        sr.triangle(barbX - r * 0.08f, barbY - r * 0.1f, barbX + r * 0.08f, barbY - r * 0.1f, barbX - r * 0.14f, barbY + r * 0.25f);
-        // Razor white glint on tip
+        // Inner eye circles
+        sr.setColor(0.01f, 0.52f, 0.78f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 30, 5.0f);
+        sr.setColor(0.73f, 0.90f, 0.99f, 1f);
+        drawLine(sr, cx, cy, s, 60, 30, 68, 30, 1.2f);
+        sr.setColor(0.06f, 0.09f, 0.16f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 30, 2.5f);
         sr.setColor(Color.WHITE);
-        sr.rectLine(barbX, barbY - r * 0.1f, barbX - r * 0.14f, barbY + r * 0.25f, 1.6f);
+        fillCircle(sr, cx, cy, s, 62.5f, 28.5f, 1.4f);
 
-        // Secondary jagged frost barb on inner curve
-        sr.setColor(0.50f, 0.85f, 1f, 1f);
-        sr.triangle(barbX - r * 0.04f, barbY - r * 0.24f, barbX + r * 0.06f, barbY - r * 0.24f, barbX - r * 0.20f, barbY - r * 0.06f);
-
-        // 4. Glowing Sub-Zero Freezing Runes along Shank
-        sr.setColor(1f, 1f, 1f, 0.95f);
-        sr.circle(shankX, cy + r * 0.25f, r * 0.07f);
-        sr.circle(shankX, cy, r * 0.07f);
-        sr.circle(shankX, cy - r * 0.25f, r * 0.07f);
-        sr.setColor(0.35f, 0.90f, 1f, 1f);
-        sr.circle(shankX, cy + r * 0.25f, r * 0.04f);
-        sr.circle(shankX, cy, r * 0.04f);
-        sr.circle(shankX, cy - r * 0.25f, r * 0.04f);
-
-        // 5. Crown Eyelet: 6-Spoke Snowflake Crystal Crown
-        sr.setColor(0.55f, 0.88f, 1f, 1f);
-        sr.circle(shankX, topY, r * 0.24f);
-        sr.setColor(0.08f, 0.18f, 0.35f, 1f);
-        sr.circle(shankX, topY, r * 0.12f);
-        // Crystal snowflake points around crown
-        sr.setColor(1f, 1f, 1f, 0.95f);
-        for (int a = 0; a < 6; a++) {
-            float ang = a * 60f;
-            float cos = MathUtils.cosDeg(ang);
-            float sin = MathUtils.sinDeg(ang);
-            sr.circle(shankX + cos * r * 0.24f, topY + sin * r * 0.24f, 1.8f);
-        }
-
-        // Dangling cryo pearl charm
-        sr.setColor(0.65f, 0.90f, 1f, 0.85f);
-        sr.rectLine(shankX, topY, shankX - r * 0.28f, topY - r * 0.22f, 1.5f);
-        sr.setColor(0.85f, 0.98f, 1f, 1f);
-        sr.circle(shankX - r * 0.28f, topY - r * 0.22f, 4.5f);
+        // 3. Faceted Crystalline Ice Anchor Pillar Shank (Centered Vertical)
+        sr.setColor(0.05f, 0.18f, 0.37f, 1f);
+        fillQuad(sr, cx, cy, s, 61, 42, 67, 42, 69, 76, 59, 76);
+        sr.setColor(0.01f, 0.52f, 0.78f, 1f);
+        fillQuad(sr, cx, cy, s, 62, 42, 66, 42, 68, 76, 60, 76);
+        sr.setColor(0.22f, 0.74f, 0.97f, 1f);
+        drawLine(sr, cx, cy, s, 62, 42, 60, 76, 1.0f);
+        drawLine(sr, cx, cy, s, 66, 42, 68, 76, 1.0f);
         sr.setColor(Color.WHITE);
-        sr.circle(shankX - r * 0.28f - 1f, topY - r * 0.22f + 1f, 1.8f);
+        drawLine(sr, cx, cy, s, 64, 42, 64, 76, 1.6f);
+
+        // 4. Dual Crystalline Frost Anchor Wings & Symmetrical Barbs (Cánh mỏ neo băng giá)
+        // Left Frost Wing (Solid filled curved polygon)
+        sr.setColor(0.01f, 0.52f, 0.78f, 1f);
+        fillQuad(sr, cx, cy, s, 60, 74, 48, 76, 46, 88, 62, 82);
+        fillQuad(sr, cx, cy, s, 48, 76, 38, 82, 38, 100, 46, 88);
+        fillQuad(sr, cx, cy, s, 38, 82, 30, 94, 28, 101, 38, 100);
+        fillTri(sr, cx, cy, s, 46, 88, 38, 100, 50, 95);
+        fillTri(sr, cx, cy, s, 46, 88, 50, 95, 62, 82);
+
+        // Left Wing Cyan Stroke Outline
+        sr.setColor(0.22f, 0.74f, 0.97f, 1f);
+        drawLine(sr, cx, cy, s, 60, 74, 48, 76, 1.5f);
+        drawLine(sr, cx, cy, s, 48, 76, 38, 82, 1.5f);
+        drawLine(sr, cx, cy, s, 38, 82, 30, 94, 1.5f);
+        drawLine(sr, cx, cy, s, 30, 94, 28, 101, 1.5f);
+        drawLine(sr, cx, cy, s, 28, 101, 38, 100, 1.5f);
+        drawLine(sr, cx, cy, s, 38, 100, 50, 95, 1.5f);
+        drawLine(sr, cx, cy, s, 50, 95, 62, 82, 1.5f);
+
+        // Left Razor Barb
+        sr.setColor(0.73f, 0.90f, 0.99f, 1f);
+        fillTri(sr, cx, cy, s, 30, 94, 22, 86, 34, 88);
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 30, 94, 22, 86, 0.8f);
+        drawLine(sr, cx, cy, s, 22, 86, 34, 88, 0.8f);
+
+        // Left Ice Facet
+        sr.setColor(0.49f, 0.83f, 0.99f, 1f);
+        fillQuad(sr, cx, cy, s, 58, 76, 44, 79, 44, 90, 58, 82);
+        fillTri(sr, cx, cy, s, 44, 79, 34, 92, 44, 90);
+
+        // Right Frost Wing (Exact Symmetrical Mirror across X=64)
+        sr.setColor(0.01f, 0.52f, 0.78f, 1f);
+        fillQuad(sr, cx, cy, s, 68, 74, 80, 76, 82, 88, 66, 82);
+        fillQuad(sr, cx, cy, s, 80, 76, 90, 82, 90, 100, 82, 88);
+        fillQuad(sr, cx, cy, s, 90, 82, 98, 94, 100, 101, 90, 100);
+        fillTri(sr, cx, cy, s, 82, 88, 90, 100, 78, 95);
+        fillTri(sr, cx, cy, s, 82, 88, 78, 95, 66, 82);
+
+        // Right Wing Cyan Stroke Outline
+        sr.setColor(0.22f, 0.74f, 0.97f, 1f);
+        drawLine(sr, cx, cy, s, 68, 74, 80, 76, 1.5f);
+        drawLine(sr, cx, cy, s, 80, 76, 90, 82, 1.5f);
+        drawLine(sr, cx, cy, s, 90, 82, 98, 94, 1.5f);
+        drawLine(sr, cx, cy, s, 98, 94, 100, 101, 1.5f);
+        drawLine(sr, cx, cy, s, 100, 101, 90, 100, 1.5f);
+        drawLine(sr, cx, cy, s, 90, 100, 78, 95, 1.5f);
+        drawLine(sr, cx, cy, s, 78, 95, 66, 82, 1.5f);
+
+        // Right Razor Barb
+        sr.setColor(0.73f, 0.90f, 0.99f, 1f);
+        fillTri(sr, cx, cy, s, 98, 94, 106, 86, 94, 88);
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 98, 94, 106, 86, 0.8f);
+        drawLine(sr, cx, cy, s, 106, 86, 94, 88, 0.8f);
+
+        // Right Ice Facet
+        sr.setColor(0.49f, 0.83f, 0.99f, 1f);
+        fillQuad(sr, cx, cy, s, 70, 76, 84, 79, 84, 90, 70, 82);
+        fillTri(sr, cx, cy, s, 84, 79, 94, 92, 84, 90);
+
+        // 5. Central 5-Pointed Snowflake Core Medallion on Shank
+        sr.setColor(0.22f, 0.74f, 0.97f, 0.35f);
+        fillCircle(sr, cx, cy, s, 64, 62, 10.0f);
+
+        // Star polygon points: 64,54 68,60 74,60 70,64 72,70 64,66 56,70 58,64 54,60 60,60
+        sr.setColor(0.88f, 0.95f, 1f, 1f);
+        fillTri(sr, cx, cy, s, 64, 62, 64, 54, 68, 60);
+        fillTri(sr, cx, cy, s, 64, 62, 68, 60, 74, 60);
+        fillTri(sr, cx, cy, s, 64, 62, 74, 60, 70, 64);
+        fillTri(sr, cx, cy, s, 64, 62, 70, 64, 72, 70);
+        fillTri(sr, cx, cy, s, 64, 62, 72, 70, 64, 66);
+        fillTri(sr, cx, cy, s, 64, 62, 64, 66, 56, 70);
+        fillTri(sr, cx, cy, s, 64, 62, 56, 70, 58, 64);
+        fillTri(sr, cx, cy, s, 64, 62, 58, 64, 54, 60);
+        fillTri(sr, cx, cy, s, 64, 62, 54, 60, 60, 60);
+        fillTri(sr, cx, cy, s, 64, 62, 60, 60, 64, 54);
+
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 64, 54, 68, 60, 0.8f);
+        drawLine(sr, cx, cy, s, 68, 60, 74, 60, 0.8f);
+        drawLine(sr, cx, cy, s, 74, 60, 70, 64, 0.8f);
+        drawLine(sr, cx, cy, s, 70, 64, 72, 70, 0.8f);
+        drawLine(sr, cx, cy, s, 72, 70, 64, 66, 0.8f);
+        drawLine(sr, cx, cy, s, 64, 66, 56, 70, 0.8f);
+        drawLine(sr, cx, cy, s, 56, 70, 58, 64, 0.8f);
+        drawLine(sr, cx, cy, s, 58, 64, 54, 60, 0.8f);
+        drawLine(sr, cx, cy, s, 54, 60, 60, 60, 0.8f);
+        drawLine(sr, cx, cy, s, 60, 60, 64, 54, 0.8f);
+        fillCircle(sr, cx, cy, s, 64, 62, 2.5f);
+
+        // 6. Bottom Glacier Point (Chóp nhọn mỏ neo băng đáy)
+        sr.setColor(0.01f, 0.52f, 0.78f, 1f);
+        fillTri(sr, cx, cy, s, 60, 80, 68, 80, 64, 96);
+        sr.setColor(0.22f, 0.74f, 0.97f, 1f);
+        drawLine(sr, cx, cy, s, 60, 80, 64, 96, 1.0f);
+        drawLine(sr, cx, cy, s, 68, 80, 64, 96, 1.0f);
+        sr.setColor(Color.WHITE);
+        fillTri(sr, cx, cy, s, 62, 80, 66, 80, 64, 94);
+
+        // 7. Specular Glints
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 22, 86, 2.0f);
+        fillCircle(sr, cx, cy, s, 106, 86, 2.0f);
+        fillCircle(sr, cx, cy, s, 64, 95, 1.6f);
+        fillCircle(sr, cx, cy, s, 64, 62, 1.5f);
     }
 
     // =========================================================================
@@ -1130,773 +1339,949 @@ public class EquipmentIconRenderer {
     }
 
     public static void drawDaiDuongHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Deep-Sea Leviathan Jaw Aura
-        sr.setColor(0.12f, 0.65f, 0.90f, 0.20f);
-        sr.circle(cx, cy, r * 0.95f);
+        float s = r / 64f;
 
-        // 2. Heavy Ancient Leviathan Bone Fang Hook Body
-        float shankX = cx - r * 0.25f;
-        float topY = cy + r * 0.60f;
-        float bendY = cy - r * 0.45f;
-        float barbX = cx + r * 0.48f;
-        float barbY = cy + r * 0.25f;
+        // 1. Deep-Sea Leviathan Jaw & Oceanic Swirl Aura
+        sr.setColor(0.02f, 0.71f, 0.83f, 0.20f);
+        fillCircle(sr, cx, cy, s, 64, 64, 54);
+        sr.setColor(0.01f, 0.41f, 0.63f, 0.18f);
+        fillCircle(sr, cx, cy, s, 64, 64, 42);
 
-        // Abyssal Cobalt Spine Reinforcement
-        sr.setColor(0.08f, 0.22f, 0.45f, 1f);
-        sr.rectLine(shankX - 2f, topY, shankX - 2f, bendY, Math.max(4.5f, r * 0.20f));
-        sr.rectLine(shankX, bendY, barbX, bendY, Math.max(4.5f, r * 0.20f));
+        // 2. Crown Eyelet: Whale-Tail Fluke / Dolphin Nautical Crest (Top-Left)
+        // Fluke wings around (44, 34)
+        sr.setColor(0.85f, 0.47f, 0.02f, 1f);
+        fillTri(sr, cx, cy, s, 44, 38, 32, 24, 40, 20);
+        fillTri(sr, cx, cy, s, 44, 38, 40, 20, 44, 26);
+        fillTri(sr, cx, cy, s, 44, 38, 56, 24, 48, 20);
+        fillTri(sr, cx, cy, s, 44, 38, 48, 20, 44, 26);
 
-        // Ancient Leviathan Ivory Tooth Shank
-        sr.setColor(0.85f, 0.92f, 0.95f, 1f);
-        sr.rectLine(shankX, topY, shankX, bendY, Math.max(3.2f, r * 0.14f));
-        sr.rectLine(shankX, bendY, barbX, bendY, Math.max(3.2f, r * 0.14f));
-        sr.rectLine(barbX, bendY, barbX, barbY, Math.max(3.5f, r * 0.16f));
+        sr.setColor(0.98f, 0.75f, 0.14f, 1f);
+        drawLine(sr, cx, cy, s, 32, 24, 40, 20, 1.2f);
+        drawLine(sr, cx, cy, s, 40, 20, 44, 26, 1.2f);
+        drawLine(sr, cx, cy, s, 44, 26, 48, 20, 1.2f);
+        drawLine(sr, cx, cy, s, 48, 20, 56, 24, 1.2f);
+        drawLine(sr, cx, cy, s, 56, 24, 44, 38, 1.2f);
+        drawLine(sr, cx, cy, s, 44, 38, 32, 24, 1.2f);
 
-        // Luminous Oceanic Wave Runes along Shank
-        sr.setColor(0.35f, 0.95f, 1f, 1f);
-        sr.circle(shankX, cy + r * 0.25f, r * 0.08f);
-        sr.circle(shankX, cy, r * 0.08f);
-        sr.circle(shankX, cy - r * 0.25f, r * 0.08f);
+        // Nautical eyelet ring at (44, 34)
+        sr.setColor(0.03f, 0.18f, 0.29f, 1f);
+        fillCircle(sr, cx, cy, s, 44, 34, 5.0f);
+        sr.setColor(0.98f, 0.75f, 0.14f, 1f);
+        fillCircle(sr, cx, cy, s, 44, 34, 4.0f);
+        sr.setColor(0.01f, 0.52f, 0.78f, 1f);
+        fillCircle(sr, cx, cy, s, 44, 34, 2.5f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 42.5f, 32.5f, 1.2f);
 
-        // 3. Dual Razor-Sharp Sea Serpent Tooth Barbs
-        // Main Barb Tip
-        sr.setColor(0.30f, 0.85f, 1f, 1f);
-        sr.triangle(barbX - r * 0.08f, barbY - r * 0.1f, barbX + r * 0.08f, barbY - r * 0.1f, barbX - r * 0.15f, barbY + r * 0.25f);
-        // Razor-sharp cyan glint edge
-        sr.setColor(1f, 1f, 1f, 0.95f);
-        sr.rectLine(barbX, barbY - r * 0.1f, barbX - r * 0.15f, barbY + r * 0.25f, 1.5f);
-        // Secondary Inner Wave Barb
-        sr.setColor(0.20f, 0.75f, 0.95f, 1f);
-        sr.triangle(barbX - r * 0.04f, barbY - r * 0.22f, barbX + r * 0.06f, barbY - r * 0.22f, barbX - r * 0.20f, barbY - r * 0.05f);
+        // 3. Ancient Leviathan Jaw Tooth Shank & Sweeping Marine Curve
+        // Deep cobalt armor spine (stroke-width 8.5)
+        sr.setColor(0.03f, 0.18f, 0.29f, 1f);
+        drawLine(sr, cx, cy, s, 44, 38, 44, 78, 8.5f);
+        drawLine(sr, cx, cy, s, 44, 78, 52, 98, 8.5f);
+        drawLine(sr, cx, cy, s, 52, 98, 72, 106, 8.5f);
+        drawLine(sr, cx, cy, s, 72, 106, 92, 98, 8.5f);
+        drawLine(sr, cx, cy, s, 92, 98, 98, 76, 8.5f);
+        drawLine(sr, cx, cy, s, 98, 76, 96, 54, 8.5f);
 
-        // 4. Crown Eyelet: Golden Anchor-Knot Medallion
-        sr.setColor(0.85f, 0.70f, 0.25f, 1f);
-        sr.circle(shankX, topY, r * 0.26f);
-        sr.setColor(0.08f, 0.14f, 0.25f, 1f);
-        sr.circle(shankX, topY, r * 0.14f);
-        // Golden Anchor Ring Crown
-        sr.setColor(1f, 0.88f, 0.35f, 1f);
-        sr.circle(shankX, topY + r * 0.05f, r * 0.12f);
+        // Ancient Leviathan Ivory Tooth Blade (stroke-width 5.5)
+        sr.setColor(0.01f, 0.52f, 0.78f, 1f);
+        drawLine(sr, cx, cy, s, 44, 38, 44, 78, 5.5f);
+        drawLine(sr, cx, cy, s, 44, 78, 52, 98, 5.5f);
+        drawLine(sr, cx, cy, s, 52, 98, 72, 106, 5.5f);
+        drawLine(sr, cx, cy, s, 72, 106, 92, 98, 5.5f);
+        drawLine(sr, cx, cy, s, 92, 98, 98, 76, 5.5f);
+        drawLine(sr, cx, cy, s, 98, 76, 96, 54, 5.5f);
 
-        // Dangling Luminescent Angler-Fish Lure Pearl Charm
-        sr.setColor(0.25f, 0.85f, 1f, 0.85f);
-        sr.rectLine(shankX, topY, shankX - r * 0.30f, topY - r * 0.22f, 1.8f);
-        sr.setColor(0.40f, 0.95f, 1f, 0.35f);
-        sr.circle(shankX - r * 0.30f, topY - r * 0.22f, 7f);
-        sr.setColor(0.95f, 1f, 1f, 1f);
-        sr.circle(shankX - r * 0.30f, topY - r * 0.22f, 3.5f);
+        // Bioluminescent Seafoam Vein (stroke-width 2.2)
+        sr.setColor(0.40f, 0.91f, 0.98f, 1f);
+        drawLine(sr, cx, cy, s, 44, 38, 44, 78, 2.2f);
+        drawLine(sr, cx, cy, s, 44, 78, 52, 98, 2.2f);
+        drawLine(sr, cx, cy, s, 52, 98, 72, 106, 2.2f);
+        drawLine(sr, cx, cy, s, 72, 106, 92, 98, 2.2f);
+        drawLine(sr, cx, cy, s, 92, 98, 98, 76, 2.2f);
+        drawLine(sr, cx, cy, s, 98, 76, 96, 54, 2.2f);
+
+        // Specular blade rim
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 45, 38, 45, 78, 0.9f);
+        drawLine(sr, cx, cy, s, 45, 78, 53, 97, 0.9f);
+        drawLine(sr, cx, cy, s, 53, 97, 72, 104, 0.9f);
+        drawLine(sr, cx, cy, s, 72, 104, 91, 97, 0.9f);
+        drawLine(sr, cx, cy, s, 91, 97, 97, 76, 0.9f);
+        drawLine(sr, cx, cy, s, 97, 76, 95, 56, 0.9f);
+
+        // 4. 2 Dorsal Shark/Manta Wave Fins protruding backwards on Shank
+        sr.setColor(0.03f, 0.18f, 0.29f, 1f);
+        fillTri(sr, cx, cy, s, 44, 50, 28, 58, 44, 62);
+        fillTri(sr, cx, cy, s, 44, 66, 26, 76, 44, 80);
+        sr.setColor(0.22f, 0.74f, 0.97f, 1f);
+        drawLine(sr, cx, cy, s, 44, 50, 28, 58, 1.0f);
+        drawLine(sr, cx, cy, s, 28, 58, 44, 62, 1.0f);
+        drawLine(sr, cx, cy, s, 44, 66, 26, 76, 1.0f);
+        drawLine(sr, cx, cy, s, 26, 76, 44, 80, 1.0f);
+        sr.setColor(0.40f, 0.91f, 0.98f, 1f);
+        fillCircle(sr, cx, cy, s, 28, 58, 1.2f);
+        fillCircle(sr, cx, cy, s, 26, 76, 1.2f);
+
+        // 5. Massive Neptune Tidal Trident Wave Harpoon Point (Right)
+        // Center Harpoon Spearhead
+        sr.setColor(0.01f, 0.52f, 0.78f, 1f);
+        fillTri(sr, cx, cy, s, 96, 54, 90, 68, 102, 68);
+        sr.setColor(0.40f, 0.91f, 0.98f, 1f);
+        drawLine(sr, cx, cy, s, 96, 54, 90, 68, 1.0f);
+        drawLine(sr, cx, cy, s, 96, 54, 102, 68, 1.0f);
+
+        // Razor Sharp Ivory Spear Point
+        sr.setColor(0.94f, 0.98f, 1f, 1f);
+        fillTri(sr, cx, cy, s, 96, 44, 91, 56, 101, 56);
+
+        // Outer Tidal Wave Hook Flukes (Ngạnh sóng kép đối xứng)
+        sr.setColor(0.05f, 0.65f, 0.91f, 1f);
+        fillTri(sr, cx, cy, s, 96, 66, 86, 78, 96, 70);
+        fillTri(sr, cx, cy, s, 96, 66, 84, 68, 86, 78);
+        fillTri(sr, cx, cy, s, 96, 66, 106, 78, 96, 70);
+        fillTri(sr, cx, cy, s, 96, 66, 108, 68, 106, 78);
+
+        sr.setColor(0.73f, 0.90f, 0.99f, 1f);
+        drawLine(sr, cx, cy, s, 96, 66, 84, 68, 0.8f);
+        drawLine(sr, cx, cy, s, 84, 68, 86, 78, 0.8f);
+        drawLine(sr, cx, cy, s, 96, 66, 108, 68, 0.8f);
+        drawLine(sr, cx, cy, s, 108, 68, 106, 78, 0.8f);
+
+        // 6. Dangling Luminescent Angler-Fish Lure Pearl Charm
+        sr.setColor(0.98f, 0.75f, 0.14f, 1f);
+        drawLine(sr, cx, cy, s, 44, 42, 30, 48, 1.2f);
+        sr.setColor(0.97f, 0.98f, 0.99f, 1f);
+        fillCircle(sr, cx, cy, s, 28, 49, 4.0f);
+        sr.setColor(0.02f, 0.71f, 0.83f, 1f);
+        drawLine(sr, cx, cy, s, 25, 49, 31, 49, 1.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 27, 48, 1.5f);
+
+        // 7. Specular Glints
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 96, 44, 2.2f);
+        fillCircle(sr, cx, cy, s, 44, 32, 1.4f);
+        fillCircle(sr, cx, cy, s, 72, 104, 1.6f);
     }
 
     // =========================================================================
     // 5. HẢI TẶC SET (Pirate Galleon Mast, Anchor Chain Wheel, Reaper Scythe Hook)
     // =========================================================================
     public static void drawHaiTacRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Cursed Treasure & Gunpowder Smoke Aura
-        sr.setColor(0.85f, 0.40f, 0.12f, 0.20f);
-        sr.circle(cx, cy, r * 0.95f);
-        sr.setColor(0.95f, 0.20f, 0.15f, 0.15f);
-        sr.circle(cx, cy, r * 0.75f);
+        float s = r / 64f;
 
-        // 2. Weathered Black-Iron Galleon Mast Timber (Diagonal Spar)
-        float startX = cx - r * 0.72f, startY = cy - r * 0.72f;
-        float endX = cx + r * 0.65f, endY = cy + r * 0.65f;
+        // LAYER 1: CURSED TREASURE & GUNPOWDER SMOKE AURA
+        sr.setColor(0.96f, 0.62f, 0.04f, 0.22f);
+        fillCircle(sr, cx, cy, s, 64, 64, 56);
+        sr.setColor(0.85f, 0.40f, 0.12f, 0.15f);
+        fillTri(sr, cx, cy, s, 64, 8, 120, 64, 64, 120);
+        fillTri(sr, cx, cy, s, 64, 8, 8, 64, 64, 120);
 
-        // Dark aged ebony core
-        sr.setColor(0.18f, 0.12f, 0.08f, 1f);
-        sr.rectLine(startX, startY, endX, endY, Math.max(6.5f, r * 0.26f));
+        // LAYER 2: FACET BODY - GALLEON MAST & RIGGING
+        // Yardarm Cross-Spar
+        sr.setColor(0.27f, 0.15f, 0.08f, 1f);
+        fillQuad(sr, cx, cy, s, 26, 82, 30, 80, 50, 100, 46, 102);
+        sr.setColor(0.71f, 0.53f, 0.18f, 1f);
+        fillCircle(sr, cx, cy, s, 28, 81, 2.5f);
+        fillCircle(sr, cx, cy, s, 48, 101, 2.5f);
 
-        // Weathered dark mahogany wood body
-        sr.setColor(0.38f, 0.22f, 0.14f, 1f);
-        sr.rectLine(startX + 1f, startY + 1f, endX, endY, Math.max(4.2f, r * 0.18f));
+        // Pirate Storm Lantern
+        sr.setColor(0.71f, 0.53f, 0.18f, 1f);
+        drawLine(sr, cx, cy, s, 36, 92, 34, 99, 1.5f);
+        fillTri(sr, cx, cy, s, 34, 99, 31, 102, 37, 102);
+        sr.setColor(0.96f, 0.62f, 0.04f, 1f);
+        fillQuad(sr, cx, cy, s, 31, 102, 37, 102, 36, 110, 32, 110);
+        sr.setColor(0.99f, 0.94f, 0.54f, 1f);
+        fillCircle(sr, cx, cy, s, 34, 106, 2.0f);
+        sr.setColor(0.71f, 0.53f, 0.18f, 1f);
+        drawLine(sr, cx, cy, s, 34, 102, 34, 110, 1.2f);
+        fillQuad(sr, cx, cy, s, 30, 110, 38, 110, 37, 112, 31, 112);
 
-        // Wood grain highlight streak
-        sr.setColor(0.55f, 0.35f, 0.20f, 0.85f);
-        sr.rectLine(startX + 2f, startY + 2f, endX - r * 0.1f, endY - r * 0.1f, 1.8f);
+        // Main Weathered Mahogany Mast Spar
+        sr.setColor(0.18f, 0.10f, 0.06f, 1f);
+        fillQuad(sr, cx, cy, s, 18, 108, 22, 112, 102, 32, 98, 28);
+        sr.setColor(0.36f, 0.20f, 0.12f, 1f);
+        fillQuad(sr, cx, cy, s, 19, 107, 23, 111, 101, 33, 97, 29);
+        sr.setColor(0.57f, 0.33f, 0.18f, 1f);
+        drawLine(sr, cx, cy, s, 21, 109, 99, 31, 1.8f);
 
-        // 3. Forged Brass & Wrought-Iron Mast Fastener Bands with Rivets
-        for (int b = 0; b < 4; b++) {
-            float frac = 0.20f + b * 0.22f;
-            float bx = startX + (endX - startX) * frac;
-            float by = startY + (endY - startY) * frac;
-            // Brass ring band
-            sr.setColor(0.85f, 0.68f, 0.22f, 1f);
-            sr.rectLine(bx - 3.5f, by + 3.5f, bx + 3.5f, by - 3.5f, Math.max(3.5f, r * 0.12f));
-            // Dark iron inner groove
-            sr.setColor(0.12f, 0.10f, 0.08f, 1f);
-            sr.rectLine(bx - 2f, by + 2f, bx + 2f, by - 2f, 1.2f);
-            // Golden rivet dots
-            sr.setColor(1f, 0.88f, 0.35f, 1f);
-            sr.circle(bx - 2f, by + 2f, 1.2f);
-            sr.circle(bx + 2f, by - 2f, 1.2f);
-        }
-
-        // 4. Heavy Brass Galleon Rigging Block / Pulley
-        float px = cx + r * 0.20f, py = cy + r * 0.20f;
-        // Wooden/brass cheek housing
-        sr.setColor(0.24f, 0.15f, 0.09f, 1f);
-        sr.circle(px, py, r * 0.28f);
+        // Forged Brass Bands with Golden Rivets
         sr.setColor(0.85f, 0.65f, 0.20f, 1f);
-        sr.circle(px, py, r * 0.22f);
-        // Dark sheave groove & rope spool
-        sr.setColor(0.15f, 0.10f, 0.08f, 1f);
-        sr.circle(px, py, r * 0.14f);
-        // Golden axle hub bolt
-        sr.setColor(1f, 0.85f, 0.3f, 1f);
-        sr.circle(px, py, r * 0.06f);
+        fillQuad(sr, cx, cy, s, 33, 89, 39, 95, 41, 93, 35, 87);
+        fillQuad(sr, cx, cy, s, 51, 71, 57, 77, 59, 75, 53, 69);
+        fillQuad(sr, cx, cy, s, 69, 53, 75, 59, 77, 57, 71, 51);
+        fillQuad(sr, cx, cy, s, 87, 35, 93, 41, 95, 39, 89, 33);
+        sr.setColor(0.99f, 0.90f, 0.40f, 1f);
+        fillCircle(sr, cx, cy, s, 35, 91, 1.2f); fillCircle(sr, cx, cy, s, 39, 93, 1.2f);
+        fillCircle(sr, cx, cy, s, 53, 73, 1.2f); fillCircle(sr, cx, cy, s, 57, 75, 1.2f);
+        fillCircle(sr, cx, cy, s, 71, 55, 1.2f); fillCircle(sr, cx, cy, s, 75, 57, 1.2f);
+        fillCircle(sr, cx, cy, s, 89, 37, 1.2f); fillCircle(sr, cx, cy, s, 93, 39, 1.2f);
 
-        // Coiled Rigging Hemp Rope
-        sr.setColor(0.70f, 0.55f, 0.35f, 1f);
-        sr.rectLine(px - r * 0.18f, py - r * 0.10f, cx - r * 0.15f, cy - r * 0.40f, 2.2f);
-        sr.rectLine(px + r * 0.12f, py - r * 0.12f, cx + r * 0.05f, cy - r * 0.35f, 1.8f);
-
-        // 5. Yardarm Cross-Spar & Pirate Storm Lantern
-        float yx = cx - r * 0.35f, yy = cy - r * 0.35f;
-        sr.setColor(0.32f, 0.18f, 0.10f, 1f);
-        sr.rectLine(yx - r * 0.20f, yy + r * 0.20f, yx + r * 0.20f, yy - r * 0.20f, 3.5f);
-        // Hanging brass lantern
+        // Rigging Block & Pulley Wheel at (62, 66)
+        sr.setColor(0.27f, 0.15f, 0.08f, 1f);
+        fillCircle(sr, cx, cy, s, 62, 66, 11.0f);
         sr.setColor(0.85f, 0.65f, 0.20f, 1f);
-        sr.rect(yx - r * 0.22f, yy + r * 0.12f, r * 0.14f, r * 0.18f);
-        // Glowing cursed flame inside
-        sr.setColor(1f, 0.85f, 0.25f, 1f);
-        sr.circle(yx - r * 0.15f, yy + r * 0.21f, r * 0.06f);
+        fillCircle(sr, cx, cy, s, 62, 66, 8.5f);
+        sr.setColor(0.18f, 0.10f, 0.06f, 1f);
+        fillCircle(sr, cx, cy, s, 62, 66, 5.0f);
+        sr.setColor(0.99f, 0.90f, 0.40f, 1f);
+        fillCircle(sr, cx, cy, s, 62, 66, 2.5f);
 
-        // 6. Flying Tattered Black Jolly Roger Pennant Flag
-        float fx = endX - r * 0.05f, fy = endY - r * 0.05f;
-        // Masthead cap
-        sr.setColor(0.85f, 0.70f, 0.25f, 1f);
-        sr.circle(endX, endY, r * 0.12f);
+        // Hemp Rigging Rope
+        sr.setColor(0.85f, 0.70f, 0.48f, 1f);
+        drawLine(sr, cx, cy, s, 62, 71, 48, 101, 1.8f);
+        drawLine(sr, cx, cy, s, 66, 62, 98, 30, 1.8f);
 
-        // Black ragged swallowtail banner fluttering rightward
-        sr.setColor(0.10f, 0.08f, 0.10f, 0.98f);
-        sr.triangle(fx, fy + r * 0.15f, fx + r * 0.45f, fy + r * 0.10f, fx, fy - r * 0.25f);
-        sr.triangle(fx + r * 0.45f, fy + r * 0.10f, fx + r * 0.28f, fy - r * 0.08f, fx, fy - r * 0.25f);
+        // Masthead Cap & Jolly Roger Flag
+        sr.setColor(0.85f, 0.65f, 0.20f, 1f);
+        fillCircle(sr, cx, cy, s, 100, 30, 4.5f);
+        sr.setColor(0.09f, 0.09f, 0.11f, 1f);
+        fillTri(sr, cx, cy, s, 100, 30, 122, 22, 102, 44);
+        fillTri(sr, cx, cy, s, 122, 22, 114, 32, 102, 44);
+        // Ivory Skull
+        sr.setColor(0.96f, 0.96f, 0.96f, 1f);
+        fillCircle(sr, cx, cy, s, 108, 32, 3.2f);
+        fillQuad(sr, cx, cy, s, 106.5f, 33, 109.5f, 33, 109.5f, 36, 106.5f, 36);
+        sr.setColor(0.94f, 0.15f, 0.15f, 1f);
+        fillCircle(sr, cx, cy, s, 107, 32, 0.8f);
+        fillCircle(sr, cx, cy, s, 109, 32, 0.8f);
 
-        // Bleached ivory skull on flag
-        sr.setColor(0.92f, 0.90f, 0.85f, 1f);
-        float skX = fx + r * 0.15f, skY = fy - r * 0.02f;
-        sr.circle(skX, skY + 2f, r * 0.08f);
-        sr.rect(skX - r * 0.04f, skY - r * 0.05f, r * 0.08f, r * 0.05f);
-        // Glowing ruby red skull eye dots
-        sr.setColor(0.95f, 0.15f, 0.15f, 1f);
-        sr.circle(skX - 1.5f, skY + 2f, 1.2f);
-        sr.circle(skX + 1.5f, skY + 2f, 1.2f);
-        // Crossed pirate cutlass bones behind skull
-        sr.setColor(0.85f, 0.82f, 0.78f, 1f);
-        sr.rectLine(skX - r * 0.08f, skY - r * 0.06f, skX + r * 0.08f, skY + r * 0.08f, 1.2f);
-        sr.rectLine(skX + r * 0.08f, skY - r * 0.06f, skX - r * 0.08f, skY + r * 0.08f, 1.2f);
+        // LAYER 4: SPECULAR GLINTS
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 100, 28, 1.8f);
+        fillCircle(sr, cx, cy, s, 61, 64, 1.5f);
+        fillCircle(sr, cx, cy, s, 34, 105, 1.5f);
+        fillCircle(sr, cx, cy, s, 90, 35, 1.2f);
     }
 
     public static void drawHaiTacLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Cursed Galleon Whirlpool & Spanish Gold Aura
-        sr.setColor(0.85f, 0.55f, 0.15f, 0.20f);
-        sr.circle(cx, cy, r * 0.95f);
-        sr.setColor(0.18f, 0.12f, 0.08f, 0.40f);
-        sr.circle(cx, cy, r * 0.85f);
+        float s = r / 64f;
 
-        // 2. Ornate Nautical Galleon Ship's Wheel (Mahogany & Brass)
-        // Outer wheel rim
-        sr.setColor(0.28f, 0.16f, 0.10f, 1f);
-        sr.circle(cx, cy, r * 0.76f);
-        // Brass tire inlay
-        sr.setColor(0.85f, 0.68f, 0.22f, 1f);
-        sr.circle(cx, cy, r * 0.70f);
-        // Inner wheel opening
-        sr.setColor(0.08f, 0.07f, 0.09f, 0.95f);
-        sr.circle(cx, cy, r * 0.62f);
+        // LAYER 1: CURSED VORTEX & AZTEC GOLD AURA
+        sr.setColor(0.96f, 0.62f, 0.04f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64, 64, 56);
+        sr.setColor(0.18f, 0.10f, 0.06f, 0.40f);
+        fillCircle(sr, cx, cy, s, 64, 64, 48);
 
-        // 8 Turned Wheel Spokes with Handles extending beyond rim
-        for (int a = 0; a < 8; a++) {
-            float ang = a * 45f;
-            float cos = MathUtils.cosDeg(ang);
-            float sin = MathUtils.sinDeg(ang);
-            // Spoke spindle
-            sr.setColor(0.45f, 0.28f, 0.16f, 1f);
-            sr.rectLine(cx, cy, cx + cos * r * 0.72f, cy + sin * r * 0.72f, 2.5f);
-            // Turned handle grip extending outwards
-            sr.setColor(0.85f, 0.68f, 0.22f, 1f);
-            sr.circle(cx + cos * r * 0.84f, cy + sin * r * 0.84f, Math.max(2.2f, r * 0.08f));
-            sr.setColor(0.32f, 0.18f, 0.10f, 1f);
-            sr.circle(cx + cos * r * 0.84f, cy + sin * r * 0.84f, Math.max(1.2f, r * 0.04f));
+        // LAYER 2: FACET BODY - ORNATE SHIP'S WHEEL & ANCHOR
+        // Outer Wheel Rim
+        sr.setColor(0.27f, 0.15f, 0.08f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 46);
+        sr.setColor(0.85f, 0.65f, 0.20f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 42);
+        sr.setColor(0.09f, 0.09f, 0.11f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 38);
+
+        // 8 Turned Spokes & Grips
+        sr.setColor(0.36f, 0.20f, 0.12f, 1f);
+        drawLine(sr, cx, cy, s, 64, 64, 64, 16, 2.5f);
+        drawLine(sr, cx, cy, s, 64, 64, 98, 30, 2.5f);
+        drawLine(sr, cx, cy, s, 64, 64, 112, 64, 2.5f);
+        drawLine(sr, cx, cy, s, 64, 64, 98, 98, 2.5f);
+        drawLine(sr, cx, cy, s, 64, 64, 64, 112, 2.5f);
+        drawLine(sr, cx, cy, s, 64, 64, 30, 98, 2.5f);
+        drawLine(sr, cx, cy, s, 64, 64, 16, 64, 2.5f);
+        drawLine(sr, cx, cy, s, 64, 64, 30, 30, 2.5f);
+
+        sr.setColor(0.85f, 0.65f, 0.20f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 12, 3.2f);
+        fillCircle(sr, cx, cy, s, 101, 27, 3.2f);
+        fillCircle(sr, cx, cy, s, 116, 64, 3.2f);
+        fillCircle(sr, cx, cy, s, 101, 101, 3.2f);
+        fillCircle(sr, cx, cy, s, 64, 116, 3.2f);
+        fillCircle(sr, cx, cy, s, 27, 101, 3.2f);
+        fillCircle(sr, cx, cy, s, 12, 64, 3.2f);
+        fillCircle(sr, cx, cy, s, 27, 27, 3.2f);
+
+        // Forged-Iron Admiralty Anchor
+        sr.setColor(0.18f, 0.20f, 0.25f, 1f);
+        drawLine(sr, cx, cy, s, 64, 28, 64, 94, 4.0f);
+        sr.setColor(0.36f, 0.20f, 0.12f, 1f);
+        drawLine(sr, cx, cy, s, 42, 38, 86, 38, 3.5f);
+        sr.setColor(0.85f, 0.65f, 0.20f, 1f);
+        fillCircle(sr, cx, cy, s, 42, 38, 2.5f);
+        fillCircle(sr, cx, cy, s, 86, 38, 2.5f);
+
+        sr.setColor(0.18f, 0.20f, 0.25f, 1f);
+        drawLine(sr, cx, cy, s, 44, 82, 64, 96, 3.8f);
+        drawLine(sr, cx, cy, s, 84, 82, 64, 96, 3.8f);
+        sr.setColor(0.58f, 0.63f, 0.72f, 1f);
+        fillTri(sr, cx, cy, s, 44, 82, 38, 76, 48, 76);
+        fillTri(sr, cx, cy, s, 84, 82, 80, 76, 90, 76);
+
+        // Coiled Wrought-Iron Chain Links
+        float[][] chainCoords = {
+            {64, 32}, {86, 42}, {96, 64}, {86, 86},
+            {64, 96}, {42, 86}, {32, 64}, {42, 42}
+        };
+        for (float[] pt : chainCoords) {
+            sr.setColor(0.18f, 0.20f, 0.25f, 1f);
+            fillCircle(sr, cx, cy, s, pt[0], pt[1], 5.5f);
+            sr.setColor(0.58f, 0.63f, 0.72f, 1f);
+            fillCircle(sr, cx, cy, s, pt[0] - 0.5f, pt[1] - 0.5f, 3.8f);
+            sr.setColor(0.09f, 0.09f, 0.11f, 1f);
+            fillCircle(sr, cx, cy, s, pt[0], pt[1], 2.0f);
         }
 
-        // 3. Heavy Forged-Iron Admiralty Anchor crossed in center
-        float ancX = cx, ancY = cy;
-        // Anchor shank (vertical)
-        sr.setColor(0.22f, 0.22f, 0.26f, 1f);
-        sr.rectLine(ancX, ancY - r * 0.45f, ancX, ancY + r * 0.45f, Math.max(3.5f, r * 0.14f));
-        // Anchor stock (horizontal wooden crossbar)
-        sr.setColor(0.40f, 0.25f, 0.14f, 1f);
-        sr.rectLine(ancX - r * 0.32f, ancY + r * 0.28f, ancX + r * 0.32f, ancY + r * 0.28f, Math.max(3f, r * 0.12f));
-        // Brass stock tips
-        sr.setColor(0.85f, 0.68f, 0.22f, 1f);
-        sr.circle(ancX - r * 0.32f, ancY + r * 0.28f, 2.2f);
-        sr.circle(ancX + r * 0.32f, ancY + r * 0.28f, 2.2f);
+        // LAYER 3: CORE - AZTEC GOLD DOUBLOON MEDALLION
+        sr.setColor(0.71f, 0.53f, 0.18f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 18.0f);
+        sr.setColor(0.85f, 0.65f, 0.20f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 15.0f);
+        sr.setColor(0.96f, 0.75f, 0.15f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 12.0f);
 
-        // Anchor curved arms / flukes
-        sr.setColor(0.22f, 0.22f, 0.26f, 1f);
-        sr.rectLine(ancX - r * 0.30f, ancY - r * 0.30f, ancX, ancY - r * 0.48f, Math.max(3.2f, r * 0.13f));
-        sr.rectLine(ancX + r * 0.30f, ancY - r * 0.30f, ancX, ancY - r * 0.48f, Math.max(3.2f, r * 0.13f));
-        // Spade flukes
-        sr.setColor(0.55f, 0.58f, 0.65f, 1f);
-        sr.triangle(ancX - r * 0.30f, ancY - r * 0.30f, ancX - r * 0.38f, ancY - r * 0.22f, ancX - r * 0.22f, ancY - r * 0.22f);
-        sr.triangle(ancX + r * 0.30f, ancY - r * 0.30f, ancX + r * 0.38f, ancY - r * 0.22f, ancX + r * 0.22f, ancY - r * 0.22f);
+        // Ivory Skull Center Boss
+        sr.setColor(0.96f, 0.96f, 0.96f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 63, 6.0f);
+        fillQuad(sr, cx, cy, s, 61, 65, 67, 65, 66, 70, 62, 70);
+        // Cursed Emerald Eye Sockets
+        sr.setColor(0.06f, 0.73f, 0.51f, 1f);
+        fillCircle(sr, cx, cy, s, 62, 63, 1.5f);
+        fillCircle(sr, cx, cy, s, 66, 63, 1.5f);
 
-        // 4. Coiled Heavy Wrought-Iron Chain Links wrapping the wheel
-        for (int c = 0; c < 10; c++) {
-            float cAng = c * 36f;
-            float cosC = MathUtils.cosDeg(cAng);
-            float sinC = MathUtils.sinDeg(cAng);
-            float lx = cx + cosC * (r * 0.50f);
-            float ly = cy + sinC * (r * 0.50f);
-
-            // Outer forged iron link ring
-            sr.setColor(0.18f, 0.18f, 0.22f, 1f);
-            sr.circle(lx, ly, Math.max(3.8f, r * 0.13f));
-            // Metallic silver highlight
-            sr.setColor(0.68f, 0.72f, 0.78f, 1f);
-            sr.circle(lx - 0.8f, ly + 0.8f, Math.max(2.4f, r * 0.08f));
-            // Inner hollow link
-            sr.setColor(0.08f, 0.08f, 0.10f, 1f);
-            sr.circle(lx, ly, Math.max(1.4f, r * 0.05f));
-        }
-
-        // 5. Golden Pirate Doubloon Wheel Hub Medallion
-        sr.setColor(0.90f, 0.72f, 0.20f, 1f);
-        sr.circle(cx, cy, r * 0.24f);
-        sr.setColor(0.65f, 0.48f, 0.12f, 1f);
-        sr.circle(cx, cy, r * 0.20f);
-        // Center ivory skull boss
-        sr.setColor(0.95f, 0.92f, 0.85f, 1f);
-        sr.circle(cx, cy + 1f, r * 0.10f);
-        sr.rect(cx - r * 0.05f, cy - r * 0.07f, r * 0.10f, r * 0.07f);
-        // Glowing emerald eye sockets (Cursed Aztec/Pirate Treasure)
-        sr.setColor(0.15f, 0.95f, 0.35f, 1f);
-        sr.circle(cx - 1.8f, cy + 1f, 1.2f);
-        sr.circle(cx + 1.8f, cy + 1f, 1.2f);
+        // LAYER 4: SPECULAR GLINTS
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 61, 62, 1.8f);
+        fillCircle(sr, cx, cy, s, 64, 12, 1.5f);
+        fillCircle(sr, cx, cy, s, 116, 64, 1.5f);
+        fillCircle(sr, cx, cy, s, 86, 41, 1.2f);
+        fillCircle(sr, cx, cy, s, 42, 41, 1.2f);
     }
 
     public static void drawHaiTacHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Blood-Tide Maritime Curse Aura
-        sr.setColor(0.90f, 0.22f, 0.15f, 0.22f);
-        sr.circle(cx, cy, r * 0.95f);
-        sr.setColor(0.65f, 0.10f, 0.10f, 0.18f);
-        sr.circle(cx, cy, r * 0.78f);
+        float s = r / 64f;
 
-        // 2. Heavy Forged Damascus Steel Shank & Spine
-        float shankX = cx - r * 0.22f;
-        float topY = cy + r * 0.62f;
-        float bendY = cy - r * 0.48f;
-        float bladeEndX = cx + r * 0.55f;
-        float bladeEndY = cy + r * 0.40f;
+        // LAYER 1: MARITIME BLOOD-TIDE AURA
+        sr.setColor(0.88f, 0.11f, 0.14f, 0.22f);
+        fillCircle(sr, cx, cy, s, 64, 66, 54);
 
-        // Dark forged iron spine reinforcement
-        sr.setColor(0.12f, 0.12f, 0.15f, 1f);
-        sr.rectLine(shankX, topY, shankX, bendY, Math.max(5.5f, r * 0.22f));
-        sr.rectLine(shankX, bendY, cx + r * 0.30f, bendY, Math.max(5.5f, r * 0.22f));
+        // LAYER 2: FACET BODY - DAMASCUS SCYTHE & BASKET GUARD
+        // Brass Shackle Eyelet
+        sr.setColor(0.71f, 0.53f, 0.18f, 1f);
+        fillCircle(sr, cx, cy, s, 38, 24, 12.0f);
+        sr.setColor(0.85f, 0.65f, 0.20f, 1f);
+        fillCircle(sr, cx, cy, s, 38, 24, 9.5f);
+        sr.setColor(0.09f, 0.09f, 0.11f, 1f);
+        fillCircle(sr, cx, cy, s, 38, 24, 5.0f);
 
-        // Damascus slate steel shank body
-        sr.setColor(0.35f, 0.38f, 0.44f, 1f);
-        sr.rectLine(shankX, topY, shankX, bendY, Math.max(3.8f, r * 0.15f));
-        sr.rectLine(shankX, bendY, cx + r * 0.30f, bendY, Math.max(3.8f, r * 0.15f));
+        // Brass Basket Knuckle-Guard
+        sr.setColor(0.71f, 0.53f, 0.18f, 1f);
+        drawLine(sr, cx, cy, s, 38, 28, 20, 36, 4.0f);
+        drawLine(sr, cx, cy, s, 20, 36, 18, 54, 3.5f);
+        drawLine(sr, cx, cy, s, 18, 54, 34, 68, 3.5f);
+        sr.setColor(0.96f, 0.75f, 0.15f, 1f);
+        fillCircle(sr, cx, cy, s, 18, 54, 3.5f);
 
-        // 3. Brutal Sweeping Reaper Scythe Blade (Curved Upward)
-        // Main broad scythe blade
-        sr.setColor(0.48f, 0.52f, 0.60f, 1f);
-        sr.triangle(cx + r * 0.10f, bendY - 2f, bladeEndX, bladeEndY, cx + r * 0.18f, cy - r * 0.05f);
-        sr.triangle(cx + r * 0.28f, bendY - 2f, bladeEndX, bladeEndY, cx + r * 0.38f, cy + r * 0.10f);
+        // Dangling Spanish 8-Reales Silver Coin
+        sr.setColor(0.58f, 0.63f, 0.72f, 1f);
+        drawLine(sr, cx, cy, s, 18, 54, 18, 70, 1.5f);
+        sr.setColor(0.80f, 0.84f, 0.90f, 1f);
+        fillCircle(sr, cx, cy, s, 18, 74, 5.5f);
+        sr.setColor(0.09f, 0.09f, 0.11f, 1f);
+        fillCircle(sr, cx, cy, s, 18, 74, 1.8f);
+        sr.setColor(0.85f, 0.65f, 0.20f, 1f);
+        fillCircle(sr, cx, cy, s, 18, 74, 1.0f);
 
-        // Reverse wicked barb on inner scythe curve
-        sr.setColor(0.70f, 0.74f, 0.82f, 1f);
-        sr.triangle(bladeEndX, bladeEndY, bladeEndX - r * 0.22f, bladeEndY - r * 0.28f, bladeEndX - r * 0.06f, bladeEndY - r * 0.32f);
+        // Damascus Steel Shank Facets
+        sr.setColor(0.18f, 0.20f, 0.25f, 1f);
+        fillQuad(sr, cx, cy, s, 32, 34, 44, 34, 46, 68, 34, 68);
+        sr.setColor(0.31f, 0.35f, 0.44f, 1f);
+        fillQuad(sr, cx, cy, s, 32, 34, 38, 34, 40, 68, 34, 68);
+        sr.setColor(0.18f, 0.20f, 0.25f, 1f);
+        fillQuad(sr, cx, cy, s, 38, 34, 44, 34, 46, 68, 40, 68);
 
-        // Razor-sharp mirror polished blade edge
-        sr.setColor(0.96f, 0.98f, 1f, 1f);
-        sr.rectLine(bladeEndX, bladeEndY, cx + r * 0.18f, cy - r * 0.05f, 2f);
-        sr.rectLine(cx + r * 0.18f, cy - r * 0.05f, shankX + 2f, bendY + 2f, 2f);
+        // Lower Shank to Keel Arc
+        sr.setColor(0.18f, 0.20f, 0.25f, 1f);
+        fillQuad(sr, cx, cy, s, 34, 68, 46, 68, 50, 92, 38, 92);
+        sr.setColor(0.31f, 0.35f, 0.44f, 1f);
+        fillQuad(sr, cx, cy, s, 34, 68, 40, 68, 44, 92, 38, 92);
+        sr.setColor(0.18f, 0.20f, 0.25f, 1f);
+        fillQuad(sr, cx, cy, s, 38, 92, 50, 92, 70, 106, 58, 106);
+        fillQuad(sr, cx, cy, s, 58, 106, 70, 106, 88, 96, 78, 92);
+        sr.setColor(0.31f, 0.35f, 0.44f, 1f);
+        fillQuad(sr, cx, cy, s, 44, 92, 50, 92, 70, 106, 64, 106);
+        fillQuad(sr, cx, cy, s, 64, 106, 70, 106, 88, 96, 82, 94);
 
-        // 4. Etched Cursed Bloodline Fuller with Glowing Crimson Runes
-        sr.setColor(0.95f, 0.15f, 0.15f, 0.95f);
-        sr.rectLine(shankX, topY - r * 0.15f, shankX, bendY + r * 0.10f, 1.8f);
-        sr.rectLine(shankX + 2f, bendY, cx + r * 0.25f, bendY, 1.8f);
-        // Bloodline curve up the scythe spine
-        sr.rectLine(cx + r * 0.25f, bendY, bladeEndX - r * 0.08f, bladeEndY - r * 0.08f, 1.6f);
+        // Ascending Throat & Scythe Blade
+        sr.setColor(0.18f, 0.20f, 0.25f, 1f);
+        fillQuad(sr, cx, cy, s, 78, 92, 88, 96, 98, 66, 88, 68);
+        sr.setColor(0.31f, 0.35f, 0.44f, 1f);
+        fillQuad(sr, cx, cy, s, 82, 94, 88, 96, 98, 66, 92, 68);
 
-        // Glowing blood drop / ruby node on fuller
-        sr.setColor(1f, 0.35f, 0.35f, 1f);
-        sr.circle(shankX, cy, 2.2f);
-        sr.circle(cx + r * 0.15f, bendY, 2.2f);
-        sr.circle(bladeEndX - r * 0.12f, bladeEndY - r * 0.12f, 2.2f);
+        // Wicked Scythe Barb
+        sr.setColor(0.31f, 0.35f, 0.44f, 1f);
+        fillTri(sr, cx, cy, s, 88, 68, 76, 58, 92, 60);
+        sr.setColor(0.58f, 0.63f, 0.72f, 1f);
+        fillTri(sr, cx, cy, s, 92, 60, 76, 58, 90, 56);
 
-        // 5. Pirate Cutlass Brass Basket Handguard & Eyelet Shackle
-        // Eyelet ring at top
-        sr.setColor(0.85f, 0.68f, 0.22f, 1f);
-        sr.circle(shankX, topY, r * 0.24f);
-        sr.setColor(0.08f, 0.08f, 0.10f, 1f);
-        sr.circle(shankX, topY, r * 0.12f);
+        // Razor Talon Point
+        sr.setColor(0.58f, 0.63f, 0.72f, 1f);
+        fillQuad(sr, cx, cy, s, 88, 68, 98, 66, 100, 44, 94, 54);
+        sr.setColor(0.88f, 0.91f, 0.96f, 1f);
+        fillQuad(sr, cx, cy, s, 92, 68, 98, 66, 100, 44, 96, 52);
 
-        // Brass basket guard curving outwards to protect eyelet
-        sr.setColor(0.78f, 0.60f, 0.18f, 1f);
-        sr.rectLine(shankX, topY - r * 0.08f, shankX - r * 0.30f, topY - r * 0.28f, 3.2f);
-        sr.rectLine(shankX - r * 0.30f, topY - r * 0.28f, shankX - r * 0.12f, cy + r * 0.10f, 2.8f);
-        // Brass guard knuckle stud
-        sr.setColor(1f, 0.88f, 0.35f, 1f);
-        sr.circle(shankX - r * 0.30f, topY - r * 0.28f, 2.8f);
+        // LAYER 3: CORE - CURSED CRIMSON BLOOD FULLER & RUBY GEMS
+        sr.setColor(0.88f, 0.11f, 0.14f, 1f);
+        drawLine(sr, cx, cy, s, 39, 40, 41, 90, 2.5f);
+        drawLine(sr, cx, cy, s, 41, 90, 66, 103, 2.5f);
+        drawLine(sr, cx, cy, s, 66, 103, 94, 60, 2.0f);
+        drawLine(sr, cx, cy, s, 94, 60, 98, 48, 1.5f);
+        sr.setColor(0.94f, 0.15f, 0.15f, 1f);
+        fillCircle(sr, cx, cy, s, 40, 65, 2.2f);
+        fillCircle(sr, cx, cy, s, 64, 103, 2.2f);
+        fillCircle(sr, cx, cy, s, 92, 64, 2.2f);
 
-        // 6. Dangling Spanish 8-Reales Silver Coin & Pirate Feather Charm
-        float chX = shankX - r * 0.12f, chY = cy + r * 0.10f;
-        sr.setColor(0.75f, 0.78f, 0.82f, 1f);
-        sr.rectLine(chX, chY, chX - r * 0.10f, chY - r * 0.25f, 1.5f);
-        // Pierced Spanish silver coin
-        sr.setColor(0.82f, 0.85f, 0.90f, 1f);
-        sr.circle(chX - r * 0.10f, chY - r * 0.25f, r * 0.13f);
-        sr.setColor(0.12f, 0.12f, 0.15f, 1f);
-        sr.circle(chX - r * 0.10f, chY - r * 0.25f, 1.5f);
-        // Gold edge trim on coin
-        sr.setColor(0.95f, 0.80f, 0.25f, 1f);
-        sr.circle(chX - r * 0.10f, chY - r * 0.25f, 2.2f);
+        // LAYER 4: SPECULAR GLINTS
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 100, 44, 2.2f);
+        fillCircle(sr, cx, cy, s, 76, 58, 1.8f);
+        fillCircle(sr, cx, cy, s, 18, 54, 1.5f);
+        fillCircle(sr, cx, cy, s, 18, 73, 1.5f);
+        fillCircle(sr, cx, cy, s, 41, 21, 1.5f);
     }
 
     // =========================================================================
-    // 6. VỰC THẲM SET (ABYSSAL VOID: Obsidian Nether Staff, Void Vein Spool, Fiend Dragon Claw Hook)
+    // 6. VỰC THẲM SET (Obsidian Nether Staff, Void Vein Spool, Dragon Claw Hook)
     // =========================================================================
     public static void drawVucThamRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Abyssal Void Miasma & Eldritch Aura
-        sr.setColor(0.40f, 0.08f, 0.60f, 0.22f);
-        sr.circle(cx, cy, r * 0.95f);
-        sr.setColor(0.80f, 0.20f, 0.95f, 0.25f);
-        sr.circle(cx + r * 0.45f, cy + r * 0.45f, r * 0.55f);
+        float s = r / 64f;
 
-        // 2. Obsidian Nether-Titanium Spine
-        float x1 = cx - r * 0.72f, y1 = cy - r * 0.72f;
-        float x2 = cx + r * 0.38f, y2 = cy + r * 0.38f;
+        // LAYER 1: VOID MIASMA & NETHER ELDRITCH AURA
+        sr.setColor(0.66f, 0.33f, 0.97f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64, 64, 56);
+        sr.setColor(0.35f, 0.09f, 0.58f, 0.15f);
+        fillTri(sr, cx, cy, s, 20, 108, 108, 20, 100, 12);
 
-        // Dark obsidian core
-        sr.setColor(0.10f, 0.06f, 0.16f, 1f);
-        sr.rectLine(x1, y1, x2, y2, Math.max(5f, r * 0.22f));
+        // LAYER 2: FACET BODY - OBSIDIAN NETHER SHAFT & HORNS
+        // Spiky Bone Horn Spire Bands
+        sr.setColor(0.18f, 0.05f, 0.40f, 1f);
+        fillTri(sr, cx, cy, s, 36, 84, 26, 86, 38, 92);
+        fillTri(sr, cx, cy, s, 44, 92, 42, 102, 38, 92);
+        fillTri(sr, cx, cy, s, 54, 66, 44, 68, 56, 74);
+        fillTri(sr, cx, cy, s, 62, 74, 60, 84, 56, 74);
+        fillTri(sr, cx, cy, s, 72, 48, 62, 50, 74, 56);
+        fillTri(sr, cx, cy, s, 80, 56, 78, 66, 74, 56);
+        // Horn tips glowing magenta
+        sr.setColor(0.75f, 0.15f, 0.83f, 1f);
+        fillCircle(sr, cx, cy, s, 26, 86, 1.8f);
+        fillCircle(sr, cx, cy, s, 42, 102, 1.8f);
+        fillCircle(sr, cx, cy, s, 44, 68, 1.8f);
+        fillCircle(sr, cx, cy, s, 60, 84, 1.8f);
+        fillCircle(sr, cx, cy, s, 62, 50, 1.8f);
+        fillCircle(sr, cx, cy, s, 78, 66, 1.8f);
 
-        // Deep shadow-purple chassis
-        sr.setColor(0.24f, 0.10f, 0.36f, 1f);
-        sr.rectLine(x1, y1, x2, y2, Math.max(3.4f, r * 0.14f));
+        // Obsidian Nether Shaft
+        sr.setColor(0.06f, 0.09f, 0.16f, 1f);
+        fillQuad(sr, cx, cy, s, 18, 110, 22, 106, 92, 36, 88, 40);
+        sr.setColor(0.12f, 0.11f, 0.29f, 1f);
+        fillQuad(sr, cx, cy, s, 19, 109, 21, 107, 91, 37, 89, 39);
 
-        // Luminous void plasma core conduit
-        sr.setColor(0.90f, 0.25f, 0.98f, 0.95f);
-        sr.rectLine(x1, y1, x2, y2, Math.max(1.8f, r * 0.08f));
+        // Void Plasma Conduit
+        sr.setColor(0.75f, 0.15f, 0.83f, 1f);
+        drawLine(sr, cx, cy, s, 20, 108, 90, 38, 2.5f);
+        sr.setColor(0.91f, 0.47f, 0.98f, 1f);
+        drawLine(sr, cx, cy, s, 20, 108, 90, 38, 1.2f);
 
-        // 3. Spiky Demonic Bone Horn Spire Bands along the shaft
-        for (int b = 0; b < 3; b++) {
-            float frac = 0.25f + b * 0.26f;
-            float bx = x1 + (x2 - x1) * frac;
-            float by = y1 + (y2 - y1) * frac;
+        // Void Crescent Blade Headpiece
+        sr.setColor(0.06f, 0.09f, 0.16f, 1f);
+        fillTri(sr, cx, cy, s, 90, 38, 68, 24, 88, 16);
+        fillTri(sr, cx, cy, s, 90, 38, 88, 16, 106, 20);
+        sr.setColor(0.35f, 0.09f, 0.58f, 1f);
+        fillTri(sr, cx, cy, s, 68, 24, 88, 16, 76, 14);
+        sr.setColor(0.75f, 0.15f, 0.83f, 1f);
+        drawLine(sr, cx, cy, s, 68, 24, 88, 16, 1.8f);
+        drawLine(sr, cx, cy, s, 88, 16, 106, 20, 1.8f);
 
-            // Lateral spires jutting outward
-            sr.setColor(0.35f, 0.12f, 0.48f, 1f);
-            sr.triangle(bx, by, bx - r * 0.14f, by + r * 0.12f, bx - r * 0.04f, by + r * 0.18f);
-            sr.triangle(bx, by, bx + r * 0.12f, by - r * 0.14f, bx + r * 0.18f, by - r * 0.04f);
+        // LAYER 3: CORE - ALL-SEEING NETHER EYE
+        sr.setColor(0.06f, 0.09f, 0.16f, 1f);
+        fillCircle(sr, cx, cy, s, 94, 34, 11.0f);
+        sr.setColor(0.58f, 0.20f, 0.92f, 1f);
+        fillCircle(sr, cx, cy, s, 94, 34, 8.0f);
+        sr.setColor(0.86f, 0.15f, 0.45f, 1f);
+        fillCircle(sr, cx, cy, s, 94, 34, 5.5f);
+        sr.setColor(0.04f, 0.02f, 0.08f, 1f);
+        fillTri(sr, cx, cy, s, 94, 28, 92, 34, 94, 40);
+        fillTri(sr, cx, cy, s, 94, 28, 96, 34, 94, 40);
 
-            // Spire tips glowing void magenta
-            sr.setColor(0.95f, 0.30f, 1f, 1f);
-            sr.circle(bx - r * 0.12f, by + r * 0.15f, 1.8f);
-            sr.circle(bx + r * 0.15f, by - r * 0.12f, 1.8f);
+        // Pommel Void Eye
+        sr.setColor(0.58f, 0.20f, 0.92f, 1f);
+        fillCircle(sr, cx, cy, s, 20, 108, 5.5f);
+        sr.setColor(0.04f, 0.02f, 0.08f, 1f);
+        fillCircle(sr, cx, cy, s, 20, 108, 2.5f);
 
-            // Bone ring band
-            sr.setColor(0.65f, 0.22f, 0.85f, 1f);
-            sr.circle(bx, by, Math.max(2.8f, r * 0.11f));
-            sr.setColor(0.12f, 0.06f, 0.18f, 1f);
-            sr.circle(bx, by, 1.5f);
-        }
-
-        // 4. Eldritch Void Scythe & All-Seeing Nether Eye Headpiece
-        float tx = cx + r * 0.46f, ty = cy + r * 0.46f;
-
-        // Curved Void Crescent Blade jutting northwest
-        sr.setColor(0.16f, 0.08f, 0.24f, 1f);
-        float scyX = tx - r * 0.42f, scyY = ty + r * 0.35f;
-        sr.triangle(tx, ty, scyX, scyY, tx + r * 0.05f, ty + r * 0.32f);
-        sr.triangle(tx, ty, scyX, scyY, tx - r * 0.30f, ty + r * 0.15f);
-
-        // Razor-sharp void blade edge
-        sr.setColor(0.92f, 0.25f, 0.90f, 1f);
-        sr.triangle(tx, ty + r * 0.18f, scyX, scyY, scyX + r * 0.08f, scyY - r * 0.06f);
-
-        // Spine blade spikes
-        sr.setColor(0.60f, 0.15f, 0.80f, 1f);
-        sr.triangle(tx + r * 0.15f, ty + r * 0.10f, tx + r * 0.38f, ty + r * 0.32f, tx + r * 0.08f, ty + r * 0.26f);
-
-        // 5. Central All-Seeing Nether Eye (Multi-layered Demonic Eye)
-        sr.setColor(0.20f, 0.08f, 0.30f, 1f);
-        sr.circle(tx, ty, r * 0.28f);
-        sr.setColor(0.85f, 0.15f, 0.40f, 1f); // Crimson outer sclera
-        sr.circle(tx, ty, r * 0.20f);
-        sr.setColor(0.95f, 0.40f, 1f, 1f); // Vivid magenta iris
-        sr.circle(tx, ty, r * 0.14f);
-
-        // Slit-pupil of the Abyss Fiend
-        sr.setColor(0.06f, 0.02f, 0.10f, 1f);
-        sr.triangle(tx, ty + r * 0.12f, tx, ty - r * 0.12f, tx - 2f, ty);
-        sr.triangle(tx, ty + r * 0.12f, tx, ty - r * 0.12f, tx + 2f, ty);
-
-        // Specular glint
-        sr.setColor(1f, 1f, 1f, 0.95f);
-        sr.circle(tx - 1.5f, ty + 2.5f, 2f);
-
-        // 6. Void Pommel Crystal
-        sr.setColor(0.85f, 0.25f, 0.95f, 1f);
-        sr.circle(x1, y1, r * 0.14f);
+        // LAYER 4: SPECULAR GLINTS
         sr.setColor(Color.WHITE);
-        sr.circle(x1 - 1f, y1 + 1f, 1.8f);
+        fillCircle(sr, cx, cy, s, 92, 32, 2.0f);
+        fillCircle(sr, cx, cy, s, 68, 24, 1.8f);
+        fillCircle(sr, cx, cy, s, 88, 16, 1.8f);
+        fillCircle(sr, cx, cy, s, 106, 20, 1.8f);
+        fillCircle(sr, cx, cy, s, 19, 107, 1.5f);
     }
 
     public static void drawVucThamLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Spatio-Temporal Void Vortex Aura
-        sr.setColor(0.35f, 0.08f, 0.50f, 0.22f);
-        sr.circle(cx, cy, r * 0.96f);
-        sr.setColor(0.75f, 0.18f, 0.90f, 0.20f);
-        sr.circle(cx, cy, r * 0.80f);
+        float s = r / 64f;
 
-        // 2. Heavy Abyssal Carapace Spool Frame with 8 Demonic Horns
-        sr.setColor(0.18f, 0.08f, 0.26f, 1f);
-        sr.circle(cx, cy, r * 0.76f);
+        // LAYER 1: VOID VORTEX AURA
+        sr.setColor(0.66f, 0.33f, 0.97f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64, 64, 56);
 
-        // 8 jagged demonic horn prongs around circumference
-        for (int h = 0; h < 8; h++) {
-            float ang = h * 45f;
-            float cos = MathUtils.cosDeg(ang);
-            float sin = MathUtils.sinDeg(ang);
-            float hx = cx + cos * (r * 0.72f);
-            float hy = cy + sin * (r * 0.72f);
-            float tipX = cx + cos * (r * 0.90f);
-            float tipY = cy + sin * (r * 0.90f);
+        // LAYER 2: FACET BODY - OCTAGONAL NETHER-TITANIUM SPOOL & 8 HORNS
+        sr.setColor(0.06f, 0.09f, 0.16f, 1f);
+        fillQuad(sr, cx, cy, s, 48, 16, 80, 16, 112, 48, 16, 48);
+        fillQuad(sr, cx, cy, s, 16, 48, 112, 48, 112, 80, 16, 80);
+        fillQuad(sr, cx, cy, s, 16, 80, 112, 80, 80, 112, 48, 112);
 
-            sr.setColor(0.38f, 0.14f, 0.52f, 1f);
-            sr.triangle(hx - sin * 3.5f, hy + cos * 3.5f, hx + sin * 3.5f, hy - cos * 3.5f, tipX, tipY);
+        sr.setColor(0.12f, 0.11f, 0.29f, 1f);
+        fillQuad(sr, cx, cy, s, 49, 19, 79, 19, 109, 49, 19, 49);
+        fillQuad(sr, cx, cy, s, 19, 49, 109, 49, 109, 79, 19, 79);
+        fillQuad(sr, cx, cy, s, 19, 79, 109, 79, 79, 109, 49, 109);
 
-            // Glowing purple horn tip
-            sr.setColor(0.95f, 0.30f, 1f, 1f);
-            sr.circle(tipX, tipY, 1.8f);
-        }
+        // 8 Demonic Horn Spines
+        sr.setColor(0.35f, 0.09f, 0.58f, 1f);
+        fillTri(sr, cx, cy, s, 60, 16, 68, 16, 64, 4);
+        fillTri(sr, cx, cy, s, 60, 112, 68, 112, 64, 124);
+        fillTri(sr, cx, cy, s, 16, 60, 16, 68, 4, 64);
+        fillTri(sr, cx, cy, s, 112, 60, 112, 68, 124, 64);
+        fillTri(sr, cx, cy, s, 28, 36, 36, 28, 20, 20);
+        fillTri(sr, cx, cy, s, 100, 36, 92, 28, 108, 20);
+        fillTri(sr, cx, cy, s, 28, 92, 36, 100, 20, 108);
+        fillTri(sr, cx, cy, s, 100, 92, 92, 100, 108, 108);
 
-        // Inner void bezel
-        sr.setColor(0.08f, 0.04f, 0.12f, 1f);
-        sr.circle(cx, cy, r * 0.65f);
+        // Nether Vein Silk Filament Spool
+        sr.setColor(0.04f, 0.02f, 0.08f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 40);
+        sr.setColor(0.35f, 0.09f, 0.58f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 36);
+        sr.setColor(0.58f, 0.20f, 0.92f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 31);
+        sr.setColor(0.75f, 0.15f, 0.83f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 25);
+        sr.setColor(0.04f, 0.02f, 0.08f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 19);
 
-        // 3. Shimmering Nether Vein Filament (Interwoven Violet & Blood-crimson)
-        sr.setColor(0.85f, 0.20f, 0.95f, 0.95f);
-        sr.circle(cx, cy, r * 0.55f);
-        sr.setColor(0.60f, 0.10f, 0.35f, 0.95f);
-        sr.circle(cx, cy, r * 0.44f);
-        sr.setColor(0.10f, 0.04f, 0.15f, 1f);
-        sr.circle(cx, cy, r * 0.34f);
+        // LAYER 3: CORE - CENTRAL NETHER MEDALLION & EYE
+        sr.setColor(0.18f, 0.05f, 0.40f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 15.0f);
+        sr.setColor(0.58f, 0.20f, 0.92f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 11.0f);
+        sr.setColor(0.04f, 0.02f, 0.08f, 1f);
+        fillTri(sr, cx, cy, s, 64, 55, 61, 64, 64, 73);
+        fillTri(sr, cx, cy, s, 64, 55, 67, 64, 64, 73);
+        sr.setColor(0.96f, 0.45f, 0.71f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 2.0f);
 
-        // 4. Central Nether Core & Eye
-        sr.setColor(0.28f, 0.10f, 0.38f, 1f);
-        sr.circle(cx, cy, r * 0.26f);
-        sr.setColor(0.95f, 0.35f, 0.90f, 1f);
-        sr.circle(cx, cy, r * 0.18f);
-
-        // Void Singularity Pupil
-        sr.setColor(0.05f, 0.02f, 0.08f, 1f);
-        sr.circle(cx, cy, r * 0.10f);
+        // LAYER 4: SPECULAR GLINTS
         sr.setColor(Color.WHITE);
-        sr.circle(cx - 1.5f, cy + 1.5f, 1.8f);
+        fillCircle(sr, cx, cy, s, 62, 62, 1.8f);
+        fillCircle(sr, cx, cy, s, 64, 5, 1.8f);
+        fillCircle(sr, cx, cy, s, 123, 64, 1.8f);
+        fillCircle(sr, cx, cy, s, 107, 21, 1.8f);
+        fillCircle(sr, cx, cy, s, 21, 21, 1.8f);
+        fillCircle(sr, cx, cy, s, 5, 64, 1.8f);
     }
 
     public static void drawVucThamHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Abyssal Shadow Miasma Aura
-        sr.setColor(0.40f, 0.08f, 0.60f, 0.22f);
-        sr.circle(cx, cy, r * 0.96f);
+        float s = r / 64f;
 
-        // 2. Dragon Bone Shank & Bend
-        float shankX = cx - r * 0.22f;
-        float topY = cy + r * 0.56f;
-        float bendY = cy - r * 0.38f;
-        float barbX = cx + r * 0.38f;
+        // LAYER 1: VOID MIASMA AURA
+        sr.setColor(0.66f, 0.33f, 0.97f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64, 66, 54);
 
-        // Dark obsidian bone shank
-        sr.setColor(0.14f, 0.06f, 0.20f, 1f);
-        sr.rectLine(shankX, topY, shankX, bendY, Math.max(5f, r * 0.22f));
-        sr.rectLine(shankX, bendY, barbX, bendY, Math.max(5f, r * 0.22f));
-        sr.rectLine(barbX, bendY, barbX, cy + r * 0.20f, Math.max(4.5f, r * 0.20f));
+        // LAYER 2: FACET BODY - CHITIN DRAGON CLAW HOOK
+        // Outer Chitin Spines
+        sr.setColor(0.12f, 0.11f, 0.29f, 1f);
+        fillTri(sr, cx, cy, s, 32, 44, 18, 52, 34, 60);
+        sr.setColor(0.19f, 0.18f, 0.51f, 1f);
+        fillTri(sr, cx, cy, s, 34, 60, 18, 52, 34, 54);
 
-        // Violet-crimson void fuller (rãnh năng lượng dọc thân)
-        sr.setColor(0.90f, 0.25f, 0.95f, 0.95f);
-        sr.rectLine(shankX, topY - r * 0.12f, shankX, bendY + 2f, Math.max(1.8f, r * 0.08f));
-        sr.rectLine(shankX, bendY, barbX, bendY, Math.max(1.8f, r * 0.08f));
+        sr.setColor(0.12f, 0.11f, 0.29f, 1f);
+        fillTri(sr, cx, cy, s, 36, 72, 20, 86, 38, 88);
+        sr.setColor(0.23f, 0.03f, 0.39f, 1f);
+        fillTri(sr, cx, cy, s, 38, 88, 20, 86, 40, 82);
 
-        // 3. Spiky Demon Bone Scales on Shank Back
-        for (int s = 0; s < 4; s++) {
-            float sy = topY - r * 0.15f - s * r * 0.18f;
-            sr.setColor(0.38f, 0.14f, 0.52f, 1f);
-            sr.triangle(shankX - r * 0.08f, sy, shankX - r * 0.24f, sy + r * 0.08f, shankX - r * 0.08f, sy + r * 0.14f);
-            sr.setColor(0.95f, 0.35f, 1f, 1f);
-            sr.circle(shankX - r * 0.24f, sy + r * 0.08f, 1.5f);
-        }
+        sr.setColor(0.09f, 0.05f, 0.16f, 1f);
+        fillTri(sr, cx, cy, s, 52, 100, 48, 118, 64, 106);
+        sr.setColor(0.18f, 0.06f, 0.40f, 1f);
+        fillTri(sr, cx, cy, s, 64, 106, 48, 118, 60, 102);
 
-        // 4. Triple Barbed Fiend Talons & Nether Point
-        float pointX = barbX + r * 0.02f;
-        float pointY = cy + r * 0.28f;
+        // Eyelet Demonic Horn
+        sr.setColor(0.18f, 0.06f, 0.40f, 1f);
+        fillTri(sr, cx, cy, s, 34, 20, 22, 10, 40, 16);
+        sr.setColor(0.30f, 0.11f, 0.58f, 1f);
+        fillTri(sr, cx, cy, s, 40, 16, 22, 10, 38, 24);
 
-        // Main spear talon
-        sr.setColor(0.85f, 0.20f, 0.85f, 1f);
-        sr.triangle(barbX - r * 0.10f, cy + r * 0.15f, barbX + r * 0.10f, cy + r * 0.15f, pointX, pointY + r * 0.22f);
+        // Eyelet Outer Rings
+        sr.setColor(0.06f, 0.09f, 0.16f, 1f);
+        fillCircle(sr, cx, cy, s, 38, 26, 14.0f);
+        sr.setColor(0.12f, 0.11f, 0.29f, 1f);
+        fillCircle(sr, cx, cy, s, 38, 26, 11.0f);
+        sr.setColor(0.04f, 0.02f, 0.08f, 1f);
+        fillCircle(sr, cx, cy, s, 38, 26, 7.0f);
 
-        // Deadly dual backward barbed fangs
-        sr.setColor(0.98f, 0.30f, 0.75f, 1f);
-        sr.triangle(barbX - r * 0.02f, cy + r * 0.24f, barbX - r * 0.22f, cy + r * 0.08f, barbX - r * 0.06f, cy + r * 0.12f);
-        sr.triangle(barbX + r * 0.06f, cy + r * 0.24f, barbX + r * 0.24f, cy + r * 0.10f, barbX + r * 0.08f, cy + r * 0.14f);
+        // Shank Chitin Facets
+        sr.setColor(0.09f, 0.05f, 0.16f, 1f);
+        fillQuad(sr, cx, cy, s, 32, 38, 44, 38, 46, 68, 34, 68);
+        sr.setColor(0.18f, 0.06f, 0.40f, 1f);
+        fillQuad(sr, cx, cy, s, 32, 38, 38, 38, 40, 68, 34, 68);
+        sr.setColor(0.06f, 0.09f, 0.16f, 1f);
+        fillQuad(sr, cx, cy, s, 38, 38, 44, 38, 46, 68, 40, 68);
 
-        // Talon core glow
+        // Lower Shank to Heel Curve
+        sr.setColor(0.09f, 0.05f, 0.16f, 1f);
+        fillQuad(sr, cx, cy, s, 34, 68, 46, 68, 50, 92, 38, 92);
+        sr.setColor(0.18f, 0.06f, 0.40f, 1f);
+        fillQuad(sr, cx, cy, s, 34, 68, 40, 68, 44, 92, 38, 92);
+
+        // Heel / Keel Arc
+        sr.setColor(0.06f, 0.09f, 0.16f, 1f);
+        fillQuad(sr, cx, cy, s, 38, 92, 50, 92, 70, 106, 58, 106);
+        fillQuad(sr, cx, cy, s, 58, 106, 70, 106, 88, 96, 78, 92);
+        sr.setColor(0.18f, 0.06f, 0.40f, 1f);
+        fillQuad(sr, cx, cy, s, 44, 92, 50, 92, 70, 106, 64, 106);
+        sr.setColor(0.23f, 0.03f, 0.39f, 1f);
+        fillQuad(sr, cx, cy, s, 64, 106, 70, 106, 88, 96, 82, 94);
+
+        // Ascending Throat & Talon
+        sr.setColor(0.06f, 0.09f, 0.16f, 1f);
+        fillQuad(sr, cx, cy, s, 78, 92, 88, 96, 98, 66, 88, 68);
+        sr.setColor(0.18f, 0.06f, 0.40f, 1f);
+        fillQuad(sr, cx, cy, s, 82, 94, 88, 96, 98, 66, 92, 68);
+
+        // Deadly Reverse Barb
+        sr.setColor(0.23f, 0.03f, 0.39f, 1f);
+        fillTri(sr, cx, cy, s, 88, 68, 76, 58, 92, 60);
+        sr.setColor(0.35f, 0.11f, 0.53f, 1f);
+        fillTri(sr, cx, cy, s, 92, 60, 76, 58, 90, 56);
+
+        // Razor Talon Point
+        sr.setColor(0.18f, 0.06f, 0.40f, 1f);
+        fillQuad(sr, cx, cy, s, 88, 68, 98, 66, 100, 44, 94, 54);
+        sr.setColor(0.30f, 0.11f, 0.58f, 1f);
+        fillQuad(sr, cx, cy, s, 92, 68, 98, 66, 100, 44, 96, 52);
+
+        // LAYER 3: CORE - PLASMA FULLER GROOVE & NETHER EYE
+        sr.setColor(0.75f, 0.15f, 0.83f, 1f);
+        drawLine(sr, cx, cy, s, 39, 40, 41, 90, 2.5f);
+        drawLine(sr, cx, cy, s, 41, 90, 66, 103, 2.5f);
+        drawLine(sr, cx, cy, s, 66, 103, 94, 60, 2.0f);
+        sr.setColor(0.91f, 0.47f, 0.98f, 1f);
+        drawLine(sr, cx, cy, s, 94, 60, 98, 48, 1.5f);
+
+        // Glowing Nether Eye in Socket
+        sr.setColor(0.66f, 0.33f, 0.97f, 1f);
+        fillCircle(sr, cx, cy, s, 38, 26, 5.0f);
+        sr.setColor(0.04f, 0.02f, 0.08f, 1f);
+        fillTri(sr, cx, cy, s, 38, 22, 36, 26, 38, 30);
+        fillTri(sr, cx, cy, s, 38, 22, 40, 26, 38, 30);
+        sr.setColor(0.96f, 0.45f, 0.71f, 1f);
+        fillCircle(sr, cx, cy, s, 38, 26, 1.5f);
+
+        // LAYER 4: SPECULAR GLINTS
         sr.setColor(Color.WHITE);
-        sr.circle(pointX, pointY + r * 0.16f, 2f);
-
-        // 5. Crown Eyelet: Demonic Horned Skull & Blood Talisman
-        sr.setColor(0.30f, 0.10f, 0.42f, 1f);
-        sr.circle(shankX, topY, r * 0.25f);
-        sr.setColor(0.08f, 0.04f, 0.12f, 1f);
-        sr.circle(shankX, topY, r * 0.14f);
-
-        // Demon Horns atop eyelet
-        sr.setColor(0.65f, 0.20f, 0.85f, 1f);
-        sr.triangle(shankX - r * 0.08f, topY + r * 0.12f, shankX - r * 0.22f, topY + r * 0.26f, shankX, topY + r * 0.20f);
-        sr.triangle(shankX + r * 0.08f, topY + r * 0.12f, shankX + r * 0.22f, topY + r * 0.26f, shankX, topY + r * 0.20f);
-
-        // Dangling Blood Pearl Charm
-        sr.setColor(0.85f, 0.25f, 0.95f, 0.85f);
-        sr.rectLine(shankX, topY, shankX - r * 0.28f, topY - r * 0.20f, 1.8f);
-        sr.setColor(0.95f, 0.18f, 0.45f, 1f);
-        sr.circle(shankX - r * 0.28f, topY - r * 0.20f, 4.5f);
-        sr.setColor(Color.WHITE);
-        sr.circle(shankX - r * 0.28f - 1f, topY - r * 0.20f + 1f, 1.6f);
+        fillCircle(sr, cx, cy, s, 100, 44, 2.2f);
+        fillCircle(sr, cx, cy, s, 76, 58, 1.8f);
+        fillCircle(sr, cx, cy, s, 18, 52, 1.5f);
+        fillCircle(sr, cx, cy, s, 20, 86, 1.5f);
+        fillCircle(sr, cx, cy, s, 48, 118, 1.8f);
+        fillCircle(sr, cx, cy, s, 22, 10, 1.5f);
+        fillCircle(sr, cx, cy, s, 41, 23, 1.5f);
     }
 
     // =========================================================================
-    // 7. HOÀNG GIA SET (Platinum Royal Crown Scepter, Imperial Silk Spool, Royal Jadeite Gold Hook)
+    // 7. HOÀNG GIA SET (Platinum Crown Scepter, Imperial Silk Spool, White Jade Hook)
     // =========================================================================
     public static void drawHoangGiaRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Royal Golden & Violet Celestial Aura
-        sr.setColor(1.0f, 0.85f, 0.32f, 0.22f);
-        sr.circle(cx, cy, r * 1.32f);
-        sr.setColor(0.65f, 0.25f, 0.85f, 0.16f);
-        sr.circle(cx, cy, r * 1.05f);
+        float s = r / 64f;
 
-        // 2. Heavy Polished Platinum Core Shaft (Thân trượng bạch kim vương giả)
-        float startX = cx - r * 0.78f, startY = cy - r * 0.78f;
-        float endX = cx + r * 0.60f, endY = cy + r * 0.60f;
-        sr.setColor(0.70f, 0.74f, 0.84f, 1f); // Dark platinum backing
-        sr.rectLine(startX, startY, endX, endY, Math.max(4.2f, r * 0.15f));
-        sr.setColor(0.92f, 0.95f, 1.0f, 1f); // Gleaming white platinum core
-        sr.rectLine(startX, startY, endX, endY, Math.max(2.6f, r * 0.09f));
+        // LAYER 1: RADIANT ROYAL AURA
+        sr.setColor(0.98f, 0.75f, 0.14f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64, 64, 56);
 
-        // 3. Imperial Crimson Velvet Grip & Spiraling 24K Gold Wire (Bọc nhung đỏ thẫm & chỉ vàng)
-        float gripStartX = cx - r * 0.75f, gripStartY = cy - r * 0.75f;
-        float gripEndX = cx - r * 0.28f, gripEndY = cy - r * 0.28f;
-        sr.setColor(0.72f, 0.12f, 0.22f, 1f); // Royal crimson velvet
-        sr.rectLine(gripStartX, gripStartY, gripEndX, gripEndY, Math.max(5.2f, r * 0.19f));
+        // LAYER 2: FACET BODY - ROYAL PLATINUM & GOLD SCEPTER
+        // Pommel: Golden Crown & Royal Blue Sapphire Orb
+        sr.setColor(0.12f, 0.23f, 0.54f, 1f);
+        fillCircle(sr, cx, cy, s, 18, 110, 8.0f);
+        sr.setColor(0.15f, 0.39f, 0.92f, 1f);
+        fillCircle(sr, cx, cy, s, 18, 110, 6.0f);
+        sr.setColor(0.85f, 0.47f, 0.02f, 1f);
+        fillTri(sr, cx, cy, s, 14, 106, 26, 98, 20, 102);
+        fillTri(sr, cx, cy, s, 20, 102, 18, 94, 16, 102);
+        fillTri(sr, cx, cy, s, 16, 102, 10, 98, 22, 106);
 
-        // 24K Gold spiraling bands around velvet
-        sr.setColor(1.0f, 0.88f, 0.35f, 1f);
-        for (int i = 0; i < 4; i++) {
-            float bx = gripStartX + i * r * 0.14f;
-            float by = gripStartY + i * r * 0.14f;
-            sr.rectLine(bx - r * 0.06f, by + r * 0.06f, bx + r * 0.06f, by - r * 0.06f, Math.max(1.8f, r * 0.06f));
-        }
+        // Royal Grip: Platinum & Gold Filigree
+        sr.setColor(0.80f, 0.84f, 0.88f, 1f);
+        fillQuad(sr, cx, cy, s, 18, 104, 24, 104, 38, 90, 32, 90);
+        sr.setColor(0.97f, 0.98f, 0.99f, 1f);
+        fillQuad(sr, cx, cy, s, 20, 104, 24, 104, 38, 90, 34, 90);
+        sr.setColor(0.96f, 0.62f, 0.04f, 1f);
+        drawLine(sr, cx, cy, s, 21, 101, 26, 96, 2.0f);
+        drawLine(sr, cx, cy, s, 27, 95, 32, 90, 2.0f);
 
-        // Golden filigree joint rings & ferrule collars
-        sr.setColor(1.0f, 0.82f, 0.25f, 1f);
-        sr.circle(gripEndX, gripEndY, Math.max(3.2f, r * 0.12f));
-        sr.circle(cx + r * 0.05f, cy + r * 0.05f, Math.max(2.6f, r * 0.10f));
-        sr.circle(cx + r * 0.32f, cy + r * 0.32f, Math.max(2.6f, r * 0.10f));
+        // Reel Seat / Fleur-de-lis Golden Sovereign Mount
+        sr.setColor(0.71f, 0.33f, 0.04f, 1f);
+        fillCircle(sr, cx, cy, s, 36, 86, 9.0f);
+        sr.setColor(0.96f, 0.62f, 0.04f, 1f);
+        fillCircle(sr, cx, cy, s, 36, 86, 7.0f);
+        sr.setColor(0.99f, 0.94f, 0.54f, 1f);
+        fillTri(sr, cx, cy, s, 36, 76, 39, 83, 33, 83);
+        fillTri(sr, cx, cy, s, 45, 84, 40, 88, 41, 94);
+        fillTri(sr, cx, cy, s, 27, 84, 32, 88, 31, 94);
+        sr.setColor(0.12f, 0.23f, 0.54f, 1f);
+        fillCircle(sr, cx, cy, s, 36, 86, 3.5f);
+        sr.setColor(0.38f, 0.65f, 0.98f, 1f);
+        fillCircle(sr, cx, cy, s, 36, 86, 2.0f);
 
-        // 4. Imperial Crown Butt Cap with Royal Ruby Jewel (Chuôi trượng vương miện ngọc ruby)
-        sr.setColor(1.0f, 0.82f, 0.22f, 1f);
-        sr.circle(startX, startY, Math.max(4.5f, r * 0.20f));
-        // Embedded Oval Ruby
-        sr.setColor(0.95f, 0.12f, 0.25f, 1f);
-        sr.circle(startX, startY, Math.max(2.8f, r * 0.12f));
-        sr.setColor(1f, 1f, 1f, 0.95f);
-        sr.circle(startX - 0.8f, startY + 0.8f, 1.2f);
+        // Main Shaft: Polished Royal Platinum
+        // Lower Section
+        sr.setColor(0.80f, 0.84f, 0.88f, 1f);
+        fillQuad(sr, cx, cy, s, 36, 84, 42, 84, 66, 60, 62, 56);
+        sr.setColor(0.97f, 0.98f, 0.99f, 1f);
+        fillQuad(sr, cx, cy, s, 38, 84, 42, 84, 66, 60, 64, 58);
+        // Gold Ferrule 1
+        sr.setColor(0.96f, 0.62f, 0.04f, 1f);
+        fillQuad(sr, cx, cy, s, 61, 59, 67, 59, 69, 55, 63, 55);
 
-        // 5. 3 Golden Ceramic Guides with Embedded Royal Sapphires (Khoen vàng nạm lam ngọc)
-        for (int i = 0; i < 3; i++) {
-            float gx = cx - r * 0.12f + i * r * 0.24f;
-            float gy = cy - r * 0.12f + i * r * 0.24f;
-            sr.setColor(1.0f, 0.82f, 0.25f, 1f);
-            sr.rectLine(gx, gy, gx - r * 0.09f, gy + r * 0.09f, 2f);
-            // Sapphire jewel ring
-            sr.setColor(0.20f, 0.45f, 0.95f, 1f);
-            sr.circle(gx - r * 0.09f, gy + r * 0.09f, Math.max(2f, r * 0.08f));
-            sr.setColor(0.60f, 0.85f, 1.0f, 1f);
-            sr.circle(gx - r * 0.09f, gy + r * 0.09f, Math.max(1f, r * 0.04f));
-        }
+        // Mid Section
+        sr.setColor(0.80f, 0.84f, 0.88f, 1f);
+        fillQuad(sr, cx, cy, s, 64, 56, 68, 56, 88, 36, 85, 33);
+        sr.setColor(0.97f, 0.98f, 0.99f, 1f);
+        fillQuad(sr, cx, cy, s, 66, 56, 68, 56, 88, 36, 86, 34);
+        // Gold Ferrule 2
+        sr.setColor(0.96f, 0.62f, 0.04f, 1f);
+        fillQuad(sr, cx, cy, s, 84, 35, 89, 35, 91, 31, 86, 31);
 
-        // 6. Sculpted Imperial Golden Crown Finial (Vương miện hoàng gia trên đỉnh trượng)
-        float hx = cx + r * 0.72f, hy = cy + r * 0.72f;
-        // Crown Base circlet
-        sr.setColor(1.0f, 0.85f, 0.28f, 1f);
-        sr.circle(hx, hy, Math.max(4.5f, r * 0.18f));
-        // 3 Crown fleur-de-lis points
-        sr.setColor(1.0f, 0.88f, 0.35f, 1f);
-        sr.triangle(hx - r * 0.18f, hy, hx - r * 0.28f, hy + r * 0.24f, hx - r * 0.08f, hy + r * 0.08f);
-        sr.triangle(hx, hy, hx - r * 0.04f, hy + r * 0.32f, hx + r * 0.08f, hy + r * 0.08f);
-        sr.triangle(hx, hy - r * 0.18f, hx + r * 0.24f, hy - r * 0.28f, hx + r * 0.08f, hy - r * 0.08f);
-        // Center crown peak gem (Luminous star diamond)
-        sr.setColor(1f, 1f, 1f, 1f);
-        sr.circle(hx - r * 0.04f, hy + r * 0.32f, Math.max(1.8f, r * 0.07f));
-        sr.setColor(0.95f, 0.15f, 0.25f, 1f);
-        sr.circle(hx, hy, Math.max(2.2f, r * 0.09f));
+        // Tip Section
+        sr.setColor(0.89f, 0.91f, 0.94f, 1f);
+        fillQuad(sr, cx, cy, s, 87, 32, 90, 32, 106, 16, 104, 14);
+        sr.setColor(Color.WHITE);
+        fillQuad(sr, cx, cy, s, 88, 32, 90, 32, 106, 16, 105, 15);
+
+        // Royal Line Guides & Golden Line
+        sr.setColor(0.85f, 0.47f, 0.02f, 1f);
+        fillCircle(sr, cx, cy, s, 58, 68, 4.5f);
+        sr.setColor(0.09f, 0.09f, 0.11f, 1f);
+        fillCircle(sr, cx, cy, s, 58, 68, 2.5f);
+        sr.setColor(0.85f, 0.47f, 0.02f, 1f);
+        fillCircle(sr, cx, cy, s, 78, 46, 3.5f);
+        sr.setColor(0.09f, 0.09f, 0.11f, 1f);
+        fillCircle(sr, cx, cy, s, 78, 46, 1.8f);
+
+        sr.setColor(0.99f, 0.94f, 0.54f, 1f);
+        drawLine(sr, cx, cy, s, 36, 86, 58, 68, 1.2f);
+        drawLine(sr, cx, cy, s, 58, 68, 78, 46, 1.2f);
+        drawLine(sr, cx, cy, s, 78, 46, 105, 15, 1.2f);
+
+        // LAYER 3: CORE - ROYAL CROWN FINIAL & RUBY GEM
+        sr.setColor(0.85f, 0.47f, 0.02f, 1f);
+        fillTri(sr, cx, cy, s, 104, 18, 114, 8, 109, 12);
+        fillTri(sr, cx, cy, s, 104, 18, 106, 6, 108, 18);
+        fillTri(sr, cx, cy, s, 108, 18, 98, 8, 103, 12);
+
+        // Glowing Royal Ruby Jewel
+        sr.setColor(0.86f, 0.15f, 0.15f, 1f);
+        fillTri(sr, cx, cy, s, 106, 6, 110, 10, 106, 14);
+        fillTri(sr, cx, cy, s, 106, 6, 102, 10, 106, 14);
+        sr.setColor(0.94f, 0.27f, 0.27f, 1f);
+        fillTri(sr, cx, cy, s, 106, 6, 109, 10, 106, 13);
+        fillTri(sr, cx, cy, s, 106, 6, 103, 10, 106, 13);
+
+        // LAYER 4: SPECULAR GLINTS
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 106, 8, 1.8f);
+        fillCircle(sr, cx, cy, s, 89, 31, 1.5f);
+        fillCircle(sr, cx, cy, s, 66, 55, 1.5f);
+        fillCircle(sr, cx, cy, s, 36, 84, 1.8f);
+        fillCircle(sr, cx, cy, s, 16, 108, 1.8f);
     }
 
     public static void drawHoangGiaLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Imperial Royal Aura
-        sr.setColor(1.0f, 0.85f, 0.30f, 0.22f);
-        sr.circle(cx, cy, r * 1.30f);
-        sr.setColor(0.75f, 0.15f, 0.25f, 0.15f);
-        sr.circle(cx, cy, r * 1.05f);
+        float s = r / 64f;
 
-        // 2. Sculpted Imperial Ivory & 24K Gold Rotor Frame (Khung tời ngà voi dát vàng)
-        sr.setColor(0.95f, 0.93f, 0.86f, 1f); // Polished Ivory
-        sr.circle(cx, cy, r * 0.92f);
-        // Outer 24k gold filigree ring
-        sr.setColor(1.0f, 0.85f, 0.25f, 1f);
-        sr.circle(cx, cy, r * 0.84f);
-        sr.setColor(0.14f, 0.12f, 0.16f, 1f);
-        sr.circle(cx, cy, r * 0.74f);
+        // LAYER 1: REGAL PURPLE & GOLD AURA
+        sr.setColor(0.75f, 0.52f, 0.99f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64, 64, 56);
 
-        // 8 Imperial Gold Petal Crown Crests around the rim
-        sr.setColor(1.0f, 0.88f, 0.35f, 1f);
-        for (int i = 0; i < 8; i++) {
-            float ang = i * 45f * MathUtils.degreesToRadians;
-            float cos = MathUtils.cos(ang);
-            float sin = MathUtils.sin(ang);
-            float tx = cx + cos * r * 0.78f;
-            float ty = cy + sin * r * 0.78f;
-            sr.circle(tx, ty, Math.max(2.5f, r * 0.10f));
-            sr.triangle(tx, ty, tx - sin * r * 0.06f, ty + cos * r * 0.06f, cx + cos * r * 0.96f, cy + sin * r * 0.96f);
-        }
+        // LAYER 2: FACET BODY - 8-SPOKE ROYAL GOLD WHEEL
+        // Outer Gold Rim
+        sr.setColor(0.47f, 0.21f, 0.06f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 50.0f);
+        sr.setColor(0.85f, 0.47f, 0.02f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 47.0f);
+        sr.setColor(0.96f, 0.62f, 0.04f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 44.0f);
+        sr.setColor(0.71f, 0.33f, 0.04f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 41.0f);
 
-        // 3. Deep Spool Well of Crimson & Gold Imperial Silk (Tơ tằm thượng hạng màu chu sa)
-        sr.setColor(0.12f, 0.08f, 0.10f, 1f);
-        sr.circle(cx, cy, r * 0.68f);
+        // 8 Royal Crown Spoke Projections
+        sr.setColor(0.99f, 0.94f, 0.54f, 1f);
+        fillTri(sr, cx, cy, s, 64, 10, 69, 19, 59, 19);
+        fillTri(sr, cx, cy, s, 64, 118, 69, 109, 59, 109);
+        fillTri(sr, cx, cy, s, 10, 64, 19, 59, 19, 69);
+        fillTri(sr, cx, cy, s, 118, 64, 109, 59, 109, 69);
+        fillTri(sr, cx, cy, s, 26, 26, 35, 28, 28, 35);
+        fillTri(sr, cx, cy, s, 102, 26, 93, 28, 100, 35);
+        fillTri(sr, cx, cy, s, 26, 102, 35, 100, 28, 93);
+        fillTri(sr, cx, cy, s, 102, 102, 93, 100, 100, 93);
 
-        // Woven royal crimson silk layers
-        sr.setColor(0.78f, 0.12f, 0.20f, 1f); // Deep imperial crimson silk
-        sr.circle(cx, cy, r * 0.62f);
-        sr.setColor(1.0f, 0.85f, 0.30f, 1f); // 24K Gold spun thread
-        sr.circle(cx, cy, r * 0.52f);
-        sr.setColor(0.85f, 0.16f, 0.25f, 1f); // Scarlet silk
-        sr.circle(cx, cy, r * 0.42f);
-        sr.setColor(1.0f, 0.92f, 0.45f, 1f); // Core gold thread
-        sr.circle(cx, cy, r * 0.32f);
+        // Royal Purple Silk Spool
+        sr.setColor(0.18f, 0.06f, 0.40f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 40.0f);
+        sr.setColor(0.35f, 0.11f, 0.53f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 37.0f);
+        sr.setColor(0.49f, 0.23f, 0.93f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 33.0f);
+        sr.setColor(0.58f, 0.20f, 0.92f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 29.0f);
 
-        // Spiral silk brocade weave texture (Hoa văn dệt tơ tằm chéo)
-        sr.setColor(1.0f, 0.82f, 0.25f, 0.80f);
-        for (int i = 0; i < 8; i++) {
-            float ang = (i * 45f + 22.5f) * MathUtils.degreesToRadians;
-            float cos = MathUtils.cos(ang);
-            float sin = MathUtils.sin(ang);
-            sr.rectLine(cx + cos * r * 0.34f, cy + sin * r * 0.34f, cx + cos * r * 0.62f, cy + sin * r * 0.62f, 1.4f);
-        }
+        // Golden Silk Thread Waves & Trailing Line
+        sr.setColor(0.99f, 0.94f, 0.54f, 1f);
+        drawLine(sr, cx, cy, s, 88, 40, 102, 28, 2.2f);
+        drawLine(sr, cx, cy, s, 102, 28, 116, 14, 2.2f);
+        fillCircle(sr, cx, cy, s, 116, 14, 2.5f);
 
-        // 4. Center Imperial Seal Hub with Royal Ruby (Trục ấn triều đình nạm ngọc ruby)
-        sr.setColor(0.95f, 0.92f, 0.85f, 1f); // Ivory collar
-        sr.circle(cx, cy, r * 0.24f);
-        sr.setColor(1.0f, 0.82f, 0.22f, 1f); // Gold mount
-        sr.circle(cx, cy, r * 0.17f);
-        // Ruby core
-        sr.setColor(0.95f, 0.12f, 0.25f, 1f);
-        sr.circle(cx, cy, r * 0.10f);
-        sr.setColor(1f, 1f, 1f, 0.95f);
-        sr.circle(cx - r * 0.03f, cy + r * 0.03f, 1.2f);
+        // LAYER 3: CORE - ROYAL SAPPHIRE & GOLD MEDALLION
+        sr.setColor(0.85f, 0.47f, 0.02f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 21.0f);
+        sr.setColor(0.96f, 0.62f, 0.04f, 1f);
+        fillCircle(sr, cx, cy, s, 64, 64, 18.0f);
 
-        // 5. Gilded Bail Arm & Flowing Royal Silk Line (Càng tời dát vàng & sợi tơ tằm tỏa sáng)
-        sr.setColor(1.0f, 0.82f, 0.22f, 1f);
-        sr.rectLine(cx + r * 0.52f, cy - r * 0.28f, cx + r * 0.84f, cy + r * 0.42f, Math.max(2.6f, r * 0.09f));
-        // Diamond roller guide
-        sr.setColor(0.55f, 0.88f, 1.0f, 1f);
-        sr.circle(cx + r * 0.84f, cy + r * 0.42f, Math.max(2.8f, r * 0.10f));
-        // Glowing gold-crimson silk thread trailing out
-        sr.setColor(1.0f, 0.88f, 0.35f, 1f);
-        sr.rectLine(cx + r * 0.84f, cy + r * 0.42f, cx + r * 1.15f, cy + r * 0.92f, Math.max(1.8f, r * 0.06f));
-        sr.setColor(1f, 1f, 1f, 1f);
-        sr.circle(cx + r * 1.02f, cy + r * 0.70f, 1.5f);
+        sr.setColor(0.99f, 0.94f, 0.54f, 1f);
+        fillTri(sr, cx, cy, s, 64, 44, 67, 50, 61, 50);
+        fillTri(sr, cx, cy, s, 64, 84, 67, 78, 61, 78);
+        fillTri(sr, cx, cy, s, 44, 64, 50, 67, 50, 61);
+        fillTri(sr, cx, cy, s, 84, 64, 78, 67, 78, 61);
+
+        // Brilliant Cut Royal Sapphire Gem
+        sr.setColor(0.12f, 0.23f, 0.54f, 1f);
+        fillQuad(sr, cx, cy, s, 54, 54, 74, 54, 78, 64, 50, 64);
+        fillQuad(sr, cx, cy, s, 50, 64, 78, 64, 74, 74, 54, 74);
+        sr.setColor(0.15f, 0.39f, 0.92f, 1f);
+        fillQuad(sr, cx, cy, s, 56, 56, 72, 56, 75, 64, 53, 64);
+        fillQuad(sr, cx, cy, s, 53, 64, 75, 64, 72, 72, 56, 72);
+        sr.setColor(0.23f, 0.51f, 0.96f, 1f);
+        fillQuad(sr, cx, cy, s, 58, 58, 70, 58, 72, 64, 56, 64);
+        fillQuad(sr, cx, cy, s, 56, 64, 72, 64, 70, 70, 58, 70);
+        sr.setColor(0.38f, 0.65f, 0.98f, 1f);
+        fillQuad(sr, cx, cy, s, 60, 59, 68, 59, 70, 64, 58, 64);
+
+        // LAYER 4: SPECULAR GLINTS
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 61, 59, 2.0f);
+        fillCircle(sr, cx, cy, s, 64, 11, 1.5f);
+        fillCircle(sr, cx, cy, s, 117, 14, 1.8f);
+        fillCircle(sr, cx, cy, s, 102, 27, 1.5f);
+        fillCircle(sr, cx, cy, s, 117, 64, 1.5f);
+        fillCircle(sr, cx, cy, s, 27, 27, 1.5f);
+        fillCircle(sr, cx, cy, s, 11, 64, 1.5f);
     }
 
     public static void drawHoangGiaHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Imperial Jade & Gold Aura
-        sr.setColor(0.25f, 0.85f, 0.50f, 0.22f);
-        sr.circle(cx, cy, r * 1.25f);
-        sr.setColor(1.0f, 0.85f, 0.30f, 0.16f);
-        sr.circle(cx, cy, r * 1.05f);
+        float s = r / 64f;
 
-        // 2. Imperial Golden Lotus Eyelet & Royal Ruby Charm (Khuyên hoa sen vàng & chuỗi ngọc)
-        float eyeX = cx - r * 0.22f;
-        float eyeY = cy + r * 0.70f;
-        sr.setColor(1.0f, 0.82f, 0.22f, 1f);
-        sr.circle(eyeX, eyeY, Math.max(4.6f, r * 0.22f));
-        sr.setColor(0.08f, 0.12f, 0.16f, 1f);
-        sr.circle(eyeX, eyeY, Math.max(2.0f, r * 0.10f));
+        // LAYER 1: RADIANT CHAMPAGNE GOLD AURA
+        sr.setColor(0.99f, 0.94f, 0.54f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64, 66, 54);
 
-        // 24K Gold filigree crown collar
-        sr.setColor(1.0f, 0.88f, 0.35f, 1f);
-        sr.rect(eyeX - r * 0.14f, eyeY - r * 0.22f, r * 0.28f, r * 0.12f);
+        // LAYER 2: FACET BODY - WHITE JADE & GOLD FILIGREE HOOK
+        // Golden Crown Eyelet Prongs
+        sr.setColor(0.85f, 0.47f, 0.02f, 1f);
+        fillTri(sr, cx, cy, s, 30, 16, 38, 6, 46, 16);
+        sr.setColor(0.96f, 0.62f, 0.04f, 1f);
+        fillTri(sr, cx, cy, s, 32, 16, 38, 8, 44, 16);
+        sr.setColor(0.71f, 0.33f, 0.04f, 1f);
+        fillTri(sr, cx, cy, s, 26, 14, 32, 20, 28, 24);
+        fillTri(sr, cx, cy, s, 50, 14, 44, 20, 48, 24);
 
-        // Hanging Royal Crimson Silk Tassel with dangling Ruby Gem (Tua rua nhung đỏ nạm ngọc ruby)
-        sr.setColor(0.85f, 0.14f, 0.22f, 1f);
-        sr.triangle(eyeX, eyeY - r * 0.22f, eyeX - r * 0.18f, eyeY - r * 0.52f, eyeX + r * 0.04f, eyeY - r * 0.52f);
-        // Ruby pendant bead
-        sr.setColor(0.95f, 0.15f, 0.25f, 1f);
-        sr.circle(eyeX - r * 0.07f, eyeY - r * 0.54f, Math.max(2.2f, r * 0.09f));
-        sr.setColor(1f, 1f, 1f, 1f);
-        sr.circle(eyeX - r * 0.09f, eyeY - r * 0.52f, 1.2f);
+        // Polished Gold Eyelet Ring
+        sr.setColor(0.71f, 0.33f, 0.04f, 1f);
+        fillCircle(sr, cx, cy, s, 38, 24, 12.0f);
+        sr.setColor(0.96f, 0.62f, 0.04f, 1f);
+        fillCircle(sr, cx, cy, s, 38, 24, 9.5f);
+        sr.setColor(0.12f, 0.11f, 0.29f, 1f);
+        fillCircle(sr, cx, cy, s, 38, 24, 5.0f);
 
-        // 3. Carved Imperial Emerald-Jadeite Shank (Thân ngọc cẩm thạch ngọc bích chạm rồng)
-        float shankX = cx - r * 0.20f;
-        float bendBottomY = cy - r * 0.42f;
+        // Hanging Royal Pearl Charm
+        sr.setColor(0.85f, 0.47f, 0.02f, 1f);
+        drawLine(sr, cx, cy, s, 28, 24, 22, 38, 1.5f);
+        sr.setColor(0.95f, 0.91f, 1.0f, 1f);
+        fillCircle(sr, cx, cy, s, 20, 44, 5.5f);
+        sr.setColor(0.98f, 0.96f, 1.0f, 1f);
+        fillCircle(sr, cx, cy, s, 19, 43, 4.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 18, 41, 1.5f);
 
-        // Deep translucent jadeite stone
-        sr.setColor(0.12f, 0.58f, 0.34f, 1f);
-        sr.rectLine(shankX, eyeY - r * 0.18f, shankX, bendBottomY, Math.max(5.8f, r * 0.24f));
-        // Luminous emerald-jade inner core
-        sr.setColor(0.28f, 0.88f, 0.54f, 1f);
-        sr.rectLine(shankX, eyeY - r * 0.18f, shankX, bendBottomY, Math.max(3.6f, r * 0.15f));
+        // Gold Outer Reinforcing Ridge
+        sr.setColor(0.85f, 0.47f, 0.02f, 1f);
+        fillQuad(sr, cx, cy, s, 30, 34, 35, 34, 39, 68, 34, 68);
+        fillQuad(sr, cx, cy, s, 34, 68, 39, 68, 45, 94, 40, 94);
+        fillQuad(sr, cx, cy, s, 40, 94, 45, 94, 67, 108, 62, 108);
+        fillQuad(sr, cx, cy, s, 62, 108, 67, 108, 89, 98, 84, 94);
+        fillQuad(sr, cx, cy, s, 84, 94, 89, 98, 100, 64, 95, 64);
 
-        // 24K Gold Dragon Ribbon Wraps around jade shank (Dải rồng vàng quấn quanh thân ngọc)
-        sr.setColor(1.0f, 0.85f, 0.25f, 1f);
-        for (int i = 0; i < 3; i++) {
-            float by = eyeY - r * 0.32f - i * r * 0.24f;
-            sr.rectLine(shankX - r * 0.14f, by + r * 0.06f, shankX + r * 0.14f, by - r * 0.06f, Math.max(2.2f, r * 0.08f));
-        }
+        // White Jade Core Shank & Curve (Faceted)
+        // Upper Shank
+        sr.setColor(0.89f, 0.91f, 0.94f, 1f);
+        fillQuad(sr, cx, cy, s, 34, 34, 44, 34, 45, 68, 35, 68);
+        sr.setColor(Color.WHITE);
+        fillQuad(sr, cx, cy, s, 36, 34, 42, 34, 43, 68, 37, 68);
 
-        // 4. Sweeping U-Bend of Carved Jadeite & Gold Spine (Đáy uốn cong cẩm thạch bọc vàng)
-        sr.setColor(0.12f, 0.58f, 0.34f, 1f);
-        sr.rectLine(shankX, bendBottomY, cx + r * 0.45f, bendBottomY + r * 0.08f, Math.max(5.8f, r * 0.24f));
-        sr.setColor(0.28f, 0.88f, 0.54f, 1f);
-        sr.rectLine(shankX, bendBottomY, cx + r * 0.45f, bendBottomY + r * 0.08f, Math.max(3.6f, r * 0.15f));
-        // Gold reinforcement spine under the bend
-        sr.setColor(1.0f, 0.85f, 0.25f, 1f);
-        sr.rectLine(shankX, bendBottomY - r * 0.04f, cx + r * 0.35f, bendBottomY + r * 0.04f, 2f);
+        // Lower Shank to Bend
+        sr.setColor(0.89f, 0.91f, 0.94f, 1f);
+        fillQuad(sr, cx, cy, s, 35, 68, 45, 68, 51, 92, 41, 92);
+        sr.setColor(Color.WHITE);
+        fillQuad(sr, cx, cy, s, 37, 68, 43, 68, 49, 92, 43, 92);
 
-        // 5. Polished Platinum Recurve Point & Razor Barb (Mũi bạch kim siêu bén & ngạnh khóa mồi)
-        float hookTipX = cx + r * 0.50f;
-        float hookTipY = cy + r * 0.38f;
+        // Keel Arc
+        sr.setColor(0.89f, 0.91f, 0.94f, 1f);
+        fillQuad(sr, cx, cy, s, 41, 92, 51, 92, 70, 105, 60, 105);
+        sr.setColor(Color.WHITE);
+        fillQuad(sr, cx, cy, s, 43, 92, 49, 92, 68, 105, 62, 105);
 
-        // Jade upward curve
-        sr.setColor(0.12f, 0.58f, 0.34f, 1f);
-        sr.triangle(cx + r * 0.35f, bendBottomY + r * 0.04f, cx + r * 0.62f, cy + r * 0.10f, hookTipX, hookTipY);
-        // Pure Platinum forged razor cutting point
-        sr.setColor(0.85f, 0.88f, 0.96f, 1f);
-        sr.triangle(cx + r * 0.38f, bendBottomY + r * 0.06f, cx + r * 0.56f, cy + r * 0.12f, hookTipX, hookTipY);
+        sr.setColor(0.89f, 0.91f, 0.94f, 1f);
+        fillQuad(sr, cx, cy, s, 60, 105, 70, 105, 86, 94, 76, 90);
+        sr.setColor(Color.WHITE);
+        fillQuad(sr, cx, cy, s, 62, 105, 68, 105, 84, 94, 78, 92);
 
-        // Platinum Inward Barb (Ngạnh móc ngược bạch kim)
-        sr.setColor(0.95f, 0.97f, 1.0f, 1f);
-        sr.triangle(hookTipX, hookTipY, cx + r * 0.42f, cy + r * 0.18f, cx + r * 0.26f, cy + r * 0.20f);
+        // Ascending Throat & Spear
+        sr.setColor(0.89f, 0.91f, 0.94f, 1f);
+        fillQuad(sr, cx, cy, s, 76, 90, 86, 94, 97, 64, 87, 64);
+        sr.setColor(Color.WHITE);
+        fillQuad(sr, cx, cy, s, 78, 92, 84, 94, 95, 64, 89, 64);
 
-        // Gold inlay accent line
-        sr.setColor(1.0f, 0.88f, 0.35f, 0.95f);
-        sr.rectLine(cx + r * 0.38f, bendBottomY + r * 0.15f, hookTipX - r * 0.05f, hookTipY - r * 0.05f, 1.5f);
+        // Royal Golden Barb
+        sr.setColor(0.85f, 0.47f, 0.02f, 1f);
+        fillTri(sr, cx, cy, s, 87, 64, 74, 54, 91, 56);
+        sr.setColor(0.96f, 0.62f, 0.04f, 1f);
+        fillTri(sr, cx, cy, s, 91, 56, 74, 54, 89, 52);
+        sr.setColor(0.99f, 0.94f, 0.54f, 1f);
+        fillTri(sr, cx, cy, s, 89, 52, 74, 54, 87, 51);
 
-        // Specular glint on diamond-honed platinum tip
-        sr.setColor(1f, 1f, 1f, 1f);
-        sr.circle(hookTipX, hookTipY, Math.max(1.5f, r * 0.06f));
+        // Razor Golden / Jade Point
+        sr.setColor(0.96f, 0.62f, 0.04f, 1f);
+        fillQuad(sr, cx, cy, s, 87, 64, 97, 64, 100, 42, 93, 52);
+        sr.setColor(0.99f, 0.94f, 0.54f, 1f);
+        fillQuad(sr, cx, cy, s, 91, 64, 97, 64, 100, 42, 95, 50);
+
+        // LAYER 3: CORE - RUBY ACCENTS
+        sr.setColor(0.86f, 0.15f, 0.15f, 1f);
+        fillTri(sr, cx, cy, s, 38, 18, 41, 21, 35, 21);
+        fillTri(sr, cx, cy, s, 38, 24, 41, 21, 35, 21);
+        fillCircle(sr, cx, cy, s, 88, 58, 2.2f);
+        sr.setColor(0.97f, 0.44f, 0.44f, 1f);
+        fillCircle(sr, cx, cy, s, 88, 58, 1.3f);
+
+        // LAYER 4: SPECULAR GLINTS
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 100, 42, 2.2f);
+        fillCircle(sr, cx, cy, s, 74, 54, 1.6f);
+        fillCircle(sr, cx, cy, s, 18, 41, 1.5f);
+        fillCircle(sr, cx, cy, s, 38, 7, 1.5f);
+        fillCircle(sr, cx, cy, s, 26, 14, 1.2f);
+        fillCircle(sr, cx, cy, s, 50, 14, 1.2f);
+        fillCircle(sr, cx, cy, s, 41, 52, 1.5f);
+        fillCircle(sr, cx, cy, s, 64, 105, 1.5f);
     }
 
     // =========================================================================
@@ -2208,221 +2593,298 @@ public class EquipmentIconRenderer {
     // 9. QUANG MINH SET (Formerly Thần Thoại: Solar Deity Scepter, Sun-Thread Spool, Archangel Hook)
     // =========================================================================
     public static void drawQuangMinhRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Radiant Solar Corona & Golden Aura
-        sr.setColor(1f, 0.88f, 0.25f, 0.16f);
-        sr.circle(cx, cy, r * 0.98f);
-        sr.setColor(1f, 0.95f, 0.50f, 0.25f);
-        sr.circle(cx + r * 0.48f, cy + r * 0.48f, r * 0.52f);
+        float s = r / 64f;
 
-        // 2. Pure White-Gold Celestial Shaft (Thân trượng vàng ròng khảm bạch kim)
-        float x1 = cx - r * 0.72f, y1 = cy - r * 0.72f;
-        float x2 = cx + r * 0.45f, y2 = cy + r * 0.45f;
-        // Burnished gold outer bevel
-        sr.setColor(0.92f, 0.72f, 0.16f, 1f);
-        sr.rectLine(x1, y1, x2, y2, Math.max(4.2f, r * 0.20f));
-        // Luminous ivory-platinum core
-        sr.setColor(1.0f, 0.98f, 0.82f, 1f);
-        sr.rectLine(x1, y1, x2, y2, Math.max(2.2f, r * 0.10f));
-
-        // 3. 4 Ornate Solar Node Rings with embedded Sunstone gems
-        for (float f = 0.22f; f <= 0.82f; f += 0.20f) {
-            float nx = x1 + (x2 - x1) * f;
-            float ny = y1 + (y2 - y1) * f;
-            // Golden node collar
-            sr.setColor(0.85f, 0.65f, 0.12f, 1f);
-            sr.circle(nx, ny, Math.max(3.2f, r * 0.14f));
-            // Inset Ruby / Sunstone jewel
-            sr.setColor(1.0f, 0.35f, 0.20f, 1f);
-            sr.circle(nx, ny, Math.max(1.8f, r * 0.08f));
-            sr.setColor(1f, 1f, 1f, 0.9f);
-            sr.circle(nx + 0.6f, ny + 0.6f, Math.max(0.8f, r * 0.04f));
-        }
-
-        // 4. White Silk Grip & Gold Cross-Lacing (Chuôi trượng bọc lụa trắng ánh kim)
-        float gx = x1 + (x2 - x1) * 0.12f;
-        float gy = y1 + (y2 - y1) * 0.12f;
-        sr.setColor(0.95f, 0.95f, 0.92f, 1f);
-        sr.circle(gx, gy, Math.max(3.8f, r * 0.16f));
-        sr.setColor(1.0f, 0.85f, 0.25f, 1f);
-        sr.rectLine(x1, y1, gx + 2f, gy + 2f, 1.4f);
-
-        // 5. Stylized Angelic Feather Plumes flanking neck
-        float neckX = cx + r * 0.35f, neckY = cy + r * 0.35f;
-        sr.setColor(1f, 0.95f, 0.80f, 0.95f);
-        sr.triangle(neckX, neckY, neckX - r * 0.25f, neckY + r * 0.12f, neckX - r * 0.08f, neckY + r * 0.22f);
-        sr.triangle(neckX, neckY, neckX + r * 0.12f, neckY - r * 0.25f, neckX + r * 0.22f, neckY - r * 0.08f);
-        sr.setColor(0.95f, 0.80f, 0.25f, 1f);
-        sr.rectLine(neckX, neckY, neckX - r * 0.25f, neckY + r * 0.12f, 1.2f);
-        sr.rectLine(neckX, neckY, neckX + r * 0.12f, neckY - r * 0.25f, 1.2f);
-
-        // 6. Grand Solar Corona Headpiece (Đỉnh Trượng Thái Dương Hoàng Kim)
-        float sx = cx + r * 0.52f, sy = cy + r * 0.52f;
-        // Outer radiant ring
-        sr.setColor(0.90f, 0.70f, 0.15f, 1f);
-        sr.circle(sx, sy, r * 0.34f);
-        sr.setColor(1.0f, 0.90f, 0.35f, 1f);
-        sr.circle(sx, sy, r * 0.28f);
-        sr.setColor(0.35f, 0.18f, 0.05f, 1f); // Inner shadow bezel
-        sr.circle(sx, sy, r * 0.20f);
-
-        // 8 Radiating Solar Rays (4 Cardinal + 4 Diagonal)
-        sr.setColor(1f, 0.88f, 0.25f, 1f);
-        float rayL = Math.max(9f, r * 0.40f);
-        float rayS = Math.max(6f, r * 0.26f);
-        // Cardinal
-        sr.rectLine(sx, sy + r * 0.28f, sx, sy + r * 0.28f + rayL, 2.2f);
-        sr.rectLine(sx, sy - r * 0.28f, sx, sy - r * 0.28f - rayL, 2.2f);
-        sr.rectLine(sx + r * 0.28f, sy, sx + r * 0.28f + rayL, sy, 2.2f);
-        sr.rectLine(sx - r * 0.28f, sy, sx - r * 0.28f - rayL, sy, 2.2f);
-        // Diagonal
-        float dOff = (r * 0.28f) * 0.707f;
-        float dRay = rayS * 0.707f;
-        sr.setColor(1f, 0.96f, 0.60f, 1f);
-        sr.rectLine(sx + dOff, sy + dOff, sx + dOff + dRay, sy + dOff + dRay, 1.6f);
-        sr.rectLine(sx - dOff, sy + dOff, sx - dOff - dRay, sy + dOff + dRay, 1.6f);
-        sr.rectLine(sx + dOff, sy - dOff, sx + dOff + dRay, sy - dOff - dRay, 1.6f);
-        sr.rectLine(sx - dOff, sy - dOff, sx - dOff - dRay, sy - dOff - dRay, 1.6f);
-
-        // 7. Central Radiant Sunstone Prism Core
-        sr.setColor(1f, 0.95f, 0.45f, 1f);
-        sr.circle(sx, sy, r * 0.15f);
-        sr.setColor(1f, 1f, 1f, 1f);
-        float dSize = Math.max(3f, r * 0.12f);
-        sr.rect(sx - dSize, sy - dSize, dSize, dSize, dSize * 2f, dSize * 2f, 1f, 1f, 45f);
-        sr.circle(sx + 0.8f, sy + 0.8f, Math.max(1f, r * 0.05f));
+        sr.setColor(0.98f, 0.80f, 0.08f, 0.16f);
+        fillCircle(sr, cx, cy, s, 64.0f, 40.0f, 50.0f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 0.22f);
+        fillCircle(sr, cx, cy, s, 64.0f, 40.0f, 34.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 0.10f);
+        fillCircle(sr, cx, cy, s, 64.0f, 80.0f, 26.0f);
+        sr.setColor(0.47f, 0.21f, 0.06f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 116.0f, 64.0f, 34.0f, 8.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 116.0f, 64.0f, 34.0f, 5.5f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 114.0f, 64.0f, 36.0f, 3.2f);
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 64.0f, 114.0f, 64.0f, 36.0f, 1.2f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 94.0f, 5.0f);
+        sr.setColor(0.92f, 0.35f, 0.05f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 94.0f, 2.8f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 63.0f, 93.0f, 1.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 72.0f, 5.2f);
+        sr.setColor(0.92f, 0.35f, 0.05f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 72.0f, 3.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 63.0f, 71.0f, 1.1f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        fillQuad(sr, cx, cy, s, 58.0f, 98.0f, 70.0f, 98.0f, 70.0f, 112.0f, 58.0f, 112.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        drawLine(sr, cx, cy, s, 59.0f, 102.0f, 69.0f, 102.0f, 1.2f);
+        drawLine(sr, cx, cy, s, 59.0f, 106.0f, 69.0f, 106.0f, 1.2f);
+        fillTri(sr, cx, cy, s, 64.0f, 124.0f, 57.0f, 114.0f, 71.0f, 114.0f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 123.0f, 2.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 64.0f, 123.0f, 0.8f);
+        sr.setColor(0.99f, 0.88f, 0.28f, 1.00f);
+        fillQuad(sr, cx, cy, s, 64.0f, 48.0f, 16.0f, 30.0f, 24.0f, 44.0f, 48.0f, 52.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillQuad(sr, cx, cy, s, 64.0f, 48.0f, 24.0f, 44.0f, 32.0f, 58.0f, 54.0f, 54.0f);
+        sr.setColor(Color.WHITE);
+        fillQuad(sr, cx, cy, s, 64.0f, 47.0f, 22.0f, 34.0f, 30.0f, 44.0f, 50.0f, 50.0f);
+        sr.setColor(0.99f, 0.88f, 0.28f, 1.00f);
+        fillQuad(sr, cx, cy, s, 64.0f, 48.0f, 112.0f, 30.0f, 104.0f, 44.0f, 80.0f, 52.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillQuad(sr, cx, cy, s, 64.0f, 48.0f, 104.0f, 44.0f, 96.0f, 58.0f, 74.0f, 54.0f);
+        sr.setColor(Color.WHITE);
+        fillQuad(sr, cx, cy, s, 64.0f, 47.0f, 106.0f, 34.0f, 98.0f, 44.0f, 78.0f, 50.0f);
+        sr.setColor(0.47f, 0.21f, 0.06f, 1.00f);
+        drawLine(sr, cx, cy, s, 42.0f, 44.0f, 86.0f, 44.0f, 5.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        drawLine(sr, cx, cy, s, 42.0f, 44.0f, 86.0f, 44.0f, 3.0f);
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 44.0f, 44.0f, 84.0f, 44.0f, 1.0f);
+        sr.setColor(0.92f, 0.35f, 0.05f, 1.00f);
+        fillCircle(sr, cx, cy, s, 42.0f, 44.0f, 3.2f);
+        fillCircle(sr, cx, cy, s, 86.0f, 44.0f, 3.2f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillTri(sr, cx, cy, s, 64.0f, 8.0f, 60.0f, 24.0f, 68.0f, 24.0f);
+        fillTri(sr, cx, cy, s, 48.0f, 24.0f, 64.0f, 20.0f, 64.0f, 28.0f);
+        fillTri(sr, cx, cy, s, 80.0f, 24.0f, 64.0f, 20.0f, 64.0f, 28.0f);
+        fillTri(sr, cx, cy, s, 64.0f, 40.0f, 60.0f, 24.0f, 68.0f, 24.0f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        fillQuad(sr, cx, cy, s, 64.0f, 16.0f, 71.0f, 24.0f, 64.0f, 32.0f, 57.0f, 24.0f);
+        sr.setColor(Color.WHITE);
+        fillQuad(sr, cx, cy, s, 64.0f, 18.0f, 69.0f, 24.0f, 64.0f, 30.0f, 59.0f, 24.0f);
+        fillCircle(sr, cx, cy, s, 63.0f, 22.0f, 1.8f);
+        fillCircle(sr, cx, cy, s, 18.0f, 31.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 110.0f, 31.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 42.0f, 43.0f, 1.0f);
+        fillCircle(sr, cx, cy, s, 86.0f, 43.0f, 1.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 56.0f, 1.4f);
     }
 
     public static void drawQuangMinhLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Radiant Solar Spool Aura
-        sr.setColor(1f, 0.88f, 0.25f, 0.18f);
-        sr.circle(cx, cy, r * 0.98f);
-        sr.setColor(1f, 0.96f, 0.55f, 0.15f);
-        sr.circle(cx, cy, r * 0.88f);
+        float s = r / 64f;
 
-        // 2. Heavy Antique Celestial Gold Spool Frame (Khung cuộn vàng kim 24K)
-        sr.setColor(0.85f, 0.65f, 0.15f, 1f);
-        sr.circle(cx, cy, r * 0.84f);
-        sr.setColor(1.0f, 0.90f, 0.38f, 1f);
-        sr.circle(cx, cy, r * 0.76f);
-        sr.setColor(0.28f, 0.16f, 0.04f, 1f); // Inner spool chamber
-        sr.circle(cx, cy, r * 0.68f);
-
-        // 3. 12-Toothed Sunburst Cog Rim (Vành răng cưa mặt trời)
-        sr.setColor(1f, 0.88f, 0.30f, 1f);
-        for (int i = 0; i < 12; i++) {
-            float rad = (i * 30f) * MathUtils.degreesToRadians;
-            float px = cx + MathUtils.cos(rad) * r * 0.84f;
-            float py = cy + MathUtils.sin(rad) * r * 0.84f;
-            sr.circle(px, py, Math.max(1.8f, r * 0.07f));
-        }
-
-        // 4. 8 Radiant Sunburst Spokes
-        sr.setColor(0.95f, 0.80f, 0.25f, 0.9f);
-        for (int i = 0; i < 8; i++) {
-            float rad = (i * 45f) * MathUtils.degreesToRadians;
-            float sx = cx + MathUtils.cos(rad) * r * 0.68f;
-            float sy = cy + MathUtils.sin(rad) * r * 0.68f;
-            sr.rectLine(cx, cy, sx, sy, 2f);
-        }
-
-        // 5. SIGNATURE DÂY CHỈ VÀNG (Cuộn sợi chỉ vàng ròng đa tầng phản quang lộng lẫy)
-        sr.setColor(0.88f, 0.65f, 0.12f, 1f); // Deep gold base
-        sr.circle(cx, cy, r * 0.55f);
-        sr.setColor(1.0f, 0.88f, 0.30f, 1f); // Vibrant 24K gold strands
-        sr.circle(cx, cy, r * 0.46f);
-        sr.setColor(1.0f, 0.98f, 0.65f, 1f); // Specular highlight ring
-        sr.circle(cx, cy, r * 0.36f);
-        sr.setColor(0.35f, 0.20f, 0.06f, 1f); // Center hub socket
-        sr.circle(cx, cy, r * 0.26f);
-
-        // 6. Central 8-Pointed Star of Dawn & Sunstone Prism
-        sr.setColor(1f, 0.90f, 0.30f, 1f);
-        float starS = Math.max(3.5f, r * 0.15f);
-        sr.rect(cx - starS, cy - starS, starS, starS, starS * 2f, starS * 2f, 1f, 1f, 0f);
-        sr.rect(cx - starS, cy - starS, starS, starS, starS * 2f, starS * 2f, 1f, 1f, 45f);
-        sr.setColor(1f, 1f, 1f, 1f);
-        sr.circle(cx, cy, Math.max(2.0f, r * 0.08f));
-
-        // 7. Flowing Golden Thread Filament curling out with Sun-pearl weight
-        sr.setColor(1f, 0.92f, 0.40f, 0.95f);
-        sr.rectLine(cx + r * 0.52f, cy - r * 0.10f, cx + r * 0.82f, cy - r * 0.45f, 1.8f);
-        sr.rectLine(cx + r * 0.82f, cy - r * 0.45f, cx + r * 0.70f, cy - r * 0.75f, 1.4f);
-        // Sun-pearl bead
-        sr.setColor(1f, 0.85f, 0.25f, 1f);
-        sr.circle(cx + r * 0.70f, cy - r * 0.75f, Math.max(2.8f, r * 0.11f));
-        sr.setColor(1f, 1f, 1f, 1f);
-        sr.circle(cx + r * 0.71f, cy - r * 0.74f, Math.max(1.2f, r * 0.05f));
+        sr.setColor(0.98f, 0.80f, 0.08f, 0.16f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 54.0f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 0.22f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 40.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillQuad(sr, cx, cy, s, 64.0f, 12.0f, 52.0f, 28.0f, 64.0f, 36.0f, 76.0f, 28.0f);
+        sr.setColor(Color.WHITE);
+        fillQuad(sr, cx, cy, s, 64.0f, 15.0f, 56.0f, 27.0f, 64.0f, 33.0f, 72.0f, 27.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillQuad(sr, cx, cy, s, 64.0f, 116.0f, 52.0f, 100.0f, 64.0f, 92.0f, 76.0f, 100.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillQuad(sr, cx, cy, s, 64.0f, 113.0f, 56.0f, 101.0f, 64.0f, 95.0f, 72.0f, 101.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillQuad(sr, cx, cy, s, 12.0f, 64.0f, 28.0f, 52.0f, 36.0f, 64.0f, 28.0f, 76.0f);
+        sr.setColor(Color.WHITE);
+        fillQuad(sr, cx, cy, s, 15.0f, 64.0f, 27.0f, 56.0f, 33.0f, 64.0f, 27.0f, 72.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillQuad(sr, cx, cy, s, 116.0f, 64.0f, 100.0f, 52.0f, 92.0f, 64.0f, 100.0f, 76.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillQuad(sr, cx, cy, s, 113.0f, 64.0f, 101.0f, 56.0f, 95.0f, 64.0f, 101.0f, 72.0f);
+        sr.setColor(0.99f, 0.88f, 0.28f, 1.00f);
+        fillQuad(sr, cx, cy, s, 50.0f, 28.0f, 28.0f, 50.0f, 36.0f, 54.0f, 54.0f, 34.0f);
+        sr.setColor(Color.WHITE);
+        fillQuad(sr, cx, cy, s, 48.0f, 30.0f, 32.0f, 48.0f, 36.0f, 50.0f, 50.0f, 34.0f);
+        sr.setColor(0.99f, 0.88f, 0.28f, 1.00f);
+        fillQuad(sr, cx, cy, s, 78.0f, 28.0f, 100.0f, 50.0f, 92.0f, 54.0f, 74.0f, 34.0f);
+        sr.setColor(Color.WHITE);
+        fillQuad(sr, cx, cy, s, 80.0f, 30.0f, 96.0f, 48.0f, 92.0f, 50.0f, 78.0f, 34.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillQuad(sr, cx, cy, s, 28.0f, 78.0f, 50.0f, 100.0f, 54.0f, 94.0f, 36.0f, 74.0f);
+        fillQuad(sr, cx, cy, s, 100.0f, 78.0f, 78.0f, 100.0f, 74.0f, 94.0f, 92.0f, 74.0f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 26.0f, 102.0f, 64.0f, 1.6f);
+        drawLine(sr, cx, cy, s, 102.0f, 64.0f, 64.0f, 102.0f, 1.6f);
+        drawLine(sr, cx, cy, s, 64.0f, 102.0f, 26.0f, 64.0f, 1.6f);
+        drawLine(sr, cx, cy, s, 26.0f, 64.0f, 64.0f, 26.0f, 1.6f);
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 40.0f, 40.0f, 88.0f, 88.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 88.0f, 40.0f, 40.0f, 88.0f, 1.0f);
+        sr.setColor(0.47f, 0.21f, 0.06f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 22.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 18.0f);
+        sr.setColor(0.92f, 0.35f, 0.05f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 14.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 9.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 62.0f, 62.0f, 4.5f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 116.0f, 64.0f, 124.0f, 1.5f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 124.0f, 3.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 63.5f, 123.5f, 1.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 14.0f, 1.6f);
+        fillCircle(sr, cx, cy, s, 14.0f, 64.0f, 1.6f);
+        fillCircle(sr, cx, cy, s, 114.0f, 64.0f, 1.6f);
+        fillCircle(sr, cx, cy, s, 64.0f, 60.0f, 2.0f);
+        fillCircle(sr, cx, cy, s, 50.0f, 30.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 78.0f, 30.0f, 1.2f);
     }
 
     public static void drawQuangMinhHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Holy Archangel Divine Aura
-        sr.setColor(1f, 0.90f, 0.30f, 0.18f);
-        sr.circle(cx, cy, r * 0.95f);
-        sr.setColor(1f, 0.98f, 0.60f, 0.14f);
-        sr.circle(cx, cy, r * 0.82f);
+        float s = r / 64f;
 
-        // 2. Heavy Forged Celestial Gold Shank & J-Bend (Thân móc câu vàng ròng)
-        float shankX = cx - r * 0.18f;
-        float topY = cy + r * 0.55f;
-        float bendY = cy - r * 0.38f;
-        float barbX = cx + r * 0.42f;
-        float tipY = cy + r * 0.22f;
-
-        // Outer warm gold spine
-        sr.setColor(0.90f, 0.70f, 0.15f, 1f);
-        sr.rectLine(shankX, topY, shankX, bendY, Math.max(4.5f, r * 0.18f));
-        sr.rectLine(shankX, bendY, barbX, bendY, Math.max(4.5f, r * 0.18f));
-        sr.rectLine(barbX, bendY, barbX, tipY, Math.max(4.5f, r * 0.18f));
-
-        // Inner luminous white-gold razor edge
-        sr.setColor(1f, 0.98f, 0.78f, 1f);
-        sr.rectLine(shankX + 1f, topY - 2f, shankX + 1f, bendY + 1f, Math.max(2.2f, r * 0.09f));
-        sr.rectLine(shankX + 1f, bendY + 1f, barbX - 1f, bendY + 1f, Math.max(2.2f, r * 0.09f));
-        sr.rectLine(barbX - 1f, bendY + 1f, barbX - 1f, tipY - 2f, Math.max(2.2f, r * 0.09f));
-
-        // 3. SPREAD ANGELIC WINGS ON HOOK SHANK (Đôi cánh thiên thần 3 tầng lông vũ)
-        // Tier 1 (High plume)
-        sr.setColor(1f, 0.95f, 0.82f, 1f);
-        sr.triangle(shankX, cy + r * 0.40f, shankX - r * 0.68f, cy + r * 0.62f, shankX, cy + r * 0.52f);
-        sr.setColor(0.92f, 0.75f, 0.22f, 1f);
-        sr.rectLine(shankX, cy + r * 0.40f, shankX - r * 0.68f, cy + r * 0.62f, 1.4f);
-
-        // Tier 2 (Mid plume)
-        sr.setColor(1f, 0.98f, 0.90f, 1f);
-        sr.triangle(shankX, cy + r * 0.22f, shankX - r * 0.60f, cy + r * 0.40f, shankX, cy + r * 0.36f);
-        sr.setColor(0.92f, 0.75f, 0.22f, 1f);
-        sr.rectLine(shankX, cy + r * 0.22f, shankX - r * 0.60f, cy + r * 0.40f, 1.4f);
-
-        // Tier 3 (Lower plume)
-        sr.setColor(1f, 0.92f, 0.78f, 1f);
-        sr.triangle(shankX, cy + r * 0.06f, shankX - r * 0.45f, cy + r * 0.20f, shankX, cy + r * 0.20f);
-        sr.setColor(0.92f, 0.75f, 0.22f, 1f);
-        sr.rectLine(shankX, cy + r * 0.06f, shankX - r * 0.45f, cy + r * 0.20f, 1.2f);
-
-        // 4. Holy Spearhead Barb (Mũi giáo ngạnh thần thánh sắc nhọn)
-        sr.setColor(1f, 0.90f, 0.30f, 1f);
-        sr.triangle(barbX, tipY, barbX - r * 0.20f, tipY - r * 0.16f, barbX + r * 0.14f, tipY - r * 0.16f);
-        sr.setColor(1f, 1f, 1f, 1f); // Diamond tip gleam
-        sr.triangle(barbX, tipY, barbX - r * 0.08f, tipY - r * 0.10f, barbX + r * 0.08f, tipY - r * 0.10f);
-
-        // 5. Hovering Holy Halo & Eyelet (Vòng hào quang thánh quang)
-        // Golden eyelet ring
-        sr.setColor(0.88f, 0.68f, 0.15f, 1f);
-        sr.circle(shankX, topY, Math.max(4.2f, r * 0.18f));
-        sr.setColor(0.12f, 0.08f, 0.04f, 1f);
-        sr.circle(shankX, topY, Math.max(2.0f, r * 0.09f));
-
-        // Floating Holy Halo Ring
-        float haloY = topY + r * 0.18f;
-        sr.setColor(1f, 0.92f, 0.45f, 0.85f);
-        sr.rect(shankX - r * 0.26f, haloY - 1.5f, r * 0.52f, 3f);
-        sr.setColor(1f, 1f, 1f, 0.95f);
-        sr.rect(shankX - r * 0.18f, haloY - 0.8f, r * 0.36f, 1.6f);
-        // Tiny sunbeams from halo
-        sr.setColor(1f, 0.92f, 0.40f, 0.9f);
-        sr.rectLine(shankX, haloY + 2f, shankX, haloY + 7f, 1.6f);
-        sr.rectLine(shankX - r * 0.22f, haloY + 1f, shankX - r * 0.28f, haloY + 5f, 1.2f);
-        sr.rectLine(shankX + r * 0.22f, haloY + 1f, shankX + r * 0.28f, haloY + 5f, 1.2f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 0.16f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 54.0f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 0.22f);
+        fillCircle(sr, cx, cy, s, 64.0f, 40.0f, 32.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 0.14f);
+        fillCircle(sr, cx, cy, s, 64.0f, 90.0f, 30.0f);
+        sr.setColor(0.47f, 0.21f, 0.06f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 22.0f, 8.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 22.0f, 5.5f);
+        sr.setColor(0.06f, 0.09f, 0.16f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 22.0f, 3.0f);
+        sr.setColor(0.99f, 0.88f, 0.28f, 1.00f);
+        fillQuad(sr, cx, cy, s, 64.0f, 26.0f, 36.0f, 12.0f, 44.0f, 28.0f, 62.0f, 32.0f);
+        sr.setColor(Color.WHITE);
+        fillQuad(sr, cx, cy, s, 64.0f, 26.0f, 38.0f, 16.0f, 44.0f, 24.0f, 62.0f, 30.0f);
+        sr.setColor(0.99f, 0.88f, 0.28f, 1.00f);
+        fillQuad(sr, cx, cy, s, 64.0f, 26.0f, 92.0f, 12.0f, 84.0f, 28.0f, 66.0f, 32.0f);
+        sr.setColor(Color.WHITE);
+        fillQuad(sr, cx, cy, s, 64.0f, 26.0f, 90.0f, 16.0f, 84.0f, 24.0f, 66.0f, 30.0f);
+        sr.setColor(0.47f, 0.21f, 0.06f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 28.0f, 64.0f, 88.0f, 8.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 28.0f, 64.0f, 88.0f, 5.5f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 28.0f, 64.0f, 88.0f, 3.0f);
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 64.0f, 30.0f, 64.0f, 86.0f, 1.2f);
+        sr.setColor(0.92f, 0.35f, 0.05f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 44.0f, 3.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 63.5f, 43.5f, 1.0f);
+        sr.setColor(0.92f, 0.35f, 0.05f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 3.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 63.5f, 63.5f, 1.0f);
+        sr.setColor(0.47f, 0.21f, 0.06f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 88.0f, 62.0f, 98.8f, 7.5f);
+        drawLine(sr, cx, cy, s, 62.0f, 98.8f, 56.8f, 105.2f, 7.5f);
+        drawLine(sr, cx, cy, s, 56.8f, 105.2f, 49.3f, 107.3f, 7.5f);
+        drawLine(sr, cx, cy, s, 49.3f, 107.3f, 40.7f, 105.5f, 7.5f);
+        drawLine(sr, cx, cy, s, 40.7f, 105.5f, 32.0f, 100.0f, 7.5f);
+        drawLine(sr, cx, cy, s, 32.0f, 100.0f, 27.1f, 93.6f, 7.5f);
+        drawLine(sr, cx, cy, s, 27.1f, 93.6f, 24.2f, 86.3f, 7.5f);
+        drawLine(sr, cx, cy, s, 24.2f, 86.3f, 22.6f, 78.5f, 7.5f);
+        drawLine(sr, cx, cy, s, 22.6f, 78.5f, 22.1f, 70.4f, 7.5f);
+        drawLine(sr, cx, cy, s, 22.1f, 70.4f, 22.0f, 62.0f, 7.5f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 88.0f, 62.0f, 98.8f, 5.0f);
+        drawLine(sr, cx, cy, s, 62.0f, 98.8f, 56.8f, 105.2f, 5.0f);
+        drawLine(sr, cx, cy, s, 56.8f, 105.2f, 49.3f, 107.3f, 5.0f);
+        drawLine(sr, cx, cy, s, 49.3f, 107.3f, 40.7f, 105.5f, 5.0f);
+        drawLine(sr, cx, cy, s, 40.7f, 105.5f, 32.0f, 100.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 32.0f, 100.0f, 27.1f, 93.6f, 5.0f);
+        drawLine(sr, cx, cy, s, 27.1f, 93.6f, 24.2f, 86.3f, 5.0f);
+        drawLine(sr, cx, cy, s, 24.2f, 86.3f, 22.6f, 78.5f, 5.0f);
+        drawLine(sr, cx, cy, s, 22.6f, 78.5f, 22.1f, 70.4f, 5.0f);
+        drawLine(sr, cx, cy, s, 22.1f, 70.4f, 22.0f, 62.0f, 5.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 88.0f, 62.0f, 98.8f, 2.6f);
+        drawLine(sr, cx, cy, s, 62.0f, 98.8f, 56.8f, 105.2f, 2.6f);
+        drawLine(sr, cx, cy, s, 56.8f, 105.2f, 49.3f, 107.3f, 2.6f);
+        drawLine(sr, cx, cy, s, 49.3f, 107.3f, 40.7f, 105.5f, 2.6f);
+        drawLine(sr, cx, cy, s, 40.7f, 105.5f, 32.0f, 100.0f, 2.6f);
+        drawLine(sr, cx, cy, s, 32.0f, 100.0f, 27.1f, 93.6f, 2.6f);
+        drawLine(sr, cx, cy, s, 27.1f, 93.6f, 24.2f, 86.3f, 2.6f);
+        drawLine(sr, cx, cy, s, 24.2f, 86.3f, 22.6f, 78.5f, 2.6f);
+        drawLine(sr, cx, cy, s, 22.6f, 78.5f, 22.1f, 70.4f, 2.6f);
+        drawLine(sr, cx, cy, s, 22.1f, 70.4f, 22.0f, 62.0f, 2.6f);
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 64.0f, 88.0f, 62.1f, 97.9f, 1.0f);
+        drawLine(sr, cx, cy, s, 62.1f, 97.9f, 57.1f, 103.7f, 1.0f);
+        drawLine(sr, cx, cy, s, 57.1f, 103.7f, 50.0f, 105.6f, 1.0f);
+        drawLine(sr, cx, cy, s, 50.0f, 105.6f, 41.6f, 104.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 41.6f, 104.0f, 33.0f, 99.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 33.0f, 99.0f, 28.6f, 93.1f, 1.0f);
+        drawLine(sr, cx, cy, s, 28.6f, 93.1f, 25.9f, 86.2f, 1.0f);
+        drawLine(sr, cx, cy, s, 25.9f, 86.2f, 24.6f, 78.9f, 1.0f);
+        drawLine(sr, cx, cy, s, 24.6f, 78.9f, 24.1f, 71.4f, 1.0f);
+        drawLine(sr, cx, cy, s, 24.1f, 71.4f, 24.0f, 64.0f, 1.0f);
+        sr.setColor(0.47f, 0.21f, 0.06f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 88.0f, 66.0f, 98.8f, 7.5f);
+        drawLine(sr, cx, cy, s, 66.0f, 98.8f, 71.2f, 105.2f, 7.5f);
+        drawLine(sr, cx, cy, s, 71.2f, 105.2f, 78.7f, 107.3f, 7.5f);
+        drawLine(sr, cx, cy, s, 78.7f, 107.3f, 87.3f, 105.5f, 7.5f);
+        drawLine(sr, cx, cy, s, 87.3f, 105.5f, 96.0f, 100.0f, 7.5f);
+        drawLine(sr, cx, cy, s, 96.0f, 100.0f, 100.9f, 93.6f, 7.5f);
+        drawLine(sr, cx, cy, s, 100.9f, 93.6f, 103.8f, 86.3f, 7.5f);
+        drawLine(sr, cx, cy, s, 103.8f, 86.3f, 105.4f, 78.5f, 7.5f);
+        drawLine(sr, cx, cy, s, 105.4f, 78.5f, 105.9f, 70.4f, 7.5f);
+        drawLine(sr, cx, cy, s, 105.9f, 70.4f, 106.0f, 62.0f, 7.5f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 88.0f, 66.0f, 98.8f, 5.0f);
+        drawLine(sr, cx, cy, s, 66.0f, 98.8f, 71.2f, 105.2f, 5.0f);
+        drawLine(sr, cx, cy, s, 71.2f, 105.2f, 78.7f, 107.3f, 5.0f);
+        drawLine(sr, cx, cy, s, 78.7f, 107.3f, 87.3f, 105.5f, 5.0f);
+        drawLine(sr, cx, cy, s, 87.3f, 105.5f, 96.0f, 100.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 96.0f, 100.0f, 100.9f, 93.6f, 5.0f);
+        drawLine(sr, cx, cy, s, 100.9f, 93.6f, 103.8f, 86.3f, 5.0f);
+        drawLine(sr, cx, cy, s, 103.8f, 86.3f, 105.4f, 78.5f, 5.0f);
+        drawLine(sr, cx, cy, s, 105.4f, 78.5f, 105.9f, 70.4f, 5.0f);
+        drawLine(sr, cx, cy, s, 105.9f, 70.4f, 106.0f, 62.0f, 5.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 88.0f, 66.0f, 98.8f, 2.6f);
+        drawLine(sr, cx, cy, s, 66.0f, 98.8f, 71.2f, 105.2f, 2.6f);
+        drawLine(sr, cx, cy, s, 71.2f, 105.2f, 78.7f, 107.3f, 2.6f);
+        drawLine(sr, cx, cy, s, 78.7f, 107.3f, 87.3f, 105.5f, 2.6f);
+        drawLine(sr, cx, cy, s, 87.3f, 105.5f, 96.0f, 100.0f, 2.6f);
+        drawLine(sr, cx, cy, s, 96.0f, 100.0f, 100.9f, 93.6f, 2.6f);
+        drawLine(sr, cx, cy, s, 100.9f, 93.6f, 103.8f, 86.3f, 2.6f);
+        drawLine(sr, cx, cy, s, 103.8f, 86.3f, 105.4f, 78.5f, 2.6f);
+        drawLine(sr, cx, cy, s, 105.4f, 78.5f, 105.9f, 70.4f, 2.6f);
+        drawLine(sr, cx, cy, s, 105.9f, 70.4f, 106.0f, 62.0f, 2.6f);
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 64.0f, 88.0f, 65.9f, 97.9f, 1.0f);
+        drawLine(sr, cx, cy, s, 65.9f, 97.9f, 70.9f, 103.7f, 1.0f);
+        drawLine(sr, cx, cy, s, 70.9f, 103.7f, 78.0f, 105.6f, 1.0f);
+        drawLine(sr, cx, cy, s, 78.0f, 105.6f, 86.4f, 104.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 86.4f, 104.0f, 95.0f, 99.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 95.0f, 99.0f, 99.4f, 93.1f, 1.0f);
+        drawLine(sr, cx, cy, s, 99.4f, 93.1f, 102.1f, 86.2f, 1.0f);
+        drawLine(sr, cx, cy, s, 102.1f, 86.2f, 103.4f, 78.9f, 1.0f);
+        drawLine(sr, cx, cy, s, 103.4f, 78.9f, 103.9f, 71.4f, 1.0f);
+        drawLine(sr, cx, cy, s, 103.9f, 71.4f, 104.0f, 64.0f, 1.0f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        fillTri(sr, cx, cy, s, 22.0f, 50.0f, 14.0f, 64.0f, 22.0f, 62.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillTri(sr, cx, cy, s, 22.0f, 50.0f, 30.0f, 64.0f, 22.0f, 62.0f);
+        sr.setColor(Color.WHITE);
+        fillTri(sr, cx, cy, s, 22.0f, 51.0f, 17.0f, 63.0f, 22.0f, 61.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillQuad(sr, cx, cy, s, 22.0f, 72.0f, 30.0f, 78.0f, 28.0f, 82.0f, 22.0f, 78.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillTri(sr, cx, cy, s, 106.0f, 50.0f, 98.0f, 64.0f, 106.0f, 62.0f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        fillTri(sr, cx, cy, s, 106.0f, 50.0f, 114.0f, 64.0f, 106.0f, 62.0f);
+        sr.setColor(Color.WHITE);
+        fillTri(sr, cx, cy, s, 106.0f, 51.0f, 111.0f, 63.0f, 106.0f, 61.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillQuad(sr, cx, cy, s, 106.0f, 72.0f, 98.0f, 78.0f, 100.0f, 82.0f, 106.0f, 78.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 64.0f, 14.0f, 1.6f);
+        fillCircle(sr, cx, cy, s, 22.0f, 52.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 106.0f, 52.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 64.0f, 38.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 32.0f, 104.0f, 1.4f);
+        fillCircle(sr, cx, cy, s, 96.0f, 104.0f, 1.4f);
     }
 
     // Compatibility aliases
@@ -2443,431 +2905,811 @@ public class EquipmentIconRenderer {
     // 10. VỆ QUỐC VANG DANH SET
     // =========================================================================
     public static void drawVeQuocRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Glowing battle aura behind spear-rod
-        sr.setColor(1f, 0.85f, 0.25f, 0.20f);
-        sr.circle(cx, cy, r * 0.95f);
-
-        // 2. Heavy lacquered red-and-gold battle bamboo rod
-        float x1 = cx - r * 0.75f, y1 = cy - r * 0.75f;
-        float x2 = cx + r * 0.55f, y2 = cy + r * 0.55f;
-        sr.setColor(0.72f, 0.14f, 0.16f, 1f); // Imperial crimson lacquer
-        sr.rectLine(x1, y1, x2, y2, Math.max(3.5f, r * 0.18f));
-
-        // 3. Gold-leaf bamboo node rings
-        sr.setColor(1f, 0.85f, 0.25f, 1f);
-        for (float f = 0.2f; f <= 0.8f; f += 0.25f) {
-            float nx = x1 + (x2 - x1) * f;
-            float ny = y1 + (y2 - y1) * f;
-            sr.circle(nx, ny, Math.max(2.5f, r * 0.12f));
-        }
-
-        // 4. Dong Son Bronze Spear Tip atop rod
-        float tipX = cx + r * 0.85f, tipY = cy + r * 0.85f;
-        sr.setColor(0.92f, 0.65f, 0.18f, 1f); // Antique Bronze
-        sr.triangle(x2, y2, tipX, tipY, cx + r * 0.45f, cy + r * 0.75f);
-        sr.triangle(x2, y2, tipX, tipY, cx + r * 0.75f, cy + r * 0.45f);
-        // Steel edge highlight
-        sr.setColor(1f, 0.95f, 0.75f, 1f);
-        sr.rectLine(x2, y2, tipX, tipY, 1.8f);
-
-        // 5. Fluttering Crimson Battle Pennant (Cờ Lệnh Ngũ Sắc)
-        sr.setColor(0.90f, 0.15f, 0.18f, 1f);
-        sr.triangle(cx + r * 0.4f, cy + r * 0.4f, cx + r * 0.85f, cy + r * 0.05f, cx + r * 0.35f, cy + r * 0.12f);
-        // Gold flame border on pennant
-        sr.setColor(1f, 0.85f, 0.25f, 1f);
-        sr.rectLine(cx + r * 0.4f, cy + r * 0.4f, cx + r * 0.85f, cy + r * 0.05f, 1.6f);
-        sr.rectLine(cx + r * 0.85f, cy + r * 0.05f, cx + r * 0.35f, cy + r * 0.12f, 1.6f);
-
-        // 6. Brilliant Gold Star on pennant
-        float starX = cx + r * 0.52f, starY = cy + r * 0.22f;
-        sr.setColor(1f, 0.90f, 0.25f, 1f);
-        sr.circle(starX, starY, Math.max(2.5f, r * 0.12f));
-        sr.rect(starX - 2f, starY - 2f, 2f, 2f, 4f, 4f, 1f, 1f, 45f);
-
-        // 7. Cyan spirit fishing line connecting rod guides
-        sr.setColor(0.35f, 0.95f, 1f, 0.85f);
-        sr.rectLine(x1 + r * 0.15f, y1 + r * 0.15f, tipX, tipY, 1.2f);
+        float s = r / 64f;
+        sr.setColor(0.86f, 0.15f, 0.15f, 0.16f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 54.0f);
+        sr.setColor(0.92f, 0.70f, 0.03f, 0.14f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 42.0f);
+        sr.setColor(0.27f, 0.04f, 0.04f, 1.00f);
+        drawLine(sr, cx, cy, s, 26.0f, 102.0f, 88.0f, 40.0f, 7.5f);
+        sr.setColor(0.60f, 0.11f, 0.11f, 1.00f);
+        drawLine(sr, cx, cy, s, 26.0f, 102.0f, 88.0f, 40.0f, 5.2f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        drawLine(sr, cx, cy, s, 26.0f, 102.0f, 88.0f, 40.0f, 2.8f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        drawLine(sr, cx, cy, s, 27.0f, 101.0f, 87.0f, 41.0f, 1.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillCircle(sr, cx, cy, s, 42.0f, 86.0f, 4.5f);
+        sr.setColor(0.27f, 0.04f, 0.04f, 1.00f);
+        fillCircle(sr, cx, cy, s, 42.0f, 86.0f, 4.5f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        fillTri(sr, cx, cy, s, 42.0f, 83.0f, 43.0f, 85.0f, 45.0f, 85.0f);
+        fillTri(sr, cx, cy, s, 42.0f, 83.0f, 45.0f, 85.0f, 43.5f, 86.5f);
+        fillTri(sr, cx, cy, s, 42.0f, 83.0f, 43.5f, 86.5f, 44.0f, 89.0f);
+        fillTri(sr, cx, cy, s, 42.0f, 83.0f, 44.0f, 89.0f, 42.0f, 87.5f);
+        fillTri(sr, cx, cy, s, 42.0f, 83.0f, 42.0f, 87.5f, 40.0f, 89.0f);
+        fillTri(sr, cx, cy, s, 42.0f, 83.0f, 40.0f, 89.0f, 40.5f, 86.5f);
+        fillTri(sr, cx, cy, s, 42.0f, 83.0f, 40.5f, 86.5f, 39.0f, 85.0f);
+        fillTri(sr, cx, cy, s, 42.0f, 83.0f, 39.0f, 85.0f, 41.0f, 85.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillCircle(sr, cx, cy, s, 58.0f, 70.0f, 4.8f);
+        sr.setColor(0.27f, 0.04f, 0.04f, 1.00f);
+        fillCircle(sr, cx, cy, s, 58.0f, 70.0f, 4.8f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        fillTri(sr, cx, cy, s, 58.0f, 67.0f, 59.0f, 69.0f, 61.0f, 69.0f);
+        fillTri(sr, cx, cy, s, 58.0f, 67.0f, 61.0f, 69.0f, 59.5f, 70.5f);
+        fillTri(sr, cx, cy, s, 58.0f, 67.0f, 59.5f, 70.5f, 60.0f, 73.0f);
+        fillTri(sr, cx, cy, s, 58.0f, 67.0f, 60.0f, 73.0f, 58.0f, 71.5f);
+        fillTri(sr, cx, cy, s, 58.0f, 67.0f, 58.0f, 71.5f, 56.0f, 73.0f);
+        fillTri(sr, cx, cy, s, 58.0f, 67.0f, 56.0f, 73.0f, 56.5f, 70.5f);
+        fillTri(sr, cx, cy, s, 58.0f, 67.0f, 56.5f, 70.5f, 55.0f, 69.0f);
+        fillTri(sr, cx, cy, s, 58.0f, 67.0f, 55.0f, 69.0f, 57.0f, 69.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillCircle(sr, cx, cy, s, 74.0f, 54.0f, 5.0f);
+        sr.setColor(0.27f, 0.04f, 0.04f, 1.00f);
+        fillCircle(sr, cx, cy, s, 74.0f, 54.0f, 5.0f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        fillTri(sr, cx, cy, s, 74.0f, 51.0f, 75.0f, 53.0f, 77.0f, 53.0f);
+        fillTri(sr, cx, cy, s, 74.0f, 51.0f, 77.0f, 53.0f, 75.5f, 54.5f);
+        fillTri(sr, cx, cy, s, 74.0f, 51.0f, 75.5f, 54.5f, 76.0f, 57.0f);
+        fillTri(sr, cx, cy, s, 74.0f, 51.0f, 76.0f, 57.0f, 74.0f, 55.5f);
+        fillTri(sr, cx, cy, s, 74.0f, 51.0f, 74.0f, 55.5f, 72.0f, 57.0f);
+        fillTri(sr, cx, cy, s, 74.0f, 51.0f, 72.0f, 57.0f, 72.5f, 54.5f);
+        fillTri(sr, cx, cy, s, 74.0f, 51.0f, 72.5f, 54.5f, 71.0f, 53.0f);
+        fillTri(sr, cx, cy, s, 74.0f, 51.0f, 71.0f, 53.0f, 73.0f, 53.0f);
+        sr.setColor(0.50f, 0.11f, 0.11f, 1.00f);
+        fillQuad(sr, cx, cy, s, 22.0f, 94.0f, 38.0f, 94.0f, 38.0f, 104.0f, 22.0f, 104.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        drawLine(sr, cx, cy, s, 24.0f, 101.0f, 33.0f, 92.0f, 1.2f);
+        drawLine(sr, cx, cy, s, 27.0f, 104.0f, 36.0f, 95.0f, 1.2f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillCircle(sr, cx, cy, s, 21.0f, 107.0f, 4.2f);
+        sr.setColor(0.27f, 0.04f, 0.04f, 1.00f);
+        fillCircle(sr, cx, cy, s, 21.0f, 107.0f, 4.2f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        fillQuad(sr, cx, cy, s, 21.0f, 107.0f, 15.0f, 116.0f, 19.0f, 118.0f, 21.0f, 110.0f);
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.00f);
+        fillQuad(sr, cx, cy, s, 21.0f, 107.0f, 19.0f, 118.0f, 24.0f, 116.0f, 21.0f, 110.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        fillTri(sr, cx, cy, s, 88.0f, 40.0f, 122.0f, 32.0f, 110.0f, 46.0f);
+        fillTri(sr, cx, cy, s, 88.0f, 40.0f, 110.0f, 46.0f, 124.0f, 54.0f);
+        fillTri(sr, cx, cy, s, 88.0f, 40.0f, 124.0f, 54.0f, 88.0f, 48.0f);
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.00f);
+        fillTri(sr, cx, cy, s, 88.0f, 42.0f, 114.0f, 35.0f, 106.0f, 46.0f);
+        fillTri(sr, cx, cy, s, 88.0f, 42.0f, 106.0f, 46.0f, 118.0f, 52.0f);
+        fillTri(sr, cx, cy, s, 88.0f, 42.0f, 118.0f, 52.0f, 88.0f, 47.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillTri(sr, cx, cy, s, 104.0f, 39.0f, 105.5f, 42.5f, 109.0f, 43.0f);
+        fillTri(sr, cx, cy, s, 104.0f, 39.0f, 109.0f, 43.0f, 106.5f, 45.5f);
+        fillTri(sr, cx, cy, s, 104.0f, 39.0f, 106.5f, 45.5f, 107.5f, 49.0f);
+        fillTri(sr, cx, cy, s, 104.0f, 39.0f, 107.5f, 49.0f, 104.0f, 47.0f);
+        fillTri(sr, cx, cy, s, 104.0f, 39.0f, 104.0f, 47.0f, 100.5f, 49.0f);
+        fillTri(sr, cx, cy, s, 104.0f, 39.0f, 100.5f, 49.0f, 101.5f, 45.5f);
+        fillTri(sr, cx, cy, s, 104.0f, 39.0f, 101.5f, 45.5f, 99.0f, 43.0f);
+        fillTri(sr, cx, cy, s, 104.0f, 39.0f, 99.0f, 43.0f, 102.5f, 42.5f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillCircle(sr, cx, cy, s, 88.0f, 40.0f, 3.5f);
+        sr.setColor(0.27f, 0.04f, 0.04f, 1.00f);
+        fillCircle(sr, cx, cy, s, 88.0f, 40.0f, 3.5f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        fillCircle(sr, cx, cy, s, 88.0f, 40.0f, 1.8f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 104.0f, 42.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 88.0f, 38.0f, 1.4f);
+        fillCircle(sr, cx, cy, s, 74.0f, 52.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 21.0f, 105.0f, 1.2f);
     }
 
     public static void drawVeQuocLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Radiant bronze drum aura
-        sr.setColor(0.95f, 0.65f, 0.2f, 0.18f);
-        sr.circle(cx, cy, r * 0.95f);
+        float s = r / 64f;
 
-        // 2. Heavy Antique Bronze Spool outer rim
-        sr.setColor(0.72f, 0.48f, 0.18f, 1f);
-        sr.circle(cx, cy, r * 0.82f);
-        sr.setColor(0.92f, 0.72f, 0.25f, 1f);
-        sr.circle(cx, cy, r * 0.75f);
-        sr.setColor(0.35f, 0.22f, 0.08f, 1f);
-        sr.circle(cx, cy, r * 0.68f);
-
-        // 3. Dong Son 8-Pointed Sunburst Spool Spokes
-        sr.setColor(1f, 0.85f, 0.35f, 0.9f);
-        for (int i = 0; i < 8; i++) {
-            float rad = (i * 45f) * com.badlogic.gdx.math.MathUtils.degreesToRadians;
-            float sx = cx + com.badlogic.gdx.math.MathUtils.cos(rad) * r * 0.68f;
-            float sy = cy + com.badlogic.gdx.math.MathUtils.sin(rad) * r * 0.68f;
-            sr.rectLine(cx, cy, sx, sy, 2f);
-        }
-
-        // 4. Braided Crimson & Golden Silk Defense Cord
-        sr.setColor(0.85f, 0.18f, 0.22f, 1f); // Crimson braided silk
-        sr.circle(cx, cy, r * 0.52f);
-        sr.setColor(1f, 0.88f, 0.30f, 1f); // Gold thread accents
-        sr.circle(cx, cy, r * 0.38f);
-        sr.setColor(0.75f, 0.15f, 0.18f, 1f);
-        sr.circle(cx, cy, r * 0.26f);
-
-        // 5. Central Bronze Spindle & Star Rivet
-        sr.setColor(0.25f, 0.15f, 0.08f, 1f);
-        sr.circle(cx, cy, r * 0.16f);
-        sr.setColor(1f, 0.90f, 0.35f, 1f);
-        sr.circle(cx, cy, r * 0.09f);
-
-        // 6. Bronze crank handle
-        float hx = cx + r * 0.55f, hy = cy + r * 0.45f;
-        sr.setColor(0.85f, 0.60f, 0.20f, 1f);
-        sr.rectLine(cx, cy, hx, hy, 2.5f);
-        sr.setColor(0.6f, 0.15f, 0.15f, 1f);
-        sr.circle(hx, hy, r * 0.12f);
-        sr.setColor(1f, 0.85f, 0.3f, 1f);
-        sr.circle(hx, hy, r * 0.06f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 0.16f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 54.0f);
+        sr.setColor(0.96f, 0.62f, 0.04f, 0.20f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 42.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillTri(sr, cx, cy, s, 64.0f, 10.0f, 58.0f, 24.0f, 70.0f, 24.0f);
+        fillTri(sr, cx, cy, s, 118.0f, 64.0f, 104.0f, 58.0f, 104.0f, 70.0f);
+        fillTri(sr, cx, cy, s, 64.0f, 118.0f, 70.0f, 104.0f, 58.0f, 104.0f);
+        fillTri(sr, cx, cy, s, 10.0f, 64.0f, 24.0f, 70.0f, 24.0f, 58.0f);
+        fillTri(sr, cx, cy, s, 102.0f, 26.0f, 89.0f, 34.0f, 97.0f, 42.0f);
+        fillTri(sr, cx, cy, s, 102.0f, 102.0f, 97.0f, 86.0f, 89.0f, 94.0f);
+        fillTri(sr, cx, cy, s, 26.0f, 102.0f, 39.0f, 94.0f, 31.0f, 86.0f);
+        fillTri(sr, cx, cy, s, 26.0f, 26.0f, 31.0f, 42.0f, 39.0f, 34.0f);
+        sr.setColor(0.47f, 0.21f, 0.06f, 1.00f);
+        fillTri(sr, cx, cy, s, 39.0f, 34.0f, 58.0f, 24.0f, 70.0f, 24.0f);
+        fillTri(sr, cx, cy, s, 39.0f, 34.0f, 70.0f, 24.0f, 89.0f, 34.0f);
+        fillTri(sr, cx, cy, s, 39.0f, 34.0f, 89.0f, 34.0f, 97.0f, 42.0f);
+        fillTri(sr, cx, cy, s, 39.0f, 34.0f, 97.0f, 42.0f, 104.0f, 58.0f);
+        fillTri(sr, cx, cy, s, 39.0f, 34.0f, 104.0f, 58.0f, 104.0f, 70.0f);
+        fillTri(sr, cx, cy, s, 39.0f, 34.0f, 104.0f, 70.0f, 97.0f, 86.0f);
+        fillTri(sr, cx, cy, s, 39.0f, 34.0f, 97.0f, 86.0f, 89.0f, 94.0f);
+        fillTri(sr, cx, cy, s, 39.0f, 34.0f, 89.0f, 94.0f, 70.0f, 104.0f);
+        fillTri(sr, cx, cy, s, 39.0f, 34.0f, 70.0f, 104.0f, 58.0f, 104.0f);
+        fillTri(sr, cx, cy, s, 39.0f, 34.0f, 58.0f, 104.0f, 39.0f, 94.0f);
+        fillTri(sr, cx, cy, s, 39.0f, 34.0f, 39.0f, 94.0f, 31.0f, 86.0f);
+        fillTri(sr, cx, cy, s, 39.0f, 34.0f, 31.0f, 86.0f, 24.0f, 70.0f);
+        fillTri(sr, cx, cy, s, 39.0f, 34.0f, 24.0f, 70.0f, 24.0f, 58.0f);
+        fillTri(sr, cx, cy, s, 24.0f, 58.0f, 31.0f, 42.0f, 39.0f, 34.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillTri(sr, cx, cy, s, 40.0f, 37.0f, 56.0f, 28.0f, 72.0f, 28.0f);
+        fillTri(sr, cx, cy, s, 40.0f, 37.0f, 72.0f, 28.0f, 88.0f, 37.0f);
+        fillTri(sr, cx, cy, s, 40.0f, 37.0f, 88.0f, 37.0f, 95.0f, 44.0f);
+        fillTri(sr, cx, cy, s, 40.0f, 37.0f, 95.0f, 44.0f, 100.0f, 56.0f);
+        fillTri(sr, cx, cy, s, 40.0f, 37.0f, 100.0f, 56.0f, 100.0f, 72.0f);
+        fillTri(sr, cx, cy, s, 40.0f, 37.0f, 100.0f, 72.0f, 95.0f, 84.0f);
+        fillTri(sr, cx, cy, s, 40.0f, 37.0f, 95.0f, 84.0f, 88.0f, 91.0f);
+        fillTri(sr, cx, cy, s, 40.0f, 37.0f, 88.0f, 91.0f, 72.0f, 100.0f);
+        fillTri(sr, cx, cy, s, 40.0f, 37.0f, 72.0f, 100.0f, 56.0f, 100.0f);
+        fillTri(sr, cx, cy, s, 40.0f, 37.0f, 56.0f, 100.0f, 40.0f, 91.0f);
+        fillTri(sr, cx, cy, s, 40.0f, 37.0f, 40.0f, 91.0f, 33.0f, 84.0f);
+        fillTri(sr, cx, cy, s, 40.0f, 37.0f, 33.0f, 84.0f, 28.0f, 72.0f);
+        fillTri(sr, cx, cy, s, 40.0f, 37.0f, 28.0f, 72.0f, 28.0f, 56.0f);
+        fillTri(sr, cx, cy, s, 28.0f, 56.0f, 33.0f, 44.0f, 40.0f, 37.0f);
+        sr.setColor(0.27f, 0.04f, 0.04f, 1.00f);
+        fillTri(sr, cx, cy, s, 42.0f, 40.0f, 54.0f, 32.0f, 74.0f, 32.0f);
+        fillTri(sr, cx, cy, s, 42.0f, 40.0f, 74.0f, 32.0f, 86.0f, 40.0f);
+        fillTri(sr, cx, cy, s, 42.0f, 40.0f, 86.0f, 40.0f, 92.0f, 46.0f);
+        fillTri(sr, cx, cy, s, 42.0f, 40.0f, 92.0f, 46.0f, 96.0f, 54.0f);
+        fillTri(sr, cx, cy, s, 42.0f, 40.0f, 96.0f, 54.0f, 96.0f, 74.0f);
+        fillTri(sr, cx, cy, s, 42.0f, 40.0f, 96.0f, 74.0f, 92.0f, 82.0f);
+        fillTri(sr, cx, cy, s, 42.0f, 40.0f, 92.0f, 82.0f, 86.0f, 88.0f);
+        fillTri(sr, cx, cy, s, 42.0f, 40.0f, 86.0f, 88.0f, 74.0f, 96.0f);
+        fillTri(sr, cx, cy, s, 42.0f, 40.0f, 74.0f, 96.0f, 54.0f, 96.0f);
+        fillTri(sr, cx, cy, s, 42.0f, 40.0f, 54.0f, 96.0f, 42.0f, 88.0f);
+        fillTri(sr, cx, cy, s, 42.0f, 40.0f, 42.0f, 88.0f, 36.0f, 82.0f);
+        fillTri(sr, cx, cy, s, 42.0f, 40.0f, 36.0f, 82.0f, 32.0f, 74.0f);
+        fillTri(sr, cx, cy, s, 42.0f, 40.0f, 32.0f, 74.0f, 32.0f, 54.0f);
+        fillTri(sr, cx, cy, s, 32.0f, 54.0f, 36.0f, 46.0f, 42.0f, 40.0f);
+        sr.setColor(0.50f, 0.11f, 0.11f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 28.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 24.0f);
+        sr.setColor(0.96f, 0.62f, 0.04f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 20.0f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        drawLine(sr, cx, cy, s, 46.0f, 52.0f, 82.0f, 76.0f, 1.2f);
+        drawLine(sr, cx, cy, s, 46.0f, 76.0f, 82.0f, 52.0f, 1.2f);
+        sr.setColor(0.27f, 0.04f, 0.04f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 16.0f);
+        sr.setColor(0.60f, 0.11f, 0.11f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 13.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillTri(sr, cx, cy, s, 61.0f, 61.0f, 64.0f, 53.0f, 67.0f, 61.0f);
+        fillTri(sr, cx, cy, s, 67.0f, 61.0f, 75.0f, 61.0f, 69.0f, 66.0f);
+        fillTri(sr, cx, cy, s, 61.0f, 61.0f, 67.0f, 61.0f, 69.0f, 66.0f);
+        fillTri(sr, cx, cy, s, 61.0f, 61.0f, 69.0f, 66.0f, 71.0f, 74.0f);
+        fillTri(sr, cx, cy, s, 61.0f, 61.0f, 71.0f, 74.0f, 64.0f, 69.0f);
+        fillTri(sr, cx, cy, s, 61.0f, 61.0f, 64.0f, 69.0f, 57.0f, 74.0f);
+        fillTri(sr, cx, cy, s, 61.0f, 61.0f, 57.0f, 74.0f, 59.0f, 66.0f);
+        fillTri(sr, cx, cy, s, 59.0f, 66.0f, 53.0f, 61.0f, 61.0f, 61.0f);
+        sr.setColor(Color.WHITE);
+        fillTri(sr, cx, cy, s, 61.5f, 61.0f, 64.0f, 54.0f, 66.5f, 61.0f);
+        fillTri(sr, cx, cy, s, 66.5f, 61.0f, 73.0f, 61.0f, 68.0f, 65.5f);
+        fillTri(sr, cx, cy, s, 61.5f, 61.0f, 66.5f, 61.0f, 68.0f, 65.5f);
+        fillTri(sr, cx, cy, s, 61.5f, 61.0f, 68.0f, 65.5f, 70.0f, 72.0f);
+        fillTri(sr, cx, cy, s, 61.5f, 61.0f, 70.0f, 72.0f, 64.0f, 68.0f);
+        fillTri(sr, cx, cy, s, 61.5f, 61.0f, 64.0f, 68.0f, 58.0f, 72.0f);
+        fillTri(sr, cx, cy, s, 61.5f, 61.0f, 58.0f, 72.0f, 60.0f, 65.5f);
+        fillTri(sr, cx, cy, s, 60.0f, 65.5f, 55.0f, 61.0f, 61.5f, 61.0f);
+        sr.setColor(0.47f, 0.21f, 0.06f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 64.0f, 98.0f, 34.0f, 4.5f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 64.0f, 98.0f, 34.0f, 2.5f);
+        sr.setColor(0.47f, 0.21f, 0.06f, 1.00f);
+        fillCircle(sr, cx, cy, s, 98.0f, 34.0f, 5.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        fillCircle(sr, cx, cy, s, 98.0f, 34.0f, 2.8f);
+        fillTri(sr, cx, cy, s, 100.0f, 42.0f, 98.0f, 36.0f, 112.0f, 40.0f);
+        fillTri(sr, cx, cy, s, 100.0f, 42.0f, 112.0f, 40.0f, 106.0f, 44.0f);
+        fillTri(sr, cx, cy, s, 106.0f, 44.0f, 116.0f, 48.0f, 100.0f, 42.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 64.0f, 12.0f, 1.4f);
+        fillCircle(sr, cx, cy, s, 98.0f, 32.0f, 1.6f);
+        fillCircle(sr, cx, cy, s, 64.0f, 55.0f, 1.4f);
+        fillCircle(sr, cx, cy, s, 102.0f, 27.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 26.0f, 27.0f, 1.2f);
     }
 
     public static void drawVeQuocHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Dragon claw aura
-        sr.setColor(1f, 0.3f, 0.3f, 0.18f);
-        sr.circle(cx, cy, r * 0.95f);
+        float s = r / 64f;
 
-        // 2. Thick sacred bronze spine shank
-        float shankX = cx - r * 0.25f;
-        float topY = cy + r * 0.60f;
-        float bendY = cy - r * 0.45f;
-        float barbX = cx + r * 0.48f;
-        float barbY = cy + r * 0.25f;
-
-        // Shank & Bend
-        sr.setColor(0.78f, 0.52f, 0.18f, 1f); // Antique Bronze
-        sr.rectLine(shankX, topY, shankX, bendY, Math.max(3.8f, r * 0.18f));
-        sr.rectLine(shankX, bendY, barbX, bendY, Math.max(3.8f, r * 0.18f));
-        sr.rectLine(barbX, bendY, barbX, barbY, Math.max(3.5f, r * 0.16f));
-
-        // 3. Razor-sharp Dragon Claw Barb Tip
-        sr.setColor(0.95f, 0.75f, 0.25f, 1f);
-        sr.triangle(barbX - r * 0.08f, barbY - r * 0.1f, barbX + r * 0.08f, barbY - r * 0.1f, barbX - r * 0.15f, barbY + r * 0.25f);
-        // Bloodline razor edge
-        sr.setColor(1f, 0.2f, 0.25f, 1f);
-        sr.rectLine(barbX, barbY - r * 0.1f, barbX - r * 0.15f, barbY + r * 0.25f, 1.5f);
-
-        // 4. Hook spine wave notches (Dong Son Wave Motif)
-        sr.setColor(1f, 0.88f, 0.35f, 1f);
-        sr.circle(shankX, cy + r * 0.25f, r * 0.09f);
-        sr.circle(shankX, cy, r * 0.09f);
-        sr.circle(shankX, cy - r * 0.25f, r * 0.09f);
-
-        // 5. Crown Eyelet with Golden 5-Pointed Star
-        sr.setColor(0.85f, 0.60f, 0.20f, 1f);
-        sr.circle(shankX, topY, r * 0.25f);
-        sr.setColor(0.12f, 0.15f, 0.22f, 1f);
-        sr.circle(shankX, topY, r * 0.14f);
-        sr.setColor(1f, 0.90f, 0.30f, 1f);
-        sr.circle(shankX, topY + r * 0.04f, r * 0.12f);
-        sr.rect(shankX - 2.5f, topY + r * 0.04f - 2.5f, 2.5f, 2.5f, 5f, 5f, 1f, 1f, 45f);
-
-        // 6. Fluttering Red Silk Tassel from eyelet
-        sr.setColor(0.90f, 0.15f, 0.20f, 1f);
-        sr.rectLine(shankX, topY, shankX - r * 0.35f, topY - r * 0.25f, 2.5f);
-        sr.rectLine(shankX, topY, shankX - r * 0.22f, topY - r * 0.35f, 2f);
+        // --- LAYER: background_glow ---
+        sr.setColor(0.94f, 0.27f, 0.27f, 0.16f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 42.0f);
+        sr.setColor(0.96f, 0.62f, 0.04f, 0.18f);
+        fillCircle(sr, cx, cy, s, 80.0f, 26.0f, 16.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        fillTri(sr, cx, cy, s, 92.0f, 52.0f, 86.0f, 36.0f, 90.8f, 42.5f);
+        fillTri(sr, cx, cy, s, 92.0f, 52.0f, 90.8f, 42.5f, 95.0f, 50.0f);
+        fillTri(sr, cx, cy, s, 92.0f, 52.0f, 95.0f, 50.0f, 98.8f, 58.5f);
+        fillTri(sr, cx, cy, s, 92.0f, 52.0f, 98.8f, 58.5f, 102.0f, 68.0f);
+        fillTri(sr, cx, cy, s, 92.0f, 52.0f, 102.0f, 68.0f, 99.9f, 64.8f);
+        fillTri(sr, cx, cy, s, 92.0f, 52.0f, 99.9f, 64.8f, 97.5f, 61.0f);
+        fillTri(sr, cx, cy, s, 97.5f, 61.0f, 94.9f, 56.8f, 92.0f, 52.0f);
+        sr.setColor(0.73f, 0.11f, 0.11f, 1.00f);
+        fillTri(sr, cx, cy, s, 96.0f, 60.0f, 88.0f, 40.0f, 96.4f, 49.5f);
+        fillTri(sr, cx, cy, s, 96.0f, 60.0f, 96.4f, 49.5f, 103.5f, 60.0f);
+        fillTri(sr, cx, cy, s, 96.0f, 60.0f, 103.5f, 60.0f, 109.4f, 71.5f);
+        fillTri(sr, cx, cy, s, 96.0f, 60.0f, 109.4f, 71.5f, 114.0f, 84.0f);
+        fillTri(sr, cx, cy, s, 96.0f, 60.0f, 114.0f, 84.0f, 109.9f, 78.8f);
+        fillTri(sr, cx, cy, s, 96.0f, 60.0f, 109.9f, 78.8f, 105.5f, 73.0f);
+        fillTri(sr, cx, cy, s, 105.5f, 73.0f, 100.9f, 66.8f, 96.0f, 60.0f);
+        sr.setColor(0.50f, 0.11f, 0.11f, 1.00f);
+        fillTri(sr, cx, cy, s, 114.0f, 84.0f, 116.0f, 92.0f, 108.0f, 88.0f);
+        sr.setColor(0.47f, 0.21f, 0.06f, 1.00f);
+        fillTri(sr, cx, cy, s, 76.0f, 34.0f, 84.0f, 34.0f, 84.0f, 72.0f);
+        fillTri(sr, cx, cy, s, 74.0f, 34.0f, 76.0f, 34.0f, 84.0f, 72.0f);
+        fillTri(sr, cx, cy, s, 74.0f, 34.0f, 84.0f, 72.0f, 82.2f, 86.0f);
+        fillTri(sr, cx, cy, s, 74.0f, 34.0f, 82.2f, 86.0f, 77.0f, 96.0f);
+        fillTri(sr, cx, cy, s, 77.0f, 96.0f, 68.2f, 102.0f, 56.0f, 104.0f);
+        fillTri(sr, cx, cy, s, 77.0f, 96.0f, 56.0f, 104.0f, 43.8f, 102.5f);
+        fillTri(sr, cx, cy, s, 77.0f, 96.0f, 43.8f, 102.5f, 35.0f, 98.0f);
+        fillTri(sr, cx, cy, s, 35.0f, 98.0f, 29.8f, 90.5f, 28.0f, 80.0f);
+        fillTri(sr, cx, cy, s, 35.0f, 98.0f, 28.0f, 80.0f, 28.9f, 72.4f);
+        fillTri(sr, cx, cy, s, 35.0f, 98.0f, 28.9f, 72.4f, 31.5f, 65.5f);
+        fillTri(sr, cx, cy, s, 35.0f, 98.0f, 31.5f, 65.5f, 35.9f, 59.4f);
+        fillTri(sr, cx, cy, s, 35.9f, 59.4f, 42.0f, 54.0f, 46.0f, 62.0f);
+        fillTri(sr, cx, cy, s, 35.9f, 59.4f, 46.0f, 62.0f, 41.6f, 66.1f);
+        fillTri(sr, cx, cy, s, 35.9f, 59.4f, 41.6f, 66.1f, 38.5f, 70.5f);
+        fillTri(sr, cx, cy, s, 35.9f, 59.4f, 38.5f, 70.5f, 36.6f, 75.1f);
+        fillTri(sr, cx, cy, s, 35.9f, 59.4f, 36.6f, 75.1f, 36.0f, 80.0f);
+        fillTri(sr, cx, cy, s, 35.0f, 98.0f, 35.9f, 59.4f, 36.0f, 80.0f);
+        fillTri(sr, cx, cy, s, 35.0f, 98.0f, 36.0f, 80.0f, 37.2f, 87.0f);
+        fillTri(sr, cx, cy, s, 35.0f, 98.0f, 37.2f, 87.0f, 41.0f, 92.0f);
+        fillTri(sr, cx, cy, s, 35.0f, 98.0f, 41.0f, 92.0f, 47.2f, 95.0f);
+        fillTri(sr, cx, cy, s, 35.0f, 98.0f, 47.2f, 95.0f, 56.0f, 96.0f);
+        fillTri(sr, cx, cy, s, 77.0f, 96.0f, 35.0f, 98.0f, 56.0f, 96.0f);
+        fillTri(sr, cx, cy, s, 77.0f, 96.0f, 56.0f, 96.0f, 63.9f, 94.5f);
+        fillTri(sr, cx, cy, s, 77.0f, 96.0f, 63.9f, 94.5f, 69.5f, 90.0f);
+        fillTri(sr, cx, cy, s, 77.0f, 96.0f, 69.5f, 90.0f, 72.9f, 82.5f);
+        fillTri(sr, cx, cy, s, 77.0f, 96.0f, 72.9f, 82.5f, 74.0f, 72.0f);
+        fillTri(sr, cx, cy, s, 77.0f, 96.0f, 74.0f, 72.0f, 74.0f, 34.0f);
+        sr.setColor(0.85f, 0.47f, 0.02f, 1.00f);
+        fillTri(sr, cx, cy, s, 42.0f, 54.0f, 48.0f, 42.0f, 46.0f, 62.0f);
+        sr.setColor(0.57f, 0.25f, 0.05f, 1.00f);
+        fillTri(sr, cx, cy, s, 82.0f, 38.0f, 82.0f, 72.0f, 80.4f, 85.1f);
+        fillTri(sr, cx, cy, s, 80.4f, 85.1f, 75.5f, 94.5f, 67.4f, 100.1f);
+        fillTri(sr, cx, cy, s, 67.4f, 100.1f, 56.0f, 102.0f, 45.5f, 100.6f);
+        fillTri(sr, cx, cy, s, 67.4f, 100.1f, 45.5f, 100.6f, 38.0f, 96.5f);
+        fillTri(sr, cx, cy, s, 38.0f, 96.5f, 33.5f, 89.6f, 32.0f, 80.0f);
+        fillTri(sr, cx, cy, s, 38.0f, 96.5f, 32.0f, 80.0f, 32.6f, 73.1f);
+        fillTri(sr, cx, cy, s, 38.0f, 96.5f, 32.6f, 73.1f, 34.5f, 66.5f);
+        fillTri(sr, cx, cy, s, 38.0f, 96.5f, 34.5f, 66.5f, 37.6f, 60.1f);
+        fillTri(sr, cx, cy, s, 37.6f, 60.1f, 42.0f, 54.0f, 44.0f, 64.0f);
+        fillTri(sr, cx, cy, s, 37.6f, 60.1f, 44.0f, 64.0f, 41.4f, 68.1f);
+        fillTri(sr, cx, cy, s, 37.6f, 60.1f, 41.4f, 68.1f, 39.5f, 72.5f);
+        fillTri(sr, cx, cy, s, 37.6f, 60.1f, 39.5f, 72.5f, 38.4f, 77.1f);
+        fillTri(sr, cx, cy, s, 37.6f, 60.1f, 38.4f, 77.1f, 38.0f, 82.0f);
+        fillTri(sr, cx, cy, s, 38.0f, 96.5f, 37.6f, 60.1f, 38.0f, 82.0f);
+        fillTri(sr, cx, cy, s, 38.0f, 96.5f, 38.0f, 82.0f, 39.1f, 89.0f);
+        fillTri(sr, cx, cy, s, 38.0f, 96.5f, 39.1f, 89.0f, 42.5f, 94.0f);
+        fillTri(sr, cx, cy, s, 38.0f, 96.5f, 42.5f, 94.0f, 48.1f, 97.0f);
+        fillTri(sr, cx, cy, s, 67.4f, 100.1f, 38.0f, 96.5f, 48.1f, 97.0f);
+        fillTri(sr, cx, cy, s, 67.4f, 100.1f, 48.1f, 97.0f, 56.0f, 98.0f);
+        fillTri(sr, cx, cy, s, 67.4f, 100.1f, 56.0f, 98.0f, 66.5f, 96.2f);
+        fillTri(sr, cx, cy, s, 67.4f, 100.1f, 66.5f, 96.2f, 74.0f, 91.0f);
+        fillTri(sr, cx, cy, s, 80.4f, 85.1f, 67.4f, 100.1f, 74.0f, 91.0f);
+        fillTri(sr, cx, cy, s, 80.4f, 85.1f, 74.0f, 91.0f, 78.5f, 82.2f);
+        fillTri(sr, cx, cy, s, 80.4f, 85.1f, 78.5f, 82.2f, 80.0f, 70.0f);
+        fillTri(sr, cx, cy, s, 82.0f, 38.0f, 80.4f, 85.1f, 80.0f, 70.0f);
+        fillTri(sr, cx, cy, s, 82.0f, 38.0f, 80.0f, 70.0f, 80.0f, 38.0f);
+        fillTri(sr, cx, cy, s, 82.0f, 38.0f, 80.0f, 38.0f, 74.0f, 38.0f);
+        sr.setColor(0.47f, 0.21f, 0.06f, 1.00f);
+        fillCircle(sr, cx, cy, s, 80.0f, 26.0f, 14.0f);
+        sr.setColor(0.06f, 0.09f, 0.16f, 1.00f);
+        fillCircle(sr, cx, cy, s, 80.0f, 26.0f, 8.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(0.12f, 0.16f, 0.23f, 1.00f);
+        fillTri(sr, cx, cy, s, 84.0f, 46.0f, 92.0f, 42.0f, 84.0f, 54.0f);
+        fillTri(sr, cx, cy, s, 84.0f, 58.0f, 93.0f, 56.0f, 84.0f, 66.0f);
+        fillTri(sr, cx, cy, s, 82.0f, 70.0f, 91.0f, 72.0f, 80.0f, 78.0f);
+        fillTri(sr, cx, cy, s, 74.0f, 84.0f, 81.0f, 90.0f, 70.0f, 92.0f);
+        fillTri(sr, cx, cy, s, 62.0f, 96.0f, 66.0f, 105.0f, 54.0f, 102.0f);
+        fillTri(sr, cx, cy, s, 46.0f, 102.0f, 44.0f, 111.0f, 36.0f, 98.0f);
+        sr.setColor(0.47f, 0.21f, 0.06f, 1.00f);
+        fillCircle(sr, cx, cy, s, 80.0f, 26.0f, 6.0f);
+        sr.setColor(0.92f, 0.70f, 0.03f, 1.00f);
+        fillTri(sr, cx, cy, s, 78.2f, 24.8f, 80.0f, 21.0f, 81.8f, 24.8f);
+        fillTri(sr, cx, cy, s, 78.2f, 24.8f, 81.8f, 24.8f, 86.0f, 25.4f);
+        fillTri(sr, cx, cy, s, 78.2f, 24.8f, 86.0f, 25.4f, 83.0f, 28.2f);
+        fillTri(sr, cx, cy, s, 78.2f, 24.8f, 83.0f, 28.2f, 83.7f, 32.4f);
+        fillTri(sr, cx, cy, s, 78.2f, 24.8f, 83.7f, 32.4f, 80.0f, 30.4f);
+        fillTri(sr, cx, cy, s, 78.2f, 24.8f, 80.0f, 30.4f, 76.3f, 32.4f);
+        fillTri(sr, cx, cy, s, 78.2f, 24.8f, 76.3f, 32.4f, 77.0f, 28.2f);
+        fillTri(sr, cx, cy, s, 77.0f, 28.2f, 74.0f, 25.4f, 78.2f, 24.8f);
+        sr.setColor(0.96f, 0.62f, 0.04f, 1.00f);
+        drawLine(sr, cx, cy, s, 79.0f, 38.0f, 79.0f, 72.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 79.0f, 72.0f, 77.6f, 80.8f, 1.5f);
+        drawLine(sr, cx, cy, s, 77.6f, 80.8f, 73.2f, 87.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 73.2f, 87.0f, 66.1f, 90.8f, 1.5f);
+        drawLine(sr, cx, cy, s, 66.1f, 90.8f, 56.0f, 92.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 56.0f, 92.0f, 49.9f, 91.2f, 1.5f);
+        drawLine(sr, cx, cy, s, 49.9f, 91.2f, 45.5f, 89.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 45.5f, 89.0f, 42.9f, 85.2f, 1.5f);
+        drawLine(sr, cx, cy, s, 42.9f, 85.2f, 42.0f, 80.0f, 1.5f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        fillCircle(sr, cx, cy, s, 76.0f, 38.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 82.0f, 38.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 79.0f, 50.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 79.0f, 62.0f, 1.5f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 72.0f, 20.0f, 76.0f, 17.8f, 1.5f);
+        drawLine(sr, cx, cy, s, 76.0f, 17.8f, 80.0f, 17.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 80.0f, 17.0f, 84.0f, 17.8f, 1.5f);
+        drawLine(sr, cx, cy, s, 84.0f, 17.8f, 88.0f, 20.0f, 1.5f);
+        fillTri(sr, cx, cy, s, 48.0f, 42.0f, 46.0f, 47.0f, 44.0f, 45.0f);
+        drawLine(sr, cx, cy, s, 48.0f, 42.0f, 42.0f, 54.0f, 1.0f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.85f);
+        drawLine(sr, cx, cy, s, 44.0f, 64.0f, 41.4f, 68.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 41.4f, 68.0f, 39.5f, 72.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 39.5f, 72.0f, 38.4f, 76.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 38.4f, 76.0f, 38.0f, 80.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 38.0f, 80.0f, 39.1f, 86.1f, 1.0f);
+        drawLine(sr, cx, cy, s, 39.1f, 86.1f, 42.5f, 90.5f, 1.0f);
+        drawLine(sr, cx, cy, s, 42.5f, 90.5f, 48.1f, 93.1f, 1.0f);
+        drawLine(sr, cx, cy, s, 48.1f, 93.1f, 56.0f, 94.0f, 1.0f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.75f);
+        drawLine(sr, cx, cy, s, 75.0f, 40.0f, 75.0f, 68.0f, 1.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 80.0f, 26.0f, 1.0f);
     }
 
     // =========================================================================
     // 11. THẦN KHÍ LẠC HỒNG SET (Imperial Dong Son Bronze Drum Staff, Sacred Dragon Spool, Au Co Lotus Hook)
     // =========================================================================
     public static void drawLacHongRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Radiant Dong Son Solar Bronze & Crimson Ruby Flame Aura
-        sr.setColor(1f, 0.72f, 0.18f, 0.18f);
-        sr.circle(cx, cy, r * 0.98f);
-        sr.setColor(0.95f, 0.18f, 0.22f, 0.22f);
-        sr.circle(cx + r * 0.48f, cy + r * 0.48f, r * 0.54f);
+        float s = r / 64f;
 
-        // 2. Antique Dong Son Bronze & 24K Gold Celestial Shaft
-        float x1 = cx - r * 0.72f, y1 = cy - r * 0.72f;
-        float x2 = cx + r * 0.45f, y2 = cy + r * 0.45f;
-        // Deep antique bronze mantle
-        sr.setColor(0.68f, 0.42f, 0.14f, 1f);
-        sr.rectLine(x1, y1, x2, y2, Math.max(4.5f, r * 0.22f));
-        // Burnished 24K royal gold inlay
-        sr.setColor(1.0f, 0.84f, 0.25f, 1f);
-        sr.rectLine(x1, y1, x2, y2, Math.max(2.6f, r * 0.12f));
-        // Luminous imperial emerald jade core vein
-        sr.setColor(0.18f, 0.78f, 0.45f, 0.95f);
-        sr.rectLine(x1, y1, x2, y2, Math.max(1.2f, r * 0.05f));
-
-        // 3. 4 Raised Dong Son Geometric Collar Rings with Embedded Glowing Rubies
-        for (float f = 0.20f; f <= 0.80f; f += 0.20f) {
-            float nx = x1 + (x2 - x1) * f;
-            float ny = y1 + (y2 - y1) * f;
-            // Bronze collar ring
-            sr.setColor(0.85f, 0.62f, 0.18f, 1f);
-            sr.circle(nx, ny, Math.max(3.4f, r * 0.15f));
-            // Inset flaming Ruby gem
-            sr.setColor(0.96f, 0.15f, 0.25f, 1f);
-            sr.circle(nx, ny, Math.max(1.8f, r * 0.08f));
-            sr.setColor(1f, 1f, 1f, 0.9f);
-            sr.circle(nx + 0.6f, ny + 0.6f, Math.max(0.8f, r * 0.04f));
-        }
-
-        // 4. Imperial Jade Grip & Cross-Laced Crimson Silk Cord
-        float gx = x1 + (x2 - x1) * 0.10f;
-        float gy = y1 + (y2 - y1) * 0.10f;
-        sr.setColor(0.15f, 0.65f, 0.38f, 1f);
-        sr.circle(gx, gy, Math.max(4.0f, r * 0.18f));
-        sr.setColor(0.90f, 0.15f, 0.20f, 1f);
-        sr.rectLine(x1, y1, gx + 2f, gy + 2f, 1.8f);
-        // Hanging Dong Son bronze bell pommel
-        sr.setColor(0.85f, 0.62f, 0.18f, 1f);
-        sr.triangle(x1, y1, x1 - r * 0.12f, y1 - r * 0.18f, x1 - r * 0.18f, y1 - r * 0.10f);
-
-        // 5. Royal Crimson Silk Tassels & Dangling Jade Beads
-        sr.setColor(0.90f, 0.15f, 0.22f, 0.95f);
-        sr.rectLine(gx, gy, gx - r * 0.26f, gy - r * 0.18f, 2.2f);
-        sr.rectLine(gx, gy, gx - r * 0.18f, gy - r * 0.28f, 1.8f);
-        sr.setColor(0.20f, 0.85f, 0.50f, 1f);
-        sr.circle(gx - r * 0.26f, gy - r * 0.18f, Math.max(1.6f, r * 0.07f));
-        sr.circle(gx - r * 0.18f, gy - r * 0.28f, Math.max(1.4f, r * 0.06f));
-
-        // 6. Miniature Dong Son Bronze Drum Headpiece (Trống Đồng Đông Sơn Cổ Điển)
-        float sx = cx + r * 0.50f, sy = cy + r * 0.50f;
-        // Outer bronze drum flange
-        sr.setColor(0.72f, 0.45f, 0.14f, 1f);
-        sr.circle(sx, sy, r * 0.36f);
-        sr.setColor(0.98f, 0.82f, 0.22f, 1f);
-        sr.circle(sx, sy, r * 0.30f);
-        sr.setColor(0.40f, 0.20f, 0.06f, 1f); // Inner drum face recess
-        sr.circle(sx, sy, r * 0.22f);
-
-        // 14-Pointed Dong Son Sunburst Rays (Mặt trời 14 tia sáng rực lửa)
-        sr.setColor(1.0f, 0.88f, 0.28f, 1f);
-        for (int i = 0; i < 14; i++) {
-            float rad = (i * (360f / 14f)) * MathUtils.degreesToRadians;
-            float px1 = sx + MathUtils.cos(rad) * r * 0.12f;
-            float py1 = sy + MathUtils.sin(rad) * r * 0.12f;
-            float px2 = sx + MathUtils.cos(rad) * r * 0.22f;
-            float py2 = sy + MathUtils.sin(rad) * r * 0.22f;
-            sr.rectLine(px1, py1, px2, py2, 1.4f);
-        }
-
-        // Tangential dot circle pattern (Vòng hoa văn chấm tròn tiếp tuyến)
-        sr.setColor(1.0f, 0.92f, 0.45f, 0.9f);
-        for (int i = 0; i < 10; i++) {
-            float rad = (i * 36f) * MathUtils.degreesToRadians;
-            float dx = sx + MathUtils.cos(rad) * r * 0.26f;
-            float dy = sy + MathUtils.sin(rad) * r * 0.26f;
-            sr.circle(dx, dy, Math.max(1.2f, r * 0.04f));
-        }
-
-        // 7. MAJESTIC CHIM LẠC BIRD IN FULL FLIGHT (Chim Lạc sải cánh thần thoại)
-        float bx = sx + r * 0.05f, by = sy + r * 0.05f;
-        // Majestic outstretched wings (Tầng cánh chim Lạc vươn cao kiêu hãnh)
-        sr.setColor(1f, 0.88f, 0.25f, 1f);
-        sr.triangle(bx, by, bx - r * 0.32f, by + r * 0.24f, bx - r * 0.10f, by + r * 0.35f);
-        sr.triangle(bx, by, bx + r * 0.24f, by - r * 0.32f, bx + r * 0.35f, by - r * 0.10f);
-        // Wing feather serrations
-        sr.setColor(1f, 0.96f, 0.55f, 1f);
-        sr.triangle(bx, by, bx - r * 0.28f, by + r * 0.20f, bx - r * 0.18f, by + r * 0.28f);
-        sr.triangle(bx, by, bx + r * 0.20f, by - r * 0.28f, bx + r * 0.28f, by - r * 0.18f);
-
-        // Long stylized neck, head & characteristic crest (Đầu, mỏ nhọn và mào chim Lạc vươn cao)
-        sr.setColor(1f, 0.92f, 0.30f, 1f);
-        sr.triangle(bx, by, bx + r * 0.26f, by + r * 0.26f, bx + r * 0.08f, by + r * 0.30f);
-        // Beak (Mỏ dài thanh thoát)
-        sr.setColor(1f, 1f, 0.80f, 1f);
-        sr.triangle(bx + r * 0.24f, by + r * 0.24f, bx + r * 0.42f, by + r * 0.38f, bx + r * 0.28f, by + r * 0.28f);
-        // Swept-back royal crest (Mào chim Lạc uốn cong)
-        sr.setColor(0.96f, 0.18f, 0.25f, 1f);
-        sr.triangle(bx + r * 0.12f, by + r * 0.28f, bx - r * 0.05f, by + r * 0.42f, bx + r * 0.18f, by + r * 0.32f);
-
-        // Eye: Piercing Ruby Star
-        sr.setColor(0.95f, 0.10f, 0.18f, 1f);
-        sr.circle(bx + r * 0.22f, by + r * 0.26f, Math.max(1.8f, r * 0.07f));
-        sr.setColor(1f, 1f, 1f, 1f);
-        sr.circle(bx + r * 0.24f, by + r * 0.27f, Math.max(0.9f, r * 0.035f));
-
-        // Long streaming tail plumes (Đuôi chim Lạc trải dài uốn lượn)
-        sr.setColor(1.0f, 0.82f, 0.20f, 0.95f);
-        sr.triangle(bx, by, bx - r * 0.35f, by - r * 0.20f, bx - r * 0.22f, by - r * 0.32f);
-        sr.setColor(0.95f, 0.20f, 0.25f, 0.9f);
-        sr.rectLine(bx, by, bx - r * 0.38f, by - r * 0.26f, 1.8f);
-
-        // 8. Central Radiant Ruby Sun Core
-        sr.setColor(0.98f, 0.18f, 0.25f, 1f);
-        sr.circle(sx, sy, r * 0.11f);
-        sr.setColor(1f, 1f, 1f, 1f);
-        sr.circle(sx + 0.5f, sy + 0.5f, Math.max(1.0f, r * 0.045f));
+        sr.setColor(0.86f, 0.15f, 0.15f, 0.22f);
+        fillCircle(sr, cx, cy, s, 86.0f, 38.0f, 40.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 0.25f);
+        fillCircle(sr, cx, cy, s, 86.0f, 38.0f, 30.0f);
+        sr.setColor(0.06f, 0.73f, 0.51f, 0.16f);
+        fillCircle(sr, cx, cy, s, 54.0f, 74.0f, 34.0f);
+        sr.setColor(0.11f, 0.10f, 0.09f, 1.00f);
+        drawLine(sr, cx, cy, s, 20.0f, 108.0f, 84.0f, 44.0f, 8.5f);
+        sr.setColor(0.47f, 0.21f, 0.06f, 1.00f);
+        drawLine(sr, cx, cy, s, 20.0f, 108.0f, 84.0f, 44.0f, 6.2f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        drawLine(sr, cx, cy, s, 22.0f, 106.0f, 82.0f, 46.0f, 3.6f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        drawLine(sr, cx, cy, s, 22.0f, 106.0f, 82.0f, 46.0f, 1.2f);
+        sr.setColor(0.02f, 0.37f, 0.27f, 1.00f);
+        drawLine(sr, cx, cy, s, 28.0f, 100.0f, 31.9f, 95.9f, 5.0f);
+        drawLine(sr, cx, cy, s, 31.9f, 95.9f, 35.5f, 93.5f, 5.0f);
+        drawLine(sr, cx, cy, s, 35.5f, 93.5f, 38.9f, 92.9f, 5.0f);
+        drawLine(sr, cx, cy, s, 38.9f, 92.9f, 42.0f, 94.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 42.0f, 94.0f, 44.9f, 95.1f, 5.0f);
+        drawLine(sr, cx, cy, s, 44.9f, 95.1f, 47.5f, 94.5f, 5.0f);
+        drawLine(sr, cx, cy, s, 47.5f, 94.5f, 49.9f, 92.1f, 5.0f);
+        drawLine(sr, cx, cy, s, 49.9f, 92.1f, 52.0f, 88.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 52.0f, 88.0f, 54.2f, 83.9f, 5.0f);
+        drawLine(sr, cx, cy, s, 54.2f, 83.9f, 57.0f, 81.5f, 5.0f);
+        drawLine(sr, cx, cy, s, 57.0f, 81.5f, 60.2f, 80.9f, 5.0f);
+        drawLine(sr, cx, cy, s, 60.2f, 80.9f, 64.0f, 82.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 64.0f, 82.0f, 67.8f, 83.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 67.8f, 83.0f, 71.0f, 82.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 71.0f, 82.0f, 73.8f, 79.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 73.8f, 79.0f, 76.0f, 74.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 76.0f, 74.0f, 78.1f, 69.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 78.1f, 69.0f, 80.5f, 66.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 80.5f, 66.0f, 83.1f, 65.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 83.1f, 65.0f, 86.0f, 66.0f, 5.0f);
+        sr.setColor(0.06f, 0.73f, 0.51f, 1.00f);
+        drawLine(sr, cx, cy, s, 28.0f, 100.0f, 31.9f, 95.9f, 3.0f);
+        drawLine(sr, cx, cy, s, 31.9f, 95.9f, 35.5f, 93.5f, 3.0f);
+        drawLine(sr, cx, cy, s, 35.5f, 93.5f, 38.9f, 92.9f, 3.0f);
+        drawLine(sr, cx, cy, s, 38.9f, 92.9f, 42.0f, 94.0f, 3.0f);
+        drawLine(sr, cx, cy, s, 42.0f, 94.0f, 44.9f, 95.1f, 3.0f);
+        drawLine(sr, cx, cy, s, 44.9f, 95.1f, 47.5f, 94.5f, 3.0f);
+        drawLine(sr, cx, cy, s, 47.5f, 94.5f, 49.9f, 92.1f, 3.0f);
+        drawLine(sr, cx, cy, s, 49.9f, 92.1f, 52.0f, 88.0f, 3.0f);
+        drawLine(sr, cx, cy, s, 52.0f, 88.0f, 54.2f, 83.9f, 3.0f);
+        drawLine(sr, cx, cy, s, 54.2f, 83.9f, 57.0f, 81.5f, 3.0f);
+        drawLine(sr, cx, cy, s, 57.0f, 81.5f, 60.2f, 80.9f, 3.0f);
+        drawLine(sr, cx, cy, s, 60.2f, 80.9f, 64.0f, 82.0f, 3.0f);
+        drawLine(sr, cx, cy, s, 64.0f, 82.0f, 67.8f, 83.0f, 3.0f);
+        drawLine(sr, cx, cy, s, 67.8f, 83.0f, 71.0f, 82.0f, 3.0f);
+        drawLine(sr, cx, cy, s, 71.0f, 82.0f, 73.8f, 79.0f, 3.0f);
+        drawLine(sr, cx, cy, s, 73.8f, 79.0f, 76.0f, 74.0f, 3.0f);
+        drawLine(sr, cx, cy, s, 76.0f, 74.0f, 78.1f, 69.0f, 3.0f);
+        drawLine(sr, cx, cy, s, 78.1f, 69.0f, 80.5f, 66.0f, 3.0f);
+        drawLine(sr, cx, cy, s, 80.5f, 66.0f, 83.1f, 65.0f, 3.0f);
+        drawLine(sr, cx, cy, s, 83.1f, 65.0f, 86.0f, 66.0f, 3.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        drawLine(sr, cx, cy, s, 28.0f, 100.0f, 31.9f, 95.9f, 1.0f);
+        drawLine(sr, cx, cy, s, 31.9f, 95.9f, 35.5f, 93.5f, 1.0f);
+        drawLine(sr, cx, cy, s, 35.5f, 93.5f, 38.9f, 92.9f, 1.0f);
+        drawLine(sr, cx, cy, s, 38.9f, 92.9f, 42.0f, 94.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 42.0f, 94.0f, 44.9f, 95.1f, 1.0f);
+        drawLine(sr, cx, cy, s, 44.9f, 95.1f, 47.5f, 94.5f, 1.0f);
+        drawLine(sr, cx, cy, s, 47.5f, 94.5f, 49.9f, 92.1f, 1.0f);
+        drawLine(sr, cx, cy, s, 49.9f, 92.1f, 52.0f, 88.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 52.0f, 88.0f, 54.2f, 83.9f, 1.0f);
+        drawLine(sr, cx, cy, s, 54.2f, 83.9f, 57.0f, 81.5f, 1.0f);
+        drawLine(sr, cx, cy, s, 57.0f, 81.5f, 60.2f, 80.9f, 1.0f);
+        drawLine(sr, cx, cy, s, 60.2f, 80.9f, 64.0f, 82.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 64.0f, 82.0f, 67.8f, 83.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 67.8f, 83.0f, 71.0f, 82.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 71.0f, 82.0f, 73.8f, 79.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 73.8f, 79.0f, 76.0f, 74.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 76.0f, 74.0f, 78.1f, 69.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 78.1f, 69.0f, 80.5f, 66.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 80.5f, 66.0f, 83.1f, 65.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 83.1f, 65.0f, 86.0f, 66.0f, 1.0f);
+        fillTri(sr, cx, cy, s, 40.0f, 88.0f, 44.0f, 84.0f, 43.0f, 91.0f);
+        fillTri(sr, cx, cy, s, 54.0f, 80.0f, 58.0f, 76.0f, 57.0f, 83.0f);
+        fillTri(sr, cx, cy, s, 68.0f, 74.0f, 72.0f, 70.0f, 71.0f, 77.0f);
+        sr.setColor(0.47f, 0.21f, 0.06f, 1.00f);
+        fillCircle(sr, cx, cy, s, 86.0f, 38.0f, 22.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillCircle(sr, cx, cy, s, 86.0f, 38.0f, 18.0f);
+        sr.setColor(0.27f, 0.10f, 0.01f, 1.00f);
+        fillCircle(sr, cx, cy, s, 86.0f, 38.0f, 14.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillTri(sr, cx, cy, s, 86.0f, 18.0f, 83.0f, 26.0f, 89.0f, 26.0f);
+        fillTri(sr, cx, cy, s, 106.0f, 38.0f, 98.0f, 35.0f, 98.0f, 41.0f);
+        fillTri(sr, cx, cy, s, 86.0f, 58.0f, 89.0f, 50.0f, 83.0f, 50.0f);
+        fillTri(sr, cx, cy, s, 66.0f, 38.0f, 74.0f, 41.0f, 74.0f, 35.0f);
+        sr.setColor(0.92f, 0.35f, 0.05f, 1.00f);
+        fillTri(sr, cx, cy, s, 100.0f, 24.0f, 92.0f, 30.0f, 96.0f, 34.0f);
+        fillTri(sr, cx, cy, s, 100.0f, 52.0f, 96.0f, 44.0f, 92.0f, 48.0f);
+        fillTri(sr, cx, cy, s, 72.0f, 52.0f, 80.0f, 48.0f, 76.0f, 44.0f);
+        fillTri(sr, cx, cy, s, 72.0f, 24.0f, 76.0f, 34.0f, 80.0f, 30.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        fillCircle(sr, cx, cy, s, 86.0f, 38.0f, 7.0f);
+        sr.setColor(0.98f, 0.45f, 0.09f, 1.00f);
+        fillCircle(sr, cx, cy, s, 86.0f, 38.0f, 4.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 85.0f, 37.0f, 1.8f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillQuad(sr, cx, cy, s, 84.0f, 34.0f, 62.0f, 20.0f, 72.0f, 12.0f, 88.0f, 26.0f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        fillQuad(sr, cx, cy, s, 84.0f, 33.0f, 66.0f, 22.0f, 74.0f, 16.0f, 86.0f, 26.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillQuad(sr, cx, cy, s, 88.0f, 32.0f, 98.0f, 8.0f, 108.0f, 16.0f, 94.0f, 30.0f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        fillQuad(sr, cx, cy, s, 88.0f, 31.0f, 98.0f, 12.0f, 104.0f, 18.0f, 92.0f, 30.0f);
+        sr.setColor(0.99f, 0.88f, 0.28f, 1.00f);
+        fillQuad(sr, cx, cy, s, 88.0f, 30.0f, 114.0f, 20.0f, 118.0f, 22.0f, 92.0f, 34.0f);
+        sr.setColor(Color.WHITE);
+        fillTri(sr, cx, cy, s, 114.0f, 20.0f, 124.0f, 16.0f, 116.0f, 23.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        fillTri(sr, cx, cy, s, 90.0f, 28.0f, 78.0f, 14.0f, 86.0f, 22.0f);
+        fillCircle(sr, cx, cy, s, 94.0f, 28.0f, 2.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 93.5f, 27.5f, 0.8f);
+        sr.setColor(0.96f, 0.62f, 0.04f, 1.00f);
+        fillQuad(sr, cx, cy, s, 82.0f, 44.0f, 70.0f, 62.0f, 76.0f, 64.0f, 86.0f, 46.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        fillQuad(sr, cx, cy, s, 80.0f, 46.0f, 64.0f, 68.0f, 68.0f, 70.0f, 82.0f, 48.0f);
+        sr.setColor(0.02f, 0.37f, 0.27f, 1.00f);
+        fillQuad(sr, cx, cy, s, 22.0f, 96.0f, 38.0f, 96.0f, 38.0f, 108.0f, 22.0f, 108.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillQuad(sr, cx, cy, s, 20.0f, 108.0f, 10.0f, 118.0f, 16.0f, 122.0f, 24.0f, 112.0f);
+        sr.setColor(0.06f, 0.73f, 0.51f, 1.00f);
+        fillCircle(sr, cx, cy, s, 12.0f, 120.0f, 2.2f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        fillTri(sr, cx, cy, s, 14.0f, 120.0f, 10.0f, 126.0f, 6.6f, 125.6f);
+        fillTri(sr, cx, cy, s, 6.6f, 125.6f, 4.5f, 124.5f, 3.6f, 122.6f);
+        fillTri(sr, cx, cy, s, 6.6f, 125.6f, 3.6f, 122.6f, 4.0f, 120.0f);
+        fillTri(sr, cx, cy, s, 6.6f, 125.6f, 4.0f, 120.0f, 6.1f, 121.5f);
+        fillTri(sr, cx, cy, s, 6.6f, 125.6f, 6.1f, 121.5f, 8.5f, 122.0f);
+        fillTri(sr, cx, cy, s, 6.6f, 125.6f, 8.5f, 122.0f, 11.1f, 121.5f);
+        fillTri(sr, cx, cy, s, 6.6f, 125.6f, 11.1f, 121.5f, 14.0f, 120.0f);
+        sr.setColor(0.92f, 0.35f, 0.05f, 1.00f);
+        fillTri(sr, cx, cy, s, 20.0f, 128.0f, 18.0f, 122.0f, 20.0f, 124.4f);
+        fillTri(sr, cx, cy, s, 20.0f, 128.0f, 20.0f, 124.4f, 22.0f, 125.5f);
+        fillTri(sr, cx, cy, s, 20.0f, 128.0f, 22.0f, 125.5f, 24.0f, 125.4f);
+        fillTri(sr, cx, cy, s, 24.0f, 125.4f, 26.0f, 124.0f, 26.4f, 125.8f);
+        fillTri(sr, cx, cy, s, 20.0f, 128.0f, 24.0f, 125.4f, 26.4f, 125.8f);
+        fillTri(sr, cx, cy, s, 20.0f, 128.0f, 26.4f, 125.8f, 25.5f, 127.0f);
+        fillTri(sr, cx, cy, s, 25.5f, 127.0f, 23.4f, 127.8f, 20.0f, 128.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 122.0f, 17.0f, 1.6f);
+        fillCircle(sr, cx, cy, s, 70.0f, 14.0f, 1.4f);
+        fillCircle(sr, cx, cy, s, 102.0f, 10.0f, 1.4f);
+        fillCircle(sr, cx, cy, s, 86.0f, 20.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 85.0f, 36.0f, 2.0f);
+        fillCircle(sr, cx, cy, s, 43.0f, 91.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 24.0f, 104.0f, 1.2f);
     }
 
     public static void drawLacHongLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Dragon Pearl Aura & Solar Flame Halo
-        sr.setColor(0.95f, 0.22f, 0.22f, 0.20f);
-        sr.circle(cx, cy, r * 0.98f);
-        sr.setColor(1.0f, 0.85f, 0.25f, 0.18f);
-        sr.circle(cx, cy, r * 0.88f);
+        float s = r / 64f;
 
-        // 2. Heavy Antique Dong Son Bronze Drum Spool Casing
-        sr.setColor(0.70f, 0.44f, 0.15f, 1f);
-        sr.circle(cx, cy, r * 0.85f);
-        sr.setColor(1.0f, 0.84f, 0.26f, 1f);
-        sr.circle(cx, cy, r * 0.77f);
-        sr.setColor(0.28f, 0.14f, 0.05f, 1f); // Recessed spool chamber
-        sr.circle(cx, cy, r * 0.68f);
-
-        // 3. 16-Toothed Dong Son Sunburst Cog Rim (Vành răng cưa mặt trời Đông Sơn)
-        sr.setColor(1.0f, 0.88f, 0.30f, 1f);
-        for (int i = 0; i < 16; i++) {
-            float rad = (i * 22.5f) * MathUtils.degreesToRadians;
-            float px = cx + MathUtils.cos(rad) * r * 0.85f;
-            float py = cy + MathUtils.sin(rad) * r * 0.85f;
-            sr.circle(px, py, Math.max(1.8f, r * 0.07f));
-        }
-
-        // 4. Coiled Sacred Dragon Sinew (Hàng trăm vòng gân rồng thiêng vàng kim & đỏ ruby)
-        for (int l = 0; l < 4; l++) {
-            float lr = r * (0.68f - l * 0.09f);
-            sr.setColor((l % 2 == 0) ? new Color(1.0f, 0.84f, 0.25f, 0.95f) : new Color(0.95f, 0.20f, 0.25f, 0.95f));
-            sr.circle(cx, cy, lr);
-        }
-        sr.setColor(0.35f, 0.12f, 0.05f, 1f);
-        sr.circle(cx, cy, r * 0.38f);
-
-        // 5. DUAL CELESTIAL DRAGONS MOUNT (Song Long Chầu Nguyệt / Rồng Thiêng Lạc Long Quân ôm cuộn cước)
-        // Upper Celestial Dragon arching over spool
-        sr.setColor(0.18f, 0.75f, 0.42f, 1f); // Emerald dragon body
-        sr.rectLine(cx - r * 0.55f, cy + r * 0.45f, cx + r * 0.55f, cy + r * 0.45f, Math.max(3.0f, r * 0.13f));
-        sr.setColor(1.0f, 0.85f, 0.25f, 1f); // Golden dragon dorsal fin spines
-        for (int d = -3; d <= 3; d++) {
-            float dx = cx + d * r * 0.14f;
-            sr.triangle(dx - 1.5f, cy + r * 0.48f, dx + 1.5f, cy + r * 0.48f, dx, cy + r * 0.62f);
-        }
-        // Dragon Head with horns and fierce whiskers (Đầu Rồng Lạc Long Quân)
-        float dhx = cx + r * 0.60f, dhy = cy + r * 0.45f;
-        sr.setColor(1.0f, 0.85f, 0.25f, 1f);
-        sr.triangle(dhx, dhy, dhx + r * 0.24f, dhy + r * 0.08f, dhx + r * 0.10f, dhy + r * 0.20f);
-        // Antler Horn
-        sr.setColor(0.96f, 0.20f, 0.25f, 1f);
-        sr.rectLine(dhx + r * 0.06f, dhy + r * 0.15f, dhx - r * 0.05f, dhy + r * 0.32f, 2f);
-        // Dragon Whisker (Râu rồng uốn lượn)
-        sr.setColor(1.0f, 0.92f, 0.45f, 1f);
-        sr.rectLine(dhx + r * 0.20f, dhy + r * 0.05f, dhx + r * 0.34f, dhy - r * 0.12f, 1.4f);
-
-        // 6. CENTRAL DIVINE DRAGON PEARL (Viên Ngọc Rồng Lạc Hồng rực lửa)
-        sr.setColor(1.0f, 0.85f, 0.25f, 1f);
-        // 8 Radiant sun rays emerging from pearl
-        for (int i = 0; i < 8; i++) {
-            float rad = (i * 45f) * MathUtils.degreesToRadians;
-            float px1 = cx + MathUtils.cos(rad) * r * 0.15f;
-            float py1 = cy + MathUtils.sin(rad) * r * 0.15f;
-            float px2 = cx + MathUtils.cos(rad) * r * 0.32f;
-            float py2 = cy + MathUtils.sin(rad) * r * 0.32f;
-            sr.rectLine(px1, py1, px2, py2, 1.8f);
-        }
-
-        // Deep Ruby dragon pearl body
-        sr.setColor(0.96f, 0.15f, 0.22f, 1f);
-        sr.circle(cx, cy, r * 0.22f);
-        sr.setColor(1.0f, 0.45f, 0.30f, 1f);
-        sr.circle(cx, cy, r * 0.15f);
-        sr.setColor(1.0f, 0.95f, 0.60f, 1f);
-        sr.circle(cx, cy, r * 0.08f);
-        sr.setColor(1f, 1f, 1f, 1f);
-        sr.circle(cx + 0.8f, cy + 0.8f, Math.max(1.0f, r * 0.045f));
-
-        // 7. Trailing Golden Dragon Filament & Hanging Imperial Jade Talisman
-        sr.setColor(1.0f, 0.85f, 0.25f, 0.95f);
-        sr.rectLine(cx + r * 0.45f, cy - r * 0.40f, cx + r * 0.22f, cy - r * 0.72f, 2.2f);
-        sr.rectLine(cx + r * 0.22f, cy - r * 0.72f, cx - r * 0.10f, cy - r * 0.82f, 1.8f);
-        // Dangling Imperial Jade Token (Lệnh bài Lạc Hồng)
-        sr.setColor(0.18f, 0.78f, 0.45f, 1f);
-        sr.rect(cx - r * 0.18f, cy - r * 0.90f, r * 0.16f, r * 0.18f);
-        sr.setColor(1.0f, 0.85f, 0.25f, 1f);
-        sr.circle(cx - r * 0.10f, cy - r * 0.81f, Math.max(1.2f, r * 0.05f));
+        sr.setColor(0.86f, 0.15f, 0.15f, 0.20f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 54.0f);
+        sr.setColor(0.06f, 0.73f, 0.51f, 0.22f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 44.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 32.0f);
+        sr.setColor(0.02f, 0.31f, 0.23f, 1.00f);
+        drawLine(sr, cx, cy, s, 30.0f, 64.0f, 32.2f, 48.1f, 8.0f);
+        drawLine(sr, cx, cy, s, 32.2f, 48.1f, 38.2f, 36.3f, 8.0f);
+        drawLine(sr, cx, cy, s, 38.2f, 36.3f, 46.8f, 28.1f, 8.0f);
+        drawLine(sr, cx, cy, s, 46.8f, 28.1f, 57.1f, 23.5f, 8.0f);
+        drawLine(sr, cx, cy, s, 57.1f, 23.5f, 68.0f, 22.0f, 8.0f);
+        drawLine(sr, cx, cy, s, 68.0f, 22.0f, 76.3f, 22.9f, 8.0f);
+        drawLine(sr, cx, cy, s, 76.3f, 22.9f, 83.9f, 25.7f, 8.0f);
+        drawLine(sr, cx, cy, s, 83.9f, 25.7f, 90.2f, 30.2f, 8.0f);
+        drawLine(sr, cx, cy, s, 90.2f, 30.2f, 94.4f, 36.3f, 8.0f);
+        drawLine(sr, cx, cy, s, 94.4f, 36.3f, 96.0f, 44.0f, 8.0f);
+        sr.setColor(0.06f, 0.73f, 0.51f, 1.00f);
+        drawLine(sr, cx, cy, s, 30.0f, 64.0f, 32.2f, 48.1f, 5.5f);
+        drawLine(sr, cx, cy, s, 32.2f, 48.1f, 38.2f, 36.3f, 5.5f);
+        drawLine(sr, cx, cy, s, 38.2f, 36.3f, 46.8f, 28.1f, 5.5f);
+        drawLine(sr, cx, cy, s, 46.8f, 28.1f, 57.1f, 23.5f, 5.5f);
+        drawLine(sr, cx, cy, s, 57.1f, 23.5f, 68.0f, 22.0f, 5.5f);
+        drawLine(sr, cx, cy, s, 68.0f, 22.0f, 76.3f, 22.9f, 5.5f);
+        drawLine(sr, cx, cy, s, 76.3f, 22.9f, 83.9f, 25.7f, 5.5f);
+        drawLine(sr, cx, cy, s, 83.9f, 25.7f, 90.2f, 30.2f, 5.5f);
+        drawLine(sr, cx, cy, s, 90.2f, 30.2f, 94.4f, 36.3f, 5.5f);
+        drawLine(sr, cx, cy, s, 94.4f, 36.3f, 96.0f, 44.0f, 5.5f);
+        sr.setColor(0.43f, 0.91f, 0.72f, 1.00f);
+        drawLine(sr, cx, cy, s, 30.0f, 64.0f, 32.2f, 48.1f, 1.8f);
+        drawLine(sr, cx, cy, s, 32.2f, 48.1f, 38.2f, 36.3f, 1.8f);
+        drawLine(sr, cx, cy, s, 38.2f, 36.3f, 46.8f, 28.1f, 1.8f);
+        drawLine(sr, cx, cy, s, 46.8f, 28.1f, 57.1f, 23.5f, 1.8f);
+        drawLine(sr, cx, cy, s, 57.1f, 23.5f, 68.0f, 22.0f, 1.8f);
+        drawLine(sr, cx, cy, s, 68.0f, 22.0f, 76.3f, 22.9f, 1.8f);
+        drawLine(sr, cx, cy, s, 76.3f, 22.9f, 83.9f, 25.7f, 1.8f);
+        drawLine(sr, cx, cy, s, 83.9f, 25.7f, 90.2f, 30.2f, 1.8f);
+        drawLine(sr, cx, cy, s, 90.2f, 30.2f, 94.4f, 36.3f, 1.8f);
+        drawLine(sr, cx, cy, s, 94.4f, 36.3f, 96.0f, 44.0f, 1.8f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillTri(sr, cx, cy, s, 44.0f, 32.0f, 46.0f, 24.0f, 50.0f, 30.0f);
+        fillTri(sr, cx, cy, s, 58.0f, 24.0f, 62.0f, 16.0f, 66.0f, 24.0f);
+        fillTri(sr, cx, cy, s, 76.0f, 24.0f, 82.0f, 18.0f, 82.0f, 28.0f);
+        fillQuad(sr, cx, cy, s, 94.0f, 40.0f, 106.0f, 34.0f, 102.0f, 46.0f, 92.0f, 46.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        fillTri(sr, cx, cy, s, 98.0f, 34.0f, 110.0f, 26.0f, 104.0f, 36.0f);
+        sr.setColor(0.92f, 0.35f, 0.05f, 1.00f);
+        drawLine(sr, cx, cy, s, 96.0f, 36.0f, 104.0f, 22.0f, 2.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        fillCircle(sr, cx, cy, s, 98.0f, 40.0f, 1.8f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 97.5f, 39.5f, 0.7f);
+        sr.setColor(0.02f, 0.31f, 0.23f, 1.00f);
+        drawLine(sr, cx, cy, s, 98.0f, 64.0f, 95.8f, 79.9f, 8.0f);
+        drawLine(sr, cx, cy, s, 95.8f, 79.9f, 89.8f, 91.7f, 8.0f);
+        drawLine(sr, cx, cy, s, 89.8f, 91.7f, 81.2f, 99.9f, 8.0f);
+        drawLine(sr, cx, cy, s, 81.2f, 99.9f, 70.9f, 104.5f, 8.0f);
+        drawLine(sr, cx, cy, s, 70.9f, 104.5f, 60.0f, 106.0f, 8.0f);
+        drawLine(sr, cx, cy, s, 60.0f, 106.0f, 51.7f, 105.1f, 8.0f);
+        drawLine(sr, cx, cy, s, 51.7f, 105.1f, 44.1f, 102.3f, 8.0f);
+        drawLine(sr, cx, cy, s, 44.1f, 102.3f, 37.8f, 97.8f, 8.0f);
+        drawLine(sr, cx, cy, s, 37.8f, 97.8f, 33.6f, 91.7f, 8.0f);
+        drawLine(sr, cx, cy, s, 33.6f, 91.7f, 32.0f, 84.0f, 8.0f);
+        sr.setColor(0.06f, 0.73f, 0.51f, 1.00f);
+        drawLine(sr, cx, cy, s, 98.0f, 64.0f, 95.8f, 79.9f, 5.5f);
+        drawLine(sr, cx, cy, s, 95.8f, 79.9f, 89.8f, 91.7f, 5.5f);
+        drawLine(sr, cx, cy, s, 89.8f, 91.7f, 81.2f, 99.9f, 5.5f);
+        drawLine(sr, cx, cy, s, 81.2f, 99.9f, 70.9f, 104.5f, 5.5f);
+        drawLine(sr, cx, cy, s, 70.9f, 104.5f, 60.0f, 106.0f, 5.5f);
+        drawLine(sr, cx, cy, s, 60.0f, 106.0f, 51.7f, 105.1f, 5.5f);
+        drawLine(sr, cx, cy, s, 51.7f, 105.1f, 44.1f, 102.3f, 5.5f);
+        drawLine(sr, cx, cy, s, 44.1f, 102.3f, 37.8f, 97.8f, 5.5f);
+        drawLine(sr, cx, cy, s, 37.8f, 97.8f, 33.6f, 91.7f, 5.5f);
+        drawLine(sr, cx, cy, s, 33.6f, 91.7f, 32.0f, 84.0f, 5.5f);
+        sr.setColor(0.43f, 0.91f, 0.72f, 1.00f);
+        drawLine(sr, cx, cy, s, 98.0f, 64.0f, 95.8f, 79.9f, 1.8f);
+        drawLine(sr, cx, cy, s, 95.8f, 79.9f, 89.8f, 91.7f, 1.8f);
+        drawLine(sr, cx, cy, s, 89.8f, 91.7f, 81.2f, 99.9f, 1.8f);
+        drawLine(sr, cx, cy, s, 81.2f, 99.9f, 70.9f, 104.5f, 1.8f);
+        drawLine(sr, cx, cy, s, 70.9f, 104.5f, 60.0f, 106.0f, 1.8f);
+        drawLine(sr, cx, cy, s, 60.0f, 106.0f, 51.7f, 105.1f, 1.8f);
+        drawLine(sr, cx, cy, s, 51.7f, 105.1f, 44.1f, 102.3f, 1.8f);
+        drawLine(sr, cx, cy, s, 44.1f, 102.3f, 37.8f, 97.8f, 1.8f);
+        drawLine(sr, cx, cy, s, 37.8f, 97.8f, 33.6f, 91.7f, 1.8f);
+        drawLine(sr, cx, cy, s, 33.6f, 91.7f, 32.0f, 84.0f, 1.8f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillTri(sr, cx, cy, s, 84.0f, 96.0f, 82.0f, 104.0f, 78.0f, 98.0f);
+        fillTri(sr, cx, cy, s, 70.0f, 104.0f, 66.0f, 112.0f, 62.0f, 104.0f);
+        fillTri(sr, cx, cy, s, 52.0f, 104.0f, 46.0f, 110.0f, 46.0f, 100.0f);
+        fillQuad(sr, cx, cy, s, 34.0f, 88.0f, 22.0f, 94.0f, 26.0f, 82.0f, 36.0f, 82.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        fillTri(sr, cx, cy, s, 30.0f, 94.0f, 18.0f, 102.0f, 24.0f, 92.0f);
+        sr.setColor(0.92f, 0.35f, 0.05f, 1.00f);
+        drawLine(sr, cx, cy, s, 32.0f, 92.0f, 24.0f, 106.0f, 2.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        fillCircle(sr, cx, cy, s, 30.0f, 88.0f, 1.8f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 30.5f, 87.5f, 0.7f);
+        sr.setColor(0.47f, 0.21f, 0.06f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 28.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 25.0f);
+        sr.setColor(0.27f, 0.04f, 0.04f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 22.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillTri(sr, cx, cy, s, 64.0f, 38.0f, 61.0f, 48.0f, 67.0f, 48.0f);
+        fillTri(sr, cx, cy, s, 90.0f, 64.0f, 80.0f, 61.0f, 80.0f, 67.0f);
+        fillTri(sr, cx, cy, s, 64.0f, 90.0f, 67.0f, 80.0f, 61.0f, 80.0f);
+        fillTri(sr, cx, cy, s, 38.0f, 64.0f, 48.0f, 67.0f, 48.0f, 61.0f);
+        sr.setColor(0.92f, 0.35f, 0.05f, 1.00f);
+        fillTri(sr, cx, cy, s, 82.0f, 46.0f, 72.0f, 50.0f, 75.0f, 55.0f);
+        fillTri(sr, cx, cy, s, 82.0f, 82.0f, 75.0f, 73.0f, 72.0f, 78.0f);
+        fillTri(sr, cx, cy, s, 46.0f, 82.0f, 56.0f, 78.0f, 53.0f, 73.0f);
+        fillTri(sr, cx, cy, s, 46.0f, 46.0f, 53.0f, 55.0f, 56.0f, 50.0f);
+        sr.setColor(0.50f, 0.11f, 0.11f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 16.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 12.0f);
+        sr.setColor(0.92f, 0.35f, 0.05f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 8.0f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        fillCircle(sr, cx, cy, s, 62.0f, 62.0f, 4.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 61.0f, 61.0f, 2.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 106.0f, 64.0f, 116.0f, 1.5f);
+        sr.setColor(0.06f, 0.73f, 0.51f, 1.00f);
+        fillQuad(sr, cx, cy, s, 60.0f, 116.0f, 68.0f, 116.0f, 66.0f, 126.0f, 62.0f, 126.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 120.0f, 1.5f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 61.0f, 60.0f, 2.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 40.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 104.0f, 28.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 24.0f, 100.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 62.0f, 18.0f, 1.6f);
+        fillCircle(sr, cx, cy, s, 66.0f, 110.0f, 1.6f);
     }
 
     public static void drawLacHongHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
-        // 1. Sacred Lotus Halo & Celestial Aura
-        sr.setColor(0.96f, 0.35f, 0.55f, 0.18f);
-        sr.circle(cx, cy, r * 0.98f);
-        sr.setColor(1.0f, 0.85f, 0.25f, 0.18f);
-        sr.circle(cx + r * 0.10f, cy - r * 0.10f, r * 0.82f);
+        float s = r / 64f;
 
-        // 2. CELESTIAL METEORIC BRONZE-GOLD HOOK (Thiên Thạch Thần Kim)
-        float shankX = cx - r * 0.22f;
-        float topY = cy + r * 0.56f;
-        float bendY = cy - r * 0.62f;
-        float tipX = cx + r * 0.52f;
-        float tipY = cy + r * 0.28f;
-
-        // Antique Bronze spine
-        sr.setColor(0.70f, 0.44f, 0.15f, 1f);
-        sr.rectLine(shankX, topY, shankX, bendY, Math.max(4.8f, r * 0.22f));
-        sr.rectLine(shankX, bendY, tipX, bendY, Math.max(4.8f, r * 0.22f));
-        sr.rectLine(tipX, bendY, tipX, tipY, Math.max(4.8f, r * 0.22f));
-
-        // 24K Polished Gold razor blade edge
-        sr.setColor(1.0f, 0.86f, 0.28f, 1f);
-        sr.rectLine(shankX, topY, shankX, bendY, Math.max(2.4f, r * 0.11f));
-        sr.rectLine(shankX, bendY, tipX, bendY, Math.max(2.4f, r * 0.11f));
-        sr.rectLine(tipX, bendY, tipX, tipY, Math.max(2.4f, r * 0.11f));
-
-        // Engraved Turquoise Jade Wave Inlays along hook shank
-        sr.setColor(0.18f, 0.80f, 0.55f, 0.95f);
-        sr.rectLine(shankX, topY - r * 0.20f, shankX, bendY + r * 0.20f, Math.max(1.2f, r * 0.05f));
-
-        // 3. BLOSSOMING SACRED LOTUS FLOWER CRADLE (Đóa Sen Tiên Mẫu Âu Cơ)
-        float lx = shankX;
-        float ly = topY - r * 0.10f;
-        // Lotus Jade Sepals
-        sr.setColor(0.18f, 0.72f, 0.40f, 1f);
-        sr.triangle(lx, ly, lx - r * 0.32f, ly - r * 0.12f, lx - r * 0.20f, ly - r * 0.24f);
-        sr.triangle(lx, ly, lx + r * 0.32f, ly - r * 0.12f, lx + r * 0.20f, ly - r * 0.24f);
-        // Outer Pink Lotus Petals
-        sr.setColor(0.96f, 0.38f, 0.58f, 1f);
-        sr.triangle(lx, ly, lx - r * 0.36f, ly + r * 0.24f, lx - r * 0.12f, ly + r * 0.32f);
-        sr.triangle(lx, ly, lx + r * 0.36f, ly + r * 0.24f, lx + r * 0.12f, ly + r * 0.32f);
-        // Center Tender Petals with Gold Rim
-        sr.setColor(1.0f, 0.88f, 0.94f, 1f);
-        sr.triangle(lx, ly, lx - r * 0.16f, ly + r * 0.36f, lx + r * 0.16f, ly + r * 0.36f);
-        sr.setColor(1.0f, 0.86f, 0.28f, 1f);
-        sr.circle(lx, ly + r * 0.15f, Math.max(1.8f, r * 0.08f));
-
-        // 4. CHIM LẠC BEAK SPEARHEAD BARB & POINT (Ngạnh câu tạo hình mỏ Chim Lạc)
-        sr.setColor(1.0f, 0.88f, 0.28f, 1f);
-        // Inward facing spearhead barb
-        sr.triangle(tipX, tipY - r * 0.14f, tipX, tipY + r * 0.22f, tipX - r * 0.28f, tipY + r * 0.04f);
-        // Razor white blade facet
-        sr.setColor(1f, 1f, 1f, 0.95f);
-        sr.triangle(tipX, tipY, tipX, tipY + r * 0.22f, tipX - r * 0.16f, tipY + r * 0.14f);
-        // Ruby gem set into barb
-        sr.setColor(0.96f, 0.15f, 0.22f, 1f);
-        sr.circle(tipX - r * 0.08f, tipY + r * 0.02f, Math.max(1.5f, r * 0.065f));
-
-        // 5. CROWN EYELET & TIÊN CHÂU BÁCH NOÃN (Viên Ngọc Tiên Châu Âu Cơ)
-        sr.setColor(1.0f, 0.86f, 0.28f, 1f);
-        sr.circle(shankX, topY + r * 0.18f, Math.max(3.8f, r * 0.17f));
-        // Luminous Iridescent Opal Pearl (Bách Noãn Tiên Châu)
-        sr.setColor(0.98f, 0.98f, 0.92f, 1f);
-        sr.circle(shankX, topY + r * 0.18f, Math.max(2.4f, r * 0.11f));
-        sr.setColor(1f, 1f, 1f, 1f);
-        sr.circle(shankX + 0.6f, topY + r * 0.20f, Math.max(1.0f, r * 0.045f));
-
-        // 6. Fluttering Twin Royal Crimson Silk Ribbons
-        sr.setColor(0.90f, 0.15f, 0.22f, 1f);
-        sr.rectLine(shankX, topY + r * 0.12f, shankX - r * 0.32f, topY - r * 0.12f, 2.2f);
-        sr.rectLine(shankX, topY + r * 0.12f, shankX - r * 0.22f, topY - r * 0.25f, 1.8f);
-        // Dangling Bronze Bell beads
-        sr.setColor(0.85f, 0.62f, 0.18f, 1f);
-        sr.circle(shankX - r * 0.32f, topY - r * 0.12f, Math.max(1.6f, r * 0.07f));
-        sr.circle(shankX - r * 0.22f, topY - r * 0.25f, Math.max(1.4f, r * 0.06f));
+        // --- LAYER: background_glow ---
+        sr.setColor(0.99f, 0.88f, 0.28f, 0.16f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 44.0f);
+        sr.setColor(0.96f, 0.45f, 0.71f, 0.18f);
+        fillCircle(sr, cx, cy, s, 76.0f, 24.0f, 16.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        fillTri(sr, cx, cy, s, 90.0f, 48.0f, 82.0f, 28.0f, 89.4f, 35.8f);
+        fillTri(sr, cx, cy, s, 90.0f, 48.0f, 89.4f, 35.8f, 95.5f, 45.0f);
+        fillTri(sr, cx, cy, s, 90.0f, 48.0f, 95.5f, 45.0f, 100.4f, 55.8f);
+        fillTri(sr, cx, cy, s, 90.0f, 48.0f, 100.4f, 55.8f, 104.0f, 68.0f);
+        fillTri(sr, cx, cy, s, 90.0f, 48.0f, 104.0f, 68.0f, 100.1f, 64.5f);
+        fillTri(sr, cx, cy, s, 90.0f, 48.0f, 100.1f, 64.5f, 96.5f, 60.0f);
+        fillTri(sr, cx, cy, s, 96.5f, 60.0f, 93.1f, 54.5f, 90.0f, 48.0f);
+        sr.setColor(0.96f, 0.62f, 0.04f, 1.00f);
+        fillTri(sr, cx, cy, s, 94.0f, 56.0f, 84.0f, 32.0f, 94.0f, 42.5f);
+        fillTri(sr, cx, cy, s, 94.0f, 56.0f, 94.0f, 42.5f, 102.0f, 54.0f);
+        fillTri(sr, cx, cy, s, 94.0f, 56.0f, 102.0f, 54.0f, 108.0f, 66.5f);
+        fillTri(sr, cx, cy, s, 94.0f, 56.0f, 108.0f, 66.5f, 112.0f, 80.0f);
+        fillTri(sr, cx, cy, s, 94.0f, 56.0f, 112.0f, 80.0f, 107.9f, 74.8f);
+        fillTri(sr, cx, cy, s, 94.0f, 56.0f, 107.9f, 74.8f, 103.5f, 69.0f);
+        fillTri(sr, cx, cy, s, 103.5f, 69.0f, 98.9f, 62.8f, 94.0f, 56.0f);
+        sr.setColor(0.60f, 0.11f, 0.11f, 1.00f);
+        fillTri(sr, cx, cy, s, 112.0f, 80.0f, 116.0f, 88.0f, 108.0f, 84.0f);
+        sr.setColor(0.02f, 0.59f, 0.41f, 1.00f);
+        fillTri(sr, cx, cy, s, 80.0f, 32.0f, 80.0f, 74.0f, 78.2f, 88.0f);
+        fillTri(sr, cx, cy, s, 80.0f, 32.0f, 78.2f, 88.0f, 73.0f, 98.0f);
+        fillTri(sr, cx, cy, s, 73.0f, 98.0f, 64.2f, 104.0f, 52.0f, 106.0f);
+        fillTri(sr, cx, cy, s, 73.0f, 98.0f, 52.0f, 106.0f, 39.8f, 104.5f);
+        fillTri(sr, cx, cy, s, 73.0f, 98.0f, 39.8f, 104.5f, 31.0f, 100.0f);
+        fillTri(sr, cx, cy, s, 31.0f, 100.0f, 25.8f, 92.5f, 24.0f, 82.0f);
+        fillTri(sr, cx, cy, s, 31.0f, 100.0f, 24.0f, 82.0f, 24.9f, 73.4f);
+        fillTri(sr, cx, cy, s, 31.0f, 100.0f, 24.9f, 73.4f, 27.5f, 65.5f);
+        fillTri(sr, cx, cy, s, 31.0f, 100.0f, 27.5f, 65.5f, 31.9f, 58.4f);
+        fillTri(sr, cx, cy, s, 31.9f, 58.4f, 38.0f, 52.0f, 42.0f, 60.0f);
+        fillTri(sr, cx, cy, s, 31.9f, 58.4f, 42.0f, 60.0f, 37.6f, 64.4f);
+        fillTri(sr, cx, cy, s, 31.9f, 58.4f, 37.6f, 64.4f, 34.5f, 69.5f);
+        fillTri(sr, cx, cy, s, 31.9f, 58.4f, 34.5f, 69.5f, 32.6f, 75.4f);
+        fillTri(sr, cx, cy, s, 31.9f, 58.4f, 32.6f, 75.4f, 32.0f, 82.0f);
+        fillTri(sr, cx, cy, s, 31.0f, 100.0f, 31.9f, 58.4f, 32.0f, 82.0f);
+        fillTri(sr, cx, cy, s, 31.0f, 100.0f, 32.0f, 82.0f, 33.2f, 89.0f);
+        fillTri(sr, cx, cy, s, 31.0f, 100.0f, 33.2f, 89.0f, 37.0f, 94.0f);
+        fillTri(sr, cx, cy, s, 31.0f, 100.0f, 37.0f, 94.0f, 43.2f, 97.0f);
+        fillTri(sr, cx, cy, s, 31.0f, 100.0f, 43.2f, 97.0f, 52.0f, 98.0f);
+        fillTri(sr, cx, cy, s, 73.0f, 98.0f, 31.0f, 100.0f, 52.0f, 98.0f);
+        fillTri(sr, cx, cy, s, 73.0f, 98.0f, 52.0f, 98.0f, 60.8f, 96.5f);
+        fillTri(sr, cx, cy, s, 73.0f, 98.0f, 60.8f, 96.5f, 67.0f, 92.0f);
+        fillTri(sr, cx, cy, s, 73.0f, 98.0f, 67.0f, 92.0f, 70.8f, 84.5f);
+        fillTri(sr, cx, cy, s, 80.0f, 32.0f, 73.0f, 98.0f, 70.8f, 84.5f);
+        fillTri(sr, cx, cy, s, 80.0f, 32.0f, 70.8f, 84.5f, 72.0f, 74.0f);
+        fillTri(sr, cx, cy, s, 72.0f, 32.0f, 80.0f, 32.0f, 72.0f, 74.0f);
+        fillTri(sr, cx, cy, s, 72.0f, 32.0f, 72.0f, 74.0f, 72.0f, 32.0f);
+        sr.setColor(0.86f, 0.15f, 0.47f, 1.00f);
+        fillTri(sr, cx, cy, s, 44.2f, 100.1f, 49.3f, 99.1f, 54.7f, 99.1f);
+        fillTri(sr, cx, cy, s, 44.2f, 100.1f, 54.7f, 99.1f, 59.8f, 100.1f);
+        fillTri(sr, cx, cy, s, 44.2f, 100.1f, 59.8f, 100.1f, 64.0f, 102.0f);
+        fillTri(sr, cx, cy, s, 44.2f, 100.1f, 64.0f, 102.0f, 59.8f, 108.7f);
+        fillTri(sr, cx, cy, s, 44.2f, 100.1f, 59.8f, 108.7f, 54.7f, 112.1f);
+        fillTri(sr, cx, cy, s, 44.2f, 100.1f, 54.7f, 112.1f, 49.3f, 112.1f);
+        fillTri(sr, cx, cy, s, 44.2f, 100.1f, 49.3f, 112.1f, 44.2f, 108.7f);
+        fillTri(sr, cx, cy, s, 40.0f, 102.0f, 44.2f, 100.1f, 44.2f, 108.7f);
+        fillTri(sr, cx, cy, s, 40.0f, 102.0f, 44.2f, 108.7f, 40.0f, 102.0f);
+        fillTri(sr, cx, cy, s, 30.6f, 93.4f, 33.6f, 95.4f, 36.9f, 97.8f);
+        fillTri(sr, cx, cy, s, 30.6f, 93.4f, 36.9f, 97.8f, 40.4f, 100.6f);
+        fillTri(sr, cx, cy, s, 30.6f, 93.4f, 40.4f, 100.6f, 44.0f, 104.0f);
+        fillTri(sr, cx, cy, s, 30.6f, 93.4f, 44.0f, 104.0f, 38.7f, 107.7f);
+        fillTri(sr, cx, cy, s, 30.6f, 93.4f, 38.7f, 107.7f, 33.2f, 107.6f);
+        fillTri(sr, cx, cy, s, 30.6f, 93.4f, 33.2f, 107.6f, 28.7f, 104.3f);
+        fillTri(sr, cx, cy, s, 30.6f, 93.4f, 28.7f, 104.3f, 26.6f, 98.8f);
+        fillTri(sr, cx, cy, s, 28.0f, 92.0f, 30.6f, 93.4f, 26.6f, 98.8f);
+        fillTri(sr, cx, cy, s, 28.0f, 92.0f, 26.6f, 98.8f, 28.0f, 92.0f);
+        fillTri(sr, cx, cy, s, 63.6f, 100.6f, 67.1f, 97.8f, 70.4f, 95.4f);
+        fillTri(sr, cx, cy, s, 63.6f, 100.6f, 70.4f, 95.4f, 73.4f, 93.4f);
+        fillTri(sr, cx, cy, s, 63.6f, 100.6f, 73.4f, 93.4f, 76.0f, 92.0f);
+        fillTri(sr, cx, cy, s, 63.6f, 100.6f, 76.0f, 92.0f, 77.4f, 98.8f);
+        fillTri(sr, cx, cy, s, 63.6f, 100.6f, 77.4f, 98.8f, 75.3f, 104.3f);
+        fillTri(sr, cx, cy, s, 63.6f, 100.6f, 75.3f, 104.3f, 70.8f, 107.6f);
+        fillTri(sr, cx, cy, s, 63.6f, 100.6f, 70.8f, 107.6f, 65.3f, 107.7f);
+        fillTri(sr, cx, cy, s, 60.0f, 104.0f, 63.6f, 100.6f, 65.3f, 107.7f);
+        fillTri(sr, cx, cy, s, 60.0f, 104.0f, 65.3f, 107.7f, 60.0f, 104.0f);
+        sr.setColor(0.96f, 0.62f, 0.04f, 1.00f);
+        fillTri(sr, cx, cy, s, 46.0f, 100.0f, 52.0f, 94.0f, 58.0f, 100.0f);
+        fillTri(sr, cx, cy, s, 36.0f, 94.0f, 40.0f, 88.0f, 44.0f, 95.0f);
+        fillTri(sr, cx, cy, s, 60.0f, 95.0f, 64.0f, 88.0f, 68.0f, 94.0f);
+        fillTri(sr, cx, cy, s, 38.0f, 52.0f, 46.0f, 38.0f, 42.0f, 60.0f);
+        sr.setColor(0.99f, 0.88f, 0.28f, 1.00f);
+        fillTri(sr, cx, cy, s, 45.6f, 46.2f, 48.0f, 50.0f, 45.1f, 48.6f);
+        fillTri(sr, cx, cy, s, 44.5f, 43.0f, 45.6f, 46.2f, 45.1f, 48.6f);
+        fillTri(sr, cx, cy, s, 44.5f, 43.0f, 45.1f, 48.6f, 42.5f, 48.5f);
+        fillTri(sr, cx, cy, s, 44.6f, 40.2f, 44.5f, 43.0f, 42.5f, 48.5f);
+        fillTri(sr, cx, cy, s, 44.6f, 40.2f, 42.5f, 48.5f, 40.1f, 49.6f);
+        fillTri(sr, cx, cy, s, 44.6f, 40.2f, 40.1f, 49.6f, 38.0f, 52.0f);
+        fillTri(sr, cx, cy, s, 46.0f, 38.0f, 44.6f, 40.2f, 38.0f, 52.0f);
+        sr.setColor(0.96f, 0.62f, 0.04f, 1.00f);
+        fillTri(sr, cx, cy, s, 38.0f, 60.0f, 42.0f, 68.0f, 38.2f, 72.0f);
+        fillTri(sr, cx, cy, s, 38.0f, 60.0f, 38.2f, 72.0f, 35.0f, 76.0f);
+        fillTri(sr, cx, cy, s, 38.0f, 60.0f, 35.0f, 76.0f, 32.2f, 80.0f);
+        fillTri(sr, cx, cy, s, 38.0f, 60.0f, 32.2f, 80.0f, 30.0f, 84.0f);
+        fillTri(sr, cx, cy, s, 38.0f, 60.0f, 30.0f, 84.0f, 29.8f, 78.0f);
+        fillTri(sr, cx, cy, s, 38.0f, 60.0f, 29.8f, 78.0f, 31.0f, 72.0f);
+        fillTri(sr, cx, cy, s, 31.0f, 72.0f, 33.8f, 66.0f, 38.0f, 60.0f);
+        // --- LAYER: details_and_relief ---
+        fillCircle(sr, cx, cy, s, 76.0f, 24.0f, 12.0f);
+        sr.setColor(0.88f, 0.95f, 1.00f, 1.00f);
+        fillCircle(sr, cx, cy, s, 76.0f, 24.0f, 8.0f);
+        sr.setColor(0.99f, 0.88f, 0.28f, 1.00f);
+        drawLine(sr, cx, cy, s, 73.0f, 42.0f, 75.2f, 41.5f, 1.5f);
+        drawLine(sr, cx, cy, s, 75.2f, 41.5f, 76.8f, 42.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 76.8f, 42.0f, 77.7f, 43.5f, 1.5f);
+        drawLine(sr, cx, cy, s, 77.7f, 43.5f, 78.0f, 46.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 78.0f, 46.0f, 76.1f, 47.1f, 1.5f);
+        drawLine(sr, cx, cy, s, 76.1f, 47.1f, 75.5f, 48.5f, 1.5f);
+        drawLine(sr, cx, cy, s, 75.5f, 48.5f, 76.1f, 50.1f, 1.5f);
+        drawLine(sr, cx, cy, s, 76.1f, 50.1f, 78.0f, 52.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 78.0f, 52.0f, 76.1f, 53.1f, 1.5f);
+        drawLine(sr, cx, cy, s, 76.1f, 53.1f, 75.5f, 54.5f, 1.5f);
+        drawLine(sr, cx, cy, s, 75.5f, 54.5f, 76.1f, 56.1f, 1.5f);
+        drawLine(sr, cx, cy, s, 76.1f, 56.1f, 78.0f, 58.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 78.0f, 58.0f, 76.1f, 59.1f, 1.5f);
+        drawLine(sr, cx, cy, s, 76.1f, 59.1f, 75.5f, 60.5f, 1.5f);
+        drawLine(sr, cx, cy, s, 75.5f, 60.5f, 76.1f, 62.1f, 1.5f);
+        drawLine(sr, cx, cy, s, 76.1f, 62.1f, 78.0f, 64.0f, 1.5f);
+        sr.setColor(0.96f, 0.62f, 0.04f, 1.00f);
+        drawLine(sr, cx, cy, s, 72.0f, 36.0f, 80.0f, 36.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 72.0f, 70.0f, 80.0f, 70.0f, 1.5f);
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.00f);
+        fillCircle(sr, cx, cy, s, 43.0f, 48.0f, 2.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 42.5f, 47.5f, 0.6f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        drawLine(sr, cx, cy, s, 52.0f, 96.0f, 52.0f, 114.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 36.0f, 94.0f, 32.0f, 108.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 68.0f, 94.0f, 72.0f, 108.0f, 1.0f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 74.0f, 21.0f, 2.0f);
+        fillTri(sr, cx, cy, s, 46.0f, 38.0f, 48.0f, 42.0f, 44.0f, 40.0f);
+        drawLine(sr, cx, cy, s, 46.0f, 38.0f, 48.0f, 50.0f, 0.8f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.80f);
+        drawLine(sr, cx, cy, s, 42.0f, 104.0f, 47.0f, 109.2f, 1.0f);
+        drawLine(sr, cx, cy, s, 47.0f, 109.2f, 52.0f, 111.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 52.0f, 111.0f, 57.0f, 109.2f, 1.0f);
+        drawLine(sr, cx, cy, s, 57.0f, 109.2f, 62.0f, 104.0f, 1.0f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.85f);
+        drawLine(sr, cx, cy, s, 74.0f, 34.0f, 74.0f, 68.0f, 1.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 76.0f, 12.0f, 1.5f);
     }
 
     // =========================================================================

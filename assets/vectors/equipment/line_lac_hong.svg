@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- 1. Explosive Celestial Dragon Aura (Ruby Flame & Emerald Sea Glow) -->
+  <circle cx="64" cy="64" r="54" fill="rgba(220, 38, 38, 0.20)" />
+  <circle cx="64" cy="64" r="44" fill="rgba(16, 185, 129, 0.22)" />
+  <circle cx="64" cy="64" r="32" fill="rgba(250, 204, 21, 0.25)" />
+
+  <!-- 2. Dual Dragon Ouroboros Ring (Upper Emerald Dragon & Lower Dragon) -->
+  <!-- Upper Dragon Arc Body (from 32,60 up through 64,22 to 86,38) -->
+  <path d="M 30,64 C 30,34 50,22 68,22 C 82,22 96,30 96,44" fill="none" stroke="#064e3b" stroke-width="8.0" stroke-linecap="round" />
+  <path d="M 30,64 C 30,34 50,22 68,22 C 82,22 96,30 96,44" fill="none" stroke="#10b981" stroke-width="5.5" stroke-linecap="round" />
+  <path d="M 30,64 C 30,34 50,22 68,22 C 82,22 96,30 96,44" fill="none" stroke="#6ee7b7" stroke-width="1.8" stroke-linecap="round" />
+  <!-- Upper Dragon Golden Dorsal Spine Spikes -->
+  <polygon points="44,32 46,24 50,30" fill="#facc15" />
+  <polygon points="58,24 62,16 66,24" fill="#facc15" />
+  <polygon points="76,24 82,18 82,28" fill="#facc15" />
+  <!-- Upper Dragon Head (facing center pearl) -->
+  <polygon points="94,40 106,34 102,46 92,46" fill="#facc15" stroke="#78350f" stroke-width="1.0" />
+  <polygon points="98,34 110,26 104,36" fill="#dc2626" />
+  <!-- Horn -->
+  <line x1="96" y1="36" x2="104" y2="22" stroke="#ea580c" stroke-width="2.0" />
+  <circle cx="98" cy="40" r="1.8" fill="#dc2626" />
+  <circle cx="97.5" cy="39.5" r="0.7" fill="#ffffff" />
+
+  <!-- Lower Dragon Arc Body (from 98,64 down through 64,106 to 32,84) -->
+  <path d="M 98,64 C 98,94 78,106 60,106 C 46,106 32,98 32,84" fill="none" stroke="#064e3b" stroke-width="8.0" stroke-linecap="round" />
+  <path d="M 98,64 C 98,94 78,106 60,106 C 46,106 32,98 32,84" fill="none" stroke="#10b981" stroke-width="5.5" stroke-linecap="round" />
+  <path d="M 98,64 C 98,94 78,106 60,106 C 46,106 32,98 32,84" fill="none" stroke="#6ee7b7" stroke-width="1.8" stroke-linecap="round" />
+  <!-- Lower Dragon Golden Dorsal Spine Spikes -->
+  <polygon points="84,96 82,104 78,98" fill="#facc15" />
+  <polygon points="70,104 66,112 62,104" fill="#facc15" />
+  <polygon points="52,104 46,110 46,100" fill="#facc15" />
+  <!-- Lower Dragon Head (facing center pearl) -->
+  <polygon points="34,88 22,94 26,82 36,82" fill="#facc15" stroke="#78350f" stroke-width="1.0" />
+  <polygon points="30,94 18,102 24,92" fill="#dc2626" />
+  <!-- Horn -->
+  <line x1="32" y1="92" x2="24" y2="106" stroke="#ea580c" stroke-width="2.0" />
+  <circle cx="30" cy="88" r="1.8" fill="#dc2626" />
+  <circle cx="30.5" cy="87.5" r="0.7" fill="#ffffff" />
+
+  <!-- 3. Coiled Dragon Sinew Thread Ring (Inner Spool Chamber) -->
+  <circle cx="64" cy="64" r="28" fill="#78350f" stroke="#ca8a04" stroke-width="1.5" />
+  <circle cx="64" cy="64" r="25" fill="#ca8a04" />
+  <circle cx="64" cy="64" r="22" fill="#450a0a" />
+
+  <!-- 4. Blazing Sacred Dragon Pearl (Long Châu Thiêng Lạc Long Quân) -->
+  <!-- 8 Radial Sunburst Flare Rays from Pearl -->
+  <polygon points="64,38 61,48 67,48" fill="#facc15" />
+  <polygon points="90,64 80,61 80,67" fill="#facc15" />
+  <polygon points="64,90 67,80 61,80" fill="#facc15" />
+  <polygon points="38,64 48,67 48,61" fill="#facc15" />
+  <polygon points="82,46 72,50 75,55" fill="#ea580c" />
+  <polygon points="82,82 75,73 72,78" fill="#ea580c" />
+  <polygon points="46,82 56,78 53,73" fill="#ea580c" />
+  <polygon points="46,46 53,55 56,50" fill="#ea580c" />
+  <!-- Deep Flaming Ruby Dragon Pearl Sphere -->
+  <circle cx="64" cy="64" r="16" fill="#7f1d1d" stroke="#facc15" stroke-width="1.5" />
+  <circle cx="64" cy="64" r="12" fill="#dc2626" />
+  <circle cx="64" cy="64" r="8" fill="#ea580c" />
+  <circle cx="62" cy="62" r="4.0" fill="#fef08a" />
+  <circle cx="61" cy="61" r="2.0" fill="#ffffff" />
+
+  <!-- 5. Hanging Imperial Jade Token & Crimson Cord -->
+  <line x1="64" y1="106" x2="64" y2="116" stroke="#ca8a04" stroke-width="1.5" />
+  <polygon points="60,116 68,116 66,126 62,126" fill="#10b981" stroke="#ca8a04" stroke-width="0.8" />
+  <circle cx="64" cy="120" r="1.5" fill="#facc15" />
+
+  <!-- 6. Specular Glints -->
+  <circle cx="61" cy="60" r="2.0" fill="#ffffff" />
+  <circle cx="64" cy="40" r="1.2" fill="#ffffff" />
+  <circle cx="104" cy="28" r="1.5" fill="#ffffff" />
+  <circle cx="24" cy="100" r="1.5" fill="#ffffff" />
+  <circle cx="62" cy="18" r="1.6" fill="#ffffff" />
+  <circle cx="66" cy="110" r="1.6" fill="#ffffff" />
+</svg>

@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- 1. Solar Corona & Archangel Halo Aura -->
+  <circle cx="64" cy="64" r="54" fill="rgba(250, 204, 21, 0.16)" />
+  <circle cx="64" cy="40" r="32" fill="rgba(254, 240, 138, 0.22)" />
+  <circle cx="64" cy="90" r="30" fill="rgba(250, 204, 21, 0.14)" />
+
+  <!-- 2. Holy Seraph Halo Eyelet with Sunstone Crown -->
+  <ellipse cx="64" cy="14" rx="14" ry="5.5" fill="none" stroke="#fde047" stroke-width="2.0" />
+  <ellipse cx="64" cy="14" rx="10" ry="3.5" fill="none" stroke="#ffffff" stroke-width="1.0" />
+  <!-- Eyelet Ring -->
+  <circle cx="64" cy="22" r="8.0" fill="#78350f" stroke="#ca8a04" stroke-width="1.8" />
+  <circle cx="64" cy="22" r="5.5" fill="#ca8a04" />
+  <circle cx="64" cy="22" r="3.0" fill="#0f172a" />
+
+  <!-- 3. Twin Celestial Seraph Plumes (Arching Crown Flanking Eyelet) -->
+  <polygon points="64,26 36,12 44,28 62,32" fill="#fde047" stroke="#ca8a04" stroke-width="1.0" />
+  <polygon points="64,26 38,16 44,24 62,30" fill="#ffffff" />
+  <polygon points="64,26 92,12 84,28 66,32" fill="#fde047" stroke="#ca8a04" stroke-width="1.0" />
+  <polygon points="64,26 90,16 84,24 66,30" fill="#ffffff" />
+
+  <!-- 4. Central Double-Edged Holy Blade Shank -->
+  <line x1="64" y1="28" x2="64" y2="88" stroke="#78350f" stroke-width="8.0" stroke-linecap="round" />
+  <line x1="64" y1="28" x2="64" y2="88" stroke="#ca8a04" stroke-width="5.5" stroke-linecap="round" />
+  <line x1="64" y1="28" x2="64" y2="88" stroke="#facc15" stroke-width="3.0" stroke-linecap="round" />
+  <line x1="64" y1="30" x2="64" y2="86" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" />
+  <!-- Inset Sunstone Jewels along Shank -->
+  <circle cx="64" cy="44" r="3.0" fill="#ea580c" stroke="#ca8a04" stroke-width="0.8" />
+  <circle cx="63.5" cy="43.5" r="1.0" fill="#ffffff" />
+  <circle cx="64" cy="64" r="3.0" fill="#ea580c" stroke="#ca8a04" stroke-width="0.8" />
+  <circle cx="63.5" cy="63.5" r="1.0" fill="#ffffff" />
+
+  <!-- 5. Symmetrical Cruciform Anchor Flukes (Dual Curved Anchor Arms) -->
+  <!-- Left Anchor Fluke -->
+  <path d="M 64,88 C 64,110 46,112 32,100 C 22,90 22,76 22,62" fill="none" stroke="#78350f" stroke-width="7.5" stroke-linecap="round" />
+  <path d="M 64,88 C 64,110 46,112 32,100 C 22,90 22,76 22,62" fill="none" stroke="#ca8a04" stroke-width="5.0" stroke-linecap="round" />
+  <path d="M 64,88 C 64,110 46,112 32,100 C 22,90 22,76 22,62" fill="none" stroke="#facc15" stroke-width="2.6" stroke-linecap="round" />
+  <path d="M 64,88 C 64,108 47,110 33,99 C 24,90 24,76 24,64" fill="none" stroke="#ffffff" stroke-width="1.0" stroke-linecap="round" />
+  <!-- Right Anchor Fluke -->
+  <path d="M 64,88 C 64,110 82,112 96,100 C 106,90 106,76 106,62" fill="none" stroke="#78350f" stroke-width="7.5" stroke-linecap="round" />
+  <path d="M 64,88 C 64,110 82,112 96,100 C 106,90 106,76 106,62" fill="none" stroke="#ca8a04" stroke-width="5.0" stroke-linecap="round" />
+  <path d="M 64,88 C 64,110 82,112 96,100 C 106,90 106,76 106,62" fill="none" stroke="#facc15" stroke-width="2.6" stroke-linecap="round" />
+  <path d="M 64,88 C 64,108 81,110 95,99 C 104,90 104,76 104,64" fill="none" stroke="#ffffff" stroke-width="1.0" stroke-linecap="round" />
+
+  <!-- 6. Dual Spearhead Barbs & Crystal Tips -->
+  <!-- Left Spear Tip -->
+  <polygon points="22,50 14,64 22,62" fill="#fef08a" stroke="#ca8a04" stroke-width="1.0" />
+  <polygon points="22,50 30,64 22,62" fill="#ca8a04" stroke="#78350f" stroke-width="1.0" />
+  <polygon points="22,51 17,63 22,61" fill="#ffffff" />
+  <polygon points="22,72 30,78 28,82 22,78" fill="#facc15" />
+  <!-- Right Spear Tip -->
+  <polygon points="106,50 98,64 106,62" fill="#ca8a04" stroke="#78350f" stroke-width="1.0" />
+  <polygon points="106,50 114,64 106,62" fill="#fef08a" stroke="#ca8a04" stroke-width="1.0" />
+  <polygon points="106,51 111,63 106,61" fill="#ffffff" />
+  <polygon points="106,72 98,78 100,82 106,78" fill="#facc15" />
+
+  <!-- 7. Specular Glints -->
+  <circle cx="64" cy="14" r="1.6" fill="#ffffff" />
+  <circle cx="22" cy="52" r="1.5" fill="#ffffff" />
+  <circle cx="106" cy="52" r="1.5" fill="#ffffff" />
+  <circle cx="64" cy="38" r="1.2" fill="#ffffff" />
+  <circle cx="32" cy="104" r="1.4" fill="#ffffff" />
+  <circle cx="96" cy="104" r="1.4" fill="#ffffff" />
+</svg>
