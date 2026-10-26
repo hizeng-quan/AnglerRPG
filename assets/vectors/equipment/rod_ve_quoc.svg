@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- 1. Patriotic Crimson & Golden Flame Aura -->
+  <circle cx="64" cy="64" r="54" fill="rgba(220, 38, 38, 0.16)" />
+  <circle cx="64" cy="64" r="42" fill="rgba(234, 179, 8, 0.14)" />
+
+  <!-- 2. Hardened Red Mahogany & Bamboo Shaft -->
+  <line x1="26" y1="102" x2="88" y2="40" stroke="#450a0a" stroke-width="7.5" stroke-linecap="round" />
+  <line x1="26" y1="102" x2="88" y2="40" stroke="#991b1b" stroke-width="5.2" stroke-linecap="round" />
+  <line x1="26" y1="102" x2="88" y2="40" stroke="#dc2626" stroke-width="2.8" stroke-linecap="round" />
+  <line x1="27" y1="101" x2="87" y2="41" stroke="#fef08a" stroke-width="1.0" stroke-linecap="round" />
+
+  <!-- 3. Dong Son Bronze Joint Rings with Gold Star Insignia -->
+  <!-- Ring 1 -->
+  <circle cx="42" cy="86" r="4.5" fill="#ca8a04" stroke="#450a0a" stroke-width="1.0" />
+  <polygon points="42,83 43,85 45,85 43.5,86.5 44,89 42,87.5 40,89 40.5,86.5 39,85 41,85" fill="#fef08a" />
+  <!-- Ring 2 -->
+  <circle cx="58" cy="70" r="4.8" fill="#ca8a04" stroke="#450a0a" stroke-width="1.0" />
+  <polygon points="58,67 59,69 61,69 59.5,70.5 60,73 58,71.5 56,73 56.5,70.5 55,69 57,69" fill="#fef08a" />
+  <!-- Ring 3 -->
+  <circle cx="74" cy="54" r="5.0" fill="#ca8a04" stroke="#450a0a" stroke-width="1.0" />
+  <polygon points="74,51 75,53 77,53 75.5,54.5 76,57 74,55.5 72,57 72.5,54.5 71,53 73,53" fill="#fef08a" />
+
+  <!-- 4. Grip: Crimson Silk Cord & Bronze Dragon Butt Cap with Red Tassel -->
+  <rect x="22" y="94" width="16" height="10" rx="2" transform="rotate(-45 30 99)" fill="#7f1d1d" stroke="#ca8a04" stroke-width="1.2" />
+  <line x1="24" y1="101" x2="33" y2="92" stroke="#facc15" stroke-width="1.2" />
+  <line x1="27" y1="104" x2="36" y2="95" stroke="#facc15" stroke-width="1.2" />
+  <circle cx="21" cy="107" r="4.2" fill="#ca8a04" stroke="#450a0a" stroke-width="1.2" />
+  <!-- Red Silk Tassel -->
+  <polygon points="21,107 15,116 19,118 21,110" fill="#dc2626" />
+  <polygon points="21,107 19,118 24,116 21,110" fill="#ef4444" />
+
+  <!-- 5. Flying Red Silk Pennant Flag with Golden 5-Point Star -->
+  <polygon points="88,40 122,32 110,46 124,54 88,48" fill="#dc2626" stroke="#ca8a04" stroke-width="1.2" />
+  <polygon points="88,42 114,35 106,46 118,52 88,47" fill="#ef4444" />
+  <!-- Golden 5-Point Star on Flag -->
+  <polygon points="104,39 105.5,42.5 109,43 106.5,45.5 107.5,49 104,47 100.5,49 101.5,45.5 99,43 102.5,42.5" fill="#facc15" stroke="#ca8a04" stroke-width="0.6" />
+
+  <!-- 6. Tip Bronze Guide Ring -->
+  <circle cx="88" cy="40" r="3.5" fill="#ca8a04" stroke="#450a0a" stroke-width="1.0" />
+  <circle cx="88" cy="40" r="1.8" fill="#fef08a" />
+
+  <!-- 7. Specular Glints -->
+  <circle cx="104" cy="42" r="1.5" fill="#ffffff" />
+  <circle cx="88" cy="38" r="1.4" fill="#ffffff" />
+  <circle cx="74" cy="52" r="1.2" fill="#ffffff" />
+  <circle cx="21" cy="105" r="1.2" fill="#ffffff" />
+</svg>

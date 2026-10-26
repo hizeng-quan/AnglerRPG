@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="plasticAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#0284c7" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#0369a1" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="petBottle" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.5"/>
+      <stop offset="40%" stop-color="#7dd3fc" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0.5"/>
+    </linearGradient>
+  </defs>
+
+  <!-- LAYER 1: Background Glow -->
+  <g id="background_glow">
+    <circle cx="64" cy="64" r="42" fill="url(#plasticAura)"/>
+    <ellipse cx="64" cy="112" rx="26" ry="7" fill="#000000" opacity="0.3"/>
+  </g>
+
+  <!-- LAYER 2: Base Form (Transparent PET Bottle Cylinder, Cone Shoulder & Cap) -->
+  <g id="base_form">
+    <!-- Main Bottle Body -->
+    <rect x="48" y="44" width="32" height="58" rx="4" fill="url(#petBottle)"/>
+    <ellipse cx="64" cy="102" rx="16" ry="5" fill="#0284c7" opacity="0.6"/>
+    <!-- Tapered Cone Shoulder -->
+    <polygon points="48,44 80,44 72,26 56,26" fill="url(#petBottle)"/>
+    <!-- Threaded Bottle Neck -->
+    <rect x="58" y="18" width="12" height="10" fill="#38bdf8" opacity="0.8"/>
+    <!-- Blue Screw Cap -->
+    <rect x="56" y="12" width="16" height="8" rx="1.5" fill="#1d4ed8"/>
+    <rect x="55" y="10" width="18" height="3" fill="#2563eb"/>
+  </g>
+
+  <!-- LAYER 3: Details & Relief (Murky Water Line, Peeling Brand Label & Bubbles) -->
+  <g id="details_and_relief">
+    <!-- Murky Swamp Water Inside Bottle -->
+    <rect x="50" y="74" width="28" height="26" fill="#15803d" opacity="0.75"/>
+    <ellipse cx="64" cy="74" rx="14" ry="3" fill="#166534" opacity="0.8"/>
+    <!-- Peeling Wrinkled Label -->
+    <polygon points="48,54 78,56 76,68 48,66" fill="#f8fafc"/>
+    <line x1="50" y1="60" x2="74" y2="62" stroke="#dc2626" stroke-width="2"/>
+    <!-- Air Bubbles Inside Murk -->
+    <circle cx="58" cy="86" r="2" fill="#bae6fd"/>
+    <circle cx="70" cy="92" r="1.5" fill="#bae6fd"/>
+  </g>
+
+  <!-- LAYER 4: Specular Highlights (Plastic Gloss Sheen) -->
+  <g id="specular_highlights">
+    <!-- Vertical Plastic Reflection Stripe -->
+    <line x1="52" y1="46" x2="52" y2="100" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+    <line x1="56" y1="48" x2="56" y2="98" stroke="#ffffff" stroke-width="1.0" opacity="0.5"/>
+    <!-- Cap Rim Glint -->
+    <line x1="58" y1="12" x2="68" y2="12" stroke="#ffffff" stroke-width="1.5"/>
+  </g>
+</svg>

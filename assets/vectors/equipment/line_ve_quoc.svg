@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- 1. Battle Flame & Crimson Aura -->
+  <circle cx="64" cy="64" r="54" fill="rgba(220, 38, 38, 0.16)" />
+  <circle cx="64" cy="64" r="42" fill="rgba(245, 158, 11, 0.20)" />
+
+  <!-- 2. Octagonal Bronze War-Spool (8 Radial Spearhead Spikes) -->
+  <!-- 8 Radial Bronze Spearhead Spikes -->
+  <polygon points="64,10 58,24 70,24" fill="#ca8a04" stroke="#451a03" stroke-width="1.0" />
+  <polygon points="118,64 104,58 104,70" fill="#ca8a04" stroke="#451a03" stroke-width="1.0" />
+  <polygon points="64,118 70,104 58,104" fill="#ca8a04" stroke="#451a03" stroke-width="1.0" />
+  <polygon points="10,64 24,70 24,58" fill="#ca8a04" stroke="#451a03" stroke-width="1.0" />
+  <polygon points="102,26 89,34 97,42" fill="#ca8a04" stroke="#451a03" stroke-width="1.0" />
+  <polygon points="102,102 97,86 89,94" fill="#ca8a04" stroke="#451a03" stroke-width="1.0" />
+  <polygon points="26,102 39,94 31,86" fill="#ca8a04" stroke="#451a03" stroke-width="1.0" />
+  <polygon points="26,26 31,42 39,34" fill="#ca8a04" stroke="#451a03" stroke-width="1.0" />
+
+  <!-- 3. Octagonal Outer Bronze Rim Plates -->
+  <polygon points="58,24 70,24 89,34 97,42 104,58 104,70 97,86 89,94 70,104 58,104 39,94 31,86 24,70 24,58 31,42 39,34" fill="#78350f" stroke="#ca8a04" stroke-width="2.0" />
+  <polygon points="56,28 72,28 88,37 95,44 100,56 100,72 95,84 88,91 72,100 56,100 40,91 33,84 28,72 28,56 33,44 40,37" fill="#ca8a04" />
+  <polygon points="54,32 74,32 86,40 92,46 96,54 96,74 92,82 86,88 74,96 54,96 42,88 36,82 32,74 32,54 36,46 42,40" fill="#450a0a" />
+
+  <!-- 4. Braided Crimson & Golden Silk Military Cord -->
+  <circle cx="64" cy="64" r="28" fill="#7f1d1d" />
+  <circle cx="64" cy="64" r="24" fill="#dc2626" />
+  <circle cx="64" cy="64" r="20" fill="#f59e0b" />
+  <!-- Cross-woven cord strands -->
+  <line x1="46" y1="52" x2="82" y2="76" stroke="#fef08a" stroke-width="1.2" />
+  <line x1="46" y1="76" x2="82" y2="52" stroke="#fef08a" stroke-width="1.2" />
+
+  <!-- 5. Central Hub with Golden 5-Pointed Star -->
+  <circle cx="64" cy="64" r="16" fill="#450a0a" stroke="#ca8a04" stroke-width="1.8" />
+  <circle cx="64" cy="64" r="13" fill="#991b1b" />
+  <!-- Vietnam Golden 5-Pointed Star -->
+  <polygon points="64,53 67,61 75,61 69,66 71,74 64,69 57,74 59,66 53,61 61,61" fill="#facc15" stroke="#78350f" stroke-width="0.8" />
+  <polygon points="64,54 66.5,61 73,61 68,65.5 70,72 64,68 58,72 60,65.5 55,61 61.5,61" fill="#ffffff" />
+
+  <!-- 6. Forged Bronze Crank Handle & Red Battle Pennant -->
+  <line x1="64" y1="64" x2="98" y2="34" stroke="#78350f" stroke-width="4.5" stroke-linecap="round" />
+  <line x1="64" y1="64" x2="98" y2="34" stroke="#ca8a04" stroke-width="2.5" stroke-linecap="round" />
+  <circle cx="98" cy="34" r="5.0" fill="#78350f" stroke="#ca8a04" stroke-width="1.5" />
+  <circle cx="98" cy="34" r="2.8" fill="#dc2626" />
+  <!-- Fluttering Red Silk Tassel from Crank -->
+  <polygon points="98,36 112,40 106,44 116,48 100,42" fill="#dc2626" />
+
+  <!-- 7. Specular Glints -->
+  <circle cx="64" cy="12" r="1.4" fill="#ffffff" />
+  <circle cx="98" cy="32" r="1.6" fill="#ffffff" />
+  <circle cx="64" cy="55" r="1.4" fill="#ffffff" />
+  <circle cx="102" cy="27" r="1.2" fill="#ffffff" />
+  <circle cx="26" cy="27" r="1.2" fill="#ffffff" />
+</svg>

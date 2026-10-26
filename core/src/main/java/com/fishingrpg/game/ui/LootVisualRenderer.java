@@ -39,10 +39,16 @@ public class LootVisualRenderer {
             drawAncientSword(sr, cx, cy, scale, timer);
         } else if (name.startsWith("Sách") || name.equals("Sách Thông Thái")) {
             drawSpellBook(sr, cx, cy, scale, timer, name);
-        } else if (name.equals("Mồi Thơm") || name.equals("Mồi Rủi Ro")) {
-            drawBaitJar(sr, cx, cy, scale, name.equals("Mồi Rủi Ro"));
-        } else if (name.equals("Thuốc Hồi Stamina") || name.equals("Nước Tăng Lực") || name.equals("Nước Bức Phá") || name.equals("Nước Bứt Phá")) {
-            drawPotionFlask(sr, cx, cy, scale, name);
+        } else if (name.equals("Mồi Thơm")) {
+            drawAromaBait(sr, cx, cy, scale);
+        } else if (name.equals("Mồi Rủi Ro")) {
+            drawRiskyBait(sr, cx, cy, scale, timer);
+        } else if (name.equals("Thuốc Hồi Stamina")) {
+            drawStaminaPotion(sr, cx, cy, scale);
+        } else if (name.equals("Nước Tăng Lực")) {
+            drawEnergyDrink(sr, cx, cy, scale);
+        } else if (name.equals("Nước Bức Phá") || name.equals("Nước Bứt Phá")) {
+            drawOverdrivePotion(sr, cx, cy, scale);
         } else if (name.equals("Dây Câu Tốt")) {
             drawLineSpool(sr, cx, cy, scale);
         } else if (name.equals("Bánh Mì")) {
@@ -71,735 +77,1346 @@ public class LootVisualRenderer {
     }
 
     // =========================================================================
-    // TRASH ITEMS
+    // SVG PIXEL-PERFECT VECTOR RENDERING HELPERS (ViewBox 128x128 -> Screen)
     // =========================================================================
-
-    /**
-     * 1. Ủng Cao Su Cũ (Worn rubber boot with tread sole, patch & water drip)
-     */
-    public static void drawBoot(ShapeRenderer sr, float cx, float cy, float s) {
-        // Boot shaft (cổ ủng)
-        sr.setColor(0.24f, 0.28f, 0.26f, 1f);
-        sr.rect(cx - 18f * s, cy - 10f * s, 26f * s, 48f * s);
-
-        // Boot top rim fold
-        sr.setColor(0.18f, 0.22f, 0.20f, 1f);
-        sr.rect(cx - 20f * s, cy + 34f * s, 30f * s, 7f * s);
-
-        // Boot foot base & toe (mũi ủng cong)
-        sr.setColor(0.24f, 0.28f, 0.26f, 1f);
-        sr.circle(cx - 5f * s, cy - 12f * s, 22f * s, 24);
-        sr.circle(cx + 22f * s, cy - 18f * s, 16f * s, 20);
-        sr.rect(cx - 18f * s, cy - 30f * s, 42f * s, 22f * s);
-
-        // Heavy corrugated rubber tread sole (đế cao su có rãnh)
-        sr.setColor(0.12f, 0.12f, 0.14f, 1f);
-        sr.rect(cx - 22f * s, cy - 36f * s, 62f * s, 8f * s);
-        for (int r = 0; r < 5; r++) {
-            sr.setColor(0.06f, 0.06f, 0.08f, 1f);
-            sr.rect(cx - 18f * s + r * 12f * s, cy - 36f * s, 4f * s, 5f * s);
-        }
-
-        // Leather stitched patch (miếng vá nâu)
-        sr.setColor(0.45f, 0.32f, 0.18f, 1f);
-        sr.rect(cx - 14f * s, cy + 10f * s, 14f * s, 12f * s);
-        sr.setColor(0.72f, 0.65f, 0.45f, 1f);
-        sr.rect(cx - 12f * s, cy + 12f * s, 10f * s, 1.5f * s);
-        sr.rect(cx - 12f * s, cy + 18f * s, 10f * s, 1.5f * s);
-
-        // Dripping water droplet
-        sr.setColor(0.4f, 0.85f, 1f, 0.85f);
-        sr.circle(cx + 34f * s, cy - 42f * s, 3.5f * s, 10);
-        sr.triangle(cx + 34f * s, cy - 36f * s, cx + 31f * s, cy - 42f * s, cx + 37f * s, cy - 42f * s);
+    private static float sx(float cx, float svgX, float s) {
+        return cx + (svgX - 64f) * s;
     }
 
-    /**
-     * 2. Chai Nhựa (Plastic bottle with blue screw cap, label, murky water)
-     */
-    public static void drawBottle(ShapeRenderer sr, float cx, float cy, float s, float timer) {
-        // Transparent cyan plastic body
-        sr.setColor(0.35f, 0.72f, 0.85f, 0.65f);
-        sr.rect(cx - 14f * s, cy - 30f * s, 28f * s, 45f * s);
-        sr.circle(cx, cy - 28f * s, 14f * s, 20);
-
-        // Murky water inside bottle
-        sr.setColor(0.22f, 0.45f, 0.35f, 0.75f);
-        sr.rect(cx - 12f * s, cy - 30f * s, 24f * s, 22f * s);
-
-        // Tapered shoulder
-        sr.setColor(0.40f, 0.78f, 0.90f, 0.70f);
-        sr.triangle(cx - 14f * s, cy + 15f * s, cx + 14f * s, cy + 15f * s, cx, cy + 32f * s);
-
-        // Bottle neck
-        sr.setColor(0.45f, 0.82f, 0.95f, 0.85f);
-        sr.rect(cx - 6f * s, cy + 28f * s, 12f * s, 12f * s);
-
-        // Blue screw cap (nắp xanh)
-        sr.setColor(0.15f, 0.42f, 0.85f, 1f);
-        sr.rect(cx - 8f * s, cy + 38f * s, 16f * s, 8f * s);
-        sr.rect(cx - 9f * s, cy + 44f * s, 18f * s, 3f * s);
-
-        // Peeling label (nhãn dán rách)
-        sr.setColor(0.92f, 0.90f, 0.82f, 0.9f);
-        sr.rect(cx - 13f * s, cy - 10f * s, 26f * s, 16f * s);
-        sr.setColor(0.85f, 0.22f, 0.20f, 1f);
-        sr.rect(cx - 10f * s, cy - 4f * s, 20f * s, 4f * s);
-
-        // Glistening plastic highlight
-        sr.setColor(1f, 1f, 1f, 0.75f);
-        sr.rect(cx - 11f * s, cy - 25f * s, 3f * s, 35f * s);
+    private static float sy(float cy, float svgY, float s) {
+        return cy + (64f - svgY) * s;
     }
 
-    /**
-     * 3. Lốp Xe (Heavy black rubber tire with hollow rim & green seaweed)
-     */
-    public static void drawTire(ShapeRenderer sr, float cx, float cy, float s) {
-        // Outer dark rubber body
-        sr.setColor(0.14f, 0.15f, 0.16f, 1f);
-        sr.circle(cx, cy, 38f * s, 32);
-
-        // Outer tread layer
-        sr.setColor(0.22f, 0.24f, 0.25f, 1f);
-        sr.circle(cx, cy, 35f * s, 32);
-
-        // Tire tread notches (8 tread cuts)
-        sr.setColor(0.08f, 0.09f, 0.10f, 1f);
-        for (int i = 0; i < 8; i++) {
-            float ang = i * (MathUtils.PI2 / 8f);
-            float tx = cx + MathUtils.cos(ang) * 32f * s;
-            float ty = cy + MathUtils.sin(ang) * 32f * s;
-            sr.circle(tx, ty, 3.5f * s, 8);
-        }
-
-        // Inner rim dark hollow
-        sr.setColor(0.10f, 0.11f, 0.12f, 1f);
-        sr.circle(cx, cy, 22f * s, 28);
-        sr.setColor(0.06f, 0.14f, 0.18f, 1f); // Water inside rim
-        sr.circle(cx, cy, 18f * s, 24);
-
-        // Clinging green pond weed (rong rêu bám)
-        sr.setColor(0.18f, 0.48f, 0.22f, 0.95f);
-        sr.rectLine(cx - 15f * s, cy + 28f * s, cx - 25f * s, cy + 42f * s, 3.5f * s);
-        sr.rectLine(cx + 18f * s, cy - 22f * s, cx + 32f * s, cy - 35f * s, 3f * s);
-        sr.circle(cx - 26f * s, cy + 42f * s, 4f * s, 8);
+    private static void fillTri(ShapeRenderer sr, float cx, float cy, float s, float x1, float y1, float x2, float y2, float x3, float y3) {
+        sr.triangle(sx(cx, x1, s), sy(cy, y1, s), sx(cx, x2, s), sy(cy, y2, s), sx(cx, x3, s), sy(cy, y3, s));
     }
 
-    /**
-     * 4. Túi Rác (Dark plastic garbage bag tied with knot)
-     */
-    public static void drawTrashBag(ShapeRenderer sr, float cx, float cy, float s) {
-        // Bulging bag base
-        sr.setColor(0.12f, 0.16f, 0.14f, 1f);
-        sr.circle(cx, cy - 10f * s, 32f * s, 28);
-        sr.circle(cx - 14f * s, cy - 16f * s, 24f * s, 24);
-        sr.circle(cx + 14f * s, cy - 16f * s, 24f * s, 24);
-
-        // Tied neck
-        sr.setColor(0.16f, 0.22f, 0.18f, 1f);
-        sr.rect(cx - 10f * s, cy + 14f * s, 20f * s, 10f * s);
-
-        // Knotted ears (tai thắt nút)
-        sr.setColor(0.20f, 0.28f, 0.22f, 1f);
-        sr.triangle(cx - 4f * s, cy + 22f * s, cx - 18f * s, cy + 38f * s, cx, cy + 28f * s);
-        sr.triangle(cx + 4f * s, cy + 22f * s, cx + 18f * s, cy + 38f * s, cx, cy + 28f * s);
-
-        // Plastic shine wrinkles
-        sr.setColor(0.32f, 0.45f, 0.36f, 0.6f);
-        sr.rectLine(cx - 12f * s, cy - 2f * s, cx - 2f * s, cy + 8f * s, 2.5f * s);
-        sr.rectLine(cx + 10f * s, cy - 6f * s, cx + 18f * s, cy + 4f * s, 2f * s);
+    private static void fillQuad(ShapeRenderer sr, float cx, float cy, float s, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
+        fillTri(sr, cx, cy, s, x1, y1, x2, y2, x3, y3);
+        fillTri(sr, cx, cy, s, x1, y1, x3, y3, x4, y4);
     }
 
-    private static void drawGenericTrash(ShapeRenderer sr, float cx, float cy, float s) {
-        drawBoot(sr, cx, cy, s);
+    private static void drawLine(ShapeRenderer sr, float cx, float cy, float s, float x1, float y1, float x2, float y2, float width) {
+        sr.rectLine(sx(cx, x1, s), sy(cy, y1, s), sx(cx, x2, s), sy(cy, y2, s), Math.max(1f, width * s));
+    }
+
+    private static void fillCircle(ShapeRenderer sr, float cx, float cy, float s, float svgX, float svgY, float r) {
+        sr.circle(sx(cx, svgX, s), sy(cy, svgY, s), Math.max(0.8f, r * s));
+    }
+
+    private static void fillEllipse(ShapeRenderer sr, float cx, float cy, float s, float svgX, float svgY, float rx, float ry) {
+        sr.ellipse(sx(cx, svgX, s) - rx * s, sy(cy, svgY, s) - ry * s, rx * 2f * s, ry * 2f * s);
     }
 
     // =========================================================================
-    // TREASURE ITEMS
+    // TRASH & TREASURE LOOT ITEMS (Step 1.5)
     // =========================================================================
 
-    /**
-     * 1. Bình Cổ (Ancient porcelain / terracotta vase with gold trim & dragon glaze)
-     */
-    public static void drawAncientVase(ShapeRenderer sr, float cx, float cy, float s, float timer) {
-        // Glowing aura
-        sr.setColor(1f, 0.85f, 0.35f, 0.22f);
-        sr.circle(cx, cy, 48f * s, 28);
-
-        // Pedestal foot
-        sr.setColor(0.65f, 0.45f, 0.18f, 1f);
-        sr.rect(cx - 16f * s, cy - 35f * s, 32f * s, 8f * s);
-
-        // Round vase belly (Bầu bình cổ)
-        sr.setColor(0.28f, 0.48f, 0.46f, 1f); // Antique celadon jade
-        sr.circle(cx, cy - 6f * s, 30f * s, 32);
-
-        // Golden ornamental belly band
-        sr.setColor(1f, 0.82f, 0.22f, 1f);
-        sr.rect(cx - 28f * s, cy - 10f * s, 56f * s, 8f * s);
-        sr.setColor(0.85f, 0.25f, 0.20f, 1f);
-        for (int i = 0; i < 4; i++) {
-            sr.circle(cx - 20f * s + i * 13f * s, cy - 6f * s, 2.5f * s, 8);
+    public static void drawBaitJar(ShapeRenderer sr, float cx, float cy, float s, boolean isRisky) {
+        if (isRisky) {
+            drawRiskyBait(sr, cx, cy, s, 0f);
+        } else {
+            drawAromaBait(sr, cx, cy, s);
         }
-
-        // Tapered neck
-        sr.setColor(0.32f, 0.54f, 0.52f, 1f);
-        sr.triangle(cx - 22f * s, cy + 14f * s, cx + 22f * s, cy + 14f * s, cx, cy + 42f * s);
-        sr.rect(cx - 10f * s, cy + 18f * s, 20f * s, 20f * s);
-
-        // Fluted Golden Lip
-        sr.setColor(1f, 0.85f, 0.25f, 1f);
-        sr.ellipse(cx - 15f * s, cy + 35f * s, 30f * s, 10f * s);
-        sr.setColor(0.18f, 0.32f, 0.30f, 1f);
-        sr.ellipse(cx - 11f * s, cy + 37f * s, 22f * s, 6f * s);
-
-        // Dual dragon ear handles (Quai rồng hai bên)
-        sr.setColor(1f, 0.82f, 0.22f, 1f);
-        sr.rectLine(cx - 12f * s, cy + 30f * s, cx - 26f * s, cy + 18f * s, 3.5f * s);
-        sr.rectLine(cx - 26f * s, cy + 18f * s, cx - 18f * s, cy + 4f * s, 3.5f * s);
-        sr.rectLine(cx + 12f * s, cy + 30f * s, cx + 26f * s, cy + 18f * s, 3.5f * s);
-        sr.rectLine(cx + 26f * s, cy + 18f * s, cx + 18f * s, cy + 4f * s, 3.5f * s);
-
-        // Sparkle glints
-        float pulse = 0.5f + 0.5f * MathUtils.sin(timer * 5f);
-        sr.setColor(1f, 1f, 0.8f, pulse);
-        sr.circle(cx - 12f * s, cy + 12f * s, 3f * s, 8);
     }
 
-    /**
-     * 2. Nhẫn Vàng (Shimmering gold signet ring with sparkling ruby)
-     */
-    public static void drawGoldRing(ShapeRenderer sr, float cx, float cy, float s, float timer) {
-        // Glowing gold halo
-        sr.setColor(1f, 0.85f, 0.25f, 0.28f);
-        sr.circle(cx, cy, 45f * s, 28);
-
-        // Thick Gold Band
-        sr.setColor(1f, 0.82f, 0.20f, 1f);
-        sr.circle(cx, cy - 4f * s, 30f * s, 32);
-
-        // Inner finger hole
-        sr.setColor(0.10f, 0.14f, 0.22f, 1f);
-        sr.circle(cx, cy - 4f * s, 18f * s, 28);
-
-        // Golden gemstone bezel setting
-        sr.setColor(0.95f, 0.75f, 0.15f, 1f);
-        sr.rect(cx - 14f * s, cy + 18f * s, 28f * s, 10f * s);
-
-        // Faceted Crimson Ruby (Viên hồng ngọc đỏ thắm)
-        sr.setColor(0.95f, 0.18f, 0.25f, 1f);
-        sr.triangle(cx - 12f * s, cy + 22f * s, cx + 12f * s, cy + 22f * s, cx, cy + 38f * s);
-        sr.triangle(cx - 12f * s, cy + 22f * s, cx + 12f * s, cy + 22f * s, cx, cy + 16f * s);
-
-        // Ruby facet gleam
-        sr.setColor(1f, 0.65f, 0.75f, 0.95f);
-        sr.triangle(cx - 6f * s, cy + 22f * s, cx + 3f * s, cy + 22f * s, cx, cy + 34f * s);
-
-        // Radiating 4-point sparkle stars
-        float sp = 0.5f + 0.5f * MathUtils.sin(timer * 6f);
-        sr.setColor(1f, 0.95f, 0.5f, sp);
-        sr.rectLine(cx + 18f * s, cy + 28f * s, cx + 28f * s, cy + 28f * s, 2f * s);
-        sr.rectLine(cx + 23f * s, cy + 23f * s, cx + 23f * s, cy + 33f * s, 2f * s);
-    }
-
-    /**
-     * 3. Rương Chìm (Sunken wooden pirate chest with iron bands, barnacles & gold coins)
-     */
-    public static void drawSunkenChest(ShapeRenderer sr, float cx, float cy, float s, float timer) {
-        // Golden treasure radiance
-        sr.setColor(1f, 0.85f, 0.25f, 0.25f);
-        sr.circle(cx, cy, 55f * s, 32);
-
-        // Chest Lower Body (Gỗ rương ngâm nước)
-        sr.setColor(0.32f, 0.18f, 0.10f, 1f);
-        sr.rect(cx - 36f * s, cy - 25f * s, 72f * s, 32f * s);
-
-        // Chest Curved Lid (Nắp rương hé mở)
-        sr.setColor(0.42f, 0.24f, 0.14f, 1f);
-        sr.rect(cx - 38f * s, cy + 10f * s, 76f * s, 18f * s);
-        sr.circle(cx, cy + 28f * s, 16f * s, 24);
-
-        // Overflowing Gold Coins & Gems inside crack
-        sr.setColor(1f, 0.88f, 0.25f, 1f);
-        for (int c = 0; c < 7; c++) {
-            sr.circle(cx - 24f * s + c * 8f * s, cy + 8f * s + (c % 2) * 3f * s, 5f * s, 12);
-        }
-        sr.setColor(0.2f, 0.95f, 1f, 1f); // Cyan diamond gem
-        sr.circle(cx + 4f * s, cy + 12f * s, 4f * s, 8);
-
-        // Corroded iron reinforcing straps & lock (Đai sắt rỉ sét & ổ khóa)
-        sr.setColor(0.18f, 0.20f, 0.22f, 1f);
-        sr.rect(cx - 36f * s, cy - 25f * s, 8f * s, 32f * s);
-        sr.rect(cx + 28f * s, cy - 25f * s, 8f * s, 32f * s);
-        sr.rect(cx - 38f * s, cy + 10f * s, 8f * s, 18f * s);
-        sr.rect(cx + 30f * s, cy + 10f * s, 8f * s, 18f * s);
-
-        // Large Brass Skull Lock in center
-        sr.setColor(0.92f, 0.75f, 0.20f, 1f);
-        sr.circle(cx, cy + 2f * s, 9f * s, 16);
-        sr.setColor(0.15f, 0.12f, 0.08f, 1f);
-        sr.rect(cx - 2f * s, cy - 1f * s, 4f * s, 7f * s);
-
-        // Clinging sea barnacles & moss (Hàu biển bám rương)
-        sr.setColor(0.72f, 0.75f, 0.65f, 1f);
-        sr.circle(cx - 28f * s, cy - 20f * s, 4f * s, 8);
-        sr.circle(cx + 22f * s, cy - 18f * s, 5f * s, 8);
-    }
-
-    /**
-     * 4. Kiếm Cổ (Ancient ceremonial blade with jade dragon guard & glowing runes)
-     */
-    public static void drawAncientSword(ShapeRenderer sr, float cx, float cy, float s, float timer) {
-        // Mythic blue blade aura
-        sr.setColor(0.3f, 0.75f, 1f, 0.25f);
-        sr.circle(cx, cy, 50f * s, 28);
-
-        // Steel Blade (Pointing up)
-        sr.setColor(0.85f, 0.92f, 0.98f, 1f);
-        sr.rect(cx - 5f * s, cy - 10f * s, 10f * s, 42f * s);
-        sr.triangle(cx - 5f * s, cy + 32f * s, cx + 5f * s, cy + 32f * s, cx, cy + 46f * s);
-
-        // Glowing Ancient Runes along blade fuller
-        sr.setColor(0.2f, 0.85f, 1f, 0.95f);
-        sr.rect(cx - 1.5f * s, cy - 6f * s, 3f * s, 36f * s);
-        for (int r = 0; r < 4; r++) {
-            sr.circle(cx, cy + r * 9f * s, 2.5f * s, 8);
-        }
-
-        // Dragon Head Crossguard (Thanh chắn kiếm hình đầu rồng ngọc)
-        sr.setColor(0.25f, 0.65f, 0.45f, 1f); // Imperial Jade
-        sr.rect(cx - 24f * s, cy - 15f * s, 48f * s, 7f * s);
-        sr.setColor(1f, 0.82f, 0.20f, 1f); // Gold accents
-        sr.triangle(cx - 24f * s, cy - 15f * s, cx - 30f * s, cy - 9f * s, cx - 24f * s, cy - 8f * s);
-        sr.triangle(cx + 24f * s, cy - 15f * s, cx + 30f * s, cy - 9f * s, cx + 24f * s, cy - 8f * s);
-        sr.circle(cx, cy - 11.5f * s, 5f * s, 12);
-
-        // Red wrapped hilt & golden pommel (Chuôi kiếm quấn dây đỏ & ngọc chuôi)
-        sr.setColor(0.75f, 0.18f, 0.18f, 1f);
-        sr.rect(cx - 3.5f * s, cy - 32f * s, 7f * s, 17f * s);
-        sr.setColor(1f, 0.82f, 0.20f, 1f);
-        sr.circle(cx, cy - 34f * s, 6.5f * s, 14);
-
-        // Hanging red silk tassel
-        sr.setColor(0.85f, 0.2f, 0.2f, 0.9f);
-        sr.rectLine(cx, cy - 36f * s, cx - 5f * s, cy - 48f * s, 2.5f * s);
-    }
-
-    /**
-     * 5. Sách Kỹ Năng / Bí Kíp (Ancient mystical leather spellbook with arcane rune & ribbon)
-     */
     public static void drawSpellBook(ShapeRenderer sr, float cx, float cy, float s, float timer) {
         drawSpellBook(sr, cx, cy, s, timer, "");
     }
 
     public static void drawSpellBook(ShapeRenderer sr, float cx, float cy, float s, float timer, String bookName) {
         if (bookName == null) bookName = "";
-        Color coverColor = new Color(0.35f, 0.16f, 0.10f, 1f); // default leather brown
-        Color auraColor = new Color(0.55f, 0.3f, 0.95f, 0.25f);
-        Color symbolColor = new Color(0.2f, 0.95f, 1f, 1f);
-
-        if (bookName.contains("Dưỡng Sức")) {
-            coverColor = new Color(0.12f, 0.38f, 0.22f, 1f); // Jade green
-            auraColor = new Color(0.2f, 0.85f, 0.45f, 0.30f);
-            symbolColor = new Color(0.4f, 1f, 0.6f, 1f);
-        } else if (bookName.contains("Giật Kép")) {
-            coverColor = new Color(0.52f, 0.15f, 0.12f, 1f); // Crimson
-            auraColor = new Color(0.95f, 0.3f, 0.2f, 0.30f);
-            symbolColor = new Color(1f, 0.85f, 0.2f, 1f);
-        } else if (bookName.contains("Mắt Đại Bàng")) {
-            coverColor = new Color(0.12f, 0.25f, 0.52f, 1f); // Sapphire
-            auraColor = new Color(0.2f, 0.6f, 1f, 0.30f);
-            symbolColor = new Color(1f, 0.9f, 0.35f, 1f);
-        } else if (bookName.contains("Thông Thái")) {
-            coverColor = new Color(0.38f, 0.15f, 0.52f, 1f); // Arcane purple
-            auraColor = new Color(0.7f, 0.3f, 1f, 0.30f);
-            symbolColor = new Color(1f, 0.9f, 0.4f, 1f);
-        } else if (bookName.contains("Thuần Hóa")) {
-            coverColor = new Color(0.16f, 0.42f, 0.28f, 1f); // Forest jade
-            auraColor = new Color(0.25f, 0.9f, 0.55f, 0.30f);
-            symbolColor = new Color(0.5f, 1f, 0.7f, 1f);
-        } else if (bookName.contains("Trói Buộc")) {
-            coverColor = new Color(0.22f, 0.12f, 0.36f, 1f); // Deep chain indigo
-            auraColor = new Color(0.45f, 0.25f, 0.85f, 0.30f);
-            symbolColor = new Color(0.75f, 0.5f, 1f, 1f);
-        } else if (bookName.contains("Trái Tim ĐD")) {
-            coverColor = new Color(0.08f, 0.28f, 0.44f, 1f); // Oceanic deep teal
-            auraColor = new Color(0.2f, 0.75f, 0.95f, 0.30f);
-            symbolColor = new Color(0.35f, 0.95f, 1f, 1f);
-        }
-
-        // Arcane glow
-        sr.setColor(auraColor);
-        sr.circle(cx, cy, 48f * s, 28);
-
-        // Leather Book Cover (Bìa sách cổ)
-        sr.setColor(coverColor);
-        sr.rect(cx - 28f * s, cy - 30f * s, 56f * s, 60f * s);
-
-        // Aged Parchment Pages edge (Trang sách cổ vàng ố)
-        sr.setColor(0.92f, 0.88f, 0.72f, 1f);
-        sr.rect(cx + 20f * s, cy - 27f * s, 6f * s, 54f * s);
-
-        // Golden Corner Brackets
-        sr.setColor(1f, 0.82f, 0.22f, 1f);
-        sr.triangle(cx - 28f * s, cy + 30f * s, cx - 16f * s, cy + 30f * s, cx - 28f * s, cy + 18f * s);
-        sr.triangle(cx + 20f * s, cy + 30f * s, cx + 8f * s, cy + 30f * s, cx + 20f * s, cy + 18f * s);
-        sr.triangle(cx - 28f * s, cy - 30f * s, cx - 16f * s, cy - 30f * s, cx - 28f * s, cy - 18f * s);
-
-        // Glowing Arcane Symbol on cover (Phù hiệu bí thuật phát sáng)
-        float pulse = 0.7f + 0.3f * MathUtils.sin(timer * 4f);
-        sr.setColor(symbolColor.r, symbolColor.g, symbolColor.b, pulse);
-        sr.circle(cx - 4f * s, cy, 14f * s, 24);
-        sr.setColor(coverColor);
-        sr.circle(cx - 4f * s, cy, 10f * s, 20);
-        sr.setColor(1f, 0.88f, 0.25f, pulse);
-        sr.circle(cx - 4f * s, cy, 5f * s, 12);
-
-        // Silken Red Bookmark ribbon
-        sr.setColor(0.85f, 0.18f, 0.18f, 1f);
-        sr.rect(cx + 4f * s, cy - 38f * s, 6f * s, 12f * s);
-        sr.triangle(cx + 4f * s, cy - 38f * s, cx + 10f * s, cy - 38f * s, cx + 7f * s, cy - 44f * s);
-    }
-
-    // =========================================================================
-    // CONSUMABLES & QUICK SLOT ICONS
-    // =========================================================================
-
-    public static void drawBread(ShapeRenderer sr, float cx, float cy, float s) {
-        float bw = 48f * s;
-        float bh = 26f * s;
-
-        // Shadow under loaf
-        sr.setColor(0.14f, 0.08f, 0.04f, 0.35f);
-        sr.ellipse(cx - bw / 2f + 2f * s, cy - bh / 2f - 4f * s, bw, bh * 0.7f);
-
-        // Golden baked crust loaf (perfectly centered at cx, cy)
-        sr.setColor(0.82f, 0.52f, 0.20f, 1f);
-        sr.ellipse(cx - bw / 2f, cy - bh / 2f, bw, bh);
-
-        // Fluffy warm golden-yellow inner dome
-        sr.setColor(0.96f, 0.76f, 0.38f, 1f);
-        sr.ellipse(cx - bw * 0.44f, cy - bh * 0.38f, bw * 0.88f, bh * 0.76f);
-
-        // Golden center highlight
-        sr.setColor(1f, 0.88f, 0.55f, 0.85f);
-        sr.ellipse(cx - bw * 0.32f, cy - bh * 0.22f, bw * 0.64f, bh * 0.45f);
-
-        // 3 artisan score cuts perfectly aligned across the bread body
-        sr.setColor(0.55f, 0.28f, 0.10f, 1f);
-        sr.rectLine(cx - 12f * s, cy - 6f * s, cx - 6f * s, cy + 7f * s, 2.8f * s);
-        sr.rectLine(cx - 2f * s, cy - 6f * s, cx + 4f * s, cy + 7f * s, 2.8f * s);
-        sr.rectLine(cx + 8f * s, cy - 6f * s, cx + 14f * s, cy + 7f * s, 2.8f * s);
-
-        // Flour dust specks along cuts
-        sr.setColor(1f, 0.98f, 0.92f, 0.8f);
-        sr.circle(cx - 6f * s, cy + 7f * s, 1.8f * s);
-        sr.circle(cx + 4f * s, cy + 7f * s, 1.8f * s);
-        sr.circle(cx + 14f * s, cy + 7f * s, 1.8f * s);
-    }
-
-    public static void drawBaitJar(ShapeRenderer sr, float cx, float cy, float s, boolean isRisky) {
-        // Jar body
-        sr.setColor(isRisky ? new Color(0.38f, 0.12f, 0.42f, 1f) : new Color(0.85f, 0.38f, 0.58f, 1f));
-        sr.rect(cx - 16f * s, cy - 20f * s, 32f * s, 32f * s);
-        sr.circle(cx, cy - 18f * s, 16f * s, 20);
-
-        // Cork lid & twine tie
-        sr.setColor(0.55f, 0.38f, 0.22f, 1f);
-        sr.rect(cx - 12f * s, cy + 12f * s, 24f * s, 10f * s);
-        sr.setColor(1f, 0.85f, 0.35f, 1f);
-        sr.rect(cx - 14f * s, cy + 10f * s, 28f * s, 3f * s);
-
-        // Emblem (Star for aroma, Skull for risk)
-        if (isRisky) {
-            sr.setColor(0.95f, 0.2f, 0.2f, 1f);
-            sr.circle(cx, cy - 4f * s, 6f * s, 10);
+        if (bookName.contains("Thông Thái") || bookName.contains("Bị Động") ||
+            bookName.contains("Mắt Đại Bàng") || bookName.contains("Thuần Hóa")) {
+            drawPassiveSpellBook(sr, cx, cy, s, timer);
         } else {
-            sr.setColor(1f, 0.9f, 0.35f, 1f);
-            sr.circle(cx, cy - 4f * s, 5f * s, 10);
+            drawActiveSpellBook(sr, cx, cy, s, timer);
         }
     }
 
-    public static void drawPotionFlask(ShapeRenderer sr, float cx, float cy, float s, String name) {
-        Color liquidColor = new Color(0.2f, 0.95f, 0.45f, 1f); // Stamina green
-        if (name.equals("Nước Tăng Lực")) liquidColor = new Color(0.2f, 0.75f, 1f, 1f);
-        else if (name.equals("Nước Bức Phá") || name.equals("Nước Bứt Phá")) liquidColor = new Color(0.95f, 0.22f, 0.20f, 1f);
-
-        // Round potion flask body
-        sr.setColor(0.85f, 0.95f, 1f, 0.4f); // Glass
-        sr.circle(cx, cy - 6f * s, 24f * s, 24);
-
-        // Bubbling liquid inside
-        sr.setColor(liquidColor);
-        sr.circle(cx, cy - 8f * s, 20f * s, 20);
-
-        // Bubbles
-        sr.setColor(1f, 1f, 1f, 0.85f);
-        sr.circle(cx - 6f * s, cy - 6f * s, 3f * s, 8);
-        sr.circle(cx + 5f * s, cy - 12f * s, 2f * s, 6);
-
-        // Flask neck
-        sr.setColor(0.85f, 0.95f, 1f, 0.5f);
-        sr.rect(cx - 7f * s, cy + 10f * s, 14f * s, 14f * s);
-
-        // Cork stopper
-        sr.setColor(0.60f, 0.42f, 0.24f, 1f);
-        sr.rect(cx - 8f * s, cy + 20f * s, 16f * s, 8f * s);
+    private static void drawGenericTrash(ShapeRenderer sr, float cx, float cy, float s) {
+        drawBoot(sr, cx, cy, s);
     }
 
-    public static void drawLineSpool(ShapeRenderer sr, float cx, float cy, float s) {
-        // Line spool flanges (2 golden discs)
-        sr.setColor(0.35f, 0.38f, 0.42f, 1f);
-        sr.rect(cx - 22f * s, cy - 18f * s, 44f * s, 36f * s);
-
-        // Braided golden line wound around core
-        sr.setColor(1f, 0.85f, 0.25f, 1f);
-        sr.rect(cx - 16f * s, cy - 14f * s, 32f * s, 28f * s);
-        sr.setColor(0.85f, 0.65f, 0.15f, 1f);
-        for (int i = 0; i < 4; i++) {
-            sr.rect(cx - 16f * s, cy - 10f * s + i * 7f * s, 32f * s, 2f * s);
-        }
-
-        // Outer spool rim lip
-        sr.setColor(0.18f, 0.20f, 0.24f, 1f);
-        sr.rect(cx - 24f * s, cy - 18f * s, 6f * s, 36f * s);
-        sr.rect(cx + 18f * s, cy - 18f * s, 6f * s, 36f * s);
+    public static void drawBoot(ShapeRenderer sr, float cx, float cy, float s) {
+        // --- LAYER: background_glow ---
+        sr.setColor(0.28f, 0.33f, 0.41f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64.0f, 68.0f, 42.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.35f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 112.0f, 34.0f, 8.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.28f, 0.33f, 0.41f, 1.00f);
+        fillQuad(sr, cx, cy, s, 42.0f, 24.0f, 70.0f, 24.0f, 70.0f, 76.0f, 42.0f, 76.0f);
+        sr.setColor(0.12f, 0.16f, 0.23f, 1.00f);
+        fillQuad(sr, cx, cy, s, 40.0f, 20.0f, 72.0f, 20.0f, 72.0f, 28.0f, 40.0f, 28.0f);
+        sr.setColor(0.20f, 0.25f, 0.33f, 1.00f);
+        fillCircle(sr, cx, cy, s, 56.0f, 74.0f, 24.0f);
+        fillCircle(sr, cx, cy, s, 82.0f, 80.0f, 18.0f);
+        fillQuad(sr, cx, cy, s, 42.0f, 70.0f, 88.0f, 70.0f, 88.0f, 94.0f, 42.0f, 94.0f);
+        sr.setColor(0.06f, 0.09f, 0.16f, 1.00f);
+        fillQuad(sr, cx, cy, s, 38.0f, 94.0f, 94.0f, 94.0f, 94.0f, 104.0f, 38.0f, 104.0f);
+        sr.setColor(0.01f, 0.02f, 0.09f, 1.00f);
+        fillQuad(sr, cx, cy, s, 42.0f, 100.0f, 48.0f, 100.0f, 48.0f, 105.0f, 42.0f, 105.0f);
+        fillQuad(sr, cx, cy, s, 52.0f, 100.0f, 58.0f, 100.0f, 58.0f, 105.0f, 52.0f, 105.0f);
+        fillQuad(sr, cx, cy, s, 62.0f, 100.0f, 68.0f, 100.0f, 68.0f, 105.0f, 62.0f, 105.0f);
+        fillQuad(sr, cx, cy, s, 72.0f, 100.0f, 78.0f, 100.0f, 78.0f, 105.0f, 72.0f, 105.0f);
+        fillQuad(sr, cx, cy, s, 82.0f, 100.0f, 88.0f, 100.0f, 88.0f, 105.0f, 82.0f, 105.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(0.47f, 0.21f, 0.06f, 1.00f);
+        fillQuad(sr, cx, cy, s, 46.0f, 44.0f, 62.0f, 44.0f, 62.0f, 58.0f, 46.0f, 58.0f);
+        sr.setColor(0.85f, 0.47f, 0.02f, 1.00f);
+        drawLine(sr, cx, cy, s, 48.0f, 46.0f, 60.0f, 46.0f, 1.2f);
+        drawLine(sr, cx, cy, s, 48.0f, 56.0f, 60.0f, 56.0f, 1.2f);
+        drawLine(sr, cx, cy, s, 48.0f, 46.0f, 48.0f, 56.0f, 1.2f);
+        drawLine(sr, cx, cy, s, 60.0f, 46.0f, 60.0f, 56.0f, 1.2f);
+        sr.setColor(0.27f, 0.10f, 0.01f, 1.00f);
+        fillCircle(sr, cx, cy, s, 50.0f, 84.0f, 2.0f);
+        fillCircle(sr, cx, cy, s, 70.0f, 88.0f, 2.5f);
+        fillCircle(sr, cx, cy, s, 78.0f, 74.0f, 1.5f);
+        sr.setColor(0.22f, 0.74f, 0.97f, 1.00f);
+        fillCircle(sr, cx, cy, s, 94.0f, 98.0f, 3.5f);
+        fillTri(sr, cx, cy, s, 94.0f, 93.0f, 91.0f, 98.0f, 97.0f, 98.0f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.60f);
+        drawLine(sr, cx, cy, s, 45.0f, 26.0f, 45.0f, 70.0f, 2.5f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.70f);
+        drawLine(sr, cx, cy, s, 72.0f, 74.0f, 77.1f, 75.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 77.1f, 75.0f, 81.3f, 76.6f, 2.0f);
+        drawLine(sr, cx, cy, s, 81.3f, 76.6f, 84.5f, 78.6f, 2.0f);
+        drawLine(sr, cx, cy, s, 84.5f, 78.6f, 86.7f, 81.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 86.7f, 81.0f, 88.0f, 84.0f, 2.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 93.0f, 97.0f, 1.2f);
     }
 
-    public static void drawGoldTalisman(ShapeRenderer sr, float cx, float cy, float s, float timer) {
-        // Radiant golden aura
-        float p = 0.5f + 0.5f * MathUtils.sin(timer * 5f);
-        sr.setColor(1f, 0.85f, 0.25f, 0.3f * p);
-        sr.circle(cx, cy, 32f * s, 20);
-
-        // Yellow talisman paper
-        sr.setColor(0.95f, 0.82f, 0.22f, 1f);
-        sr.rect(cx - 14f * s, cy - 24f * s, 28f * s, 48f * s);
-
-        // Red sacred rune calligraphy
-        sr.setColor(0.85f, 0.15f, 0.15f, 1f);
-        sr.circle(cx, cy + 12f * s, 5f * s, 10);
-        sr.rect(cx - 6f * s, cy + 2f * s, 12f * s, 3f * s);
-        sr.rect(cx - 2f * s, cy - 14f * s, 4f * s, 16f * s);
-        sr.rect(cx - 8f * s, cy - 8f * s, 16f * s, 2.5f * s);
+    public static void drawBottle(ShapeRenderer sr, float cx, float cy, float s, float timer) {
+        // --- LAYER: background_glow ---
+        sr.setColor(0.01f, 0.52f, 0.78f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 42.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.30f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 112.0f, 26.0f, 7.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.49f, 0.83f, 0.99f, 0.75f);
+        fillQuad(sr, cx, cy, s, 48.0f, 44.0f, 80.0f, 44.0f, 80.0f, 102.0f, 48.0f, 102.0f);
+        sr.setColor(0.01f, 0.52f, 0.78f, 0.60f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 102.0f, 16.0f, 5.0f);
+        sr.setColor(0.49f, 0.83f, 0.99f, 0.75f);
+        fillQuad(sr, cx, cy, s, 48.0f, 44.0f, 80.0f, 44.0f, 72.0f, 26.0f, 56.0f, 26.0f);
+        sr.setColor(0.22f, 0.74f, 0.97f, 0.80f);
+        fillQuad(sr, cx, cy, s, 58.0f, 18.0f, 70.0f, 18.0f, 70.0f, 28.0f, 58.0f, 28.0f);
+        sr.setColor(0.11f, 0.31f, 0.85f, 1.00f);
+        fillQuad(sr, cx, cy, s, 56.0f, 12.0f, 72.0f, 12.0f, 72.0f, 20.0f, 56.0f, 20.0f);
+        sr.setColor(0.15f, 0.39f, 0.92f, 1.00f);
+        fillQuad(sr, cx, cy, s, 55.0f, 10.0f, 73.0f, 10.0f, 73.0f, 13.0f, 55.0f, 13.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(0.08f, 0.50f, 0.24f, 0.75f);
+        fillQuad(sr, cx, cy, s, 50.0f, 74.0f, 78.0f, 74.0f, 78.0f, 100.0f, 50.0f, 100.0f);
+        sr.setColor(0.09f, 0.40f, 0.20f, 0.80f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 74.0f, 14.0f, 3.0f);
+        sr.setColor(0.97f, 0.98f, 0.99f, 1.00f);
+        fillQuad(sr, cx, cy, s, 48.0f, 54.0f, 78.0f, 56.0f, 76.0f, 68.0f, 48.0f, 66.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        drawLine(sr, cx, cy, s, 50.0f, 60.0f, 74.0f, 62.0f, 2.0f);
+        sr.setColor(0.73f, 0.90f, 0.99f, 1.00f);
+        fillCircle(sr, cx, cy, s, 58.0f, 86.0f, 2.0f);
+        fillCircle(sr, cx, cy, s, 70.0f, 92.0f, 1.5f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.85f);
+        drawLine(sr, cx, cy, s, 52.0f, 46.0f, 52.0f, 100.0f, 2.5f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.50f);
+        drawLine(sr, cx, cy, s, 56.0f, 48.0f, 56.0f, 98.0f, 1.0f);
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 58.0f, 12.0f, 68.0f, 12.0f, 1.5f);
     }
 
-    public static void drawFishingNet(ShapeRenderer sr, float cx, float cy, float s) {
-        // Folded diamond fishing net mesh
-        sr.setColor(0.2f, 0.75f, 0.95f, 0.95f);
-        sr.rectLine(cx - 20f * s, cy - 16f * s, cx + 20f * s, cy + 16f * s, 2.5f * s);
-        sr.rectLine(cx - 20f * s, cy + 16f * s, cx + 20f * s, cy - 16f * s, 2.5f * s);
-        sr.rectLine(cx - 20f * s, cy, cx + 20f * s, cy, 2.5f * s);
-        sr.rectLine(cx, cy - 16f * s, cx, cy + 16f * s, 2.5f * s);
+    public static void drawTire(ShapeRenderer sr, float cx, float cy, float s) {
+        // --- LAYER: background_glow ---
+        sr.setColor(0.20f, 0.25f, 0.33f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 44.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.40f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 112.0f, 30.0f, 8.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.12f, 0.16f, 0.23f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 38.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 34.0f);
+        sr.setColor(0.06f, 0.09f, 0.16f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 20.0f);
+        sr.setColor(0.01f, 0.17f, 0.13f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 16.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(0.01f, 0.02f, 0.09f, 1.00f);
+        fillQuad(sr, cx, cy, s, 62.0f, 26.0f, 66.0f, 26.0f, 66.0f, 32.0f, 62.0f, 32.0f);
+        fillQuad(sr, cx, cy, s, 62.0f, 96.0f, 66.0f, 96.0f, 66.0f, 102.0f, 62.0f, 102.0f);
+        fillQuad(sr, cx, cy, s, 26.0f, 62.0f, 32.0f, 62.0f, 32.0f, 66.0f, 26.0f, 66.0f);
+        fillQuad(sr, cx, cy, s, 96.0f, 62.0f, 102.0f, 62.0f, 102.0f, 66.0f, 96.0f, 66.0f);
+        fillQuad(sr, cx, cy, s, 37.0f, 37.0f, 42.0f, 37.0f, 42.0f, 42.0f, 37.0f, 42.0f);
+        fillQuad(sr, cx, cy, s, 86.0f, 37.0f, 91.0f, 37.0f, 91.0f, 42.0f, 86.0f, 42.0f);
+        fillQuad(sr, cx, cy, s, 37.0f, 86.0f, 42.0f, 86.0f, 42.0f, 91.0f, 37.0f, 91.0f);
+        fillQuad(sr, cx, cy, s, 86.0f, 86.0f, 91.0f, 86.0f, 91.0f, 91.0f, 86.0f, 91.0f);
+        sr.setColor(0.09f, 0.64f, 0.29f, 1.00f);
+        drawLine(sr, cx, cy, s, 46.0f, 32.0f, 43.6f, 26.9f, 3.5f);
+        drawLine(sr, cx, cy, s, 43.6f, 26.9f, 41.2f, 22.7f, 3.5f);
+        drawLine(sr, cx, cy, s, 41.2f, 22.7f, 38.8f, 19.5f, 3.5f);
+        drawLine(sr, cx, cy, s, 38.8f, 19.5f, 36.4f, 17.3f, 3.5f);
+        drawLine(sr, cx, cy, s, 36.4f, 17.3f, 34.0f, 16.0f, 3.5f);
+        sr.setColor(0.08f, 0.50f, 0.24f, 1.00f);
+        drawLine(sr, cx, cy, s, 84.0f, 84.0f, 88.6f, 89.0f, 3.0f);
+        drawLine(sr, cx, cy, s, 88.6f, 89.0f, 92.6f, 92.6f, 3.0f);
+        drawLine(sr, cx, cy, s, 92.6f, 92.6f, 96.2f, 95.0f, 3.0f);
+        drawLine(sr, cx, cy, s, 96.2f, 95.0f, 99.4f, 96.2f, 3.0f);
+        drawLine(sr, cx, cy, s, 99.4f, 96.2f, 102.0f, 96.0f, 3.0f);
+        sr.setColor(0.13f, 0.77f, 0.37f, 1.00f);
+        fillCircle(sr, cx, cy, s, 34.0f, 16.0f, 3.0f);
+        fillCircle(sr, cx, cy, s, 102.0f, 96.0f, 2.5f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.60f);
+        drawLine(sr, cx, cy, s, 38.0f, 52.0f, 40.3f, 49.7f, 2.5f);
+        drawLine(sr, cx, cy, s, 40.3f, 49.7f, 42.7f, 47.3f, 2.5f);
+        drawLine(sr, cx, cy, s, 42.7f, 47.3f, 45.0f, 45.0f, 2.5f);
+        drawLine(sr, cx, cy, s, 45.0f, 45.0f, 47.3f, 42.7f, 2.5f);
+        drawLine(sr, cx, cy, s, 47.3f, 42.7f, 49.7f, 40.3f, 2.5f);
+        drawLine(sr, cx, cy, s, 49.7f, 40.3f, 52.0f, 38.0f, 2.5f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.70f);
+        drawLine(sr, cx, cy, s, 50.0f, 64.0f, 52.3f, 61.7f, 1.5f);
+        drawLine(sr, cx, cy, s, 52.3f, 61.7f, 54.7f, 59.3f, 1.5f);
+        drawLine(sr, cx, cy, s, 54.7f, 59.3f, 57.0f, 57.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 57.0f, 57.0f, 59.3f, 54.7f, 1.5f);
+        drawLine(sr, cx, cy, s, 59.3f, 54.7f, 61.7f, 52.3f, 1.5f);
+        drawLine(sr, cx, cy, s, 61.7f, 52.3f, 64.0f, 50.0f, 1.5f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 37.0f, 22.0f, 1.2f);
+    }
 
-        // Outer cork floats on net border
-        sr.setColor(0.85f, 0.55f, 0.22f, 1f);
-        sr.circle(cx - 20f * s, cy + 16f * s, 4.5f * s, 8);
-        sr.circle(cx, cy + 16f * s, 4.5f * s, 8);
-        sr.circle(cx + 20f * s, cy + 16f * s, 4.5f * s, 8);
+    public static void drawTrashBag(ShapeRenderer sr, float cx, float cy, float s) {
+        // --- LAYER: background_glow ---
+        sr.setColor(0.12f, 0.16f, 0.23f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64.0f, 68.0f, 42.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.40f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 112.0f, 32.0f, 8.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.20f, 0.25f, 0.33f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 74.0f, 30.0f);
+        fillCircle(sr, cx, cy, s, 48.0f, 78.0f, 22.0f);
+        fillCircle(sr, cx, cy, s, 80.0f, 78.0f, 22.0f);
+        sr.setColor(0.12f, 0.16f, 0.23f, 1.00f);
+        fillQuad(sr, cx, cy, s, 54.0f, 40.0f, 74.0f, 40.0f, 74.0f, 52.0f, 54.0f, 52.0f);
+        sr.setColor(0.20f, 0.25f, 0.33f, 1.00f);
+        fillTri(sr, cx, cy, s, 56.0f, 42.0f, 42.0f, 24.0f, 50.0f, 38.0f);
+        fillTri(sr, cx, cy, s, 72.0f, 42.0f, 86.0f, 24.0f, 78.0f, 38.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(0.06f, 0.09f, 0.16f, 1.00f);
+        drawLine(sr, cx, cy, s, 46.0f, 64.0f, 53.2f, 68.5f, 3.0f);
+        drawLine(sr, cx, cy, s, 53.2f, 68.5f, 60.4f, 70.7f, 3.0f);
+        drawLine(sr, cx, cy, s, 60.4f, 70.7f, 67.6f, 70.7f, 3.0f);
+        drawLine(sr, cx, cy, s, 67.6f, 70.7f, 74.8f, 68.5f, 3.0f);
+        drawLine(sr, cx, cy, s, 74.8f, 68.5f, 82.0f, 64.0f, 3.0f);
+        drawLine(sr, cx, cy, s, 40.0f, 82.0f, 49.6f, 86.5f, 2.5f);
+        drawLine(sr, cx, cy, s, 49.6f, 86.5f, 59.2f, 88.7f, 2.5f);
+        drawLine(sr, cx, cy, s, 59.2f, 88.7f, 68.8f, 88.7f, 2.5f);
+        drawLine(sr, cx, cy, s, 68.8f, 88.7f, 78.4f, 86.5f, 2.5f);
+        drawLine(sr, cx, cy, s, 78.4f, 86.5f, 88.0f, 82.0f, 2.5f);
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.00f);
+        drawLine(sr, cx, cy, s, 54.0f, 46.0f, 58.0f, 47.3f, 2.5f);
+        drawLine(sr, cx, cy, s, 58.0f, 47.3f, 62.0f, 47.9f, 2.5f);
+        drawLine(sr, cx, cy, s, 62.0f, 47.9f, 66.0f, 47.9f, 2.5f);
+        drawLine(sr, cx, cy, s, 66.0f, 47.9f, 70.0f, 47.3f, 2.5f);
+        drawLine(sr, cx, cy, s, 70.0f, 47.3f, 74.0f, 46.0f, 2.5f);
+        sr.setColor(0.97f, 0.44f, 0.44f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 48.0f, 2.0f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.60f);
+        drawLine(sr, cx, cy, s, 44.0f, 60.0f, 52.0f, 64.5f, 2.0f);
+        drawLine(sr, cx, cy, s, 52.0f, 64.5f, 60.0f, 66.7f, 2.0f);
+        drawLine(sr, cx, cy, s, 60.0f, 66.7f, 68.0f, 66.7f, 2.0f);
+        drawLine(sr, cx, cy, s, 68.0f, 66.7f, 76.0f, 64.5f, 2.0f);
+        drawLine(sr, cx, cy, s, 76.0f, 64.5f, 84.0f, 60.0f, 2.0f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.70f);
+        drawLine(sr, cx, cy, s, 50.0f, 70.0f, 60.0f, 82.0f, 1.8f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 45.0f, 27.0f, 1.5f);
+    }
+
+    public static void drawAncientVase(ShapeRenderer sr, float cx, float cy, float s, float timer) {
+        // --- LAYER: background_glow ---
+        sr.setColor(0.96f, 0.62f, 0.04f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 44.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.40f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 112.0f, 28.0f, 7.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.47f, 0.21f, 0.06f, 1.00f);
+        fillQuad(sr, cx, cy, s, 48.0f, 96.0f, 80.0f, 96.0f, 80.0f, 106.0f, 48.0f, 106.0f);
+        sr.setColor(0.05f, 0.58f, 0.53f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 68.0f, 30.0f);
+        fillQuad(sr, cx, cy, s, 52.0f, 46.0f, 76.0f, 46.0f, 70.0f, 24.0f, 58.0f, 24.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 24.0f, 16.0f, 5.0f);
+        sr.setColor(0.07f, 0.37f, 0.35f, 1.00f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 23.0f, 12.0f, 3.5f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        drawLine(sr, cx, cy, s, 52.0f, 28.0f, 46.7f, 32.2f, 4.0f);
+        drawLine(sr, cx, cy, s, 46.7f, 32.2f, 43.7f, 37.0f, 4.0f);
+        drawLine(sr, cx, cy, s, 43.7f, 37.0f, 42.9f, 42.2f, 4.0f);
+        drawLine(sr, cx, cy, s, 42.9f, 42.2f, 44.3f, 47.8f, 4.0f);
+        drawLine(sr, cx, cy, s, 44.3f, 47.8f, 48.0f, 54.0f, 4.0f);
+        drawLine(sr, cx, cy, s, 76.0f, 28.0f, 81.3f, 32.2f, 4.0f);
+        drawLine(sr, cx, cy, s, 81.3f, 32.2f, 84.3f, 37.0f, 4.0f);
+        drawLine(sr, cx, cy, s, 84.3f, 37.0f, 85.1f, 42.2f, 4.0f);
+        drawLine(sr, cx, cy, s, 85.1f, 42.2f, 83.7f, 47.8f, 4.0f);
+        drawLine(sr, cx, cy, s, 83.7f, 47.8f, 80.0f, 54.0f, 4.0f);
+        sr.setColor(0.92f, 0.70f, 0.03f, 1.00f);
+        fillQuad(sr, cx, cy, s, 36.0f, 64.0f, 92.0f, 64.0f, 92.0f, 72.0f, 36.0f, 72.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        fillCircle(sr, cx, cy, s, 44.0f, 68.0f, 2.5f);
+        fillCircle(sr, cx, cy, s, 54.0f, 68.0f, 2.5f);
+        fillCircle(sr, cx, cy, s, 64.0f, 68.0f, 2.5f);
+        fillCircle(sr, cx, cy, s, 74.0f, 68.0f, 2.5f);
+        fillCircle(sr, cx, cy, s, 84.0f, 68.0f, 2.5f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.85f);
+        drawLine(sr, cx, cy, s, 44.0f, 54.0f, 48.8f, 50.4f, 2.5f);
+        drawLine(sr, cx, cy, s, 48.8f, 50.4f, 53.6f, 47.6f, 2.5f);
+        drawLine(sr, cx, cy, s, 53.6f, 47.6f, 58.4f, 45.6f, 2.5f);
+        drawLine(sr, cx, cy, s, 58.4f, 45.6f, 63.2f, 44.4f, 2.5f);
+        drawLine(sr, cx, cy, s, 63.2f, 44.4f, 68.0f, 44.0f, 2.5f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.60f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 22.0f, 14.0f, 2.0f);
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 60.0f, 68.0f, 68.0f, 68.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 64.0f, 64.0f, 64.0f, 72.0f, 1.5f);
+    }
+
+    public static void drawGoldRing(ShapeRenderer sr, float cx, float cy, float s, float timer) {
+        // --- LAYER: background_glow ---
+        sr.setColor(0.98f, 0.80f, 0.08f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 44.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.35f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 112.0f, 26.0f, 7.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 70.0f, 32.0f);
+        sr.setColor(0.06f, 0.09f, 0.16f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 70.0f, 20.0f);
+        sr.setColor(0.01f, 0.02f, 0.09f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 70.0f, 18.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillQuad(sr, cx, cy, s, 50.0f, 28.0f, 78.0f, 28.0f, 78.0f, 42.0f, 50.0f, 42.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(0.75f, 0.07f, 0.24f, 1.00f);
+        fillTri(sr, cx, cy, s, 52.0f, 32.0f, 56.0f, 16.0f, 64.0f, 12.0f);
+        fillTri(sr, cx, cy, s, 52.0f, 32.0f, 64.0f, 12.0f, 72.0f, 16.0f);
+        fillTri(sr, cx, cy, s, 72.0f, 16.0f, 76.0f, 32.0f, 52.0f, 32.0f);
+        sr.setColor(0.88f, 0.11f, 0.28f, 1.00f);
+        fillQuad(sr, cx, cy, s, 56.0f, 32.0f, 72.0f, 32.0f, 68.0f, 18.0f, 60.0f, 18.0f);
+        sr.setColor(0.99f, 0.64f, 0.69f, 1.00f);
+        fillTri(sr, cx, cy, s, 60.0f, 18.0f, 68.0f, 18.0f, 64.0f, 12.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillCircle(sr, cx, cy, s, 52.0f, 30.0f, 2.5f);
+        fillCircle(sr, cx, cy, s, 76.0f, 30.0f, 2.5f);
+        fillCircle(sr, cx, cy, s, 55.0f, 16.0f, 2.0f);
+        fillCircle(sr, cx, cy, s, 73.0f, 16.0f, 2.0f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.95f);
+        fillTri(sr, cx, cy, s, 62.0f, 18.0f, 66.0f, 18.0f, 64.0f, 14.0f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.80f);
+        drawLine(sr, cx, cy, s, 40.0f, 58.0f, 41.0f, 52.6f, 2.0f);
+        drawLine(sr, cx, cy, s, 41.0f, 52.6f, 42.6f, 47.8f, 2.0f);
+        drawLine(sr, cx, cy, s, 42.6f, 47.8f, 44.6f, 43.4f, 2.0f);
+        drawLine(sr, cx, cy, s, 44.6f, 43.4f, 47.0f, 39.4f, 2.0f);
+        drawLine(sr, cx, cy, s, 47.0f, 39.4f, 50.0f, 36.0f, 2.0f);
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 64.0f, 6.0f, 64.0f, 20.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 57.0f, 13.0f, 71.0f, 13.0f, 2.0f);
+    }
+
+    public static void drawSunkenChest(ShapeRenderer sr, float cx, float cy, float s, float timer) {
+        // --- LAYER: background_glow ---
+        sr.setColor(0.98f, 0.80f, 0.08f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 44.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.45f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 112.0f, 36.0f, 8.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.27f, 0.10f, 0.01f, 1.00f);
+        fillQuad(sr, cx, cy, s, 28.0f, 56.0f, 100.0f, 56.0f, 100.0f, 98.0f, 28.0f, 98.0f);
+        sr.setColor(0.47f, 0.21f, 0.06f, 1.00f);
+        fillQuad(sr, cx, cy, s, 26.0f, 28.0f, 102.0f, 28.0f, 102.0f, 52.0f, 26.0f, 52.0f);
+        sr.setColor(0.12f, 0.16f, 0.23f, 1.00f);
+        fillQuad(sr, cx, cy, s, 36.0f, 56.0f, 46.0f, 56.0f, 46.0f, 98.0f, 36.0f, 98.0f);
+        fillQuad(sr, cx, cy, s, 82.0f, 56.0f, 92.0f, 56.0f, 92.0f, 98.0f, 82.0f, 98.0f);
+        sr.setColor(0.20f, 0.25f, 0.33f, 1.00f);
+        fillQuad(sr, cx, cy, s, 36.0f, 28.0f, 46.0f, 28.0f, 46.0f, 52.0f, 36.0f, 52.0f);
+        fillQuad(sr, cx, cy, s, 82.0f, 28.0f, 92.0f, 28.0f, 92.0f, 52.0f, 82.0f, 52.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillCircle(sr, cx, cy, s, 44.0f, 52.0f, 4.5f);
+        fillCircle(sr, cx, cy, s, 52.0f, 50.0f, 5.0f);
+        sr.setColor(0.99f, 0.88f, 0.28f, 1.00f);
+        fillCircle(sr, cx, cy, s, 60.0f, 53.0f, 4.5f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillCircle(sr, cx, cy, s, 68.0f, 51.0f, 5.0f);
+        sr.setColor(0.99f, 0.88f, 0.28f, 1.00f);
+        fillCircle(sr, cx, cy, s, 76.0f, 53.0f, 4.5f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillCircle(sr, cx, cy, s, 84.0f, 51.0f, 4.0f);
+        sr.setColor(0.02f, 0.71f, 0.83f, 1.00f);
+        fillQuad(sr, cx, cy, s, 64.0f, 44.0f, 68.0f, 48.0f, 64.0f, 52.0f, 60.0f, 48.0f);
+        sr.setColor(0.92f, 0.70f, 0.03f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 66.0f, 8.0f);
+        sr.setColor(0.06f, 0.09f, 0.16f, 1.00f);
+        fillQuad(sr, cx, cy, s, 62.0f, 70.0f, 66.0f, 70.0f, 66.0f, 76.0f, 62.0f, 76.0f);
+        fillCircle(sr, cx, cy, s, 61.0f, 65.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 67.0f, 65.0f, 1.5f);
+        sr.setColor(0.58f, 0.64f, 0.72f, 1.00f);
+        fillCircle(sr, cx, cy, s, 34.0f, 90.0f, 3.5f);
+        fillCircle(sr, cx, cy, s, 92.0f, 88.0f, 4.0f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 51.0f, 49.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 67.0f, 50.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 64.0f, 46.0f, 1.2f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.65f);
+        drawLine(sr, cx, cy, s, 30.0f, 32.0f, 98.0f, 32.0f, 2.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 66.0f, 63.0f, 1.5f);
+    }
+
+    public static void drawAncientSword(ShapeRenderer sr, float cx, float cy, float s, float timer) {
+        // --- LAYER: background_glow ---
+        sr.setColor(0.22f, 0.74f, 0.97f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 44.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.35f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 112.0f, 22.0f, 6.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.97f, 0.98f, 0.99f, 1.00f);
+        fillTri(sr, cx, cy, s, 60.0f, 78.0f, 60.0f, 26.0f, 64.0f, 12.0f);
+        fillTri(sr, cx, cy, s, 60.0f, 78.0f, 64.0f, 12.0f, 68.0f, 26.0f);
+        fillTri(sr, cx, cy, s, 68.0f, 26.0f, 68.0f, 78.0f, 60.0f, 78.0f);
+        sr.setColor(0.01f, 0.52f, 0.78f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 26.0f, 64.0f, 76.0f, 2.5f);
+        sr.setColor(0.02f, 0.59f, 0.41f, 1.00f);
+        fillQuad(sr, cx, cy, s, 42.0f, 78.0f, 86.0f, 78.0f, 86.0f, 86.0f, 42.0f, 86.0f);
+        sr.setColor(0.02f, 0.47f, 0.34f, 1.00f);
+        fillTri(sr, cx, cy, s, 42.0f, 78.0f, 36.0f, 74.0f, 42.0f, 74.0f);
+        fillTri(sr, cx, cy, s, 86.0f, 78.0f, 92.0f, 74.0f, 86.0f, 74.0f);
+        sr.setColor(0.60f, 0.11f, 0.11f, 1.00f);
+        fillQuad(sr, cx, cy, s, 61.0f, 86.0f, 67.0f, 86.0f, 67.0f, 104.0f, 61.0f, 104.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 106.0f, 5.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(0.22f, 0.74f, 0.97f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 32.0f, 2.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 44.0f, 2.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 56.0f, 2.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 68.0f, 2.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillCircle(sr, cx, cy, s, 50.0f, 82.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 78.0f, 82.0f, 1.5f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 110.0f, 62.5f, 113.1f, 2.5f);
+        drawLine(sr, cx, cy, s, 62.5f, 113.1f, 61.1f, 116.1f, 2.5f);
+        drawLine(sr, cx, cy, s, 61.1f, 116.1f, 59.9f, 118.9f, 2.5f);
+        drawLine(sr, cx, cy, s, 59.9f, 118.9f, 58.9f, 121.5f, 2.5f);
+        drawLine(sr, cx, cy, s, 58.9f, 121.5f, 58.0f, 124.0f, 2.5f);
+        sr.setColor(0.06f, 0.73f, 0.51f, 1.00f);
+        fillCircle(sr, cx, cy, s, 61.0f, 116.0f, 1.8f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.90f);
+        drawLine(sr, cx, cy, s, 67.0f, 28.0f, 67.0f, 76.0f, 1.5f);
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 60.0f, 12.0f, 68.0f, 12.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 64.0f, 8.0f, 64.0f, 16.0f, 2.0f);
+        fillCircle(sr, cx, cy, s, 63.0f, 105.0f, 1.5f);
+    }
+
+    public static void drawAromaBait(ShapeRenderer sr, float cx, float cy, float s) {
+        // --- LAYER: background_glow ---
+        sr.setColor(0.52f, 0.80f, 0.09f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 44.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.35f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 112.0f, 28.0f, 7.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.75f, 0.95f, 0.39f, 0.70f);
+        fillQuad(sr, cx, cy, s, 42.0f, 42.0f, 86.0f, 42.0f, 86.0f, 100.0f, 42.0f, 100.0f);
+        sr.setColor(0.52f, 0.80f, 0.09f, 0.80f);
+        fillQuad(sr, cx, cy, s, 40.0f, 36.0f, 88.0f, 36.0f, 88.0f, 44.0f, 40.0f, 44.0f);
+        sr.setColor(0.57f, 0.25f, 0.05f, 1.00f);
+        fillQuad(sr, cx, cy, s, 46.0f, 36.0f, 82.0f, 36.0f, 78.0f, 22.0f, 50.0f, 22.0f);
+        sr.setColor(0.85f, 0.47f, 0.02f, 1.00f);
+        fillQuad(sr, cx, cy, s, 42.0f, 40.0f, 86.0f, 40.0f, 86.0f, 44.0f, 42.0f, 44.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(0.64f, 0.90f, 0.21f, 1.00f);
+        fillCircle(sr, cx, cy, s, 54.0f, 74.0f, 9.0f);
+        sr.setColor(0.52f, 0.80f, 0.09f, 1.00f);
+        fillCircle(sr, cx, cy, s, 72.0f, 72.0f, 10.0f);
+        sr.setColor(0.40f, 0.64f, 0.05f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 86.0f, 11.0f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        fillCircle(sr, cx, cy, s, 53.0f, 73.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 71.0f, 71.0f, 1.5f);
+        sr.setColor(0.71f, 0.33f, 0.04f, 1.00f);
+        fillQuad(sr, cx, cy, s, 76.0f, 44.0f, 86.0f, 54.0f, 80.0f, 64.0f, 70.0f, 54.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillTri(sr, cx, cy, s, 75.0f, 53.0f, 76.0f, 51.0f, 77.0f, 53.0f);
+        fillTri(sr, cx, cy, s, 77.0f, 53.0f, 80.0f, 53.0f, 78.0f, 55.0f);
+        fillTri(sr, cx, cy, s, 75.0f, 53.0f, 77.0f, 53.0f, 78.0f, 55.0f);
+        fillTri(sr, cx, cy, s, 75.0f, 53.0f, 78.0f, 55.0f, 79.0f, 57.0f);
+        fillTri(sr, cx, cy, s, 75.0f, 53.0f, 79.0f, 57.0f, 76.0f, 56.0f);
+        fillTri(sr, cx, cy, s, 76.0f, 56.0f, 73.0f, 57.0f, 74.0f, 55.0f);
+        fillTri(sr, cx, cy, s, 75.0f, 53.0f, 76.0f, 56.0f, 74.0f, 55.0f);
+        fillTri(sr, cx, cy, s, 74.0f, 55.0f, 72.0f, 53.0f, 75.0f, 53.0f);
+        sr.setColor(0.75f, 0.95f, 0.39f, 0.80f);
+        drawLine(sr, cx, cy, s, 52.0f, 20.0f, 50.9f, 16.2f, 2.0f);
+        drawLine(sr, cx, cy, s, 50.9f, 16.2f, 50.7f, 13.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 50.7f, 13.0f, 51.5f, 10.2f, 2.0f);
+        drawLine(sr, cx, cy, s, 51.5f, 10.2f, 53.3f, 7.8f, 2.0f);
+        drawLine(sr, cx, cy, s, 53.3f, 7.8f, 56.0f, 6.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 76.0f, 20.0f, 77.2f, 16.9f, 2.0f);
+        drawLine(sr, cx, cy, s, 77.2f, 16.9f, 77.6f, 13.9f, 2.0f);
+        drawLine(sr, cx, cy, s, 77.6f, 13.9f, 77.2f, 11.1f, 2.0f);
+        drawLine(sr, cx, cy, s, 77.2f, 11.1f, 76.0f, 8.5f, 2.0f);
+        drawLine(sr, cx, cy, s, 76.0f, 8.5f, 74.0f, 6.0f, 2.0f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.85f);
+        drawLine(sr, cx, cy, s, 46.0f, 46.0f, 46.0f, 94.0f, 2.5f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.60f);
+        drawLine(sr, cx, cy, s, 52.0f, 24.0f, 76.0f, 24.0f, 1.2f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 76.0f, 54.0f, 1.2f);
+    }
+
+    public static void drawRiskyBait(ShapeRenderer sr, float cx, float cy, float s, float timer) {
+        // --- LAYER: background_glow ---
+        sr.setColor(0.49f, 0.23f, 0.93f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 44.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.45f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 112.0f, 28.0f, 7.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.18f, 0.06f, 0.40f, 1.00f);
+        fillQuad(sr, cx, cy, s, 42.0f, 40.0f, 86.0f, 40.0f, 86.0f, 100.0f, 42.0f, 100.0f);
+        sr.setColor(0.88f, 0.11f, 0.28f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 74.0f, 18.0f);
+        sr.setColor(0.20f, 0.25f, 0.33f, 1.00f);
+        fillQuad(sr, cx, cy, s, 40.0f, 30.0f, 88.0f, 30.0f, 88.0f, 42.0f, 40.0f, 42.0f);
+        sr.setColor(0.28f, 0.33f, 0.41f, 1.00f);
+        fillQuad(sr, cx, cy, s, 38.0f, 28.0f, 90.0f, 28.0f, 90.0f, 31.0f, 38.0f, 31.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(0.97f, 0.98f, 0.99f, 1.00f);
+        fillQuad(sr, cx, cy, s, 48.0f, 58.0f, 80.0f, 58.0f, 80.0f, 88.0f, 48.0f, 88.0f);
+        sr.setColor(0.06f, 0.09f, 0.16f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 69.0f, 6.0f);
+        fillQuad(sr, cx, cy, s, 62.0f, 73.0f, 66.0f, 73.0f, 66.0f, 78.0f, 62.0f, 78.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 62.0f, 68.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 66.0f, 68.0f, 1.2f);
+        sr.setColor(0.06f, 0.09f, 0.16f, 1.00f);
+        drawLine(sr, cx, cy, s, 56.0f, 81.0f, 72.0f, 81.0f, 2.0f);
+        fillCircle(sr, cx, cy, s, 56.0f, 81.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 72.0f, 81.0f, 1.5f);
+        sr.setColor(0.75f, 0.52f, 0.99f, 1.00f);
+        fillCircle(sr, cx, cy, s, 54.0f, 22.0f, 2.5f);
+        sr.setColor(0.96f, 0.25f, 0.37f, 1.00f);
+        fillCircle(sr, cx, cy, s, 74.0f, 18.0f, 3.0f);
+        sr.setColor(0.91f, 0.47f, 0.98f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 14.0f, 2.0f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.75f);
+        drawLine(sr, cx, cy, s, 45.0f, 42.0f, 45.0f, 98.0f, 2.0f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.60f);
+        drawLine(sr, cx, cy, s, 42.0f, 30.0f, 86.0f, 30.0f, 1.5f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 60.0f, 70.0f, 1.8f);
+    }
+
+    public static void drawActiveSpellBook(ShapeRenderer sr, float cx, float cy, float s, float timer) {
+        // --- LAYER: background_glow ---
+        sr.setColor(0.94f, 0.27f, 0.27f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 44.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.40f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 112.0f, 34.0f, 8.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.50f, 0.11f, 0.11f, 1.00f);
+        fillQuad(sr, cx, cy, s, 36.0f, 24.0f, 92.0f, 24.0f, 92.0f, 98.0f, 36.0f, 98.0f);
+        sr.setColor(0.99f, 0.88f, 0.28f, 1.00f);
+        fillQuad(sr, cx, cy, s, 86.0f, 28.0f, 94.0f, 28.0f, 94.0f, 94.0f, 86.0f, 94.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        drawLine(sr, cx, cy, s, 88.0f, 32.0f, 88.0f, 90.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 91.0f, 32.0f, 91.0f, 90.0f, 1.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillTri(sr, cx, cy, s, 36.0f, 24.0f, 50.0f, 24.0f, 36.0f, 38.0f);
+        fillTri(sr, cx, cy, s, 86.0f, 24.0f, 72.0f, 24.0f, 86.0f, 38.0f);
+        fillTri(sr, cx, cy, s, 36.0f, 98.0f, 50.0f, 98.0f, 36.0f, 84.0f);
+        fillTri(sr, cx, cy, s, 86.0f, 98.0f, 72.0f, 98.0f, 86.0f, 84.0f);
+        sr.setColor(0.27f, 0.04f, 0.04f, 1.00f);
+        fillCircle(sr, cx, cy, s, 61.0f, 58.0f, 18.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillCircle(sr, cx, cy, s, 61.0f, 58.0f, 15.0f);
+        sr.setColor(Color.WHITE);
+        fillQuad(sr, cx, cy, s, 60.0f, 46.0f, 62.0f, 46.0f, 62.0f, 64.0f, 60.0f, 64.0f);
+        fillTri(sr, cx, cy, s, 61.0f, 42.0f, 63.0f, 46.0f, 59.0f, 46.0f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        drawLine(sr, cx, cy, s, 56.0f, 64.0f, 66.0f, 64.0f, 2.5f);
+        fillCircle(sr, cx, cy, s, 61.0f, 68.0f, 2.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        fillTri(sr, cx, cy, s, 68.0f, 118.0f, 68.0f, 96.0f, 76.0f, 96.0f);
+        fillTri(sr, cx, cy, s, 76.0f, 96.0f, 76.0f, 118.0f, 72.0f, 112.0f);
+        fillTri(sr, cx, cy, s, 76.0f, 96.0f, 72.0f, 112.0f, 68.0f, 118.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        drawLine(sr, cx, cy, s, 68.0f, 96.0f, 76.0f, 96.0f, 2.0f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.60f);
+        drawLine(sr, cx, cy, s, 39.0f, 26.0f, 39.0f, 96.0f, 2.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 42.0f, 28.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 80.0f, 28.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 61.0f, 46.0f, 1.5f);
+    }
+
+    public static void drawPassiveSpellBook(ShapeRenderer sr, float cx, float cy, float s, float timer) {
+        // --- LAYER: background_glow ---
+        sr.setColor(0.39f, 0.40f, 0.95f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 44.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.40f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 112.0f, 34.0f, 8.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.19f, 0.18f, 0.51f, 1.00f);
+        fillQuad(sr, cx, cy, s, 36.0f, 24.0f, 92.0f, 24.0f, 92.0f, 98.0f, 36.0f, 98.0f);
+        sr.setColor(0.89f, 0.91f, 0.94f, 1.00f);
+        fillQuad(sr, cx, cy, s, 86.0f, 28.0f, 94.0f, 28.0f, 94.0f, 94.0f, 86.0f, 94.0f);
+        sr.setColor(0.58f, 0.64f, 0.72f, 1.00f);
+        drawLine(sr, cx, cy, s, 88.0f, 32.0f, 88.0f, 90.0f, 1.0f);
+        drawLine(sr, cx, cy, s, 91.0f, 32.0f, 91.0f, 90.0f, 1.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(0.80f, 0.84f, 0.88f, 1.00f);
+        fillTri(sr, cx, cy, s, 36.0f, 24.0f, 50.0f, 24.0f, 36.0f, 38.0f);
+        fillTri(sr, cx, cy, s, 86.0f, 24.0f, 72.0f, 24.0f, 86.0f, 38.0f);
+        fillTri(sr, cx, cy, s, 36.0f, 98.0f, 50.0f, 98.0f, 36.0f, 84.0f);
+        fillTri(sr, cx, cy, s, 86.0f, 98.0f, 72.0f, 98.0f, 86.0f, 84.0f);
+        sr.setColor(0.06f, 0.09f, 0.16f, 1.00f);
+        fillCircle(sr, cx, cy, s, 61.0f, 58.0f, 18.0f);
+        sr.setColor(0.22f, 0.74f, 0.97f, 1.00f);
+        fillCircle(sr, cx, cy, s, 61.0f, 58.0f, 15.0f);
+        sr.setColor(0.12f, 0.11f, 0.29f, 1.00f);
+        fillEllipse(sr, cx, cy, s, 61.0f, 58.0f, 10.0f, 6.0f);
+        sr.setColor(0.22f, 0.74f, 0.97f, 1.00f);
+        fillCircle(sr, cx, cy, s, 61.0f, 58.0f, 4.0f);
+        sr.setColor(0.01f, 0.02f, 0.09f, 1.00f);
+        fillCircle(sr, cx, cy, s, 61.0f, 58.0f, 2.0f);
+        sr.setColor(0.01f, 0.52f, 0.78f, 1.00f);
+        fillTri(sr, cx, cy, s, 68.0f, 116.0f, 68.0f, 96.0f, 76.0f, 96.0f);
+        fillTri(sr, cx, cy, s, 76.0f, 96.0f, 76.0f, 116.0f, 72.0f, 112.0f);
+        fillTri(sr, cx, cy, s, 76.0f, 96.0f, 72.0f, 112.0f, 68.0f, 116.0f);
+        sr.setColor(0.22f, 0.74f, 0.97f, 1.00f);
+        fillCircle(sr, cx, cy, s, 72.0f, 116.0f, 3.5f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.60f);
+        drawLine(sr, cx, cy, s, 39.0f, 26.0f, 39.0f, 96.0f, 2.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 60.0f, 57.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 63.0f, 59.0f, 0.8f);
+        fillCircle(sr, cx, cy, s, 71.0f, 115.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 42.0f, 28.0f, 1.2f);
     }
 
     private static void drawGenericPotion(ShapeRenderer sr, float cx, float cy, float s) {
-        drawPotionFlask(sr, cx, cy, s, "Thuốc Hồi Stamina");
+        drawStaminaPotion(sr, cx, cy, s);
     }
 
-    // =========================================================================
-    // NEW TACTICAL & UTILITY ITEMS
-    // =========================================================================
+    public static void drawBread(ShapeRenderer sr, float cx, float cy, float s) {
+        // --- LAYER: background_glow ---
+        sr.setColor(0.47f, 0.21f, 0.06f, 0.00f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 68.0f, 46.0f, 28.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.35f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 86.0f, 42.0f, 12.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.71f, 0.33f, 0.04f, 1.00f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 68.0f, 44.0f, 26.0f);
+        sr.setColor(0.96f, 0.62f, 0.04f, 1.00f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 64.0f, 40.0f, 21.0f);
+        sr.setColor(0.99f, 0.88f, 0.28f, 1.00f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 62.0f, 36.0f, 16.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(0.47f, 0.21f, 0.06f, 1.00f);
+        drawLine(sr, cx, cy, s, 44.0f, 50.0f, 52.0f, 74.0f, 3.5f);
+        drawLine(sr, cx, cy, s, 60.0f, 50.0f, 68.0f, 74.0f, 3.5f);
+        drawLine(sr, cx, cy, s, 76.0f, 50.0f, 84.0f, 74.0f, 3.5f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        drawLine(sr, cx, cy, s, 44.0f, 52.0f, 51.0f, 72.0f, 1.8f);
+        drawLine(sr, cx, cy, s, 60.0f, 52.0f, 67.0f, 72.0f, 1.8f);
+        drawLine(sr, cx, cy, s, 76.0f, 52.0f, 83.0f, 72.0f, 1.8f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillEllipse(sr, cx, cy, s, 48.0f, 62.0f, 3.0f, 1.5f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 62.0f, 3.5f, 2.0f);
+        fillEllipse(sr, cx, cy, s, 80.0f, 62.0f, 3.0f, 1.5f);
+        sr.setColor(1.00f, 0.98f, 0.76f, 1.00f);
+        fillCircle(sr, cx, cy, s, 36.0f, 60.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 92.0f, 60.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 56.0f, 56.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 72.0f, 56.0f, 1.2f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.85f);
+        drawLine(sr, cx, cy, s, 38.0f, 56.0f, 51.0f, 53.0f, 1.2f);
+        drawLine(sr, cx, cy, s, 51.0f, 53.0f, 64.0f, 52.0f, 1.2f);
+        drawLine(sr, cx, cy, s, 64.0f, 52.0f, 77.0f, 53.0f, 1.2f);
+        drawLine(sr, cx, cy, s, 77.0f, 53.0f, 90.0f, 56.0f, 1.2f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 63.0f, 61.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 47.0f, 61.0f, 1.0f);
+        fillCircle(sr, cx, cy, s, 79.0f, 61.0f, 1.0f);
+    }
 
-    public static void drawCryoSpray(ShapeRenderer sr, float cx, float cy, float s, float timer) {
-        // Frost aura
-        float pulse = 0.5f + 0.5f * MathUtils.sin(timer * 5f);
-        sr.setColor(0.3f, 0.85f, 1f, 0.25f * pulse);
-        sr.circle(cx, cy, 38f * s, 24);
+    public static void drawStaminaPotion(ShapeRenderer sr, float cx, float cy, float s) {
+        // --- LAYER: background_glow ---
+        sr.setColor(0.02f, 0.47f, 0.34f, 0.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 72.0f, 42.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.40f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 104.0f, 26.0f, 8.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.06f, 0.09f, 0.16f, 0.60f);
+        fillCircle(sr, cx, cy, s, 64.0f, 74.0f, 32.0f);
+        sr.setColor(0.06f, 0.73f, 0.51f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 74.0f, 28.0f);
+        sr.setColor(0.20f, 0.25f, 0.33f, 1.00f);
+        fillQuad(sr, cx, cy, s, 56.0f, 28.0f, 72.0f, 28.0f, 72.0f, 46.0f, 56.0f, 46.0f);
+        sr.setColor(0.06f, 0.73f, 0.51f, 0.60f);
+        fillQuad(sr, cx, cy, s, 58.0f, 30.0f, 70.0f, 30.0f, 70.0f, 46.0f, 58.0f, 46.0f);
+        sr.setColor(0.39f, 0.45f, 0.55f, 1.00f);
+        fillQuad(sr, cx, cy, s, 54.0f, 24.0f, 74.0f, 24.0f, 74.0f, 30.0f, 54.0f, 30.0f);
+        sr.setColor(0.57f, 0.25f, 0.05f, 1.00f);
+        fillQuad(sr, cx, cy, s, 56.0f, 24.0f, 72.0f, 24.0f, 70.0f, 14.0f, 58.0f, 14.0f);
+        sr.setColor(0.47f, 0.21f, 0.06f, 1.00f);
+        drawLine(sr, cx, cy, s, 57.0f, 18.0f, 71.0f, 18.0f, 1.5f);
+        // --- LAYER: details_and_relief ---
+        fillQuad(sr, cx, cy, s, 55.0f, 36.0f, 73.0f, 36.0f, 73.0f, 40.0f, 55.0f, 40.0f);
+        sr.setColor(0.57f, 0.25f, 0.05f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 40.0f, 60.0f, 50.0f, 2.0f);
+        sr.setColor(0.96f, 0.62f, 0.04f, 1.00f);
+        fillCircle(sr, cx, cy, s, 60.0f, 52.0f, 2.5f);
+        sr.setColor(0.65f, 0.95f, 0.82f, 1.00f);
+        fillCircle(sr, cx, cy, s, 56.0f, 80.0f, 3.5f);
+        fillCircle(sr, cx, cy, s, 72.0f, 70.0f, 4.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 2.5f);
+        fillCircle(sr, cx, cy, s, 60.0f, 90.0f, 2.0f);
+        fillCircle(sr, cx, cy, s, 74.0f, 84.0f, 2.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 55.0f, 79.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 71.0f, 69.0f, 1.5f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.90f);
+        drawLine(sr, cx, cy, s, 44.0f, 56.0f, 48.2f, 51.6f, 3.0f);
+        drawLine(sr, cx, cy, s, 48.2f, 51.6f, 53.0f, 48.5f, 3.0f);
+        drawLine(sr, cx, cy, s, 53.0f, 48.5f, 58.2f, 46.6f, 3.0f);
+        drawLine(sr, cx, cy, s, 58.2f, 46.6f, 64.0f, 46.0f, 3.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 42.0f, 62.0f, 1.8f);
+        sr.setColor(0.43f, 0.91f, 0.72f, 0.80f);
+        drawLine(sr, cx, cy, s, 52.0f, 98.0f, 58.0f, 99.5f, 2.0f);
+        drawLine(sr, cx, cy, s, 58.0f, 99.5f, 64.0f, 100.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 64.0f, 100.0f, 70.0f, 99.5f, 2.0f);
+        drawLine(sr, cx, cy, s, 70.0f, 99.5f, 76.0f, 98.0f, 2.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 60.0f, 16.0f, 1.2f);
+    }
 
-        // Canister metallic cyan body
-        sr.setColor(0.18f, 0.42f, 0.62f, 1f);
-        sr.rect(cx - 15f * s, cy - 24f * s, 30f * s, 42f * s);
-        sr.circle(cx, cy - 22f * s, 15f * s, 20);
+    public static void drawEnergyDrink(ShapeRenderer sr, float cx, float cy, float s) {
+        // --- LAYER: background_glow ---
+        sr.setColor(0.73f, 0.11f, 0.11f, 0.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 44.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.40f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 112.0f, 24.0f, 7.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        fillQuad(sr, cx, cy, s, 42.0f, 28.0f, 86.0f, 28.0f, 86.0f, 104.0f, 42.0f, 104.0f);
+        sr.setColor(0.97f, 0.98f, 0.99f, 1.00f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 104.0f, 22.0f, 6.0f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 28.0f, 20.0f, 5.0f);
+        sr.setColor(0.20f, 0.25f, 0.33f, 1.00f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 27.0f, 17.0f, 4.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(0.58f, 0.64f, 0.72f, 1.00f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 26.0f, 8.0f, 2.5f);
+        sr.setColor(0.12f, 0.16f, 0.23f, 1.00f);
+        fillCircle(sr, cx, cy, s, 62.0f, 26.0f, 1.5f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillQuad(sr, cx, cy, s, 42.0f, 42.0f, 86.0f, 50.0f, 86.0f, 54.0f, 42.0f, 46.0f);
+        fillQuad(sr, cx, cy, s, 42.0f, 84.0f, 86.0f, 92.0f, 86.0f, 96.0f, 42.0f, 88.0f);
+        fillTri(sr, cx, cy, s, 66.0f, 60.0f, 78.0f, 60.0f, 56.0f, 94.0f);
+        fillTri(sr, cx, cy, s, 66.0f, 60.0f, 56.0f, 94.0f, 62.0f, 68.0f);
+        fillTri(sr, cx, cy, s, 68.0f, 36.0f, 66.0f, 60.0f, 62.0f, 68.0f);
+        fillTri(sr, cx, cy, s, 62.0f, 68.0f, 50.0f, 68.0f, 68.0f, 36.0f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.80f);
+        fillTri(sr, cx, cy, s, 65.0f, 62.0f, 74.0f, 62.0f, 59.0f, 88.0f);
+        fillTri(sr, cx, cy, s, 65.0f, 62.0f, 59.0f, 88.0f, 63.0f, 66.0f);
+        fillTri(sr, cx, cy, s, 67.0f, 40.0f, 65.0f, 62.0f, 63.0f, 66.0f);
+        fillTri(sr, cx, cy, s, 63.0f, 66.0f, 54.0f, 66.0f, 67.0f, 40.0f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.85f);
+        drawLine(sr, cx, cy, s, 48.0f, 30.0f, 48.0f, 102.0f, 2.5f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.50f);
+        drawLine(sr, cx, cy, s, 52.0f, 32.0f, 52.0f, 100.0f, 1.0f);
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 46.0f, 27.0f, 55.0f, 25.5f, 1.5f);
+        drawLine(sr, cx, cy, s, 55.0f, 25.5f, 64.0f, 25.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 64.0f, 25.0f, 73.0f, 25.5f, 1.5f);
+        drawLine(sr, cx, cy, s, 73.0f, 25.5f, 82.0f, 27.0f, 1.5f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.90f);
+        fillCircle(sr, cx, cy, s, 78.0f, 46.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 82.0f, 74.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 46.0f, 62.0f, 1.0f);
+    }
 
-        // Chrome metallic gradient strip
-        sr.setColor(0.65f, 0.90f, 1f, 0.85f);
-        sr.rect(cx - 11f * s, cy - 20f * s, 5f * s, 36f * s);
-
-        // Canister shoulder & nozzle collar
-        sr.setColor(0.75f, 0.82f, 0.88f, 1f);
-        sr.triangle(cx - 15f * s, cy + 18f * s, cx + 15f * s, cy + 18f * s, cx, cy + 28f * s);
-        sr.rect(cx - 6f * s, cy + 24f * s, 12f * s, 8f * s);
-
-        // Spray push button nozzle
-        sr.setColor(0.2f, 0.75f, 0.95f, 1f);
-        sr.rect(cx - 5f * s, cy + 30f * s, 10f * s, 8f * s);
-        // Nozzle spout angled to the left
-        sr.rect(cx - 10f * s, cy + 33f * s, 6f * s, 4f * s);
-
-        // Snowflake frost emblem on body
-        sr.setColor(1f, 1f, 1f, 0.95f);
-        sr.rectLine(cx - 8f * s, cy, cx + 8f * s, cy, 2.5f * s);
-        sr.rectLine(cx, cy - 8f * s, cx, cy + 8f * s, 2.5f * s);
-        sr.rectLine(cx - 6f * s, cy - 6f * s, cx + 6f * s, cy + 6f * s, 2f * s);
-        sr.rectLine(cx - 6f * s, cy + 6f * s, cx + 6f * s, cy - 6f * s, 2f * s);
-
-        // Freezing cryo vapor puffs escaping from nozzle
-        sr.setColor(0.7f, 0.95f, 1f, 0.75f);
-        sr.circle(cx - 14f * s, cy + 35f * s, 4.5f * s, 10);
-        sr.circle(cx - 21f * s, cy + 39f * s, 6.5f * s, 10);
+    public static void drawOverdrivePotion(ShapeRenderer sr, float cx, float cy, float s) {
+        // --- LAYER: background_glow ---
+        sr.setColor(0.86f, 0.15f, 0.15f, 0.20f);
+        fillCircle(sr, cx, cy, s, 64.0f, 72.0f, 44.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.45f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 108.0f, 30.0f, 8.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.12f, 0.16f, 0.23f, 0.60f);
+        fillQuad(sr, cx, cy, s, 56.0f, 36.0f, 72.0f, 36.0f, 94.0f, 100.0f, 34.0f, 100.0f);
+        sr.setColor(0.98f, 0.45f, 0.09f, 1.00f);
+        fillQuad(sr, cx, cy, s, 58.0f, 60.0f, 70.0f, 60.0f, 90.0f, 98.0f, 38.0f, 98.0f);
+        sr.setColor(0.60f, 0.11f, 0.11f, 1.00f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 98.0f, 26.0f, 6.0f);
+        sr.setColor(0.20f, 0.25f, 0.33f, 1.00f);
+        fillQuad(sr, cx, cy, s, 56.0f, 24.0f, 72.0f, 24.0f, 72.0f, 40.0f, 56.0f, 40.0f);
+        sr.setColor(0.39f, 0.45f, 0.55f, 1.00f);
+        fillQuad(sr, cx, cy, s, 54.0f, 20.0f, 74.0f, 20.0f, 74.0f, 25.0f, 54.0f, 25.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillTri(sr, cx, cy, s, 64.0f, 10.0f, 70.0f, 20.0f, 58.0f, 20.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        fillQuad(sr, cx, cy, s, 53.0f, 32.0f, 75.0f, 32.0f, 75.0f, 38.0f, 53.0f, 38.0f);
+        sr.setColor(0.27f, 0.10f, 0.01f, 1.00f);
+        fillCircle(sr, cx, cy, s, 56.0f, 35.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 64.0f, 35.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 72.0f, 35.0f, 1.2f);
+        sr.setColor(0.99f, 0.88f, 0.28f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 78.0f, 9.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 64.0f, 78.0f, 5.0f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        fillTri(sr, cx, cy, s, 52.0f, 86.0f, 58.0f, 82.0f, 54.0f, 90.0f);
+        fillTri(sr, cx, cy, s, 74.0f, 72.0f, 78.0f, 78.0f, 72.0f, 80.0f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.70f);
+        drawLine(sr, cx, cy, s, 42.0f, 84.0f, 48.0f, 84.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 47.0f, 74.0f, 52.0f, 74.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 52.0f, 64.0f, 56.0f, 64.0f, 1.5f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.90f);
+        drawLine(sr, cx, cy, s, 56.0f, 36.0f, 38.0f, 96.0f, 2.2f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.80f);
+        drawLine(sr, cx, cy, s, 58.0f, 24.0f, 58.0f, 36.0f, 1.5f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 64.0f, 78.0f, 2.5f);
+        fillCircle(sr, cx, cy, s, 64.0f, 12.0f, 1.2f);
     }
 
     public static void drawHerbalTea(ShapeRenderer sr, float cx, float cy, float s, float timer) {
-        // Dark polished wooden saucer
-        float sw = 50f * s;
-        float sh = 16f * s;
-        sr.setColor(0.35f, 0.22f, 0.12f, 1f);
-        sr.ellipse(cx - sw / 2f, cy - 24f * s - sh / 2f, sw, sh);
-        sr.setColor(0.50f, 0.32f, 0.18f, 1f);
-        sr.ellipse(cx - sw * 0.42f, cy - 23f * s - sh * 0.42f, sw * 0.84f, sh * 0.84f);
+        // --- LAYER: background_glow ---
+        sr.setColor(0.02f, 0.37f, 0.27f, 0.00f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 76.0f, 42.0f, 24.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.35f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 102.0f, 36.0f, 10.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.89f, 0.91f, 0.94f, 1.00f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 94.0f, 42.0f, 12.0f);
+        sr.setColor(0.02f, 0.59f, 0.41f, 0.30f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 93.0f, 36.0f, 9.0f);
+        sr.setColor(0.89f, 0.91f, 0.94f, 1.00f);
+        fillTri(sr, cx, cy, s, 36.0f, 60.0f, 92.0f, 60.0f, 89.5f, 72.2f);
+        fillTri(sr, cx, cy, s, 36.0f, 60.0f, 89.5f, 72.2f, 84.0f, 81.0f);
+        fillTri(sr, cx, cy, s, 36.0f, 60.0f, 84.0f, 81.0f, 75.5f, 86.2f);
+        fillTri(sr, cx, cy, s, 36.0f, 60.0f, 75.5f, 86.2f, 64.0f, 88.0f);
+        fillTri(sr, cx, cy, s, 36.0f, 60.0f, 64.0f, 88.0f, 52.5f, 86.2f);
+        fillTri(sr, cx, cy, s, 36.0f, 60.0f, 52.5f, 86.2f, 44.0f, 81.0f);
+        fillTri(sr, cx, cy, s, 44.0f, 81.0f, 38.5f, 72.2f, 36.0f, 60.0f);
+        sr.setColor(0.80f, 0.84f, 0.88f, 1.00f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 60.0f, 28.0f, 10.0f);
+        sr.setColor(0.20f, 0.83f, 0.60f, 1.00f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 61.0f, 25.0f, 8.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(0.02f, 0.37f, 0.27f, 1.00f);
+        fillTri(sr, cx, cy, s, 57.0f, 58.5f, 60.0f, 58.0f, 63.0f, 58.5f);
+        fillTri(sr, cx, cy, s, 57.0f, 58.5f, 63.0f, 58.5f, 66.0f, 60.0f);
+        fillTri(sr, cx, cy, s, 57.0f, 58.5f, 66.0f, 60.0f, 63.0f, 61.5f);
+        fillTri(sr, cx, cy, s, 57.0f, 58.5f, 63.0f, 61.5f, 60.0f, 62.0f);
+        fillTri(sr, cx, cy, s, 57.0f, 58.5f, 60.0f, 62.0f, 57.0f, 61.5f);
+        fillTri(sr, cx, cy, s, 54.0f, 60.0f, 57.0f, 58.5f, 57.0f, 61.5f);
+        fillTri(sr, cx, cy, s, 54.0f, 60.0f, 57.0f, 61.5f, 54.0f, 60.0f);
+        sr.setColor(0.20f, 0.83f, 0.60f, 1.00f);
+        drawLine(sr, cx, cy, s, 55.0f, 60.0f, 65.0f, 60.0f, 0.8f);
+        sr.setColor(0.02f, 0.47f, 0.34f, 1.00f);
+        fillTri(sr, cx, cy, s, 70.9f, 60.9f, 73.5f, 60.8f, 75.9f, 61.4f);
+        fillTri(sr, cx, cy, s, 70.9f, 60.9f, 75.9f, 61.4f, 78.0f, 63.0f);
+        fillTri(sr, cx, cy, s, 70.9f, 60.9f, 78.0f, 63.0f, 75.5f, 64.1f);
+        fillTri(sr, cx, cy, s, 70.9f, 60.9f, 75.5f, 64.1f, 73.0f, 64.2f);
+        fillTri(sr, cx, cy, s, 70.9f, 60.9f, 73.0f, 64.2f, 70.5f, 63.6f);
+        fillTri(sr, cx, cy, s, 68.0f, 62.0f, 70.9f, 60.9f, 70.5f, 63.6f);
+        fillTri(sr, cx, cy, s, 68.0f, 62.0f, 70.5f, 63.6f, 68.0f, 62.0f);
+        sr.setColor(0.96f, 0.62f, 0.04f, 1.00f);
+        drawLine(sr, cx, cy, s, 44.0f, 66.0f, 46.2f, 71.8f, 1.8f);
+        drawLine(sr, cx, cy, s, 46.2f, 71.8f, 49.0f, 77.0f, 1.8f);
+        drawLine(sr, cx, cy, s, 49.0f, 77.0f, 52.2f, 81.8f, 1.8f);
+        drawLine(sr, cx, cy, s, 52.2f, 81.8f, 56.0f, 86.0f, 1.8f);
+        sr.setColor(0.99f, 0.88f, 0.28f, 1.00f);
+        fillCircle(sr, cx, cy, s, 56.0f, 86.0f, 1.5f);
+        sr.setColor(0.43f, 0.91f, 0.72f, 0.60f);
+        drawLine(sr, cx, cy, s, 52.0f, 50.0f, 50.6f, 45.1f, 2.0f);
+        drawLine(sr, cx, cy, s, 50.6f, 45.1f, 50.5f, 40.5f, 2.0f);
+        drawLine(sr, cx, cy, s, 50.5f, 40.5f, 51.6f, 36.1f, 2.0f);
+        drawLine(sr, cx, cy, s, 51.6f, 36.1f, 54.0f, 32.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 54.0f, 32.0f, 55.5f, 28.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 55.5f, 28.0f, 56.0f, 24.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 56.0f, 24.0f, 55.5f, 20.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 55.5f, 20.0f, 54.0f, 16.0f, 2.0f);
+        sr.setColor(0.43f, 0.91f, 0.72f, 0.75f);
+        drawLine(sr, cx, cy, s, 64.0f, 48.0f, 66.2f, 43.0f, 2.5f);
+        drawLine(sr, cx, cy, s, 66.2f, 43.0f, 67.0f, 38.0f, 2.5f);
+        drawLine(sr, cx, cy, s, 67.0f, 38.0f, 66.2f, 33.0f, 2.5f);
+        drawLine(sr, cx, cy, s, 66.2f, 33.0f, 64.0f, 28.0f, 2.5f);
+        drawLine(sr, cx, cy, s, 64.0f, 28.0f, 62.6f, 23.1f, 2.5f);
+        drawLine(sr, cx, cy, s, 62.6f, 23.1f, 62.5f, 18.5f, 2.5f);
+        drawLine(sr, cx, cy, s, 62.5f, 18.5f, 63.6f, 14.1f, 2.5f);
+        drawLine(sr, cx, cy, s, 63.6f, 14.1f, 66.0f, 10.0f, 2.5f);
+        sr.setColor(0.43f, 0.91f, 0.72f, 0.50f);
+        drawLine(sr, cx, cy, s, 76.0f, 52.0f, 78.2f, 47.1f, 1.8f);
+        drawLine(sr, cx, cy, s, 78.2f, 47.1f, 79.0f, 42.5f, 1.8f);
+        drawLine(sr, cx, cy, s, 79.0f, 42.5f, 78.2f, 38.1f, 1.8f);
+        drawLine(sr, cx, cy, s, 78.2f, 38.1f, 76.0f, 34.0f, 1.8f);
+        drawLine(sr, cx, cy, s, 76.0f, 34.0f, 74.6f, 30.0f, 1.8f);
+        drawLine(sr, cx, cy, s, 74.6f, 30.0f, 74.5f, 26.0f, 1.8f);
+        drawLine(sr, cx, cy, s, 74.5f, 26.0f, 75.6f, 22.0f, 1.8f);
+        drawLine(sr, cx, cy, s, 75.6f, 22.0f, 78.0f, 18.0f, 1.8f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.90f);
+        drawLine(sr, cx, cy, s, 38.0f, 62.0f, 39.9f, 71.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 39.9f, 71.0f, 43.5f, 78.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 43.5f, 78.0f, 48.9f, 83.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 48.9f, 83.0f, 56.0f, 86.0f, 2.0f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.85f);
+        fillEllipse(sr, cx, cy, s, 74.0f, 59.0f, 2.5f, 1.0f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.80f);
+        drawLine(sr, cx, cy, s, 32.0f, 94.0f, 48.0f, 97.8f, 1.2f);
+        drawLine(sr, cx, cy, s, 48.0f, 97.8f, 64.0f, 99.0f, 1.2f);
+        drawLine(sr, cx, cy, s, 64.0f, 99.0f, 80.0f, 97.8f, 1.2f);
+        drawLine(sr, cx, cy, s, 80.0f, 97.8f, 96.0f, 94.0f, 1.2f);
+    }
 
-        // Celadon jade ceramic teacup bowl
-        sr.setColor(0.28f, 0.52f, 0.42f, 1f);
-        sr.circle(cx, cy - 6f * s, 22f * s, 24);
-        sr.rect(cx - 20f * s, cy - 6f * s, 40f * s, 16f * s);
+    public static void drawLineSpool(ShapeRenderer sr, float cx, float cy, float s) {
+        // --- LAYER: background_glow ---
+        sr.setColor(0.01f, 0.41f, 0.63f, 0.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 44.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.40f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 106.0f, 32.0f, 8.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.28f, 0.33f, 0.41f, 1.00f);
+        fillEllipse(sr, cx, cy, s, 36.0f, 64.0f, 10.0f, 34.0f);
+        fillEllipse(sr, cx, cy, s, 92.0f, 64.0f, 10.0f, 34.0f);
+        sr.setColor(0.22f, 0.74f, 0.97f, 1.00f);
+        fillQuad(sr, cx, cy, s, 36.0f, 34.0f, 92.0f, 34.0f, 92.0f, 94.0f, 36.0f, 94.0f);
+        sr.setColor(0.20f, 0.25f, 0.33f, 1.00f);
+        fillEllipse(sr, cx, cy, s, 92.0f, 64.0f, 8.0f, 32.0f);
+        sr.setColor(0.06f, 0.09f, 0.16f, 1.00f);
+        fillEllipse(sr, cx, cy, s, 92.0f, 64.0f, 4.0f, 16.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(0.73f, 0.90f, 0.99f, 1.00f);
+        drawLine(sr, cx, cy, s, 38.0f, 42.0f, 90.0f, 42.0f, 1.8f);
+        sr.setColor(0.01f, 0.41f, 0.63f, 1.00f);
+        drawLine(sr, cx, cy, s, 38.0f, 50.0f, 90.0f, 50.0f, 1.5f);
+        sr.setColor(0.73f, 0.90f, 0.99f, 1.00f);
+        drawLine(sr, cx, cy, s, 38.0f, 58.0f, 90.0f, 58.0f, 1.8f);
+        sr.setColor(0.01f, 0.41f, 0.63f, 1.00f);
+        drawLine(sr, cx, cy, s, 38.0f, 66.0f, 90.0f, 66.0f, 1.5f);
+        sr.setColor(0.73f, 0.90f, 0.99f, 1.00f);
+        drawLine(sr, cx, cy, s, 38.0f, 74.0f, 90.0f, 74.0f, 1.8f);
+        sr.setColor(0.01f, 0.41f, 0.63f, 1.00f);
+        drawLine(sr, cx, cy, s, 38.0f, 82.0f, 90.0f, 82.0f, 1.5f);
+        sr.setColor(0.58f, 0.64f, 0.72f, 1.00f);
+        drawLine(sr, cx, cy, s, 92.0f, 36.0f, 92.0f, 92.0f, 3.0f);
+        drawLine(sr, cx, cy, s, 86.0f, 64.0f, 98.0f, 64.0f, 3.0f);
+        sr.setColor(0.96f, 0.62f, 0.04f, 1.00f);
+        fillQuad(sr, cx, cy, s, 74.0f, 56.0f, 80.0f, 56.0f, 80.0f, 72.0f, 74.0f, 72.0f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        fillCircle(sr, cx, cy, s, 77.0f, 64.0f, 1.5f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.90f);
+        drawLine(sr, cx, cy, s, 30.0f, 38.0f, 27.8f, 51.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 27.8f, 51.0f, 27.0f, 64.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 27.0f, 64.0f, 27.8f, 77.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 27.8f, 77.0f, 30.0f, 90.0f, 2.0f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.80f);
+        drawLine(sr, cx, cy, s, 42.0f, 38.0f, 84.0f, 38.0f, 1.2f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 92.0f, 64.0f, 1.5f);
+    }
 
-        // Warm jade interior glaze
-        sr.setColor(0.42f, 0.68f, 0.55f, 1f);
-        sr.circle(cx, cy - 6f * s, 19f * s, 20);
-
-        // Soothing emerald herbal tea surface
-        float lw = 36f * s;
-        float lh = 14f * s;
-        sr.setColor(0.18f, 0.62f, 0.32f, 1f);
-        sr.ellipse(cx - lw / 2f, cy + 4f * s - lh / 2f, lw, lh);
-        sr.setColor(0.35f, 0.82f, 0.45f, 0.8f);
-        sr.ellipse(cx - lw * 0.38f, cy + 4f * s - lh * 0.35f, lw * 0.76f, lh * 0.7f);
-
-        // Floating fresh green tea leaf
-        sr.setColor(0.12f, 0.45f, 0.18f, 1f);
-        sr.triangle(cx - 6f * s, cy + 5f * s, cx + 8f * s, cy + 3f * s, cx + 2f * s, cy + 8f * s);
-
-        // Gentle aromatic steam vapors rising from cup
-        float wag1 = MathUtils.sin(timer * 3f) * 4f * s;
-        float wag2 = MathUtils.cos(timer * 2.5f) * 5f * s;
-        sr.setColor(0.9f, 1f, 0.95f, 0.5f);
-        sr.rectLine(cx - 6f * s, cy + 12f * s, cx - 4f * s + wag1, cy + 32f * s, 2.5f * s);
-        sr.rectLine(cx + 8f * s, cy + 12f * s, cx + 6f * s + wag2, cy + 36f * s, 2.5f * s);
+    public static void drawCryoSpray(ShapeRenderer sr, float cx, float cy, float s, float timer) {
+        // --- LAYER: background_glow ---
+        sr.setColor(0.65f, 0.95f, 0.99f, 0.20f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 44.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.40f);
+        fillEllipse(sr, cx, cy, s, 56.0f, 112.0f, 20.0f, 6.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.01f, 0.52f, 0.78f, 1.00f);
+        fillQuad(sr, cx, cy, s, 38.0f, 38.0f, 74.0f, 38.0f, 74.0f, 106.0f, 38.0f, 106.0f);
+        fillEllipse(sr, cx, cy, s, 56.0f, 106.0f, 18.0f, 5.0f);
+        sr.setColor(0.80f, 0.84f, 0.88f, 1.00f);
+        fillEllipse(sr, cx, cy, s, 56.0f, 38.0f, 18.0f, 5.0f);
+        sr.setColor(0.01f, 0.52f, 0.78f, 1.00f);
+        fillQuad(sr, cx, cy, s, 50.0f, 24.0f, 62.0f, 24.0f, 62.0f, 36.0f, 50.0f, 36.0f);
+        sr.setColor(0.89f, 0.91f, 0.94f, 1.00f);
+        fillQuad(sr, cx, cy, s, 62.0f, 26.0f, 74.0f, 22.0f, 72.0f, 30.0f, 62.0f, 30.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 56.0f, 62.0f, 56.0f, 82.0f, 2.5f);
+        drawLine(sr, cx, cy, s, 46.0f, 72.0f, 66.0f, 72.0f, 2.5f);
+        drawLine(sr, cx, cy, s, 49.0f, 65.0f, 63.0f, 79.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 49.0f, 79.0f, 63.0f, 65.0f, 2.0f);
+        sr.setColor(0.65f, 0.95f, 0.99f, 1.00f);
+        fillCircle(sr, cx, cy, s, 56.0f, 72.0f, 3.0f);
+        sr.setColor(0.88f, 0.95f, 1.00f, 0.85f);
+        fillTri(sr, cx, cy, s, 84.0f, 28.0f, 74.0f, 24.0f, 81.9f, 20.1f);
+        fillTri(sr, cx, cy, s, 84.0f, 28.0f, 81.9f, 20.1f, 89.5f, 18.5f);
+        fillTri(sr, cx, cy, s, 84.0f, 28.0f, 89.5f, 18.5f, 96.9f, 19.1f);
+        fillTri(sr, cx, cy, s, 84.0f, 28.0f, 96.9f, 19.1f, 104.0f, 22.0f);
+        fillTri(sr, cx, cy, s, 84.0f, 28.0f, 104.0f, 22.0f, 99.0f, 25.4f);
+        fillTri(sr, cx, cy, s, 84.0f, 28.0f, 99.0f, 25.4f, 94.0f, 27.5f);
+        fillTri(sr, cx, cy, s, 94.0f, 27.5f, 89.0f, 28.4f, 84.0f, 28.0f);
+        sr.setColor(0.73f, 0.90f, 0.99f, 0.70f);
+        fillCircle(sr, cx, cy, s, 92.0f, 18.0f, 5.0f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.80f);
+        fillCircle(sr, cx, cy, s, 106.0f, 22.0f, 6.0f);
+        sr.setColor(0.88f, 0.95f, 1.00f, 0.60f);
+        fillCircle(sr, cx, cy, s, 100.0f, 32.0f, 4.5f);
+        sr.setColor(0.88f, 0.95f, 1.00f, 1.00f);
+        fillTri(sr, cx, cy, s, 38.0f, 102.0f, 34.0f, 92.0f, 42.0f, 98.0f);
+        fillTri(sr, cx, cy, s, 74.0f, 102.0f, 78.0f, 90.0f, 70.0f, 96.0f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.90f);
+        drawLine(sr, cx, cy, s, 42.0f, 40.0f, 42.0f, 100.0f, 2.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 56.0f, 72.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 90.0f, 20.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 104.0f, 24.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 80.0f, 24.0f, 1.0f);
     }
 
     public static void drawWhetstone(ShapeRenderer sr, float cx, float cy, float s, float timer) {
-        // Coarse bottom stone layer (charcoal slate)
-        sr.setColor(0.24f, 0.26f, 0.30f, 1f);
-        sr.rect(cx - 26f * s, cy - 20f * s, 52f * s, 18f * s);
-        // Base edge bevel
-        sr.setColor(0.16f, 0.18f, 0.22f, 1f);
-        sr.rect(cx - 26f * s, cy - 23f * s, 52f * s, 4f * s);
-
-        // Fine top sharpening layer (warm amber-tan oilstone)
-        sr.setColor(0.85f, 0.65f, 0.38f, 1f);
-        sr.rect(cx - 26f * s, cy - 2f * s, 52f * s, 20f * s);
-
-        // Smooth top hone surface with wet sheen
-        sr.setColor(0.96f, 0.80f, 0.52f, 1f);
-        sr.rect(cx - 24f * s, cy + 10f * s, 48f * s, 6f * s);
-        sr.setColor(1f, 1f, 1f, 0.65f);
-        sr.rect(cx - 18f * s, cy + 12f * s, 32f * s, 2.5f * s);
-
-        // Heavy forged steel fishing hook laid across stone
-        sr.setColor(0.72f, 0.78f, 0.85f, 1f);
-        sr.rectLine(cx - 18f * s, cy - 8f * s, cx + 12f * s, cy + 22f * s, 4.5f * s);
-        // Curved barb tip
-        sr.rectLine(cx + 12f * s, cy + 22f * s, cx + 22f * s, cy + 12f * s, 4f * s);
-        sr.triangle(cx + 22f * s, cy + 12f * s, cx + 24f * s, cy + 18f * s, cx + 28f * s, cy + 10f * s);
-
-        // Brilliant sharpening spark glint on hook tip
-        float sparkPulse = 0.5f + 0.5f * MathUtils.sin(timer * 6f);
-        sr.setColor(1f, 0.95f, 0.4f, sparkPulse);
-        sr.circle(cx + 25f * s, cy + 13f * s, 5f * s * sparkPulse, 12);
-        sr.rectLine(cx + 18f * s, cy + 13f * s, cx + 32f * s, cy + 13f * s, 2f * s);
-        sr.rectLine(cx + 25f * s, cy + 6f * s, cx + 25f * s, cy + 20f * s, 2f * s);
+        // --- LAYER: background_glow ---
+        sr.setColor(0.20f, 0.25f, 0.33f, 0.00f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 68.0f, 46.0f, 26.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.35f);
+        fillQuad(sr, cx, cy, s, 20.0f, 94.0f, 88.0f, 112.0f, 112.0f, 86.0f, 44.0f, 70.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.58f, 0.64f, 0.72f, 1.00f);
+        fillQuad(sr, cx, cy, s, 56.0f, 36.0f, 106.0f, 52.0f, 74.0f, 74.0f, 24.0f, 56.0f);
+        sr.setColor(0.39f, 0.45f, 0.55f, 1.00f);
+        fillQuad(sr, cx, cy, s, 24.0f, 56.0f, 74.0f, 74.0f, 74.0f, 84.0f, 24.0f, 66.0f);
+        sr.setColor(0.20f, 0.25f, 0.33f, 1.00f);
+        fillQuad(sr, cx, cy, s, 24.0f, 66.0f, 74.0f, 84.0f, 74.0f, 96.0f, 24.0f, 78.0f);
+        sr.setColor(0.28f, 0.33f, 0.41f, 1.00f);
+        fillQuad(sr, cx, cy, s, 74.0f, 74.0f, 106.0f, 52.0f, 106.0f, 62.0f, 74.0f, 84.0f);
+        sr.setColor(0.06f, 0.09f, 0.16f, 1.00f);
+        fillQuad(sr, cx, cy, s, 74.0f, 84.0f, 106.0f, 62.0f, 106.0f, 74.0f, 74.0f, 96.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(0.96f, 0.62f, 0.04f, 1.00f);
+        drawLine(sr, cx, cy, s, 24.0f, 66.0f, 74.0f, 84.0f, 1.8f);
+        drawLine(sr, cx, cy, s, 74.0f, 84.0f, 106.0f, 62.0f, 1.8f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.70f);
+        drawLine(sr, cx, cy, s, 42.0f, 52.0f, 86.0f, 66.0f, 2.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillTri(sr, cx, cy, s, 86.0f, 64.0f, 92.0f, 58.0f, 88.0f, 68.0f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        fillTri(sr, cx, cy, s, 94.0f, 62.0f, 100.0f, 60.0f, 96.0f, 66.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillCircle(sr, cx, cy, s, 82.0f, 56.0f, 1.5f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 98.0f, 54.0f, 1.2f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.95f);
+        drawLine(sr, cx, cy, s, 24.0f, 56.0f, 74.0f, 74.0f, 2.5f);
+        drawLine(sr, cx, cy, s, 74.0f, 74.0f, 106.0f, 52.0f, 2.0f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 74.0f, 74.0f, 2.0f);
+        fillCircle(sr, cx, cy, s, 56.0f, 36.0f, 1.2f);
     }
 
     public static void drawTreasureMagnet(ShapeRenderer sr, float cx, float cy, float s, float timer) {
-        // Red lacquer horseshoe magnet body
-        sr.setColor(0.85f, 0.18f, 0.18f, 1f);
-        // Left prong
-        sr.rect(cx - 25f * s, cy - 12f * s, 14f * s, 36f * s);
-        // Right prong
-        sr.rect(cx + 11f * s, cy - 12f * s, 14f * s, 36f * s);
-        // Top curved arch bridge
-        sr.rect(cx - 25f * s, cy + 14f * s, 50f * s, 16f * s);
-        sr.circle(cx - 18f * s, cy + 22f * s, 10f * s, 16);
-        sr.circle(cx + 18f * s, cy + 22f * s, 10f * s, 16);
-
-        // Center cutout arch
-        sr.setColor(0.12f, 0.10f, 0.08f, 0.9f);
-        sr.rect(cx - 11f * s, cy - 15f * s, 22f * s, 30f * s);
-        sr.circle(cx, cy + 14f * s, 11f * s, 16);
-
-        // Chrome silver magnetic pole shoes
-        sr.setColor(0.82f, 0.88f, 0.92f, 1f);
-        sr.rect(cx - 25f * s, cy - 24f * s, 14f * s, 12f * s);
-        sr.rect(cx + 11f * s, cy - 24f * s, 14f * s, 12f * s);
-
-        // Silver rim lips
-        sr.setColor(0.95f, 0.98f, 1f, 1f);
-        sr.rect(cx - 26f * s, cy - 25f * s, 16f * s, 3f * s);
-        sr.rect(cx + 10f * s, cy - 25f * s, 16f * s, 3f * s);
-
-        // Floating magnetic gold coin in between
-        sr.setColor(1f, 0.85f, 0.22f, 1f);
-        sr.circle(cx, cy - 14f * s, 8f * s, 16);
-        sr.setColor(0.85f, 0.65f, 0.15f, 1f);
-        sr.circle(cx, cy - 14f * s, 5f * s, 14);
-
-        // Pulsing golden magnetic flux arcs
-        float wave = 0.5f + 0.5f * MathUtils.sin(timer * 5f);
-        sr.setColor(1f, 0.9f, 0.3f, 0.6f * wave);
-        sr.rectLine(cx - 18f * s, cy - 30f * s, cx + 18f * s, cy - 30f * s, 2.5f * s);
-        sr.circle(cx - 22f * s, cy - 34f * s, 2.5f * s);
-        sr.circle(cx + 22f * s, cy - 34f * s, 2.5f * s);
+        // --- LAYER: background_glow ---
+        sr.setColor(0.94f, 0.27f, 0.27f, 0.20f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 44.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.35f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 110.0f, 34.0f, 8.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        fillTri(sr, cx, cy, s, 46.0f, 84.0f, 28.0f, 84.0f, 28.0f, 54.0f);
+        fillTri(sr, cx, cy, s, 46.0f, 84.0f, 28.0f, 54.0f, 30.2f, 39.1f);
+        fillTri(sr, cx, cy, s, 46.0f, 84.0f, 30.2f, 39.1f, 37.0f, 28.5f);
+        fillTri(sr, cx, cy, s, 37.0f, 28.5f, 48.2f, 22.1f, 64.0f, 20.0f);
+        fillTri(sr, cx, cy, s, 37.0f, 28.5f, 64.0f, 20.0f, 79.8f, 22.1f);
+        fillTri(sr, cx, cy, s, 37.0f, 28.5f, 79.8f, 22.1f, 91.0f, 28.5f);
+        fillTri(sr, cx, cy, s, 37.0f, 28.5f, 91.0f, 28.5f, 97.8f, 39.1f);
+        fillTri(sr, cx, cy, s, 97.8f, 39.1f, 100.0f, 54.0f, 100.0f, 84.0f);
+        fillTri(sr, cx, cy, s, 97.8f, 39.1f, 100.0f, 84.0f, 82.0f, 84.0f);
+        fillTri(sr, cx, cy, s, 97.8f, 39.1f, 82.0f, 84.0f, 82.0f, 54.0f);
+        fillTri(sr, cx, cy, s, 97.8f, 39.1f, 82.0f, 54.0f, 80.9f, 47.0f);
+        fillTri(sr, cx, cy, s, 97.8f, 39.1f, 80.9f, 47.0f, 77.5f, 42.0f);
+        fillTri(sr, cx, cy, s, 97.8f, 39.1f, 77.5f, 42.0f, 71.9f, 39.0f);
+        fillTri(sr, cx, cy, s, 37.0f, 28.5f, 97.8f, 39.1f, 71.9f, 39.0f);
+        fillTri(sr, cx, cy, s, 37.0f, 28.5f, 71.9f, 39.0f, 64.0f, 38.0f);
+        fillTri(sr, cx, cy, s, 37.0f, 28.5f, 64.0f, 38.0f, 56.1f, 39.0f);
+        fillTri(sr, cx, cy, s, 37.0f, 28.5f, 56.1f, 39.0f, 50.5f, 42.0f);
+        fillTri(sr, cx, cy, s, 37.0f, 28.5f, 50.5f, 42.0f, 47.1f, 47.0f);
+        fillTri(sr, cx, cy, s, 37.0f, 28.5f, 47.1f, 47.0f, 46.0f, 54.0f);
+        fillTri(sr, cx, cy, s, 37.0f, 28.5f, 46.0f, 54.0f, 46.0f, 84.0f);
+        sr.setColor(0.89f, 0.91f, 0.94f, 1.00f);
+        fillQuad(sr, cx, cy, s, 28.0f, 80.0f, 46.0f, 80.0f, 46.0f, 98.0f, 28.0f, 98.0f);
+        sr.setColor(0.58f, 0.64f, 0.72f, 1.00f);
+        fillQuad(sr, cx, cy, s, 28.0f, 94.0f, 46.0f, 94.0f, 46.0f, 98.0f, 28.0f, 98.0f);
+        sr.setColor(0.89f, 0.91f, 0.94f, 1.00f);
+        fillQuad(sr, cx, cy, s, 82.0f, 80.0f, 100.0f, 80.0f, 100.0f, 98.0f, 82.0f, 98.0f);
+        sr.setColor(0.58f, 0.64f, 0.72f, 1.00f);
+        fillQuad(sr, cx, cy, s, 82.0f, 94.0f, 100.0f, 94.0f, 100.0f, 98.0f, 82.0f, 98.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        drawLine(sr, cx, cy, s, 33.0f, 84.0f, 33.0f, 92.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 33.0f, 84.0f, 41.0f, 92.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 41.0f, 84.0f, 41.0f, 92.0f, 2.0f);
+        sr.setColor(0.15f, 0.39f, 0.92f, 1.00f);
+        drawLine(sr, cx, cy, s, 87.0f, 92.0f, 88.8f, 91.8f, 2.0f);
+        drawLine(sr, cx, cy, s, 88.8f, 91.8f, 90.0f, 91.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 90.0f, 91.0f, 90.8f, 89.8f, 2.0f);
+        drawLine(sr, cx, cy, s, 90.8f, 89.8f, 91.0f, 88.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 91.0f, 88.0f, 89.2f, 87.8f, 2.0f);
+        drawLine(sr, cx, cy, s, 89.2f, 87.8f, 88.0f, 87.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 88.0f, 87.0f, 87.2f, 85.8f, 2.0f);
+        drawLine(sr, cx, cy, s, 87.2f, 85.8f, 87.0f, 84.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 87.0f, 84.0f, 88.8f, 84.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 88.8f, 84.0f, 90.0f, 84.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 90.0f, 84.0f, 90.8f, 84.0f, 2.0f);
+        drawLine(sr, cx, cy, s, 90.8f, 84.0f, 91.0f, 84.0f, 2.0f);
+        sr.setColor(0.22f, 0.74f, 0.97f, 1.00f);
+        drawLine(sr, cx, cy, s, 46.0f, 90.0f, 55.0f, 94.5f, 2.2f);
+        drawLine(sr, cx, cy, s, 55.0f, 94.5f, 64.0f, 96.0f, 2.2f);
+        drawLine(sr, cx, cy, s, 64.0f, 96.0f, 73.0f, 94.5f, 2.2f);
+        drawLine(sr, cx, cy, s, 73.0f, 94.5f, 82.0f, 90.0f, 2.2f);
+        drawLine(sr, cx, cy, s, 46.0f, 96.0f, 55.0f, 101.2f, 1.8f);
+        drawLine(sr, cx, cy, s, 55.0f, 101.2f, 64.0f, 103.0f, 1.8f);
+        drawLine(sr, cx, cy, s, 64.0f, 103.0f, 73.0f, 101.2f, 1.8f);
+        drawLine(sr, cx, cy, s, 73.0f, 101.2f, 82.0f, 96.0f, 1.8f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 98.0f, 6.0f);
+        sr.setColor(1.00f, 0.94f, 0.54f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 98.0f, 4.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillCircle(sr, cx, cy, s, 54.0f, 106.0f, 4.0f);
+        fillCircle(sr, cx, cy, s, 74.0f, 106.0f, 4.0f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.90f);
+        drawLine(sr, cx, cy, s, 32.0f, 80.0f, 32.0f, 54.0f, 2.5f);
+        drawLine(sr, cx, cy, s, 32.0f, 54.0f, 34.0f, 40.9f, 2.5f);
+        drawLine(sr, cx, cy, s, 34.0f, 40.9f, 40.0f, 31.5f, 2.5f);
+        drawLine(sr, cx, cy, s, 40.0f, 31.5f, 50.0f, 25.9f, 2.5f);
+        drawLine(sr, cx, cy, s, 50.0f, 25.9f, 64.0f, 24.0f, 2.5f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 30.0f, 82.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 84.0f, 82.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 63.0f, 97.0f, 1.2f);
     }
 
     public static void drawSonarGoggles(ShapeRenderer sr, float cx, float cy, float s, float timer) {
-        // Brown riveted leather strap
-        sr.setColor(0.42f, 0.25f, 0.14f, 1f);
-        sr.rect(cx - 36f * s, cy - 5f * s, 72f * s, 10f * s);
-        sr.setColor(0.28f, 0.16f, 0.08f, 1f);
-        sr.circle(cx - 32f * s, cy, 3f * s);
-        sr.circle(cx + 32f * s, cy, 3f * s);
+        // --- LAYER: background_glow ---
+        sr.setColor(0.02f, 0.37f, 0.27f, 0.15f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 64.0f, 46.0f, 26.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.40f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 98.0f, 40.0f, 8.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.12f, 0.16f, 0.23f, 1.00f);
+        drawLine(sr, cx, cy, s, 20.0f, 62.0f, 15.4f, 63.4f, 5.0f);
+        drawLine(sr, cx, cy, s, 15.4f, 63.4f, 11.5f, 65.5f, 5.0f);
+        drawLine(sr, cx, cy, s, 11.5f, 65.5f, 8.4f, 68.4f, 5.0f);
+        drawLine(sr, cx, cy, s, 8.4f, 68.4f, 6.0f, 72.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 6.0f, 72.0f, 8.4f, 73.6f, 5.0f);
+        drawLine(sr, cx, cy, s, 8.4f, 73.6f, 11.5f, 74.5f, 5.0f);
+        drawLine(sr, cx, cy, s, 11.5f, 74.5f, 15.4f, 74.6f, 5.0f);
+        drawLine(sr, cx, cy, s, 15.4f, 74.6f, 20.0f, 74.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 108.0f, 62.0f, 112.6f, 63.4f, 5.0f);
+        drawLine(sr, cx, cy, s, 112.6f, 63.4f, 116.5f, 65.5f, 5.0f);
+        drawLine(sr, cx, cy, s, 116.5f, 65.5f, 119.6f, 68.4f, 5.0f);
+        drawLine(sr, cx, cy, s, 119.6f, 68.4f, 122.0f, 72.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 122.0f, 72.0f, 119.6f, 73.6f, 5.0f);
+        drawLine(sr, cx, cy, s, 119.6f, 73.6f, 116.5f, 74.5f, 5.0f);
+        drawLine(sr, cx, cy, s, 116.5f, 74.5f, 112.6f, 74.6f, 5.0f);
+        drawLine(sr, cx, cy, s, 112.6f, 74.6f, 108.0f, 74.0f, 5.0f);
+        sr.setColor(0.06f, 0.09f, 0.16f, 1.00f);
+        fillQuad(sr, cx, cy, s, 22.0f, 44.0f, 106.0f, 44.0f, 106.0f, 84.0f, 22.0f, 84.0f);
+        sr.setColor(0.92f, 0.70f, 0.03f, 1.00f);
+        fillCircle(sr, cx, cy, s, 44.0f, 64.0f, 18.0f);
+        fillCircle(sr, cx, cy, s, 84.0f, 64.0f, 18.0f);
+        sr.setColor(0.06f, 0.73f, 0.51f, 1.00f);
+        fillCircle(sr, cx, cy, s, 44.0f, 64.0f, 14.0f);
+        fillCircle(sr, cx, cy, s, 84.0f, 64.0f, 14.0f);
+        sr.setColor(0.92f, 0.70f, 0.03f, 1.00f);
+        fillQuad(sr, cx, cy, s, 58.0f, 60.0f, 70.0f, 60.0f, 70.0f, 68.0f, 58.0f, 68.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.70f);
+        drawLine(sr, cx, cy, s, 44.0f, 52.0f, 44.0f, 76.0f, 0.8f);
+        drawLine(sr, cx, cy, s, 32.0f, 64.0f, 56.0f, 64.0f, 0.8f);
+        drawLine(sr, cx, cy, s, 84.0f, 52.0f, 84.0f, 76.0f, 0.8f);
+        drawLine(sr, cx, cy, s, 72.0f, 64.0f, 96.0f, 64.0f, 0.8f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillEllipse(sr, cx, cy, s, 86.0f, 62.0f, 3.5f, 1.8f);
+        fillTri(sr, cx, cy, s, 82.0f, 62.0f, 79.0f, 59.0f, 79.0f, 65.0f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.90f);
+        drawLine(sr, cx, cy, s, 36.0f, 54.0f, 48.0f, 70.0f, 2.5f);
+        drawLine(sr, cx, cy, s, 76.0f, 54.0f, 88.0f, 70.0f, 2.5f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 34.0f, 52.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 74.0f, 52.0f, 1.5f);
+    }
 
-        // Brass nose bridge bridge
-        sr.setColor(0.92f, 0.75f, 0.25f, 1f);
-        sr.rect(cx - 6f * s, cy - 3f * s, 12f * s, 6f * s);
+    public static void drawFishingNet(ShapeRenderer sr, float cx, float cy, float s) {
+        // --- LAYER: background_glow ---
+        sr.setColor(0.06f, 0.09f, 0.16f, 0.00f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 68.0f, 46.0f, 32.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.40f);
+        fillEllipse(sr, cx, cy, s, 64.0f, 106.0f, 42.0f, 10.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.01f, 0.41f, 0.63f, 0.35f);
+        fillTri(sr, cx, cy, s, 77.0f, 43.5f, 88.0f, 62.0f, 97.0f, 79.5f);
+        fillTri(sr, cx, cy, s, 77.0f, 43.5f, 97.0f, 79.5f, 104.0f, 96.0f);
+        fillTri(sr, cx, cy, s, 77.0f, 43.5f, 104.0f, 96.0f, 84.0f, 99.8f);
+        fillTri(sr, cx, cy, s, 77.0f, 43.5f, 84.0f, 99.8f, 64.0f, 101.0f);
+        fillTri(sr, cx, cy, s, 77.0f, 43.5f, 64.0f, 101.0f, 44.0f, 99.8f);
+        fillTri(sr, cx, cy, s, 77.0f, 43.5f, 44.0f, 99.8f, 24.0f, 96.0f);
+        fillTri(sr, cx, cy, s, 77.0f, 43.5f, 24.0f, 96.0f, 31.0f, 79.5f);
+        fillTri(sr, cx, cy, s, 77.0f, 43.5f, 31.0f, 79.5f, 40.0f, 62.0f);
+        fillTri(sr, cx, cy, s, 77.0f, 43.5f, 40.0f, 62.0f, 51.0f, 43.5f);
+        fillTri(sr, cx, cy, s, 64.0f, 24.0f, 77.0f, 43.5f, 51.0f, 43.5f);
+        fillTri(sr, cx, cy, s, 64.0f, 24.0f, 51.0f, 43.5f, 64.0f, 24.0f);
+        sr.setColor(0.01f, 0.52f, 0.78f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 24.0f, 77.0f, 43.5f, 2.5f);
+        drawLine(sr, cx, cy, s, 77.0f, 43.5f, 88.0f, 62.0f, 2.5f);
+        drawLine(sr, cx, cy, s, 88.0f, 62.0f, 97.0f, 79.5f, 2.5f);
+        drawLine(sr, cx, cy, s, 97.0f, 79.5f, 104.0f, 96.0f, 2.5f);
+        drawLine(sr, cx, cy, s, 104.0f, 96.0f, 84.0f, 99.8f, 2.5f);
+        drawLine(sr, cx, cy, s, 84.0f, 99.8f, 64.0f, 101.0f, 2.5f);
+        drawLine(sr, cx, cy, s, 64.0f, 101.0f, 44.0f, 99.8f, 2.5f);
+        drawLine(sr, cx, cy, s, 44.0f, 99.8f, 24.0f, 96.0f, 2.5f);
+        drawLine(sr, cx, cy, s, 24.0f, 96.0f, 31.0f, 79.5f, 2.5f);
+        drawLine(sr, cx, cy, s, 31.0f, 79.5f, 40.0f, 62.0f, 2.5f);
+        drawLine(sr, cx, cy, s, 40.0f, 62.0f, 51.0f, 43.5f, 2.5f);
+        drawLine(sr, cx, cy, s, 51.0f, 43.5f, 64.0f, 24.0f, 2.5f);
+        sr.setColor(0.79f, 0.54f, 0.02f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 20.0f, 8.0f);
+        sr.setColor(0.06f, 0.09f, 0.16f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 20.0f, 4.5f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(0.22f, 0.74f, 0.97f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 24.0f, 26.0f, 96.0f, 1.4f);
+        drawLine(sr, cx, cy, s, 64.0f, 24.0f, 42.0f, 100.0f, 1.4f);
+        drawLine(sr, cx, cy, s, 64.0f, 24.0f, 56.0f, 103.0f, 1.4f);
+        drawLine(sr, cx, cy, s, 64.0f, 24.0f, 72.0f, 103.0f, 1.4f);
+        drawLine(sr, cx, cy, s, 64.0f, 24.0f, 86.0f, 100.0f, 1.4f);
+        drawLine(sr, cx, cy, s, 64.0f, 24.0f, 102.0f, 96.0f, 1.4f);
+        drawLine(sr, cx, cy, s, 46.0f, 54.0f, 55.0f, 56.2f, 1.4f);
+        drawLine(sr, cx, cy, s, 55.0f, 56.2f, 64.0f, 57.0f, 1.4f);
+        drawLine(sr, cx, cy, s, 64.0f, 57.0f, 73.0f, 56.2f, 1.4f);
+        drawLine(sr, cx, cy, s, 73.0f, 56.2f, 82.0f, 54.0f, 1.4f);
+        drawLine(sr, cx, cy, s, 36.0f, 72.0f, 50.0f, 75.0f, 1.4f);
+        drawLine(sr, cx, cy, s, 50.0f, 75.0f, 64.0f, 76.0f, 1.4f);
+        drawLine(sr, cx, cy, s, 64.0f, 76.0f, 78.0f, 75.0f, 1.4f);
+        drawLine(sr, cx, cy, s, 78.0f, 75.0f, 92.0f, 72.0f, 1.4f);
+        drawLine(sr, cx, cy, s, 28.0f, 88.0f, 46.0f, 91.8f, 1.6f);
+        drawLine(sr, cx, cy, s, 46.0f, 91.8f, 64.0f, 93.0f, 1.6f);
+        drawLine(sr, cx, cy, s, 64.0f, 93.0f, 82.0f, 91.8f, 1.6f);
+        drawLine(sr, cx, cy, s, 82.0f, 91.8f, 100.0f, 88.0f, 1.6f);
+        sr.setColor(0.28f, 0.33f, 0.41f, 1.00f);
+        fillCircle(sr, cx, cy, s, 24.0f, 96.0f, 4.0f);
+        fillCircle(sr, cx, cy, s, 38.0f, 100.0f, 4.0f);
+        fillCircle(sr, cx, cy, s, 52.0f, 103.0f, 4.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 104.0f, 4.0f);
+        fillCircle(sr, cx, cy, s, 76.0f, 103.0f, 4.0f);
+        fillCircle(sr, cx, cy, s, 90.0f, 100.0f, 4.0f);
+        fillCircle(sr, cx, cy, s, 104.0f, 96.0f, 4.0f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 23.0f, 95.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 51.0f, 102.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 63.0f, 103.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 75.0f, 102.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 103.0f, 95.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 62.0f, 16.0f, 1.5f);
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.80f);
+        drawLine(sr, cx, cy, s, 52.0f, 44.0f, 58.0f, 45.5f, 1.2f);
+        drawLine(sr, cx, cy, s, 58.0f, 45.5f, 64.0f, 46.0f, 1.2f);
+        drawLine(sr, cx, cy, s, 64.0f, 46.0f, 70.0f, 45.5f, 1.2f);
+        drawLine(sr, cx, cy, s, 70.0f, 45.5f, 76.0f, 44.0f, 1.2f);
+    }
 
-        // Left & Right Brass Goggle Outer Eyepieces
-        sr.setColor(0.85f, 0.68f, 0.22f, 1f);
-        sr.circle(cx - 16f * s, cy, 18f * s, 24);
-        sr.circle(cx + 16f * s, cy, 18f * s, 24);
-
-        // Dark inner bezel
-        sr.setColor(0.12f, 0.18f, 0.22f, 1f);
-        sr.circle(cx - 16f * s, cy, 14f * s, 20);
-        sr.circle(cx + 16f * s, cy, 14f * s, 20);
-
-        // Glowing deep ocean sonar screen
-        sr.setColor(0.08f, 0.45f, 0.65f, 0.95f);
-        sr.circle(cx - 16f * s, cy, 12f * s, 20);
-        sr.circle(cx + 16f * s, cy, 12f * s, 20);
-
-        // Concentric radar sweep rings
-        sr.setColor(0.35f, 0.95f, 1f, 0.85f);
-        sr.circle(cx - 16f * s, cy, 8f * s, 16);
-        sr.circle(cx + 16f * s, cy, 8f * s, 16);
-        sr.circle(cx - 16f * s, cy, 3.5f * s, 12);
-        sr.circle(cx + 16f * s, cy, 3.5f * s, 12);
-
-        // Crosshairs in lenses
-        sr.rectLine(cx - 24f * s, cy, cx - 8f * s, cy, 1.5f * s);
-        sr.rectLine(cx - 16f * s, cy - 8f * s, cx - 16f * s, cy + 8f * s, 1.5f * s);
-        sr.rectLine(cx + 8f * s, cy, cx + 24f * s, cy, 1.5f * s);
-        sr.rectLine(cx + 16f * s, cy - 8f * s, cx + 16f * s, cy + 8f * s, 1.5f * s);
-
-        // Glass reflection sheen
-        sr.setColor(1f, 1f, 1f, 0.65f);
-        sr.rectLine(cx - 21f * s, cy + 5f * s, cx - 14f * s, cy + 10f * s, 2f * s);
-        sr.rectLine(cx + 11f * s, cy + 5f * s, cx + 18f * s, cy + 10f * s, 2f * s);
+    public static void drawGoldTalisman(ShapeRenderer sr, float cx, float cy, float s, float timer) {
+        // --- LAYER: background_glow ---
+        sr.setColor(0.86f, 0.15f, 0.15f, 0.20f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 46.0f);
+        sr.setColor(0.00f, 0.00f, 0.00f, 0.35f);
+        fillQuad(sr, cx, cy, s, 46.0f, 24.0f, 82.0f, 24.0f, 86.0f, 112.0f, 42.0f, 112.0f);
+        // --- LAYER: base_form ---
+        sr.setColor(0.02f, 0.59f, 0.41f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 16.0f, 6.0f);
+        sr.setColor(0.20f, 0.83f, 0.60f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 16.0f, 3.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 16.0f, 64.0f, 28.0f, 3.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillQuad(sr, cx, cy, s, 46.0f, 26.0f, 82.0f, 26.0f, 82.0f, 108.0f, 46.0f, 108.0f);
+        // --- LAYER: details_and_relief ---
+        sr.setColor(0.60f, 0.11f, 0.11f, 1.00f);
+        fillQuad(sr, cx, cy, s, 54.0f, 36.0f, 64.0f, 32.0f, 74.0f, 36.0f, 64.0f, 40.0f);
+        sr.setColor(0.99f, 0.88f, 0.28f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 36.0f, 2.5f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        drawLine(sr, cx, cy, s, 64.0f, 42.0f, 64.0f, 62.0f, 3.0f);
+        drawLine(sr, cx, cy, s, 56.0f, 48.0f, 60.0f, 49.5f, 2.2f);
+        drawLine(sr, cx, cy, s, 60.0f, 49.5f, 64.0f, 50.0f, 2.2f);
+        drawLine(sr, cx, cy, s, 64.0f, 50.0f, 68.0f, 49.5f, 2.2f);
+        drawLine(sr, cx, cy, s, 68.0f, 49.5f, 72.0f, 48.0f, 2.2f);
+        drawLine(sr, cx, cy, s, 58.0f, 56.0f, 61.0f, 57.5f, 2.2f);
+        drawLine(sr, cx, cy, s, 61.0f, 57.5f, 64.0f, 58.0f, 2.2f);
+        drawLine(sr, cx, cy, s, 64.0f, 58.0f, 67.0f, 57.5f, 2.2f);
+        drawLine(sr, cx, cy, s, 67.0f, 57.5f, 70.0f, 56.0f, 2.2f);
+        sr.setColor(0.73f, 0.11f, 0.11f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 72.0f, 7.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 72.0f, 4.5f);
+        sr.setColor(0.73f, 0.11f, 0.11f, 1.00f);
+        fillCircle(sr, cx, cy, s, 64.0f, 72.0f, 2.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.00f);
+        drawLine(sr, cx, cy, s, 58.0f, 84.0f, 61.0f, 82.5f, 2.2f);
+        drawLine(sr, cx, cy, s, 61.0f, 82.5f, 64.0f, 82.0f, 2.2f);
+        drawLine(sr, cx, cy, s, 64.0f, 82.0f, 67.0f, 82.5f, 2.2f);
+        drawLine(sr, cx, cy, s, 67.0f, 82.5f, 70.0f, 84.0f, 2.2f);
+        drawLine(sr, cx, cy, s, 70.0f, 84.0f, 67.0f, 86.0f, 2.2f);
+        drawLine(sr, cx, cy, s, 67.0f, 86.0f, 64.0f, 88.0f, 2.2f);
+        drawLine(sr, cx, cy, s, 64.0f, 88.0f, 61.0f, 90.0f, 2.2f);
+        drawLine(sr, cx, cy, s, 61.0f, 90.0f, 58.0f, 92.0f, 2.2f);
+        drawLine(sr, cx, cy, s, 58.0f, 92.0f, 61.0f, 93.8f, 2.2f);
+        drawLine(sr, cx, cy, s, 61.0f, 93.8f, 64.0f, 95.0f, 2.2f);
+        drawLine(sr, cx, cy, s, 64.0f, 95.0f, 67.0f, 95.8f, 2.2f);
+        drawLine(sr, cx, cy, s, 67.0f, 95.8f, 70.0f, 96.0f, 2.2f);
+        sr.setColor(0.73f, 0.11f, 0.11f, 1.00f);
+        fillTri(sr, cx, cy, s, 46.0f, 108.0f, 46.0f, 104.0f, 82.0f, 104.0f);
+        fillTri(sr, cx, cy, s, 82.0f, 104.0f, 82.0f, 108.0f, 73.0f, 102.0f);
+        fillTri(sr, cx, cy, s, 73.0f, 102.0f, 64.0f, 108.0f, 55.0f, 102.0f);
+        fillTri(sr, cx, cy, s, 82.0f, 104.0f, 73.0f, 102.0f, 55.0f, 102.0f);
+        fillTri(sr, cx, cy, s, 82.0f, 104.0f, 55.0f, 102.0f, 46.0f, 108.0f);
+        // --- LAYER: specular_highlights ---
+        sr.setColor(1.00f, 1.00f, 1.00f, 0.90f);
+        drawLine(sr, cx, cy, s, 50.0f, 30.0f, 50.0f, 104.0f, 1.5f);
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 63.0f, 14.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 63.0f, 71.0f, 1.2f);
+        fillTri(sr, cx, cy, s, 64.0f, 28.0f, 66.0f, 32.0f, 62.0f, 32.0f);
     }
 }

@@ -767,44 +767,50 @@ public class FishingManager {
 
         float tensionIncrease = 0f;
 
-        // Fish Pulling
+        // Fish Pulling & Water Resistance (Cá giằng co PULLING & Lực cản khi cá mệt IDLE)
+        float pullMult;
         if (currentFish.getState() == com.fishingrpg.game.entities.Fish.State.PULLING) {
-            float pull = currentFish.getCurrentPull() * (isSpaceDown ? 1.5f : 0.4f);
-            if (currentFish.getPassiveSkill("xuc_tu") != null) {
-                pull *= (1f + (combatDuration / 10f) * 0.1f);
-            }
-            float pullReduceFromSubstat = player.getEquipmentTotalStat(com.fishingrpg.game.entities.equipment.Substat.Type.FISH_PULL_REDUCE) / 100f;
-            float khangDut = player.getEquippedLine() != null ? player.getEquippedLine().mainStat2 : 0f;
-            float pullReduceFromLine = (khangDut * 1.5f) / 100f;
-            float totalPullMult = Math.max(0.25f, 1f - (pullReduceFromSubstat + pullReduceFromLine));
-            pull *= totalPullMult;
-            if (fishButTocTimer > 0) pull *= 2f;
-            if (currentFish.getPassiveSkill("vung_vay") != null) {
-                if (com.badlogic.gdx.math.MathUtils.random(100f) < 2f) {
-                    pull *= 3f;
-                }
-            }
-            
-            if (luotDayTimer > 0 || abilitySystem.hasEffect("effect_luot_day")) {
-                pull *= abilitySystem.getFishPullMultiplier();
-            }
-
-            boolean isTroiBuoc = troiBuocTimer > 0 || abilitySystem.isFishFrozen() || abilitySystem.hasEffect("effect_troi_buoc");
-            if (isTroiBuoc) {
-                pull = 0f; // Stopped
-            }
-            
-            // Nhip Nhang: if holding space, chance to negate pull
-            if (isSpaceDown && player.isSkillEquipped("nhip_nhang")) {
-                if (MathUtils.random(100f) < player.getSkillTree().getNhipNhangChance()) {
-                    pull = 0f;
-                }
-            }
-            if (player.isRiskyBaitActive()) {
-                pull *= 2f;
-            }
-            tensionIncrease += pull * delta;
+            // Khi cá vùng vẫy: kéo thì 1.5x, buông sẽ kéo với 80% lực (0.8x)
+            pullMult = isSpaceDown ? 1.5f : 0.8f;
+        } else {
+            // Khi cá mệt (IDLE): Cá bơi chậm (kéo: 0.15x, buông: 0.10x)
+            pullMult = isSpaceDown ? 0.15f : 0.10f;
         }
+        float pull = currentFish.getPullStrength() * pullMult;
+        if (currentFish.getPassiveSkill("xuc_tu") != null) {
+            pull *= (1f + (combatDuration / 10f) * 0.1f);
+        }
+        float pullReduceFromSubstat = player.getEquipmentTotalStat(com.fishingrpg.game.entities.equipment.Substat.Type.FISH_PULL_REDUCE) / 100f;
+        float khangDut = player.getEquippedLine() != null ? player.getEquippedLine().mainStat2 : 0f;
+        float pullReduceFromLine = (khangDut * 1.5f) / 100f;
+        float totalPullMult = Math.max(0.25f, 1f - (pullReduceFromSubstat + pullReduceFromLine));
+        pull *= totalPullMult;
+        if (fishButTocTimer > 0) pull *= 2f;
+        if (currentFish.getPassiveSkill("vung_vay") != null) {
+            if (com.badlogic.gdx.math.MathUtils.random(100f) < 2f) {
+                pull *= 3f;
+            }
+        }
+        
+        if (luotDayTimer > 0 || abilitySystem.hasEffect("effect_luot_day")) {
+            pull *= abilitySystem.getFishPullMultiplier();
+        }
+
+        boolean isTroiBuoc = troiBuocTimer > 0 || abilitySystem.isFishFrozen() || abilitySystem.hasEffect("effect_troi_buoc");
+        if (isTroiBuoc) {
+            pull = 0f; // Stopped
+        }
+        
+        // Nhip Nhang: if holding space, chance to negate pull
+        if (isSpaceDown && player.isSkillEquipped("nhip_nhang")) {
+            if (MathUtils.random(100f) < player.getSkillTree().getNhipNhangChance()) {
+                pull = 0f;
+            }
+        }
+        if (player.isRiskyBaitActive()) {
+            pull *= 2f;
+        }
+        tensionIncrease += pull * delta;
 
         // Băng Giá set bonus: đóng băng Tension tăng từ cá kéo
         if (player.isSetBonusActive() && player.getEquippedRod() != null
@@ -812,7 +818,6 @@ public class FishingManager {
             tensionIncrease = 0f;
         }
 
-        boolean isTroiBuoc = troiBuocTimer > 0 || abilitySystem.isFishFrozen() || abilitySystem.hasEffect("effect_troi_buoc");
         boolean isDuongSuc = duongSucChannelTimer > 0 || abilitySystem.hasEffect("effect_duong_suc");
 
         // Player Action
@@ -845,8 +850,8 @@ public class FishingManager {
             
             slackTimer = 0f;
         } else {
-            // Slack: không giữ dây hoặc đang vận sức Dưỡng Sức → tension tự giảm an toàn
-            float tensionDec = (20f + player.getMaxLineTension() * 0.1f) * delta;
+            // Slack: không giữ dây hoặc đang vận sức Dưỡng Sức → tension tự giảm an toàn (đã giảm mạnh tốc độ xả tự nhiên)
+            float tensionDec = (6f + player.getMaxLineTension() * 0.04f) * delta;
             if (currentFish.getPassiveSkill("xuc_tu") != null) {
                 tensionDec *= 0.7f; // Xúc tu quấn chặt làm dây chùng chậm hơn 30%
             }

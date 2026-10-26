@@ -465,10 +465,10 @@ public class GachaScreen implements Screen {
             drawGachaWheel(sr, showcaseCX, wheelCY, wheelRadius, isEventBanner);
 
             // Featured Set Equipment Pedestal with 3 Slots
-            float pedX = showcaseCX - 130f;
-            float pedY = cardY + 45f;
-            float pedW = 260f;
-            float pedH = 88f;
+            float pedW = 320f;
+            float pedH = 124f;
+            float pedX = showcaseCX - pedW / 2f;
+            float pedY = cardY + 20f;
 
             sr.setColor(0.09f, 0.12f, 0.18f, 0.95f);
             drawRoundedRect(sr, pedX, pedY, pedW, pedH, 8);
@@ -482,37 +482,43 @@ public class GachaScreen implements Screen {
                 drawRectOutline(sr, pedX, pedY, pedW, pedH, 1.5f);
             }
 
-            // 3 Equipment Slots (Rod, Line, Hook)
+            // 3 Equipment Slots (Rod, Line, Hook) with Full Vector Art Display
             String curSetName = isEventBanner ? "Thần Khí Lạc Hồng" : curTheme.setName;
             Color curSetCol = isEventBanner ? new Color(1f, 0.85f, 0.35f, 1f) : curTheme.primaryColor;
 
-            float slotW = 72f;
-            float slotH = 72f;
-            float slotY = pedY + 8f;
-            float slot1X = pedX + 12f;
-            float slot2X = pedX + 94f;
-            float slot3X = pedX + 176f;
+            float slotW = 92f;
+            float slotH = 88f;
+            float slotY = pedY + 28f;
+            float slot1X = pedX + 10f;
+            float slot2X = pedX + 114f;
+            float slot3X = pedX + 218f;
 
             // Slot 1: Rod
             sr.setColor(0.06f, 0.08f, 0.13f, 0.95f);
             drawRoundedRect(sr, slot1X, slotY, slotW, slotH, 6);
             sr.setColor(curSetCol.r, curSetCol.g, curSetCol.b, 0.65f);
             drawRectOutline(sr, slot1X, slotY, slotW, slotH, 1.2f);
-            EquipmentIconRenderer.drawSetPiece(sr, curSetName, EquipmentType.ROD, slot1X + slotW / 2f, slotY + slotH / 2f + 4f, 24f, curSetCol);
+            sr.setColor(curSetCol.r, curSetCol.g, curSetCol.b, 0.18f);
+            sr.circle(slot1X + slotW / 2f, slotY + slotH / 2f, 40f);
+            EquipmentIconRenderer.drawSetPiece(sr, curSetName, EquipmentType.ROD, slot1X + slotW / 2f, slotY + slotH / 2f, 36f, curSetCol);
 
             // Slot 2: Line
             sr.setColor(0.06f, 0.08f, 0.13f, 0.95f);
             drawRoundedRect(sr, slot2X, slotY, slotW, slotH, 6);
             sr.setColor(curSetCol.r, curSetCol.g, curSetCol.b, 0.65f);
             drawRectOutline(sr, slot2X, slotY, slotW, slotH, 1.2f);
-            EquipmentIconRenderer.drawSetPiece(sr, curSetName, EquipmentType.LINE, slot2X + slotW / 2f, slotY + slotH / 2f + 4f, 24f, curSetCol);
+            sr.setColor(curSetCol.r, curSetCol.g, curSetCol.b, 0.18f);
+            sr.circle(slot2X + slotW / 2f, slotY + slotH / 2f, 40f);
+            EquipmentIconRenderer.drawSetPiece(sr, curSetName, EquipmentType.LINE, slot2X + slotW / 2f, slotY + slotH / 2f, 36f, curSetCol);
 
             // Slot 3: Hook
             sr.setColor(0.06f, 0.08f, 0.13f, 0.95f);
             drawRoundedRect(sr, slot3X, slotY, slotW, slotH, 6);
             sr.setColor(curSetCol.r, curSetCol.g, curSetCol.b, 0.65f);
             drawRectOutline(sr, slot3X, slotY, slotW, slotH, 1.2f);
-            EquipmentIconRenderer.drawSetPiece(sr, curSetName, EquipmentType.HOOK, slot3X + slotW / 2f, slotY + slotH / 2f + 4f, 24f, curSetCol);
+            sr.setColor(curSetCol.r, curSetCol.g, curSetCol.b, 0.18f);
+            sr.circle(slot3X + slotW / 2f, slotY + slotH / 2f, 40f);
+            EquipmentIconRenderer.drawSetPiece(sr, curSetName, EquipmentType.HOOK, slot3X + slotW / 2f, slotY + slotH / 2f, 36f, curSetCol);
 
             // Right Info Section Background Box
             float infoX = cardX + 460f;
@@ -561,12 +567,12 @@ public class GachaScreen implements Screen {
             }
         }
 
-        // 5. SPINNING STATE: Roller Bar
+        // 5. SPINNING STATE: Roller Bar (CS:GO Reel) with Full Vector Artwork
         if (state == State.SPINNING) {
-            float spinX = 140f;
-            float spinY = 265f;
-            float spinW = 1000f;
-            float spinH = 180f;
+            float spinX = 100f;
+            float spinY = 240f;
+            float spinW = 1080f;
+            float spinH = 225f;
 
             // Roller container background
             sr.setColor(0.05f, 0.07f, 0.12f, 0.98f);
@@ -584,8 +590,8 @@ public class GachaScreen implements Screen {
                 float progress = spinTimer / totalSpinTime;
                 float easedProgress = Interpolation.pow5Out.apply(progress);
 
-                float itemWidth = 135f;
-                float itemHeight = 158f;
+                float itemWidth = 160f;
+                float itemHeight = 200f;
                 float spacing = 20f;
                 float totalW = itemWidth + spacing;
 
@@ -597,7 +603,7 @@ public class GachaScreen implements Screen {
                     float ix = currentOffset + i * totalW;
                     if (ix + itemWidth > spinX && ix < spinX + spinW) {
                         Equipment eq = spinItems.get(i);
-                        float cardY = spinY + 11f;
+                        float cardY = spinY + 12f;
 
                         // Card background
                         sr.setColor(0.08f, 0.11f, 0.18f, 0.96f);
@@ -605,15 +611,17 @@ public class GachaScreen implements Screen {
 
                         // Rarity aura glow behind equipment icon
                         Color rCol = eq.rarity != null ? eq.rarity.color : Color.WHITE;
+                        float iconCX = ix + itemWidth / 2f;
+                        float iconCY = cardY + itemHeight - 72f;
                         sr.setColor(rCol.r, rCol.g, rCol.b, 0.22f);
-                        sr.circle(ix + itemWidth / 2f, cardY + itemHeight - 55f, 32f);
+                        sr.circle(iconCX, iconCY, 50f);
 
                         // Card border
                         sr.setColor(rCol.r, rCol.g, rCol.b, 0.85f);
                         drawRectOutline(sr, ix, cardY, itemWidth, itemHeight, 1.8f);
 
-                        // Real vector equipment artwork!
-                        EquipmentIconRenderer.draw(sr, eq, eq.type, ix + itemWidth / 2f, cardY + itemHeight - 55f, 26f, rCol);
+                        // Full-size vector equipment artwork!
+                        EquipmentIconRenderer.draw(sr, eq, eq.type, iconCX, iconCY, 44f, rCol);
                     }
                 }
                 sr.flush();
@@ -652,8 +660,13 @@ public class GachaScreen implements Screen {
                 sr.setColor(eq.rarity.color);
                 drawRectOutline(sr, cardX, cardY, cardW, cardH, 3f);
 
-                // Draw exact equipment vector icon
-                EquipmentIconRenderer.draw(sr, eq, eq.type, cardX + cardW / 2f, cardY + cardH - 80f, 38f, eq.rarity.color);
+                // Aura glow
+                float iconCY = cardY + cardH - 85f;
+                sr.setColor(eq.rarity.color.r, eq.rarity.color.g, eq.rarity.color.b, 0.22f);
+                sr.circle(cardX + cardW / 2f, iconCY, 58f);
+
+                // Draw exact equipment vector icon (Full-size showcase)
+                EquipmentIconRenderer.draw(sr, eq, eq.type, cardX + cardW / 2f, iconCY, 50f, eq.rarity.color);
             } else if (lastPull.size() > 1) {
                 float cW = 190f;
                 float cH = 170f;
@@ -682,8 +695,13 @@ public class GachaScreen implements Screen {
                         drawRectOutline(sr, gx, gy, cW, cH, 1.5f);
                     }
 
-                    // Vector icon for each item in grid
-                    EquipmentIconRenderer.draw(sr, eq, eq.type, gx + cW / 2f, gy + cH - 52f, 22f, eq.rarity.color);
+                    // Aura glow behind item in grid
+                    float iconCY = gy + cH - 56f;
+                    sr.setColor(eq.rarity.color.r, eq.rarity.color.g, eq.rarity.color.b, 0.18f);
+                    sr.circle(gx + cW / 2f, iconCY, 42f);
+
+                    // Vector icon for each item in grid (Full detailed display)
+                    EquipmentIconRenderer.draw(sr, eq, eq.type, gx + cW / 2f, iconCY, 36f, eq.rarity.color);
                 }
             }
         }
@@ -801,19 +819,21 @@ public class GachaScreen implements Screen {
             float infoX = cardX + 460f;
             float infoY = cardY + 30f;
 
-            // Pedestal equipment slot labels
-            float pedX = showcaseCX - 130f;
-            float pedY = cardY + 45f;
-            float slotW = 72f;
-            float slot1X = pedX + 12f;
-            float slot2X = pedX + 94f;
-            float slot3X = pedX + 176f;
+            // Pedestal equipment slot labels - Perfectly aligned under each 92px slot!
+            float pedW = 320f;
+            float pedH = 124f;
+            float pedX = showcaseCX - pedW / 2f;
+            float pedY = cardY + 20f;
+            float slotW = 92f;
+            float slot1X = pedX + 10f;
+            float slot2X = pedX + 114f;
+            float slot3X = pedX + 218f;
 
             font.getData().setScale(0.70f);
-            font.setColor(0.85f, 0.9f, 1f, 0.85f);
-            drawCenteredText(font, "Cần Câu", slot1X, pedY - 14f, slotW, 16f);
-            drawCenteredText(font, "Dây Cước", slot2X, pedY - 14f, slotW, 16f);
-            drawCenteredText(font, "Lưỡi Câu", slot3X, pedY - 14f, slotW, 16f);
+            font.setColor(0.85f, 0.9f, 1f, 0.90f);
+            drawCenteredText(font, "Cần Câu", slot1X, pedY + 6f, slotW, 18f);
+            drawCenteredText(font, "Dây Cước", slot2X, pedY + 6f, slotW, 18f);
+            drawCenteredText(font, "Lưỡi Câu", slot3X, pedY + 6f, slotW, 18f);
             font.getData().setScale(1f);
 
             if (!isEventBanner) {
@@ -1043,10 +1063,10 @@ public class GachaScreen implements Screen {
         if (state == State.SPINNING) {
             game.batch.begin();
             game.batch.flush();
-            float spinX = 140f;
-            float spinY = 265f;
-            float spinW = 1000f;
-            float spinH = 180f;
+            float spinX = 100f;
+            float spinY = 240f;
+            float spinW = 1080f;
+            float spinH = 225f;
 
             Rectangle clipBounds = new Rectangle(spinX + 4f, spinY + 4f, spinW - 8f, spinH - 8f);
             Rectangle scissors = new Rectangle();
@@ -1056,8 +1076,8 @@ public class GachaScreen implements Screen {
                 float progress = spinTimer / totalSpinTime;
                 float easedProgress = Interpolation.pow5Out.apply(progress);
 
-                float itemWidth = 135f;
-                float itemHeight = 158f;
+                float itemWidth = 160f;
+                float itemHeight = 200f;
                 float spacing = 20f;
                 float totalW = itemWidth + spacing;
 
@@ -1069,19 +1089,19 @@ public class GachaScreen implements Screen {
                     float ix = currentOffset + i * totalW;
                     if (ix + itemWidth > spinX && ix < spinX + spinW) {
                         Equipment eq = spinItems.get(i);
-                        float cardY = spinY + 11f;
+                        float cardY = spinY + 12f;
 
                         // Equipment Name in rarity color
                         font.setColor(eq.rarity != null ? eq.rarity.color : Color.WHITE);
                         font.getData().setScale(0.72f);
-                        font.draw(game.batch, eq.name, ix + 4f, cardY + 58f, itemWidth - 8f, Align.center, true);
+                        font.draw(game.batch, eq.name, ix + 6f, cardY + 54f, itemWidth - 12f, Align.center, true);
 
                         // Equipment Type & Rarity tag
                         font.setColor(0.8f, 0.9f, 1f, 0.85f);
                         font.getData().setScale(0.64f);
                         String typeLabel = (eq.type == EquipmentType.ROD ? "Cần" : eq.type == EquipmentType.LINE ? "Cước" : "Lưỡi");
                         String rarName = (eq.rarity != null ? eq.rarity.name() : "");
-                        font.draw(game.batch, typeLabel + " • " + rarName, ix + 4f, cardY + 22f, itemWidth - 8f, Align.center, false);
+                        font.draw(game.batch, typeLabel + " • " + rarName, ix + 6f, cardY + 22f, itemWidth - 12f, Align.center, false);
                         font.getData().setScale(1f);
                     }
                 }
@@ -1148,12 +1168,12 @@ public class GachaScreen implements Screen {
             sr.circle(p1x, p1y, 2.5f);
         }
 
-        // Center hub plate
+        // Center hub plate (Circular plate with circular rim)
         float hubR = r * 0.42f;
-        sr.setColor(0.08f, 0.10f, 0.16f, 1f);
-        sr.circle(cx, cy, hubR);
         sr.setColor(isEvent ? new Color(0.95f, 0.75f, 0.25f, 1f) : new Color(0.45f, 0.8f, 1f, 1f));
-        drawRectOutline(sr, cx - hubR, cy - hubR, hubR * 2f, hubR * 2f, 1.8f);
+        sr.circle(cx, cy, hubR);
+        sr.setColor(0.08f, 0.10f, 0.16f, 1f);
+        sr.circle(cx, cy, hubR - 2.5f);
 
         // Spinning core star emblem
         for (int s = 0; s < (isEvent ? 12 : 8); s++) {
@@ -1379,8 +1399,8 @@ public class GachaScreen implements Screen {
         }
 
         float cardW = col2W - 24f; // 696f
-        float cardH = 120f;
-        float cardSpacing = 10f;
+        float cardH = 195f;
+        float cardSpacing = 12f;
         float totalListH = displaySets.size() * (cardH + cardSpacing);
         float visibleListH = colH - 46f;
         float maxScrollY = Math.max(0f, totalListH - visibleListH);
@@ -1414,8 +1434,8 @@ public class GachaScreen implements Screen {
         if (hasScissors) {
             float startCardY = colY + colH - 44f - cardH + modalLootScrollY;
             float boxW = 216f;
-            float boxH = 50f;
-            float gap = 8f;
+            float boxH = 142f;
+            float gap = 12f;
 
             for (int i = 0; i < displaySets.size(); i++) {
                 StandardSetTheme st = displaySets.get(i);
@@ -1430,19 +1450,28 @@ public class GachaScreen implements Screen {
                 sr.setColor(st.primaryColor.r, st.primaryColor.g, st.primaryColor.b, 0.45f);
                 drawRectOutline(sr, cX, cY, cardW, cardH, 1.2f);
 
-                // 3 Item Boxes in a row (Rod, Line, Hook)
-                float boxY = cY + 36f;
+                // 3 Vertical Showcase Item Boxes (Rod, Line, Hook)
+                float boxY = cY + 12f;
                 EquipmentType[] eqTypes = { EquipmentType.ROD, EquipmentType.LINE, EquipmentType.HOOK };
 
                 for (int s = 0; s < 3; s++) {
-                    float bx = cX + 16f + s * (boxW + gap);
+                    float bx = cX + 12f + s * (boxW + gap);
                     sr.setColor(0.04f, 0.06f, 0.10f, 0.95f);
                     drawRoundedRect(sr, bx, boxY, boxW, boxH, 6);
                     sr.setColor(st.primaryColor.r, st.primaryColor.g, st.primaryColor.b, 0.5f);
                     drawRectOutline(sr, bx, boxY, boxW, boxH, 1f);
 
-                    // Render vector icon for the item (Centered vertically on the left of each box)
-                    EquipmentIconRenderer.drawSetPiece(sr, st.setName, eqTypes[s], bx + 24f, boxY + boxH / 2f, 15f, st.primaryColor);
+                    // Type badge pill at top of box
+                    sr.setColor(0.09f, 0.13f, 0.20f, 0.9f);
+                    drawRoundedRect(sr, bx + 24f, boxY + boxH - 24f, boxW - 48f, 18f, 4);
+
+                    // Full detailed vector icon with aura (r = 34f!)
+                    float iconCX = bx + boxW / 2f;
+                    float iconCY = boxY + 68f;
+                    sr.setColor(st.primaryColor.r, st.primaryColor.g, st.primaryColor.b, 0.20f);
+                    sr.circle(iconCX, iconCY, 42f);
+
+                    EquipmentIconRenderer.drawSetPiece(sr, st.setName, eqTypes[s], iconCX, iconCY, 34f, st.primaryColor);
                 }
             }
             sr.flush(); // FLUSH BEFORE POPPING SCISSORS!
@@ -1544,8 +1573,8 @@ public class GachaScreen implements Screen {
         if (hasBatchScissors) {
             float startCardY = colY + colH - 44f - cardH + modalLootScrollY;
             float boxW = 216f;
-            float boxH = 50f;
-            float gap = 8f;
+            float boxH = 142f;
+            float gap = 12f;
 
             for (int i = 0; i < displaySets.size(); i++) {
                 StandardSetTheme st = displaySets.get(i);
@@ -1556,40 +1585,39 @@ public class GachaScreen implements Screen {
 
                 float multVal = 1f + st.points * 0.15f;
 
-                // 1. Top Title: Set Name
+                // 1. Top Title: Set Name & Points & Multiplier
                 font.setColor(st.primaryColor);
-                font.getData().setScale(0.80f);
-                font.draw(game.batch, "Bộ " + st.setName, cX + 16f, cY + cardH - 10f);
+                font.getData().setScale(0.85f);
+                font.draw(game.batch, "✦ BỘ " + st.setName.toUpperCase(), cX + 16f, cY + cardH - 10f);
 
-                // 2. Middle Row: 3 Boxes (Rod, Line, Hook)
-                float boxY = cY + 36f;
+                font.setColor(1f, 0.85f, 0.35f, 1f);
+                font.getData().setScale(0.72f);
+                String badge = "[+" + st.points + " Cấp Điểm • Hệ số: x" + String.format(java.util.Locale.US, "%.2f", multVal) + "]";
+                font.draw(game.batch, badge, cX + 220f, cY + cardH - 10f);
+
+                font.setColor(0.45f, 0.95f, 0.65f, 1f);
+                font.getData().setScale(0.68f);
+                String bonus = "★ 3 Món: " + EquipmentGenerator.getSetBonusDesc(st.setName);
+                font.draw(game.batch, bonus, cX + 16f, cY + cardH - 28f);
+
+                // 2. 3 Vertical Showcase Item Boxes (Rod, Line, Hook)
+                float boxY = cY + 12f;
                 String[] pTypes = { "CẦN CÂU", "DÂY CƯỚC", "LƯỠI CÂU" };
                 String[] pNames = { st.rodName, st.lineName, st.hookName };
 
                 for (int s = 0; s < 3; s++) {
-                    float bx = cX + 16f + s * (boxW + gap);
+                    float bx = cX + 12f + s * (boxW + gap);
 
-                    // Type subtitle
-                    font.setColor(0.6f, 0.8f, 1f, 0.75f);
-                    font.getData().setScale(0.56f);
-                    font.draw(game.batch, pTypes[s], bx + 48f, boxY + boxH - 10f);
+                    // Type subtitle in pill
+                    font.setColor(0.7f, 0.85f, 1f, 0.85f);
+                    font.getData().setScale(0.58f);
+                    font.draw(game.batch, pTypes[s], bx + 4f, boxY + boxH - 10f, boxW - 8f, Align.center, false);
 
-                    // Item Name
+                    // Item Name under icon
                     font.setColor(Color.WHITE);
-                    font.getData().setScale(0.66f);
-                    font.draw(game.batch, pNames[s], bx + 48f, boxY + 18f);
+                    font.getData().setScale(0.72f);
+                    font.draw(game.batch, pNames[s], bx + 4f, boxY + 22f, boxW - 8f, Align.center, false);
                 }
-
-                // 3. Bottom: Points & Multiplier + Set Bonus
-                font.setColor(1f, 0.85f, 0.35f, 1f);
-                font.getData().setScale(0.70f);
-                String badge = "[+" + st.points + " Cấp Điểm • Hệ số: x" + String.format(java.util.Locale.US, "%.2f", multVal) + "]";
-                font.draw(game.batch, badge, cX + 16f, cY + 16f);
-
-                font.setColor(0.45f, 0.95f, 0.65f, 1f);
-                font.getData().setScale(0.70f);
-                String bonus = "★ Set 3 món: " + EquipmentGenerator.getSetBonusDesc(st.setName);
-                font.draw(game.batch, bonus, cX + 240f, cY + 16f);
             }
 
             game.batch.flush(); // FLUSH TEXT CARDS BEFORE POPPING!
@@ -1628,7 +1656,7 @@ public class GachaScreen implements Screen {
 
         hoverSet = !showRateLootModal && (
             (mouseX >= infoX && mouseX <= infoX + infoW && mouseY >= infoY && mouseY <= infoY + infoH) ||
-            (mouseX >= showcaseCX - 130f && mouseX <= showcaseCX + 130f && mouseY >= cardY + 45f && mouseY <= cardY + 140f)
+            (mouseX >= showcaseCX - 160f && mouseX <= showcaseCX + 160f && mouseY >= cardY + 20f && mouseY <= cardY + 144f)
         );
 
         // Set Detail Modal Close Button Hover

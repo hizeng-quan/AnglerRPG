@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- 1. Atmospheric Solar Dawn Aura -->
+  <circle cx="64" cy="40" r="50" fill="rgba(250, 204, 21, 0.16)" />
+  <circle cx="64" cy="40" r="34" fill="rgba(254, 240, 138, 0.22)" />
+  <circle cx="64" cy="80" r="26" fill="rgba(250, 204, 21, 0.10)" />
+
+  <!-- 2. Floating Holy Seraph Halo (Behind Upper Cross) -->
+  <ellipse cx="64" cy="30" rx="22" ry="7" fill="none" stroke="#fde047" stroke-width="2.5" />
+  <ellipse cx="64" cy="30" rx="18" ry="5" fill="none" stroke="#ffffff" stroke-width="1.0" />
+
+  <!-- 3. Upright White-Gold Celestial Shaft (Vertical Scepter) -->
+  <line x1="64" y1="116" x2="64" y2="34" stroke="#78350f" stroke-width="8.0" stroke-linecap="round" />
+  <line x1="64" y1="116" x2="64" y2="34" stroke="#ca8a04" stroke-width="5.5" stroke-linecap="round" />
+  <line x1="64" y1="114" x2="64" y2="36" stroke="#facc15" stroke-width="3.2" stroke-linecap="round" />
+  <line x1="64" y1="114" x2="64" y2="36" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" />
+
+  <!-- 4. Ornate Shaft Node Rings & Ruby Sunstones -->
+  <circle cx="64" cy="94" r="5.0" fill="#ca8a04" stroke="#78350f" stroke-width="1.2" />
+  <circle cx="64" cy="94" r="2.8" fill="#ea580c" />
+  <circle cx="63" cy="93" r="1.0" fill="#ffffff" />
+  <circle cx="64" cy="72" r="5.2" fill="#ca8a04" stroke="#78350f" stroke-width="1.2" />
+  <circle cx="64" cy="72" r="3.0" fill="#ea580c" />
+  <circle cx="63" cy="71" r="1.1" fill="#ffffff" />
+
+  <!-- 5. Grip & Chalice Base Pommel -->
+  <rect x="58" y="98" width="12" height="14" rx="2" fill="#fef08a" stroke="#ca8a04" stroke-width="1.2" />
+  <line x1="59" y1="102" x2="69" y2="102" stroke="#ca8a04" stroke-width="1.2" />
+  <line x1="59" y1="106" x2="69" y2="106" stroke="#ca8a04" stroke-width="1.2" />
+  <polygon points="64,124 57,114 71,114" fill="#ca8a04" stroke="#78350f" stroke-width="1.0" />
+  <circle cx="64" cy="123" r="2.0" fill="#fef08a" />
+  <circle cx="64" cy="123" r="0.8" fill="#ffffff" />
+
+  <!-- 6. Colossal Archangel Feathered Wings (Sweeping Outward) -->
+  <!-- Left Wing Outer & Inner -->
+  <polygon points="64,48 16,30 24,44 48,52" fill="#fde047" stroke="#ca8a04" stroke-width="1.2" />
+  <polygon points="64,48 24,44 32,58 54,54" fill="#ca8a04" />
+  <polygon points="64,47 22,34 30,44 50,50" fill="#ffffff" />
+  <!-- Right Wing Outer & Inner -->
+  <polygon points="64,48 112,30 104,44 80,52" fill="#fde047" stroke="#ca8a04" stroke-width="1.2" />
+  <polygon points="64,48 104,44 96,58 74,54" fill="#ca8a04" />
+  <polygon points="64,47 106,34 98,44 78,50" fill="#ffffff" />
+
+  <!-- 7. Cruciform Crossbar with Solar Endcaps -->
+  <line x1="42" y1="44" x2="86" y2="44" stroke="#78350f" stroke-width="5.0" stroke-linecap="round" />
+  <line x1="42" y1="44" x2="86" y2="44" stroke="#facc15" stroke-width="3.0" stroke-linecap="round" />
+  <line x1="44" y1="44" x2="84" y2="44" stroke="#ffffff" stroke-width="1.0" stroke-linecap="round" />
+  <circle cx="42" cy="44" r="3.2" fill="#ea580c" stroke="#ca8a04" stroke-width="1.0" />
+  <circle cx="86" cy="44" r="3.2" fill="#ea580c" stroke="#ca8a04" stroke-width="1.0" />
+
+  <!-- 8. Sol Diamond Crown & Dawn Starburst (Scepter Tip) -->
+  <polygon points="64,8 60,24 68,24" fill="#facc15" />
+  <polygon points="48,24 64,20 64,28" fill="#facc15" />
+  <polygon points="80,24 64,20 64,28" fill="#facc15" />
+  <polygon points="64,40 60,24 68,24" fill="#facc15" />
+  <!-- Central Sol Diamond Gem -->
+  <polygon points="64,16 71,24 64,32 57,24" fill="#fef08a" stroke="#ca8a04" stroke-width="1.2" />
+  <polygon points="64,18 69,24 64,30 59,24" fill="#ffffff" />
+
+  <!-- 9. Specular Glints -->
+  <circle cx="63" cy="22" r="1.8" fill="#ffffff" />
+  <circle cx="18" cy="31" r="1.5" fill="#ffffff" />
+  <circle cx="110" cy="31" r="1.5" fill="#ffffff" />
+  <circle cx="42" cy="43" r="1.0" fill="#ffffff" />
+  <circle cx="86" cy="43" r="1.0" fill="#ffffff" />
+  <circle cx="64" cy="56" r="1.4" fill="#ffffff" />
+</svg>

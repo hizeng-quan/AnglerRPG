@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="energyAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#b91c1c" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="canBodyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#991b1b"/>
+      <stop offset="30%" stop-color="#ef4444"/>
+      <stop offset="70%" stop-color="#dc2626"/>
+      <stop offset="100%" stop-color="#7f1d1d"/>
+    </linearGradient>
+    <linearGradient id="metalRimGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#cbd5e1"/>
+      <stop offset="50%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#64748b"/>
+    </linearGradient>
+    <linearGradient id="lightningGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#facc15"/>
+      <stop offset="100%" stop-color="#eab308"/>
+    </linearGradient>
+  </defs>
+
+  <!-- LAYER 1: Background Glow -->
+  <g id="background_glow">
+    <circle cx="64" cy="64" r="44" fill="url(#energyAura)"/>
+    <ellipse cx="64" cy="112" rx="24" ry="7" fill="#000000" opacity="0.4"/>
+  </g>
+
+  <!-- LAYER 2: Base Form (Aluminum Can Cylinder Body & Rims) -->
+  <g id="base_form">
+    <!-- Main Can Cylindrical Hull -->
+    <rect x="42" y="28" width="44" height="76" rx="4" fill="url(#canBodyGrad)"/>
+    <!-- Can Bottom Chime -->
+    <ellipse cx="64" cy="104" rx="22" ry="6" fill="url(#metalRimGrad)"/>
+    <!-- Can Top Tapered Rim -->
+    <ellipse cx="64" cy="28" rx="20" ry="5" fill="url(#metalRimGrad)"/>
+    <ellipse cx="64" cy="27" rx="17" ry="4" fill="#334155"/>
+  </g>
+
+  <!-- LAYER 3: Details & Relief (Pull Tab, Dynamic Cyber Lightning Bolt & Gold Ribbons) -->
+  <g id="details_and_relief">
+    <!-- Aluminum Can Pull Tab at Top -->
+    <ellipse cx="64" cy="26" rx="8" ry="2.5" fill="#94a3b8"/>
+    <circle cx="62" cy="26" r="1.5" fill="#1e293b"/>
+
+    <!-- Gold Accent Racing Stripes -->
+    <path d="M 42 42 L 86 50 L 86 54 L 42 46 Z" fill="#facc15"/>
+    <path d="M 42 84 L 86 92 L 86 96 L 42 88 Z" fill="#facc15"/>
+
+    <!-- Sharp Cyber Lightning Bolt Emblem -->
+    <polygon points="68,36 50,68 62,68 56,94 78,60 66,60" fill="url(#lightningGrad)"/>
+    <!-- Lightning core glow -->
+    <polygon points="67,40 54,66 63,66 59,88 74,62 65,62" fill="#ffffff" opacity="0.8"/>
+  </g>
+
+  <!-- LAYER 4: Specular Highlights (Chilled Can Gloss & Condensation Droplets) -->
+  <g id="specular_highlights">
+    <!-- High Metallic Specular Stripe along Left Rim -->
+    <line x1="48" y1="30" x2="48" y2="102" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+    <line x1="52" y1="32" x2="52" y2="100" stroke="#ffffff" stroke-width="1.0" opacity="0.5"/>
+    <!-- Top Rim Metallic Shine -->
+    <path d="M 46 27 Q 64 23 82 27" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+    <!-- Ice Cold Condensation Droplets -->
+    <circle cx="78" cy="46" r="1.5" fill="#ffffff" opacity="0.9"/>
+    <circle cx="82" cy="74" r="1.2" fill="#ffffff" opacity="0.9"/>
+    <circle cx="46" cy="62" r="1.0" fill="#ffffff" opacity="0.9"/>
+  </g>
+</svg>

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="cryoAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.35"/>
+      <stop offset="60%" stop-color="#a5f3fc" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="canisterGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0369a1"/>
+      <stop offset="30%" stop-color="#38bdf8"/>
+      <stop offset="70%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#075985"/>
+    </linearGradient>
+  </defs>
+
+  <!-- LAYER 1: Background Glow -->
+  <g id="background_glow">
+    <circle cx="64" cy="64" r="44" fill="url(#cryoAura)"/>
+    <ellipse cx="56" cy="112" rx="20" ry="6" fill="#000000" opacity="0.4"/>
+  </g>
+
+  <!-- LAYER 2: Base Form (Aerosol Canister & Angled Nozzle Head) -->
+  <g id="base_form">
+    <!-- Canister Main Cylindrical Tank -->
+    <rect x="38" y="38" width="36" height="68" rx="4" fill="url(#canisterGrad)"/>
+    <ellipse cx="56" cy="106" rx="18" ry="5" fill="#0284c7"/>
+    <!-- Dome Top Shoulder -->
+    <ellipse cx="56" cy="38" rx="18" ry="5" fill="#cbd5e1"/>
+
+    <!-- High-Pressure Spray Nozzle Button (Van xịt nghiêng) -->
+    <rect x="50" y="24" width="12" height="12" rx="2" fill="#0284c7"/>
+    <polygon points="62,26 74,22 72,30 62,30" fill="#e2e8f0"/>
+  </g>
+
+  <!-- LAYER 3: Details & Relief (Snowflake Hazard Emblem & Subzero Frost Blast) -->
+  <g id="details_and_relief">
+    <!-- Snowflake Crystal Hazard Warning on Tank -->
+    <line x1="56" y1="62" x2="56" y2="82" stroke="#ffffff" stroke-width="2.5"/>
+    <line x1="46" y1="72" x2="66" y2="72" stroke="#ffffff" stroke-width="2.5"/>
+    <line x1="49" y1="65" x2="63" y2="79" stroke="#ffffff" stroke-width="2.0"/>
+    <line x1="49" y1="79" x2="63" y2="65" stroke="#ffffff" stroke-width="2.0"/>
+    <circle cx="56" cy="72" r="3" fill="#a5f3fc"/>
+
+    <!-- Freezing Fog / Subzero Frost Spray Clouds Spewing from Nozzle -->
+    <path d="M 74 24 Q 90 14 104 22 Q 94 30 84 28 Z" fill="#e0f2fe" opacity="0.85"/>
+    <circle cx="92" cy="18" r="5" fill="#bae6fd" opacity="0.7"/>
+    <circle cx="106" cy="22" r="6" fill="#ffffff" opacity="0.8"/>
+    <circle cx="100" cy="32" r="4.5" fill="#e0f2fe" opacity="0.6"/>
+
+    <!-- Ice Crystal Spikes Forming on Base of Canister -->
+    <polygon points="38,102 34,92 42,98" fill="#e0f2fe"/>
+    <polygon points="74,102 78,90 70,96" fill="#e0f2fe"/>
+  </g>
+
+  <!-- LAYER 4: Specular Highlights (Chilled Can Gloss & Ice Sparkles) -->
+  <g id="specular_highlights">
+    <!-- Canister Left Edge Metallic Reflection -->
+    <line x1="42" y1="40" x2="42" y2="100" stroke="#ffffff" stroke-width="2.0" stroke-linecap="round" opacity="0.9"/>
+    <!-- Snowflake Center Sparkle -->
+    <circle cx="56" cy="72" r="1.2" fill="#ffffff"/>
+    <!-- Ice Dust Stars in Frost Spray -->
+    <circle cx="90" cy="20" r="1.5" fill="#ffffff"/>
+    <circle cx="104" cy="24" r="1.5" fill="#ffffff"/>
+    <circle cx="80" cy="24" r="1.0" fill="#ffffff"/>
+  </g>
+</svg>

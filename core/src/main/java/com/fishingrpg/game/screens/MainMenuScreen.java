@@ -26,10 +26,10 @@ public class MainMenuScreen implements Screen {
     private static final float H = 720f;
 
     private static final String[] ITEMS = { "BẮT ĐẦU CÂU", "THOÁT" };
-    private static final float BTN_W = 380f;
-    private static final float BTN_H = 46f;
-    private static final float BTN_START_Y = 245f;
-    private static final float BTN_SPACING = 58f;
+    private static final float BTN_W = 600f;
+    private static final float BTN_H = 92f;
+    private static final float BTN_START_Y = 275f;
+    private static final float BTN_SPACING = 118f;
 
     private final FishingRPG game;
     private final ShapeRenderer sr;
@@ -567,7 +567,7 @@ public class MainMenuScreen implements Screen {
                 } else {
                     sr.setColor(1f, 0.85f, 0.35f, 0.25f + 0.15f * pulse);
                 }
-                drawRoundedRect(sr, btnX - 6f, btnY - 6f, BTN_W + 12f, BTN_H + 12f, 16);
+                drawRoundedRect(sr, btnX - 8f, btnY - 8f, BTN_W + 16f, BTN_H + 16f, 20);
 
                 // Button plate background
                 if (isExit) {
@@ -575,7 +575,7 @@ public class MainMenuScreen implements Screen {
                 } else {
                     sr.setColor(0.12f, 0.18f, 0.32f, 0.96f);
                 }
-                drawRoundedRect(sr, btnX, btnY, BTN_W, BTN_H, 12);
+                drawRoundedRect(sr, btnX, btnY, BTN_W, BTN_H, 16);
 
                 // High-polish border
                 if (isExit) {
@@ -583,7 +583,7 @@ public class MainMenuScreen implements Screen {
                 } else {
                     sr.setColor(1f, 0.88f, 0.35f, 1f);
                 }
-                drawRectOutline(sr, btnX, btnY, BTN_W, BTN_H, 2.5f);
+                drawRectOutline(sr, btnX, btnY, BTN_W, BTN_H, 3f);
 
                 // Side accent indicator bars
                 if (isExit) {
@@ -591,8 +591,8 @@ public class MainMenuScreen implements Screen {
                 } else {
                     sr.setColor(1f, 0.92f, 0.5f, 1f);
                 }
-                sr.rect(btnX + 12f, btnY + 12f, 4f, BTN_H - 24f);
-                sr.rect(btnX + BTN_W - 16f, btnY + 12f, 4f, BTN_H - 24f);
+                sr.rect(btnX + 16f, btnY + 16f, 6f, BTN_H - 32f);
+                sr.rect(btnX + BTN_W - 22f, btnY + 16f, 6f, BTN_H - 32f);
             } else {
                 // Glassmorphism translucent obsidian plate
                 if (isExit) {
@@ -600,7 +600,7 @@ public class MainMenuScreen implements Screen {
                 } else {
                     sr.setColor(0.06f, 0.09f, 0.16f, 0.88f);
                 }
-                drawRoundedRect(sr, btnX, btnY, BTN_W, BTN_H, 12);
+                drawRoundedRect(sr, btnX, btnY, BTN_W, BTN_H, 16);
 
                 // Subtle metallic border
                 if (isExit) {
@@ -608,7 +608,7 @@ public class MainMenuScreen implements Screen {
                 } else {
                     sr.setColor(0.25f, 0.40f, 0.60f, 0.70f);
                 }
-                drawRectOutline(sr, btnX, btnY, BTN_W, BTN_H, 1.5f);
+                drawRectOutline(sr, btnX, btnY, BTN_W, BTN_H, 2f);
             }
         }
     }
@@ -653,6 +653,7 @@ public class MainMenuScreen implements Screen {
 
     private void drawButtonTexts() {
         float btnX = (W - BTN_W) / 2f;
+        menuFont.getData().setScale(1.25f);
 
         for (int i = 0; i < ITEMS.length; i++) {
             float btnY = BTN_START_Y - i * BTN_SPACING;
@@ -666,8 +667,8 @@ public class MainMenuScreen implements Screen {
                 menuFont.setColor(0.02f, 0.04f, 0.08f, 0.9f);
                 layout.setText(menuFont, text);
                 menuFont.draw(game.batch, text,
-                    btnX + (BTN_W - layout.width) / 2f + 2f,
-                    btnY + (BTN_H + layout.height) / 2f - 2f
+                    btnX + (BTN_W - layout.width) / 2f + 3f,
+                    btnY + (BTN_H + layout.height) / 2f - 3f
                 );
 
                 if (isExit) {
@@ -692,6 +693,7 @@ public class MainMenuScreen implements Screen {
                 );
             }
         }
+        menuFont.getData().setScale(1.0f);
     }
 
     private void drawFooterInfo() {

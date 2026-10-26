@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- 1. Gunpowder Smoke & Cursed Gold Aura -->
+  <circle cx="64" cy="64" r="54" fill="rgba(217, 119, 6, 0.18)" />
+  <circle cx="64" cy="64" r="42" fill="rgba(220, 38, 38, 0.14)" />
+
+  <!-- 2. Weathered Mahogany Galleon Mast Timber Shaft -->
+  <line x1="26" y1="102" x2="88" y2="40" stroke="#1c1917" stroke-width="7.5" stroke-linecap="round" />
+  <line x1="26" y1="102" x2="88" y2="40" stroke="#451a03" stroke-width="5.0" stroke-linecap="round" />
+  <line x1="26" y1="102" x2="88" y2="40" stroke="#9a3412" stroke-width="2.2" stroke-linecap="round" />
+  <line x1="27" y1="101" x2="87" y2="41" stroke="#fed7aa" stroke-width="0.9" stroke-linecap="round" />
+
+  <!-- 3. Forged Brass Fastener Bands with Rivets -->
+  <line x1="38" y1="93" x2="44" y2="87" stroke="#d97706" stroke-width="4.0" stroke-linecap="round" />
+  <circle cx="41" cy="90" r="1.5" fill="#fef08a" />
+  <line x1="54" y1="77" x2="60" y2="71" stroke="#d97706" stroke-width="4.0" stroke-linecap="round" />
+  <circle cx="57" cy="74" r="1.5" fill="#fef08a" />
+  <line x1="70" y1="61" x2="76" y2="55" stroke="#d97706" stroke-width="4.0" stroke-linecap="round" />
+  <circle cx="73" cy="58" r="1.5" fill="#fef08a" />
+
+  <!-- 4. Heavy Brass Galleon Rigging Pulley Block -->
+  <circle cx="68" cy="60" r="8" fill="#78350f" stroke="#d97706" stroke-width="1.6" />
+  <circle cx="68" cy="60" r="4.5" fill="#1c1917" />
+  <circle cx="68" cy="60" r="2.0" fill="#fbbf24" />
+  <!-- Rigging Rope Strands -->
+  <line x1="62" y1="64" x2="48" y2="82" stroke="#d97706" stroke-width="1.8" />
+  <line x1="72" y1="64" x2="60" y2="86" stroke="#b45309" stroke-width="1.5" />
+
+  <!-- 5. Hanging Cursed Pirate Storm Lantern (Bottom-Left Yardarm) -->
+  <line x1="34" y1="96" x2="22" y2="84" stroke="#78350f" stroke-width="2.5" />
+  <rect x="18" y="86" width="8" height="12" rx="1.5" fill="#1c1917" stroke="#d97706" stroke-width="1.2" />
+  <circle cx="22" cy="92" r="3" fill="#fbbf24" />
+  <circle cx="22" cy="92" r="1.5" fill="#ffffff" />
+
+  <!-- 6. Flying Tattered Black Jolly Roger Pennant Flag -->
+  <polygon points="88,40 120,32 108,46 122,54 88,48" fill="#0f172a" stroke="#d97706" stroke-width="1.2" />
+  <!-- Ivory Skull on Flag -->
+  <circle cx="98" cy="43" r="3.5" fill="#f1f5f9" />
+  <rect x="96" y="45" width="4" height="2.5" fill="#f1f5f9" />
+  <circle cx="97" cy="43" r="0.8" fill="#dc2626" />
+  <circle cx="99" cy="43" r="0.8" fill="#dc2626" />
+  <!-- Crossed Cutlasses -->
+  <line x1="93" y1="48" x2="103" y2="40" stroke="#94a3b8" stroke-width="0.9" />
+  <line x1="103" y1="48" x2="93" y2="40" stroke="#94a3b8" stroke-width="0.9" />
+
+  <!-- 7. Specular Glints -->
+  <circle cx="88" cy="40" r="1.8" fill="#ffffff" />
+  <circle cx="68" cy="58" r="1.5" fill="#ffffff" />
+  <circle cx="22" cy="87" r="1.4" fill="#ffffff" />
+  <circle cx="41" cy="90" r="1.2" fill="#ffffff" />
+</svg>

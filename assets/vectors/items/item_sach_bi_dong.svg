@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="wisdomAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#4338ca" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="mysticCover" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="50%" stop-color="#312e81"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- LAYER 1: Background Glow -->
+  <g id="background_glow">
+    <circle cx="64" cy="64" r="44" fill="url(#wisdomAura)"/>
+    <ellipse cx="64" cy="112" rx="34" ry="8" fill="#000000" opacity="0.4"/>
+  </g>
+
+  <!-- LAYER 2: Base Form (Midnight Blue Velvet Tome & Silver-Gilt Pages) -->
+  <g id="base_form">
+    <!-- Main Velvet Spellbook Cover -->
+    <rect x="36" y="24" width="56" height="74" rx="4" fill="url(#mysticCover)"/>
+    <!-- Silver-Gilt Page Block Edge -->
+    <rect x="86" y="28" width="8" height="66" rx="1" fill="#e2e8f0"/>
+    <line x1="88" y1="32" x2="88" y2="90" stroke="#94a3b8" stroke-width="1"/>
+    <line x1="91" y1="32" x2="91" y2="90" stroke="#94a3b8" stroke-width="1"/>
+  </g>
+
+  <!-- LAYER 3: Details & Relief (Silver Filigree, All-Seeing Eye Glyph & Teardrop Gem) -->
+  <g id="details_and_relief">
+    <!-- 4 Silver Filigree Corner Brackets -->
+    <polygon points="36,24 50,24 36,38" fill="#cbd5e1"/>
+    <polygon points="86,24 72,24 86,38" fill="#cbd5e1"/>
+    <polygon points="36,98 50,98 36,84" fill="#cbd5e1"/>
+    <polygon points="86,98 72,98 86,84" fill="#cbd5e1"/>
+
+    <!-- Mystic All-Seeing Eye Center Emblem -->
+    <circle cx="61" cy="58" r="18" fill="#0f172a"/>
+    <circle cx="61" cy="58" r="15" fill="#38bdf8"/>
+    <!-- Eye Iris -->
+    <ellipse cx="61" cy="58" rx="10" ry="6" fill="#1e1b4b"/>
+    <circle cx="61" cy="58" r="4" fill="#38bdf8"/>
+    <circle cx="61" cy="58" r="2" fill="#020617"/>
+
+    <!-- Sapphire-Blue Bookmark Ribbon with Teardrop Gem -->
+    <polygon points="68,96 76,96 76,116 72,112 68,116" fill="#0284c7"/>
+    <circle cx="72" cy="116" r="3.5" fill="#38bdf8"/>
+  </g>
+
+  <!-- LAYER 4: Specular Highlights (Eye Pupil Sparkle & Silver Sheen) -->
+  <g id="specular_highlights">
+    <!-- Spine Velvet Sheen Line -->
+    <line x1="39" y1="26" x2="39" y2="96" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+    <!-- Eye Pupil Specular Glint -->
+    <circle cx="60" cy="57" r="1.5" fill="#ffffff"/>
+    <circle cx="63" cy="59" r="0.8" fill="#ffffff"/>
+    <!-- Teardrop Gem Glint -->
+    <circle cx="71" cy="115" r="1.2" fill="#ffffff"/>
+    <!-- Silver Corner Sparkle -->
+    <circle cx="42" cy="28" r="1.2" fill="#ffffff"/>
+  </g>
+</svg>

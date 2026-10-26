@@ -121,8 +121,8 @@ public class SkillTreeScreen implements Screen {
         new NodeBounds("loi_nguyen_troi_buoc", 560f, -460f, 185f, 82f, 3)
     };
     
-    private final Rectangle upgradeBtn = new Rectangle(925f, 220f, 320f, 48f);
-    private final Rectangle equipBtn = new Rectangle(925f, 155f, 320f, 48f);
+    private final Rectangle upgradeBtn = new Rectangle(915f, 45f, 330f, 50f);
+    private final Rectangle equipBtn = new Rectangle(915f, 35f, 330f, 48f);
     
     private final Rectangle[] activeSlots = new Rectangle[4];
     private final Rectangle[] passiveSlots = new Rectangle[2];
@@ -373,23 +373,35 @@ public class SkillTreeScreen implements Screen {
             }
         }
         
-        if (selectedSkill != null && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-            if (upgradeBtn.contains(mouse.x, mouse.y)) {
-                String bName = getBookNameForSkill(selectedSkill.id);
-                boolean hasBook = bName != null && player.getItemCount(bName) > 0;
-                boolean canUpSP = tree.canUpgrade(selectedSkill.id, player.getSkillPoints());
-                if (canUpSP) {
+        if (selectedSkill != null) {
+            float pX = 880f;
+            float pW = W - pX;
+            if (selectedSkill.isUnlocked()) {
+                upgradeBtn.set(pX + 35f, 95f, pW - 70f, 48f);
+                equipBtn.set(pX + 35f, 35f, pW - 70f, 48f);
+            } else {
+                upgradeBtn.set(pX + 35f, 45f, pW - 70f, 50f);
+                equipBtn.set(-1000f, -1000f, 0f, 0f);
+            }
+
+            if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+                if (upgradeBtn.contains(mouse.x, mouse.y)) {
+                    String bName = getBookNameForSkill(selectedSkill.id);
+                    boolean hasBook = bName != null && player.getItemCount(bName) > 0;
+                    boolean canUpSP = tree.canUpgrade(selectedSkill.id, player.getSkillPoints());
+                    if (canUpSP) {
+                        AudioManager.getInstance().playSFX("sfx_button");
+                        player.upgradeSkill(selectedSkill.id);
+                    } else if (hasBook && !selectedSkill.isMaxed()) {
+                        AudioManager.getInstance().playSFX("sfx_skill");
+                        player.consumeItem(bName);
+                        selectedSkill.upgrade();
+                        player.applySkillBonuses();
+                    }
+                } else if (equipBtn.contains(mouse.x, mouse.y) && selectedSkill.isUnlocked()) {
                     AudioManager.getInstance().playSFX("sfx_button");
-                    player.upgradeSkill(selectedSkill.id);
-                } else if (hasBook && !selectedSkill.isMaxed()) {
-                    AudioManager.getInstance().playSFX("sfx_skill");
-                    player.consumeItem(bName);
-                    selectedSkill.upgrade();
-                    player.applySkillBonuses();
+                    toggleEquip(selectedSkill);
                 }
-            } else if (equipBtn.contains(mouse.x, mouse.y) && selectedSkill.isUnlocked()) {
-                AudioManager.getInstance().playSFX("sfx_button");
-                toggleEquip(selectedSkill);
             }
         }
         
@@ -630,6 +642,10 @@ public class SkillTreeScreen implements Screen {
             // Draw enlarged skill icon in inspector preview box
             Color skColor = selectedSkill.type == Skill.SkillType.ACTIVE ? new Color(1f, 0.65f, 0.3f, 1f) : new Color(0.35f, 0.85f, 1f, 1f);
             drawSkillIcon(sr, selectedSkill.id, pX + 25f + 37.5f, pH - 110f + 37.5f, 26f, skColor, selectedSkill.isUnlocked());
+
+            // Sleek subtle separator line below header
+            sr.setColor(0.20f, 0.32f, 0.48f, 0.6f);
+            sr.rectLine(pX + 25f, pH - 124f, pX + pW - 25f, pH - 124f, 1.5f);
 
             // Upgrade Button
             String bName = getBookNameForSkill(selectedSkill.id);
@@ -876,6 +892,7 @@ public class SkillTreeScreen implements Screen {
             float pX = 880f;
             float pW = W - pX;
             float pH = H - 74f;
+            float textW = pW - 50f;
 
             // Name (Auto-scale to fit available panel width)
             titleFont.setColor(0.95f, 0.85f, 0.4f, 1f);
@@ -884,35 +901,60 @@ public class SkillTreeScreen implements Screen {
             if (layout.width > maxSkillNameW) {
                 titleFont.getData().setScale(maxSkillNameW / layout.width);
             }
-            titleFont.draw(game.batch, selectedSkill.name, pX + 115f, pH - 45f);
+            boolean hasCooldown = selectedSkill.type == Skill.SkillType.ACTIVE && selectedSkill.getCooldown() > 0;
+            float nameY = hasCooldown ? pH - 38f : pH - 44f;
+            float badgeY = hasCooldown ? pH - 72f : pH - 82f;
+            titleFont.draw(game.batch, selectedSkill.name, pX + 115f, nameY);
             titleFont.getData().setScale(1f);
 
-            // Level & Type Tag
-            font.setColor(selectedSkill.type == Skill.SkillType.ACTIVE ? new Color(1f, 0.6f, 0.3f, 1f) : new Color(0.35f, 0.85f, 1f, 1f));
+            // Level & Type Tag (Unified font scale 0.95f)
+            font.getData().setScale(0.95f);
+            font.setColor(selectedSkill.type == Skill.SkillType.ACTIVE ? new Color(1f, 0.68f, 0.32f, 1f) : new Color(0.35f, 0.85f, 1f, 1f));
             String typeBadge = (selectedSkill.type == Skill.SkillType.ACTIVE ? "Chủ Động" : "Bị Động") + " • Cấp " + selectedSkill.getLevel() + "/" + selectedSkill.maxLevel;
-            font.draw(game.batch, typeBadge, pX + 115f, pH - 78f);
+            font.draw(game.batch, typeBadge, pX + 115f, badgeY);
 
-            // Description
-            font.setColor(0.85f, 0.9f, 0.95f, 1f);
-            font.draw(game.batch, selectedSkill.description, pX + 25f, pH - 135f, pW - 50f, Align.left, true);
+            // Cooldown info: Same font scale, NO bullet dot, clean spacing
+            if (hasCooldown) {
+                font.setColor(0.40f, 0.85f, 1f, 1f);
+                String cdText = "Thời gian hồi chiêu: " + String.format(java.util.Locale.US, "%.1fs", selectedSkill.getCooldown());
+                font.draw(game.batch, cdText, pX + 115f, pH - 100f);
+            }
+
+            // Description (Dynamic flow using measured layout height, spacious padding)
+            float cursorY = pH - 146f;
+            font.setColor(0.86f, 0.92f, 0.98f, 1f);
+            layout.setText(font, selectedSkill.description, Color.WHITE, textW, Align.left, true);
+            font.draw(game.batch, layout, pX + 25f, cursorY);
+            cursorY -= (layout.height + 28f);
 
             // Current effect
-            float curY = pH - 200f;
             if (selectedSkill.isUnlocked()) {
-                font.setColor(0.4f, 1f, 0.65f, 1f);
-                font.draw(game.batch, "❖ Hiệu ứng hiện tại:", pX + 25f, curY);
+                font.setColor(0.35f, 0.95f, 0.60f, 1f);
+                font.draw(game.batch, "❖ HIỆU ỨNG HIỆN TẠI (CẤP " + selectedSkill.getLevel() + "):", pX + 25f, cursorY);
+                cursorY -= 24f;
+
                 font.setColor(Color.WHITE);
-                font.draw(game.batch, selectedSkill.getCurrentLevelEffectString(), pX + 25f, curY - 22f, pW - 50f, Align.left, true);
-                curY -= 54f;
+                String curEff = selectedSkill.getCurrentLevelEffectString();
+                layout.setText(font, curEff, Color.WHITE, textW, Align.left, true);
+                font.draw(game.batch, layout, pX + 25f, cursorY);
+                cursorY -= (layout.height + 28f);
             }
 
             // Next level effect
             if (!selectedSkill.isMaxed()) {
-                font.setColor(0.4f, 0.85f, 1f, 1f);
-                font.draw(game.batch, "❖ Cấp tiếp theo:", pX + 25f, curY);
+                font.setColor(0.35f, 0.85f, 1f, 1f);
+                font.draw(game.batch, "❖ CẤP TIẾP THEO (CẤP " + (selectedSkill.getLevel() + 1) + "):", pX + 25f, cursorY);
+                cursorY -= 24f;
+
                 font.setColor(Color.WHITE);
-                font.draw(game.batch, selectedSkill.getNextLevelEffectString(), pX + 25f, curY - 22f, pW - 50f, Align.left, true);
-                curY -= 54f;
+                String nextEff = selectedSkill.getNextLevelEffectString();
+                layout.setText(font, nextEff, Color.WHITE, textW, Align.left, true);
+                font.draw(game.batch, layout, pX + 25f, cursorY);
+                cursorY -= (layout.height + 28f);
+            } else {
+                font.setColor(0.9f, 0.5f, 1f, 1f);
+                font.draw(game.batch, "★ KỸ NĂNG ĐÃ ĐẠT CẤP TỐI ĐA ★", pX + 25f, cursorY);
+                cursorY -= 28f;
             }
 
             // Book indicator text anchored cleanly above upgrade button
@@ -920,24 +962,13 @@ public class SkillTreeScreen implements Screen {
             boolean hasBook = bName != null && player.getItemCount(bName) > 0;
             boolean canUpSP = tree.canUpgrade(selectedSkill.id, player.getSkillPoints());
 
-            float bookY = upgradeBtn.y + upgradeBtn.height + 10f;
+            float bookY = upgradeBtn.y + upgradeBtn.height + 12f;
             if (hasBook) {
                 font.setColor(1f, 0.85f, 0.25f, 1f);
-                font.getData().setScale(0.82f);
                 font.draw(game.batch, "★ Trong túi có: " + player.getItemCount(bName) + " " + bName + " (Có thể dùng thay SP)", pX + 25f, bookY);
-                font.getData().setScale(1f);
-            }
-
-            // Cooldown info placed safely above buttons/book info without any overlap or missing glyphs
-            if (selectedSkill.type == Skill.SkillType.ACTIVE && selectedSkill.getCooldown() > 0) {
-                float minCdY = hasBook ? (bookY + 24f) : (upgradeBtn.y + upgradeBtn.height + 16f);
-                float cdY = Math.max(curY, minCdY);
-                font.setColor(0.45f, 0.85f, 1f, 1f);
-                font.draw(game.batch, "• Thời gian hồi chiêu: " + String.format(java.util.Locale.US, "%.1fs", selectedSkill.getCooldown()), pX + 25f, cdY);
             }
 
             // Upgrade Button Text
-
             if (!selectedSkill.isMaxed()) {
                 String cost;
                 if (hasBook && !canUpSP) {
@@ -950,18 +981,17 @@ public class SkillTreeScreen implements Screen {
                     cost = (selectedSkill.isUnlocked() ? "NÂNG CẤP (" : "MỞ KHÓA (") + selectedSkill.getUpgradeCost() + " SP)";
                     font.setColor(Color.WHITE);
                 }
-                font.getData().setScale(0.85f);
                 layout.setText(font, cost);
-                if (layout.width > upgradeBtn.width - 12f) {
-                    font.getData().setScale(0.85f * ((upgradeBtn.width - 12f) / layout.width));
+                if (layout.width > upgradeBtn.width - 16f) {
+                    font.getData().setScale(0.95f * ((upgradeBtn.width - 16f) / layout.width));
                     layout.setText(font, cost);
                 }
-                font.draw(game.batch, layout, upgradeBtn.x + (upgradeBtn.width - layout.width) / 2f, upgradeBtn.y + 30f);
-                font.getData().setScale(1f);
+                font.draw(game.batch, layout, upgradeBtn.x + (upgradeBtn.width - layout.width) / 2f, upgradeBtn.y + 31f);
+                font.getData().setScale(0.95f);
             } else {
                 font.setColor(0.9f, 0.5f, 1f, 1f);
                 layout.setText(font, "★ ĐÃ ĐẠT CẤP TỐI ĐA ★");
-                font.draw(game.batch, layout, upgradeBtn.x + (upgradeBtn.width - layout.width) / 2f, upgradeBtn.y + 30f);
+                font.draw(game.batch, layout, upgradeBtn.x + (upgradeBtn.width - layout.width) / 2f, upgradeBtn.y + 31f);
             }
 
             // Equip Button Text
@@ -969,12 +999,16 @@ public class SkillTreeScreen implements Screen {
                 boolean isEq = player.isSkillEquipped(selectedSkill.id);
                 font.setColor(Color.WHITE);
                 String eqText = isEq ? "THÁO KHỎI THANH KỸ NĂNG" : "GÁN VÀO THANH KỸ NĂNG";
-                font.getData().setScale(0.88f);
                 layout.setText(font, eqText);
+                if (layout.width > equipBtn.width - 16f) {
+                    font.getData().setScale(0.95f * ((equipBtn.width - 16f) / layout.width));
+                    layout.setText(font, eqText);
+                }
                 font.draw(game.batch, layout, equipBtn.x + (equipBtn.width - layout.width) / 2f, equipBtn.y + 30f);
-                font.getData().setScale(1f);
             }
+            font.getData().setScale(1f);
         } else {
+            font.getData().setScale(1f);
             font.setColor(0.5f, 0.6f, 0.7f, 0.8f);
             String noSkillMsg = "Chọn một kỹ năng trên cây thiên phú để xem thông tin chi tiết và nâng cấp";
             font.draw(game.batch, noSkillMsg, 880f + 25f, H / 2f, 350f, Align.center, true);

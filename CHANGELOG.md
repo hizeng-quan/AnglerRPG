@@ -4,7 +4,151 @@
 
 ---
 
-## 📅 [2026-10-26] - Phiên bản v0.4.24 (Mã Hóa File Save Chống Sửa Đổi, Chốt Hạn Sự Kiện Lạc Hồng 28/10 & Cơ Chế Chuyển Giao Mùa Halloween)
+## 📅 [2026-10-27] - Phiên bản v0.5.1 (Đại Tu Toàn Diện 54 Vector Icon Nguyên Bản & Phóng To Quickslot)
+
+### 🖥️ Nâng Cấp Giao Diện Phím Tắt Nhanh ([GameHUD.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/GameHUD.java))
+- **Phóng To Kích Thước Ô Quickslot & Tỷ Lệ Hiển Thị**:
+  - Tăng kích thước mỗi ô từ `58f` lên `68f` (+17% kích thước), panel tổng thể mở rộng thành `236x264px` tạo không gian thoáng đãng, dễ bấm chuột và thao tác phản xạ.
+  - Tăng hệ số scale vẽ icon đồ họa vector từ `0.60f` lên `0.70f` tương xứng với kích thước ô mới, giúp mọi vật phẩm nổi bật và sắc nét.
+  - Tự động đồng bộ neo tọa độ góc cho nhãn phím tắt `[1]-[9]`, huy hiệu số lượng xN và huy hiệu trạng thái sách kỹ năng (HỌC / ★UP / +SP).
+
+### 🎨 Chuẩn Hóa Vector 4 Lớp Bước 1.5: 12 Icon Mồi Câu, Sách Kỹ Năng & Chiến Lợi Phẩm Đáy Biển ([assets/vectors/loot/](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/loot/), [assets/vectors/items/](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/items/), [LootVisualRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/LootVisualRenderer.java))
+- **Thiết Kế 12 Tác Phẩm Vector Phân Tầng 4 Lớp Đạt Điểm Tuyệt Đối 100/100 Audit**:
+  - *4 Chiến Lợi Phẩm Rác (Trash):*
+    1. **Ủng Cao Su Cũ** ([loot_ung_cao_su.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/loot/loot_ung_cao_su.svg)): Cổ ủng gập viền, đế cao su gai cleat xẻ rãnh bùn, miếng vá da chỉ thêu vàng và giọt nước nhỏ giọt ở mũi ủng.
+    2. **Chai Nhựa** ([loot_chai_nhua.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/loot/loot_chai_nhua.svg)): Thân chai PET trong suốt, nắp ren xanh dương đậm, ngấn nước đục đáy chai cùng nhãn dán rách mép và bọt khí lơ lửng.
+    3. **Lốp Xe** ([loot_lop_xe.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/loot/loot_lop_xe.svg)): Vành lốp cao su dày với 8 rãnh khía gai xuyên tâm, hốc bánh đọng nước rêu và các dải rong rêu bám quấn quanh viền.
+    4. **Túi Rác** ([loot_tui_rac.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/loot/loot_tui_rac.svg)): Túi nilon phồng to thắt 2 tai thỏ, dây rút đỏ lộ diện, các đường gân nếp gấp kéo căng và ánh bóng nhựa phản quang.
+  - *4 Cổ Vật Kho Báu (Treasure):*
+    5. **Bình Cổ** ([loot_binh_co.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/loot/loot_binh_co.svg)): Bầu bình ngọc bích men lam viền chân đế đồng cổ, miệng bình loe bọc vàng, quai rồng 2 bên và đai vàng đính 5 viên hồng ngọc.
+    6. **Nhẫn Vàng** ([loot_nhan_vang.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/loot/loot_nhan_vang.svg)): Nhẫn vàng ròng 24K khối dày, chấu vương miện 4 ngàm ôm viên hồng ngọc ruby giác cắt cushion lấp lánh ánh sao 4 cánh.
+    7. **Rương Chìm** ([loot_ruong_chim.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/loot/loot_ruong_chim.svg)): Rương gỗ sồi cổ ngâm đáy biển nắp hé mở, đai sắt rỉ đính đinh tán, tràn ngập tiền vàng doubloon & sapphire xanh, khóa đầu lâu đồng thau và vỏ hàu bám góc.
+    8. **Kiếm Cổ** ([loot_kiem_co.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/loot/loot_kiem_co.svg)): Thanh bảo kiếm thép 2 lưỡi vươn thẳng, rãnh xẻ khắc 4 ký tự cổ ngữ phát sáng, đốc kiếm đầu rồng ngọc bích, chuôi quấn lụa đỏ và dải ngọc bội phỉ thúy.
+  - *2 Mồi Câu Chuyên Dụng:*
+    9. **Mồi Thơm** ([item_moi_thom.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/items/item_moi_thom.svg)): Hũ thủy tinh chứa các viên bột mồi thảo mộc vàng xanh, nắp bần buộc dây gai thẻ gỗ ngôi sao thơm và làn khói hương ngọt ngào.
+    10. **Mồi Rủi Ro** ([item_moi_rui_ro.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/items/item_moi_rui_ro.svg)): Lọ thuốc độc thủy tinh tím sẫm nắp kim loại vặn ren, lõi mồi đỏ thẫm phát sáng, nhãn cảnh báo đầu lâu xương chéo và làn sương tím ma quái.
+  - *2 Sách Kỹ Năng / Bí Kíp:*
+    11. **Sách Kỹ Năng Chủ Động** ([item_sach_chu_dong.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/items/item_sach_chu_dong.svg)): Bìa da rồng đỏ thẫm viền 4 góc vàng chạm trổ, gáy sách gân nổi, biểu tượng kiếm chiến trận hoàng kim và dải ruy băng lụa đỏ đánh dấu trang.
+    12. **Sách Kỹ Năng Bị Động / Sách Thông Thái** ([item_sach_bi_dong.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/items/item_sach_bi_dong.svg)): Bìa nhung xanh thẳm huyền bí viền 4 góc bạc, mép giấy ánh bạc, phù hiệu mắt toàn tri tinh tú và dải ruy băng ngọc sapphire giọt nước.
+- **Hoàn Thành Toàn Diện Giai Đoạn 1 Kế Hoạch Phát Triển Đồ Họa**:
+  - Chuẩn hóa trọn vẹn 100% (54/54 icon) gồm: 30 icon trang bị (10 bộ x 3 món) + 24 icon vật phẩm tiệm tạp hóa và chiến lợi phẩm biển.
+  - Tích hợp toàn bộ vào [LootVisualRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/LootVisualRenderer.java) với bộ điều hướng chính xác 100%.
+
+---
+
+## 📅 [2026-10-26] - Phiên bản v0.4.24 (Chuẩn Hóa Đồ Họa Vector 4 Lớp Bước 1.2 & Tái Cân Bằng Lực Căng Dây Combat)
+
+### ⚖️ Tái Cân Bằng Lực Căng Dây (Tension) & Cơ Chế Giằng Co Chiến Đấu ([FishingManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/FishingManager.java), [Fish.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/entities/Fish.java), [combat_simulator.py](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/scripts/balance/combat_simulator.py))
+- **Giảm Mạnh Tốc Độ Xả Tension Tự Nhiên Khi Buông Dây**:
+  - *Vấn đề*: Tốc độ giảm Tension tự nhiên cũ là `20f + 0.10f * MaxTension` (~30-40 tension/s), quá lớn so với lực kéo của cá (thường từ 10-30). Khi người chơi buông phím Space, kim Tension lập tức tụt dốc không phanh về 0 bất kể cá đang giằng co thế nào, khiến cơ chế đứt dây trở nên vô hại.
+  - *Giải pháp*: Điều chỉnh tốc độ giảm tự nhiên xuống `(6f + 0.04f * MaxTension) * delta` (chỉ còn ~10 tension/s ở mốc 100 MaxTension, giảm hơn 67%), loại bỏ hiện tượng tụt dốc bất hợp lý.
+- **Buff Cho Cá Khi Vùng Vẫy (PULLING) & Khi Kiệt Sức (IDLE)**:
+  - *Khi cá vùng vẫy (PULLING)*:
+    - Nếu người chơi buông phím Space (buông dây): Cá vẫn giằng với **80% lực kéo** (`pullMult = 0.8f`, tăng gấp đôi so với mốc 40% trước đây).
+    - Nếu người chơi kéo cần (giữ Space): Giữ nguyên **150% lực kéo** (`pullMult = 1.5f`) cộng dồn lực quay máy câu làm tăng vọt Tension.
+  - *Khi cá kiệt sức (IDLE)*:
+    - Nerf lực cản của cá khi kiệt sức để người chơi dễ thở và dồn sát thương: `pullMult = 0.15f` khi kéo và `0.10f` khi buông.
+    - Nhịp nghỉ IDLE của cá được ấn định ở mức `1.5s - 3.5s` cân đối hoàn hảo giữa nhịp hồi Tension và nhịp kéo.
+- **Đồng Bộ Hệ Thống Mô Phỏng Cân Bằng (Monte Carlo Combat Simulator)**:
+  - Cập nhật [combat_simulator.py](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/scripts/balance/combat_simulator.py) chuẩn hóa 100% các công thức kéo cá, sát thương cơ bản (20 base + chỉ số cần), thể lực người chơi (100 base + chỉ số cần) và tiêu hao thể lực.
+  - Chạy kiểm định toàn diện qua [balance_cli.py](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/scripts/balance/balance_cli.py): Các bậc cá từ Ao Làng đến Đại Dương đều thỏa mãn tiêu chuẩn TTK và Win Rate theo quy chuẩn [balance_guidelines.md](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/.agents/rules/balance_guidelines.md).
+### 🎨 Chuẩn Hóa Vector 4 Lớp Bước 1.4: 12 Icon Vật Phẩm Tiêu Hao & Đạo Cụ Tạp Hóa ([assets/vectors/items/](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/items/), [LootVisualRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/LootVisualRenderer.java), [ItemDatabase.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/data/ItemDatabase.java))
+- **Thiết Kế 12 Tác Phẩm Vector Độc Bản Đạt Chuẩn Tuyệt Đối 100/100 Điểm Audit**:
+  - *5 Vật Phẩm Tiêu Hao & Hồi Phục:*
+    1. **Bánh Mì** ([item_banh_mi.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/items/item_banh_mi.svg)): Ổ bánh mì nướng vàng giòn, 3 rãnh khía vát nở xốp rắc bột mì trắng tinh, bơ mật óng ánh và bóng đổ tiếp xúc êm dịu.
+    2. **Thuốc Hồi Stamina** ([item_thuoc_stamina.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/items/item_thuoc_stamina.svg)): Bình cầu thủy tinh ngọc bích sủi bọt khí hồi sinh, đai da cổ buộc đá vàng hổ phách, nắp bần gỗ sồi và dải quang phổ phản quang hình cung.
+    3. **Nước Tăng Lực** ([item_nuoc_tang_luc.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/items/item_nuoc_tang_luc.svg)): Lon nhôm thể thao phong cách cyber đỏ rực, nắp lon khoen giật kim loại, tia chớp vàng bùng nổ năng lượng, dải sọc tốc độ và các giọt nước ngưng tụ sương lạnh.
+    4. **Nước Bứt Phá** ([item_nuoc_but_pha.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/items/item_nuoc_but_pha.svg)): Bình tam giác Erlenmeyer giả kim thuật cổ đại, đai đồng tán đinh vàng vương miện, chất lỏng plasma rực lửa với tâm lốc xoáy năng lượng Overdrive cực hạn.
+    5. **Trà Thảo Mộc Định Thần** ([item_tra_thao_moc.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/items/item_tra_thao_moc.svg)): Tách trà gốm ngọc men xanh ngọc bích nằm trên đĩa sứ viền đôi, mặt trà tĩnh lặng với lá trà xanh thơm ngát trôi nổi và 3 làn khói thơm thư thái uốn lượn.
+  - *7 Đạo Cụ Chiến Đấu & Khai Thác Tiệm Tạp Hóa:*
+    6. **Dây Câu Tốt** ([item_day_cau_tot.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/items/item_day_cau_tot.svg)): Cuộn cước câu cá thể thao gia cường khung titan xám đậm, lõi cước bện sợi Kevlar xanh biển chịu tải cực cao, kẹp giữ dây đồng thau và bóng đổ tròn tiếp xúc.
+    7. **Bình Xịt Đóng Băng** ([item_binh_xit_bang.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/items/item_binh_xit_bang.svg)): Bình xịt khí nén kim loại xanh băng giá, dải phản quang kim loại lạnh, biểu tượng hoa tuyết Cryo sắc nét, van xịt và chùm khói sương cực lạnh đang phụt tỏa.
+    8. **Đá Mài Lưỡi Câu** ([item_da_mai_luoi.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/items/item_da_mai_luoi.svg)): Khối đá mài 2 tầng độ mịn (tầng dưới thô xám đen, tầng trên mịn màu đá dầu), vát góc phối cảnh đẳng cự 3D, rãnh mài lưỡi sáng bóng và tia lửa mài sắc bén văng lên.
+    9. **Nam Châm Kho Báu** ([item_nam_cham.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/items/item_nam_cham.svg)): Nam châm móng ngựa chữ U phủ sơn đỏ truyền thống, 2 cực N và S bọc thép mạ chrome sáng loáng, các đường cung từ trường phát sáng hút chặt các đồng tiền vàng lấp lánh.
+    10. **Kính Nhìn Xuyên Nước** ([item_kinh_nhin_xuyen_nuoc.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/items/item_kinh_nhin_xuyen_nuoc.svg)): Kính lặn thấu thị công nghệ sonar với 2 tròng kính viền đồng thau, màn hình rada xanh lục phát sáng, tâm ngắm chữ thập đo đạc và tín hiệu cá bơi phản xạ vàng kim.
+    11. **Lưới Đánh Cá** ([item_luoi_danh_ca.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/items/item_luoi_danh_ca.svg)): Lưới nón quăng cá đan mắt cáo hình thoi đều đặn bằng sợi tơ nilon xanh lam, khuyên tròn cầm tay bằng đồng vàng đỉnh lưới và chuỗi 7 quả chì chìm đáy có ánh sáng phản chiếu.
+    12. **Bùa Hoàng Kim** ([item_bua_hoang_kim.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/items/item_bua_hoang_kim.svg)): Thẻ bùa giấy tiên đạo phương Đông màu hoàng kim viền đỏ chu sa, thư pháp bùa chú phong thủy uốn lượn sắc sảo, đính dây treo chỉ đỏ và hạt ngọc bội phỉ thúy may mắn.
+- **Khắc Phục Lỗi Biến Dạng Tọa Độ & Ban Hành Quy Chuẩn An Toàn Tọa Độ (Coordinate Integrity)**:
+  - *Nguyên nhân sự cố:* Bộ script chuyển đổi trước đó bị lỗi gõ nhầm biến `y1 = x1` và `y3 = x3` (`poly_pts[1][0]` thay vì `poly_pts[1][1]`), khiến các hình đa giác bị kéo xiên 45 độ thành dạng răng cưa mã vạch; đồng thời vòng hào quang nền bị vẽ quá lớn với màu đục che khuất vật thể chính.
+  - *Giải pháp:* Sửa hoàn toàn thuật toán transpile sang cấu trúc `(x1, y1, x2, y2, x3, y3, x4, y4)` hoàn toàn độc lập, tinh chỉnh hào quang mềm mại ($r \le 44$, opacity $0.12 - 0.18$), bổ sung hàm `fillEllipse` chuẩn xác.
+  - *Cập nhật Agent Skills:* Bổ sung Mục 4 (Quy Chuẩn Kiểm Thử Hình Học & An Toàn Tọa Độ) vào [.agents/skills/vector-graphics-designer/SKILL.md](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/.agents/skills/vector-graphics-designer/SKILL.md).
+- **Tích Hợp Toàn Bộ Vào [LootVisualRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/LootVisualRenderer.java)**:
+  - Bổ sung bộ helper hình học chuẩn LibGDX (`sx`, `sy`, `fillTri`, `fillQuad`, `drawLine`, `fillCircle`, `fillEllipse`).
+  - Điều hướng chính xác toàn bộ 12 vật phẩm tiêu hao trong `drawLoot()`, chấm dứt việc dùng chung lọ thuốc tạm bợ.
+  - Dọn dẹp sạch sẽ toàn bộ 36+ ảnh preview trong `assets/vectors/previews/`.
+
+### 🎨 Đột Phá Thiết Kế Độc Bản (Strict Non-Repetition Rule) & Bùng Nổ Hiệu Ứng Thần Khí Lạc Hồng ([SKILL.md](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/.agents/skills/vector-graphics-designer/SKILL.md), [EquipmentIconRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/EquipmentIconRenderer.java), [assets/vectors/equipment/](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/))
+- **Ban Hành Nguyên Lý Độc Nhất Vô Nhị (Section 1.1 trong SKILL.md)**:
+  - Cấm tuyệt đối hiện tượng tái sử dụng phom dáng (template reuse) hoặc vẽ các đường cong na ná nhau giữa các bộ trang bị.
+  - Mỗi icon bắt buộc phải sở hữu ngôn ngữ tạo hình (silhouette), chủ đề văn hóa và cấu trúc cơ học hoàn toàn khác biệt.
+  - Quy định chuẩn hiệu ứng bùng nổ (Explosive Impact) riêng cho dòng Thần Khí Premium Limited (Lạc Hồng): Đỉnh cao huyền thoại văn hóa Lạc Việt, hào quang nhiều tầng, chi tiết vương giả rực lửa.
+- **Tái Sinh Ngoại Hình Cần Câu (Rod) Quang Minh vs Lạc Hồng**:
+  - *Cần Quang Minh ([rod_quang_minh.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/rod_quang_minh.svg))*: Chuyển đổi thành quyền trượng Seraph dựng đứng hình chữ thập (Upright Cruciform Staff), hào quang Sol Halo bay lơ lửng, đôi cánh lông vũ thiên thần xòe rộng rực sáng.
+  - *Cần Lạc Hồng ([rod_lac_hong.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/rod_lac_hong.svg))*: Thần trượng chiến trận Đông Sơn nghiêng chéo bùng nổ, đầu trượng Trống Đồng 14 tia sáng rực lửa, Chim Lạc sải cánh ngậm hồng ngọc ruby và thanh long ngọc lục bảo cuộn dọc thân trượng.
+- **Tái Sinh Ngoại Hình Dây Cước (Line) Cả 3 Bộ Đỉnh Cao**:
+  - *Dây Quang Minh ([line_quang_minh.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/line_quang_minh.svg))*: Khung dệt quả trám Seraphic Reliquary Loom 4 ngàm lông vũ thiên sứ ôm trọn khối cầu Thái Dương Sunstone rực lửa.
+  - *Dây Vệ Quốc ([line_ve_quoc.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/line_ve_quoc.svg))*: Ổ quay bát giác đồng rèn chiến trận với 8 đầu mũi giáo nhọn nhô ra ngoài, tâm khiên sao vàng 5 cánh, tay quay cơ học cổ và cờ lệnh đỏ bay phần phật.
+  - *Dây Lạc Hồng ([line_lac_hong.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/line_lac_hong.svg))*: Bùng nổ Song Long Ouroboros (đôi rồng ngọc lục bảo bờm vàng) quấn quanh viên Ngọc Rồng Huyết Ngọc Ruby phân tầng ánh lửa thần thoại.
+- **Tái Sinh Ngoại Hình Lưỡi Câu (Hook) Cả 3 Bộ Độc Bản**:
+  - *Lưỡi Quang Minh ([hook_quang_minh.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/hook_quang_minh.svg))*: Mỏ neo thập tự thánh thiện đối xứng hoàn hảo, vương miện 3 vòng hào quang, thân kiếm 2 lưỡi và 2 ngạnh móc đối xứng đầu mũi tên kim cương.
+  - *Lưỡi Vệ Quốc ([hook_ve_quoc.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/hook_ve_quoc.svg))*: Móng vuốt rồng Trảo Long Khởi Nghĩa với sống gai nhọn răng cưa chiến trận, mắt khuyên huy hiệu sao vàng 5 cánh và dải lụa đỏ xung trận.
+  - *Lưỡi Lạc Hồng ([hook_lac_hong.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/hook_lac_hong.svg))*: Bệ đỡ Đóa Sen Hồng Khảm Vàng (Đài Sen Mẫu Âu Cơ) tại đáy uốn, ngạnh câu tạc hình Chim Lạc sải cánh mỏ khoằm với mắt hồng ngọc ruby, mắt khuyên ngọc Tiên Châu hào quang mặt trời và dải lụa tiên phục.
+- **Kiểm Định Vector Studio & Đồng Bộ 100% In-Game**:
+  - Toàn bộ 8 file SVG tái thiết kế đều đạt điểm số tuyệt đối 100/100 tại Quality Gate.
+  - Transpile hoàn toàn 8 hàm vẽ vào [EquipmentIconRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/EquipmentIconRenderer.java).
+
+### 🎨 Chuẩn Hóa Vector 4 Lớp Bước 1.3: 9 Icon Trang Bị Thần Thoại & Giới Hạn 6★ - 7★ ([EquipmentIconRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/EquipmentIconRenderer.java), [assets/vectors/equipment/](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/))
+- **Thiết Kế & Kiểm Định Chất Lượng Tuyệt Đối (100/100 Điểm Kiểm Định Vector Studio)**:
+  - Hoàn thiện trọn vẹn 9 tác phẩm vector đỉnh cao phân tầng 4 lớp (Aura phân tầng -> Facet Body -> Core Accent -> Specular Glint `#ffffff`):
+    - **Set Quang Minh (7★ Mythic)**:
+      - *Cần Câu Quang Minh ([rod_quang_minh.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/rod_quang_minh.svg))*: Quyền trượng Seraph thiên sứ bạch kim mạ vàng 24K, 3 đai ngọc Thái Dương Sunstone rực lửa, đôi cánh lông vũ thiên thần xòe rộng và vương miện Sol Diamond 8 tia sáng.
+      - *Dây Cước Quang Minh ([line_quang_minh.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/line_quang_minh.svg))*: Bánh xe mặt trời chiến xa Archangel 12 răng cưa thái dương, 8 nan hoa vàng ròng, cuộn chỉ tơ vàng đan chéo phản quang và tâm lõi bảo ngọc Sol Gem kim cương.
+      - *Lưỡi Câu Quang Minh ([hook_quang_minh.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/hook_quang_minh.svg))*: Lưỡi câu vàng ròng thiên sứ uốn lượn uy nghi, 3 tầng cánh lông vũ thánh thần dọc sống lưng, mắt khuyên vương miện hào quang bay lơ lửng đính hồng ngọc và ngạnh mũi giáo pha lê ánh kim.
+    - **Set Vệ Quốc Vang Danh (Limited Event cày mốc)**:
+      - *Cần Câu Vệ Quốc ([rod_ve_quoc.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/rod_ve_quoc.svg))*: Thân trúc son ngọc bích đỏ sẫm quấn đai đồng cổ khắc sao vàng 5 cánh, ngọn giáo đồng Đông Sơn và lá cờ lệnh ngũ sắc bay phấp phới trong gió chiến trận.
+      - *Dây Cước Vệ Quốc ([line_ve_quoc.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/line_ve_quoc.svg))*: Khung cuộn trống đồng Đông Sơn 8 tia răng cưa, cuộn dây cước bện tơ đỏ huyết chiến bọc viền vàng kim và tâm sao vàng 5 cánh oai hùng.
+      - *Lưỡi Câu Vệ Quốc ([hook_ve_quoc.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/hook_ve_quoc.svg))*: Móng vuốt rồng thiêng đồng cổ uốn lượn sắc nhọn, dải hoa văn sóng nước Đông Sơn, mắt khuyên vương miện sao vàng và dải lụa đỏ thắm hộ quốc.
+    - **Set Thần Khí Lạc Hồng (6★ Limited Premium Gacha)**:
+      - *Cần Câu Lạc Hồng ([rod_lac_hong.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/rod_lac_hong.svg))*: Thần trượng Đông Sơn khảm ngọc lục bảo và vàng hoàng gia 24K, 4 đai đồng nạm hồng ngọc ruby, đỉnh trượng đầu rồng thiêng và chim Lạc sải cánh thần thoại.
+      - *Dây Cước Lạc Hồng ([line_lac_hong.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/line_lac_hong.svg))*: Khung cuộn trống đồng 16 răng cưa, Song Long Chầu Nguyệt (rồng ngọc lục bảo Lạc Long Quân) ôm trọn cuộn gân rồng, tâm lõi viên ngọc rồng Long Châu rực lửa và thẻ ngọc bài hộ mệnh.
+      - *Lưỡi Câu Lạc Hồng ([hook_lac_hong.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/hook_lac_hong.svg))*: Lưỡi câu thiên thạch thần kim viền vàng ngọc bích, đài sen tiên mẫu Âu Cơ tỏa hương, ngạnh câu mỏ chim Lạc đính hồng ngọc và chuỗi ngọc Tiên Châu Bách Noãn.
+- **Transpile Hoàn Toàn 9 Hàm Vẽ Vào [EquipmentIconRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/EquipmentIconRenderer.java)**:
+  - Tái cấu trúc toàn bộ 9 hàm: `drawQuangMinhRod`, `drawQuangMinhLine`, `drawQuangMinhHook`, `drawVeQuocRod`, `drawVeQuocLine`, `drawVeQuocHook`, `drawLacHongRod`, `drawLacHongLine`, `drawLacHongHook`.
+  - Thay thế toàn bộ hình vẽ sơ khai bằng các khối hình học đa giác đặc `(fillTri, fillQuad, drawLine, fillCircle)` chuẩn xác tọa độ SVG.
+
+### 🎨 Chuẩn Hóa Vector 4 Lớp Bước 1.2: 9 Icon Trang Bị Cao Cấp & Huyền Thoại 4★ - 6★ ([EquipmentIconRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/EquipmentIconRenderer.java), [assets/vectors/equipment/](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/))
+- **Thiết Kế & Kiểm Định Chất Lượng Tuyệt Đối (100/100 Điểm Kiểm Định Vector Studio)**:
+  - Hoàn thiện trọn vẹn 9 tác phẩm vector hình học 4 lớp (Aura hào quang phân tầng -> Thân hình học khối Facet Body -> Tâm lõi Core Gem / Accent -> Đốm sáng phản chiếu Specular Glint `#ffffff`):
+    - **Set Hải Tặc (4★ Epic)**:
+      - *Cần Câu Hải Tặc ([rod_hai_tac.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/rod_hai_tac.svg))*: Trụ cột buồm chiến hạm gỗ gụ lâu năm bọc 4 đai đồng đinh tán vàng, xà ngang treo đèn bão cướp biển ngọn lửa ma quái, ròng rọc mạn thuyền quấn dây thừng gai và cờ đuôi nheo Jolly Roger đầu lâu mắt đỏ hồng ngọc.
+      - *Dây Cước Hải Tặc ([line_hai_tac.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/line_hai_tac.svg))*: Bánh lái tàu chiến mahogany nạm đồng 8 tay cầm xoay tròn, mỏ neo cổ sắt rèn gác chéo, 8 mắt xích sắt bao quanh và đồng tiền vàng Aztec trung tâm khắc đầu lâu ivory phát sáng mắt ngọc lục bảo.
+      - *Lưỡi Câu Hải Tặc ([hook_hai_tac.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/hook_hai_tac.svg))*: Lưỡi hái hải tặc rèn thép Damascus nguyên khối uốn cong ngược tàn khốc, rãnh xẻ rỉ máu hồng ngọc, chuôi bảo kiếm bát kiếm đồng bảo vệ mắt khuyên và đồng bạc 8-Reales xỏ lỗ lúc lắc.
+    - **Set Vực Thẳm (5★ Legendary)**:
+      - *Cần Câu Vực Thẳm ([rod_vuc_tham.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/rod_vuc_tham.svg))*: Quyền trượng vực sâu hắc ám obsidian giác cạnh sắc lẹm, 3 cụm gai sừng quỷ nhô ngang rực sáng tím plasma, vương miện lưỡi liềm hư không và con mắt quỷ toàn tri All-Seeing Nether Eye đồng tử dọc ma mị.
+      - *Dây Cước Vực Thẳm ([line_vuc_tham.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/line_vuc_tham.svg))*: Khung cuộn bát giác nether-titanium 8 gai sừng quỷ hướng tâm, cuộn tơ hắc mạch tím thẫm đan xen huyết sắc và tâm mắt quỷ phát quang rực rỡ.
+      - *Lưỡi Câu Vực Thẳm ([hook_vuc_tham.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/hook_vuc_tham.svg))*: Móng vuốt rồng vực sâu hắc ám ngạnh ngược, 3 gai vảy rồng hư không trên lưng móng, rãnh rỉ huyết tương tím plasma và mắt quỷ Nether Eye All-Seeing ở mắt khuyên.
+    - **Set Hoàng Gia (6★ Legendary)**:
+      - *Cần Câu Hoàng Gia ([rod_hoang_gia.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/rod_hoang_gia.svg))*: Quyền trượng bạch kim tinh khiết mạ vàng hoàng gia 24k dập nổi hoa văn, tay cầm quấn chỉ vàng, 2 đai khớp vàng, khoen gốm viền vàng và đỉnh trượng hoa bách hợp Fleur-de-lis đính hồng ngọc Ruby giác cắt kim cương chói lọi.
+      - *Dây Cước Hoàng Gia ([line_hoang_gia.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/line_hoang_gia.svg))*: Bánh xe tơ tằm hoàng gia 8 cánh hoa văn cung đình nạm vàng ròng, cuộn chỉ tơ tằm tím dệt kim tuyến vàng óng ả và trục ấn triều đình khảm viên lam ngọc Sapphire giác cắt giác đa diện rực rỡ.
+      - *Lưỡi Câu Hoàng Gia ([hook_hoang_gia.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/hook_hoang_gia.svg))*: Lưỡi câu tạc từ khối cẩm thạch trắng thượng hạng (White Nephrite Jade) nạm viền sống lưng vàng 24k, mắt khuyên vương miện hoàng gia hoa bách hợp, chuỗi ngọc trai giọt nước rủ xuống mềm mại và ngạnh khóa mồi mạ vàng đính hồng ngọc.
+- **Transpile & Đồng Nhất 100% Vào Đồ Họa In-Game ([EquipmentIconRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/EquipmentIconRenderer.java))**:
+  - Tái cấu trúc toàn bộ 9 phương thức `drawHaiTacRod`, `drawHaiTacLine`, `drawHaiTacHook`, `drawVucThamRod`, `drawVucThamLine`, `drawVucThamHook`, `drawHoangGiaRod`, `drawHoangGiaLine`, `drawHoangGiaHook`.
+  - Thay thế toàn bộ nét phác thảo đường thẳng que cũ bằng hệ thống hình học đa giác đặc `(sx, sy, fillTri, fillQuad, drawLine, fillCircle)` chuẩn xác theo tọa độ ViewBox 128x128 của file SVG.
+  - Đảm bảo hiệu ứng hiển thị lộng lẫy, phân tầng màu sắc tương phản sắc nét và đồng nhất tuyệt đối giữa màn hình Gacha, Túi đồ (Inventory), Bảng Trang Bị (Equipment) và Tiệm buôn.
+
+### 🎨 Chuyển Thể Đồ Họa Vector Hình Học Nguyên Bản Bước 1.1 ([EquipmentIconRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/EquipmentIconRenderer.java), [GachaScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/GachaScreen.java))
+- **Khắc Phục Hiện Tượng "Nét Vẽ Gậy Que" Khác Biệt Giữa File SVG Và In-Game**:
+  - *Nguyên nhân*: Các hàm vẽ trước đây chỉ dùng vài nét đơn sơ `sr.rectLine` để phác thảo đại khái, khiến Lưỡi Câu Băng Giá nhìn như một cây đinh ba thanh mảnh thay vì mỏ neo pha lê tuyết phủ dày dặn, có giác cạnh và cánh cong như trong file vector gốc `hook_bang_gia.svg`.
+  - *Giải pháp*: Xây dựng hệ thống ánh xạ tọa độ chuẩn xác `(sx, sy, fillTri, fillQuad, drawLine, fillCircle)` biến toàn bộ cấu trúc SVG 128x128 sang hình học đa giác đặc (`ShapeRenderer.ShapeType.Filled`) 100% trung thực:
+    - **Lưỡi Câu Băng Giá ([hook_bang_gia.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/hook_bang_gia.svg))**: Lỗ xỏ lục giác băng Cryo, trụ đá ngọc bích 2 lớp, đôi cánh mỏ neo băng giá cong dày với giác cắt pha lê và ngạnh nhọn, huy hiệu sao băng tuyết 5 cánh đặc tâm phát sáng rực rỡ, mũi chóp mỏ neo và hạt lấp lánh specular glint.
+    - **Cần Câu Băng Giá ([rod_bang_gia.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/rod_bang_gia.svg))**: Thân cần ngọc bích uốn lượn mượt mà không gai nhọn, 3 đai ngọc lam nạm bạc, chuôi kim cương và vương miện sao tuyết 6 cánh với các đỉnh quả trám đối xứng.
+    - **Dây Cước Băng Giá ([line_bang_gia.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/line_bang_gia.svg))**: Khung cuộn lục giác với 6 sừng băng vươn ra ngoài, các vòng cước siêu dẫn, tâm lục giác lõi băng và giọt nước tuyết nhỏ giọt.
+    - **Lưỡi Câu Thợ Săn ([hook_tho_san.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/hook_tho_san.svg))**: Móng vuốt lưỡi liềm khủng long hóa thạch dày đặc ngà voi, 3 gai răng cưa săn mồi trên lưng cong, rãnh xẻ rỉ nọc độc ngọc lục bảo và bùa nanh hổ phách.
+    - **Lưỡi Câu Đại Dương ([hook_dai_duong.svg](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/hook_dai_duong.svg))**: Mắt xỏ vây đuôi cá voi mạ vàng, sống răng hàm thủy quái Leviathan uốn lượn, 2 vây cá mập và mũi lao tam xoa sóng triều Hải Vương.
+- **Sửa Lỗi Giao Diện & Canh Chỉnh Chữ Tại Bệ Đỡ Gacha ([GachaScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/GachaScreen.java))**:
+  - Khắc phục chữ nhãn "Cần Câu", "Dây Cước", "Lưỡi Câu" bị lệch tọa độ đè ngang mép dưới khung ô vuông trang bị: Nâng chiều cao bệ đỡ lên `124px`, đặt ô vật phẩm ở `pedY + 28f` và đưa nhãn chữ xuống `pedY + 6f` ngay ngắn, thoáng đãng.
+  - Loại bỏ hoàn toàn viền khung chữ nhật màu xanh đè lên trục quay hình tròn của Đài quay gacha.
+  - Đồng bộ vùng cảm ứng chuột (hitbox) của Bệ đỡ trang bị chính xác theo kích thước mới.
 
 ### 🛡️ Bảo Mật File Save & Chống Gian Lận Dữ Liệu ([SaveManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/data/SaveManager.java), [SettingsDialog.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/SettingsDialog.java))
 - **Mã Hóa Toàn Diện File Save Bằng Thuật Toán AES-256**:
@@ -33,6 +177,66 @@
 - **Tự Động Quy Đổi Điểm Sự Kiện Tồn Đọng Sang Vàng (Grace Transition)**:
   - Nhằm bảo vệ công sức cày cuốc của cần thủ, khi sự kiện kết thúc, toàn bộ Điểm Sự Kiện còn dư sẽ được tự động quy đổi thành Vàng với tỉ lệ ưu đãi: **1 Điểm SK = 1,000 Vàng**, nạp thẳng vào túi đồ người chơi và reset điểm về 0 để chuẩn bị cho mùa sự kiện mới.
   - Trong giai đoạn chuyển giao từ 29/10 đến 30/10, Header sự kiện hiển thị thông báo: *"ĐÃ KẾT THÚC (Halloween sau: Xd Yh)"*.
+
+### 🎰 Đính Chính Hoạt Ảnh Băng Chuyền Gacha Kiểu CS:GO ([TASKS.md](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/TASKS.md), [PatchNotesDialog.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/PatchNotesDialog.java))
+- **Đồng Bộ Mô Tả Hoạt Ảnh Gacha Theo Phong Cách Con Lăn Mở Hòm CS:GO (Case Opening Reel)**:
+  - Khắc phục các mô tả nhầm lẫn trước đây trong tài liệu và Roadmap về "vòng quay 12 cung" hay "lật thẻ" (game hoàn toàn không có cơ chế lật thẻ bài).
+  - Hoạt ảnh quay Gacha thực tế trong `GachaScreen.java` là cơ chế Băng chuyền con lăn cuộn ngang (Horizontal Roller Reel) kinh điển của CS:GO: Băng chuyền 70 thẻ trang bị trượt lướt tốc độ cao từ phải sang trái rồi hãm phanh mượt mà bằng đường cong gia tốc phi tuyến `Interpolation.pow5Out`, dừng lại tại kim chỉ vạch vàng căn giữa.
+  - Cập nhật ma trận ưu tiên (GAC-02, GAC-03), lộ trình Phase 4 và bản tin Patch Notes: Loại bỏ hoàn toàn khái niệm "lật thẻ" và chuẩn hóa thành Showcase trang bị nổ vàng.
+
+### 🛠️ Đại Tu Bố Cục Thẻ Kỹ Năng & Đồng Nhất Phông Chữ ([SkillTreeScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/SkillTreeScreen.java))
+- **Bỏ Dấu Chấm & Chuẩn Hóa Dòng Hồi Chiêu**:
+  - Loại bỏ hoàn toàn ký tự chấm đầu dòng `•` gây vướng mắt ở thông tin hồi chiêu, đổi thành `"Thời gian hồi chiêu: Xs"` đặt ngay ngắn 28px bên dưới nhãn phân loại `[Chủ Động • Cấp X/Y]`.
+- **Đồng Nhất Chuẩn Phông Chữ & Tỷ Lệ Sắc Nét**:
+  - Áp dụng chuẩn tỷ lệ font đồng nhất (0.95f) cho toàn bộ nhãn phân loại, hồi chiêu, mô tả chi tiết, tiêu đề hiệu ứng và thông số cấp tiếp theo, triệt tiêu hoàn toàn hiện tượng lệch cỡ font hay mờ nhòe.
+- **Tối Ưu Bố Cục Dọc & Neo Cố Định Nút Hành Động Ở Đáy Bảng**:
+  - Mở rộng khoảng cách giữa các phần (Mô tả, Hiệu ứng hiện tại, Hiệu ứng cấp tiếp theo) từ 28-32px, bổ sung đường phân cách tinh tế dưới header.
+  - Neo cố định các nút hành động (Mở Khóa / Nâng Cấp / Gán Kỹ Năng) ở sát đáy bảng thông tin; lấp đầy không gian hài hòa, giải quyết triệt để cả lỗi đè chữ dính nhau lẫn khoảng trống thừa thãi.
+
+### 🎨 Bước 1.1: Hoàn Thành 12 Vector Icon 4 Set Trang Bị Cơ Bản 0★ - 3★ (EQP-02A) ([EquipmentIconRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/EquipmentIconRenderer.java), [assets/vectors/equipment/](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/vectors/equipment/))
+- **Chuẩn Hóa Thư Viện SVG Nguồn & Quy Chuẩn Vector 4 Lớp Đạt 100/100 Điểm Quality Gate**:
+  - Thiết lập đầy đủ 12 file SVG gốc trong `assets/vectors/equipment/` theo chuẩn tỉ lệ `viewBox="0 0 128 128"` và thẩm mỹ Cyber-Fantasy & Deep Ocean Abyssal:
+    * *Set Tập Sự (0★ Common):* `rod_tap_su.svg`, `line_tap_su.svg`, `hook_tap_su.svg`.
+    * *Set Thợ Săn (1★ Uncommon):* `rod_tho_san.svg`, `line_tho_san.svg`, `hook_tho_san.svg`.
+    * *Set Băng Giá (2★ Rare):* `rod_bang_gia.svg`, `line_bang_gia.svg`, `hook_bang_gia.svg`.
+    * *Set Đại Dương (3★ Rare/Epic):* `rod_dai_duong.svg`, `line_dai_duong.svg`, `hook_dai_duong.svg`.
+  - Toàn bộ 12 icon vượt qua đợt kiểm duyệt `vector_pipeline.py audit` với điểm số tuyệt đối 100/100.
+
+### 💎 Đồng Nhất & Phóng Đại Bản Hiển Thị Đầy Đủ Trang Bị Gacha & Equipment (Full Representation & Anti-Squish) ([GachaScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/GachaScreen.java), [EquipmentScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/EquipmentScreen.java), [EquipmentIconRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/EquipmentIconRenderer.java))
+- **Thiết Kế Lại Triệt Để Ngoại Hình 3 Móc Câu (Khác Biệt Hoàn Toàn Về Dáng Silhouette)**:
+  - *Hook Thợ Săn (`hook_tho_san`):* Móng Vuốt Dã Thú Tiền Sử (Raptor Talon Sickle) uốn cong hình lưỡi liềm, ngàm xương kẹp dây da thuộc, rãnh xẻ máu ngọc bích và bùa ngọc mắt hổ.
+  - *Hook Băng Giá (`hook_bang_gia`):* Mỏ Neo Tinh Thể Băng Đối Xứng (Ice Crystal Anchor), khuyên móc lục giác pha lê, thân trụ băng thẳng đứng với 2 cánh ngạnh băng song đối tựa cánh chim băng và huy hiệu hoa tuyết 6 cánh ở tâm.
+  - *Hook Đại Dương (`hook_dai_duong`):* Lao Nanh Thủy Quái Đuôi Cá Voi (Leviathan Harpoon Fang), khuyên móc tạo hình đuôi cá voi vút cong, thân nanh đính vây cá mập và đầu phi lao đinh ba hải vương kèm ngọc trai phát quang.
+- **Thiết Kế Lại Rod Băng Giá (`rod_bang_gia`) - Xóa Sạch Hoàn Toàn Gai Nhọn**:
+  - Gọt sạch hoàn toàn các gai nhọn/mấu gồ ghề (`sr.triangle` gai góc). Thân cần chuyển thành quyền trượng tinh thể băng vĩnh cửu trơn láng, phẳng mịn và thanh thoát, ôm sát bởi các vòng đai nẹp bạch kim khắc cổ ngữ chìm và vương miện hoa tuyết 6 cánh ở đỉnh ngọn cần.
+- **Đại Tu Hiển Thị Đầy Đủ Chi Tiết - Chấm Dứt Hiện Tượng Bị Bóp/Thu Nhỏ ("Anti-Squish")**:
+  - *Vòng quay cuộn thưởng Gacha (CS:GO Reel):* Phóng to thẻ cuộn từ 135x158 lên 160x200, nâng bán kính icon từ `26f` lên **`44f`** (đường kính 88px, diện tích điểm ảnh tăng gấp gần 3 lần), hiển thị rõ nét từng chi tiết đồ họa khi con lăn lướt qua.
+  - *Bảng Tỷ lệ & Kho Trang bị (Loot Table Modal):* Chuyển đổi toàn bộ từ 3 thanh ngang dẹt 50px sang 3 ô thẻ Showcase đứng rộng rãi (216x142px), nâng bán kính icon từ `15f` lên **`34f`** (diện tích điểm ảnh tăng gấp 4.5 lần!), bao gồm vầng hào quang aura và thông tin món đồ đặt ngay ngắn bên dưới.
+  - *Bệ Trưng Bày Banner (Showcase Pedestal):* Mở rộng ô chứa lên 92x92px, nâng bán kính icon từ `24f` lên **`38f`**.
+  - *Thẻ Kết Quả Quay Trúng:* Tăng bán kính icon lên **`50f`** (Quay 1 lượt) và **`36f`** (Quay 10 lượt).
+  - *Màn hình Equipment:* Nâng bán kính icon lên `23f` trong danh sách hòm đồ và tooltip, bảo đảm sự đồng nhất tuyệt đối giữa hai giao diện.
+- **Dynamic Stroke Scaling Trong `EquipmentIconRenderer.java`**:
+  - Loại bỏ hoàn toàn các mức sàn nét vẽ cố định quá lớn (như `Math.max(6.5f, ...)` hay `Math.max(7.5f, ...)` từng làm bết dính nét khi co giãn), thay bằng tỷ lệ động `Math.max(1.0f, r * k)` giúp mọi đường nét luôn thanh thoát, sắc sảo chuẩn mực SVG ở mọi kích thước.
+- **Bổ Sung Quy Chuẩn Full Representation Vào Agent Skills**:
+  - Cập nhật quy chuẩn kiểm duyệt đồ họa trong `vector-graphics-designer` và `game-graphics-pipeline`.
+
+### 🎨 Tái Cấu Trúc Lộ Trình Đồ Họa 5 Bước Triển Khai Cuốn Chiếu ([TASKS.md](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/TASKS.md), [PatchNotesDialog.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/PatchNotesDialog.java))
+- **Phân Bổ Kế Hoạch Đồ Họa Thành 5 Bước Triển Khai Dần**:
+  - *Bước 1 (v0.5.1):* Ngoại hình 30 Vector Icon 10 Set Trang Bị (loại bỏ Set Thời Không do đã hoàn thiện ở SET-07) & 24 Icon Tiệm Tạp Hóa / Loot Đáy Biển. Được phân rã thành **5 bước nhỏ** để triển khai cuốn chiếu dễ dàng:
+    * *Bước 1.1:* 12 Icon 4 Set Trang Bị Khởi Đầu & Cơ Bản 0★ - 3★ (Tập Sự, Thợ Săn, Băng Giá, Đại Dương) — **Đã Hoàn Thành (v0.5.1a)**.
+    * *Bước 1.2:* 9 Icon 3 Set Trang Bị Cao Cấp & Huyền Thoại 4★ - 6★ (Hải Tặc, Vực Thẳm, Hoàng Gia; loại bỏ Set Thời Không đã hoàn thiện ở SET-07).
+    * *Bước 1.3:* 9 Icon 3 Set Trang Bị Thần Thoại & Giới Hạn Sự Kiện 6★ - 7★ (Quang Minh, Vệ Quốc Vang Danh, Thần Khí Lạc Hồng).
+    * *Bước 1.4:* 12 Icon Vật Phẩm Tiêu Hao & Đạo Cụ Chiến Đấu Tiệm Tạp Hóa (Bánh Mì, Thuốc Stamina, Nước Tăng Lực, Bình Xịt, Bùa...).
+    * *Bước 1.5:* 12 Icon Mồi Câu, Sách Kỹ Năng & Loot Rác / Kho Báu Đáy Biển (Mồi thơm/rủi ro, 7 sách kỹ năng, rương & loot rác).
+  - *Bước 2 (v0.5.2):* Hiện đại hóa khung viền UI bo góc 12px, nút bấm xúc giác ZzFX, thanh Ghost HP bar và dải Tension bar Gradient.
+  - *Bước 3 (v0.5.3):* Đại tu ngoại hình 45 loài cá vector thuộc 3 bản đồ cùng 3 Siêu Boss Thế Giới (Thủy Quái Sông Trà, Bạch Tuộc Khổng Lồ, Thần Biển Leviathan).
+  - *Bước 4 (v0.5.4):* Bộ hiệu ứng hình ảnh VFX chiêu thức cần thủ (Dưỡng Sức, Giật Kép, Trói Buộc) và kỹ năng Boss (Quẫy Bùn, Bứt Tốc, Sóng Thần...).
+  - *Bước 5 (v0.5.5):* Hệ thống Custom Skin Động Cần - Dây - Phao trên PlayScreen theo trang bị đang mặc (ANM-06), hoạt ảnh chuyển động quẫy đuôi cá hình sin, cần câu uốn cong vật lý và băng chuyền Gacha cuộn ngang kiểu CS:GO.
+
+### 📦 Đóng Gói Bản Cài Đặt Phát Hành ([AnglerRPG-v0.4.24.zip](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/AnglerRPG-v0.4.24.zip))
+- Build lại tệp nhị phân thực thi game độc lập `AnglerRPG.jar` mới nhất (43.3 MB) thông qua tác vụ `gradlew lwjgl3:jar`.
+- Đóng gói trọn gói vào tệp zip: `AnglerRPG-v0.4.24.zip` (42.8 MB) gồm `AnglerRPG.jar` và kịch bản khởi chạy 1-click `Launcher.bat`.
+- Dọn dẹp và xóa bỏ tệp zip bản phát hành cũ (`AnglerRPG-v0.4.211.zip`).
 
 ---
 

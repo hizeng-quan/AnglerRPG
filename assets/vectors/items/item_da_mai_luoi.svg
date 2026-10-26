@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="stoneAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#94a3b8" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#334155" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="fineGrit" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#cbd5e1"/>
+      <stop offset="50%" stop-color="#94a3b8"/>
+      <stop offset="100%" stop-color="#64748b"/>
+    </linearGradient>
+    <linearGradient id="coarseGrit" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#475569"/>
+      <stop offset="50%" stop-color="#334155"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- LAYER 1: Background Glow -->
+  <g id="background_glow">
+    <ellipse cx="64" cy="68" rx="46" ry="26" fill="url(#stoneAura)"/>
+    <polygon points="20,94 88,112 112,86 44,70" fill="#000000" opacity="0.35"/>
+  </g>
+
+  <!-- LAYER 2: Base Form (3D Isometric Dual-Grit Rectangular Whetstone Block) -->
+  <g id="base_form">
+    <!-- Top Face (Fine Grit Polishing Side - Lớp Đá Mịn) -->
+    <polygon points="56,36 106,52 74,74 24,56" fill="url(#fineGrit)"/>
+
+    <!-- Front Left Face (Upper fine layer) -->
+    <polygon points="24,56 74,74 74,84 24,66" fill="#64748b"/>
+    <!-- Front Left Face (Lower coarse layer - Lớp Đá Thô) -->
+    <polygon points="24,66 74,84 74,96 24,78" fill="url(#coarseGrit)"/>
+
+    <!-- Front Right Face (Upper fine layer) -->
+    <polygon points="74,74 106,52 106,62 74,84" fill="#475569"/>
+    <!-- Front Right Face (Lower coarse layer) -->
+    <polygon points="74,84 106,62 106,74 74,96" fill="#0f172a"/>
+  </g>
+
+  <!-- LAYER 3: Details & Relief (Beveled Edge, Grit Split Line, Honing Sparks) -->
+  <g id="details_and_relief">
+    <!-- Two-tone division seam line -->
+    <line x1="24" y1="66" x2="74" y2="84" stroke="#f59e0b" stroke-width="1.8"/>
+    <line x1="74" y1="84" x2="106" y2="62" stroke="#f59e0b" stroke-width="1.8"/>
+
+    <!-- Hook Honing Stroke Water & Sparks -->
+    <line x1="42" y1="52" x2="86" y2="66" stroke="#ffffff" stroke-width="2.0" opacity="0.7"/>
+
+    <!-- Golden Sharpening Friction Sparks -->
+    <polygon points="86,64 92,58 88,68" fill="#facc15"/>
+    <polygon points="94,62 100,60 96,66" fill="#fef08a"/>
+    <circle cx="82" cy="56" r="1.5" fill="#facc15"/>
+    <circle cx="98" cy="54" r="1.2" fill="#ffffff"/>
+  </g>
+
+  <!-- LAYER 4: Specular Highlights (Razor Edge Sheen) -->
+  <g id="specular_highlights">
+    <!-- Top Chamfer Razor Edge Highlight -->
+    <line x1="24" y1="56" x2="74" y2="74" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.95"/>
+    <line x1="74" y1="74" x2="106" y2="52" stroke="#ffffff" stroke-width="2.0" stroke-linecap="round" opacity="0.95"/>
+    <!-- Corner Glint -->
+    <circle cx="74" cy="74" r="2.0" fill="#ffffff"/>
+    <circle cx="56" cy="36" r="1.2" fill="#ffffff"/>
+  </g>
+</svg>

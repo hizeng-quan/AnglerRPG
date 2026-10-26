@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- 1. Aqua-Amber Rustic Aura -->
+  <circle cx="64" cy="64" r="54" fill="rgba(56, 189, 248, 0.16)" />
+  <circle cx="64" cy="64" r="44" fill="rgba(245, 158, 11, 0.14)" />
+
+  <!-- 2. Heavy Natural Walnut Spool Frame -->
+  <circle cx="64" cy="64" r="48" fill="#271202" />
+  <circle cx="64" cy="64" r="45" fill="#5c2c06" stroke="#b45309" stroke-width="1.8" />
+  <!-- Golden woodgrain accent ring -->
+  <circle cx="64" cy="64" r="41" fill="none" stroke="#d97706" stroke-width="1.2" stroke-dasharray="8,4" />
+  <circle cx="64" cy="64" r="37" fill="#1c0d02" />
+
+  <!-- 3. Monofilament Nylon Line Layers -->
+  <circle cx="64" cy="64" r="35" fill="#0284c7" />
+  <circle cx="64" cy="64" r="32" fill="#38bdf8" />
+  <circle cx="64" cy="64" r="28" fill="#7dd3fc" />
+  <!-- Concentric Winding Ridges -->
+  <circle cx="64" cy="64" r="33" fill="none" stroke="#bae6fd" stroke-width="1" />
+  <circle cx="64" cy="64" r="29" fill="none" stroke="#ffffff" stroke-width="0.8" opacity="0.8" />
+  <circle cx="64" cy="64" r="25" fill="none" stroke="#0284c7" stroke-width="1" />
+
+  <!-- 4. Vintage Parchment Label & Center Brass Axle -->
+  <circle cx="64" cy="64" r="22" fill="#1c0d02" />
+  <circle cx="64" cy="64" r="19" fill="#fef3c7" stroke="#d97706" stroke-width="1.2" />
+  <circle cx="64" cy="64" r="15" fill="#fde68a" stroke="#b45309" stroke-width="0.8" />
+  <!-- Center Brass Spindle -->
+  <circle cx="64" cy="64" r="8" fill="#78350f" stroke="#fbbf24" stroke-width="1.4" />
+  <circle cx="64" cy="64" r="4" fill="#fbbf24" />
+  <circle cx="62.5" cy="62.5" r="1.5" fill="#ffffff" />
+
+  <!-- 5. Flying Line Strand & Orange Stopper Bead -->
+  <path d="M 94,64 Q 106,64 108,44 Q 110,28 92,20" fill="none" stroke="#ffffff" stroke-width="1.6" />
+  <!-- Terminal Tied Loop -->
+  <circle cx="92" cy="20" r="3" fill="none" stroke="#38bdf8" stroke-width="1.4" />
+  <circle cx="92" cy="20" r="1.2" fill="#ffffff" />
+  <!-- Bright Orange Rubber Stopper Bead -->
+  <circle cx="107" cy="40" r="4" fill="#ea580c" stroke="#fed7aa" stroke-width="1" />
+  <circle cx="106" cy="39" r="1.2" fill="#ffffff" />
+
+  <!-- 6. Specular Glints -->
+  <circle cx="48" cy="48" r="1.8" fill="#ffffff" />
+  <circle cx="64" cy="24" r="1.5" fill="#ffffff" />
+</svg>

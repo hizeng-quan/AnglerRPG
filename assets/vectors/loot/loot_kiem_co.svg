@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="swordAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="bladeSteel" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#94a3b8"/>
+      <stop offset="50%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#64748b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- LAYER 1: Background Glow -->
+  <g id="background_glow">
+    <circle cx="64" cy="64" r="44" fill="url(#swordAura)"/>
+    <ellipse cx="64" cy="112" rx="22" ry="6" fill="#000000" opacity="0.35"/>
+  </g>
+
+  <!-- LAYER 2: Base Form (Steel Blade, Jade Dragon Crossguard & Red Hilt) -->
+  <g id="base_form">
+    <!-- Double-Edged Ceremonial Blade -->
+    <polygon points="60,78 68,78 68,26 64,12 60,26" fill="url(#bladeSteel)"/>
+    <!-- Central Blade Fuller Groove -->
+    <line x1="64" y1="26" x2="64" y2="76" stroke="#0284c7" stroke-width="2.5"/>
+    <!-- Imperial Jade Dragon Crossguard -->
+    <rect x="42" y="78" width="44" height="8" rx="2" fill="#059669"/>
+    <polygon points="42,78 36,74 42,74" fill="#047857"/>
+    <polygon points="86,78 92,74 86,74" fill="#047857"/>
+    <!-- Wrapped Crimson Leather Hilt -->
+    <rect x="61" y="86" width="6" height="18" fill="#991b1b"/>
+    <!-- Golden Lotus Pommel -->
+    <circle cx="64" cy="106" r="5" fill="#facc15"/>
+  </g>
+
+  <!-- LAYER 3: Details & Relief (Glowing Runic Ciphers & Red Silk Tassel) -->
+  <g id="details_and_relief">
+    <!-- 4 Arcane Cipher Runes along Fuller -->
+    <circle cx="64" cy="32" r="2" fill="#38bdf8"/>
+    <circle cx="64" cy="44" r="2" fill="#38bdf8"/>
+    <circle cx="64" cy="56" r="2" fill="#38bdf8"/>
+    <circle cx="64" cy="68" r="2" fill="#38bdf8"/>
+    <!-- Dragon Eyes on Guard -->
+    <circle cx="50" cy="82" r="1.5" fill="#facc15"/>
+    <circle cx="78" cy="82" r="1.5" fill="#facc15"/>
+    <!-- Hanging Red Silk Tassel -->
+    <path d="M 64 110 Q 60 118 58 124" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="61" cy="116" r="1.8" fill="#10b981"/>
+  </g>
+
+  <!-- LAYER 4: Specular Highlights (Razor Edge Sheen & Tip Sparkle) -->
+  <g id="specular_highlights">
+    <!-- Blade Edge Gleam -->
+    <line x1="67" y1="28" x2="67" y2="76" stroke="#ffffff" stroke-width="1.5" opacity="0.9"/>
+    <!-- Tip Sparkle Star -->
+    <line x1="60" y1="12" x2="68" y2="12" stroke="#ffffff" stroke-width="2"/>
+    <line x1="64" y1="8" x2="64" y2="16" stroke="#ffffff" stroke-width="2"/>
+    <!-- Pommel Gold Glint -->
+    <circle cx="63" cy="105" r="1.5" fill="#ffffff"/>
+  </g>
+</svg>

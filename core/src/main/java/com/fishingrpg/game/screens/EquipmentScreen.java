@@ -351,7 +351,7 @@ public class EquipmentScreen implements Screen {
                 drawRectOutline(sr, iconBoxX, iconBoxY, iconBoxSize, iconBoxSize, 1.4f);
 
                 // Render Item's Unique Vector Icon
-                EquipmentIconRenderer.draw(sr, eq, eq.type, iconBoxX + iconBoxSize / 2f, iconBoxY + iconBoxSize / 2f, 19f, eq.rarity.color);
+                EquipmentIconRenderer.draw(sr, eq, eq.type, iconBoxX + iconBoxSize / 2f, iconBoxY + iconBoxSize / 2f, 23f, eq.rarity.color);
 
                 // Row outline
                 sr.setColor(hoverRow ? new Color(0.45f, 0.75f, 1f, 0.85f) : new Color(0.18f, 0.26f, 0.38f, 0.65f));
@@ -898,16 +898,16 @@ public class EquipmentScreen implements Screen {
         drawRoundedRect(sr, x, y - 62f, tipW, 62f, 8f);
 
         // Icon square in header
-        float iconBoxSize = 48f;
+        float iconBoxSize = 52f;
         float iconBoxX = x + 10f;
-        float iconBoxY = y - 55f;
+        float iconBoxY = y - 57f;
         sr.setColor(0.04f, 0.06f, 0.10f, 0.95f);
         drawRoundedRect(sr, iconBoxX, iconBoxY, iconBoxSize, iconBoxSize, 6f);
         sr.setColor(eq.rarity.color);
         drawRectOutline(sr, iconBoxX, iconBoxY, iconBoxSize, iconBoxSize, 1.5f);
 
         // Draw unique equipment icon
-        EquipmentIconRenderer.draw(sr, eq, eq.type, iconBoxX + iconBoxSize / 2f, iconBoxY + iconBoxSize / 2f, 18f, eq.rarity.color);
+        EquipmentIconRenderer.draw(sr, eq, eq.type, iconBoxX + iconBoxSize / 2f, iconBoxY + iconBoxSize / 2f, 23f, eq.rarity.color);
 
         // Outer border with rarity color
         sr.setColor(eq.rarity.color);
