@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class PatchNotesDialog {
 
-    public static final String CURRENT_VERSION = "v0.5.3.4";
+    public static final String CURRENT_VERSION = "v0.5.3.5";
     private static final String PREF_LAST_SEEN_VERSION = "last_seen_patch_notes_version";
 
     private final FishingRPG game;
@@ -91,8 +91,24 @@ public class PatchNotesDialog {
         // --- TAB 0: BẢN TIN CẬP NHẬT THEO TỪNG PHIÊN BẢN ---
         // =====================================================================
 
-        // ===== PHIÊN BẢN v0.5.3.4 (MỚI NHẤT) =====
-        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.3.4 (MỚI NHẤT - SỬA LỖI DƯỠNG SỨC & TIÊU HAO THỂ LỰC ĐỘNG)"));
+        // ===== PHIÊN BẢN v0.5.3.5 (MỚI NHẤT) =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.3.5 (MỚI NHẤT - RUNG LẮC CĂNG DÂY REALTIME & KẾ HOẠCH GIAI ĐOẠN 3)"));
+
+        patchNotesItems.add(new UpdateItem("TRẢI NGHIỆM CHIẾN ĐẤU", "Tối Ưu Hiệu Ứng Rung Lắc Camera Khi Căng Dây (VFX-SHK-01)", new Color(1f, 0.55f, 0.20f, 1f))
+                .addPoint("Hạ thấp ngưỡng bắt đầu rung lắc: Camera bắt đầu rung nhẹ ngay từ mốc 80% Tension (thay vì 88% như trước), giúp người chơi sớm cảm nhận độ căng thẳng khi giằng co.")
+                .addPoint("Tăng tiến cường độ rung chấn (+0.02f): Tăng mức chấn động lên +0.02f trauma mỗi tick ở vùng nguy hiểm (>80% Tension).")
+                .addPoint("Rung chấn cực hạn sát ngưỡng đứt dây: Khi Tension vượt 94% (nguy cơ đứt dây cận kề), trần rung lắc tăng vọt lên 0.45f trauma, mang lại cảm giác rung giật mãnh liệt và báo động đứt cước nghẹt thở.")
+        );
+
+        patchNotesItems.add(new UpdateItem("LỘ TRÌNH SỰ KIỆN", "Kế Hoạch Giai Đoạn 3: Bộ 7 Cá Halloween Cân Bằng Cao Cấp (HLW-03)", new Color(0.95f, 0.35f, 0.85f, 1f))
+                .addPoint("Chuẩn độ khó vượt trội Map Đảo Xa: Cân bằng toàn diện HP và Damage cho 7 loài cá Halloween: Cá Skeleton (400 HP), Cá Đèn Lồng Jack-o' (720 HP), Cá Đầu Lâu Huyết Nguyệt (1,300 HP), Cá Dạng Ma (2,000 HP), Frankenstein (2,250 HP), Hải Xà Dạ Xoa (4,000 HP - thay thế Bạch Tuộc) và Siêu Boss Thanatos (6,666 HP, 235 dmg/s).")
+                .addPoint("Bộ kỹ năng độc nhất vô nhị: Thân xương giảm 20% kéo thường nhưng nhận +50% sát thương từ MỌI KỸ NĂNG; Đèn ma thiêu đốt bốc hơi 3 Thể lực/s; Cá đầu lâu hồi 1% HP/s khi cần thủ kiệt sức; Frankenstein phóng điện ngắt kéo 0.6s & trừ 10 Thể lực; Hải Xà Dạ Xoa siết cứng dây và phun độc âm ty.")
+                .addPoint("Đại chiến Trùm Thanatos 3 Pha: Uy Áp Thần Chết tăng +20% thể lực tiêu hao kỹ năng người chơi; Tiếng Hú Địa Ngục vô hiệu hóa chiêu thức tiếp theo; Vực Xoáy Âm Ty hồi máu; Âm Hồn Quấy Phá tạo Giáp Soul Shield 500 HP (khắc chế bằng Phá Giáp); Pha cuối giảm 30% hồi chiêu các skill và Tuyệt kỹ Liên Hoàn Trảm 2 Nhịp Re-Hook nghẹt thở.")
+                .addPoint("Hệ thống Hàng Đợi Kỹ Năng & Global Cooldown (Skill Queue & GCD): Giãn cách 2.5s - 3.0s an toàn giữa các chiêu thức của cá nhiều skill, loại bỏ hoàn toàn tình trạng kỹ năng bị kích hoạt đè lấp lẫn nhau.")
+        );
+
+        // ===== PHIÊN BẢN v0.5.3.4 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.3.4 (SỬA LỖI DƯỠNG SỨC & TIÊU HAO THỂ LỰC ĐỘNG)"));
 
         patchNotesItems.add(new UpdateItem("SỬA LỖI & CÂN BẰNG", "Khắc Phục Lỗi Kỹ Năng Dưỡng Sức & Tinh Chỉnh Thể Lực Động (BAL-STM-01)", new Color(0.25f, 0.85f, 0.50f, 1f))
                 .addPoint("Khắc phục triệt để lỗi hồi Thể lực kép ở chiêu Dưỡng Sức: Loại bỏ lượng hồi dồn +50 dư thừa ở thời điểm kết thúc vận sức, chuẩn hóa kỹ năng hồi đều đặn theo thời gian qua hệ thống GAS (+10 Thể lực/s trong 5 giây ở cấp 1).")

@@ -121,8 +121,13 @@ public class PlayScreen implements Screen {
         }
         if (fishingManager.state == FishingManager.State.COMBAT) {
             float tensionRatio = player.getCurrentLineTension() / Math.max(1f, player.getMaxLineTension());
-            if (tensionRatio > 0.88f && screenShake.getTrauma() < 0.16f) {
-                screenShake.addTrauma(0.01f);
+            // Giảm mốc bắt đầu rung xuống 0.80f và tăng cường độ rung khi gần chạm max (+0.02f trauma)
+            if (tensionRatio > 0.80f) {
+                float maxTrauma = (tensionRatio > 0.94f) ? 0.45f : ((tensionRatio > 0.88f) ? 0.30f : 0.18f);
+                float traumaAdd = (tensionRatio > 0.94f) ? 0.035f : 0.02f;
+                if (screenShake.getTrauma() < maxTrauma) {
+                    screenShake.addTrauma(traumaAdd);
+                }
             }
         }
 
