@@ -70,18 +70,29 @@
 | **EQP-02D**| Đồ họa   | Đột phá thiết kế độc bản (Strict Non-Repetition Rule) & Bùng nổ hiệu ứng Thần Khí Lạc Hồng (8 Icon)| **P1 (Đồ họa)**     | ✅ Đã hoàn thành (v0.4.24) |
 | **ICO-03A**| Đồ họa   | Bước 1.4: 12 Icon Tiêu Hao & Đạo Cụ Chiến Đấu Tiệm Tạp Hóa (Thuốc, Nước Tăng Lực, Bùa...)| **P1 (Đồ họa)**     | ✅ Đã hoàn thành (v0.4.24) |
 | **ICO-03B**| Đồ họa   | Bước 1.5: 12 Icon Mồi Câu, Sách Kỹ Năng & Loot Rác / Kho Báu Đáy Biển                | **P1 (Đồ họa)**     | ✅ Đã hoàn thành (v0.5.1.1) |
-| **UI-05**  | Giao diện| Khung viền Dialog hiện đại bo góc & Bộ nút bấm phản hồi âm ZzFX, hiệu ứng hover/pressed| **P1 (Giao diện)**  | 📋 Kế hoạch (Bước 2 - v0.5.2) |
-| **UI-06**  | Giao diện| Thanh trạng thái chiến đấu động (Ghost HP bar tụt dần, Gradient Tension bar rung giật)| **P1 (Giao diện)**  | 📋 Kế hoạch (Bước 2 - v0.5.2) |
-| **UI-07**  | Giao diện| Thẻ bài trang bị hiển thị Rarity rõ nét & So sánh chỉ số tức thì (Stat Diff) khi hover| **P1 (Giao diện)**  | 📋 Kế hoạch (Bước 2 - v0.5.2) |
-| **FSH-02** | Đồ họa   | Đại tu ngoại hình 45 loài cá & 3 Siêu Boss Thế Giới trong FishVisualRenderer          | **P1 (Đồ họa)**     | 📋 Kế hoạch (Bước 3 - v0.5.3) |
-| **ENV-02** | Đồ họa   | Môi trường mặt nước gợn sóng sinh động, rạn san hô, cá bơi nền & khúc xạ ánh sáng    | **P1 (Đồ họa)**     | 📋 Kế hoạch (Bước 3 - v0.5.3) |
-| **VFX-04** | Kỹ năng  | Bộ hiệu ứng thị giác chiêu thức cần thủ (Dưỡng Sức, Giật Kép, Trói Buộc, Thuần Hóa)   | **P1 (Trải nghiệm)**| 📋 Kế hoạch (Bước 4 - v0.5.4) |
-| **VFX-05** | Kỹ năng  | Bộ hiệu ứng kỹ năng cá & Boss (Quẫy Bùn che HUD, Mực Mù, Sóng Thần, Cuồng Nộ, Bão Tố) | **P1 (Trải nghiệm)**| 📋 Kế hoạch (Bước 4 - v0.5.4) |
-| **ANM-04** | Hoạt ảnh | Chuyển động hữu cơ của cá (đuôi quẫy nhịp nhàng, uốn mình giằng co khi PULLING)       | **P1 (Hoạt ảnh)**   | 📋 Kế hoạch (Bước 5 - v0.5.5) |
-| **ANM-05** | Hoạt ảnh | Cần câu uốn cong vật lý theo lực căng Tension, hiệu ứng giật cần & bọt nước cắn câu  | **P1 (Hoạt ảnh)**   | 📋 Kế hoạch (Bước 5 - v0.5.5) |
-| **ANM-06** | Hoạt ảnh | Hệ thống Skin Động Cần - Dây - Phao trên PlayScreen thay đổi theo trang bị đang mặc (Custom Skin) | **P1 (Hoạt ảnh)**| 📋 Kế hoạch (Bước 5 - v0.5.5) |
-| **GAC-02** | Gacha    | Hoạt ảnh Băng Chuyền Gacha cuộn ngang kiểu CS:GO (Con lăn trượt giảm tốc, kim chỉ vạch & âm thanh tick lướt đồ) | **P1 (Hoạt ảnh)**   | 📋 Kế hoạch (Bước 5 - v0.5.5) |
-| **GAC-03** | Gacha    | Hiệu ứng nổ trang bị bậc cao Legendary & Limited Premium (Rung chấn màn hình, hào quang bùng nổ & showcase nổ vàng) | **P1 (Hoạt ảnh)**   | 📋 Kế hoạch (Bước 5 - v0.5.5) |
+| **BAL-12** | Cân bằng | Nerf lực kéo cá khi buông cần (0.8x->0.4x), giảm screen shake tension & cảnh báo đứt dây| **P1 (Cân bằng)**   | ✅ Đã hoàn thành (v0.5.1.2) |
+| **ECO-02** | Kinh tế  | Giới hạn mua sách kỹ năng theo cấp tối đa & lọc bỏ sách max khỏi sự kiện giảm giá    | **P1 (Kinh tế)**    | ✅ Đã hoàn thành (v0.5.1.2) |
+| **ITM-01** | Vật phẩm | Chống dùng trùng lặp vật phẩm đa lượt, hiển thị Buff trên HUD & đổi tên Trà Thảo Mộc | **P1 (Vật phẩm)**   | ✅ Đã hoàn thành (v0.5.1.2) |
+| **BUG-09** | Sửa lỗi  | Khắc phục Auto-Updater đóng ngay khi mở, cân đối 3 nút và bỏ nhãn `(AUTO-UPDATER)`   | **P0 (Khẩn cấp)**   | ✅ Đã khắc phục triệt để (v0.5.1.2) |
+| **GAC-04** | Giao diện| Giãn cách tên và chỉ số khỏi icon kết quả quay Gacha đơn lẻ tránh đè chữ             | **P1 (Giao diện)**  | ✅ Đã hoàn thành (v0.5.1.2) |
+| **DAO-01** | Gameplay | Đại Tu 15 Loài Cá Đảo Xa, Chuẩn Hóa Phân Tầng Kỹ Năng, Cơ Chế Perfect Re-Hook & Siêu Boss Cá Cờ Xanh 3K HP | **P1 (Quan trọng)** | ✅ Đã hoàn thành (v0.5.2.0) |
+| **QSL-01** | Giao diện| Phân trang Quick Slots (Ô Phím Tắt Nhanh) chống tràn 9 ô & Đồng bộ phím 1-9 | **P0 (Cần thiết)** | ✅ Đã hoàn thành (v0.5.2.1) |
+| **ITM-02** | Vật phẩm | Sửa lỗi Sonar thấu thị khi 0 lượt, không trừ Sonar khi CHẬM TAY, mất Mồi Thơm khi bỏ lỡ | **P0 (Cần thiết)** | ✅ Đã hoàn thành (v0.5.2.1) |
+| **COL-02** | Sổ tay   | Tái thiết kế 5 Bộ Sưu Tập Đảo Xa khớp chuẩn 15 loài cá mới & Xóa sạch dấu vết cá cũ | **P1 (Quan trọng)** | ✅ Đã hoàn thành (v0.5.2.1) |
+| **FSH-02A** | Đồ họa   | Bước 2.1: 15 Loài Cá Ao Làng & Siêu Boss Thủy Quái Sông Trà trong FishVisualRenderer | **P1 (Đồ họa)**     | ✅ Đã hoàn thành (v0.5.2.2) |
+| **FSH-02B** | Đồ họa   | Bước 2.2: 15 Loài Cá Bãi Biển & Siêu Boss Bạch Tuộc Khổng Lồ trong FishVisualRenderer | **P1 (Đồ họa)**     | ✅ Đã hoàn thành (v0.5.2.3) |
+| **FSH-02C** | Đồ họa   | Bước 2.3: 15 Loài Cá Đảo Xa & Siêu Boss Cá Cờ Xanh Khổng Lồ trong FishVisualRenderer  | **P1 (Đồ họa)**     | ✅ Đã hoàn thành (v0.5.2.4) |
+| **ENV-02**  | Đồ họa   | Bước 3: Môi trường mặt nước gợn sóng sinh động, rạn san hô & khúc xạ ánh sáng 3 Map  | **P1 (Đồ họa)**     | 📋 Kế hoạch (Bước 3 - v0.5.3) |
+| **UI-05**   | Giao diện| Bước 4: Khung viền Dialog hiện đại bo góc & Bộ nút bấm phản hồi âm ZzFX               | **P1 (Giao diện)**  | 📋 Kế hoạch (Bước 4 - v0.5.4) |
+| **UI-06**   | Giao diện| Bước 4: Thanh trạng thái chiến đấu động (Ghost HP bar tụt dần, Gradient Tension bar)  | **P1 (Giao diện)**  | 📋 Kế hoạch (Bước 4 - v0.5.4) |
+| **UI-07**   | Giao diện| Bước 4: Thẻ bài trang bị hiển thị Rarity rõ nét & So sánh chỉ số tức thì (Stat Diff)  | **P1 (Giao diện)**  | 📋 Kế hoạch (Bước 4 - v0.5.4) |
+| **VFX-04**  | Kỹ năng  | Bước 5: Bộ hiệu ứng thị giác chiêu thức cần thủ (Dưỡng Sức, Giật Kép, Trói Buộc)     | **P1 (Trải nghiệm)**| 📋 Kế hoạch (Bước 5 - v0.5.5) |
+| **VFX-05**  | Kỹ năng  | Bước 5: Bộ hiệu ứng kỹ năng cá & Boss (Quẫy Bùn che HUD, Mực Mù, Sóng Thần, Cuồng Nộ) | **P1 (Trải nghiệm)**| 📋 Kế hoạch (Bước 5 - v0.5.5) |
+| **ANM-04**  | Hoạt ảnh | Bước 6: Chuyển động hữu cơ của cá (đuôi quẫy nhịp nhàng, uốn mình giằng co)          | **P1 (Hoạt ảnh)**   | 📋 Kế hoạch (Bước 6 - v0.5.6) |
+| **ANM-05**  | Hoạt ảnh | Bước 6: Cần câu uốn cong vật lý theo lực căng Tension, hiệu ứng giật cần & bọt nước   | **P1 (Hoạt ảnh)**   | 📋 Kế hoạch (Bước 6 - v0.5.6) |
+| **ANM-06**  | Hoạt ảnh | Bước 6: Hệ thống Skin Động Cần - Dây - Phao trên PlayScreen thay đổi theo đồ mặc     | **P1 (Hoạt ảnh)**   | 📋 Kế hoạch (Bước 6 - v0.5.6) |
+| **GAC-02**  | Gacha    | Bước 6: Hoạt ảnh Băng Chuyền Gacha cuộn ngang kiểu CS:GO (Con lăn trượt giảm tốc)     | **P1 (Hoạt ảnh)**   | 📋 Kế hoạch (Bước 6 - v0.5.6) |
+| **GAC-03**  | Gacha    | Bước 6: Hiệu ứng nổ trang bị bậc cao Legendary & Limited Premium (Rung chấn màn hình) | **P1 (Hoạt ảnh)**   | 📋 Kế hoạch (Bước 6 - v0.5.6) |
 
 ---
 
@@ -354,10 +365,13 @@
 | **BƯỚC 1.3** | `v0.5.1c` | **Trang Bị Thần Thoại & Giới Hạn (6★ - 7★)** | EQP-02C (9 icon: Set Quang Minh, Vệ Quốc Vang Danh, Thần Khí Lạc Hồng) - ✅ Đã hoàn thành |
 | **BƯỚC 1.4** | `v0.4.24` | **Vật Phẩm Tiêu Hao & Đạo Cụ Tạp Hóa** | ICO-03A (Đã hoàn thành 12 icon vector 4 lớp 100/100 audit & tích hợp in-game) - ✅ Đã hoàn thành |
 | **BƯỚC 1.5** | `v0.5.1` | **Mồi Câu, Sách Kỹ Năng & Loot Đáy Biển** | ICO-03B (12 icon: Mồi thơm/rủi ro, sách kỹ năng, rương & loot rác) - ✅ Đã hoàn thành |
-| **BƯỚC 2** | `v0.5.2` | **Hiện Đại Hóa UI & Combat Gauges** | UI-05 (Khung viền/nút bấm), UI-06 (Ghost HP/Tension), UI-07 (Thẻ Rarity) |
-| **BƯỚC 3** | `v0.5.3` | **45 Loài Cá Vector & Môi Trường 3 Map** | FSH-02 (45 cá + 3 Siêu Boss), ENV-02 (Sóng nước & khúc xạ biển) |
-| **BƯỚC 4** | `v0.5.4` | **Hiệu Ứng Kỹ Năng VFX Cần Thủ & Boss** | VFX-04 (VFX chiêu cần thủ), VFX-05 (VFX chiêu Boss & kỹ năng cá) |
-| **BƯỚC 5** | `v0.5.5` | **Hoạt Ảnh Vật Lý, Băng Chuyền CS:GO & Custom Skin** | ANM-04 (Đuôi cá hữu cơ), ANM-05 (Uốn cong cần câu), ANM-06 (Skin Cần/Dây/Phao theo đồ mặc), GAC-02,03 (Gacha CS:GO) |
+| **BƯỚC 2.1** | `v0.5.2` | **15 Loài Cá Ao Làng & Siêu Boss Thủy Quái** | FSH-02A (15 loài cá Ao Làng & Boss Thủy Quái Sông Trà) - ✅ Đã hoàn thành |
+| **BƯỚC 2.2** | `v0.5.2` | **15 Loài Cá Bãi Biển & Siêu Boss Bạch Tuộc** | FSH-02B (15 loài cá Bãi Biển & Boss Bạch Tuộc Khổng Lồ) |
+| **BƯỚC 2.3** | `v0.5.2` | **15 Loài Cá Đảo Xa & Siêu Boss Cá Cờ Xanh** | FSH-02C (15 loài cá Đảo Xa & Boss Cá Cờ Xanh Khổng Lồ) |
+| **BƯỚC 3** | `v0.5.3` | **Môi Trường Nước 3 Bản Đồ & Khúc Xạ Ánh Sáng** | ENV-02 (Sóng nước tự nhiên, rạn san hô, khúc xạ biển) |
+| **BƯỚC 4** | `v0.5.4` | **Hiện Đại Hóa UI, Nút Bấm Xúc Giác & Gauges** | UI-05 (Khung viền/nút bấm), UI-06 (Ghost HP/Tension), UI-07 (Thẻ Rarity) |
+| **BƯỚC 5** | `v0.5.5` | **Hiệu Ứng Kỹ Năng VFX Cần Thủ & Boss** | VFX-04 (VFX chiêu cần thủ), VFX-05 (VFX chiêu Boss & kỹ năng cá) |
+| **BƯỚC 6** | `v0.5.6` | **Hoạt Ảnh Vật Lý, Băng Chuyền CS:GO & Custom Skin** | ANM-04 (Đuôi cá hữu cơ), ANM-05 (Uốn cong cần câu), ANM-06, GAC-02,03 |
 
 ---
 
@@ -401,38 +415,149 @@
 - Đã transpile và tích hợp 100% 12 hàm vẽ độc lập vào `LootVisualRenderer.java` với bộ helper `(sx, sy, fillTri, fillQuad, drawLine, fillCircle, fillEllipse)`.
 - Hoàn thành trọn vẹn 100% Giai đoạn 1 (54/54 icon vector nguyên bản: 30 trang bị + 24 tiêu hao & loot).
 
+#### 🔹 Bản Cập Nhật v0.5.1.2 (BAL-12, ECO-02, ITM-01, BUG-09, GAC-04) - [x] ✅ ĐÃ HOÀN THÀNH
+- **BAL-12 (Cân bằng giằng co & giảm screen shake, chuẩn hóa chữ nổi):**
+  - Nerf lực kéo cá khi người chơi buông phím Space trong trạng thái `PULLING` từ `0.8x` xuống `0.4x` (giảm 50% lực kéo), tạo khoảng thở nhả bớt lực căng dây an toàn.
+  - Giảm chấn động rung giật màn hình khi Tension cao từ `0.04f` xuống `0.01f`, chỉ kích hoạt khi Tension > 88% và khống chế tối đa `0.16f`.
+  - Chuẩn hóa thông báo đứt dây: Bỏ tiền tố `"CĂNG DÂY TỐI ĐA!"`, hiển thị gọn gàng `"DÂY CƯỚC BỊ ĐỨT, CÁ ĐÃ CHẠY MẤT!"` và chữ nổi `"ĐỨT DÂY CÂU!"`.
+  - Bổ sung chữ nổi khi cá vừa cắn câu (`!`): Tự động nhảy chữ nổi `"BOSS!"` nếu là Boss, và `"NEW!"` nếu là loài cá mới chưa từng câu được trong đời.
+  - Sửa lỗi chữ nổi khi hụt cá: Tinh giản thành một chữ nổi ngắn gọn `"CHẬM TAY!"`, không bị nhảy đè cả câu văn bản dài.
+- **ECO-02 (Cửa hàng & Sách kỹ năng):**
+  - Công thức giới hạn số lượng mua tối đa: `maxLevel - currentLevel - booksInBag`. Khi `<= 0` chuyển sang `"ĐÃ BÁN HẾT"`.
+  - Loại bỏ các sách kỹ năng đã bán hết / đạt cấp tối đa khỏi sự kiện giảm giá ngẫu nhiên của tiệm tạp hóa.
+- **ITM-01 (Nút BUFF trên thanh trạng thái & Bảo vệ Buff):**
+  - Dời nút Mồi Thơm cũ sang vị trí mới thoáng đãng (`x=438px`), chuyển đổi thành nút duy nhất `"BUFF (N)"`.
+  - Khi hover vào nút `"BUFF"`, mở bảng Tooltip chi tiết hiển thị danh sách toàn bộ các hiệu ứng vật phẩm đang kích hoạt kèm số lượt còn lại.
+  - Khóa sử dụng trùng lặp cho các vật phẩm đa lượt đang còn hiệu lực: Lưới Đánh Cá, Mồi Rủi Ro, Bùa Hoàng Kim, Sách Thông Thái, Nước Bứt Phá, Đá Mài Lưỡi Câu, Nam Châm Kho Báu, Kính Nhìn Xuyên Nước.
+  - Đổi tên `"Trà Thảo Mộc Định Thần"` thành `"Trà Thảo Mộc"` (duy trì tương thích dữ liệu cũ).
+- **BUG-09 & GAC-04 (Sửa lỗi giao diện & Auto-Updater):**
+  - Sửa lỗi click-through làm tắt `UpdateDialog` ngay frame đầu tiên khi mở từ menu chính.
+  - Bỏ nhãn `(AUTO-UPDATER)` trên tiêu đề và cân đối 3 nút bấm với độ rộng 190px, khoảng cách 35px.
+  - Mở rộng kích thước thẻ bài Gacha đơn lẻ `340x380px`, giãn cách tách biệt hoàn toàn Tên trang bị và Chỉ số khỏi icon trang bị.
+- **MAP-01 (Sửa lỗi thanh tiến trình bản đồ & Độ khó):**
+  - Sửa lỗi thanh tiến trình cá hiển thị sai bản đồ: Đưa về đúng thẻ tương ứng `Đã bắt ở [Tên Map]: X/15 loài`.
+  - Cập nhật xếp hạng độ khó: Ao Làng (0 sao - Rất Dễ), Bãi Biển (1 sao - Dễ), Đảo Xa (2 sao - Vừa).
+  - Tinh giản mô tả Đảo Xa thành vùng biển ngoài khơi thực tế: `"Hòn đảo ngoài khơi xa, sóng gió và cá lớn"`.
+
 ---
 
-### 🖥️ BƯỚC 2: Hiện Đại Hóa UI, Nút Bấm Xúc Giác & Combat Gauges (Phiên bản v0.5.2)
-- **Đợt 2.1 - Bộ Khung Viền Dialog Bo Góc & Phản Hồi Xúc Giác (UI-05):**
+### 🐟 BƯỚC 2: Ngoại Hình 45 Loài Cá Vector & 3 Siêu Boss Thế Giới (Phiên bản v0.5.2)
+
+#### 🔹 Bước 2.1: 15 Loài Cá Ao Làng & Siêu Boss Thủy Quái Sông Trà (FSH-02A - `FishVisualRenderer.java`) - [x] ✅ ĐÃ HOÀN THÀNH
+- Chuẩn hóa nét vẽ vector đa lớp, tạo khối mềm mại, bóng sáng và cử động quẫy đuôi mềm mại (tail wagging) cho 15 loài cá Ao Làng:
+  - *4 Loài Cá Thường (Common):*
+    - **Cá Rô Đồng:** Thân ô-liu ánh đồng, vây lưng 9 gai nhọn sắc bén, đốm đen nắp mang, vệt vằn ngụy trang.
+    - **Cá Diếc:** Lưng vồng cao, vảy trắng bạc ngọc trai lấp lánh, vây phớt hồng cam dịu dàng.
+    - **Cá Mương:** Thân thon dài trong suốt như lưỡi liềm, vảy bạc phản chiếu ánh nắng mặt hồ.
+    - **Cá Lóc Nhí:** Lưng hoa văn rằn ri ngụy trang cỏ nước, mắt lanh lợi sục sạo tìm mồi.
+  - *3 Loài Cá Hiếm (Uncommon):*
+    - **Cá Chép:** Lưng gù uy dũng ánh cam hoàng kim, vảy xếp lớp giáp rồng, đôi râu mềm mại rước lộc, vây đuôi đỏ son.
+    - **Cá Mè:** Đầu to béo tròn, miệng hướng lên đớp bọt nước, vảy xám bạc nhạt bơi đàn tầng mặt.
+    - **Cá Trê:** Thân trơn bóng đen nâu nhẵn thín, 4 cặp râu dài linh hoạt sục bùn, gai ngạnh sắc.
+  - *3 Loài Cá Quý (Rare):*
+    - **Cá Trôi:** Thân thuôn dài vẩy viền đỏ thẫm tinh tế, lưng cong xám xanh bơi lướt uyển chuyển.
+    - **Cá Trắm Cỏ:** Cơ bắp cuồn cuộn vảy xanh ô-liu dày dặn, hàm răng cưa nghiền cỏ nước mạnh mẽ.
+    - **Cá Chim Trắng:** Dáng dẹt tròn như chiếc đĩa bạc, vây bơi vút nhọn viền đen nổi bật.
+  - *3 Loài Cá Sử Thi (Epic):*
+    - **Cá Lóc Bông:** Thân rồng đầm lầy hoa văn đốm hoa mai đen tuyền, đầu bẹt hung hãn, cú táp kinh hoàng.
+    - **Cá Trê Lai:** Thân khổng lồ vằn cẩm thạch vàng đen, sức kéo đầm lì ghìm đáy bùn lầy.
+    - **Cá Chép Vàng:** Thần ngư ánh kim rực rỡ phát quang hào quang may mắn, vây đuôi lụa bồng bềnh.
+  - *2 Loài Huyền Thoại & Boss:*
+    - **Cá Lăng Khổng Lồ:** Chiến binh đáy sâu đen tím bóng bẩy, râu thép dài quét bùn, lực giật đanh thép.
+    - **Siêu Boss Thủy Quái Sông Trà (2,500 HP):** Hào quang huyết ma bạo chúa đa tầng, vảy rêu phù sa bọc giáp dung nham, mắt rực lửa với con ngươi khe hẹp ma quỷ, 6 quả cầu lửa xoay quanh cơ thể, đuôi lưỡi hái khổng lồ xé toạc lòng sông Trà.
+
+#### 🔹 Bước 2.2: 15 Loài Cá Bãi Biển & Siêu Boss Bạch Tuộc Khổng Lồ (FSH-02B - `FishVisualRenderer.java`) - [x] ✅ ĐÃ HOÀN THÀNH (v0.5.2.3)
+- Chuẩn hóa nét vẽ vector đa lớp, tạo khối nổi khối mềm mại, bóng sáng specular và cử động quẫy đuôi/xúc tu mềm mại cho 15 loài cá Bãi Biển:
+  - *6 Loài Cá Thường (Common):*
+    - **Cá Chỉ Vàng:** Thân thoi bạc ánh xanh biển, dải sọc vàng kim óng ả kéo dài từ mang đến cuống đuôi, gai vảy cứng đường bên, đốm đen nắp mang đặc trưng, vây đuôi xòe vàng chanh.
+    - **Cá Đục:** Thân thon dài vàng cát ngụy trang đáy cát biển nông, vảy óng ánh chấm nâu li ti, mõm dài nhọn sục cát tìm mồi.
+    - **Cá Cơm:** Thân trong suốt như pha lê, dải chỉ bạc dọc sống lưng phản chiếu lấp lánh ánh nắng, vây đuôi quẫy nhanh (`wagFine`).
+    - **Cá Mòi:** Lưng xanh thẫm ánh thép, hàng 4-7 chấm đen tròn dọc mạn sườn, vảy bạc mềm mại, vây lưng tam giác nhọn.
+    - **Cá Lẹp:** Thân dẹt mỏng như tờ giấy lướt sóng, bụng sắc cạnh như lưỡi dao, vảy trắng bạc phản quang.
+    - **Cá Bạc Má:** Mắt to tròn thao thức, lưng xanh lục rằn ri vằn sóng biển, thân thon chắc nịch của dòng họ cá thu ngừ bơi nhanh.
+  - *4 Loài Cá Hiếm (Uncommon):*
+    - **Cá Nục:** Thân thuôn tròn chắc nịch, đường bên uốn lượn phủ giáp vảy cứng (scutes), vây đuôi cánh én vàng tươi.
+    - **Cá Đối:** Đầu dẹt mõm tù môi dày, vảy tròn to xám bạc viền đậm, mắt to lấp lánh màng mỡ bảo vệ.
+    - **Cá Trích:** Thân dẹp dài xanh thẫm lưng, bụng trắng bạc óng ánh, vảy tròn lấp lánh phản xạ ánh mặt trời.
+    - **Cá Chim Biển:** Thân dẹt hình đĩa tròn màu bạc ngọc trai kiêu sa, vây lưng và vây hậu môn cong dài như lưỡi liềm.
+  - *2 Loài Cá Quý (Rare):*
+    - **Cá Mú:** Thân đầm chắc hoa văn đốm hoa đá (honeycomb) ngụy trang rạn san hô, miệng rộng răng sắc nhọn, vây lưng gai tua tủa.
+    - **Cá Bóp:** Thân ngư lôi màu nâu đen khỏe khoắn, hai dải sọc trắng bạc song song nổi bật chạy dọc thân, vây lưng trước cụt gai sắc.
+  - *2 Loài Cá Sử Thi (Epic):*
+    - **Cá Thu Hoàng Kim:** Hào quang hoàng kim bạo chúa xé biển, thân ngư lôi xanh sapphire bóng bẩy, 8 đôi vây phụ rời vàng chói dọc cuống đuôi, vây đuôi trăng khuyết khổng lồ vàng rực 24K.
+    - **Cá Ngừ Đại Dương:** Thân bắp thịt hình thoi khổng lồ xanh thẫm - bạc, các vây phụ nhọn vàng tươi phát quang, mắt vàng săn mồi sắc lẹm, lực bơi bạt mạng.
+  - *1 Siêu Boss Thế Giới:*
+    - **Bạch Tuộc Khổng Lồ (2,200 HP):** Xoáy mực vực thẳm và vòng năng lượng cyan-tím đa tầng (`fastPulse`), 8 xúc tu gai nhọn khổng lồ quằn quại bọc giác mút đỏ thẫm phát sáng, mắt quỷ tím với đồng tử chữ nhật ma quái, mắt phụ phát quang thái dương, mỏ quái vật sừng đen chitin tử thần và giọt mực độc ma quỷ.
+
+#### 🔹 Bước 2.3: 15 Loài Cá Đảo Xa & Siêu Boss Cá Cờ Xanh Khổng Lồ (FSH-02C - `FishVisualRenderer.java`) - [x] ✅ ĐÃ HOÀN THÀNH (v0.5.2.4)
+- Chuẩn hóa toàn bộ 15 loài cá Đảo Xa hoàn toàn mới theo chuẩn Big Game Fishing với hình học vector LibGDX ShapeRenderer đa tầng, hiệu ứng ánh sáng đại dương và hoạt ảnh sinh động:
+  - *6 Loài Cá Thường (Common):*
+    - **Cá Mú Đỏ:** Thân bầu dục đậm đà màu đỏ san hô rực rỡ, phủ kín hàng chục đốm sao xanh ngọc bích lấp lánh, vây đuôi quạt tròn viền xanh neon, miệng rộng hàm bẹt dữ dằn.
+    - **Cá Hồng Chuối:** Thân thon dài màu hồng phấn - hồng cam tươi tắn, dải sọc vàng chuối óng ả chạy dọc từ sau mắt tới cuống đuôi, vây đuôi xẻ thùy vàng chanh rực rỡ.
+    - **Cá Dìa Biển Đảo:** Thân dẹt hình bầu dục màu nâu ô-liu lấm tấm hoa văn cẩm thạch hoa đá biển khơi, vây lưng và vây hậu môn có hàng gai nhọn tẩm độc bảo vệ (`gai_doc_san_ho`), mõm nhỏ như miệng thỏ gặm san hô.
+    - **Cá Nhồng Biển:** Thân thuôn dài ngư lôi như mũi tên bạc xé nước, lưng xám xanh ánh thép, 12 vạch sọc vằn đứng sẫm màu, hàm dưới chìa dài lộ răng nanh tam giác nhọn hoắt như dao găm (`can_day`), vây đuôi chữ V cắt nước cực nhanh (`wagFine`).
+    - **Cá Bè Trang:** Thân dẹt sâu hình thoi bằng chrome bạc sáng chói, hàng 6 đốm đen tròn to như đồng tiền cổ chạy trên đường bên uốn lượn, vây đuôi xẻ sâu nhọn hoắt tạo lực bơi xé sóng.
+    - **Cá Nục Heo (Mahi-Mahi / Dorado):** Trán gồ vuông góc dốc thẳng đứng kiêu hãnh của dòng cá đực, lưng xanh ngọc lục bảo rực rỡ, mạn sườn chuyển vàng chanh phát quang chấm xanh điện tử, vây lưng dải lụa xanh biếc chạy suốt sống lưng, bơi bứt tốc đổi hướng (`doi_huong`).
+  - *4 Loài Cá Hiếm (Uncommon):*
+    - **Cá Bớp Khơi:** Thân ngư lôi cơ bắp cuồn cuộn tròn trịa màu nâu đen espresso sẫm tuyền (`tro_luc`), 2 dải sọc trắng kem song song hoàn hảo chạy từ mang tới cuống đuôi, hàng 8 gai ngắn rời rạc cứng như đinh thép.
+    - **Cá Cam Biển:** Thân dày khỏe bắp thịt chắc nịch, lưng xanh ô-liu ánh đồng, mạn sườn vàng cam hổ phách rực rỡ, vệt sọc sẫm màu đặc trưng vắt chéo từ mõm qua mắt lên đỉnh gáy, bơi dũng mãnh nương theo hải lưu xiết (`nuong_hai_luu`).
+    - **Cá Thu Ngàng (Wahoo):** Thân dài thanh mảnh như thanh trường đao ("Thân Đao Xé Gió"), lưng xanh coban sapphire đậm, 24-28 sọc vằn lam sẫm hổ vằn biển sâu, hàng 8 vây phụ nhỏ vàng chói ở cuống đuôi, vây đuôi lưỡi liềm đối xứng xé gió bạt mạng (`wagFine`).
+    - **Cá Đuối Hoa Cương:** Đĩa thân tròn rộng xòe như cánh diều ngầm lướt đáy biển, phủ kín hoa văn cẩm thạch xoáy đá hoa cương mỹ thuật, đuôi roi dài có gai ngạnh độc phóng điện (`phong_dien`), tia điện cyan phát quang crackling theo nhịp timer.
+  - *2 Loài Cá Quý (Rare):*
+    - **Cá Ngừ Vây Vàng:** Thân ngư lôi khổng lồ cơ bắp tròn vo xanh thẫm kim loại, vây lưng thứ hai và vây hậu môn hình lưỡi liềm vàng chanh rực rỡ vươn dài cong vút, hàng vây phụ tam giác vàng tươi viền đen tạo xoáy nước áp lực lớn (`xoay_nuoc`), mắt vàng sáng quắc.
+    - **Cá Cờ Gòn (Sailfish):** Mũi kiếm nhọn dài thanh mảnh, cánh buồm vây lưng vĩ đại cao chót vót màu xanh coban phủ đầy hàng chục đốm tròn đen óng ánh ("Vũ Điệu Cờ Buồm"), vây bụng dài như hai dải lụa mỏng buông thõng, vây đuôi trăng khuyết mềm mại.
+  - *2 Loài Cá Sử Thi (Epic):*
+    - **Cá Mú Nghệ Khơi (Giant Grouper):** Thân hình đồ sộ mập mạp bọc lớp giáp đá cổ thạch sừng sững (`than_ho_co_thach`), các đốm đen hoa mai lớn phủ kín thân và vây, chiếc miệng vực thẳm khổng lồ nuốt chửng mọi thứ (`vuc_da_nuot_chung`), hào quang bụi đá trầm tích xoay quanh thân.
+    - **Cá Mập Rạn Đen (Blacktip Reef Shark):** Kẻ săn mồi đỉnh cao với thân hình khí động học xám nâu ánh đồng, bụng trắng muốt tương phản sắc nét, đỉnh chóp của TẤT CẢ các vây đều có vệt đen tuyền viền trắng nổi bật đặc trưng, 5 khe mang sắc lẹm, đôi mắt vàng thính mùi máu (`thinh_mui_mau`), hàm răng tam giác lởm chởm cắn xé điên cuồng (`can_xe_dien_cuong`).
+  - *1 Siêu Boss Thế Giới (World Boss - 3,000 HP, Lực kéo 195.0, 260 kg):*
+    - **Cá Cờ Xanh Khổng Lồ (Blue Marlin - Tuyệt Tác Siêu Boss):**
+      - *Hào Quang Thần Thoại Đa Tầng:* Hào quang tím sâu thẳm + xanh coban bão tố + vầng sáng cyan điện tử phát xung nhịp nhàng.
+      - *Mũi Kiếm Thép Xé Biển (`mui_kiem_xe_bien`):* Mũi kiếm thép siêu dài nhọn hoắt với rãnh năng lượng plasma điện tử chạy dọc từ gốc đến mũi và tia lửa điện lóe sáng chớp nháy ở đầu mũi kiếm.
+      - *Cánh Buồm Lam Ngọc Vĩ Đại (`vu_dieu_luot_song`):* 10 tia vây buồm vươn cao ngạo nghễ với màng vây xanh ngọc bích phát quang rực rỡ, chóp vây đính hạt ngọc lấp lánh.
+      - *Thân Hình Ngư Lôi Bạo Chúa:* Lưng xanh navy hoàng gia, mạn sườn chuyển bạc xà cừ, 7 dải sọc xanh neon điện tử rực sáng chớp nháy.
+      - *Vây Đuôi Trăng Khuyết Khổng Lồ:* Hai thùy đuôi vút dài uy mãnh xé toạc đại dương với các tia trợ lực vàng ngọc.
+      - *Mắt Thần Săn Mồi (`cuong_phong_ngu_kiem`):* Đôi mắt vàng kim rực lửa uy dũng, đồng tử sắc lạnh nhìn thấu tâm can cần thủ, kèm đốm sáng kim cương và tia sáng ngọc lục bảo.
+      - *Hiệu Ứng Bọt Khí Cavitation:* Bọt khí bão tố khí động học và tia sóng áp lực tỏa ra quanh thân khi bơi.
+
+---
+
+### 🌊 BƯỚC 3: Môi Trường Nước 3 Bản Đồ & Khúc Xạ Ánh Sáng Biển (Phiên bản v0.5.3)
+- Hoàn thiện chuyển động sóng nước tự nhiên theo thời gian thực tại `AoLangBackground`, `BaiBienBackground`, và `DaoXaBackground` (ENV-02).
+- Hiệu ứng rạn san hô, cá bơi nền, bóng nước khúc xạ God Rays và bọt sóng ven bờ.
+
+---
+
+### 🖥️ BƯỚC 4: Hiện Đại Hóa UI, Nút Bấm Xúc Giác & Combat Gauges (Phiên bản v0.5.4)
+- **Đợt 4.1 - Bộ Khung Viền Dialog Bo Góc & Phản Hồi Xúc Giác (UI-05):**
   - Nâng cấp khung viền các Modal/Dialog (Shop, Inventory, Equipment, PatchNotes, Settings, SkillTree) bo góc 12px hiện đại, viền obsidian phân tầng độ sâu bóng đổ.
   - Chuẩn hóa nút bấm 3 trạng thái phản hồi xúc giác: Normal, Hover (phát sáng viền hào quang), Pressed (thụt 2px kèm âm click cơ khí ZzFX).
-- **Đợt 2.2 - Thanh Trạng Thái Chiến Đấu Động (UI-06 - Dynamic Combat Gauges):**
+- **Đợt 4.2 - Thanh Trạng Thái Chiến Đấu Động (UI-06 - Dynamic Combat Gauges):**
   - *Thanh Máu Cá (HP Bar):* Bổ sung thanh "Ghost HP" đỏ sẫm tụt dần sau mỗi đòn kéo sát thương, tạo cảm giác đòn đánh có trọng lượng và uy lực.
   - *Thanh Lực Căng (Tension Bar):* Chuyển sang dải Gradient mượt mà (Xanh an toàn -> Vàng cảnh báo -> Đỏ cam nguy hiểm -> Đỏ nhấp nháy rung giật khi > 85%).
   - *Quickslots HUD:* Hiển thị số lượng vật phẩm và phím tắt (1, 2, 3...) rõ ràng, hiệu ứng sáng viền khi sẵn sàng sử dụng.
-- **Đợt 2.3 - Thẻ Bài Trang Bị Chuẩn Hóa Rarity & So Sánh Chỉ Số (UI-07):**
+- **Đợt 4.3 - Thẻ Bài Trang Bị Chuẩn Hóa Rarity & So Sánh Chỉ Số (UI-07):**
   - Viền thẻ bài hiển thị chuẩn hệ màu Rarity: Trắng (Common), Xanh lá (Uncommon), Xanh dương (Rare), Tím (Epic), Cam (Legendary), Vàng Kim (Limited Premium).
   - Hiển thị so sánh chỉ số tức thì (Stat Diff: `+X` xanh lá, `-Y` đỏ) trực tiếp với trang bị đang mặc khi hover trong túi đồ.
 
 ---
 
-### 🐟 BƯỚC 3: Ngoại Hình 45 Loài Cá Vector & Môi Trường 3 Bản Đồ (Phiên bản v0.5.3)
-- **Đợt 3.1 - 15 Loài Cá Ao Làng & Siêu Boss Thủy Quái Sông Trà (FSH-02):**
-  - Cá Rô Đồng, Cá Diếc, Cá Chép, Cá Mè, Cá Mương, Cá Lóc Nhí, Cá Trê, Cá Trôi, Cá Trắm Cỏ, Cá Chim Trắng, Cá Lóc Bông, Cá Trê Lai, Cá Chép Vàng, Cá Lăng Khổng Lồ.
-  - *Siêu Boss Thủy Quái Sông Trà:* Vảy rêu phù sa bọc ngọc bùn đáy nước, vây gai sắc nhọn, râu dài quẫy đục đáy sông.
-- **Đợt 3.2 - 15 Loài Cá Bãi Biển & Siêu Boss Bạch Tuộc Khổng Lồ (FSH-02):**
-  - Cá Chỉ Vàng, Cá Đục, Cá Cơm, Cá Mòi, Cá Lẹp, Cá Bạc Má, Cá Nục, Cá Đối, Cá Trích, Cá Chim Biển, Cá Mú, Cá Bóp, Cá Thu Hoàng Kim, Cá Ngừ Đại Dương.
-  - *Siêu Boss Bạch Tuộc Khổng Lồ:* 8 xúc tu gai nhọn khổng lồ bọc giác mút đỏ thẫm, mắt tím ma mị, túi mực đen kịt.
-- **Đợt 3.3 - 15 Loài Cá Đảo Xa & Siêu Boss Thần Biển Leviathan (FSH-02):**
-  - Cá Ngựa Vằn, Cá Hề, Cá Đuối Nhỏ, Mực Ống, Cá Nóc, Cá Phèn, Cá Mặt Trăng, Cá Cờ, Rùa Biển, Cá Chuồn, Cá Mập Cáo, Cá Kiếm, Cá Voi Lưng Gù, Mực Khổng Lồ.
-  - *Siêu Boss Thần Biển Leviathan:* Thân rồng viễn cổ khổng lồ xanh thẫm, vương miện sừng san hô phát quang, rãnh mang rít gào bão tố.
-- **Đợt 3.4 - Môi Trường Nước & Khúc Xạ Ánh Sáng (ENV-02):**
-  - Hoàn thiện chuyển động sóng nước tự nhiên theo thời gian thực tại `AoLangBackground`, `BaiBienBackground`, và `DaoXaBackground`.
+### ✨ BƯỚC 5: Bộ Hiệu Ứng Kỹ Năng VFX Cần Thủ & Boss Thủy Quái (Phiên bản v0.5.5)
+- **Đợt 5.1 - Bộ Hiệu Ứng Kỹ Năng Cần Thủ (VFX-04 - `CombatVFXManager.java`):**
+  - Dưỡng Sức (vòng hồi thể lực xanh ngọc sáng bừng quanh cần thủ).
+  - Giật Kép (vết chém kép sóng nước xé toạc mặt hồ).
+  - Mắt Đại Bàng (hào quang định vị tầm nhìn xuyên thấu).
+  - Trói Buộc (vòng sóng năng lượng trói chặt cá).
+  - Thuần Hóa, Trái Tim Đại Dương (hào quang cộng hưởng dịu mắt).
+- **Đợt 5.2 - Bộ Hiệu Ứng Kỹ Năng Cá & Siêu Boss (VFX-05):**
+  - Quẫy Bùn (vết bùn bắn che mờ thanh Tension và HUD).
+  - Bứt Tốc (luồng bọt nước xoáy tốc độ cao phía sau đuôi cá).
+  - Lặn Sâu (sóng nước xoáy tụ, giật tăng lực căng đột ngột).
+  - Cuồng Nộ (hào quang đỏ rực bùng cháy khi cá dưới 25% HP).
+  - Giật Điện (tia sét tê liệt chạy dọc theo đường dây cước).
 
 ---
 
-### ✨ BƯỚC 4: Bộ Hiệu Ứng Kỹ Năng VFX Cần Thủ & Boss Thủy Quái (Phiên bản v0.5.4)
+### 🎬 BƯỚC 6: Hoạt Ảnh Chuyển Động Hữu Cơ, Băng Chuyền CS:GO & Custom Skin Động (Phiên bản v0.5.6)
 - **Đợt 4.1 - Bộ Hiệu Ứng Kỹ Năng Cần Thủ (VFX-04 - `CombatVFXManager.java`):**
   - Dưỡng Sức (vòng hồi thể lực xanh ngọc sáng bừng quanh cần thủ).
   - Giật Kép (vết chém kép sóng nước xé toạc mặt hồ).
@@ -671,13 +796,32 @@ Xóa bỏ hoàn toàn việc dùng chung kỹ năng thường; mỗi Boss thế 
 - **Active 2 (Kích hoạt ở 20% HP): Quét Xúc Tu Cuồng Bạo**
   - Vung liên hoàn các xúc tu gai quất mạnh vào mặt nước tạo chấn động rung lắc cực mạnh (Trauma 0.8), giật tăng đột ngột +40% Tension và trừ ngay 30 Thể lực nếu người chơi đang ghìm giữ kéo.
 
-#### 🌊 Boss 3: Thần Biển Leviathan (Bản đồ Đảo Xa - 5,500 HP, Lực kéo 450.0f)
-- **Passive Độc Bản: Áp Lực Vực Sâu (Abyssal Pressure)**
-  - Uy áp của Thần Biển ngàn tầm vực thẳm: Giảm 30% hiệu lực của mọi bùa chú/kỹ năng tăng sát thương từ cần thủ, đồng thời tốc độ hồi Thể lực tự nhiên của người chơi bị giảm 40%.
-- **Active 1 (Kích hoạt ở 60% HP): Cuồng Nộ Sóng Thần**
-  - Triệu hồi đại hồng thủy gầm thét, các đợt sóng biển dâng cao dập dồn rút 8 Thể lực/giây và đẩy kim Tension chao đảo dâng cao liên tục theo nhịp sóng.
-- **Active 2 (Kích hoạt ở 20% HP): Bão Tố Diệt Thế**
-  - Sấm sét biển sâu rạch ngang trời kèm cuồng phong dữ dội, rung chấn màn hình cấp độ tối đa (Trauma 1.0). Tăng +100% lực kéo của Leviathan trong 5 giây, kích hoạt chuỗi giằng co sinh tử buộc người chơi phải kích hoạt toàn bộ trang bị và kỹ năng sinh tồn.
+#### 🗡️ Boss 3: Cá Cờ Xanh Khổng Lồ - Blue Marlin (Bản đồ Đảo Xa - 3,000 HP, Lực kéo 195.0f)
+- **Passive Độc Bản: Mũi Kiếm Xé Biển (`mui_kiem_xe_bien`)**
+  - Mũi kiếm xương dài như lưỡi lê thép rẽ sóng đại dương: Miễn nhiễm hoàn toàn các hiệu ứng khống chế (Trói Buộc, Đóng Băng).
+  - Khắc chế đè phím: Ghìm giữ phím Space > 1.5s làm Tension dâng nhanh thêm +20%/s mỗi giây ghìm tiếp theo.
+  - Thưởng nhấp nhả nhịp điệu (Tap-reeling): Nhấp nhả phím kéo <= 1.2s được thưởng **+15% sát thương kéo**.
+- **Active 1 (Định kỳ 8.0s): Vũ Điệu Lướt Sóng (`vu_dieu_luot_song`)**
+  - Boss phi thân vút lên không trung lượn trên mặt sóng suốt 0.9 giây chớp nhoáng. Xuất hiện chỉ báo nhấp nháy `"▼ TIẾP NƯỚC! [SPACE] ▼"`.
+  - Nếu người chơi nhả phím Space trong lúc bay và nhấp lại đúng khoảnh khắc chạm nước ➔ Kích hoạt `"PERFECT RE-HOOK!"` gây x2 sát thương và triệt tiêu toàn bộ lực giật. Nếu vẫn đè giữ Space khi chạm nước ➔ Cú sốc va đập làm giật tăng sốc **+35% Tension và trừ 15 Thể lực**!
+- **Active 2 (Kích hoạt ở <30% HP): Cuồng Phóng Ngư Kiếm (`cuong_phong_ngu_kiem`) - Soft Enrage**
+  - Chạy đua sinh tử: Mỗi đợt bứt tốc tăng thêm **+10% lực kéo**, cộng dồn tối đa **+50%** (lực kéo tối đa lên tới 292.5f).
+  - Bào mòn thể lực theo thời gian: Kể từ khi kích hoạt, cứ mỗi 1 giây trôi qua làm tốc độ tiêu hao thể lực của cần thủ **tăng thêm +1%**.
+  - Toàn bộ chỉ số stack lực kéo và bộ đếm gia tăng tiêu hao thể lực được tự động reset sạch sẽ về 0 ngay khi kết thúc trận đấu.
+
+---
+
+### 🌟 DAO-01: Hoàn Tất Triển Khai Đại Tu 15 Loài Cá Đảo Xa (v0.5.2.0)
+- **15 Loài Cá Biển Khơi Thực Tế**:
+  - 6 Cá Thường (260 - 360 HP): Cá Mú Đỏ, Cá Hồng Chuối, Cá Dìa Biển Đảo, Cá Nhồng Biển, Cá Bè Trang, Cá Nục Heo.
+  - 4 Cá Hiếm (520 - 650 HP): Cá Bớp Khơi, Cá Cam Biển, Cá Thu Ngàng, Cá Đuối Hoa Cương.
+  - 2 Cá Quý (1,050 - 1,150 HP): Cá Ngừ Vây Vàng, Cá Cờ Gòn.
+  - 2 Sử Thi (1,750 - 1,900 HP): Cá Mú Nghệ Khơi, Cá Mập Rạn Đen.
+  - 1 World Boss (3,000 HP): Cá Cờ Xanh Khổng Lồ.
+- **14 Kỹ Năng Độc Đáo Mới Lạ**:
+  - `tro_luc` (25% tỷ lệ miễn nhiễm lực kéo Space), `can_day` (-10% Max Tension), `gai_doc_san_ho` (-1.5 Stamina/s), `doi_huong` (chao đảo Tension ±10%), `nuong_hai_luu` (+18% pull khi Tension > 55%), `than_dao` (+35% pull speed), `phong_dien` (-12 Stamina nếu giữ Space > 2.5s), `xoay_nuoc` (dao động sin & giảm 40% xả dây), `vu_dieu_co_buom` (2 nhịp phóng lướt), `than_ho_co_thach` (-15 sát thương phẳng), `vuc_da_nuot_chung` (+35% Tension & -8 Stamina/s), `thinh_mui_mau` (+20% pull khi thể lực < 50%), `can_xe_dien_cuong` (-25% Max Tension & phản chấn -20 Stamina).
+- **Cơ Chế Phản Xạ Perfect Re-Hook**: Hiệu ứng visual/audio báo hiệu khi cá nhảy chạm nước, thưởng x2 sát thương khi Re-Hook chuẩn xác.
+- **Đồ Họa Vector Blue Marlin**: Render hình học vector nguyên bản cho Boss Cá Cờ Xanh Khổng Lồ.
 
 ---
 
@@ -710,17 +854,20 @@ gantt
     Bước 1.3 - 9 Icon 3 Set Thần Thoại & SK (EQP-02C)      :done, e3, 2026-10-26, 1d
     Bước 1.4 - 12 Icon Tiêu Hao & Đạo Cụ Tạp Hóa (ICO-03A) :done, e4, 2026-10-27, 1d
     Bước 1.5 - 12 Icon Mồi, Sách & Loot Đáy Biển (ICO-03B) :done, e5, 2026-10-27, 1d
-    section Bước 2 - Giao Diện & UI Game Juice (v0.5.2)
-    Khung Viền Bo Góc & Nút Bấm Xúc Giác (UI-05)          :active, u1, 2026-10-28, 2d
+    section Bước 2 - 45 Loài Cá Vector 3 Map (v0.5.2)
+    Bước 2.1 - 15 Cá Ao Làng & Siêu Boss (FSH-02A)       :done, f1, 2026-10-27, 1d
+    Bước 2.2 - 15 Cá Bãi Biển & Siêu Boss (FSH-02B)      :done, f2, 2026-10-27, 1d
+    Bước 2.3 - 15 Cá Đảo Xa & Siêu Boss (FSH-02C)        :done, f3, 2026-10-27, 1d
+    section Bước 3 - Môi Trường Nước 3 Map (v0.5.3)
+    Mặt Nước Gợn Sóng & Khúc Xạ God Rays (ENV-02)         :active, e1, 2026-10-28, 2d
+    section Bước 4 - Giao Diện & UI Game Juice (v0.5.4)
+    Khung Viền Bo Góc & Nút Bấm Xúc Giác (UI-05)          :u1, after e1, 2d
     Thanh Chiến Đấu Động Ghost HP & Gradient (UI-06)      :u2, after u1, 2d
     Thẻ Bài Chuẩn Rarity & So Sánh Trang Bị (UI-07)       :u3, after u2, 1d
-    section Bước 3 - 45 Loài Cá & Môi Trường 3 Map (v0.5.3)
-    Đại Tu 45 Loài Cá & 3 Siêu Boss Thế Giới (FSH-02)     :f1, after u3, 3d
-    Mặt Nước Gợn Sóng & Tia Nắng God Rays (ENV-02)         :f2, after f1, 2d
-    section Bước 4 - Hiệu Ứng Kỹ Năng VFX Cần Thủ & Boss (v0.5.4)
-    VFX Kỹ Năng Người Chơi (Dưỡng Sức, Trói Buộc) (VFX-04) :v1, after f2, 2d
+    section Bước 5 - Hiệu Ứng Kỹ Năng VFX Cần Thủ & Boss (v0.5.5)
+    VFX Kỹ Năng Người Chơi (Dưỡng Sức, Trói Buộc) (VFX-04) :v1, after u3, 2d
     VFX Kỹ Năng Cá & Boss (Quấy Bùn, Bão Tố) (VFX-05)     :v2, after v1, 2d
-    section Bước 5 - Hoạt Ảnh, Gacha CSGO & Custom Skin (v0.5.5)
+    section Bước 6 - Hoạt Ảnh, Gacha CSGO & Custom Skin (v0.5.6)
     Chuyển Động Hữu Cơ Cá Đốt Sống Verlet (ANM-04)        :a1, after v2, 3d
     Hoạt Ảnh Quăng Cần, Kéo Cần Flex, Giật Cần (ANM-05)   :a2, after a1, 3d
     Hệ Thống Custom Skin Cần, Dây, Phao Theo Đồ (ANM-06)   :a3, after a2, 2d

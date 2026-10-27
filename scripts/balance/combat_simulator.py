@@ -74,9 +74,9 @@ class CombatSimulator:
             # Tension & Damage calculations
             tension_increase = 0.0
 
-            # Fish pull: 1.5x / 0.8x in PULLING, 0.15x / 0.10x in IDLE
+            # Fish pull: 1.5x / 0.4x in PULLING, 0.03x / 0.0x in IDLE
             if fish_state == "PULLING":
-                pull_mult = 1.5 if is_space_down else 0.8
+                pull_mult = 1.5 if is_space_down else 0.4
             else:
                 pull_mult = 0.03 if is_space_down else 0.0
 

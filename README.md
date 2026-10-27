@@ -150,8 +150,8 @@ graph TD
 
 ```
 [ Ao Làng ] (Cấp 1+)  --->  [ Bãi Biển ] (Cấp 10+)  --->  [ Đảo Xa ] (Cấp 20+)
-  Hệ nước ngọt yên ả         Sóng vỗ & Thủy Quái           Vực thẳm tử thần
-  15 Loài sinh vật            15 Loài ven bờ hung hãn       Ngự trị bởi Leviathan
+  Hệ nước ngọt yên ả         Sóng vỗ & Thủy Quái           Hải đảo khơi xa
+  15 Loài sinh vật            15 Loài ven bờ hung hãn       Cá Cờ Xanh Khổng Lồ
 ```
 
 - Nền hoạt họa tương tác riêng biệt: hoa sen, bèo nổi dập dềnh ở Ao Làng; rặng dừa, chim hải âu lượn sóng ở Bãi Biển; sấm sét, vực đen ở Đảo Xa.

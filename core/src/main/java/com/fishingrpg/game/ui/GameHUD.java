@@ -20,9 +20,12 @@ import com.fishingrpg.game.loot.Catchable;
 import com.fishingrpg.game.loot.CatchableType;
 import com.fishingrpg.game.loot.LootItem;
 import com.fishingrpg.game.screens.SkillTreeScreen;
+import com.fishingrpg.game.systems.AudioManager;
 import com.fishingrpg.game.systems.FishingManager;
 import com.fishingrpg.game.systems.FishingManager.State;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class GameHUD {
@@ -101,11 +104,20 @@ public class GameHUD {
     private boolean hoverCang = false;
     private boolean hoverClose = false;
     private boolean hoverCatchClose = false;
+    private boolean hoverBuff = false;
     private final boolean[] hoverActives = new boolean[4];
 
     private float timer = 0f;
     private float fishTrailingHp = -1f;
     private String hoveredInventoryItem = null;
+
+    // Quick Slots Pagination
+    public static final int INV_PAGE_SIZE = 9;
+    public int quickSlotPage = 0;
+    private boolean hoverQuickslotPrev = false;
+    private boolean hoverQuickslotNext = false;
+    private final List<Map.Entry<String, Integer>> cachedValidInventory = new ArrayList<>();
+    private final List<String> cachedPageItems = new ArrayList<>();
 
     // News Ticker / Marquee Banner
     private static final String[] TICKER_MESSAGES = {
@@ -175,6 +187,13 @@ public class GameHUD {
 
         hoverCang = false;
 
+        float buffBtnX = 438f;
+        float buffBtnY = H - 54f;
+        float buffBtnW = 105f;
+        float buffBtnH = 36f;
+        hoverBuff = m.x >= buffBtnX && m.x <= buffBtnX + buffBtnW &&
+                    m.y >= buffBtnY && m.y <= buffBtnY + buffBtnH;
+
         // Close button on catch sidebar
         float sbX = INV_X;
         float sbY = INV_Y + INV_PANEL_H + 10f;
@@ -184,6 +203,22 @@ public class GameHUD {
                           m.x >= sbX + sbW - 24f && m.x <= sbX + sbW - 4f &&
                           m.y >= sbY + sbH - 24f && m.y <= sbY + sbH - 4f;
         hoverClose = hoverCatchClose;
+
+        // Quick Slots pagination buttons hover
+        Player player = screen.getPlayer();
+        int totalPages = getTotalQuickslotPages(player);
+        if (quickSlotPage >= totalPages) quickSlotPage = totalPages - 1;
+        if (quickSlotPage < 0) quickSlotPage = 0;
+
+        float prevBtnX = INV_X + 6f;
+        float prevBtnY = INV_Y + INV_PANEL_H - 24f;
+        float btnW = 22f;
+        float btnH = 20f;
+        float nextBtnX = INV_X + INV_PANEL_W - 28f;
+        float nextBtnY = INV_Y + INV_PANEL_H - 24f;
+
+        hoverQuickslotPrev = (totalPages > 1 && m.x >= prevBtnX && m.x <= prevBtnX + btnW && m.y >= prevBtnY && m.y <= prevBtnY + btnH);
+        hoverQuickslotNext = (totalPages > 1 && m.x >= nextBtnX && m.x <= nextBtnX + btnW && m.y >= nextBtnY && m.y <= nextBtnY + btnH);
 
         hoveredInventoryItem = getClickedInventoryItem(m, state);
     }
@@ -211,24 +246,88 @@ public class GameHUD {
     public boolean isGachaClicked(Vector3 m, State state) { return hoverGacha; }
     public boolean isEquipmentClicked(Vector3 m, State state) { return hoverEquipment; }
     public boolean isEventClicked(Vector3 m, State state) { return hoverEvent; }
+    public boolean isQuickslotPrevClicked(Vector3 m) { return hoverQuickslotPrev; }
+    public boolean isQuickslotNextClicked(Vector3 m) { return hoverQuickslotNext; }
+
+    public void prevQuickslotPage() {
+        Player player = screen.getPlayer();
+        if (player == null) return;
+        int totalPages = getTotalQuickslotPages(player);
+        if (totalPages <= 1) return;
+        quickSlotPage = (quickSlotPage - 1 + totalPages) % totalPages;
+        AudioManager.getInstance().playSFX("sfx_button");
+    }
+
+    public void nextQuickslotPage() {
+        Player player = screen.getPlayer();
+        if (player == null) return;
+        int totalPages = getTotalQuickslotPages(player);
+        if (totalPages <= 1) return;
+        quickSlotPage = (quickSlotPage + 1) % totalPages;
+        AudioManager.getInstance().playSFX("sfx_button");
+    }
+
+    public List<Map.Entry<String, Integer>> getValidInventoryEntries(Player player) {
+        cachedValidInventory.clear();
+        if (player == null) return cachedValidInventory;
+        for (Map.Entry<String, Integer> entry : player.getInventory().entrySet()) {
+            if (entry.getValue() > 0 && !entry.getKey().equals("Vàng")) {
+                cachedValidInventory.add(entry);
+            }
+        }
+        return cachedValidInventory;
+    }
+
+    public int getTotalQuickslotPages(Player player) {
+        if (player == null) return 1;
+        int count = 0;
+        for (Map.Entry<String, Integer> entry : player.getInventory().entrySet()) {
+            if (entry.getValue() > 0 && !entry.getKey().equals("Vàng")) {
+                count++;
+            }
+        }
+        return Math.max(1, (count + INV_PAGE_SIZE - 1) / INV_PAGE_SIZE);
+    }
+
+    public List<String> getItemsOnCurrentPage() {
+        cachedPageItems.clear();
+        Player player = screen.getPlayer();
+        if (player == null) return cachedPageItems;
+        List<Map.Entry<String, Integer>> validEntries = getValidInventoryEntries(player);
+        int totalPages = Math.max(1, (validEntries.size() + INV_PAGE_SIZE - 1) / INV_PAGE_SIZE);
+        if (quickSlotPage >= totalPages) quickSlotPage = totalPages - 1;
+        if (quickSlotPage < 0) quickSlotPage = 0;
+
+        int startIndex = quickSlotPage * INV_PAGE_SIZE;
+        int endIndex = Math.min(validEntries.size(), startIndex + INV_PAGE_SIZE);
+        for (int i = startIndex; i < endIndex; i++) {
+            cachedPageItems.add(validEntries.get(i).getKey());
+        }
+        return cachedPageItems;
+    }
 
     public String getClickedInventoryItem(Vector3 m, State state) {
-        int i = 0;
         Player player = screen.getPlayer();
         if (player == null) return null;
 
-        for (Map.Entry<String, Integer> entry : player.getInventory().entrySet()) {
-            String name = entry.getKey();
-            if (entry.getValue() <= 0 || name.equals("Vàng")) continue;
-            int row = i / 3;
-            int col = i % 3;
+        List<Map.Entry<String, Integer>> validEntries = getValidInventoryEntries(player);
+        int totalPages = Math.max(1, (validEntries.size() + INV_PAGE_SIZE - 1) / INV_PAGE_SIZE);
+        if (quickSlotPage >= totalPages) quickSlotPage = totalPages - 1;
+        if (quickSlotPage < 0) quickSlotPage = 0;
+
+        int startIndex = quickSlotPage * INV_PAGE_SIZE;
+        int endIndex = Math.min(validEntries.size(), startIndex + INV_PAGE_SIZE);
+
+        for (int i = startIndex; i < endIndex; i++) {
+            int slotIndex = i - startIndex;
+            int row = slotIndex / 3;
+            int col = slotIndex % 3;
             float x = INV_X + INV_PADDING + col * (INV_SLOT_SIZE + INV_PADDING);
             float y = INV_Y + INV_PANEL_H - 28f - INV_PADDING - (row + 1) * INV_SLOT_SIZE - row * INV_PADDING;
 
             if (m.x >= x && m.x <= x + INV_SLOT_SIZE && m.y >= y && m.y <= y + INV_SLOT_SIZE) {
-                return name;
+                return validEntries.get(i).getKey();
             }
-            i++;
         }
         return null;
     }
@@ -1131,24 +1230,6 @@ public class GameHUD {
         drawBoxBorder(goldX, diaY, resW, resH, 1.2f);
         // Diamond Icon (Universal glowing diamond)
         EquipmentIconRenderer.drawDiamondIcon(sr, goldX + 16f, diaY + resH / 2f, 8f);
-
-        // Active Bait Buff Banner if active (Expanded window to 340px)
-        if (player.isBaitBuffActive()) {
-            float buffY = panelY + panelH + 8f;
-            float buffW = 340f;
-            float buffH = 28f;
-            sr.setColor(0.08f, 0.22f, 0.12f, 0.95f);
-            sr.rect(panelX, buffY, buffW, buffH);
-            sr.setColor(0.35f, 0.95f, 0.45f, 0.9f);
-            drawBoxBorder(panelX, buffY, buffW, buffH, 1.4f);
-
-            // Animated green status indicator
-            float pulse = 0.6f + 0.4f * MathUtils.sin(timer * 5f);
-            sr.setColor(0.2f, 1f, 0.4f, pulse);
-            sr.circle(panelX + 14f, buffY + buffH / 2f, 4.5f);
-            sr.setColor(1f, 1f, 1f, 0.8f);
-            sr.circle(panelX + 14f, buffY + buffH / 2f, 2f);
-        }
     }
 
     public void drawIdleText(SpriteBatch batch, Player player) {
@@ -1254,15 +1335,6 @@ public class GameHUD {
             font.draw(batch, diaText, goldX + 32f, panelY + 33f);
             font.getData().setScale(1f);
 
-            // Bait Buff string inside widened 340px box
-            if (player.isBaitBuffActive()) {
-                float buffY = panelY + panelH + 8f;
-                font.setColor(0.4f, 1f, 0.5f, 1f);
-                font.getData().setScale(0.82f);
-                font.draw(batch, "BUFF: MỒI THƠM (+TỐC ĐỘ CẮN)", panelX + 28f, buffY + 20f);
-                font.getData().setScale(1f);
-            }
-
             // Quick Slots Inventory Text
             drawInventoryText(batch, player);
         }
@@ -1322,8 +1394,8 @@ public class GameHUD {
     private String getMapDisplayName(String mapId) {
         if (mapId == null) return "Ao Làng";
         if (mapId.equals("ao_lang")) return "Ao Làng";
-        if (mapId.equals("bai_bien")) return "Bờ Biển";
-        if (mapId.equals("dao_xa")) return "Đảo Xa Vực Thẳm";
+        if (mapId.equals("bai_bien")) return "Bãi Biển";
+        if (mapId.equals("dao_xa")) return "Đảo Xa";
         return mapId;
     }
 
@@ -1346,7 +1418,32 @@ public class GameHUD {
         sr.setColor(0.85f, 0.65f, 0.25f, 0.6f);
         sr.rect(INV_X, INV_Y + INV_PANEL_H - 28f, INV_PANEL_W, 1.5f);
 
-        // Draw empty slots
+        List<Map.Entry<String, Integer>> validEntries = getValidInventoryEntries(player);
+        int totalPages = Math.max(1, (validEntries.size() + INV_PAGE_SIZE - 1) / INV_PAGE_SIZE);
+        if (quickSlotPage >= totalPages) quickSlotPage = totalPages - 1;
+        if (quickSlotPage < 0) quickSlotPage = 0;
+
+        // Draw header pagination buttons if more than 1 page
+        if (totalPages > 1) {
+            float prevBtnX = INV_X + 6f;
+            float prevBtnY = INV_Y + INV_PANEL_H - 24f;
+            float btnW = 22f;
+            float btnH = 20f;
+            float nextBtnX = INV_X + INV_PANEL_W - 28f;
+            float nextBtnY = INV_Y + INV_PANEL_H - 24f;
+
+            sr.setColor(hoverQuickslotPrev ? new Color(0.28f, 0.40f, 0.60f, 0.95f) : new Color(0.18f, 0.22f, 0.32f, 0.90f));
+            sr.rect(prevBtnX, prevBtnY, btnW, btnH);
+            sr.setColor(hoverQuickslotPrev ? new Color(1f, 0.88f, 0.35f, 1f) : new Color(0.40f, 0.55f, 0.75f, 0.75f));
+            drawBoxBorder(prevBtnX, prevBtnY, btnW, btnH, 1.2f);
+
+            sr.setColor(hoverQuickslotNext ? new Color(0.28f, 0.40f, 0.60f, 0.95f) : new Color(0.18f, 0.22f, 0.32f, 0.90f));
+            sr.rect(nextBtnX, nextBtnY, btnW, btnH);
+            sr.setColor(hoverQuickslotNext ? new Color(1f, 0.88f, 0.35f, 1f) : new Color(0.40f, 0.55f, 0.75f, 0.75f));
+            drawBoxBorder(nextBtnX, nextBtnY, btnW, btnH, 1.2f);
+        }
+
+        // Draw empty slots (always 3x3)
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
                 float x = INV_X + INV_PADDING + col * (INV_SLOT_SIZE + INV_PADDING);
@@ -1358,13 +1455,16 @@ public class GameHUD {
             }
         }
 
-        // Draw filled item slots with unique vector art icons
-        int i = 0;
-        for (Map.Entry<String, Integer> entry : player.getInventory().entrySet()) {
+        // Draw filled item slots for CURRENT PAGE ONLY
+        int startIndex = quickSlotPage * INV_PAGE_SIZE;
+        int endIndex = Math.min(validEntries.size(), startIndex + INV_PAGE_SIZE);
+
+        for (int i = startIndex; i < endIndex; i++) {
+            Map.Entry<String, Integer> entry = validEntries.get(i);
             String name = entry.getKey();
-            if (entry.getValue() <= 0 || name.equals("Vàng")) continue;
-            int row = i / 3;
-            int col = i % 3;
+            int slotIndex = i - startIndex;
+            int row = slotIndex / 3;
+            int col = slotIndex % 3;
             float x = INV_X + INV_PADDING + col * (INV_SLOT_SIZE + INV_PADDING);
             float y = INV_Y + INV_PANEL_H - 28f - INV_PADDING - (row + 1) * INV_SLOT_SIZE - row * INV_PADDING;
 
@@ -1411,28 +1511,55 @@ public class GameHUD {
             float qbW = (qtyVal >= 100) ? 32f : (qtyVal >= 10) ? 26f : 20f;
             sr.setColor(0.06f, 0.08f, 0.14f, 0.92f);
             sr.rect(x + INV_SLOT_SIZE - qbW - 2f, y + 2f, qbW, 15f);
-            i++;
         }
     }
 
     public void drawInventoryText(SpriteBatch batch, Player player) {
         if (player == null) return;
 
-        font.setColor(1f, 0.88f, 0.3f, 1f);
-        drawCenteredText(font, "PHÍM TẮT NHANH", INV_X, INV_Y + INV_PANEL_H - 28f, INV_PANEL_W, 28f);
+        List<Map.Entry<String, Integer>> validEntries = getValidInventoryEntries(player);
+        int totalPages = Math.max(1, (validEntries.size() + INV_PAGE_SIZE - 1) / INV_PAGE_SIZE);
+        if (quickSlotPage >= totalPages) quickSlotPage = totalPages - 1;
+        if (quickSlotPage < 0) quickSlotPage = 0;
 
-        int i = 0;
-        for (Map.Entry<String, Integer> entry : player.getInventory().entrySet()) {
+        font.setColor(1f, 0.88f, 0.3f, 1f);
+        String headerTitle = (totalPages > 1) ? "Ô NHANH (" + (quickSlotPage + 1) + "/" + totalPages + ")" : "PHÍM TẮT NHANH";
+        drawCenteredText(font, headerTitle, INV_X, INV_Y + INV_PANEL_H - 28f, INV_PANEL_W, 28f);
+
+        if (totalPages > 1) {
+            float prevBtnX = INV_X + 6f;
+            float prevBtnY = INV_Y + INV_PANEL_H - 24f;
+            float btnW = 22f;
+            float btnH = 20f;
+            float nextBtnX = INV_X + INV_PANEL_W - 28f;
+            float nextBtnY = INV_Y + INV_PANEL_H - 24f;
+
+            font.setColor(hoverQuickslotPrev ? Color.YELLOW : Color.CYAN);
+            font.getData().setScale(0.70f);
+            layout.setText(font, "◀");
+            font.draw(batch, layout, prevBtnX + (btnW - layout.width) / 2f, prevBtnY + (btnH + layout.height) / 2f);
+
+            font.setColor(hoverQuickslotNext ? Color.YELLOW : Color.CYAN);
+            layout.setText(font, "▶");
+            font.draw(batch, layout, nextBtnX + (btnW - layout.width) / 2f, nextBtnY + (btnH + layout.height) / 2f);
+            font.getData().setScale(1f);
+        }
+
+        int startIndex = quickSlotPage * INV_PAGE_SIZE;
+        int endIndex = Math.min(validEntries.size(), startIndex + INV_PAGE_SIZE);
+
+        for (int i = startIndex; i < endIndex; i++) {
+            Map.Entry<String, Integer> entry = validEntries.get(i);
             String name = entry.getKey();
-            if (entry.getValue() <= 0 || name.equals("Vàng")) continue;
-            int row = i / 3;
-            int col = i % 3;
+            int slotIndex = i - startIndex;
+            int row = slotIndex / 3;
+            int col = slotIndex % 3;
             float x = INV_X + INV_PADDING + col * (INV_SLOT_SIZE + INV_PADDING);
             float y = INV_Y + INV_PANEL_H - 28f - INV_PADDING - (row + 1) * INV_SLOT_SIZE - row * INV_PADDING;
 
             // Top-left: dynamic quickslot hotkey badge in bright cyan
             font.setColor(0.35f, 0.9f, 1f, 1f);
-            String hotkeyStr = "[" + com.fishingrpg.game.systems.KeybindManager.getInstance().getQuickslotKeyDisplayName(i) + "]";
+            String hotkeyStr = "[" + com.fishingrpg.game.systems.KeybindManager.getInstance().getQuickslotKeyDisplayName(slotIndex) + "]";
             font.getData().setScale(hotkeyStr.length() > 3 ? 0.55f : 0.70f);
             layout.setText(font, hotkeyStr);
             font.draw(batch, layout, x + 2f + (20f - layout.width) / 2f, y + INV_SLOT_SIZE - 17f + (15f + layout.height) / 2f);
@@ -1471,11 +1598,10 @@ public class GameHUD {
             float qbX = x + INV_SLOT_SIZE - qbW - 2f;
             font.draw(batch, layout, qbX + (qbW - layout.width) / 2f, y + 2f + (15f + layout.height) / 2f);
             font.getData().setScale(1f);
-            i++;
         }
 
         // Empty state indicator
-        if (i == 0) {
+        if (validEntries.isEmpty()) {
             font.setColor(0.55f, 0.65f, 0.8f, 0.7f);
             font.getData().setScale(0.78f);
             drawCenteredText(font, "Túi rỗng\n(Mua ở Cửa Hàng)", INV_X, INV_Y + 70f, INV_PANEL_W, 40f);
@@ -1559,8 +1685,8 @@ public class GameHUD {
         if (screen.fishingManager.state == State.WAITING || screen.fishingManager.state == State.BITE) {
             drawWaterBobberShapes();
 
-            // Sonar detection radar box backing
-            if (screen.fishingManager.predictedCatch != null) {
+            // Sonar detection radar box backing (only when player has active sonar charges)
+            if (player != null && player.getSonarCharges() > 0 && screen.fishingManager.predictedCatch != null) {
                 float boxW = 500f;
                 float boxH = 36f;
                 float boxX = (W - boxW) / 2f;
@@ -2013,39 +2139,37 @@ public class GameHUD {
         sr.setColor(1f, 1f, 1f, 0.9f);
         sr.circle(locX + 16f, barY + barH / 2f + 2f, 1.8f);
 
-        // 3. Active Buff Pills (if not in combat, or if in combat placed between loc and fish hp)
-        if (screen.fishingManager.state != State.COMBAT) {
-            float buffX = 420f;
-            if (player.isBaitBuffActive()) {
-                float bW = 110f;
-                sr.setColor(0.08f, 0.22f, 0.12f, 0.92f);
-                sr.rect(buffX, barY, bW, barH);
-                sr.setColor(0.35f, 0.95f, 0.45f, 0.85f);
-                drawBoxBorder(buffX, barY, bW, barH, 1.3f);
-                float pulse = 0.6f + 0.4f * MathUtils.sin(timer * 5f);
-                sr.setColor(0.2f, 1f, 0.4f, pulse);
-                sr.circle(buffX + 14f, barY + barH / 2f, 4f);
-                buffX += bW + 8f;
-            }
-            if (player.isFishingNetActive()) {
-                float bW = 85f;
-                sr.setColor(0.10f, 0.18f, 0.32f, 0.92f);
-                sr.rect(buffX, barY, bW, barH);
-                sr.setColor(0.4f, 0.75f, 1f, 0.85f);
-                drawBoxBorder(buffX, barY, bW, barH, 1.3f);
-                sr.setColor(0.4f, 0.85f, 1f, 1f);
-                sr.circle(buffX + 14f, barY + barH / 2f, 4f);
-                buffX += bW + 8f;
-            }
-            if (player.getGoldBuffCharges() > 0) {
-                float bW = 100f;
-                sr.setColor(0.25f, 0.18f, 0.06f, 0.92f);
-                sr.rect(buffX, barY, bW, barH);
-                sr.setColor(1f, 0.85f, 0.25f, 0.85f);
-                drawBoxBorder(buffX, barY, bW, barH, 1.3f);
-                sr.setColor(1f, 0.85f, 0.25f, 1f);
-                sr.circle(buffX + 14f, barY + barH / 2f, 4f);
-            }
+        // 3. Persistent Buff Button (BUFF / BUFF (N))
+        java.util.List<ActiveBuffDisplay> activeBuffs = getActiveBuffs(player);
+        int buffCount = activeBuffs.size();
+        float buffBtnX = 438f;
+        float buffBtnW = 105f;
+        float buffBtnH = barH;
+        float buffBtnY = barY;
+
+        if (buffCount > 0) {
+            // Active style: Deep teal/emerald plate with glowing border
+            sr.setColor(hoverBuff ? new Color(0.12f, 0.28f, 0.22f, 0.95f) : new Color(0.08f, 0.18f, 0.16f, 0.92f));
+            sr.rect(buffBtnX, buffBtnY, buffBtnW, buffBtnH);
+            sr.setColor(hoverBuff ? new Color(0.45f, 1f, 0.75f, 1f) : new Color(0.3f, 0.85f, 0.55f, 0.85f));
+            drawBoxBorder(buffBtnX, buffBtnY, buffBtnW, buffBtnH, hoverBuff ? 1.6f : 1.3f);
+
+            // Pulsing dot indicator
+            float pulse = 0.6f + 0.4f * MathUtils.sin(timer * 6f);
+            sr.setColor(0.3f, 1f, 0.5f, pulse);
+            sr.circle(buffBtnX + 16f, buffBtnY + buffBtnH / 2f, 4.5f);
+            sr.setColor(1f, 1f, 1f, 0.9f);
+            sr.circle(buffBtnX + 16f, buffBtnY + buffBtnH / 2f, 1.8f);
+        } else {
+            // Inactive style: Subtle obsidian plate
+            sr.setColor(hoverBuff ? new Color(0.12f, 0.16f, 0.22f, 0.92f) : new Color(0.07f, 0.09f, 0.14f, 0.85f));
+            sr.rect(buffBtnX, buffBtnY, buffBtnW, buffBtnH);
+            sr.setColor(hoverBuff ? new Color(0.5f, 0.65f, 0.85f, 0.8f) : new Color(0.25f, 0.32f, 0.42f, 0.6f));
+            drawBoxBorder(buffBtnX, buffBtnY, buffBtnW, buffBtnH, 1.2f);
+
+            // Small indicator icon
+            sr.setColor(0.45f, 0.55f, 0.65f, 0.7f);
+            sr.circle(buffBtnX + 16f, buffBtnY + buffBtnH / 2f, 3.5f);
         }
 
         // 4. Gold Pill (Right side)
@@ -2174,8 +2298,9 @@ public class GameHUD {
         // 0. Persistent Top Header Bar (Level, EXP, Map, Buffs, Gold, Diamonds)
         drawTopPlayerHeaderText(batch, player);
 
-        // Sonar detection banner during WAITING or BITE
-        if ((screen.fishingManager.state == State.WAITING || screen.fishingManager.state == State.BITE) 
+        // Sonar detection banner during WAITING or BITE (only when player has active sonar charges)
+        if (player != null && player.getSonarCharges() > 0 
+                && (screen.fishingManager.state == State.WAITING || screen.fishingManager.state == State.BITE) 
                 && screen.fishingManager.predictedCatch != null) {
             float boxW = 500f;
             float boxH = 36f;
@@ -2706,29 +2831,108 @@ public class GameHUD {
         font.draw(batch, locName, locX + 30f, barY + barH / 2f + 5f);
         font.getData().setScale(1f);
 
-        // 3. Active Buff Pills
-        if (screen.fishingManager.state != State.COMBAT) {
-            float buffX = 420f;
-            if (player.isBaitBuffActive()) {
-                font.setColor(0.4f, 1f, 0.55f, 1f);
-                font.getData().setScale(0.75f);
-                font.draw(batch, "MỒI THƠM", buffX + 26f, barY + barH / 2f + 5f);
-                font.getData().setScale(1f);
-                buffX += 110f + 8f;
+        // 3. Persistent Buff Button (BUFF / BUFF (N))
+        java.util.List<ActiveBuffDisplay> activeBuffs = getActiveBuffs(player);
+        int buffCount = activeBuffs.size();
+        float buffBtnX = 438f;
+        float buffBtnW = 105f;
+        float buffBtnH = barH;
+        float buffBtnY = barY;
+
+        String buffBtnText = (buffCount > 0) ? ("BUFF (" + buffCount + ")") : "BUFF";
+        font.getData().setScale(0.78f);
+        layout.setText(font, buffBtnText);
+        float btx = buffBtnX + 26f + (buffBtnW - 26f - layout.width) / 2f;
+        float bty = buffBtnY + (buffBtnH + layout.height) / 2f;
+
+        font.setColor(0f, 0f, 0f, 0.85f);
+        font.draw(batch, buffBtnText, btx + 1f, bty - 1f);
+        if (buffCount > 0) {
+            font.setColor(hoverBuff ? new Color(1f, 1f, 0.8f, 1f) : new Color(0.45f, 1f, 0.7f, 1f));
+        } else {
+            font.setColor(hoverBuff ? Color.WHITE : new Color(0.6f, 0.7f, 0.8f, 0.9f));
+        }
+        font.draw(batch, buffBtnText, btx, bty);
+        font.getData().setScale(1f);
+
+        // Tooltip when hovering over BUFF button
+        if (hoverBuff) {
+            float tipX = buffBtnX;
+            float tipW = 410f;
+            float tipH = (buffCount > 0) ? (34f + buffCount * 38f + 14f) : 80f;
+            float tipY = buffBtnY - tipH - 8f;
+
+            batch.end();
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            sr.begin(ShapeRenderer.ShapeType.Filled);
+
+            // Drop shadow
+            sr.setColor(0.02f, 0.04f, 0.08f, 0.55f);
+            sr.rect(tipX + 4f, tipY - 4f, tipW, tipH);
+
+            // Obsidian background
+            sr.setColor(0.07f, 0.10f, 0.16f, 0.96f);
+            sr.rect(tipX, tipY, tipW, tipH);
+
+            // Header bar
+            sr.setColor(0.12f, 0.16f, 0.25f, 0.95f);
+            sr.rect(tipX, tipY + tipH - 28f, tipW, 28f);
+
+            // Golden border
+            sr.setColor(0.85f, 0.65f, 0.25f, 0.92f);
+            drawBoxBorder(tipX, tipY, tipW, tipH, 1.5f);
+            sr.rect(tipX, tipY + tipH - 28f, tipW, 1.2f);
+
+            // Row backgrounds if any buffs
+            if (buffCount > 0) {
+                float rowY = tipY + tipH - 28f - 38f;
+                for (ActiveBuffDisplay b : activeBuffs) {
+                    sr.setColor(b.bgColor.r, b.bgColor.g, b.bgColor.b, 0.45f);
+                    sr.rect(tipX + 8f, rowY + 3f, tipW - 16f, 32f);
+                    sr.setColor(b.color.r, b.color.g, b.color.b, 0.85f);
+                    sr.circle(tipX + 22f, rowY + 19f, 4f);
+                    rowY -= 38f;
+                }
             }
-            if (player.isFishingNetActive()) {
-                font.setColor(0.55f, 0.88f, 1f, 1f);
-                font.getData().setScale(0.75f);
-                font.draw(batch, "LƯỚI", buffX + 26f, barY + barH / 2f + 5f);
-                font.getData().setScale(1f);
-                buffX += 85f + 8f;
+
+            sr.end();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+            batch.begin();
+
+            // Header Title
+            font.getData().setScale(0.80f);
+            String hTitle = (buffCount > 0) ? ("✦ HIỆU LỰC VẬT PHẨM ĐANG KÍCH HOẠT (" + buffCount + ") ✦") : "✦ HIỆU LỰC VẬT PHẨM ✦";
+            layout.setText(font, hTitle);
+            font.setColor(0f, 0f, 0f, 0.85f);
+            font.draw(batch, hTitle, tipX + (tipW - layout.width) / 2f + 1f, tipY + tipH - 8f - 1f);
+            font.setColor(1f, 0.88f, 0.35f, 1f);
+            font.draw(batch, hTitle, tipX + (tipW - layout.width) / 2f, tipY + tipH - 8f);
+
+            if (buffCount > 0) {
+                float rowY = tipY + tipH - 28f - 10f;
+                for (ActiveBuffDisplay b : activeBuffs) {
+                    // Buff Name (Label)
+                    font.getData().setScale(0.78f);
+                    font.setColor(0f, 0f, 0f, 0.85f);
+                    font.draw(batch, b.label, tipX + 34f + 1f, rowY - 1f);
+                    font.setColor(b.color);
+                    font.draw(batch, b.label, tipX + 34f, rowY);
+
+                    // Buff Detail / Remaining charges
+                    font.getData().setScale(0.68f);
+                    font.setColor(0.82f, 0.88f, 0.95f, 1f);
+                    font.draw(batch, b.detail, tipX + 34f, rowY - 14f);
+
+                    rowY -= 38f;
+                }
+            } else {
+                font.getData().setScale(0.72f);
+                font.setColor(0.75f, 0.80f, 0.88f, 1f);
+                font.draw(batch, "Hiện không có hiệu ứng vật phẩm nào đang kích hoạt.", tipX + 16f, tipY + tipH - 36f);
+                font.setColor(1f, 0.85f, 0.45f, 0.9f);
+                font.draw(batch, "Mẹo: Dùng mồi câu, bùa, đá mài... trong túi để nhận buff!", tipX + 16f, tipY + tipH - 54f);
             }
-            if (player.getGoldBuffCharges() > 0) {
-                font.setColor(1f, 0.9f, 0.35f, 1f);
-                font.getData().setScale(0.75f);
-                font.draw(batch, "BÙA VÀNG x" + player.getGoldBuffCharges(), buffX + 26f, barY + barH / 2f + 5f);
-                font.getData().setScale(1f);
-            }
+            font.getData().setScale(1f);
         }
 
         // 4. Gold text
@@ -3302,5 +3506,51 @@ public class GameHUD {
             case "Sách: Trái Tim ĐD": return "trai_tim_dai_duong";
             default: return null;
         }
+    }
+
+    private static class ActiveBuffDisplay {
+        final String label;
+        final String detail;
+        final Color color;
+        final Color bgColor;
+        ActiveBuffDisplay(String label, String detail, Color color, Color bgColor) {
+            this.label = label;
+            this.detail = detail;
+            this.color = color;
+            this.bgColor = bgColor;
+        }
+    }
+
+    private java.util.List<ActiveBuffDisplay> getActiveBuffs(Player player) {
+        java.util.List<ActiveBuffDisplay> list = new java.util.ArrayList<>();
+        if (player == null) return list;
+        if (player.isBaitBuffActive()) {
+            list.add(new ActiveBuffDisplay("Mồi Thơm", "100% Cá & Rương (0% Rác, cá cắn nhanh x3)", new Color(0.35f, 0.95f, 0.45f, 1f), new Color(0.08f, 0.22f, 0.12f, 0.95f)));
+        }
+        if (player.getWhetstoneCharges() > 0) {
+            list.add(new ActiveBuffDisplay("Đá Mài Lưỡi Câu", "+25% Sát thương kéo cá (Còn " + player.getWhetstoneCharges() + " lượt)", new Color(0.95f, 0.75f, 0.35f, 1f), new Color(0.24f, 0.18f, 0.08f, 0.95f)));
+        }
+        if (player.getGoldBuffCharges() > 0) {
+            list.add(new ActiveBuffDisplay("Bùa Hoàng Kim", "+50% Vàng nhận thêm (Còn " + player.getGoldBuffCharges() + " lượt)", new Color(1f, 0.88f, 0.30f, 1f), new Color(0.25f, 0.18f, 0.06f, 0.95f)));
+        }
+        if (player.getExpBuffCharges() > 0) {
+            list.add(new ActiveBuffDisplay("Sách Thông Thái", "+50% Kinh nghiệm nhận thêm (Còn " + player.getExpBuffCharges() + " lượt)", new Color(0.40f, 0.85f, 1f, 1f), new Color(0.08f, 0.18f, 0.28f, 0.95f)));
+        }
+        if (player.getTreasureMagnetCharges() > 0) {
+            list.add(new ActiveBuffDisplay("Nam Châm Kho Báu", "+50% Tỷ lệ câu trúng Rương (Còn " + player.getTreasureMagnetCharges() + " lượt)", new Color(0.85f, 0.55f, 1f, 1f), new Color(0.20f, 0.10f, 0.28f, 0.95f)));
+        }
+        if (player.getSonarCharges() > 0) {
+            list.add(new ActiveBuffDisplay("Kính Nhìn Xuyên Nước", "Thấu thị radar soi trước cá cắn (Còn " + player.getSonarCharges() + " lượt)", new Color(0.35f, 0.90f, 0.90f, 1f), new Color(0.06f, 0.20f, 0.22f, 0.95f)));
+        }
+        if (player.isFishingNetActive()) {
+            list.add(new ActiveBuffDisplay("Lưới Đánh Cá", "Thu hoạch x2 đến x4 sản lượng lượt tới", new Color(0.45f, 0.75f, 1f, 1f), new Color(0.10f, 0.18f, 0.32f, 0.95f)));
+        }
+        if (player.isRiskyBaitActive()) {
+            list.add(new ActiveBuffDisplay("Mồi Rủi Ro", "x2 Lực kéo cá & x2 Phần thưởng lượt tới", new Color(1f, 0.40f, 0.30f, 1f), new Color(0.28f, 0.08f, 0.08f, 0.95f)));
+        }
+        if (player.isOverclockPotionActive()) {
+            list.add(new ActiveBuffDisplay("Nước Bứt Phá", "+150% Tốc độ cuộn máy câu & -30% Max Tension", new Color(0.95f, 0.35f, 0.90f, 1f), new Color(0.26f, 0.06f, 0.24f, 0.95f)));
+        }
+        return list;
     }
 }

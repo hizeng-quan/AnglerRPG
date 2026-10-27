@@ -1,7 +1,7 @@
 package com.fishingrpg.game.systems.updater;
 
 public class GameVersion {
-    public static final String CURRENT_VERSION = "0.5.1.1";
+    public static final String CURRENT_VERSION = "0.5.2.4";
     public static final String BUILD_DATE = "2026-10-27";
     public static final String GITHUB_OWNER = "hizeng-quan";
     public static final String GITHUB_REPO = "AnglerRPG";

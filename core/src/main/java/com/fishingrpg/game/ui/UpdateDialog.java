@@ -34,7 +34,7 @@ public class UpdateDialog {
     private final float dlgX = (1280f - W) / 2f;
     private final float dlgY = (720f - H) / 2f;
 
-    // Tọa độ các nút bấm
+    // Tọa độ các nút bấm cân bằng và giãn cách chuẩn
     private float closeBtnX, closeBtnY, closeBtnW, closeBtnH;
     private float actionBtnX, actionBtnY, actionBtnW, actionBtnH;
     private float secondBtnX, secondBtnY, secondBtnW, secondBtnH;
@@ -45,6 +45,8 @@ public class UpdateDialog {
     private boolean hoverAction = false;
     private boolean hoverSecond = false;
     private boolean hoverGithub = false;
+
+    private int ignoreClickFrames = 0;
 
     public UpdateDialog(FishingRPG game) {
         this.game = game;
@@ -57,24 +59,27 @@ public class UpdateDialog {
         closeBtnX = dlgX + W - closeBtnW - 16f;
         closeBtnY = dlgY + H - closeBtnH - 16f;
 
-        actionBtnW = 240f;
-        actionBtnH = 46f;
-        actionBtnX = dlgX + W / 2f - actionBtnW / 2f;
-        actionBtnY = dlgY + 32f;
-
-        secondBtnW = 160f;
+        // Bố cục 3 nút chuẩn xác: 40px lề trái, 190px mỗi nút, 35px khoảng cách, 40px lề phải
+        secondBtnW = 190f;
         secondBtnH = 46f;
         secondBtnX = dlgX + 40f;
         secondBtnY = dlgY + 32f;
 
-        githubBtnW = 200f;
+        actionBtnW = 190f;
+        actionBtnH = 46f;
+        actionBtnX = dlgX + 265f;
+        actionBtnY = dlgY + 32f;
+
+        githubBtnW = 190f;
         githubBtnH = 46f;
-        githubBtnX = dlgX + W - githubBtnW - 40f;
+        githubBtnX = dlgX + 490f;
         githubBtnY = dlgY + 32f;
     }
 
     public void open() {
         this.visible = true;
+        this.pulseTimer = 0f;
+        this.ignoreClickFrames = 3;
         AudioManager.getInstance().playSFX("sfx_button");
     }
 
@@ -90,14 +95,29 @@ public class UpdateDialog {
     public boolean handleInput(Vector3 mouse) {
         if (!visible) return false;
 
-        // Hover tracking
-        hoverClose = isInside(mouse.x, mouse.y, closeBtnX, closeBtnY, closeBtnW, closeBtnH);
-        hoverAction = isInside(mouse.x, mouse.y, actionBtnX, actionBtnY, actionBtnW, actionBtnH);
-        hoverSecond = isInside(mouse.x, mouse.y, secondBtnX, secondBtnY, secondBtnW, secondBtnH);
-        hoverGithub = isInside(mouse.x, mouse.y, githubBtnX, githubBtnY, githubBtnW, githubBtnH);
+        // Bỏ qua các frame đầu ngay khi vừa mở để tránh nhận nhầm click từ màn hình chính
+        if (ignoreClickFrames > 0) {
+            ignoreClickFrames--;
+            return true;
+        }
 
         AutoUpdater updater = AutoUpdater.getInstance();
         AutoUpdater.Status st = updater.getStatus();
+
+        // Hover tracking theo từng trạng thái bố cục nút
+        hoverClose = isInside(mouse.x, mouse.y, closeBtnX, closeBtnY, closeBtnW, closeBtnH);
+        if (st == AutoUpdater.Status.UP_TO_DATE) {
+            float uSecondX = dlgX + 130f;
+            float uActionX = dlgX + 380f;
+            float uBtnW = 210f;
+            hoverSecond = isInside(mouse.x, mouse.y, uSecondX, secondBtnY, uBtnW, secondBtnH);
+            hoverAction = isInside(mouse.x, mouse.y, uActionX, actionBtnY, uBtnW, actionBtnH);
+            hoverGithub = false;
+        } else {
+            hoverSecond = isInside(mouse.x, mouse.y, secondBtnX, secondBtnY, secondBtnW, secondBtnH);
+            hoverAction = isInside(mouse.x, mouse.y, actionBtnX, actionBtnY, actionBtnW, actionBtnH);
+            hoverGithub = isInside(mouse.x, mouse.y, githubBtnX, githubBtnY, githubBtnW, githubBtnH);
+        }
 
         if (Gdx.input.justTouched()) {
             if (hoverClose) {
@@ -105,30 +125,30 @@ public class UpdateDialog {
                 return true;
             }
 
-            // Click ngoài khung để đóng nếu không phải đang tải
+            // Click ngoài khung để đóng nếu không phải đang tải (chỉ đóng khi đã mở ổn định > 0.25s)
             if (!isInside(mouse.x, mouse.y, dlgX, dlgY, W, H)) {
-                if (st != AutoUpdater.Status.DOWNLOADING) {
+                if (st != AutoUpdater.Status.DOWNLOADING && pulseTimer > 0.25f) {
                     close();
                     return true;
                 }
             }
 
             if (st == AutoUpdater.Status.UPDATE_AVAILABLE) {
-                // Nút tải cập nhật tự động
-                if (isInside(mouse.x, mouse.y, actionBtnX + 50f, actionBtnY, 260f, actionBtnH)) {
-                    AudioManager.getInstance().playSFX("sfx_button");
-                    updater.startDownloadAndApply(null);
-                    return true;
-                }
                 // Nút để sau
-                if (isInside(mouse.x, mouse.y, secondBtnX, secondBtnY, 140f, secondBtnH)) {
+                if (hoverSecond) {
                     close();
                     return true;
                 }
                 // Nút mở GitHub
-                if (isInside(mouse.x, mouse.y, githubBtnX, githubBtnY, 180f, githubBtnH)) {
+                if (hoverAction) {
                     AudioManager.getInstance().playSFX("sfx_button");
                     Gdx.net.openURI("https://github.com/" + GameVersion.GITHUB_OWNER + "/" + GameVersion.GITHUB_REPO + "/releases");
+                    return true;
+                }
+                // Nút tải cập nhật tự động
+                if (hoverGithub) {
+                    AudioManager.getInstance().playSFX("sfx_button");
+                    updater.startDownloadAndApply(null);
                     return true;
                 }
             } else if (st == AutoUpdater.Status.UP_TO_DATE) {
@@ -150,15 +170,15 @@ public class UpdateDialog {
                     updater.checkForUpdates(null);
                     return true;
                 }
+                // Nút đóng
+                if (hoverAction) {
+                    close();
+                    return true;
+                }
                 // Nút mở GitHub tải thủ công
                 if (hoverGithub) {
                     AudioManager.getInstance().playSFX("sfx_button");
                     Gdx.net.openURI("https://github.com/" + GameVersion.GITHUB_OWNER + "/" + GameVersion.GITHUB_REPO + "/releases");
-                    return true;
-                }
-                // Nút đóng
-                if (hoverAction) {
-                    close();
                     return true;
                 }
             }
@@ -176,7 +196,6 @@ public class UpdateDialog {
         if (!visible) return;
 
         pulseTimer += delta;
-        handleInput(mouse);
 
         ShapeRenderer sr = game.shapeRenderer;
         SpriteBatch batch = game.batch;
@@ -256,57 +275,55 @@ public class UpdateDialog {
 
         // Vẽ các nút bấm theo trạng thái
         if (st == AutoUpdater.Status.UPDATE_AVAILABLE) {
-            // Nút Tải Tự Động
-            float dBtnX = dlgX + 400f;
-            float dBtnW = 270f;
-            sr.setColor(hoverAction ? new Color(0.15f, 0.65f, 0.40f, 1f) : new Color(0.10f, 0.50f, 0.30f, 1f));
-            sr.rect(dBtnX, actionBtnY, dBtnW, actionBtnH);
-            sr.setColor(0.40f, 0.95f, 0.60f, 0.9f);
-            drawRectOutline(sr, dBtnX, actionBtnY, dBtnW, actionBtnH, 1.8f);
-
-            // Nút Để Sau
-            float lBtnX = dlgX + 40f;
-            float lBtnW = 140f;
+            // Nút Để Sau (Trái)
             sr.setColor(hoverSecond ? new Color(0.35f, 0.40f, 0.50f, 1f) : new Color(0.20f, 0.25f, 0.35f, 1f));
-            sr.rect(lBtnX, actionBtnY, lBtnW, actionBtnH);
+            sr.rect(secondBtnX, secondBtnY, secondBtnW, secondBtnH);
             sr.setColor(0.50f, 0.65f, 0.80f, 0.7f);
-            drawRectOutline(sr, lBtnX, actionBtnY, lBtnW, actionBtnH, 1.5f);
+            drawRectOutline(sr, secondBtnX, secondBtnY, secondBtnW, secondBtnH, 1.5f);
 
-            // Nút GitHub
-            float gBtnX = dlgX + 200f;
-            float gBtnW = 180f;
-            sr.setColor(hoverGithub ? new Color(0.25f, 0.35f, 0.60f, 1f) : new Color(0.15f, 0.25f, 0.45f, 1f));
-            sr.rect(gBtnX, actionBtnY, gBtnW, actionBtnH);
+            // Nút GitHub (Giữa)
+            sr.setColor(hoverAction ? new Color(0.25f, 0.35f, 0.60f, 1f) : new Color(0.15f, 0.25f, 0.45f, 1f));
+            sr.rect(actionBtnX, actionBtnY, actionBtnW, actionBtnH);
             sr.setColor(0.45f, 0.65f, 0.95f, 0.8f);
-            drawRectOutline(sr, gBtnX, actionBtnY, gBtnW, actionBtnH, 1.5f);
+            drawRectOutline(sr, actionBtnX, actionBtnY, actionBtnW, actionBtnH, 1.5f);
+
+            // Nút Tải Tự Động (Phải)
+            sr.setColor(hoverGithub ? new Color(0.15f, 0.65f, 0.40f, 1f) : new Color(0.10f, 0.50f, 0.30f, 1f));
+            sr.rect(githubBtnX, githubBtnY, githubBtnW, githubBtnH);
+            sr.setColor(0.40f, 0.95f, 0.60f, 0.9f);
+            drawRectOutline(sr, githubBtnX, githubBtnY, githubBtnW, githubBtnH, 1.8f);
 
         } else if (st == AutoUpdater.Status.UP_TO_DATE) {
-            // Nút Đóng
-            sr.setColor(hoverAction ? new Color(0.25f, 0.50f, 0.80f, 1f) : new Color(0.18f, 0.35f, 0.60f, 1f));
-            sr.rect(actionBtnX, actionBtnY, actionBtnW, actionBtnH);
-            sr.setColor(0.45f, 0.70f, 1f, 0.9f);
-            drawRectOutline(sr, actionBtnX, actionBtnY, actionBtnW, actionBtnH, 1.8f);
+            float uSecondX = dlgX + 130f;
+            float uActionX = dlgX + 380f;
+            float uBtnW = 210f;
 
             // Nút Kiểm Tra Lại
             sr.setColor(hoverSecond ? new Color(0.25f, 0.35f, 0.50f, 1f) : new Color(0.16f, 0.22f, 0.34f, 1f));
-            sr.rect(secondBtnX, secondBtnY, secondBtnW, secondBtnH);
+            sr.rect(uSecondX, secondBtnY, uBtnW, secondBtnH);
             sr.setColor(0.40f, 0.55f, 0.75f, 0.7f);
-            drawRectOutline(sr, secondBtnX, secondBtnY, secondBtnW, secondBtnH, 1.5f);
+            drawRectOutline(sr, uSecondX, secondBtnY, uBtnW, secondBtnH, 1.5f);
 
-        } else if (st == AutoUpdater.Status.ERROR) {
             // Nút Đóng
             sr.setColor(hoverAction ? new Color(0.25f, 0.50f, 0.80f, 1f) : new Color(0.18f, 0.35f, 0.60f, 1f));
-            sr.rect(actionBtnX, actionBtnY, actionBtnW, actionBtnH);
+            sr.rect(uActionX, actionBtnY, uBtnW, actionBtnH);
             sr.setColor(0.45f, 0.70f, 1f, 0.9f);
-            drawRectOutline(sr, actionBtnX, actionBtnY, actionBtnW, actionBtnH, 1.8f);
+            drawRectOutline(sr, uActionX, actionBtnY, uBtnW, actionBtnH, 1.8f);
 
-            // Nút Thử Lại
+        } else if (st == AutoUpdater.Status.ERROR) {
+            // Nút Thử Lại (Trái)
             sr.setColor(hoverSecond ? new Color(0.35f, 0.45f, 0.65f, 1f) : new Color(0.20f, 0.30f, 0.45f, 1f));
             sr.rect(secondBtnX, secondBtnY, secondBtnW, secondBtnH);
             sr.setColor(0.50f, 0.70f, 0.95f, 0.8f);
             drawRectOutline(sr, secondBtnX, secondBtnY, secondBtnW, secondBtnH, 1.5f);
 
-            // Nút Mở GitHub
+            // Nút Đóng (Giữa)
+            sr.setColor(hoverAction ? new Color(0.25f, 0.50f, 0.80f, 1f) : new Color(0.18f, 0.35f, 0.60f, 1f));
+            sr.rect(actionBtnX, actionBtnY, actionBtnW, actionBtnH);
+            sr.setColor(0.45f, 0.70f, 1f, 0.9f);
+            drawRectOutline(sr, actionBtnX, actionBtnY, actionBtnW, actionBtnH, 1.8f);
+
+            // Nút Mở GitHub (Phải)
             sr.setColor(hoverGithub ? new Color(0.30f, 0.45f, 0.70f, 1f) : new Color(0.18f, 0.28f, 0.48f, 1f));
             sr.rect(githubBtnX, githubBtnY, githubBtnW, githubBtnH);
             sr.setColor(0.50f, 0.75f, 1f, 0.8f);
@@ -318,9 +335,9 @@ public class UpdateDialog {
         // 2. VẼ CHỮ VÀ BIỂU TƯỢNG (TEXT RENDERING)
         batch.begin();
 
-        // Tiêu đề Header
+        // Tiêu đề Header (đã bỏ AUTO-UPDATER để không đè nút X)
         titleFont.setColor(1f, 0.92f, 0.45f, 1f);
-        String titleStr = "✦ TRÌNH CẬP NHẬT TỰ ĐỘNG (AUTO-UPDATER) ✦";
+        String titleStr = "✦ TRÌNH CẬP NHẬT TỰ ĐỘNG ✦";
         layout.setText(titleFont, titleStr);
         titleFont.draw(batch, titleStr, dlgX + 35f, dlgY + H - 24f);
 
@@ -348,13 +365,17 @@ public class UpdateDialog {
             smallFont.draw(batch, "Không có bản cập nhật mới nào. Game của bạn đã sở hữu tất cả các tính năng & tối ưu mới nhất.", contentBoxX + 40f, contentBoxY + contentBoxH - 135f);
             smallFont.draw(batch, "Thời gian thực máy chủ luôn được đồng bộ trực tuyến tự động.", contentBoxX + 40f, contentBoxY + contentBoxH - 160f);
 
-            // Nút Đóng & Kiểm tra lại
-            font.setColor(1f, 1f, 1f, 1f);
-            layout.setText(font, "ĐÓNG");
-            font.draw(batch, "ĐÓNG", actionBtnX + (actionBtnW - layout.width) / 2f, actionBtnY + 30f);
+            float uSecondX = dlgX + 130f;
+            float uActionX = dlgX + 380f;
+            float uBtnW = 210f;
 
+            // Nút Kiểm tra lại & Đóng
+            font.setColor(1f, 1f, 1f, 1f);
             layout.setText(font, "KIỂM TRA LẠI");
-            font.draw(batch, "KIỂM TRA LẠI", secondBtnX + (secondBtnW - layout.width) / 2f, secondBtnY + 30f);
+            font.draw(batch, "KIỂM TRA LẠI", uSecondX + (uBtnW - layout.width) / 2f, secondBtnY + 30f);
+
+            layout.setText(font, "ĐÓNG");
+            font.draw(batch, "ĐÓNG", uActionX + (uBtnW - layout.width) / 2f, actionBtnY + 30f);
 
         } else if (st == AutoUpdater.Status.UPDATE_AVAILABLE) {
             titleFont.setColor(1f, 0.88f, 0.35f, 1f);
@@ -390,21 +411,15 @@ public class UpdateDialog {
             }
 
             // Nút bấm
-            float dBtnX = dlgX + 400f;
-            float dBtnW = 270f;
             font.setColor(1f, 1f, 1f, 1f);
-            layout.setText(font, "TẢI & CẬP NHẬT NGAY");
-            font.draw(batch, "TẢI & CẬP NHẬT NGAY", dBtnX + (dBtnW - layout.width) / 2f, actionBtnY + 30f);
-
-            float lBtnX = dlgX + 40f;
-            float lBtnW = 140f;
             layout.setText(font, "ĐỂ SAU");
-            font.draw(batch, "ĐỂ SAU", lBtnX + (lBtnW - layout.width) / 2f, actionBtnY + 30f);
+            font.draw(batch, "ĐỂ SAU", secondBtnX + (secondBtnW - layout.width) / 2f, secondBtnY + 30f);
 
-            float gBtnX = dlgX + 200f;
-            float gBtnW = 180f;
             layout.setText(font, "MỞ GITHUB");
-            font.draw(batch, "MỞ GITHUB", gBtnX + (gBtnW - layout.width) / 2f, actionBtnY + 30f);
+            font.draw(batch, "MỞ GITHUB", actionBtnX + (actionBtnW - layout.width) / 2f, actionBtnY + 30f);
+
+            layout.setText(font, "TẢI TỰ ĐỘNG");
+            font.draw(batch, "TẢI TỰ ĐỘNG", githubBtnX + (githubBtnW - layout.width) / 2f, githubBtnY + 30f);
 
         } else if (st == AutoUpdater.Status.DOWNLOADING) {
             titleFont.setColor(0.35f, 0.85f, 1f, 1f);
@@ -439,11 +454,11 @@ public class UpdateDialog {
             layout.setText(font, "THỬ LẠI");
             font.draw(batch, "THỬ LẠI", secondBtnX + (secondBtnW - layout.width) / 2f, secondBtnY + 30f);
 
-            layout.setText(font, "MỞ TRANG GITHUB");
-            font.draw(batch, "MỞ TRANG GITHUB", githubBtnX + (githubBtnW - layout.width) / 2f, githubBtnY + 30f);
-
             layout.setText(font, "ĐÓNG");
             font.draw(batch, "ĐÓNG", actionBtnX + (actionBtnW - layout.width) / 2f, actionBtnY + 30f);
+
+            layout.setText(font, "MỞ TRANG GITHUB");
+            font.draw(batch, "MỞ TRANG GITHUB", githubBtnX + (githubBtnW - layout.width) / 2f, githubBtnY + 30f);
         }
 
         batch.end();

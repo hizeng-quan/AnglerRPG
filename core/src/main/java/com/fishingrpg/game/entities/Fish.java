@@ -132,7 +132,10 @@ public class Fish implements Catchable {
                id.equals("song_than") || id.equals("cuong_no") || id.equals("phun_muc") ||
                id.equals("giat_dien") || id.equals("nhay_vot") || id.equals("song_am") ||
                id.equals("phun_muc_mu") || id.equals("hut_mau") || id.equals("bao_to") ||
-               id.equals("quet_xuc_tu") || id.equals("muc_mu_hut_mau");
+               id.equals("quet_xuc_tu") || id.equals("muc_mu_hut_mau") ||
+               id.equals("xoay_nuoc") || id.equals("vu_dieu_co_buom") ||
+               id.equals("vuc_da_nuot_chung") || id.equals("can_xe_dien_cuong") ||
+               id.equals("vu_dieu_luot_song") || id.equals("cuong_phong_ngu_kiem");
     }
 
     public static String getSkillDisplayName(String id) {
@@ -158,6 +161,22 @@ public class Fish implements Catchable {
             case "quet_xuc_tu":  return "Quét xúc tu";
             case "hut_mau":      return "Hút máu";
             case "muc_mu_hut_mau": return "Mực mù hút máu";
+            case "gai_doc_san_ho": return "Gai độc san hô";
+            case "can_day":      return "Răng nanh cắt dây";
+            case "doi_huong":    return "Đổi hướng đột ngột";
+            case "tro_luc":      return "Trơ lực kéo";
+            case "nuong_hai_luu": return "Nương hải lưu";
+            case "than_dao":     return "Thân đao xé gió";
+            case "phong_dien":   return "Gai đuôi phóng điện";
+            case "xoay_nuoc":    return "Xoáy nước đại dương";
+            case "vu_dieu_co_buom": return "Vũ điệu cờ buồm";
+            case "than_ho_co_thach": return "Thân hộ cổ thạch";
+            case "vuc_da_nuot_chung": return "Vực đá nuốt chửng";
+            case "thinh_mui_mau": return "Thính mùi máu";
+            case "can_xe_dien_cuong": return "Cắn xé điên cuồng";
+            case "mui_kiem_xe_bien": return "Mũi kiếm xé biển";
+            case "vu_dieu_luot_song": return "Vũ điệu lướt sóng";
+            case "cuong_phong_ngu_kiem": return "Cuồng phóng ngư kiếm";
             default:             return id.replace("_", " ");
         }
     }
@@ -185,6 +204,22 @@ public class Fish implements Catchable {
             case "an_minh":         return "Nội tại: Khi IDLE giảm 25% sát thương nhận vào";
             case "vung_vay":        return "Nội tại: Thỉnh thoảng quẫy mạnh đổi hướng giằng co";
             case "xuc_tu":          return "Nội tại: Xúc tu quấn chặt làm dây chùng chậm hơn 30%";
+            case "gai_doc_san_ho":  return "Nội tại: Gai độc cọ xát rút 1.5 Thể lực/s khi cần thủ kéo dây lúc cá PULLING";
+            case "can_day":         return "Nội tại: 25% tỷ lệ khi PULLING cắn mòn giảm 10% Max Tension an toàn (4s)";
+            case "doi_huong":       return "Nội tại: Bơi lượn đổi góc làm kim đo Tension dao động chao đảo ±10% (1.5s)";
+            case "tro_luc":         return "Nội tại: Da lì lợm có 25% tỷ lệ miễn nhiễm hoàn toàn sát thương kéo từ phím Space";
+            case "nuong_hai_luu":   return "Nội tại: Khi Tension trên 55%, lực kéo của cá tự động tăng thêm +18%";
+            case "than_dao":        return "Nội tại: Thân mỏng xé nước tăng 35% tốc độ bơi khi PULLING nhưng chu kỳ ngắn hơn";
+            case "phong_dien":      return "Nội tại: Giữ phím kéo Space liên tục quá 2.5s sẽ bị sốc điện trừ 12 Thể lực";
+            case "xoay_nuoc":       return "Bơi xoáy làm Tension chao đảo ±15% và giảm 40% tốc độ xả chùng dây (3.5s)";
+            case "vu_dieu_co_buom": return "Phóng lướt 2 nhịp trên mặt sóng; tiếp nước tăng +20% Tension nếu không Re-Hook";
+            case "than_ho_co_thach": return "Nội tại: Vảy rạn ngầm ngàn năm giảm phẳng -15 sát thương mỗi đòn kéo dây";
+            case "vuc_da_nuot_chung": return "Hút xoáy đáy ngầm giật +35% Tension và rút 8 Thể lực/s nếu cố tình kéo (3.5s)";
+            case "thinh_mui_mau":   return "Nội tại: Khi Thể lực cần thủ dưới 50%, cá mập kích động tăng +20% lực kéo";
+            case "can_xe_dien_cuong": return "Ngoạm nghiến dây làm giảm 25% Max Tension an toàn (5s), phản chấn trừ 20 Thể lực";
+            case "mui_kiem_xe_bien": return "Nội tại: Ghìm kéo >1.5s làm Tension dâng nhanh +20%/s; nhấp nhả <=1.2s tăng +15% dmg. Kháng khống chế";
+            case "vu_dieu_luot_song": return "Cứ 8s phi thân lên không 0.9s; tiếp nước sốc +35% Tension & -15 Thể lực trừ khi Re-Hook chuẩn xác!";
+            case "cuong_phong_ngu_kiem": return "Dưới 30% HP: Mỗi đợt gầm tăng +10% lực kéo (max +50%); mỗi 1s trôi qua tăng +1% tốc độ tụt thể lực";
             default:                return "Kỹ năng đặc biệt của thủy tộc";
         }
     }
@@ -229,6 +264,13 @@ public class Fish implements Catchable {
     public FishSkill getPassiveSkill(String id) {
         for (FishSkill s : skills) {
             if (!s.isActive && s.id.equals(id)) return s;
+        }
+        return null;
+    }
+
+    public FishSkill getSkill(String id) {
+        for (FishSkill s : skills) {
+            if (s.id.equals(id)) return s;
         }
         return null;
     }

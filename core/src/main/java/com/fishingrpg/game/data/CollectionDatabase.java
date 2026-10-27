@@ -64,20 +64,20 @@ public class CollectionDatabase {
             "Cá Ngừ Đại Dương", "Bạch Tuộc Khổng Lồ"));
 
         // --- ĐẢO XA ---
-        collections.add(new Collection("dx_ran_san_ho", "Rạn San Hô", 1000, 500, 20,
-            "Cá Ngựa Vằn", "Cá Hề", "Cá Đuối Nhỏ"));
+        collections.add(new Collection("dx_ran_san_ho", "Rạn San Hô Đảo Xa", 1500, 800, 25,
+            "Cá Mú Đỏ", "Cá Hồng Chuối", "Cá Dìa Biển Đảo"));
             
-        collections.add(new Collection("dx_doc_la", "Sinh Vật Độc Lạ", 2000, 1000, 25,
-            "Mực Ống", "Cá Nóc", "Cá Phèn"));
+        collections.add(new Collection("dx_kinh_ngu_nong", "Kình Ngư Nước Nông", 2500, 1200, 35,
+            "Cá Nhồng Biển", "Cá Bè Trang", "Cá Nục Heo"));
             
-        collections.add(new Collection("dx_cu_dan", "Cư Dân Đại Dương", 4000, 2000, 35,
-            "Cá Mặt Trăng", "Cá Cờ", "Rùa Biển", "Cá Chuồn"));
+        collections.add(new Collection("dx_dong_chay_khoi", "Dòng Chảy Khơi Xa", 5000, 2500, 50,
+            "Cá Bớp Khơi", "Cá Cam Biển", "Cá Thu Ngàng", "Cá Đuối Hoa Cương"));
             
-        collections.add(new Collection("dx_san_moi", "Hung Thần Răng Cưa", 8000, 4000, 50,
-            "Cá Mập Cáo", "Cá Kiếm"));
+        collections.add(new Collection("dx_chien_ham_dai_duong", "Chiến Hạm Đại Dương", 10000, 5000, 75,
+            "Cá Ngừ Vây Vàng", "Cá Cờ Gòn", "Cá Mú Nghệ Khơi", "Cá Mập Rạn Đen"));
             
-        collections.add(new Collection("dx_than_thoai", "Thần Thoại Biển Khơi", 20000, 10000, 100,
-            "Cá Voi Lưng Gù", "Mực Khổng Lồ", "Thần Biển Leviathan"));
+        collections.add(new Collection("dx_huyen_thoai_bien_sau", "Huyền Thoại Biển Sâu", 25000, 12000, 120,
+            "Cá Cờ Xanh Khổng Lồ"));
     }
 
     public static List<Collection> getAllCollections() {

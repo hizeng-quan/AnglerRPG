@@ -4,6 +4,237 @@
 
 ---
 
+## 📅 [2026-10-27] - Phiên bản v0.5.2.4 (Hoàn Thành Bước 2.3 - 15 Loài Cá Vector Đảo Xa & Tuyệt Tác Siêu Boss Cá Cờ Xanh Khổng Lồ)
+
+### 🌊 Bước 2.3: Chuẩn Hóa 15 Loài Cá Vector Đảo Xa & Tuyệt Tác Siêu Boss Cá Cờ Xanh ([FishVisualRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/FishVisualRenderer.java))
+- **Mục tiêu**: Nghiệm thu và chuẩn hóa toàn diện đồ họa vector LibGDX ShapeRenderer đa lớp, ánh sáng biển sâu và hoạt ảnh cho toàn bộ 15 loài cá Đảo Xa hoàn toàn mới (`FSH-02C`), đặc biệt đại tu Siêu Boss Cá Cờ Xanh Khổng Lồ thành tuyệt tác đồ họa:
+  - **6 Loài Cá Thường (Common)**:
+    - `Cá Mú Đỏ`: Thân bầu dục đậm đà màu đỏ san hô rực rỡ, phủ kín hàng chục đốm sao xanh ngọc bích lấp lánh, vây đuôi quạt tròn viền xanh neon, miệng rộng hàm bẹt dữ dằn.
+    - `Cá Hồng Chuối`: Thân thon dài màu hồng phấn - hồng cam tươi tắn, dải sọc vàng chuối óng ả chạy dọc từ sau mắt tới cuống đuôi, vây đuôi xẻ thùy vàng chanh rực rỡ.
+    - `Cá Dìa Biển Đảo`: Thân dẹt hình bầu dục màu nâu ô-liu lấm tấm hoa văn cẩm thạch hoa đá biển khơi, vây lưng và vây hậu môn có hàng gai nhọn tẩm độc bảo vệ (`gai_doc_san_ho`), mõm nhỏ như miệng thỏ gặm san hô.
+    - `Cá Nhồng Biển`: Thân thuôn dài ngư lôi như mũi tên bạc xé nước, lưng xám xanh ánh thép, 12 vạch sọc vằn đứng sẫm màu, hàm dưới chìa dài lộ răng nanh tam giác nhọn hoắt như dao găm (`can_day`), vây đuôi chữ V cắt nước cực nhanh (`wagFine`).
+    - `Cá Bè Trang`: Thân dẹt sâu hình thoi bằng chrome bạc sáng chói, hàng 6 đốm đen tròn to như đồng tiền cổ chạy trên đường bên uốn lượn, vây đuôi xẻ sâu nhọn hoắt tạo lực bơi xé sóng.
+    - `Cá Nục Heo (Mahi-Mahi / Dorado)`: Trán gồ vuông góc dốc thẳng đứng kiêu hãnh của dòng cá đực, lưng xanh ngọc lục bảo rực rỡ, mạn sườn chuyển vàng chanh phát quang chấm xanh điện tử, vây lưng dải lụa xanh biếc chạy suốt sống lưng, bơi bứt tốc đổi hướng (`doi_huong`).
+  - **4 Loài Cá Hiếm (Uncommon)**:
+    - `Cá Bớp Khơi`: Thân ngư lôi cơ bắp cuồn cuộn tròn trịa màu nâu đen espresso sẫm tuyền (`tro_luc`), 2 dải sọc trắng kem song song hoàn hảo chạy từ mang tới cuống đuôi, hàng 8 gai ngắn rời rạc cứng như đinh thép.
+    - `Cá Cam Biển`: Thân dày khỏe bắp thịt chắc nịch, lưng xanh ô-liu ánh đồng, mạn sườn vàng cam hổ phách rực rỡ, vệt sọc sẫm màu đặc trưng vắt chéo từ mõm qua mắt lên đỉnh gáy, bơi dũng mãnh nương theo hải lưu xiết (`nuong_hai_luu`).
+    - `Cá Thu Ngàng (Wahoo)`: Thân dài thanh mảnh như thanh trường đao ("Thân Đao Xé Gió"), lưng xanh coban sapphire đậm, 24-28 sọc vằn lam sẫm hổ vằn biển sâu, hàng 8 vây phụ nhỏ vàng chói ở cuống đuôi, vây đuôi lưỡi liềm đối xứng xé gió bạt mạng (`wagFine`).
+    - `Cá Đuối Hoa Cương`: Đĩa thân tròn rộng xòe như cánh diều ngầm lướt đáy biển, phủ kín hoa văn cẩm thạch xoáy đá hoa cương mỹ thuật, đuôi roi dài có gai ngạnh độc phóng điện (`phong_dien`), tia điện cyan phát quang crackling theo nhịp timer.
+  - **2 Loài Cá Quý (Rare)**:
+    - `Cá Ngừ Vây Vàng`: Thân ngư lôi khổng lồ cơ bắp tròn vo xanh thẫm kim loại, vây lưng thứ hai và vây hậu môn hình lưỡi liềm vàng chanh rực rỡ vươn dài cong vút, hàng vây phụ tam giác vàng tươi viền đen tạo xoáy nước áp lực lớn (`xoay_nuoc`), mắt vàng sáng quắc.
+    - `Cá Cờ Gòn (Sailfish)`: Mũi kiếm nhọn dài thanh mảnh, cánh buồm vây lưng vĩ đại cao chót vót màu xanh coban phủ đầy hàng chục đốm tròn đen óng ánh ("Vũ Điệu Cờ Buồm"), vây bụng dài như hai dải lụa mỏng buông thõng, vây đuôi trăng khuyết mềm mại.
+  - **2 Loài Sử Thi (Epic)**:
+    - `Cá Mú Nghệ Khơi (Giant Grouper)`: Thân hình đồ sộ mập mạp bọc lớp giáp đá cổ thạch sừng sững (`than_ho_co_thach`), các đốm đen hoa mai lớn phủ kín thân và vây, chiếc miệng vực thẳm khổng lồ nuốt chửng mọi thứ (`vuc_da_nuot_chung`), hào quang bụi đá trầm tích xoay quanh thân.
+    - `Cá Mập Rạn Đen (Blacktip Reef Shark)`: Kẻ săn mồi đỉnh cao với thân hình khí động học xám nâu ánh đồng, bụng trắng muốt tương phản sắc nét, đỉnh chóp của TẤT CẢ các vây đều có vệt đen tuyền viền trắng nổi bật đặc trưng, 5 khe mang sắc lẹm, đôi mắt vàng thính mùi máu (`thinh_mui_mau`), hàm răng tam giác lởm chởm cắn xé điên cuồng (`can_xe_dien_cuong`).
+  - **1 Siêu Boss Thế Giới (World Boss - 3,000 HP, Lực kéo 195.0, 260 kg)**:
+    - `Cá Cờ Xanh Khổng Lồ (Blue Marlin - Tuyệt Tác Siêu Boss)`:
+      - **Hào quang thần thoại 3 tầng**: Vòng tối tím vực thẳm ngoài cùng, sóng xung kích cobalt đại dương ở giữa, vầng sáng cyan điện tử shimmer bên trong phát xung theo nhịp `pulse` & `fastPulse`.
+      - **Mũi Kiếm Thép Xé Biển (`mui_kiem_xe_bien`)**: Lưỡi kiếm dài đâm xuyên đại dương với rãnh năng lượng plasma điện tử chạy dọc thân kiếm và tia lửa điện lóe sáng chớp nháy ở đầu mũi kiếm.
+      - **Cánh Buồm Lam Ngọc Vĩ Đại (`vu_dieu_luot_song`)**: 10 tia vây buồm vươn cao ngạo nghễ với màng vây xanh ngọc bích phát quang rực rỡ, chóp vây đính hạt ngọc lấp lánh.
+      - **Thân Hình Ngư Lôi Bạo Chúa**: Lưng xanh navy hoàng gia, mạn sườn chuyển bạc xà cừ, 7 dải sọc xanh neon điện tử rực sáng chớp nháy.
+      - **Vây Đuôi Trăng Khuyết Khổng Lồ**: Hai thùy đuôi vút dài uy mãnh xé toạc đại dương với các tia trợ lực vàng ngọc.
+      - **Mắt Thần Săn Mồi (`cuong_phong_ngu_kiem`)**: Đôi mắt vàng kim rực lửa uy dũng, đồng tử sắc lạnh nhìn thấu tâm can cần thủ, kèm đốm sáng kim cương và tia sáng ngọc lục bảo.
+      - **Hiệu Ứng Bọt Khí Cavitation**: Bọt khí bão tố khí động học và tia sóng áp lực tỏa ra quanh thân khi bơi.
+
+### 📦 Đóng Gói Bản Cài Đặt Phát Hành ([AnglerRPG-v0.5.2.4.zip](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/AnglerRPG-v0.5.2.4.zip))
+- Build lại tệp nhị phân thực thi game độc lập `AnglerRPG.jar` mới nhất (43.4 MB) thông qua tác vụ `gradlew lwjgl3:jar`.
+- Đóng gói trọn gói vào tệp zip: `AnglerRPG-v0.5.2.4.zip` (42.9 MB) gồm `AnglerRPG.jar` và kịch bản khởi chạy 1-click `Launcher.bat`.
+- Dọn dẹp và xóa bỏ tệp zip bản phát hành cũ (`AnglerRPG-v0.5.1.1.zip`).
+
+---
+
+## 📅 [2026-10-27] - Phiên bản v0.5.2.3 (Hoàn Thành Bước 2.2 - 15 Loài Cá Vector Bãi Biển & Siêu Boss Bạch Tuộc Khổng Lồ)
+
+### 🐙 Bước 2.2: Chuẩn Hóa 15 Loài Cá Vector Bãi Biển & Siêu Boss Bạch Tuộc Khổng Lồ ([FishVisualRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/FishVisualRenderer.java))
+- **Mục tiêu**: Nghiệm thu và chuẩn hóa toàn diện đồ họa vector LibGDX ShapeRenderer đa lớp, specular bóng sáng đại dương, vảy cá phản quang và cử động quẫy đuôi/xúc tu uyển chuyển cho 15 loài cá Bãi Biển (`FSH-02B`):
+  - **6 Loài Cá Thường (Common)**:
+    - `Cá Chỉ Vàng`: Thân thoi bạc ánh xanh biển, dải sọc vàng kim óng ả kéo dài từ mang đến cuống đuôi, đốm đen nắp mang đặc trưng, gai vảy cứng đường bên, vây đuôi xòe vàng chanh.
+    - `Cá Đục`: Thân thon dài vàng cát ngụy trang đáy biển nông, vảy óng ánh chấm nâu li ti, mõm dài nhọn sục cát tìm mồi.
+    - `Cá Cơm`: Thân trong suốt như pha lê, dải chỉ bạc dọc sống lưng phản chiếu lấp lánh, vây đuôi quẫy nhanh (`wagFine`).
+    - `Cá Mòi`: Lưng xanh thẫm ánh thép, hàng 5 chấm đen tròn dọc mạn sườn, vảy bạc mềm mại, vây lưng tam giác nhọn.
+    - `Cá Lẹp`: Thân dẹt mỏng như tờ giấy lướt sóng, bụng sắc cạnh như lưỡi dao, vảy trắng bạc phản quang.
+    - `Cá Bạc Má`: Mắt to tròn thao thức, lưng xanh lục rằn ri vằn sóng biển, thân thon chắc nịch của dòng họ cá thu ngừ bơi nhanh.
+  - **4 Loài Cá Hiếm (Uncommon)**:
+    - `Cá Nục`: Thân thuôn tròn chắc nịch, đường bên uốn lượn phủ giáp vảy cứng (scutes), vây đuôi cánh én vàng tươi.
+    - `Cá Đối`: Đầu dẹt mõm tù môi dày, vảy tròn to xám bạc viền đậm, mắt to lấp lánh màng mỡ bảo vệ.
+    - `Cá Trích`: Thân dẹp dài xanh thẫm lưng, bụng trắng bạc óng ánh, vảy tròn lấp lánh phản xạ ánh mặt trời.
+    - `Cá Chim Biển`: Thân dẹt hình đĩa tròn màu bạc ngọc trai kiêu sa, vây lưng và vây hậu môn cong dài như lưỡi liềm.
+  - **2 Loài Cá Quý (Rare)**:
+    - `Cá Mú`: Thân đầm chắc hoa văn đốm hoa đá (honeycomb) ngụy trang rạn san hô, miệng rộng răng sắc nhọn, vây lưng gai tua tủa.
+    - `Cá Bóp`: Thân ngư lôi màu nâu đen khỏe khoắn, hai dải sọc trắng bạc song song nổi bật chạy dọc thân, vây lưng trước cụt gai sắc.
+  - **2 Loài Cá Sử Thi (Epic)**:
+    - `Cá Thu Hoàng Kim`: Hào quang hoàng kim bạo chúa xé biển, thân ngư lôi xanh sapphire bóng bẩy, 8 đôi vây phụ rời vàng chói dọc cuống đuôi, vây đuôi trăng khuyết khổng lồ vàng rực 24K.
+    - `Cá Ngừ Đại Dương`: Thân bắp thịt hình thoi khổng lồ xanh thẫm - bạc, các vây phụ nhọn vàng tươi phát quang, mắt vàng săn mồi sắc lẹm, lực bơi bạt mạng.
+  - **1 Siêu Boss Thế Giới (Boss - 2,200 HP)**:
+    - `Bạch Tuộc Khổng Lồ`: Xoáy mực vực thẳm và vòng năng lượng cyan-tím đa tầng (`fastPulse`), 8 xúc tu gai nhọn khổng lồ quằn quại bọc giác mút đỏ thẫm phát sáng, mắt quỷ tím với đồng tử chữ nhật ma quái, mắt phụ phát quang thái dương, mỏ quái vật sừng đen chitin tử thần và giọt mực độc ma quỷ.
+
+---
+
+## 📅 [2026-10-27] - Phiên bản v0.5.2.2 (Hoàn Thành Bước 2.1 - 15 Loài Cá Vector Ao Làng & Tái Cấu Trúc Lộ Trình Đồ Họa)
+
+### 🐟 Bước 2.1: Chuẩn Hóa 15 Loài Cá Vector Ao Làng & Siêu Boss Thủy Quái Sông Trà ([FishVisualRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/FishVisualRenderer.java))
+- **Mục tiêu**: Nghiệm thu và chuẩn hóa toàn diện đồ họa vector LibGDX ShapeRenderer đa lớp, tạo khối nổi khối mềm mại, vệt sáng specular glint và cử động quẫy đuôi hình sin (tail wagging) cho 15 loài cá Ao Làng (`FSH-02A`):
+  - **4 Loài Cá Thường (Common)**:
+    - `Cá Rô Đồng`: Thân ô-liu ánh đồng, vây lưng 9 gai nhọn sắc bén, đốm đen nắp mang, vệt vằn ngụy trang.
+    - `Cá Diếc`: Lưng vồng cao, vảy trắng bạc ngọc trai lấp lánh, vây phớt hồng cam dịu dàng.
+    - `Cá Mương`: Thân thon dài trong suốt như lưỡi liềm, vảy bạc phản chiếu ánh nắng mặt hồ.
+    - `Cá Lóc Nhí`: Lưng hoa văn rằn ri ngụy trang cỏ nước, mắt lanh lợi sắc sảo tìm mồi.
+  - **3 Loài Cá Hiếm (Uncommon)**:
+    - `Cá Chép`: Lưng gồ uy dũng ánh cam hoàng kim, vảy xếp lớp giáp rồng, đôi râu mềm mại rước lộc, vây đuôi đỏ son.
+    - `Cá Mè`: Đầu to béo tròn, miệng hướng lên đớp bọt nước, vảy xám bạc nhạt bơi đàn tầng mặt.
+    - `Cá Trê`: Thân trơn bóng đen nâu nhẵn thín, 4 cặp râu dài linh hoạt sắc bén, gai ngạnh sắc.
+  - **3 Loài Cá Quý (Rare)**:
+    - `Cá Trôi`: Thân thuôn dài khỏe khoắn, vảy xanh lam đậm viền trắng sữa, vây ngực viền đỏ.
+    - `Cá Trắm Cỏ`: Thân trụ tròn cơ bắp, vảy trám sẫm sắc nét viền ánh lục, vây bụng khỏe.
+    - `Cá Chim Trắng`: Thân dẹt hình đĩa tròn độc đáo, vảy bạc óng ánh, vây bụng ửng đỏ cam rực rỡ.
+  - **4 Loài Cá Sử Thi (Epic)**:
+    - `Cá Lóc Bông`: Thân dài lực lưỡng, hoa văn đốm hoa mai nâu đen báo đốm săn mồi nước ngọt.
+    - `Cá Trê Lai`: Thân to kềnh càng rằn ri hổ vằn, ngạnh độc phát quang sắc thép.
+    - `Cá Chép Vàng`: Vảy hoàng kim phát quang rực rỡ, vây lụa thướt tha mang lại may mắn thần tài.
+    - `Cá Lăng Khổng Lồ`: Thân xám tro bóng loáng, đầu bẹt sát thủ săn mồi đáy sâu, râu xúc giác dài.
+  - **1 Siêu Boss Thế Giới (Boss - 850 HP)**:
+    - `Thủy Quái Sông Trà`: Thân khổng lồ phủ lớp vảy rêu cổ phù sa, đôi mắt quỷ dung nham đỏ rực phát sáng, vây lưng gai sừng nhọn uy dũng cuộn sóng dữ.
+
+### 🗺️ Tái Cấu Trúc Lộ Trình Phát Triển Đồ Họa 6 Giai Đoạn ([TASKS.md](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/TASKS.md), [PatchNotesDialog.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/PatchNotesDialog.java))
+- **Tách Bước 2 thành 3 giai đoạn độc lập chuyên sâu về cá**:
+  - `Bước 2.1` (FSH-02A): 15 loài cá Ao Làng & Siêu Boss Thủy Quái Sông Trà (✅ Hoàn thành v0.5.2.2).
+  - `Bước 2.2` (FSH-02B): 15 loài cá Bãi Biển & Siêu Boss Bạch Tuộc Khổng Lồ (📋 Kế hoạch Bước 2.2).
+  - `Bước 2.3` (FSH-02C): 15 loài cá Đảo Xa & Siêu Boss Cá Cờ Xanh Khổng Lồ (📋 Kế hoạch Bước 2.3).
+- **Di chuyển Môi Trường Nước & Khúc Xạ Ánh Sáng (`ENV-02`)**: Đưa ra khỏi Bước 2, chuyển thành `Giai Đoạn 3 (v0.5.3)` riêng biệt để hoàn thiện mặt nước sóng sánh, rạn san hô và tia sáng God Rays trên cả 3 bản đồ.
+- **Dịch chuyển các Giai đoạn tiếp theo**: Giai đoạn 4 (UI & Nút Bấm Xúc Giác v0.5.4), Giai đoạn 5 (VFX Chiêu Thức & Boss v0.5.5), Giai đoạn 6 (Hoạt Ảnh Vật Lý & Gacha CS:GO v0.5.6).
+
+---
+
+## 📅 [2026-10-27] - Phiên bản v0.5.2.1 (Phân Trang Quick Slots, Sửa Lỗi Kính Sonar & Hoàn Thiện Bộ Sưu Tập Đảo Xa)
+
+### 🎒 Hệ Thống Phân Trang Quick Slots ([GameHUD.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/GameHUD.java), [PlayScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/PlayScreen.java))
+- **Nguyên nhân gốc rễ**: Giao diện Quick Slots trước đây chỉ vẽ cố định tối đa 9 ô (3x3). Khi người chơi sở hữu từ 10 loại vật phẩm trở lên (do mua thêm ở tiệm hoặc câu trúng loot tiêu hao), các ô thứ 10+ bị vẽ tràn ra ngoài màn hình (`y < 0`), không thể bấm chuột hay gán phím nóng 1-9, khiến người chơi lầm tưởng không mua được hoặc không tính đồ.
+- **Giải pháp xử lý**:
+  - Tích hợp cơ chế phân trang `quickSlotPage` 9 ô/trang với bộ đệm danh sách không cấp phát bộ nhớ rác (`cachedValidInventory`, `cachedPageItems`).
+  - Bổ sung nút chuyển trang `[◀]` và `[▶]` cùng tiêu đề động `"Ô NHANH (Trang X/Y)"` trên thanh tiêu đề khi sở hữu trên 9 món đồ.
+  - Đồng bộ chuẩn xác phím tắt 1-9: Phím tắt số `1` đến `9` và click chuột sẽ kích hoạt đúng các vật phẩm đang hiển thị trên trang hiện tại.
+
+### 🔍 Sửa Lỗi Kính Nhìn Xuyên Nước (Sonar) & Tinh Chỉnh Mồi Thơm ([FishingManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/FishingManager.java), [GameHUD.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/GameHUD.java))
+- **Sửa Lỗi Radar Quét Khi Đã Hết Lượt (0 Lần)**:
+  - Khắc phục lỗi trong `triggerBite()` tự động gán `predictedCatch` cho cá cắn câu khiến `GameHUD` hiển thị bảng radar thấu thị ngay cả khi số lượt của Kính đã về 0.
+  - Khóa chặt điều kiện hiển thị bảng Radar thấu thị và vòng quét sóng trên HUD: Chỉ hiển thị khi `player.getSonarCharges() > 0`.
+- **Bảo Toàn Lượt Thấu Thị Khi Để Cá Chạy Thoát**:
+  - Số lượt của Kính Nhìn Xuyên Nước **không bị trừ** nếu người chơi không kéo cá mà để cá chạy đi (`"CHẬM TAY!"`). Lượt thấu thị chỉ bị tiêu hao khi người chơi thực sự giật cần vào giao tranh (`startEncounter()`) hoặc câu thành công.
+- **Tiêu Hao Mồi Thơm Khi Cá Đớp Hụt**:
+  - Khi cá cắn câu nhưng người chơi chậm tay không kéo cá (`"CHẬM TAY!"`), Mồi Thơm tự động bị hủy (`player.setBaitBuffActive(false);`) do cá đã ăn mất mồi rồi bỏ chạy.
+
+### 📚 Làm Lại 5 Bộ Sưu Tập Sổ Tay Đảo Xa & Xóa Dấu Vết Cá Cũ ([CollectionDatabase.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/data/CollectionDatabase.java), [CatalogScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/CatalogScreen.java))
+- **Tái Thiết Kế 5 Collection Đảo Xa**:
+  - `dx_ran_san_ho` (Rạn San Hô Đảo Xa): Cá Mú Đỏ, Cá Hồng Chuối, Cá Dìa Biển Đảo (1,500 Vàng, 800 XP, 25 KC).
+  - `dx_kinh_ngu_nong` (Kình Ngư Nước Nông): Cá Nhồng Biển, Cá Bè Trang, Cá Nục Heo (2,500 Vàng, 1,200 XP, 35 KC).
+  - `dx_dong_chay_khoi` (Dòng Chảy Khơi Xa): Cá Bớp Khơi, Cá Cam Biển, Cá Thu Ngàng, Cá Đuối Hoa Cương (5,000 Vàng, 2,500 XP, 50 KC).
+  - `dx_chien_ham_dai_duong` (Chiến Hạm Đại Dương): Cá Ngừ Vây Vàng, Cá Cờ Gòn, Cá Mú Nghệ Khơi, Cá Mập Rạn Đen (10,000 Vàng, 5,000 XP, 75 KC).
+  - `dx_huyen_thoai_bien_sau` (Huyền Thoại Biển Sâu): Cá Cờ Xanh Khổng Lồ (25,000 Vàng, 12,000 XP, 120 KC).
+- **Cập Nhật Lore & Xóa Sạch Dữ Liệu Cũ**:
+  - Bổ sung 15 đoạn lore sinh thái học độc đáo cho 15 loài cá mới của Đảo Xa trong `CatalogScreen.java`.
+  - Quét sạch toàn bộ tên gọi và vết tích của 15 loài cá cũ khỏi toàn bộ hệ thống code và tài liệu.
+
+### 🗺️ Hoán Đổi Lộ Trình Đồ Họa ([TASKS.md](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/TASKS.md), [PatchNotesDialog.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/PatchNotesDialog.java))
+- Hoán đổi Bước 3 (Ngoại hình 45 loài cá vector & Môi trường 3 bản đồ) lên trước Bước 2 (Giao diện UI & Game Juice) theo đúng yêu cầu phát triển.
+
+---
+
+## 📅 [2026-10-27] - Phiên bản v0.5.2.0 (Đại Tu Đảo Xa, Siêu Boss Cá Cờ Xanh 3,000 HP & Cơ Chế Perfect Re-Hook)
+
+### 🌊 Đại Tu Hệ Sinh Thái Đảo Xa Thực Tế ([fishes.json](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/assets/data/fishes.json), [FishDatabase.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/data/FishDatabase.java))
+- **Loại Bỏ Hoàn Toàn Các Loài Viễn Tưởng**:
+  - Khai trừ toàn bộ các loài thần thoại/quá đà (Cá Nhà Táng, Mực Khổng Lồ, Thần Biển Leviathan 5,500 HP).
+  - Thay thế bằng **15 loài cá biển khơi thực tế** theo chuẩn Big Game Fishing ngoài đảo xa, máu và lực kéo được tái cân bằng hoàn hảo theo độ khó VỪA (2 sao):
+    - **6 Cá Thường (COMMON - 260 đến 360 HP, Lực kéo 42-55)**: Cá Mú Đỏ, Cá Hồng Chuối, Cá Dìa Biển Đảo, Cá Nhồng Biển, Cá Bè Trang, Cá Nục Heo.
+    - **4 Cá Hiếm (UNCOMMON - 520 đến 650 HP, Lực kéo 72-85)**: Cá Bớp Khơi, Cá Cam Biển, Cá Thu Ngàng, Cá Đuối Hoa Cương.
+    - **2 Cá Quý (RARE - 1,050 đến 1,150 HP, Lực kéo 115-125)**: Cá Ngừ Vây Vàng, Cá Cờ Gòn (Sailfish).
+    - **2 Sử Thi (EPIC - 1,750 đến 1,900 HP, Lực kéo 150-160)**: Cá Mú Nghệ Khơi (Giant Grouper), Cá Mập Rạn Đen (Blacktip Reef Shark).
+    - **1 Siêu Boss Thế Giới (BOSS - 3,000 HP, Lực kéo 195.0, Cân nặng 260 kg)**: **Cá Cờ Xanh Khổng Lồ (Blue Marlin)**.
+
+### ⚔️ Chuẩn Hóa Phân Tầng Kỹ Năng & Cơ Chế Perfect Re-Hook ([FishingManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/FishingManager.java), [Fish.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/entities/Fish.java))
+- **Cơ Chế Phản Xạ Đỉnh Cao: Perfect Re-Hook**:
+  - Khi cá tung mình nhảy lên không trung, lực căng dây tụt về 0. Khi cá sắp chạm mặt nước (<= 0.35s), xuất hiện chỉ báo nhấp nháy `"▼ TIẾP NƯỚC! [SPACE] ▼"`.
+  - **Re-Hook Thành Công**: Người chơi buông phím trong lúc bay và nhấp lại phím `Space` đúng khoảnh khắc chạm nước ➔ Kích hoạt `"PERFECT RE-HOOK!"` (vàng kim), gây **x2 sát thương kéo** và triệt tiêu toàn bộ lực sốc.
+  - **Sốc Lực Trừng Phạt**: Nếu người chơi vẫn đè giữ phím kéo khi cá tiếp nước ➔ Cú va đập làm giật tăng sốc **+35% Tension** và trừ thể lực (`"SỐC LỰC TIẾP NƯỚC!"`), trừng phạt thói quen đè giữ phím liên tục.
+- **14 Kỹ Năng Độc Đáo Mới Mẻ Từ Hạng Epic Trở Xuống**:
+  - `tro_luc` (Cá Bớp Khơi): Lớp da lì lợm có **25% tỷ lệ miễn nhiễm hoàn toàn với lực kéo từ phím Space** (hiển thị `"TRƠ LỰC!"`).
+  - `can_day` (Cá Nhồng Biển): Răng nanh sắc lẹm, 25% tỷ lệ khi PULLING cắn mòn giảm 10% Max Tension an toàn trong 4s.
+  - `gai_doc_san_ho` (Cá Dìa): Gai độc cọ xát trừ 1.5 Thể lực/s khi cần thủ kéo dây lúc cá PULLING.
+  - `doi_huong` (Cá Nục Heo): Bơi lượn đổi góc làm kim đo Tension dao động chao đảo ±10% (1.5s).
+  - `nuong_hai_luu` (Cá Cam Biển): Khi Tension dâng trên 55%, lực kéo của cá tự tăng thêm +18%.
+  - `than_dao` (Cá Thu Ngàng): Thân mỏng xé nước tăng 35% tốc độ bơi khi PULLING nhưng chu kỳ ngắn hơn.
+  - `phong_dien` (Cá Đuối Hoa Cương): Giữ phím kéo Space liên tục quá 2.5s sẽ bị giật điện trừ 12 Thể lực.
+  - `xoay_nuoc` (Cá Ngừ Vây Vàng - 50% HP): Tạo xoáy nước đại dương làm Tension chao đảo theo sóng sin và giảm 40% tốc độ xả chùng dây (3.5s).
+  - `vu_dieu_co_buom` (Cá Cờ Gòn - 50% HP): Phóng lướt 2 nhịp liên tiếp trên mặt sóng (0.8s mỗi nhịp), tiếp nước tăng +20% Tension.
+  - `than_ho_co_thach` (Cá Mú Nghệ Khơi): Giảm trực tiếp **-15 sát thương phẳng** mỗi đòn kéo dây.
+  - `vuc_da_nuot_chung` (Cá Mú Nghệ Khơi - 50% HP): Hút xoáy đáy ngầm giật +35% Tension và rút 8 Thể lực/s nếu cố tình kéo (3.5s).
+  - `thinh_mui_mau` (Cá Mập Rạn Đen): Khi Thể lực cần thủ dưới 50%, cá mập tăng +20% lực kéo.
+  - `can_xe_dien_cuong` (Cá Mập Rạn Đen - 50% HP): Cắn xé làm giảm 25% Max Tension an toàn trong 5s, phản chấn trừ 20 Thể lực nếu đang giữ dây.
+
+### 👑 Bộ 3 Kỹ Năng Độc Bản Của Boss Cá Cờ Xanh Khổng Lồ ([FishingManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/FishingManager.java))
+- **Passive Độc Bản: Mũi Kiếm Xé Biển (`mui_kiem_xe_bien`)**:
+  - Miễn nhiễm hoàn toàn các hiệu ứng khống chế (Trói buộc, Đóng băng).
+  - Khắc chế đè phím: Ghìm giữ phím Space > 1.5s làm Tension dâng nhanh thêm +20%/s mỗi giây ghìm tiếp theo.
+  - Thưởng nhấp nhả nhịp điệu (Tap-reeling): Nhấp nhả phím kéo <= 1.2s được thưởng **+15% sát thương kéo**.
+- **Active 1: Vũ Điệu Lướt Sóng (`vu_dieu_luot_song`)**:
+  - Tần suất định kỳ **8.0 giây** một lần trong suốt trận đấu. Phóng vút lên không trung **0.9 giây** chớp nhoáng thử thách phản xạ Re-Hook của cần thủ.
+- **Active 2: Cuồng Phóng Ngư Kiếm (`cuong_phong_ngu_kiem`) - Soft Enrage**:
+  - Kích hoạt khi Boss dưới 30% HP (Giai đoạn Sinh Tử).
+  - Lũy tiến lực kéo: Mỗi nhịp bứt tốc nhận thêm **+10% lực kéo**, cộng dồn tối đa **+50%** (lên tới 292.5 pull).
+  - Bào mòn thể lực theo thời gian: Cứ mỗi 1 giây trôi qua sau khi kích hoạt chiêu, tốc độ tiêu hao thể lực của cần thủ **tăng thêm +1%** (chạy đua sinh tử).
+  - Tự động **reset sạch sẽ** toàn bộ trạng thái và bộ đếm ngay khi kết thúc trận đấu.
+
+### 🎨 Đồ Họa Vector Boss Khơi Xa ([FishVisualRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/FishVisualRenderer.java))
+- Bổ sung hàm vẽ độc quyền `drawCaCoXanhKhongLo`: Thân ngư lôi màu xanh coban hoàng gia bọc vảy bạc phản quang, vây cờ buồm cao vút đón gió, dãy sọc Neon Cyan phát sáng và mũi kiếm đao thép dài sắc lẹm xé toạc đại dương.
+
+---
+
+## 📅 [2026-10-27] - Phiên bản v0.5.1.2 (Nerf Cá PULLING, Sửa Auto-Updater, Giới Hạn Sách Cửa Hàng & Chống Lãng Phí Buff)
+
+### ⚖️ Cân Bằng Chiến Đấu & Lực Kéo Cá ([FishingManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/FishingManager.java), [PlayScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/PlayScreen.java), [combat_simulator.py](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/scripts/balance/combat_simulator.py))
+- **Nerf Sức Kéo Của Cá Khi Buông Dây Trong Trạng Thái Vùng Vẫy (PULLING)**:
+  - *Vấn đề*: Khi cá vùng vẫy (`PULLING`), nếu người chơi buông phím Space, cá vẫn gây tới 80% lực kéo (`pullMult = 0.8f`), khiến Tension tăng rất nhanh hoặc không kịp xả nếu đối đầu với cá khỏe.
+  - *Giải pháp*: Giảm hệ số lực kéo khi buông cần (`!isSpaceDown`) xuống **`0.4x`** (giảm 50% lực kéo), tạo khoảng thở chiến thuật để cần thủ xả bớt Tension an toàn trước khi cá chuyển nhịp.
+- **Giảm Rung Màn Hình (Screen Shake Trauma) Khi Tension Tăng Cao**:
+  - Giảm tốc độ tích lũy chấn động camera từ `+0.04f/frame` xuống `+0.01f/frame`, chỉ bắt đầu kích hoạt khi Tension vượt ngưỡng 88% và khống chế rung tối đa ở mức nhẹ (`trauma <= 0.16f`), triệt tiêu hoàn toàn cảm giác giật lắc gây mỏi mắt.
+- **Bổ Sung Cảnh Báo Trực Quan & Chuẩn Hóa Chữ Nổi Khi Đứt Dây Câu**:
+  - Khi Tension chạm trần 100%, hệ thống hiển thị thông báo `"DÂY CƯỚC BỊ ĐỨT, CÁ ĐÃ CHẠY MẤT!"` (đã bỏ tiền tố `"CĂNG DÂY TỐI ĐA!"` tránh rườm rà) kèm dòng chữ đỏ bay nổi `"ĐỨT DÂY CÂU!"`.
+- **Bổ Sung Chữ Nổi Khi Cá Vừa Cắn Câu (Dấu ! Xuất Hiện)**:
+  - Khi cá đớp phao, hệ thống tự động kiểm tra loại cá: Nhảy chữ nổi màu đỏ `"BOSS!"` nếu là cá Boss, và nhảy chữ nổi vàng kim `"NEW!"` nếu là loài cá chưa từng câu được bao giờ trong Sổ Tay Thủy Tộc.
+- **Sửa Lỗi Chữ Nổi Khi Hụt Cá (Bite Timeout)**:
+  - Khắc phục lỗi nhảy nguyên cả câu dài `"CHẬM TAY RỒI! CÁ ĐÃ ĂN HẾT MỒI VÀ CHẠY MẤT!"` làm đè chữ nổi, tinh giản thành một chữ nổi duy nhất `"CHẬM TAY!"`.
+
+### 🏪 Tạp Hóa & Kinh Tế Sách Kỹ Năng ([ShopScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/ShopScreen.java), [PlayerEconomy.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/entities/PlayerEconomy.java))
+- **Giới Hạn Số Lượng Mua Sách Kỹ Năng**:
+  - Đặt công thức chuẩn cho số sách tối đa được phép mua: `Số Lượng Cho Phép = Cấp Tối Đa Kỹ Năng - Cấp Hiện Tại - Số Sách Đang Có Trong Túi`.
+  - Khi số lượng cho phép `<= 0`, vật phẩm tự động chuyển sang trạng thái `"ĐÃ BÁN HẾT"`.
+- **Loại Bỏ Sách Đã Bán Hết Khỏi Sự Kiện Giảm Giá**:
+  - Thuật toán làm mới giảm giá tiệm tạp hóa (`PlayerEconomy.refreshDiscounts`) tự động lọc bỏ các sách kỹ năng đã bán hết / đạt cấp tối đa, đảm bảo chỉ giảm giá các món đồ người chơi thực sự còn nhu cầu mua.
+
+### 🧪 Vật Phẩm & Hiệu Ứng Trạng Thái ([PlayScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/PlayScreen.java), [GameHUD.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/GameHUD.java), [ItemDatabase.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/data/ItemDatabase.java))
+- **Nút BUFF Tích Hợp Trên Thanh Trạng Thái & Tooltip Xem Chi Tiết**:
+  - Dời vị trí nút Mồi Thơm cũ sang vị trí thoáng đãng hơn (`x=438px`), tinh gọn thành một nút duy nhất `"BUFF (N)"` trên thanh trạng thái phía trên.
+  - Khi hover vào nút `"BUFF"`, xuất hiện thẻ Tooltip chi tiết hiển thị toàn bộ danh sách các hiệu ứng vật phẩm đang kích hoạt kèm số lượt còn lại (Mồi Thơm, Đá Mài, Bùa Vàng, Sách, Nam Châm, Sonar, Lưới...).
+- **Chống Dùng Trùng Lặp Vật Phẩm Nhiều Lượt (Multi-turn Items)**:
+  - Khóa hành động sử dụng thêm và cảnh báo thông báo nếu các vật phẩm có hiệu lực nhiều lượt vẫn đang hoạt động: Lưới Đánh Cá, Mồi Rủi Ro, Bùa Hoàng Kim, Sách Thông Thái, Nước Bứt Phá, Đá Mài Lưỡi Câu, Nam Châm Kho Báu, Kính Nhìn Xuyên Nước.
+- **Chuẩn Hóa Tên Vật Phẩm**:
+  - Tinh gọn tên gọi `"Trà Thảo Mộc Định Thần"` thành **`"Trà Thảo Mộc"`**, duy trì alias tương thích ngược 100% với dữ liệu và file save cũ.
+
+### 🖥️ Sửa Lỗi Giao Diện & Tối Ưu Hóa Trải Nghiệm ([UpdateDialog.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/UpdateDialog.java), [GachaScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/GachaScreen.java))
+- **Sửa Lỗi Auto-Updater Tắt Ngay Lập Tức**:
+  - Khắc phục sự cố xung đột sự kiện click chuỗi từ nút mở ở màn hình chính làm đóng Dialog ở frame đầu tiên (`ignoreClickFrames = 3` và chặn đóng ngoài box trong `0.25s` đầu).
+- **Cân Đối Bố Cục Dialog Cập Nhật**:
+  - Bỏ nhãn `(AUTO-UPDATER)` trên thanh tiêu đề thành `✦ TRÌNH CẬP NHẬT TỰ ĐỘNG ✦`, loại bỏ hiện tượng tràn viền đè nút `[X]`.
+  - Căn chỉnh lại 3 nút chức năng với độ rộng đồng đều `190px`, khoảng cách lọt lòng `35px` cân đối chuẩn thẩm mỹ.
+- **Khắc Phục Đè Chữ Thẻ Kết Quả Gacha**:
+  - Mở rộng kích thước thẻ bài kết quả đơn lẻ (`340x380px`), tách biệt hoàn toàn cụm văn bản Tên trang bị, Phân loại, Bộ trang bị và Thuộc tính ra khỏi vòng tròn icon trang bị.
+- **Sửa Lỗi Lệch Thanh Tiến Trình Bản Đồ & Điều Chỉnh Độ Khó ([MapScreen.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/screens/MapScreen.java))**:
+  - Khắc phục lỗi thanh tiến trình câu cá của Ao Làng nhảy sang Bãi Biển và Bãi Biển nhảy sang Đảo Xa: Căn chỉnh lại để mỗi thẻ bản đồ hiển thị chính xác thanh tiến độ cá của bản đồ đó (`Đã bắt ở [Tên Bản Đồ]: X/15 loài`).
+  - Điều chỉnh chuẩn độ khó 3 bản đồ: Ao Làng (`☆☆☆☆☆ Độ khó: Rất Dễ`), Bãi Biển (`★☆☆☆☆ Độ khó: Dễ`), Đảo Xa (`★★☆☆☆ Độ khó: Vừa`).
+  - Viết lại chú thích Đảo Xa thành mô tả thực tế vùng biển khơi: `"Hòn đảo ngoài khơi xa, sóng gió và cá lớn"`.
+
+---
+
 ## 📅 [2026-10-27] - Phiên bản v0.5.1.1 (Hotfix Cân Bằng Tension IDLE, Đại Tu 54 Vector Icon & Phóng To Quickslot)
 
 ### ⚖️ Tái Cân Bằng & Giảm Lực Kéo Của Cá Trong Trạng Thái Mệt (IDLE State Tension Nerf - [FishingManager.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/systems/FishingManager.java))

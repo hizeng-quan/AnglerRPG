@@ -70,7 +70,7 @@ public class ScreenShakeController {
     }
 
     /**
-     * Rung cực đại (Ví dụ: Nổ vàng Gacha 6★ Lạc Hồng, Thần biển Leviathan trỗi dậy).
+     * Rung cực đại (Ví dụ: Nổ vàng Gacha 6★ Lạc Hồng, Cá Cờ Xanh Khổng Lồ trỗi dậy).
      */
     public void shakeExtreme() {
         addTrauma(1.0f);

@@ -29,7 +29,7 @@ public class ItemDatabase {
         
         // New items with unique mechanics
         registerItem(new ItemData("Bình Xịt Đóng Băng", "Đóng băng cá 2s trong lúc câu (ngừng giằng & không tăng Tension)", ItemUsageType.IN_COMBAT, 500), true);
-        registerItem(new ItemData("Trà Thảo Mộc Định Thần", "Hóa giải toàn bộ kỹ năng & trạng thái bất lợi của cá", ItemUsageType.IN_COMBAT, 750), true);
+        registerItem(new ItemData("Trà Thảo Mộc", "Hóa giải toàn bộ kỹ năng & trạng thái bất lợi của cá", ItemUsageType.IN_COMBAT, 750), true);
         registerItem(new ItemData("Đá Mài Lưỡi Câu", "Tăng +25% sát thương kéo cá & cá cắn câu nhanh hơn 40% (5 lượt)", ItemUsageType.PRE_COMBAT, 750), true);
         registerItem(new ItemData("Nam Châm Kho Báu", "Tăng 400% cơ hội câu trúng Rương Báu & Cổ Vật cổ xưa (3 lượt)", ItemUsageType.PRE_COMBAT, 800), true);
         registerItem(new ItemData("Kính Nhìn Xuyên Nước", "Thấu thị mặt nước: Dự báo trước loài cá & độ hiếm sắp cắn câu (3 lượt)", ItemUsageType.BOTH, 400), true);
@@ -41,7 +41,7 @@ public class ItemDatabase {
         registerItem(new ItemData("Sách: Thuần Hóa", "Học/Đột phá kỹ năng Thuần Hóa (+1 Lv hoặc +1 SP)", ItemUsageType.PRE_COMBAT, 1800), false);
         registerItem(new ItemData("Sách: Trói Buộc", "Học/Đột phá kỹ năng Trói Buộc (+1 Lv hoặc +1 SP)", ItemUsageType.PRE_COMBAT, 2200), false);
         registerItem(new ItemData("Sách: Trái Tim ĐD", "Học/Đột phá kỹ năng Trái Tim Đại Dương (+1 Lv hoặc +1 SP)", ItemUsageType.PRE_COMBAT, 2500), false);
-        items.put("Trà Thảo Mộc", getItem("Trà Thảo Mộc Định Thần"));
+        items.put("Trà Thảo Mộc Định Thần", getItem("Trà Thảo Mộc"));
         items.put("Nước Bức Phá", getItem("Nước Bứt Phá"));
     }
     
