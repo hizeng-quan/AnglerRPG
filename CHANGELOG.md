@@ -4,6 +4,27 @@
 
 ---
 
+## 📅 [2026-10-28] - Phiên bản v0.5.5.2 (Đại Tu Đồ Họa Procedural Bản Đồ Đảo Xa - Khí Quyển Biển Khơi Sống Động)
+
+### 🌊 Đại Tu Toàn Diện Background Bản Đồ Đảo Xa (DaoXaBackground.java & PlayScreen.java)
+- **Khắc Phục Nền Đen Placeholder Cũ:**
+  - Thay thế khối hình tròn đen tạm bợ trước đây bằng bộ kết xuất đồ họa procedural chuyên biệt `DaoXaBackground.java` chạy trên nền LibGDX ShapeRenderer.
+  - Tối ưu hóa 100% không cấp phát bộ nhớ (Zero Allocation) trong vòng lặp `render()`, duy trì 60 FPS ổn định tuyệt đối.
+- **Bầu Trời Đêm Vũ Trụ & Trăng Khuyết Đại Dương:**
+  - Chuyển sắc 16 tầng mượt mà từ sắc đen vũ trụ (#02050E) đến sắc chàm chân trời biển (#0E1A32).
+  - Biển sao 35 tinh tú nhấp nháy theo hàm sin với đa sắc thái (băng thanh cyan, vàng nhạt, bạc kim).
+  - Mặt Trăng Lưỡi Liềm sắc sảo với 3 tầng hào quang khuếch tán cùng cột ánh trăng lung linh rọi dọc mặt sóng biển.
+- **Quần Thể Đảo Đá Basalt & Ngôi Nhà Người Gác Đèn Biển:**
+  - Dãy đảo đá xa mờ ảo nhô lên khỏi làn sương đêm chân trời; cụm tháp đá basalt cận cảnh với các diện cắt đa giác bắt sáng ánh trăng và rừng tùng biển phong ba lộng gió.
+  - Ngôi nhà đá của người gác đèn với ống khói nhả khói nhẹ và cửa sổ bừng sáng ánh lửa lò sưởi ấm cúng giữa biển đêm.
+- **Ngọn Hải Đăng Cổ Điển & Chùm Sáng Quét Xoay 360°:**
+  - Tháp hải đăng sọc đỏ/trắng kinh điển, phòng đèn kính rực rỡ và chùm sáng quét xoay chu kỳ 360° chiếu rọi mặt biển với hiệu ứng lóe sáng Lens Flare khi tia sáng chiếu thẳng về phía camera.
+- **Sóng Ngầm Đại Dương, Bọt Sóng Xô Bờ & Sinh Vật Biển Khơi:**
+  - 4 tầng sóng ngầm cuộn nhịp nhàng với viền bọt sóng lấp lánh; bọt sóng trắng xóa đập vào chân vách đá bắn bọt khí và bụi nước li ti.
+  - Hệ sinh thái biển sống động: Bóng Cá Cờ Xanh (Blue Marlin) rẽ sóng với vây buồm và mũi kiếm dài, đàn cá biển khơi bơi nhanh, vây cá mập rạn tuần tra, 2 cá thể sứa phát quang sinh học (cyan & tím) cùng bụi dạ quang Noctiluca bềnh bồng dưới đáy vực.
+
+---
+
 ## 📅 [2026-10-28] - Phiên bản v0.5.5.1 (Giai Đoạn 6: Hoàn Tất Kiểm Thử Cân Bằng CLI, An Toàn Dữ Liệu Save & Đóng Gói Phát Hành)
 
 ### 📊 Suite Kiểm Thử Cân Bằng Game CLI & Mô Phỏng Monte Carlo (balance_cli.py)

@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class PatchNotesDialog {
 
-    public static final String CURRENT_VERSION = "v0.5.5.1";
+    public static final String CURRENT_VERSION = "v0.5.5.2";
     private static final String PREF_LAST_SEEN_VERSION = "last_seen_patch_notes_version";
 
     private final FishingRPG game;
@@ -91,8 +91,20 @@ public class PatchNotesDialog {
         // --- TAB 0: BẢN TIN CẬP NHẬT THEO TỪNG PHIÊN BẢN ---
         // =====================================================================
 
-        // ===== PHIÊN BẢN v0.5.5.1 (MỚI NHẤT) =====
-        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.5.1 (MỚI NHẤT - GIAI ĐOẠN 6: KIỂM THỬ CÂN BẰNG CLI, AN TOÀN SAVE DATA & ĐÓNG GÓI CHIẾN DỊCH HALLOWEEN)"));
+        // ===== PHIÊN BẢN v0.5.5.2 (MỚI NHẤT) =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.5.2 (MỚI NHẤT - ĐẠI TU ĐỒ HỌA PROCEDURAL BẢN ĐỒ ĐẢO XA)"));
+
+        patchNotesItems.add(new UpdateItem("MỸ THUẬT BẢN ĐỒ", "Đại Tu Khí Quyển Đảo Xa Chuẩn Chủ Đề Biển Khơi (DaoXaBackground.java)", new Color(0.25f, 0.85f, 0.95f, 1f))
+                .addPoint("Khắc Phục Nền Đen Đơn Điệu: Xóa bỏ hoàn toàn hình tròn placeholder cũ; thay thế bằng hệ thống đồ họa LibGDX ShapeRenderer đa tầng sống động, 60 FPS mượt mà và 0 cấp phát bộ nhớ (Zero Allocation).")
+                .addPoint("Bầu Trời Đêm Vũ Trụ & Trăng Khuyết Lung Linh: Bầu trời midnight vũ trụ 16 tầng chuyển sắc, biển sao lấp lánh đa quang sai, trăng khuyết với 3 tầng hào quang và cột ánh trăng lung linh rọi xuống mặt biển.")
+                .addPoint("Quần Thể Đảo Đá & Vách Núi Basalt: Dãy đảo đá xa mờ trong sương mù, mỏm đá basalt sừng sững với các mặt đa giác phản quang ánh trăng và rừng tùng biển phong ba lộng gió.")
+                .addPoint("Ngọn Hải Đăng & Chùm Sáng Quét Xoay 360°: Ngọn hải đăng cổ điển đai đỏ/trắng với phòng đèn phát sáng rực rỡ, ngôi nhà người gác đèn biển ấm áp ánh lửa lò sưởi, và chùm tia sáng quét đại dương xoay tròn kèm hiệu ứng lóe sáng Lens Flare khi quét về phía người chơi.")
+                .addPoint("Sóng Đại Dương Cuồn Cuộn & Bọt Sóng Xô Bờ Đá: 4 tầng sóng ngầm cuộn nhịp nhàng với bọt trắng đỉnh sóng, bọt biển trắng xóa đập vào chân vách đá bắn bụi nước li ti.")
+                .addPoint("Hệ Sinh Thái Biển Khơi & Sinh Vật Biển Sâu: Bóng Cá Cờ Xanh (Blue Marlin) rẽ sóng với vây buồm và mũi kiếm dài, đàn cá biển khơi bơi nhanh, vây cá mập rạn tuần tra, 2 cá thể sứa phát quang sinh học (cyan & tím) cùng bụi dạ quang Noctiluca bềnh bồng.")
+        );
+
+        // ===== PHIÊN BẢN v0.5.5.1 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.5.1 (GIAI ĐOẠN 6: KIỂM THỬ CÂN BẰNG CLI, AN TOÀN SAVE DATA & ĐÓNG GÓI CHIẾN DỊCH HALLOWEEN)"));
 
         patchNotesItems.add(new UpdateItem("CÂN BẰNG COMBAT", "Kiểm Thử Cân Bằng CLI Monte Carlo 500 Lượt & Đại Chiến Thanatos", new Color(1.0f, 0.45f, 0.25f, 1f))
                 .addPoint("Mô Phỏng 500 Lượt Boss Thanatos: Win Rate đạt chuẩn 85.2% đối với trang bị 6★ Huyết Nguyệt Thần Vương; Mean TTK đạt 73.16s chuẩn trải nghiệm boss kịch tính.")
