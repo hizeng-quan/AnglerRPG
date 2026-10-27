@@ -31,7 +31,9 @@ public class EquipmentGenerator {
         new EqSet("Thời Không", "Trượng Thời Gian", "Sợi Dây Xuyên Thấu", "Lưỡi Câu Hư Không", 6),
         new EqSet("Quang Minh", "Trượng Ánh Sáng", "Dây Chỉ Vàng", "Lưỡi Câu Thần", 7),
         new EqSet("Vệ Quốc Vang Danh", "Cần Câu Khởi Nghĩa", "Cước Vệ Quốc", "Lưỡi Sao Vàng", 4), // Same as RARE
-        new EqSet("Thần Khí Lạc Hồng", "Trượng Lạc Hồng", "Dây Rồng Thiêng", "Móc Âu Cơ", 8) // Supreme 6★
+        new EqSet("Thần Khí Lạc Hồng", "Trượng Lạc Hồng", "Dây Rồng Thiêng", "Móc Âu Cơ", 8), // Supreme 6★
+        new EqSet("Dạ Hội Bí Ngô", "Cần Bí Ngô", "Dây Tơ Nhện", "Móc Kẹo Ma", 4), // 4★ Limited Halloween
+        new EqSet("Huyết Nguyệt Thần Vương", "Trượng Lưỡi Hái Tử Thần", "Dây Huyết Ma Linh", "Móc Xương Quỷ", 8) // 6★ Limited Premium Halloween
     };
 
     public static int getSetPoints(String setName) {
@@ -66,7 +68,8 @@ public class EquipmentGenerator {
         EqSet set;
         do {
             set = SETS[MathUtils.random(0, SETS.length - 1)];
-        } while (set.setName.equals("Thần Khí Lạc Hồng") || set.setName.equals("Vệ Quốc Vang Danh"));
+        } while (set.setName.equals("Thần Khí Lạc Hồng") || set.setName.equals("Vệ Quốc Vang Danh")
+              || set.setName.equals("Huyết Nguyệt Thần Vương") || set.setName.equals("Dạ Hội Bí Ngô"));
         
         Equipment eq = new Equipment();
         eq.type = type;
@@ -243,6 +246,10 @@ public class EquipmentGenerator {
     }
 
     public static Equipment createFreeEventEquipment(EquipmentType type) {
+        if (com.fishingrpg.game.systems.EventManager.isHalloweenActive()) {
+            return createPumpkinCarnivalEquipment(type);
+        }
+
         EqSet set = null;
         for (EqSet s : SETS) {
             if (s.setName.equals("Vệ Quốc Vang Danh")) {
@@ -280,6 +287,53 @@ public class EquipmentGenerator {
                 break;
         }
 
+        for (int i = 0; i < eq.rarity.substatCount; i++) {
+            Substat.Type subType = Substat.Type.values()[MathUtils.random(0, Substat.Type.values().length - 1)];
+            float subVal = (MathUtils.random(1f, 2.5f) + (mult / 4f));
+            eq.substats.add(new Substat(subType, Math.max(1, Math.round(subVal))));
+        }
+
+        return eq;
+    }
+
+    public static Equipment createPumpkinCarnivalEquipment(EquipmentType type) {
+        EqSet set = null;
+        for (EqSet s : SETS) {
+            if (s.setName.equals("Dạ Hội Bí Ngô")) {
+                set = s;
+                break;
+            }
+        }
+        if (set == null) return createFreeEventEquipment(type);
+
+        Equipment eq = new Equipment();
+        eq.type = type;
+        eq.rarity = Rarity.LIMITED_EVENT;
+        eq.setName = set.setName;
+        eq.level = 1;
+
+        switch (type) {
+            case ROD:
+                eq.id = "rod_pumpkin_" + MathUtils.random(10000);
+                eq.name = set.rodName;
+                eq.mainStat1 = 34.0f; // Sát thương cơ bản
+                eq.mainStat2 = 210.0f; // Thể lực tối đa
+                break;
+            case LINE:
+                eq.id = "line_pumpkin_" + MathUtils.random(10000);
+                eq.name = set.lineName;
+                eq.mainStat1 = 400.0f; // Sức căng tối đa
+                eq.mainStat2 = 6.4f; // Kháng đứt dây
+                break;
+            case HOOK:
+                eq.id = "hook_pumpkin_" + MathUtils.random(10000);
+                eq.name = set.hookName;
+                eq.mainStat1 = 17.0f; // Tỉ lệ cá hiếm (+17%)
+                eq.mainStat2 = 34.0f; // Tỉ lệ giữ mồi (+34%)
+                break;
+        }
+
+        int mult = set.points + getRarityPoints(eq.rarity);
         for (int i = 0; i < eq.rarity.substatCount; i++) {
             Substat.Type subType = Substat.Type.values()[MathUtils.random(0, Substat.Type.values().length - 1)];
             float subVal = (MathUtils.random(1f, 2.5f) + (mult / 4f));

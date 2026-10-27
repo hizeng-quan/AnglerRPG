@@ -92,6 +92,13 @@ public class EquipmentIconRenderer {
                 else drawLacHongHook(sr, cx, cy, r, mainCol);
                 break;
 
+            case "Dạ Hội Bí Ngô":
+            case "Bí Ngô":
+                if (type == EquipmentType.ROD) drawPumpkinRod(sr, cx, cy, r, mainCol);
+                else if (type == EquipmentType.LINE) drawSpiderSilkLine(sr, cx, cy, r, mainCol);
+                else drawGhostCandyHook(sr, cx, cy, r, mainCol);
+                break;
+
             default:
                 // Generic fallback
                 drawGenericType(sr, type, cx, cy, r, mainCol);
@@ -3732,5 +3739,279 @@ public class EquipmentIconRenderer {
             sr.rectLine(cx + r * 0.4f, cy - r * 0.3f, cx + r * 0.4f, cy + r * 0.25f, 3.5f);
             sr.triangle(cx + r * 0.4f, cy + r * 0.25f, cx + r * 0.2f, cy + r * 0.1f, cx + r * 0.55f, cy + r * 0.1f);
         }
+    }
+
+    // =========================================================================
+    // HALLOWEEN LIMITED EVENT: DẠ HỘI BÍ NGÔ (4★)
+    // =========================================================================
+    public static void drawPumpkinRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Spooky festive aura: Phantom violet and radiant pumpkin fire
+        sr.setColor(0.52f, 0.16f, 0.78f, 0.22f);
+        sr.circle(cx, cy, r * 1.35f);
+        sr.setColor(1.00f, 0.48f, 0.08f, 0.25f);
+        sr.circle(cx, cy, r * 1.05f);
+
+        // 2. Twisted Obsidian Thorn Rod Blank
+        float startX = cx - r * 0.76f;
+        float startY = cy - r * 0.76f;
+        float endX = cx + r * 0.68f;
+        float endY = cy + r * 0.68f;
+
+        // Shadow core
+        sr.setColor(0.12f, 0.08f, 0.18f, 1f);
+        sr.rectLine(startX, startY, endX, endY, Math.max(4.0f, r * 0.15f));
+        // Violet-tinted spine
+        sr.setColor(0.25f, 0.16f, 0.35f, 1f);
+        sr.rectLine(startX, startY, endX, endY, Math.max(2.6f, r * 0.10f));
+
+        // Jack-o'-Lantern spiral vine wraps
+        sr.setColor(0.96f, 0.52f, 0.10f, 1f);
+        for (int i = 0; i < 4; i++) {
+            float t = 0.22f + i * 0.18f;
+            float wx = startX + (endX - startX) * t;
+            float wy = startY + (endY - startY) * t;
+            sr.rectLine(wx - 2.5f, wy + 2.5f, wx + 2.5f, wy - 2.5f, Math.max(2.0f, r * 0.07f));
+        }
+
+        // 3. Mini Carved Jack-o'-Lantern Reel / Accent
+        float px = cx - r * 0.35f;
+        float py = cy - r * 0.35f;
+        float pr = Math.max(5f, r * 0.28f);
+
+        // Pumpkin lobes
+        sr.setColor(0.85f, 0.35f, 0.05f, 1f);
+        sr.circle(px - pr * 0.35f, py, pr * 0.85f);
+        sr.circle(px + pr * 0.35f, py, pr * 0.85f);
+        sr.setColor(0.98f, 0.55f, 0.10f, 1f);
+        sr.circle(px, py, pr);
+
+        // Green stem on pumpkin
+        sr.setColor(0.25f, 0.72f, 0.25f, 1f);
+        sr.rectLine(px, py + pr * 0.8f, px + pr * 0.2f, py + pr * 1.35f, Math.max(1.8f, r * 0.06f));
+
+        // Carved glowing eyes & jagged smile
+        sr.setColor(1.0f, 0.95f, 0.30f, 1f);
+        sr.triangle(px - pr * 0.45f, py + pr * 0.12f, px - pr * 0.15f, py + pr * 0.12f, px - pr * 0.30f, py + pr * 0.45f);
+        sr.triangle(px + pr * 0.15f, py + pr * 0.12f, px + pr * 0.45f, py + pr * 0.12f, px + pr * 0.30f, py + pr * 0.45f);
+        sr.triangle(px - pr * 0.35f, py - pr * 0.15f, px + pr * 0.35f, py - pr * 0.15f, px, py - pr * 0.50f);
+
+        // Rod Guides: Gold and glowing ember
+        sr.setColor(1.0f, 0.85f, 0.25f, 1f);
+        sr.circle(endX, endY, Math.max(2.5f, r * 0.11f));
+        sr.circle(cx + r * 0.25f, cy + r * 0.25f, Math.max(2.0f, r * 0.08f));
+        sr.setColor(0.12f, 0.08f, 0.18f, 1f);
+        sr.circle(endX, endY, Math.max(1.2f, r * 0.05f));
+
+        // 4. Specular glint & magical ember
+        sr.setColor(1f, 1f, 1f, 0.90f);
+        sr.circle(px - pr * 0.25f, py + pr * 0.35f, Math.max(1.0f, r * 0.05f));
+        sr.setColor(0.40f, 0.95f, 1.0f, 0.95f);
+        sr.circle(endX + 2.5f, endY + 2.5f, Math.max(1.2f, r * 0.05f));
+    }
+
+    public static void drawSpiderSilkLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Cobweb & Phantom aura
+        sr.setColor(0.45f, 0.18f, 0.72f, 0.24f);
+        sr.circle(cx, cy, r * 1.35f);
+        sr.setColor(0.15f, 0.75f, 0.85f, 0.16f);
+        sr.circle(cx, cy, r * 1.02f);
+
+        // 2. Midnight Obsidian Spool
+        sr.setColor(0.12f, 0.08f, 0.18f, 1f);
+        sr.circle(cx, cy, r * 0.85f);
+        sr.setColor(0.68f, 0.32f, 0.95f, 1f);
+        sr.circle(cx, cy, r * 0.78f);
+        sr.setColor(0.08f, 0.05f, 0.12f, 1f);
+        sr.circle(cx, cy, r * 0.68f);
+
+        // 3. Intricate Spider Web Pattern (8 silk spokes + web rings)
+        sr.setColor(0.85f, 0.92f, 1.0f, 0.88f);
+        for (int i = 0; i < 8; i++) {
+            float angle = (i * 45f) * MathUtils.degreesToRadians;
+            float cos = MathUtils.cos(angle);
+            float sin = MathUtils.sin(angle);
+            sr.rectLine(cx, cy, cx + cos * (r * 0.65f), cy + sin * (r * 0.65f), Math.max(1.2f, r * 0.045f));
+        }
+
+        // Web Ring Arcs
+        float[] ringRadii = { r * 0.32f, r * 0.52f };
+        for (float rad : ringRadii) {
+            for (int i = 0; i < 8; i++) {
+                float a1 = (i * 45f) * MathUtils.degreesToRadians;
+                float a2 = ((i + 1) * 45f) * MathUtils.degreesToRadians;
+                sr.rectLine(cx + MathUtils.cos(a1) * rad, cy + MathUtils.sin(a1) * rad,
+                            cx + MathUtils.cos(a2) * rad, cy + MathUtils.sin(a2) * rad, Math.max(1.0f, r * 0.035f));
+            }
+        }
+
+        // Spooky Skull / Spider Center Crest
+        sr.setColor(0.88f, 0.25f, 0.55f, 1f);
+        sr.circle(cx, cy, r * 0.20f);
+        sr.setColor(1.0f, 0.85f, 0.25f, 1f);
+        sr.circle(cx - r * 0.07f, cy + r * 0.03f, Math.max(1.0f, r * 0.04f));
+        sr.circle(cx + r * 0.07f, cy + r * 0.03f, Math.max(1.0f, r * 0.04f));
+
+        // 4. Specular dewdrops
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.circle(cx + r * 0.36f, cy + r * 0.36f, Math.max(1.2f, r * 0.05f));
+        sr.circle(cx - r * 0.22f, cy + r * 0.46f, Math.max(1.0f, r * 0.04f));
+    }
+
+    public static void drawGhostCandyHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        // 1. Ghostly mist aura (Spectral Mint & Candy Pink)
+        sr.setColor(0.20f, 0.85f, 0.50f, 0.20f);
+        sr.circle(cx, cy, r * 1.35f);
+        sr.setColor(0.95f, 0.30f, 0.60f, 0.18f);
+        sr.circle(cx, cy, r * 1.05f);
+
+        // 2. Candy Cane Curved Hook Body
+        float topX = cx - r * 0.20f;
+        float topY = cy + r * 0.62f;
+        float botY = cy - r * 0.30f;
+        float bendX = cx + r * 0.15f;
+        float bendY = cy - r * 0.55f;
+        float tipX = cx + r * 0.42f;
+        float tipY = cy + r * 0.15f;
+
+        // Hook eyelet
+        sr.setColor(0.95f, 0.85f, 0.25f, 1f);
+        sr.circle(topX, topY, Math.max(3.5f, r * 0.15f));
+        sr.setColor(0.08f, 0.06f, 0.12f, 1f);
+        sr.circle(topX, topY, Math.max(1.8f, r * 0.07f));
+
+        // Main striped candy cane hook shank & bend
+        float hookW = Math.max(3.8f, r * 0.14f);
+        sr.setColor(0.18f, 0.08f, 0.15f, 1f);
+        sr.rectLine(topX, topY, topX, botY, hookW + 1.6f);
+        sr.rectLine(topX, botY, bendX, bendY, hookW + 1.6f);
+        sr.rectLine(bendX, bendY, tipX, tipY, hookW + 1.6f);
+
+        // Candy cane striped body (Orange & Bone-white)
+        sr.setColor(1.0f, 0.45f, 0.10f, 1f);
+        sr.rectLine(topX, topY, topX, botY, hookW);
+        sr.rectLine(topX, botY, bendX, bendY, hookW);
+        sr.rectLine(bendX, bendY, tipX, tipY, hookW);
+
+        // White spiral candy stripes
+        sr.setColor(1.0f, 0.95f, 0.90f, 1f);
+        float stripeW = Math.max(2.2f, r * 0.08f);
+        sr.rectLine(topX - 3f, topY - r * 0.25f, topX + 3f, topY - r * 0.15f, stripeW);
+        sr.rectLine(topX - 3f, topY - r * 0.55f, topX + 3f, topY - r * 0.45f, stripeW);
+        sr.rectLine(bendX - 2f, bendY - 2f, bendX + 4f, bendY + 3f, stripeW);
+        sr.rectLine(tipX - 4f, tipY - r * 0.18f, tipX + 2f, tipY - r * 0.08f, stripeW);
+
+        // Sharp barb
+        sr.setColor(0.98f, 0.92f, 0.35f, 1f);
+        sr.triangle(tipX, tipY, tipX - r * 0.15f, tipY - r * 0.12f, tipX - r * 0.02f, tipY - r * 0.22f);
+
+        // 3. Mini Ghost Charm near eyelet
+        float gx = cx + r * 0.24f;
+        float gy = cy + r * 0.42f;
+        sr.setColor(0.95f, 0.98f, 1.0f, 0.95f);
+        sr.circle(gx, gy, Math.max(3f, r * 0.14f));
+        sr.triangle(gx - r * 0.12f, gy, gx + r * 0.12f, gy, gx, gy - r * 0.22f);
+        // Ghost eyes
+        sr.setColor(0.15f, 0.10f, 0.25f, 1f);
+        sr.circle(gx - r * 0.04f, gy + r * 0.02f, Math.max(0.8f, r * 0.03f));
+        sr.circle(gx + r * 0.04f, gy + r * 0.02f, Math.max(0.8f, r * 0.03f));
+
+        // 4. Specular glint
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        sr.circle(topX - 1.5f, topY + 1.5f, Math.max(1.0f, r * 0.04f));
+        sr.circle(tipX, tipY, Math.max(1.2f, r * 0.045f));
+    }
+
+    // =========================================================================
+    // HALLOWEEN EVENT ITEMS: PUMPKIN LANTERN & TRICK-OR-TREAT CANDY
+    // =========================================================================
+    public static void drawPumpkinLantern(ShapeRenderer sr, float cx, float cy, float r) {
+        // 1. Radiant fiery pumpkin aura
+        sr.setColor(1.0f, 0.42f, 0.05f, 0.28f);
+        sr.circle(cx, cy, r * 1.35f);
+        sr.setColor(1.0f, 0.85f, 0.20f, 0.18f);
+        sr.circle(cx, cy, r * 0.95f);
+
+        // 2. Segmented Pumpkin Lobes
+        sr.setColor(0.80f, 0.30f, 0.02f, 1f);
+        sr.circle(cx - r * 0.42f, cy - r * 0.05f, r * 0.52f);
+        sr.circle(cx + r * 0.42f, cy - r * 0.05f, r * 0.52f);
+
+        sr.setColor(0.95f, 0.48f, 0.05f, 1f);
+        sr.circle(cx - r * 0.22f, cy - r * 0.03f, r * 0.58f);
+        sr.circle(cx + r * 0.22f, cy - r * 0.03f, r * 0.58f);
+
+        sr.setColor(1.00f, 0.60f, 0.08f, 1f);
+        sr.circle(cx, cy - r * 0.02f, r * 0.60f);
+
+        // Pumpkin Stem
+        sr.setColor(0.22f, 0.55f, 0.18f, 1f);
+        sr.rectLine(cx, cy + r * 0.50f, cx + r * 0.15f, cy + r * 0.92f, Math.max(2.5f, r * 0.10f));
+        sr.setColor(0.40f, 0.80f, 0.25f, 1f);
+        sr.circle(cx + r * 0.15f, cy + r * 0.92f, Math.max(1.5f, r * 0.06f));
+
+        // 3. Carved Glowing Fiery Face (Sinister Jack-o'-Lantern)
+        sr.setColor(1.0f, 0.95f, 0.32f, 1f);
+        // Left Eye
+        sr.triangle(cx - r * 0.36f, cy + r * 0.08f, cx - r * 0.12f, cy + r * 0.08f, cx - r * 0.24f, cy + r * 0.26f);
+        // Right Eye
+        sr.triangle(cx + r * 0.12f, cy + r * 0.08f, cx + r * 0.36f, cy + r * 0.08f, cx + r * 0.24f, cy + r * 0.26f);
+        // Nose
+        sr.triangle(cx - r * 0.08f, cy - r * 0.02f, cx + r * 0.08f, cy - r * 0.02f, cx, cy + r * 0.10f);
+        // Jagged Smile
+        sr.triangle(cx - r * 0.45f, cy - r * 0.10f, cx - r * 0.20f, cy - r * 0.35f, cx - r * 0.10f, cy - r * 0.10f);
+        sr.triangle(cx - r * 0.10f, cy - r * 0.10f, cx, cy - r * 0.42f, cx + r * 0.10f, cy - r * 0.10f);
+        sr.triangle(cx + r * 0.10f, cy - r * 0.10f, cx + r * 0.20f, cy - r * 0.35f, cx + r * 0.45f, cy - r * 0.10f);
+
+        // Inner incandescent core
+        sr.setColor(1.0f, 1.0f, 0.75f, 1f);
+        sr.circle(cx, cy - r * 0.18f, Math.max(1.8f, r * 0.08f));
+
+        // 4. Specular Highlights
+        sr.setColor(1f, 1f, 1f, 0.85f);
+        sr.circle(cx - r * 0.25f, cy + r * 0.38f, Math.max(1.2f, r * 0.05f));
+    }
+
+    public static void drawTrickOrTreatCandy(ShapeRenderer sr, float cx, float cy, float r) {
+        // 1. Spooky sweet violet glow
+        sr.setColor(0.68f, 0.22f, 0.88f, 0.25f);
+        sr.circle(cx, cy, r * 1.30f);
+        sr.setColor(1.0f, 0.55f, 0.10f, 0.20f);
+        sr.circle(cx, cy, r * 0.95f);
+
+        // 2. Wrapper Twists (Left & Right Fans)
+        float twistW = r * 0.65f;
+        float twistH = r * 0.48f;
+
+        // Left wrapper
+        sr.setColor(0.55f, 0.18f, 0.75f, 1f);
+        sr.triangle(cx - r * 0.25f, cy, cx - twistW - r * 0.25f, cy + twistH, cx - twistW - r * 0.25f, cy - twistH);
+        sr.setColor(0.85f, 0.35f, 0.95f, 1f);
+        sr.triangle(cx - r * 0.25f, cy, cx - twistW - r * 0.20f, cy + twistH * 0.6f, cx - twistW - r * 0.20f, cy - twistH * 0.6f);
+
+        // Right wrapper
+        sr.setColor(0.55f, 0.18f, 0.75f, 1f);
+        sr.triangle(cx + r * 0.25f, cy, cx + twistW + r * 0.25f, cy + twistH, cx + twistW + r * 0.25f, cy - twistH);
+        sr.setColor(0.85f, 0.35f, 0.95f, 1f);
+        sr.triangle(cx + r * 0.25f, cy, cx + twistW + r * 0.20f, cy + twistH * 0.6f, cx + twistW + r * 0.20f, cy - twistH * 0.6f);
+
+        // 3. Central Round Candy Ball
+        float cr = r * 0.55f;
+        sr.setColor(0.98f, 0.52f, 0.08f, 1f);
+        sr.circle(cx, cy, cr);
+
+        // Spiral candy stripes
+        sr.setColor(1.0f, 0.95f, 0.90f, 1f);
+        sr.rectLine(cx - cr * 0.7f, cy - cr * 0.4f, cx + cr * 0.7f, cy + cr * 0.4f, Math.max(2.2f, r * 0.09f));
+        sr.setColor(0.25f, 0.12f, 0.35f, 1f);
+        sr.rectLine(cx - cr * 0.5f, cy + cr * 0.5f, cx + cr * 0.5f, cy - cr * 0.5f, Math.max(2.2f, r * 0.09f));
+
+        // Golden Cinch Rings
+        sr.setColor(1.0f, 0.85f, 0.25f, 1f);
+        sr.rectLine(cx - r * 0.25f, cy - r * 0.22f, cx - r * 0.25f, cy + r * 0.22f, Math.max(2.0f, r * 0.07f));
+        sr.rectLine(cx + r * 0.25f, cy - r * 0.22f, cx + r * 0.25f, cy + r * 0.22f, Math.max(2.0f, r * 0.07f));
+
+        // 4. Glossy Specular Highlight
+        sr.setColor(1f, 1f, 1f, 0.90f);
+        sr.circle(cx - cr * 0.30f, cy + cr * 0.35f, Math.max(1.2f, r * 0.06f));
     }
 }
