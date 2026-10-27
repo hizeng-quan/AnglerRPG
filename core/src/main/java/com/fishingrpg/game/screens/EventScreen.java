@@ -1096,9 +1096,9 @@ public class EventScreen implements Screen {
             "Cần Dạ Hội Bí Ngô",
             "Dây Cước Tơ Nhện",
             "Lưỡi Kẹo Ma Quái",
-            "Vé Quay Cao Cấp x3",
-            "Vé Quay Thường x5",
-            "Túi Vàng Ma Quái"
+            "Vé Gacha Huyết Nguyệt",
+            "Vé Gacha Tiêu Chuẩn",
+            "Túi 15,000 Vàng"
         } : new String[] {
             "Cần Câu Vệ Quốc",
             "Dây Cước Vệ Quốc",
@@ -1112,9 +1112,9 @@ public class EventScreen implements Screen {
             "Cần Câu Limited 4★",
             "Dây Cước Limited 4★",
             "Lưỡi Câu Limited 4★",
-            "Vé Gacha Banner Sự Kiện",
-            "Vé Gacha Banner Tiêu Chuẩn",
-            "Nhận ngay 10,000 Vàng"
+            "Gacha Huyết Nguyệt (Vô hạn)",
+            "Gacha Tiêu Chuẩn (Vô hạn)",
+            "Tài nguyên Vàng Sự Kiện"
         } : new String[] {
             "Cần Câu Limited Event",
             "Dây Cước Limited Event",
@@ -1438,29 +1438,42 @@ public class EventScreen implements Screen {
                 showMessage("Đổi thành công: " + (isHalloween ? "Lưỡi Kẹo Ma Quái" : "Lưỡi Câu Vệ Quốc") + " (Limited Event)!");
                 break;
             case 3:
-                player.addPremiumTickets(3);
-                showMessage("Đổi thành công: +3 Vé Quay Cao Cấp!");
+                player.addPremiumTickets(1);
+                showMessage("Đổi thành công: +1 Vé Gacha Huyết Nguyệt (Cao Cấp)!");
                 break;
             case 4:
-                player.addGachaTickets(5);
-                showMessage("Đổi thành công: +5 Vé Quay Tiêu Chuẩn!");
+                player.addGachaTickets(1);
+                showMessage("Đổi thành công: +1 Vé Gacha Tiêu Chuẩn!");
                 break;
             case 5:
-                player.gainGold(10000);
-                showMessage("Đổi thành công: +10,000 Vàng!");
+                player.gainGold(15000);
+                showMessage("Đổi thành công: +15,000 Vàng!");
                 break;
         }
     }
 
     private int getShopItemPrice(int index) {
-        switch (index) {
-            case 0: return 5;
-            case 1: return 5;
-            case 2: return 5;
-            case 3: return 3;
-            case 4: return 2;
-            case 5: return 1;
-            default: return 99;
+        boolean isHalloween = EventManager.isHalloweenActive();
+        if (isHalloween) {
+            switch (index) {
+                case 0: return 500; // Can Da Hoi Bi Ngo (500 EP)
+                case 1: return 350; // Day Cuoc To Nhen (350 EP)
+                case 2: return 350; // Luoi Keo Ma Quai (350 EP)
+                case 3: return 60;  // Ve Gacha Huyet Nguyet (60 EP)
+                case 4: return 30;  // Ve Gacha Tieu Chuan (30 EP)
+                case 5: return 25;  // Tui 15,000 Vang (25 EP)
+                default: return 999;
+            }
+        } else {
+            switch (index) {
+                case 0: return 5;
+                case 1: return 5;
+                case 2: return 5;
+                case 3: return 3;
+                case 4: return 2;
+                case 5: return 1;
+                default: return 99;
+            }
         }
     }
 

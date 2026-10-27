@@ -30,6 +30,8 @@ public class PlayScreen implements Screen {
     private static final float WORLD_HEIGHT = 720f;
     private String message = null;
     private float messageTimer = 0f;
+    private float bloodMoonAlpha = 0f;
+    private boolean prevBloodMoonActive = false;
 
     private Player player;
     private GameHUD hud;
@@ -168,6 +170,25 @@ public class PlayScreen implements Screen {
                     float by = ((i * 151 + timer * 25f) % (WORLD_HEIGHT + 100)) - 50;
                     shapeRenderer.circle(bx + com.badlogic.gdx.math.MathUtils.sin(timer*0.5f + i)*30f, by, 1f + (i%3));
                 }
+            }
+
+            // HLW-05: Chuyen sac em ai 3.0s sang Bau Troi Huyet Nguyet
+            boolean bmActive = fishingManager.isBloodMoonActive();
+            if (bmActive) {
+                bloodMoonAlpha = Math.min(1.0f, bloodMoonAlpha + delta / 3.0f);
+                if (!prevBloodMoonActive) {
+                    prevBloodMoonActive = true;
+                    message = "✦ BẦU TRỜI HUYẾT NGUYỆT GIÁNG TRẦN ✦ (+20% Vàng, +20% EXP, x2 Cá Halloween!)";
+                    messageTimer = 4.0f;
+                    com.fishingrpg.game.systems.AudioManager.getInstance().playSFX("sfx_blood_moon_roar");
+                }
+            } else {
+                bloodMoonAlpha = Math.max(0f, bloodMoonAlpha - delta / 3.0f);
+                prevBloodMoonActive = false;
+            }
+
+            if (bloodMoonAlpha > 0.01f) {
+                drawBloodMoonOverlay(shapeRenderer, bloodMoonAlpha, timer);
             }
 
             com.fishingrpg.game.ui.CombatVFXManager.getInstance().drawShapes(shapeRenderer);
@@ -587,12 +608,110 @@ public class PlayScreen implements Screen {
                 player.addSonarCharges(3);
                 fishingManager.combatMessage = "Kính Nhìn Xuyên Nước: Kích hoạt Thấu thị mặt nước (3 lượt)!";
                 break;
+            case "Kẹo Trick-or-Treat":
+                player.addHalloweenCandyTimer(900f);
+                player.addHalloweenCandyCharges(1);
+                fishingManager.combatMessage = "Ăn Kẹo Trick-or-Treat: +50% Gặp Cá Halloween trong 15 phút!";
+                if (hud != null && floatingTextManager != null) {
+                    floatingTextManager.addText("KẸO MA THUẬT! (15 Phút)", 640f, 380f, Color.ORANGE);
+                }
+                com.fishingrpg.game.systems.AudioManager.getInstance().playSFX("sfx_halloween_candy");
+                break;
+            case "Đèn Lồng Bí Ngô":
+                player.addPumpkinLanternCharges(3);
+                fishingManager.combatMessage = "Đèn Lồng Bí Ngô: Quang Minh Trừ Tà (+30% phản ứng Re-Hook 3 lần)!";
+                if (hud != null && floatingTextManager != null) {
+                    floatingTextManager.addText("ĐÈN LỒNG: +30% PHẢN ỨNG RE-HOOK!", 640f, 380f, Color.GOLD);
+                }
+                com.fishingrpg.game.systems.AudioManager.getInstance().playSFX("sfx_pumpkin_lantern");
+                break;
+            case "Độc Dược Ma Quái":
+            case "Nước Phù Thủy Ma Quái":
+                player.addFreeStaminaSkillCharges(3);
+                fishingManager.combatMessage = "Độc Dược Ma Quái: 3 lần dùng kỹ năng tiếp theo tiêu hao 0 Thể lực!";
+                if (hud != null && floatingTextManager != null) {
+                    floatingTextManager.addText("ĐỘC DƯỢC: 3 KỸ NĂNG 0 THỂ LỰC!", 640f, 380f, Color.PURPLE);
+                }
+                com.fishingrpg.game.systems.AudioManager.getInstance().playSFX("sfx_ghost_potion");
+                break;
+            case "Bùa Huyết Nguyệt":
+                boolean isCombatNow = (fishingManager.state == com.fishingrpg.game.systems.FishingManager.State.COMBAT
+                                    || fishingManager.state == com.fishingrpg.game.systems.FishingManager.State.CASTING
+                                    || fishingManager.state == com.fishingrpg.game.systems.FishingManager.State.BITE);
+                if (isCombatNow) {
+                    player.setBloodMoonTalismanTimer(15f);
+                    fishingManager.combatMessage = "Bùa Huyết Nguyệt: +10% Sát thương Chuẩn từ mọi nguồn (15 giây)!";
+                    if (hud != null && floatingTextManager != null) {
+                        floatingTextManager.addText("+10% SÁT THƯƠNG CHUẨN! (15s)", 640f, 380f, Color.SCARLET);
+                    }
+                } else {
+                    if (!com.fishingrpg.game.systems.EventManager.isHalloweenActive()) {
+                        fishingManager.combatMessage = "Sự kiện Halloween chưa diễn ra, không thể triệu hồi Huyết Nguyệt!";
+                        com.fishingrpg.game.systems.AudioManager.getInstance().playSFX("sfx_button");
+                        return false;
+                    }
+                    player.setManualBloodMoonTimer(900f);
+                    fishingManager.combatMessage = "Kích hoạt Đêm Huyết Nguyệt 15 phút! +20% Vàng, +20% EXP, x2 Cá Halloween!";
+                    if (hud != null && floatingTextManager != null) {
+                        floatingTextManager.addText("✦ ĐÊM HUYẾT NGUYỆT GIÁNG TRẦN ✦", 640f, 400f, Color.RED);
+                    }
+                }
+                com.fishingrpg.game.systems.AudioManager.getInstance().playSFX("sfx_blood_moon_talisman");
+                break;
+            case "Nến Hồn Ma Bảo Hộ":
+                player.setGhostCandleActive(true);
+                fishingManager.combatMessage = "Nến Hồn Ma: Bảo hiểm đứt cước 1 lần! Hồi 50% Tension khi chạm đỉnh!";
+                if (hud != null && floatingTextManager != null) {
+                    floatingTextManager.addText("NẾN HỒN MA: BẢO VỆ ĐỨT DÂY!", 640f, 380f, Color.CYAN);
+                }
+                com.fishingrpg.game.systems.AudioManager.getInstance().playSFX("sfx_ghost_candle");
+                break;
+            case "Rương Ma Quái": {
+                int tickets = com.badlogic.gdx.math.MathUtils.random(3, 5);
+                int dias = com.badlogic.gdx.math.MathUtils.random(30, 80);
+                int candys = com.badlogic.gdx.math.MathUtils.random(20, 30);
+                player.addGachaTickets(tickets);
+                player.addDiamonds(dias);
+                player.addItem("Kẹo Trick-or-Treat", candys);
+                fishingManager.combatMessage = "MỞ RƯƠNG MA QUÁI: +" + tickets + " Vé Gacha, +" + dias + " KC, +" + candys + " Kẹo!";
+                if (hud != null && floatingTextManager != null) {
+                    floatingTextManager.addText("MỞ RƯƠNG: +" + tickets + " VÉ, +" + dias + " KC, +" + candys + " KẸO!", 640f, 400f, Color.GOLD);
+                }
+                com.fishingrpg.game.systems.AudioManager.getInstance().playSFX("sfx_success");
+                break;
+            }
             default:
                 break; // Vật phẩm không rõ — vẫn tiêu thụ
         }
 
         com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerItemUseVFX(itemName, 640f, 360f);
         return success;
+    }
+
+    private void drawBloodMoonOverlay(com.badlogic.gdx.graphics.glutils.ShapeRenderer sr, float alpha, float animTime) {
+        // Red Wine Gothic Sky tint
+        sr.setColor(0.35f, 0.04f, 0.08f, 0.38f * alpha);
+        sr.rect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
+
+        // Blood Moon Orb in top right sky
+        float moonX = WORLD_WIDTH - 180f;
+        float moonY = WORLD_HEIGHT - 120f;
+        float pulse = 0.85f + 0.15f * com.badlogic.gdx.math.MathUtils.sin(animTime * 3f);
+
+        sr.setColor(0.95f, 0.10f, 0.15f, 0.18f * alpha * pulse);
+        sr.circle(moonX, moonY, 70f);
+        sr.setColor(0.90f, 0.15f, 0.20f, 0.28f * alpha * pulse);
+        sr.circle(moonX, moonY, 48f);
+        sr.setColor(0.98f, 0.25f, 0.25f, 0.85f * alpha);
+        sr.circle(moonX, moonY, 32f);
+
+        // Floating blood embers
+        for (int i = 0; i < 15; i++) {
+            float ex = (i * 88f + animTime * 20f) % WORLD_WIDTH;
+            float ey = (i * 53f + animTime * 35f) % WORLD_HEIGHT;
+            sr.setColor(1.0f, 0.35f, 0.15f, 0.5f * alpha * com.badlogic.gdx.math.MathUtils.sin(animTime * 4f + i));
+            sr.circle(ex, ey, 2.5f);
+        }
     }
 
     @Override public void resize(int w, int h) {

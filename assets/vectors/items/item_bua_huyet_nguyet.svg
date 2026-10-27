@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="bloodMoonAura" cx="50%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#991b1b" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#450a0a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="parchmentTexture" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef3c7"/>
+      <stop offset="50%" stop-color="#fde68a"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+  </defs>
+
+  <!-- LAYER 1: Background Glow -->
+  <g id="background_glow">
+    <circle cx="64" cy="62" r="54" fill="url(#bloodMoonAura)"/>
+    <ellipse cx="64" cy="116" rx="32" ry="7" fill="#000000" opacity="0.4"/>
+  </g>
+
+  <!-- LAYER 2: Base Form (Black Silk Cord & Ancient Yellow Parchment Talisman) -->
+  <g id="base_form">
+    <!-- Obsidian Fastener Bead & Blood Cord -->
+    <circle cx="64" cy="14" r="5" fill="#18181b"/>
+    <circle cx="64" cy="14" r="2.5" fill="#ef4444"/>
+    <line x1="64" y1="14" x2="64" y2="24" stroke="#dc2626" stroke-width="2.8"/>
+
+    <!-- Main Rectangular Talisman Paper -->
+    <polygon points="42,22 86,22 86,112 42,112" fill="url(#parchmentTexture)"/>
+    <!-- Torn/Burned Edge Accents -->
+    <polygon points="42,22 86,22 86,112 42,112" fill="none" stroke="#78350f" stroke-width="2.0"/>
+
+    <!-- Double Vermilion Talisman Border -->
+    <rect x="46" y="26" width="36" height="82" fill="none" stroke="#b91c1c" stroke-width="1.8"/>
+    <rect x="49" y="29" width="30" height="76" fill="none" stroke="#ef4444" stroke-width="0.9"/>
+  </g>
+
+  <!-- LAYER 3: Details & Relief (Blood Moon Seal, Cinnabar Runes, Gothic Curses) -->
+  <g id="details_and_relief">
+    <!-- Blood Moon Eclipse Crest at Top -->
+    <circle cx="64" cy="42" r="10" fill="#dc2626"/>
+    <!-- Eclipse Crescent Shadow -->
+    <circle cx="67" cy="40" r="8" fill="#fde68a"/>
+
+    <!-- Sacred Cinnabar (Chu Sa) Rune Inscriptions -->
+    <!-- Triple Mountain Head Gate -->
+    <path d="M 54 58 L 64 54 L 74 58" stroke="#b91c1c" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    <line x1="64" y1="55" x2="64" y2="92" stroke="#dc2626" stroke-width="3.2" stroke-linecap="round"/>
+
+    <!-- Mystic Branch Strokes -->
+    <path d="M 54 66 Q 64 72 74 66" fill="none" stroke="#b91c1c" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M 56 76 Q 64 82 72 76" fill="none" stroke="#b91c1c" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M 52 86 L 64 90 L 76 86" fill="none" stroke="#b91c1c" stroke-width="2.2" stroke-linecap="round"/>
+
+    <!-- Red Blood Drops from bottom of talisman -->
+    <circle cx="64" cy="98" r="3" fill="#dc2626"/>
+    <polygon points="64,95 62,98 66,98" fill="#dc2626"/>
+  </g>
+
+  <!-- LAYER 4: Specular Highlights & Contrast -->
+  <g id="specular_highlights">
+    <!-- Glowing Red Rune Sparkle -->
+    <circle cx="64" cy="42" r="2.5" fill="#ffffff" opacity="0.9"/>
+    <!-- Edge Highlight on Paper Rim -->
+    <line x1="44" y1="24" x2="84" y2="24" stroke="#ffffff" stroke-width="1.5" opacity="0.75"/>
+  </g>
+</svg>
+

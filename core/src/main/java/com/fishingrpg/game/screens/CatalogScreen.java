@@ -57,7 +57,7 @@ public class CatalogScreen implements Screen, InputProcessor {
     private boolean hoverBack = false;
     private boolean hoverClaimAll = false;
     private int currentTab = 0; // 0: Ao Làng, 1: Bãi Biển, 2: Đảo Xa
-    private boolean[] hoverTabs = new boolean[3];
+    private boolean[] hoverTabs = new boolean[4];
 
     private final List<CollectionDatabase.Collection> allCollections;
     private final List<CollectionDatabase.Collection> visibleCollections = new ArrayList<>();
@@ -76,8 +76,8 @@ public class CatalogScreen implements Screen, InputProcessor {
     // Cached collection statistics to eliminate per-frame heavy recalculations
     private int cachedAvailableClaimCount = 0;
     private int cachedTotalCaughtCount = 0;
-    private final int[] cachedCompletedInBiome = new int[3];
-    private final int[] cachedTotalColInBiome = new int[3];
+    private final int[] cachedCompletedInBiome = new int[4];
+    private final int[] cachedTotalColInBiome = new int[4];
 
     // Notification toast
     private String toastMsg = null;
@@ -118,16 +118,21 @@ public class CatalogScreen implements Screen, InputProcessor {
 
     private void updateVisibleCollections() {
         visibleCollections.clear();
-        String prefix = currentTab == 0 ? "al_" : (currentTab == 1 ? "bb_" : "dx_");
+        String prefix = currentTab == 0 ? "al_" : (currentTab == 1 ? "bb_" : (currentTab == 2 ? "dx_" : "hlw_"));
         for (CollectionDatabase.Collection c : allCollections) {
             if (c.id.startsWith(prefix)) {
                 visibleCollections.add(c);
             }
         }
-        int rows = (visibleCollections.size() + 1) / 2;
-        float totalHeight = rows * 260f;
-        maxScrollY = Math.max(0, totalHeight - (H - 220f));
-        scrollY = 0f;
+        if (currentTab == 3) {
+            maxScrollY = 0f;
+            scrollY = 0f;
+        } else {
+            int rows = (visibleCollections.size() + 1) / 2;
+            float totalHeight = rows * 260f;
+            maxScrollY = Math.max(0, totalHeight - (H - 220f));
+            scrollY = 0f;
+        }
     }
 
     public static int getFishDiscoveryDiamonds(Fish.Rarity rarity) {
@@ -137,6 +142,7 @@ public class CatalogScreen implements Screen, InputProcessor {
             case UNCOMMON: return 3;
             case RARE: return 5;
             case EPIC: return 10;
+            case LEGENDARY: return 15;
             case BOSS: return 25;
             default: return 2;
         }
@@ -183,8 +189,8 @@ public class CatalogScreen implements Screen, InputProcessor {
     private void refreshCollectionStats() {
         cachedAvailableClaimCount = getAvailableClaimCount();
         cachedTotalCaughtCount = getTotalCaughtCount();
-        String[] tabPrefix = {"al_", "bb_", "dx_"};
-        for (int i = 0; i < 3; i++) {
+        String[] tabPrefix = {"al_", "bb_", "dx_", "hlw_"};
+        for (int i = 0; i < 4; i++) {
             int total = 0;
             int comp = 0;
             for (CollectionDatabase.Collection c : allCollections) {
@@ -221,7 +227,6 @@ public class CatalogScreen implements Screen, InputProcessor {
         updateInput(delta);
         if (game.getScreen() != this) return;
 
-        ScreenUtils.clear(0.04f, 0.07f, 0.12f, 1f);
         camera.update();
         sr.setProjectionMatrix(camera.combined);
         game.batch.setProjectionMatrix(camera.combined);
@@ -229,13 +234,19 @@ public class CatalogScreen implements Screen, InputProcessor {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-        // 1. Draw Ambient Sea Particles
-        sr.begin(ShapeRenderer.ShapeType.Filled);
-        for (int i = 0; i < particleX.length; i++) {
-            sr.setColor(0.3f, 0.7f, 1f, 0.25f + 0.15f * MathUtils.sin(animTime * 2f + i));
-            sr.circle(particleX[i], particleY[i], particleSize[i]);
+        if (currentTab == 3) {
+            ScreenUtils.clear(0.06f, 0.02f, 0.08f, 1f);
+            drawHalloweenBackground();
+        } else {
+            ScreenUtils.clear(0.04f, 0.07f, 0.12f, 1f);
+            // 1. Draw Ambient Sea Particles
+            sr.begin(ShapeRenderer.ShapeType.Filled);
+            for (int i = 0; i < particleX.length; i++) {
+                sr.setColor(0.3f, 0.7f, 1f, 0.25f + 0.15f * MathUtils.sin(animTime * 2f + i));
+                sr.circle(particleX[i], particleY[i], particleSize[i]);
+            }
+            sr.end();
         }
-        sr.end();
 
         // 2. Draw Collections with Scissor Clipping
         Rectangle scissor = new Rectangle();
@@ -266,6 +277,11 @@ public class CatalogScreen implements Screen, InputProcessor {
     }
 
     private void drawCollectionCards() {
+        if (currentTab == 3) {
+            drawHalloweenCollectionLayout();
+            return;
+        }
+
         float startX = 60f;
         float cardW = 560f;
         float cardH = 240f;
@@ -441,7 +457,7 @@ public class CatalogScreen implements Screen, InputProcessor {
             } else {
                 font.setColor(0.35f, 0.95f, 1f, 0.95f);
                 font.getData().setScale(0.82f);
-                String rewStr = "Thưởng: +" + c.rewardDiamonds + " KC • +" + c.rewardGold + "V • +" + c.rewardXp + "XP";
+                String rewStr = "Thưởng: +" + c.rewardDiamonds + " KC  -  +" + c.rewardGold + "V  -  +" + c.rewardXp + "XP";
                 layout.setText(font, rewStr);
                 font.draw(game.batch, layout, cx + cardW - 15f - layout.width, cy - 12f);
             }
@@ -480,7 +496,7 @@ public class CatalogScreen implements Screen, InputProcessor {
                         int dRew = getFishDiscoveryDiamonds(ft.getRarity());
                         font.setColor(1f, 0.95f, 0.35f, 1f);
                         font.getData().setScale(0.74f);
-                        String rewTxt = "+" + dRew + " 💎 NHẬN";
+                        String rewTxt = "+" + dRew + " KC NHẬN";
                         layout.setText(font, rewTxt);
                         font.draw(game.batch, layout, fx + (slotW - layout.width) / 2f, slotY + 22f);
                     } else {
@@ -545,73 +561,66 @@ public class CatalogScreen implements Screen, InputProcessor {
             drawRectOutline(sr, W - 240f, H - 60f, 215f, 44f, 1.2f);
         }
 
-        // Biome Tabs
+        // Biome Tabs (4 tabs centered, currency widget removed per design request)
         float tabW = 220f;
         float tabH = 46f;
-        float tabSpacing = 25f;
-        float totalTabW = 3 * tabW + 2 * tabSpacing;
+        float tabSpacing = 20f;
+        float totalTabW = 4 * tabW + 3 * tabSpacing;
         float tabStartX = (W - totalTabW) / 2f;
         float tabY = H - 138f;
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             boolean active = (currentTab == i);
             boolean hover = hoverTabs[i];
             float tx = tabStartX + i * (tabW + tabSpacing);
 
-            if (active) {
-                sr.setColor(0.18f, 0.32f, 0.48f, 1f);
-            } else if (hover) {
-                sr.setColor(0.12f, 0.20f, 0.30f, 1f);
+            if (i == 3) {
+                if (active) {
+                    sr.setColor(0.32f, 0.12f, 0.42f, 1f);
+                } else if (hover) {
+                    sr.setColor(0.22f, 0.08f, 0.30f, 1f);
+                } else {
+                    sr.setColor(0.12f, 0.06f, 0.18f, 0.92f);
+                }
             } else {
-                sr.setColor(0.08f, 0.14f, 0.22f, 0.9f);
+                if (active) {
+                    sr.setColor(0.18f, 0.32f, 0.48f, 1f);
+                } else if (hover) {
+                    sr.setColor(0.12f, 0.20f, 0.30f, 1f);
+                } else {
+                    sr.setColor(0.08f, 0.14f, 0.22f, 0.9f);
+                }
             }
             drawRoundedRect(sr, tx, tabY, tabW, tabH, 8f);
 
             // Tab Border & Active Bottom Indicator
             if (active) {
-                sr.setColor(0.4f, 0.85f, 1f, 1f);
-                drawRectOutline(sr, tx, tabY, tabW, tabH, 2f);
-                sr.setColor(1f, 0.85f, 0.3f, 1f);
-                sr.rect(tx + 20f, tabY - 2f, tabW - 40f, 4f);
+                if (i == 3) {
+                    sr.setColor(0.95f, 0.45f, 0.85f, 1f);
+                    drawRectOutline(sr, tx, tabY, tabW, tabH, 2f);
+                    sr.setColor(1f, 0.65f, 0.15f, 1f);
+                    sr.rect(tx + 20f, tabY - 2f, tabW - 40f, 4f);
+                } else {
+                    sr.setColor(0.4f, 0.85f, 1f, 1f);
+                    drawRectOutline(sr, tx, tabY, tabW, tabH, 2f);
+                    sr.setColor(1f, 0.85f, 0.3f, 1f);
+                    sr.rect(tx + 20f, tabY - 2f, tabW - 40f, 4f);
+                }
             } else {
-                sr.setColor(0.2f, 0.35f, 0.5f, 0.6f);
-                drawRectOutline(sr, tx, tabY, tabW, tabH, 1.2f);
+                if (i == 3) {
+                    sr.setColor(0.65f, 0.25f, 0.70f, 0.7f);
+                    drawRectOutline(sr, tx, tabY, tabW, tabH, 1.2f);
+                } else {
+                    sr.setColor(0.2f, 0.35f, 0.5f, 0.6f);
+                    drawRectOutline(sr, tx, tabY, tabW, tabH, 1.2f);
+                }
             }
         }
-
-        // Currency Display Pill on right of tabs
-        float curW = 225f;
-        float curH = 54f;
-        float curX = W - curW - 25f;
-        float curY = H - 142f;
-        sr.setColor(0.08f, 0.13f, 0.18f, 0.95f);
-        drawRoundedRect(sr, curX, curY, curW, curH, 8f);
-        sr.setColor(0.2f, 0.40f, 0.55f, 0.8f);
-        drawRectOutline(sr, curX, curY, curW, curH, 1.2f);
-
-        // Subtle divider between Gold and Diamond rows
-        sr.setColor(0.2f, 0.35f, 0.5f, 0.35f);
-        sr.rect(curX + 12f, curY + 27f, curW - 24f, 1f);
-
-        // Vector Icons for Gold & Diamond (Generous 24px vertical separation)
-        EquipmentIconRenderer.drawGoldCoinIcon(sr, curX + 18f, curY + 39f, 8.5f);
-        EquipmentIconRenderer.drawDiamondIcon(sr, curX + 18f, curY + 15f, 7.5f);
 
         sr.end();
 
         // Header Texts
         game.batch.begin();
-
-        // Currency Display Text
-        font.setColor(1f, 0.88f, 0.25f, 1f);
-        font.getData().setScale(0.82f);
-        String goldStr = String.format(java.util.Locale.US, "%,d", player.getGold());
-        font.draw(game.batch, goldStr, curX + 36f, curY + 44f);
-
-        font.setColor(0.35f, 0.95f, 1f, 1f);
-        font.getData().setScale(0.82f);
-        String diaStr = String.format(java.util.Locale.US, "%,d", player.getDiamonds());
-        font.draw(game.batch, diaStr, curX + 36f, curY + 20f);
 
         // Back Button Text
         font.setColor(hoverBack ? Color.WHITE : new Color(0.85f, 0.9f, 0.95f, 0.9f));
@@ -640,24 +649,32 @@ public class CatalogScreen implements Screen, InputProcessor {
             font.draw(game.batch, layout, W - 240f + (215f - layout.width) / 2f, H - 33f);
         }
 
-        // Biome Tab Texts
-        String[] tabNames = {"AO LÀNG", "BÃI BIỂN", "ĐẢO XA"};
+        // Biome Tab Texts (4 tabs)
+        String[] tabNames = {"AO LÀNG", "BÃI BIỂN", "ĐẢO XA", "HALLOWEEN"};
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             boolean active = (currentTab == i);
             float tx = tabStartX + i * (tabW + tabSpacing);
 
             int totalColInBiome = cachedTotalColInBiome[i];
             int completedInBiome = cachedCompletedInBiome[i];
 
-            font.setColor(active ? Color.WHITE : new Color(0.7f, 0.8f, 0.9f, 0.85f));
+            if (i == 3) {
+                font.setColor(active ? Color.WHITE : new Color(0.90f, 0.75f, 0.95f, 0.9f));
+            } else {
+                font.setColor(active ? Color.WHITE : new Color(0.7f, 0.8f, 0.9f, 0.85f));
+            }
             font.getData().setScale(0.95f);
             String tabTitle = tabNames[i];
             layout.setText(font, tabTitle);
             font.draw(game.batch, layout, tx + (tabW - layout.width) / 2f, tabY + 34f);
 
             // Sub badge
-            font.setColor(active ? new Color(1f, 0.85f, 0.35f, 1f) : new Color(0.5f, 0.65f, 0.8f, 0.8f));
+            if (i == 3) {
+                font.setColor(active ? new Color(1f, 0.75f, 0.25f, 1f) : new Color(0.85f, 0.55f, 0.9f, 0.85f));
+            } else {
+                font.setColor(active ? new Color(1f, 0.85f, 0.35f, 1f) : new Color(0.5f, 0.65f, 0.8f, 0.8f));
+            }
             font.getData().setScale(0.75f);
             String badge = completedInBiome + "/" + totalColInBiome + " Bộ Hoàn Tất";
             layout.setText(font, badge);
@@ -704,20 +721,94 @@ public class CatalogScreen implements Screen, InputProcessor {
     }
 
     private void drawSilhouetteFish(ShapeRenderer sr, float cx, float cy, float maxW) {
-        float bodyW = maxW * 0.45f;
-        float bodyH = bodyW * 0.55f;
+        float s = maxW * 0.55f; // scale reference
+        float pulse = 0.8f + 0.2f * MathUtils.sin(animTime * 3f);
 
-        sr.setColor(0.12f, 0.16f, 0.22f, 0.6f);
-        // Tail
-        sr.triangle(cx - bodyW * 0.6f, cy,
-                    cx - bodyW * 1.15f, cy + bodyH * 0.65f,
-                    cx - bodyW * 1.15f, cy - bodyH * 0.65f);
-        // Dorsal
-        sr.triangle(cx - bodyW * 0.1f, cy + bodyH * 0.4f,
-                    cx + bodyW * 0.2f, cy + bodyH * 0.4f,
-                    cx + bodyW * 0.05f, cy + bodyH * 0.95f);
-        // Body
-        sr.ellipse(cx - bodyW / 2f, cy - bodyH / 2f, bodyW, bodyH);
+        // 1. Mysterious Abyssal Aura Glow
+        if (currentTab == 3) {
+            sr.setColor(0.55f, 0.15f, 0.70f, 0.14f * pulse);
+        } else {
+            sr.setColor(0.15f, 0.45f, 0.85f, 0.12f * pulse);
+        }
+        sr.ellipse(cx - s * 0.85f, cy - s * 0.55f, s * 1.7f, s * 1.1f);
+        if (currentTab == 3) {
+            sr.setColor(0.80f, 0.25f, 0.40f, 0.09f * pulse);
+        } else {
+            sr.setColor(0.20f, 0.75f, 1.0f, 0.09f * pulse);
+        }
+        sr.ellipse(cx - s * 0.65f, cy - s * 0.40f, s * 1.3f, s * 0.8f);
+
+        // Dark silhouette base colors
+        Color shadowCol = (currentTab == 3)
+            ? new Color(0.15f, 0.09f, 0.20f, 0.92f)
+            : new Color(0.09f, 0.14f, 0.22f, 0.92f);
+        Color shadowDark = (currentTab == 3)
+            ? new Color(0.08f, 0.05f, 0.12f, 0.96f)
+            : new Color(0.05f, 0.08f, 0.14f, 0.96f);
+        Color edgeCol = (currentTab == 3)
+            ? new Color(0.75f, 0.35f, 0.85f, 0.35f * pulse)
+            : new Color(0.30f, 0.65f, 0.90f, 0.30f * pulse);
+
+        // 2. Twin Crescent Sickle Tail (Đuôi lưỡi liềm uy dũng)
+        sr.setColor(shadowCol);
+        // Upper tail fin blade
+        sr.triangle(cx - s * 0.45f, cy,
+                    cx - s * 1.05f, cy + s * 0.55f,
+                    cx - s * 0.70f, cy + s * 0.15f);
+        // Lower tail fin blade
+        sr.triangle(cx - s * 0.45f, cy,
+                    cx - s * 1.05f, cy - s * 0.55f,
+                    cx - s * 0.70f, cy - s * 0.15f);
+        // Tail bridge
+        sr.triangle(cx - s * 0.25f, cy,
+                    cx - s * 0.65f, cy + s * 0.22f,
+                    cx - s * 0.65f, cy - s * 0.22f);
+
+        // 3. Triple Jagged Dorsal Spikes (3 gai vây lưng săn mồi sắc lẹm)
+        sr.triangle(cx - s * 0.25f, cy + s * 0.18f,
+                    cx - s * 0.10f, cy + s * 0.18f,
+                    cx - s * 0.18f, cy + s * 0.55f);
+        sr.triangle(cx - s * 0.05f, cy + s * 0.20f,
+                    cx + s * 0.15f, cy + s * 0.18f,
+                    cx + s * 0.05f, cy + s * 0.70f);
+        sr.triangle(cx + s * 0.18f, cy + s * 0.15f,
+                    cx + s * 0.35f, cy + s * 0.10f,
+                    cx + s * 0.26f, cy + s * 0.48f);
+
+        // 4. Sharp Pectoral & Pelvic Blade Fins (Vây ngực & vây bụng vát nhọn)
+        sr.triangle(cx - s * 0.05f, cy - s * 0.15f,
+                    cx + s * 0.15f, cy - s * 0.10f,
+                    cx + s * 0.05f, cy - s * 0.55f);
+        sr.triangle(cx - s * 0.30f, cy - s * 0.12f,
+                    cx - s * 0.15f, cy - s * 0.10f,
+                    cx - s * 0.25f, cy - s * 0.42f);
+
+        // 5. Sleek Sinuous Body (Thân thoi săn mồi khí thế)
+        sr.setColor(shadowCol);
+        sr.ellipse(cx - s * 0.50f, cy - s * 0.28f, s * 1.05f, s * 0.56f);
+        // Snout taper (Mõm cá vát nhọn)
+        sr.triangle(cx + s * 0.25f, cy + s * 0.18f,
+                    cx + s * 0.25f, cy - s * 0.18f,
+                    cx + s * 0.72f, cy - s * 0.02f);
+
+        // 6. Underbelly shadow layer
+        sr.setColor(shadowDark);
+        sr.ellipse(cx - s * 0.42f, cy - s * 0.25f, s * 0.88f, s * 0.32f);
+
+        // 7. Bioluminescent Lateral Line & Spine Contour (Viền sáng lượn sóng dọc thân)
+        sr.setColor(edgeCol);
+        sr.rectLine(cx - s * 0.35f, cy, cx + s * 0.35f, cy + s * 0.05f, 1.5f);
+        sr.rectLine(cx + s * 0.35f, cy + s * 0.05f, cx + s * 0.55f, cy, 1.2f);
+
+        // 8. Glowing Eerie Eye Slit (Mắt dạ quang ẩn danh phát sáng)
+        if (currentTab == 3) {
+            sr.setColor(1.0f, 0.40f, 0.20f, 0.85f * pulse);
+        } else {
+            sr.setColor(0.35f, 0.90f, 1.0f, 0.80f * pulse);
+        }
+        sr.circle(cx + s * 0.42f, cy + s * 0.07f, s * 0.065f);
+        sr.setColor(1f, 1f, 1f, 0.90f);
+        sr.circle(cx + s * 0.43f, cy + s * 0.075f, s * 0.028f);
     }
 
     private void drawFishTooltip() {
@@ -943,12 +1034,12 @@ public class CatalogScreen implements Screen, InputProcessor {
         // Biome tab hovers
         float tabW = 220f;
         float tabH = 46f;
-        float tabSpacing = 25f;
-        float totalTabW = 3 * tabW + 2 * tabSpacing;
+        float tabSpacing = 20f;
+        float totalTabW = 4 * tabW + 3 * tabSpacing;
         float tabStartX = (W - totalTabW) / 2f;
         float tabY = H - 138f;
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             float tx = tabStartX + i * (tabW + tabSpacing);
             hoverTabs[i] = (m.x >= tx && m.x <= tx + tabW && m.y >= tabY && m.y <= tabY + tabH);
             if (hoverTabs[i] && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
@@ -1168,4 +1259,455 @@ public class CatalogScreen implements Screen, InputProcessor {
         if (scrollY > maxScrollY && maxScrollY > 0) scrollY = maxScrollY;
         return true;
     }
+
+    // =========================================================================
+    // DEDICATED HALLOWEEN CATALOG BACKGROUND & ALTAR SHOWCASE (HLW-04)
+    // =========================================================================
+
+    private void drawHalloweenBackground() {
+        sr.begin(ShapeRenderer.ShapeType.Filled);
+        float pulse = 0.85f + 0.15f * MathUtils.sin(animTime * 3f);
+
+        // 1. Distant Blood Moon Eclipse (Mat Trang Huyet Nguyet)
+        float moonX = W * 0.76f;
+        float moonY = H * 0.54f;
+
+        // Outer crimson/violet corona halos
+        sr.setColor(0.40f, 0.04f, 0.18f, 0.15f * pulse);
+        sr.circle(moonX, moonY, 140f);
+        sr.setColor(0.70f, 0.08f, 0.20f, 0.20f * pulse);
+        sr.circle(moonX, moonY, 100f);
+        sr.setColor(0.95f, 0.15f, 0.22f, 0.28f * pulse);
+        sr.circle(moonX, moonY, 78f);
+
+        // Moon sphere body
+        sr.setColor(0.78f, 0.08f, 0.12f, 0.90f);
+        sr.circle(moonX, moonY, 58f);
+
+        // Lunar dark craters
+        sr.setColor(0.52f, 0.04f, 0.08f, 0.90f);
+        sr.circle(moonX - 18f, moonY + 12f, 12f);
+        sr.circle(moonX + 16f, moonY - 14f, 15f);
+        sr.circle(moonX + 8f, moonY + 22f, 9f);
+        sr.circle(moonX - 12f, moonY - 18f, 14f);
+
+        // Eclipse shadow crescent rim
+        sr.setColor(0.06f, 0.02f, 0.08f, 0.72f);
+        sr.circle(moonX - 16f, moonY + 10f, 54f);
+
+        // 2. Rolling Haunted Fog Waves at Bottom
+        sr.setColor(0.14f, 0.05f, 0.20f, 0.35f);
+        sr.ellipse(W * 0.25f, -20f, W * 0.8f, 120f);
+        sr.ellipse(W * 0.75f, -30f, W * 0.8f, 130f);
+        sr.setColor(0.22f, 0.08f, 0.28f, 0.28f);
+        sr.ellipse(W * 0.5f, -40f, W * 0.9f, 90f);
+
+        // 3. Spooky Halloween Ember Sparks & Soul Wisps
+        for (int i = 0; i < particleX.length; i++) {
+            float pSin = MathUtils.sin(animTime * 2.5f + i);
+            if (i % 2 == 0) {
+                // Burning Pumpkin Ember Spark
+                sr.setColor(1.0f, 0.55f, 0.08f, 0.35f + 0.20f * pSin);
+                sr.circle(particleX[i], particleY[i], particleSize[i] * 1.2f);
+                sr.setColor(1.0f, 0.95f, 0.5f, 0.75f);
+                sr.circle(particleX[i], particleY[i], particleSize[i] * 0.45f);
+            } else {
+                // Spectral Violet Ghost Wisp
+                sr.setColor(0.68f, 0.25f, 0.95f, 0.30f + 0.18f * pSin);
+                sr.circle(particleX[i], particleY[i], particleSize[i] * 1.4f);
+                sr.setColor(0.35f, 0.90f, 1.0f, 0.70f);
+                sr.circle(particleX[i], particleY[i], particleSize[i] * 0.45f);
+            }
+        }
+        sr.end();
+    }
+
+    private void drawHalloweenCollectionLayout() {
+        if (visibleCollections.isEmpty()) return;
+        CollectionDatabase.Collection c = visibleCollections.get(0);
+
+        int caughtCount = 0;
+        for (String fName : c.fishNames) {
+            if (!SizeRecord.isFirstCatch(fName)) caughtCount++;
+        }
+        boolean completed = (caughtCount == c.fishNames.size());
+        boolean claimed = player.getClaimedCollections().contains(c.id);
+
+        float cardW = 1160f;
+        float cardH = 465f;
+        float cardX = (W - cardW) / 2f; // 60f
+        // Keo thap khung xuong cardY = 510f de nam tron ven trong ScissorStack clipBounds [20f, 550f]
+        float cardY = H - 210f;         // 510f (bottom is at 45f)
+
+        float pulse = 0.85f + 0.15f * MathUtils.sin(animTime * 4f);
+
+        sr.begin(ShapeRenderer.ShapeType.Filled);
+
+        // 1. Outer Grand Card Backdrop
+        sr.setColor(0.08f, 0.05f, 0.13f, 0.96f);
+        drawRoundedRect(sr, cardX, cardY - cardH, cardW, cardH, 12f);
+
+        // 2. Grand Gothic Border (Top border hoan toan khong bi che)
+        if (completed && !claimed) {
+            sr.setColor(1.0f, 0.80f, 0.20f, pulse);
+            drawRectOutline(sr, cardX, cardY - cardH, cardW, cardH, 2.5f);
+        } else if (claimed) {
+            sr.setColor(0.25f, 0.85f, 0.50f, 0.90f);
+            drawRectOutline(sr, cardX, cardY - cardH, cardW, cardH, 1.8f);
+        } else {
+            sr.setColor(0.85f, 0.45f, 0.95f, 0.75f);
+            drawRectOutline(sr, cardX, cardY - cardH, cardW, cardH, 1.6f);
+        }
+
+        // 3. Top Header Glass Bar
+        float headerH = 64f;
+        sr.setColor(0.04f, 0.02f, 0.07f, 0.88f);
+        sr.rect(cardX + 2f, cardY - headerH, cardW - 4f, headerH - 2f);
+        sr.setColor(0.85f, 0.45f, 0.95f, 0.40f);
+        sr.rect(cardX + 2f, cardY - headerH, cardW - 4f, 2f);
+
+        // 4. Progress Bar (Phong to len 300px x 14px, dat can doi o trung tam header ben duoi text)
+        float pbW = 320f;
+        float pbH = 14f;
+        float pbX = cardX + (cardW - pbW) / 2f;
+        float pbY = cardY - 48f;
+
+        sr.setColor(0.18f, 0.10f, 0.26f, 1f);
+        drawRoundedRect(sr, pbX, pbY, pbW, pbH, 4f);
+
+        float fillRatio = (float) caughtCount / (float) c.fishNames.size();
+        if (completed) {
+            sr.setColor(0.30f, 0.95f, 0.45f, 1f);
+        } else {
+            sr.setColor(1.0f, 0.55f, 0.15f, 1f);
+        }
+        if (fillRatio > 0.02f) {
+            drawRoundedRect(sr, pbX, pbY, Math.max(8f, pbW * fillRatio), pbH, 4f);
+        }
+        sr.setColor(0.85f, 0.45f, 0.95f, 0.8f);
+        drawRectOutline(sr, pbX, pbY, pbW, pbH, 1.2f);
+
+        // 5. Header Claim Button (if completed & unclaimed)
+        float claimBtnX = cardX + cardW - 240f;
+        float claimBtnY = cardY - 52f;
+        float claimBtnW = 225f;
+        float claimBtnH = 40f;
+        if (completed && !claimed) {
+            boolean isHover = c.id.equals(hoveredClaimCollectionId);
+            sr.setColor(isHover ? new Color(1f, 0.88f, 0.35f, 1f) : new Color(0.95f, 0.65f, 0.15f, 1f));
+            drawRoundedRect(sr, claimBtnX, claimBtnY, claimBtnW, claimBtnH, 6f);
+        }
+
+        // =====================================================================
+        // ROW 1: 4 Foundational & Rare Fish (Slots 0..3)
+        // =====================================================================
+        float r1SlotW = 268f;
+        float r1SlotH = 170f;
+        float r1Y = cardY - 240f;
+
+        for (int j = 0; j < 4 && j < c.fishNames.size(); j++) {
+            String fishName = c.fishNames.get(j);
+            Fish ft = FishDatabase.getFishByName(fishName);
+            boolean isCaught = !SizeRecord.isFirstCatch(fishName);
+            float fx = cardX + 16f + j * (r1SlotW + 16f);
+
+            drawHalloweenFishSlot(sr, fx, r1Y, r1SlotW, r1SlotH, fishName, ft, isCaught, j, pulse);
+        }
+
+        // =====================================================================
+        // ROW 2: 3 Elite, Legendary & World Boss Fish (Slots 4..6)
+        // =====================================================================
+        float r2SlotW = 360f;
+        float r2SlotH = 195f;
+        float r2Y = cardY - 450f;
+
+        for (int j = 4; j < 7 && j < c.fishNames.size(); j++) {
+            int k = j - 4;
+            String fishName = c.fishNames.get(j);
+            Fish ft = FishDatabase.getFishByName(fishName);
+            boolean isCaught = !SizeRecord.isFirstCatch(fishName);
+            float fx = cardX + 16f + k * (r2SlotW + 20f);
+
+            drawHalloweenFishSlot(sr, fx, r2Y, r2SlotW, r2SlotH, fishName, ft, isCaught, j, pulse);
+        }
+
+        sr.end();
+
+        // =====================================================================
+        // BATCH PASS FOR TEXTS & LABELS
+        // =====================================================================
+        game.batch.begin();
+
+        // Left Header: Title & Subtitle
+        font.setColor(1.0f, 0.85f, 0.30f, 1f);
+        font.getData().setScale(0.98f);
+        font.draw(game.batch, "✦ HUYỀN THOẠI ĐÊM HALLOWEEN ✦", cardX + 20f, cardY - 16f);
+
+        font.setColor(0.75f, 0.65f, 0.88f, 0.90f);
+        font.getData().setScale(0.70f);
+        font.draw(game.batch, "7 Loài Thủy Tộc Ma Quái Toàn Cầu", cardX + 22f, cardY - 40f);
+
+        // Center Header: Progress Text (Bo chu "Da Bat", khong de len thanh progress bar)
+        font.setColor(0.40f, 0.92f, 1.0f, 1f);
+        font.getData().setScale(0.85f);
+        String progStr = caughtCount + "/7 Loài";
+        layout.setText(font, progStr);
+        font.draw(game.batch, layout, pbX + (pbW - layout.width) / 2f, cardY - 18f);
+
+        // Right Header: Rewards / Claim Button Text (Hoan toan khong dung ki tu • gay loi vuong)
+        if (claimed) {
+            font.setColor(0.35f, 0.95f, 0.50f, 1f);
+            font.getData().setScale(0.88f);
+            layout.setText(font, "✓ ĐÃ HOÀN TẤT BỘ SƯU TẬP");
+            font.draw(game.batch, layout, cardX + cardW - 20f - layout.width, cardY - 26f);
+        } else if (completed) {
+            font.setColor(0.10f, 0.10f, 0.15f, 1f);
+            font.getData().setScale(0.88f);
+            layout.setText(font, "NHẬN THƯỞNG");
+            font.draw(game.batch, layout, claimBtnX + (claimBtnW - layout.width) / 2f, claimBtnY + 26f);
+
+            font.setColor(0.20f, 0.85f, 1.0f, 1f);
+            font.getData().setScale(0.75f);
+            String rewStr = "+" + c.rewardDiamonds + " KC   -   +" + c.rewardGold + "V   -   +" + c.rewardXp + "XP";
+            layout.setText(font, rewStr);
+            font.draw(game.batch, layout, claimBtnX + (claimBtnW - layout.width) / 2f, claimBtnY - 6f);
+        } else {
+            font.setColor(1.0f, 0.75f, 0.25f, 1f);
+            font.getData().setScale(0.80f);
+            String rewHeader = "Phần Thưởng Hoàn Thành:";
+            layout.setText(font, rewHeader);
+            font.draw(game.batch, layout, cardX + cardW - 20f - layout.width, cardY - 16f);
+
+            font.setColor(0.35f, 0.95f, 1.0f, 0.95f);
+            font.getData().setScale(0.78f);
+            String rewStr = "+" + c.rewardDiamonds + " KC     +" + String.format(java.util.Locale.US, "%,d", c.rewardGold) + " Vàng     +" + String.format(java.util.Locale.US, "%,d", c.rewardXp) + " XP";
+            layout.setText(font, rewStr);
+            font.draw(game.batch, layout, cardX + cardW - 20f - layout.width, cardY - 40f);
+        }
+
+        // Fish Slot Texts (Row 1)
+        for (int j = 0; j < 4 && j < c.fishNames.size(); j++) {
+            String fishName = c.fishNames.get(j);
+            Fish ft = FishDatabase.getFishByName(fishName);
+            boolean isCaught = !SizeRecord.isFirstCatch(fishName);
+            float fx = cardX + 16f + j * (r1SlotW + 16f);
+
+            drawHalloweenFishSlotText(fx, r1Y, r1SlotW, r1SlotH, fishName, ft, isCaught, j);
+        }
+
+        // Fish Slot Texts (Row 2)
+        for (int j = 4; j < 7 && j < c.fishNames.size(); j++) {
+            int k = j - 4;
+            String fishName = c.fishNames.get(j);
+            Fish ft = FishDatabase.getFishByName(fishName);
+            boolean isCaught = !SizeRecord.isFirstCatch(fishName);
+            float fx = cardX + 16f + k * (r2SlotW + 20f);
+
+            drawHalloweenFishSlotText(fx, r2Y, r2SlotW, r2SlotH, fishName, ft, isCaught, j);
+        }
+
+        font.getData().setScale(1f);
+        game.batch.end();
+    }
+
+    private void drawHalloweenFishSlot(ShapeRenderer sr, float fx, float fy, float fw, float fh, String fishName, Fish ft, boolean isCaught, int slotIdx, float pulse) {
+        if (isCaught && ft != null) {
+            Color rarityCol = ft.getRarityColor();
+
+            // Card background styling based on fish rank
+            if (slotIdx == 6) { // Boss Thanatos
+                sr.setColor(0.15f, 0.05f, 0.12f, 0.98f);
+            } else if (slotIdx == 5) { // Legendary Hai Xa
+                sr.setColor(0.12f, 0.07f, 0.18f, 0.96f);
+            } else {
+                sr.setColor(0.10f, 0.07f, 0.15f, 0.95f);
+            }
+            drawRoundedRect(sr, fx, fy, fw, fh, 8f);
+
+            // Rarity Header Pill Bar
+            sr.setColor(rarityCol.r, rarityCol.g, rarityCol.b, (slotIdx >= 5) ? 0.35f : 0.25f);
+            sr.rect(fx, fy + fh - 24f, fw, 24f);
+
+            // Card Border Outline
+            if (slotIdx == 6) {
+                // Triple pulsing crimson/violet border for Thanatos
+                sr.setColor(1.0f, 0.12f, 0.20f, pulse);
+                drawRectOutline(sr, fx, fy, fw, fh, 2.2f);
+            } else if (slotIdx == 5) {
+                // Purple-neon border for Legendary
+                sr.setColor(0.85f, 0.35f, 1.0f, pulse);
+                drawRectOutline(sr, fx, fy, fw, fh, 2.0f);
+            } else {
+                sr.setColor(rarityCol.r, rarityCol.g, rarityCol.b, 0.75f);
+                drawRectOutline(sr, fx, fy, fw, fh, 1.5f);
+            }
+
+            // Glowing soul pedestal
+            sr.setColor(rarityCol.r, rarityCol.g, rarityCol.b, 0.18f * pulse);
+            float pedY = (fh > 180f) ? (fy + 95f) : (fy + 82f);
+            sr.ellipse(fx + fw / 2f, pedY, fw * 0.42f, 20f);
+
+            // Vector Fish Illustration
+            float fishScale = (slotIdx == 6) ? 0.65f : ((slotIdx == 5) ? 0.60f : 0.54f);
+            float fishDrawY = (fh > 180f) ? (fy + 115f) : (fy + 100f);
+            FishVisualRenderer.drawFish(sr, fishName, fx + fw / 2f, fishDrawY, fishScale, animTime + slotIdx, rarityCol);
+
+            // Unclaimed Discovery Diamond Badge
+            boolean isFishClaimed = player.isFishCatalogClaimed(fishName);
+            if (!isFishClaimed) {
+                boolean isHover = fishName.equals(hoveredClaimFishName);
+                float btnW = Math.min(160f, fw - 40f);
+                float btnH = 24f;
+                float btnX = fx + (fw - btnW) / 2f;
+                float btnY = fy + 8f;
+                sr.setColor(isHover ? new Color(0.95f, 0.85f, 0.25f, 1f) : new Color(0.10f, 0.45f, 0.55f * pulse, 0.95f));
+                drawRoundedRect(sr, btnX, btnY, btnW, btnH, 5f);
+                sr.setColor(0.35f, 0.95f, 1f, isHover ? 1f : pulse);
+                drawRectOutline(sr, btnX, btnY, btnW, btnH, 1.3f);
+            }
+
+        } else {
+            // Mystery Locked Fish Slot
+            sr.setColor(0.06f, 0.04f, 0.09f, 0.95f);
+            drawRoundedRect(sr, fx, fy, fw, fh, 8f);
+
+            sr.setColor(0.28f, 0.18f, 0.38f, 0.60f);
+            drawRectOutline(sr, fx, fy, fw, fh, 1.2f);
+
+            float fishDrawY = (fh > 180f) ? (fy + 110f) : (fy + 95f);
+            drawSilhouetteFish(sr, fx + fw / 2f, fishDrawY, (fh > 180f ? 75f : 62f));
+        }
+    }
+
+    private void drawHalloweenFishSlotText(float fx, float fy, float fw, float fh, String fishName, Fish ft, boolean isCaught, int slotIdx) {
+        if (isCaught && ft != null) {
+            Color rarityCol = ft.getRarityColor();
+
+            // Rarity Title Tag
+            font.setColor(rarityCol);
+            font.getData().setScale(0.72f);
+            String rankTag = "[" + ft.getRarity().name() + "]";
+            layout.setText(font, rankTag);
+            font.draw(game.batch, layout, fx + (fw - layout.width) / 2f, fy + fh - 7f);
+
+            // Fish Name (Dynamic scaling to prevent overflow)
+            font.setColor(Color.WHITE);
+            font.getData().setScale(0.82f);
+            layout.setText(font, fishName);
+            if (layout.width > fw - 16f) {
+                font.getData().setScale(0.82f * ((fw - 16f) / layout.width));
+                layout.setText(font, fishName);
+            }
+            font.draw(game.batch, layout, fx + (fw - layout.width) / 2f, fy + 48f);
+
+            // Status or Diamond Claim Button
+            boolean isFishClaimed = player.isFishCatalogClaimed(fishName);
+            if (!isFishClaimed) {
+                int dRew = getFishDiscoveryDiamonds(ft.getRarity());
+                font.setColor(1.0f, 0.92f, 0.30f, 1f);
+                font.getData().setScale(0.74f);
+                String rewTxt = "+" + dRew + " KC NHẬN";
+                layout.setText(font, rewTxt);
+                font.draw(game.batch, layout, fx + (fw - layout.width) / 2f, fy + 24f);
+            } else {
+                font.setColor(0.35f, 0.95f, 0.55f, 0.90f);
+                font.getData().setScale(0.72f);
+                layout.setText(font, "✓ Đã lưu sổ");
+                font.draw(game.batch, layout, fx + (fw - layout.width) / 2f, fy + 22f);
+            }
+
+        } else {
+            // Locked Fish Labels
+            font.setColor(0.55f, 0.40f, 0.65f, 0.85f);
+            font.getData().setScale(0.95f);
+            layout.setText(font, "???");
+            font.draw(game.batch, layout, fx + (fw - layout.width) / 2f, fy + 55f);
+
+            font.setColor(0.45f, 0.35f, 0.55f, 0.65f);
+            font.getData().setScale(0.72f);
+            layout.setText(font, "Chưa câu được");
+            font.draw(game.batch, layout, fx + (fw - layout.width) / 2f, fy + 30f);
+        }
+    }
+
+    private void updateHalloweenInput(Vector3 m, float delta) {
+        if (visibleCollections.isEmpty()) return;
+        CollectionDatabase.Collection c = visibleCollections.get(0);
+
+        int caughtCount = 0;
+        for (String fName : c.fishNames) {
+            if (!SizeRecord.isFirstCatch(fName)) caughtCount++;
+        }
+        boolean completed = (caughtCount == c.fishNames.size());
+        boolean claimed = player.getClaimedCollections().contains(c.id);
+
+        float cardW = 1160f;
+        float cardX = (W - cardW) / 2f;
+        float cardY = H - 210f; // 510f
+
+        // 1. Check Collection Claim Button
+        if (completed && !claimed) {
+            float claimBtnX = cardX + cardW - 240f;
+            float claimBtnY = cardY - 52f;
+            float claimBtnW = 225f;
+            float claimBtnH = 40f;
+            if (m.x >= claimBtnX && m.x <= claimBtnX + claimBtnW && m.y >= claimBtnY && m.y <= claimBtnY + claimBtnH) {
+                hoveredClaimCollectionId = c.id;
+                if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+                    claimSingleCollection(c);
+                    return;
+                }
+            }
+        }
+
+        // 2. Check Row 1 (Slots 0..3)
+        float r1SlotW = 268f;
+        float r1SlotH = 170f;
+        float r1Y = cardY - 240f;
+
+        for (int j = 0; j < 4 && j < c.fishNames.size(); j++) {
+            String fishName = c.fishNames.get(j);
+            boolean isCaught = !SizeRecord.isFirstCatch(fishName);
+            float fx = cardX + 16f + j * (r1SlotW + 16f);
+
+            if (isCaught && m.x >= fx && m.x <= fx + r1SlotW && m.y >= r1Y && m.y <= r1Y + r1SlotH) {
+                hoveredFish = FishDatabase.getFishByName(fishName);
+                hoveredFishName = fishName;
+
+                if (!player.isFishCatalogClaimed(fishName)) {
+                    hoveredClaimFishName = fishName;
+                    if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+                        claimSingleFish(fishName, hoveredFish);
+                        return;
+                    }
+                }
+            }
+        }
+
+        // 3. Check Row 2 (Slots 4..6)
+        float r2SlotW = 360f;
+        float r2SlotH = 195f;
+        float r2Y = cardY - 450f;
+
+        for (int j = 4; j < 7 && j < c.fishNames.size(); j++) {
+            int k = j - 4;
+            String fishName = c.fishNames.get(j);
+            boolean isCaught = !SizeRecord.isFirstCatch(fishName);
+            float fx = cardX + 16f + k * (r2SlotW + 20f);
+
+            if (isCaught && m.x >= fx && m.x <= fx + r2SlotW && m.y >= r2Y && m.y <= r2Y + r2SlotH) {
+                hoveredFish = FishDatabase.getFishByName(fishName);
+                hoveredFishName = fishName;
+
+                if (!player.isFishCatalogClaimed(fishName)) {
+                    hoveredClaimFishName = fishName;
+                    if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+                        claimSingleFish(fishName, hoveredFish);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
 }

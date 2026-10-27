@@ -30,19 +30,21 @@ def get_equipment_sets():
         {"setName": "Hoàng Gia", "rodName": "Cần Câu Bạch Kim", "lineName": "Tơ Tằm Thượng Hạng", "hookName": "Móc Cẩm Thạch", "points": 6},
         {"setName": "Thời Không", "rodName": "Trượng Thời Gian", "lineName": "Sợi Dây Xuyên Thấu", "hookName": "Lưỡi Câu Hư Không", "points": 6},
         {"setName": "Quang Minh", "rodName": "Trượng Ánh Sáng", "lineName": "Dây Chỉ Vàng", "hookName": "Lưỡi Câu Thần", "points": 7},
-        {"setName": "Vệ Quốc Vang Danh", "rodName": "Cần Câu Khởi Nghĩa", "lineName": "Cước Vệ Quốc", "hookName": "Lưỡi Sao Vàng", "points": 5},
-        {"setName": "Thần Khí Lạc Hồng", "rodName": "Trượng Lạc Hồng", "lineName": "Dây Rồng Thiêng", "hookName": "Móc Âu Cơ", "points": 15}
+        {"setName": "Vệ Quốc Vang Danh", "rodName": "Cần Câu Khởi Nghĩa", "lineName": "Cước Vệ Quốc", "hookName": "Lưỡi Sao Vàng", "points": 4},
+        {"setName": "Thần Khí Lạc Hồng", "rodName": "Trượng Lạc Hồng", "lineName": "Dây Rồng Thiêng", "hookName": "Móc Âu Cơ", "points": 8},
+        {"setName": "Dạ Hội Bí Ngô", "rodName": "Cần Dạ Hội Bí Ngô", "lineName": "Dây Cước Tơ Nhện Quỷ", "hookName": "Lưỡi Kẹo Ma Quái", "points": 4},
+        {"setName": "Huyết Nguyệt Thần Vương", "rodName": "Huyết Nguyệt Thần Trượng", "lineName": "Dây Huyết Ma Cơ", "hookName": "Lưỡi Huyết Nguyệt Ma Trảo", "points": 8}
     ]
     return sets
 
 RARITY_POINTS = {
     "COMMON": 0,
     "UNCOMMON": 2,
-    "RARE": 5,
-    "EPIC": 9,
-    "LEGENDARY": 15,
-    "LIMITED_EVENT": 5,
-    "LIMITED_PREMIUM": 15
+    "RARE": 4,
+    "EPIC": 7,
+    "LEGENDARY": 10,
+    "LIMITED_EVENT": 4,
+    "LIMITED_PREMIUM": 10
 }
 
 def calculate_equipment_stats(set_name, rarity="COMMON"):
@@ -52,6 +54,14 @@ def calculate_equipment_stats(set_name, rarity="COMMON"):
     """
     eq_sets = get_equipment_sets()
     matched = next((s for s in eq_sets if s["setName"].lower() == set_name.lower()), eq_sets[0])
+    
+    # Auto-adjust rarity for limited supreme sets if default COMMON was passed
+    if rarity in ("COMMON", None, ""):
+        if matched["setName"] in ("Thần Khí Lạc Hồng", "Huyết Nguyệt Thần Vương"):
+            rarity = "LIMITED_PREMIUM"
+        elif matched["setName"] in ("Dạ Hội Bí Ngô", "Vệ Quốc Vang Danh"):
+            rarity = "LIMITED_EVENT"
+
     set_points = matched["points"]
     r_points = RARITY_POINTS.get(rarity.upper(), 0)
     mult = set_points + r_points
@@ -62,18 +72,18 @@ def calculate_equipment_stats(set_name, rarity="COMMON"):
         "mult": mult,
         "rod": {
             "name": matched["rodName"],
-            "base_pull_damage": 10.0 + mult * 2.0,
-            "max_stamina": 50.0 + mult * 15.0
+            "base_pull_damage": 10.0 + mult * 1.2,
+            "max_stamina": 50.0 + mult * 8.0
         },
         "line": {
             "name": matched["lineName"],
-            "max_tension": 100.0 + mult * 25.0,
-            "khang_dut": 2.0 + mult * 0.4
+            "max_tension": 100.0 + mult * 15.0,
+            "khang_dut": 2.0 + mult * 0.22
         },
         "hook": {
             "name": matched["hookName"],
-            "bite_rarity_pct": 5.0 + mult * 1.0,
-            "bait_retention_pct": 10.0 + mult * 2.0
+            "bite_rarity_pct": 5.0 + mult * 0.6,
+            "bait_retention_pct": 10.0 + mult * 1.2
         }
     }
 

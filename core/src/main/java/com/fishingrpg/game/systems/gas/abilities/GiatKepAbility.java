@@ -13,7 +13,11 @@ public class GiatKepAbility extends GameplayAbility {
 
     @Override
     public float getStaminaCost(AbilityContext ctx) {
-        return 40f;
+        float cost = 40f;
+        if (ctx != null && ctx.currentFish != null && ctx.currentFish.getPassiveSkill("uy_ap_tu_than") != null) {
+            cost *= 1.20f;
+        }
+        return cost;
     }
 
     @Override
@@ -24,28 +28,26 @@ public class GiatKepAbility extends GameplayAbility {
     @Override
     public boolean execute(AbilityContext ctx) {
         float cost = getStaminaCost(ctx);
-        if (!ctx.player.consumeStamina(cost)) {
-            if (ctx.ftm != null) ctx.ftm.addText("Không đủ Thể lực (-40)!", 640f, 380f, new Color(1f, 0.45f, 0.4f, 1f));
+        if (!consumeStaminaOrFreeCharge(ctx)) {
             return false;
         }
 
-        float dmg = ctx.player.getSkillTree().getKeoManhDamage() * ctx.player.getSkillTree().getGiatKepDamageMult();
-        float dmgMult = ctx.fishingManager.getAbilitySystem().getDamageMultiplier();
-        float fishDef = 1f;
+        float rawDmg = ctx.player.getSkillTree().getKeoManhDamage() * ctx.player.getSkillTree().getGiatKepDamageMult();
+        float finalDmg = calculateSkillDamage(rawDmg, ctx);
         if (ctx.currentFish != null) {
-            if (ctx.currentFish.getPassiveSkill("vo_cung") != null) fishDef -= 0.3f;
-            if (ctx.currentFish.getPassiveSkill("vay_cung") != null) fishDef -= 0.5f;
-            float finalDmg = dmg * dmgMult * Math.max(0.2f, fishDef);
-            ctx.currentFish.takeDamage(finalDmg);
-
-            if (ctx.ftm != null) {
-                ctx.ftm.addText("GIẬT KÉP! -" + (int) finalDmg, 640f + MathUtils.random(-50, 50),
-                        360f + MathUtils.random(-50, 50), Color.RED);
+            if (ctx.fishingManager != null && ctx.fishingManager.fishPhantomInvulnTimer > 0f) {
+                if (ctx.ftm != null) ctx.ftm.addText("HƯ VÔ! (MIỄN NHIỄM)", 640f, 360f, Color.PURPLE);
+            } else {
+                ctx.currentFish.takeDamage(finalDmg);
+                if (ctx.ftm != null) {
+                    ctx.ftm.addText("GIẬT KÉP! -" + (int) finalDmg, 640f + MathUtils.random(-50, 50),
+                            360f + MathUtils.random(-50, 50), Color.RED);
+                }
             }
         }
 
         ctx.player.increaseTension(30f);
-        ctx.fishingManager.combatMessage = "GIẬT KÉP! Đòn tấn công liên hoàn vũ bão! (-40 Thể lực)";
+        ctx.fishingManager.combatMessage = "GIẬT KÉP! Đòn tấn công liên hoàn vũ bão! (-" + (int) cost + " Thể lực)";
         ctx.audio.playSFX("sfx_skill");
         ctx.vfx.triggerPlayerSkillVFX("giat_kep", 640f, 360f);
         if (ctx.screenShake != null) ctx.screenShake.shakeHeavy();

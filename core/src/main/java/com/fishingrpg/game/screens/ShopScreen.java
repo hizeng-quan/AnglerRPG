@@ -46,7 +46,15 @@ public class ShopScreen implements Screen {
 
     // Filter categories: 0: ALL, 1: BAIT & RESTORE, 2: SKILL BOOKS, 3: SPECIAL GEAR
     private int currentCategory = 0;
-    private final String[] CATEGORY_NAMES = {"TẤT CẢ", "MỒI & HỒI PHỤC", "BÍ KÍP KỸ NĂNG", "ĐẠO CỤ ĐẶC BIỆT"};
+    private final String[] CATEGORY_NAMES = {"TẤT CẢ", "MỒI & HỒI PHỤC", "BÍ KÍP KỸ NĂNG", "ĐẠO CỤ ĐẶC BIỆT", "HALLOWEEN"};
+
+    public static boolean isHalloweenItem(String name) {
+        if (name == null) return false;
+        return name.equals("Kẹo Trick-or-Treat") || name.equals("Đèn Lồng Bí Ngô") ||
+               name.equals("Độc Dược Ma Quái") || name.equals("Nước Phù Thủy Ma Quái") ||
+               name.equals("Bùa Huyết Nguyệt") || name.equals("Nến Hồn Ma Bảo Hộ") ||
+               name.equals("Rương Ma Quái");
+    }
 
     private int scrollOffset = 0;
     private int maxVisibleRows = 4;
@@ -138,7 +146,11 @@ public class ShopScreen implements Screen {
                     filteredItems.add(item);
                 }
             } else if (currentCategory == 3) {
-                if (!item.name.contains("Mồi") && !item.name.contains("Nước") && !item.name.contains("Bánh") && !item.name.contains("Trà") && !item.name.contains("Thuốc") && !item.name.contains("Bình Xịt") && !item.name.startsWith("Sách: ") && !item.name.contains("Sách")) {
+                if (!item.name.contains("Mồi") && !item.name.contains("Nước") && !item.name.contains("Bánh") && !item.name.contains("Trà") && !item.name.contains("Thuốc") && !item.name.contains("Bình Xịt") && !item.name.startsWith("Sách: ") && !item.name.contains("Sách") && !isHalloweenItem(item.name)) {
+                    filteredItems.add(item);
+                }
+            } else if (currentCategory == 4) {
+                if (isHalloweenItem(item.name)) {
                     filteredItems.add(item);
                 }
             }
@@ -260,10 +272,10 @@ public class ShopScreen implements Screen {
         float dcy = diaDockY + diaDockH / 2f;
         EquipmentIconRenderer.drawDiamondIcon(sr, dcx, dcy, 9f);
 
-        // Category Filter Tabs
-        float tabW = 260f;
+        // Category Filter Tabs (5 tabs căn đối xứng màn hình)
+        float tabW = 210f;
         float tabH = 36f;
-        float tabStartX = (W - (4 * tabW + 3 * 15f)) / 2f;
+        float tabStartX = (W - (5 * tabW + 4 * 15f)) / 2f;
         float tabY = H - 122f;
 
         for (int c = 0; c < CATEGORY_NAMES.length; c++) {
@@ -309,6 +321,7 @@ public class ShopScreen implements Screen {
                 isSoldOut = true;
             }
 
+            boolean isHlwLocked = isHalloweenItem(item.name) && !com.fishingrpg.game.systems.EventManager.isHalloweenActive();
             boolean hoverCard = (m.x >= x && m.x <= x + itemW && m.y >= y && m.y <= y + itemH);
             if (hoverCard) {
                 hoveredItem = item;
@@ -325,8 +338,16 @@ public class ShopScreen implements Screen {
             // Card Base
             sr.setColor(isSoldOut ? new Color(0.12f, 0.10f, 0.08f, 0.85f) : (hoverCard ? new Color(0.24f, 0.16f, 0.11f, 0.95f) : new Color(0.18f, 0.12f, 0.08f, 0.92f)));
             drawRoundedRect(sr, x, y, itemW, itemH, 10);
-            sr.setColor(isSoldOut ? new Color(0.25f, 0.22f, 0.20f, 0.6f) : (hoverCard ? new Color(0.95f, 0.75f, 0.35f, 0.9f) : new Color(0.55f, 0.38f, 0.20f, 0.7f)));
-            drawRectOutline(sr, x, y, itemW, itemH, hoverCard ? 2f : 1.2f);
+            if (isHlwLocked) {
+                sr.setColor(0.55f, 0.25f, 0.25f, 0.75f);
+                drawRectOutline(sr, x, y, itemW, itemH, 1.6f);
+            } else if (isHalloweenItem(item.name)) {
+                sr.setColor(hoverCard ? new Color(1.0f, 0.70f, 0.15f, 1f) : new Color(0.95f, 0.45f, 0.10f, 0.90f));
+                drawRectOutline(sr, x, y, itemW, itemH, hoverCard ? 2.5f : 1.8f);
+            } else {
+                sr.setColor(isSoldOut ? new Color(0.25f, 0.22f, 0.20f, 0.6f) : (hoverCard ? new Color(0.95f, 0.75f, 0.35f, 0.9f) : new Color(0.55f, 0.38f, 0.20f, 0.7f)));
+                drawRectOutline(sr, x, y, itemW, itemH, hoverCard ? 2f : 1.2f);
+            }
 
             // Item Icon Frame (Left portion)
             float iconX = x + 10f;
@@ -347,7 +368,12 @@ public class ShopScreen implements Screen {
             float buyBtnX = x + itemW - buyBtnW - 12f;
             float buyBtnY = y + 12f;
 
-            if (!isSoldOut) {
+            if (isHlwLocked) {
+                sr.setColor(0.16f, 0.10f, 0.12f, 0.95f);
+                drawRoundedRect(sr, buyBtnX, buyBtnY, buyBtnW, buyBtnH, 6);
+                sr.setColor(0.45f, 0.22f, 0.22f, 0.6f);
+                drawRectOutline(sr, buyBtnX, buyBtnY, buyBtnW, buyBtnH, 1f);
+            } else if (!isSoldOut) {
                 boolean hoverBuy = (m.x >= buyBtnX && m.x <= buyBtnX + buyBtnW && m.y >= buyBtnY && m.y <= buyBtnY + buyBtnH);
                 sr.setColor(hoverBuy ? new Color(0.22f, 0.55f, 0.35f, 1f) : new Color(0.15f, 0.38f, 0.24f, 0.95f));
                 drawRoundedRect(sr, buyBtnX, buyBtnY, buyBtnW, buyBtnH, 6);
@@ -475,6 +501,7 @@ public class ShopScreen implements Screen {
             font.getData().setScale(origScale);
 
             // Owned count tag
+            boolean isHlwLocked = isHalloweenItem(item.name) && !com.fishingrpg.game.systems.EventManager.isHalloweenActive();
             int ownedCount = player.getItemCount(item.name);
             font.setColor(0.6f, 0.8f, 0.7f, 0.85f);
             font.getData().setScale(0.85f);
@@ -482,6 +509,7 @@ public class ShopScreen implements Screen {
             if (remBooks >= 0) {
                 countTag += (remBooks == 0) ? " [TỐI ĐA]" : " [Còn: " + remBooks + "]";
             }
+            if (isHlwLocked) countTag += " [CHƯA MỞ SỰ KIỆN]";
             font.draw(game.batch, countTag, x + 105f, y + itemH - 42f);
             font.getData().setScale(1f);
 
@@ -491,7 +519,12 @@ public class ShopScreen implements Screen {
             float buyBtnX = x + itemW - buyBtnW - 12f;
             float buyBtnY = y + 12f;
 
-            if (isSoldOut) {
+            if (isHlwLocked) {
+                font.setColor(0.95f, 0.40f, 0.40f, 1f);
+                font.getData().setScale(0.78f);
+                layout.setText(font, "KHÓA (CHƯA MỞ)");
+                font.draw(game.batch, layout, buyBtnX + (buyBtnW - layout.width) / 2f, buyBtnY + (buyBtnH + layout.height) / 2f);
+            } else if (isSoldOut) {
                 font.setColor(0.6f, 0.6f, 0.6f, 1f);
                 font.getData().setScale(0.85f);
                 layout.setText(font, "ĐÃ TỐI ĐA");
@@ -706,8 +739,15 @@ public class ShopScreen implements Screen {
                 float buyBtnX = x + itemW - buyBtnW - 12f;
                 float buyBtnY = y + 12f;
 
+                boolean isHlwLocked = isHalloweenItem(item.name) && !com.fishingrpg.game.systems.EventManager.isHalloweenActive();
                 boolean clickBuy = (m.x >= buyBtnX && m.x <= buyBtnX + buyBtnW && m.y >= buyBtnY && m.y <= buyBtnY + buyBtnH);
-                if (clickBuy && !isSoldOut) {
+                if (clickBuy) {
+                    if (isHlwLocked) {
+                        AudioManager.getInstance().playSFX("sfx_button");
+                        showMessage("Vật phẩm giới hạn Halloween! Sự kiện chưa bắt đầu.");
+                        return;
+                    }
+                    if (!isSoldOut) {
                     if (player.consumeGold(currentPrice)) {
                         AudioManager.getInstance().playSFX("sfx_button");
                         if (!skillId.isEmpty()) {
@@ -728,6 +768,7 @@ public class ShopScreen implements Screen {
                         showMessage("Bạn không đủ Vàng để mua!");
                     }
                     return;
+                    }
                 }
 
                 if (player.hasItem(item.name)) {
@@ -738,6 +779,11 @@ public class ShopScreen implements Screen {
 
                     boolean clickSell = (m.x >= sellBtnX && m.x <= sellBtnX + sellBtnW && m.y >= sellBtnY && m.y <= sellBtnY + sellBtnH);
                     if (clickSell) {
+                        if (isHlwLocked) {
+                            AudioManager.getInstance().playSFX("sfx_button");
+                            showMessage("Vật phẩm giới hạn Halloween! Sự kiện chưa bắt đầu.");
+                            return;
+                        }
                         AudioManager.getInstance().playSFX("sfx_button");
                         player.consumeItem(item.name);
                         player.gainGold(item.sellPrice);

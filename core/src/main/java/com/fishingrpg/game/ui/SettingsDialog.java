@@ -581,14 +581,20 @@ public class SettingsDialog {
             File fileLegacy = new File("angler_save.json");
             SaveManager.exportToFile(fileLegacy);
 
-            String encryptedPayload = SaveManager.exportDataToString();
-            Gdx.app.getClipboard().setContents(encryptedPayload);
+            try {
+                String encryptedPayload = SaveManager.exportDataToString();
+                if (encryptedPayload != null && encryptedPayload.length() < 16384 && Gdx.app.getClipboard() != null) {
+                    Gdx.app.getClipboard().setContents(encryptedPayload);
+                }
+            } catch (Throwable ignored) {
+                // Large save payloads cannot be placed into LWJGL MemoryStack clipboard (causes OutOfMemoryError)
+            }
 
-            statusMessage = "Thành công: Đã xuất mã hóa '" + filename + "' & Clipboard!";
+            statusMessage = "Thành công: Đã xuất tệp '" + filename + "' an toàn!";
             statusTimer = 6.0f;
             statusIsSuccess = true;
             AudioManager.getInstance().playSFX("sfx_success");
-        } catch (Exception e) {
+        } catch (Throwable e) {
             Gdx.app.error("Settings", "Export failed", e);
             statusMessage = "Lỗi xuất dữ liệu: " + e.getMessage();
             statusTimer = 5.0f;

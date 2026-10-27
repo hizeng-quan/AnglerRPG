@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="lanternFireGlow" cx="50%" cy="55%" r="50%">
+      <stop offset="0%" stop-color="#fef08a" stop-opacity="0.9"/>
+      <stop offset="40%" stop-color="#f97316" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#7c2d12" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="pumpkinRind" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fb923c"/>
+      <stop offset="50%" stop-color="#ea580c"/>
+      <stop offset="100%" stop-color="#9a3412"/>
+    </linearGradient>
+    <linearGradient id="pumpkinStem" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#166534"/>
+      <stop offset="50%" stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#14532d"/>
+    </linearGradient>
+  </defs>
+
+  <!-- LAYER 1: Background Glow -->
+  <g id="background_glow">
+    <circle cx="64" cy="70" r="54" fill="url(#lanternFireGlow)"/>
+    <ellipse cx="64" cy="112" rx="42" ry="10" fill="#000000" opacity="0.4"/>
+  </g>
+
+  <!-- LAYER 2: Base Form (Twisted Stem & 3-Lobe Pumpkin Shell) -->
+  <g id="base_form">
+    <!-- Twisted Gnarled Vine Stem -->
+    <path d="M 60 22 C 60 14 68 12 74 10 C 72 16 66 22 66 32 Z" fill="url(#pumpkinStem)"/>
+    <!-- Small Vine Leaf Curl -->
+    <path d="M 66 24 Q 78 20 76 28 Q 70 28 66 24 Z" fill="#4ade80"/>
+
+    <!-- Outer Pumpkin Lobes (Left & Right Ribs) -->
+    <ellipse cx="44" cy="72" rx="24" ry="32" fill="#c2410c"/>
+    <ellipse cx="84" cy="72" rx="24" ry="32" fill="#c2410c"/>
+    <!-- Central Main Pumpkin Lobe -->
+    <ellipse cx="64" cy="73" rx="26" ry="34" fill="url(#pumpkinRind)"/>
+
+    <!-- Pumpkin Crown Crest Rim -->
+    <path d="M 46 42 Q 64 36 82 42" stroke="#7c2d12" stroke-width="2.5" fill="none"/>
+  </g>
+
+  <!-- LAYER 3: Details & Relief (Jack-o' Carved Eyes, Nose & Jagged Fiery Grin) -->
+  <g id="details_and_relief">
+    <!-- Grooves between Lobes -->
+    <path d="M 48 42 C 40 56 40 88 50 104" stroke="#7c2d12" stroke-width="2.0" fill="none" opacity="0.6"/>
+    <path d="M 80 42 C 88 56 88 88 78 104" stroke="#7c2d12" stroke-width="2.0" fill="none" opacity="0.6"/>
+
+    <!-- Carved Triangle Eyes with Inner Glow -->
+    <polygon points="44,60 56,60 50,48" fill="#fef08a"/>
+    <polygon points="46,59 54,59 50,50" fill="#ffffff"/>
+    <polygon points="72,60 84,60 78,48" fill="#fef08a"/>
+    <polygon points="74,59 82,59 78,50" fill="#ffffff"/>
+
+    <!-- Triangle Nose -->
+    <polygon points="60,68 68,68 64,62" fill="#fef08a"/>
+
+    <!-- Sinister Jagged Pumpkin Grin -->
+    <path d="M 40 76 L 46 84 L 52 77 L 58 86 L 64 78 L 70 86 L 76 77 L 82 84 L 88 76 L 82 92 L 74 88 L 68 96 L 64 90 L 60 96 L 54 88 L 46 92 Z" fill="#fef08a"/>
+    <!-- Intense Inner White Fire Flash -->
+    <path d="M 48 83 L 52 79 L 58 87 L 64 80 L 70 87 L 76 79 L 80 83 L 74 89 L 68 93 L 64 88 L 60 93 L 54 89 Z" fill="#ffffff" opacity="0.85"/>
+  </g>
+
+  <!-- LAYER 4: Specular Highlights & Contrast -->
+  <g id="specular_highlights">
+    <!-- Gloss Highlights on Pumpkin Ribs -->
+    <path d="M 42 48 Q 36 64 40 86" stroke="#fdba74" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.8"/>
+    <path d="M 58 44 Q 54 58 56 64" stroke="#fed7aa" stroke-width="2.0" stroke-linecap="round" fill="none" opacity="0.7"/>
+  </g>
+</svg>
+

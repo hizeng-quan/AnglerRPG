@@ -19,17 +19,18 @@ public class Fish implements Catchable {
     // =========================================================================
 
     public enum Rarity {
-        COMMON, UNCOMMON, RARE, EPIC, BOSS;
+        COMMON, UNCOMMON, RARE, EPIC, LEGENDARY, BOSS;
 
         /** Mau ten hien thi theo do hiem. */
         public Color getColor() {
             switch (this) {
-                case COMMON:   return Color.WHITE;
-                case UNCOMMON: return Color.GREEN;
-                case RARE:     return new Color(0.3f, 0.6f, 1f, 1f);   // xanh duong
-                case EPIC:     return new Color(0.7f, 0.3f, 1f, 1f);   // tim
-                case BOSS:     return new Color(1f, 0.15f, 0.15f, 1f); // do
-                default:       return Color.WHITE;
+                case COMMON:    return Color.WHITE;
+                case UNCOMMON:  return Color.GREEN;
+                case RARE:      return new Color(0.3f, 0.6f, 1f, 1f);   // xanh duong
+                case EPIC:      return new Color(0.7f, 0.3f, 1f, 1f);   // tim
+                case LEGENDARY: return new Color(1f, 0.65f, 0.1f, 1f);   // cam vang neon
+                case BOSS:      return new Color(1f, 0.15f, 0.15f, 1f); // do
+                default:        return Color.WHITE;
             }
         }
     }
@@ -43,6 +44,8 @@ public class Fish implements Catchable {
     private final float  maxHp;
     private       float  currentHp;
     private final float  pullStrength; // luc keo day (units/giay)
+    private       float  shieldHp = 0f;
+    private       float  maxShieldHp = 0f;
     
     public enum State { IDLE, PULLING }
     private State state = State.IDLE;
@@ -135,7 +138,12 @@ public class Fish implements Catchable {
                id.equals("quet_xuc_tu") || id.equals("muc_mu_hut_mau") ||
                id.equals("xoay_nuoc") || id.equals("vu_dieu_co_buom") ||
                id.equals("vuc_da_nuot_chung") || id.equals("can_xe_dien_cuong") ||
-               id.equals("vu_dieu_luot_song") || id.equals("cuong_phong_ngu_kiem");
+               id.equals("vu_dieu_luot_song") || id.equals("cuong_phong_ngu_kiem") ||
+               id.equals("hoa_dang_jack_o") || id.equals("xung_kich_doat_hon") ||
+               id.equals("tieng_than_u_am") || id.equals("sam_set_hoi_sinh") ||
+               id.equals("mang_xa_siet_cuoc") || id.equals("doc_to_am_ty") ||
+               id.equals("tieng_hu_dia_nguc") || id.equals("vuc_xoay_am_ty") ||
+               id.equals("am_hon_quay_pha") || id.equals("lien_hoan_tram_doat_menh");
     }
 
     public static String getSkillDisplayName(String id) {
@@ -177,6 +185,25 @@ public class Fish implements Catchable {
             case "mui_kiem_xe_bien": return "Mũi kiếm xé biển";
             case "vu_dieu_luot_song": return "Vũ điệu lướt sóng";
             case "cuong_phong_ngu_kiem": return "Cuồng phong ngự kiếm";
+            // Kỹ năng Halloween (HLW-03)
+            case "cot_cach_bat_diet": return "Cốt Cách Bất Diệt";
+            case "hoa_nguc_lan_tinh": return "Hỏa Ngục Lân Tinh";
+            case "hoa_dang_jack_o": return "Hỏa Đăng Jack-o'";
+            case "khat_mau_dem_ram": return "Khát Máu Đêm Rằm";
+            case "xung_kich_doat_hon": return "Xung Kích Đoạt Hồn";
+            case "the_xac_hu_vo": return "Thể Xác Hư Vô";
+            case "tieng_than_u_am": return "Tiếng Than U Ám";
+            case "qua_tai_dien_nang": return "Quá Tải Điện Năng";
+            case "sam_set_hoi_sinh": return "Sấm Sét Hồi Sinh";
+            case "uon_luon_ma_quai": return "Uốn Lượn Ma Quái";
+            case "mang_xa_siet_cuoc": return "Mãng Xà Siết Cước";
+            case "doc_to_am_ty": return "Độc Tố Âm Ty";
+            case "uy_ap_tu_than": return "Uy Áp Tử Thần";
+            case "tieng_hu_dia_nguc": return "Tiếng Hú Địa Ngục";
+            case "vuc_xoay_am_ty": return "Vực Xoáy Âm Ty";
+            case "am_hon_quay_pha": return "Âm Hồn Quấy Phá";
+            case "lien_hoan_tram_doat_menh": return "Liên Hoàn Trảm Đoạt Mệnh";
+            case "tu_than_boc_phat": return "Tử Thần Bộc Phát";
             default:             return id.replace("_", " ");
         }
     }
@@ -220,6 +247,25 @@ public class Fish implements Catchable {
             case "mui_kiem_xe_bien": return "Nội tại: Ghìm kéo >1.2s làm Tension dâng nhanh +20%/s. Kháng khống chế";
             case "vu_dieu_luot_song": return "Cứ 8s phi thân 0.9s; tiếp nước sốc +20% Tension, -15 Thể lực & hồi 8% máu boss trừ khi Perfect Re-Hook";
             case "cuong_phong_ngu_kiem": return "Dưới 30% HP: Mỗi lần Vũ Điệu Lướt Sóng tăng +10% lực kéo; khi kích hoạt giúp boss bất tử khi ở trên không";
+            // Kỹ năng Halloween (HLW-03)
+            case "cot_cach_bat_diet": return "Nội tại: Giảm 20% sát thương đòn kéo thường, nhưng chịu thêm +50% sát thương từ kỹ năng";
+            case "hoa_nguc_lan_tinh": return "Nội tại: Khi cá PULLING tăng +25% sinh tension; nếu tension > 70% thiêu đốt 3 Thể lực/giây";
+            case "hoa_dang_jack_o": return "Tụ lửa ma quái 1.2s rồi nổ giật +15% Tension và thiêu đốt 10 Thể lực (ngắt được bằng Trói Buộc)";
+            case "khat_mau_dem_ram": return "Nội tại: Khi Thể lực người chơi < 50%, cá ngửi mùi máu hồi phục +1% Max HP mỗi giây";
+            case "xung_kich_doat_hon": return "Lướt cướp linh hồn Re-Hook 0.6s; nếu trượt phạt giật +25 Tension và cá hồi 15% máu đã mất";
+            case "the_xac_hu_vo": return "Nội tại: Cứ mỗi 8s toàn thân hóa khói hư vô trong 2.5s, hoàn toàn miễn nhiễm mọi sát thương";
+            case "tieng_than_u_am": return "Hút thẳng 15 Thể lực hồi 5% HP cho cá, giảm 50% hiệu quả hồi phục Thể lực người chơi trong 5s";
+            case "qua_tai_dien_nang": return "Nội tại: Kéo dây liên tục quá 1.5s phóng ngược giật điện trừ 10 Thể lực & ngắt kéo dây 0.6s";
+            case "sam_set_hoi_sinh": return "Duy nhất 1 lần khi cạn máu: Frankenstein phóng sét hồi sinh 20% HP & giật +25% Tension";
+            case "uon_luon_ma_quai": return "Nội tại: Giảm 30% tốc độ xả chùng Slack; mỗi khi đổi sang PULLING quất đuôi giật +10 Tension";
+            case "mang_xa_siet_cuoc": return "Cuộn thân quanh cước khóa cứng Tension không thể giảm trong 3s; kéo lúc này sinh tension x2";
+            case "doc_to_am_ty": return "Phun nọc hắc xà rút 5 Thể lực/giây trong 5s và phủ sương mù tím ma mị che tầm nhìn";
+            case "uy_ap_tu_than": return "Nội tại: Uy áp Thần Chết tăng +20% tiêu hao Thể lực của toàn bộ kỹ năng người chơi";
+            case "tieng_hu_dia_nguc": return "Tiếng rống địa ngục phát sóng âm câm lặng: Vô hiệu hóa kỹ năng tiếp theo của người chơi";
+            case "vuc_xoay_am_ty": return "Xoáy nước kéo căng dây +15 Tension/s trong 3s VÀ hút sinh lực hồi 3% Max HP cho Thanatos";
+            case "am_hon_quay_pha": return "Nuốt linh hồn tạo Soul Shield 500 HP; sát thương thường trừ vào giáp trước, Phá Giáp đánh xuyên máu thật";
+            case "lien_hoan_tram_doat_menh": return "Tuyệt kỹ 2 nhịp Re-Hook (0.5s & 0.6s): 2/2 choáng boss 3.5s nhận x2 dmg; 1/2 phạt tê liệt 4s; 0/2 phong ấn skill, khóa hồi TL & đứt dây nếu tension > 90%";
+            case "tu_than_boc_phat": return "Dưới 30% HP: Giảm 30% thời gian hồi chiêu tất cả kỹ năng thường của Thanatos";
             default:                return "Kỹ năng đặc biệt của thủy tộc";
         }
     }
@@ -229,7 +275,53 @@ public class Fish implements Catchable {
     // =========================================================================
 
     public void takeDamage(float damage) {
+        if (hasShield()) {
+            float remaining = damageShield(damage);
+            if (remaining > 0f) {
+                currentHp = Math.max(0, Math.min(maxHp, currentHp - remaining));
+            }
+        } else {
+            currentHp = Math.max(0, Math.min(maxHp, currentHp - damage));
+        }
+    }
+
+    /** Sát thương chuẩn / xuyên giáp: trừ trực tiếp vào HP thật của cá. */
+    public void takeTrueDamage(float damage) {
         currentHp = Math.max(0, Math.min(maxHp, currentHp - damage));
+    }
+
+    public void heal(float amount) {
+        if (isCaught() || amount <= 0f) return;
+        currentHp = Math.min(maxHp, currentHp + amount);
+    }
+
+    public float getShieldHp() { return shieldHp; }
+    public float getMaxShieldHp() { return maxShieldHp; }
+    public void setShield(float amount) {
+        this.shieldHp = amount;
+        this.maxShieldHp = amount;
+    }
+    public void clearShield() {
+        this.shieldHp = 0f;
+        this.maxShieldHp = 0f;
+    }
+    public boolean hasShield() {
+        return shieldHp > 0f;
+    }
+
+    /**
+     * Trừ sát thương vào lớp giáp. Trả về lượng sát thương dư thừa (nếu giáp bị vỡ).
+     */
+    public float damageShield(float amount) {
+        if (shieldHp <= 0f) return amount;
+        if (shieldHp >= amount) {
+            shieldHp -= amount;
+            return 0f;
+        } else {
+            float remaining = amount - shieldHp;
+            shieldHp = 0f;
+            return remaining;
+        }
     }
 
     public boolean isCaught() { return currentHp <= 0; }
@@ -317,7 +409,7 @@ public class Fish implements Catchable {
         List<String> badges = new ArrayList<>();
         if (firstCatch)                                         badges.add("NEW");
         if (isBig())                                            badges.add("BIG");
-        if (rarity == Rarity.RARE || rarity == Rarity.EPIC)   badges.add("SPECIAL");
+        if (rarity == Rarity.RARE || rarity == Rarity.EPIC || rarity == Rarity.LEGENDARY) badges.add("SPECIAL");
         if (rarity == Rarity.BOSS)                             badges.add("BOSS");
         return badges;
     }

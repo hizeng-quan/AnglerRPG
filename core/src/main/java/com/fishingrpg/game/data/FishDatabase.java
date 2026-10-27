@@ -49,20 +49,103 @@ public class FishDatabase {
 
     public static Fish getRandomFish(Player player) {
         if (templates == null) load();
+
+        // --- HALLOWEEN GLOBAL ENCOUNTER LOGIC (HLW-03.2) ---
+        boolean isHalloween = com.fishingrpg.game.systems.EventManager.isHalloweenActive();
+        if (isHalloween) {
+            float halloweenChance = 0.15f; // 15% ty le co ban
+            if (player != null) {
+                if (player.getHalloweenCandyCharges() > 0) {
+                    halloweenChance += 0.15f; // +15% khi co buff Keo Trick-or-Treat
+                }
+                String activeSet = (player.getEquipment() != null) ? player.getEquipment().getActiveSetName() : "";
+                if ("Dạ Hội Bí Ngô".equals(activeSet)) {
+                    halloweenChance += 0.10f; // +10%
+                } else if ("Huyết Nguyệt Thần Vương".equals(activeSet)) {
+                    halloweenChance += 0.15f; // +15%
+                }
+                // HLW-05: Nhan doi ty le toan bo ca Halloween trong Dem Huyet Nguyet
+                boolean isBloodMoon = (player.getManualBloodMoonTimer() > 0f);
+                if (!isBloodMoon) {
+                    java.time.LocalTime now = java.time.LocalTime.now();
+                    int hour = now.getHour();
+                    if (hour >= 18 || hour < 6) {
+                        isBloodMoon = ((now.getMinute() / 15) % 2) == 0;
+                    }
+                }
+                if (isBloodMoon) {
+                    halloweenChance *= 2.0f;
+                }
+                if (player.getHalloweenCandyTimer() > 0f) {
+                    halloweenChance *= 1.5f;
+                }
+            }
+
+            if (MathUtils.randomBoolean(Math.min(halloweenChance, 0.85f))) {
+                float wSkeleton = 45.0f;
+                float wJackO = 30.0f;
+                float wDauLau = 15.0f;
+                float wDangMa = 6.0f;
+                float wFrank = 3.0f;
+                float wHaiXa = 0.9f;
+                float wThanatos = 0.1f;
+
+                if (player != null) {
+                    float rareMulti = 1.0f;
+                    if (player.getHalloweenCandyCharges() > 0) {
+                        rareMulti += 0.50f;
+                        player.consumeHalloweenCandyCharge();
+                    }
+                    String activeSet = (player.getEquipment() != null) ? player.getEquipment().getActiveSetName() : "";
+                    if ("Dạ Hội Bí Ngô".equals(activeSet)) rareMulti += 0.35f;
+                    if ("Huyết Nguyệt Thần Vương".equals(activeSet)) rareMulti += 0.60f;
+
+                    wDauLau *= rareMulti;
+                    wDangMa *= rareMulti;
+                    wFrank *= rareMulti;
+                    wHaiXa *= (rareMulti * 1.25f);
+                    wThanatos *= (rareMulti * 1.50f);
+                }
+
+                float[] hlwWeights = { wSkeleton, wJackO, wDauLau, wDangMa, wFrank, wHaiXa, wThanatos };
+                String[] hlwNames = {
+                    "Cá Skeleton", "Cá Đèn Lồng Jack-o'", "Cá Đầu Lâu Huyết Nguyệt",
+                    "Cá Dạng Ma", "Thủy Quái Frankenstein", "Hải Xà Dạ Xoa", "Kình Ngư Tử Thần Thanatos"
+                };
+
+                float totalHlw = 0f;
+                for (float w : hlwWeights) totalHlw += w;
+                float rollHlw = MathUtils.random(totalHlw);
+                float cumHlw = 0f;
+                String selectedHlw = hlwNames[0];
+                for (int i = 0; i < hlwWeights.length; i++) {
+                    cumHlw += hlwWeights[i];
+                    if (rollHlw <= cumHlw) {
+                        selectedHlw = hlwNames[i];
+                        break;
+                    }
+                }
+                Fish hlwFish = getFishByName(selectedHlw);
+                if (hlwFish != null) return hlwFish;
+            }
+        }
+
+        // --- MAP STANDARD FISH ROLL ---
         int rarityIdx = weightedRandom(player);
         Rarity targetRarity = Rarity.values()[Math.min(rarityIdx, Rarity.values().length - 1)];
         
         java.util.ArrayList<FishTemplate> filtered = new java.util.ArrayList<>();
         String currentMap = player != null ? player.getCurrentMap() : "ao_lang";
         for (FishTemplate t : templates) {
-            if (t.rarity == targetRarity && (t.map == null || t.map.equals(currentMap))) {
+            // Chu y: Bo qua ca Halloween (t.map == null) trong pool ca thuong cua map
+            if (t.rarity == targetRarity && currentMap.equals(t.map)) {
                 filtered.add(t);
             }
         }
         
         if (filtered.isEmpty()) {
             for (FishTemplate t : templates) {
-                if (t.map == null || t.map.equals(currentMap)) filtered.add(t);
+                if (currentMap.equals(t.map)) filtered.add(t);
             }
         }
         
