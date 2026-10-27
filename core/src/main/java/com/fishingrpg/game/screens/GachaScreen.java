@@ -650,10 +650,10 @@ public class GachaScreen implements Screen {
 
             if (lastPull.size() == 1) {
                 Equipment eq = lastPull.get(0);
-                float cardW = 320f;
-                float cardH = 340f;
+                float cardW = 340f;
+                float cardH = 380f;
                 float cardX = W / 2f - cardW / 2f;
-                float cardY = resBoxY + 55f;
+                float cardY = resBoxY + (resBoxH - cardH) / 2f;
 
                 sr.setColor(0.10f, 0.14f, 0.22f, 0.98f);
                 drawRoundedRect(sr, cardX, cardY, cardW, cardH, 12);
@@ -661,12 +661,12 @@ public class GachaScreen implements Screen {
                 drawRectOutline(sr, cardX, cardY, cardW, cardH, 3f);
 
                 // Aura glow
-                float iconCY = cardY + cardH - 85f;
+                float iconCY = cardY + cardH - 116f;
                 sr.setColor(eq.rarity.color.r, eq.rarity.color.g, eq.rarity.color.b, 0.22f);
-                sr.circle(cardX + cardW / 2f, iconCY, 58f);
+                sr.circle(cardX + cardW / 2f, iconCY, 45f);
 
                 // Draw exact equipment vector icon (Full-size showcase)
-                EquipmentIconRenderer.draw(sr, eq, eq.type, cardX + cardW / 2f, iconCY, 50f, eq.rarity.color);
+                EquipmentIconRenderer.draw(sr, eq, eq.type, cardX + cardW / 2f, iconCY, 40f, eq.rarity.color);
             } else if (lastPull.size() > 1) {
                 float cW = 190f;
                 float cH = 170f;
@@ -946,38 +946,38 @@ public class GachaScreen implements Screen {
 
             if (lastPull.size() == 1) {
                 Equipment eq = lastPull.get(0);
-                float cardW = 320f;
-                float cardH = 340f;
+                float cardW = 340f;
+                float cardH = 380f;
                 float cardX = W / 2f - cardW / 2f;
-                float cardY = resBoxY + 55f;
+                float cardY = resBoxY + (resBoxH - cardH) / 2f;
 
                 titleFont.setColor(eq.rarity.color);
                 layout.setText(titleFont, eq.name);
-                titleFont.draw(game.batch, layout, cardX + (cardW - layout.width) / 2f, cardY + cardH - 25f);
+                titleFont.draw(game.batch, layout, cardX + (cardW - layout.width) / 2f, cardY + cardH - 26f);
 
                 font.setColor(0.8f, 0.9f, 1f, 1f);
                 String typeStr = "Loại: " + (eq.type == EquipmentType.ROD ? "Cần Câu" : eq.type == EquipmentType.LINE ? "Dây Cước" : "Lưỡi Câu");
                 layout.setText(font, typeStr);
-                font.draw(game.batch, layout, cardX + (cardW - layout.width) / 2f, cardY + cardH - 135f);
+                font.draw(game.batch, layout, cardX + (cardW - layout.width) / 2f, cardY + cardH - 188f);
 
                 font.setColor(eq.rarity.color);
                 layout.setText(font, "[" + eq.rarity.name() + "]  Bộ: " + eq.setName);
-                font.draw(game.batch, layout, cardX + (cardW - layout.width) / 2f, cardY + cardH - 165f);
+                font.draw(game.batch, layout, cardX + (cardW - layout.width) / 2f, cardY + cardH - 216f);
 
                 // Stats
                 font.setColor(0.4f, 1f, 0.6f, 1f);
                 String s1 = (eq.type == EquipmentType.ROD ? "Lực Kéo" : eq.type == EquipmentType.LINE ? "Độ Bền" : "Độ Sắc") + ": +" + (int)eq.mainStat1;
                 layout.setText(font, s1);
-                font.draw(game.batch, layout, cardX + (cardW - layout.width) / 2f, cardY + cardH - 200f);
+                font.draw(game.batch, layout, cardX + (cardW - layout.width) / 2f, cardY + cardH - 248f);
 
                 // Substats
                 font.setColor(0.9f, 0.85f, 0.5f, 1f);
-                float subY = cardY + cardH - 235f;
+                float subY = cardY + cardH - 280f;
                 for (com.fishingrpg.game.entities.equipment.Substat sub : eq.substats) {
                     String subStr = "• " + sub.toString();
                     layout.setText(font, subStr);
                     font.draw(game.batch, layout, cardX + (cardW - layout.width) / 2f, subY);
-                    subY -= 25f;
+                    subY -= 24f;
                 }
             } else if (lastPull.size() > 1) {
                 float cW = 190f;

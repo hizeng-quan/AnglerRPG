@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class PatchNotesDialog {
 
-    public static final String CURRENT_VERSION = "v0.5.1.1";
+    public static final String CURRENT_VERSION = "v0.5.2.0";
     private static final String PREF_LAST_SEEN_VERSION = "last_seen_patch_notes_version";
 
     private final FishingRPG game;
@@ -91,8 +91,135 @@ public class PatchNotesDialog {
         // --- TAB 0: BẢN TIN CẬP NHẬT THEO TỪNG PHIÊN BẢN ---
         // =====================================================================
 
-        // ===== PHIÊN BẢN v0.5.1.1 (MỚI NHẤT) =====
-        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.1.1 (MỚI NHẤT - CÂN BẰNG TENSION IDLE, ĐẠI TU 54 ICON & QUICKSLOT)"));
+        // ===== PHIÊN BẢN v0.5.2.4 (MỚI NHẤT) =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.2.4 (MỚI NHẤT - HOÀN THÀNH BƯỚC 2.3: 15 LOÀI CÁ ĐẢO XA & TUYỆT TÁC SIÊU BOSS CÁ CỜ XANH)"));
+
+        patchNotesItems.add(new UpdateItem("ĐỒ HỌA", "Bước 2.3: 15 Loài Cá Vector Đảo Xa & Siêu Boss Cá Cờ Xanh Khổng Lồ (FSH-02C)", new Color(0.25f, 0.85f, 0.50f, 1f))
+            .addPoint("Đại tu toàn diện đồ họa vector LibGDX ShapeRenderer đa lớp, ánh sáng biển sâu và hoạt ảnh cho toàn bộ 15 loài cá Đảo Xa hoàn toàn mới.")
+            .addPoint("6 Loài Cá Thường: Cá Mú Đỏ (thân đỏ san hô, đốm sao xanh ngọc bích lấp lánh), Cá Hồng Chuối (hồng cam tươi tắn, dải sọc vàng chuối óng ả), Cá Dìa Biển Đảo (hoa văn cẩm thạch hoa đá, gai nhọn tẩm độc bảo vệ), Cá Nhồng Biển (mũi tên bạc xé nước, hàm răng nanh tam giác nhọn hoắt), Cá Bè Trang (chrome bạc sáng chói, hàng chấm đen đồng tiền), Cá Nục Heo (trán gồ vuông góc dốc đứng, lưng xanh ngọc bích mạn sườn vàng chanh).")
+            .addPoint("4 Loài Cá Hiếm: Cá Bớp Khơi (ngư lôi nâu đen cuồn cuộn, 2 sọc trắng kem song song, 8 gai cứng), Cá Cam Biển (bắp thịt dày chắc, vệt sọc sẫm vắt chéo từ mõm qua mắt lên gáy), Cá Thu Ngàng (thân đao thanh mảnh, 26 sọc vằn lam sẫm hổ vằn, 8 vây phụ vàng chói), Cá Đuối Hoa Cương (đĩa cẩm thạch hoa cương mỹ thuật, đuôi roi phóng tia điện cyan crackling).")
+            .addPoint("2 Loài Cá Quý: Cá Ngừ Vây Vàng (ngư lôi khổng lồ, vây lưỡi liềm vàng chanh vươn dài cong vút, xoáy nước áp lực cao), Cá Cờ Gòn (mũi kiếm rapier thanh mảnh, cánh buồm xanh coban phủ đốm đen lộng gió).")
+            .addPoint("2 Loài Sử Thi: Cá Mú Nghệ Khơi (gã khổng lồ rạn đá ngầm bọc giáp cổ thạch sừng sững, đốm đen hoa mai, miệng vực thẳm nuốt chửng, bụi đá trầm tích), Cá Mập Rạn Đen (sát thủ khí động học, đỉnh chóp TẤT CẢ các vây đen tuyền viền trắng nổi bật, 5 khe mang sắc lẹm, mắt thính mùi máu).")
+            .addPoint("1 Tuyệt Tác Siêu Boss Thế Giới: Cá Cờ Xanh Khổng Lồ (3,000 HP, 260 kg) với 3 tầng hào quang thần thoại (tím vực thẳm, xanh coban, cyan điện tử), Mũi kiếm thép xé biển có rãnh plasma điện tử và tia lửa điện lóe sáng ở chóp kiếm, Cánh buồm lam ngọc 10 tia phát quang, 7 dải sọc neon điện tử chớp nháy, mắt thần săn mồi rực lửa và bọt khí cavitation bão tố.")
+        );
+
+        // ===== PHIÊN BẢN v0.5.2.3 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.2.3 (HOÀN THÀNH BƯỚC 2.2: 15 LOÀI CÁ BÃI BIỂN & SIÊU BOSS BẠCH TUỘC KHỔNG LỒ)"));
+
+        patchNotesItems.add(new UpdateItem("ĐỒ HỌA", "Bước 2.2: 15 Loài Cá Vector Bãi Biển & Siêu Boss Bạch Tuộc Khổng Lồ (FSH-02B)", new Color(0.25f, 0.85f, 0.50f, 1f))
+            .addPoint("Chuẩn hóa đồ họa LibGDX ShapeRenderer đa lớp, specular bóng sáng đại dương và hoạt ảnh quẫy đuôi/xúc tu cho toàn bộ 15 loài cá Bãi Biển.")
+            .addPoint("6 Loài Cá Thường: Cá Chỉ Vàng (thân thoi bạc, dải sọc vàng kim óng ả, đốm nắp mang), Cá Đục (thân vàng cát ngụy trang đáy biển nông), Cá Cơm (trong suốt pha lê chỉ bạc sống lưng), Cá Mòi (lưng xanh thép, 5 chấm đen mạn sườn), Cá Lẹp (mỏng dẹt lưỡi dao lướt sóng), Cá Bạc Má (mắt to thao thức, lưng xanh rằn ri sóng biển).")
+            .addPoint("4 Loài Cá Hiếm: Cá Nục (thân tròn chắc giáp vảy đường bên, vây đuôi vàng), Cá Đối (đầu dẹt mõm tù, vảy xám bạc mắt to màng mỡ), Cá Trích (thân dẹp dài xanh biển, vảy bạc lấp lánh phản quang), Cá Chim Biển (dẹt đĩa tròn bạc ngọc trai kiêu sa).")
+            .addPoint("2 Loài Cá Quý: Cá Mú (thân hoa đá honeycomb rạn san hô, miệng rộng gai vây nhọn), Cá Bóp (ngư lôi nâu đen, 2 sọc trắng bạc song song khỏe khoắn).")
+            .addPoint("2 Loài Sử Thi: Cá Thu Hoàng Kim (hào quang bạo chúa xé biển, 8 đôi vây phụ rời, vây đuôi trăng khuyết vàng 24K), Cá Ngừ Đại Dương (bắp thịt khổng lồ xanh thẫm, vây phụ nhọn vàng phát quang).")
+            .addPoint("1 Siêu Boss Thế Giới: Bạch Tuộc Khổng Lồ (2,200 HP) với xoáy mực vực thẳm và năng lượng cyan-tím đa tầng, 8 xúc tu gai nhọn quằn quại bọc giác mút đỏ thẫm, mắt quỷ tím đồng tử chữ nhật, mỏ quái vật sừng đen chitin tử thần.")
+        );
+
+        // ===== PHIÊN BẢN v0.5.2.2 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.2.2 (HOÀN THÀNH BƯỚC 2.1: 15 LOÀI CÁ AO LÀNG & TÁI CẤU TRÚC LỘ TRÌNH ĐỒ HỌA)"));
+
+        patchNotesItems.add(new UpdateItem("ĐỒ HỌA", "Bước 2.1: 15 Loài Cá Vector Ao Làng & Siêu Boss Thủy Quái Sông Trà (FSH-02A)", new Color(0.25f, 0.85f, 0.50f, 1f))
+            .addPoint("Chuẩn hóa đồ họa LibGDX ShapeRenderer đa lớp, tạo khối nổi khối mềm mại, specular bóng sáng và hoạt ảnh quẫy vây mềm mại (tail wagging) cho 15 loài cá Ao Làng.")
+            .addPoint("4 Loài Cá Thường: Cá Rô Đồng (thân ô-liu ánh đồng, vây lưng 9 gai nhọn), Cá Diếc (lưng vồng, vảy bạc ngọc trai), Cá Mương (thân trong suốt lưỡi liềm), Cá Lóc Nhí (hoa văn rằn ri ngụy trang cỏ nước).")
+            .addPoint("3 Loài Cá Hiếm: Cá Chép (vảy rồng hoàng kim, râu mềm rước lộc, đuôi đỏ son), Cá Mè (đầu to miệng hướng bọt nước, vảy xám bạc), Cá Trê (thân trơn nhẵn 4 cặp râu dài sắc bén).")
+            .addPoint("3 Loài Cá Quý: Cá Trôi (vảy xanh lam viền trắng sữa), Cá Trắm Cỏ (vảy trám sẫm viền ánh lục), Cá Chim Trắng (thân dẹt đĩa tròn, vây bụng ửng cam).")
+            .addPoint("4 Loài Sử Thi: Cá Lóc Bông (báo đốm săn mồi nước ngọt), Cá Trê Lai (vằn rằn ri hổ vằn, ngạnh độc thép), Cá Chép Vàng (phát quang lấp lánh thần tài), Cá Lăng Khổng Lồ (sát thủ đáy sâu râu xúc giác).")
+            .addPoint("1 Siêu Boss Thế Giới: Thủy Quái Sông Trà (850 HP) với vảy rêu phù sa, mắt quỷ dung nham đỏ rực, vây lưng sừng nhọn uy dũng cuộn sóng.")
+        );
+
+        patchNotesItems.add(new UpdateItem("LỘ TRÌNH", "Tái Cấu Trúc Lộ Trình Đồ Họa 6 Giai Đoạn", new Color(0.35f, 0.80f, 1f, 1f))
+            .addPoint("Tách Bước 2 thành chuỗi chuyên biệt 3 bản đồ cá: Bước 2.1 (Ao Làng - Hoàn thành v0.5.2.2), Bước 2.2 (Bãi Biển), Bước 2.3 (Đảo Xa).")
+            .addPoint("Chuyển Môi Trường Nước & Khúc Xạ Ánh Sáng (ENV-02) xuống thành Giai đoạn 3 riêng biệt (v0.5.3).")
+            .addPoint("Điều chỉnh các bước tiếp theo: Giai đoạn 4 (UI & Nút Bấm Xúc Giác v0.5.4), Giai đoạn 5 (VFX Chiêu Thức & Boss v0.5.5), Giai đoạn 6 (Hoạt Ảnh Vật Lý & Gacha CS:GO v0.5.6).")
+        );
+
+        // ===== PHIÊN BẢN v0.5.2.1 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.2.1 (PHÂN TRANG QUICK SLOTS, SỬA SONAR & BỘ SƯU TẬP ĐẢO XA)"));
+
+        patchNotesItems.add(new UpdateItem("TÚI ĐỒ", "Hệ Thống Phân Trang Quick Slots (Ô Phím Tắt Nhanh)", new Color(0.2f, 0.85f, 1f, 1f))
+            .addPoint("Khắc phục triệt để lỗi khi có trên 9 loại vật phẩm trong túi đồ không thể hiển thị, không dùng được hoặc tưởng bị mất.")
+            .addPoint("Tích hợp phân trang mượt mà [◀] Trang X/Y [▶] trên tiêu đề khung Ô Nhanh; tự động co giãn theo số lượng vật phẩm sở hữu.")
+            .addPoint("Đồng bộ hoàn hảo phím tắt 1-9: Khi chuyển trang, các phím 1-9 và click chuột sẽ tương tác trực tiếp với đúng các vật phẩm hiển thị trên trang hiện tại.")
+        );
+
+        patchNotesItems.add(new UpdateItem("VẬT PHẨM", "Sửa Lỗi Kính Nhìn Xuyên Nước (Sonar) & Tinh Chỉnh Mồi Thơm", new Color(1f, 0.85f, 0.2f, 1f))
+            .addPoint("Sửa triệt để lỗi radar thấu thị vẫn quét và hiển thị thông tin cá khi số lượt thấu thị của Kính Nhìn Xuyên Nước đã về 0.")
+            .addPoint("Bảo toàn lượt thấu thị Sonar: Số lượt thấu thị sẽ KHÔNG bị trừ nếu người chơi không kéo cá mà để cá chạy đi (CHẬM TAY!). Lượt chỉ bị trừ khi thực sự giằng co kéo cá hoặc bắt được cá.")
+            .addPoint("Mồi Thơm tự động mất đi khi cá cắn câu mà người chơi không kéo kịp để cá cắn trộm mồi và chạy mất.")
+        );
+
+        patchNotesItems.add(new UpdateItem("SỔ TAY", "Làm Lại 5 Bộ Sưu Tập (Collections) Khớp Chuẩn 15 Loài Cá Đảo Xa", new Color(0.35f, 0.95f, 0.6f, 1f))
+            .addPoint("Tái cấu trúc 100% 5 Bộ Sưu Tập Đảo Xa trong Sổ Tay Cần Thủ: Rạn San Hô Đảo Xa, Kình Ngư Nước Nông, Dòng Chảy Khơi Xa, Chiến Hạm Đại Dương, và Huyền Thoại Biển Sâu (Boss Cá Cờ Xanh Khổng Lồ).")
+            .addPoint("Cập nhật đầy đủ chú giải, tập tính và truyền thuyết sinh thái học cho toàn bộ 15 loài cá mới tại Đảo Xa.")
+            .addPoint("Xóa sạch toàn bộ dữ liệu, tên gọi và dấu vết của 15 loài cá cũ ở Đảo Xa khỏi toàn bộ hệ thống.")
+        );
+
+        patchNotesItems.add(new UpdateItem("LỘ TRÌNH", "Điều Chỉnh Thứ Tự Ưu Tiên Kế Hoạch Phát Triển Đồ Họa", new Color(1f, 0.45f, 0.75f, 1f))
+            .addPoint("Đẩy Bước 3 (Ngoại hình 45 loài cá vector & Môi trường 3 bản đồ) lên vị trí Giai đoạn 2 (v0.5.2) để ưu tiên hoàn thiện thế giới thủy tộc sống động trước.")
+            .addPoint("Chuyển Giai đoạn UI & Nút Bấm Xúc Giác sang Bước 3 (v0.5.3).")
+        );
+
+        // ===== PHIÊN BẢN v0.5.2.0 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.2.0 (ĐẠI TU ĐẢO XA, SIÊU BOSS CÁ CỜ XANH 3,000 HP & PERFECT RE-HOOK)"));
+
+        patchNotesItems.add(new UpdateItem("ĐẢO XA", "Đại Tu Toàn Diện 15 Loài Cá Đảo Xa Thực Tế & Siêu Boss 3,000 HP", new Color(0.2f, 0.85f, 1f, 1f))
+            .addPoint("Loại bỏ hoàn toàn các loài viễn tưởng (Cá Nhà Táng, Mực Khổng Lồ, Leviathan); thay bằng 15 loài cá biển khơi thực tế theo chuẩn Big Game Fishing.")
+            .addPoint("6 Cá Thường (260 - 360 HP): Cá Mú Đỏ, Cá Hồng Chuối, Cá Dìa Biển Đảo, Cá Nhồng Biển, Cá Bè Trang, Cá Nục Heo.")
+            .addPoint("4 Cá Hiếm (520 - 650 HP): Cá Bớp Khơi, Cá Cam Biển, Cá Thu Ngàng, Cá Đuối Hoa Cương.")
+            .addPoint("2 Cá Quý (1,050 - 1,150 HP): Cá Ngừ Vây Vàng, Cá Cờ Gòn (Sailfish).")
+            .addPoint("2 Cá Sử Thi (1,750 - 1,900 HP): Cá Mú Nghệ Khơi (Giant Grouper), Cá Mập Rạn Đen (Blacktip Reef Shark).")
+            .addPoint("1 Siêu Trùm Đại Dương: Cá Cờ Xanh Khổng Lồ (Blue Marlin) sở hữu 3,000 HP, lực kéo 195.0, cân nặng 260 kg.")
+        );
+
+        patchNotesItems.add(new UpdateItem("CHIẾN ĐẤU", "Chuẩn Hóa Phân Tầng Kỹ Năng & Cơ Chế Phản Xạ Perfect Re-Hook", new Color(1f, 0.85f, 0.2f, 1f))
+            .addPoint("Tuân thủ nghiêm ngặt công thức phân tầng kỹ năng: Common (0-1 passive nhẹ), Uncommon (1 passive), Rare (1 active ở 50% HP), Epic (1 passive + 1 active), Boss (1 passive + 2 active độc bản).")
+            .addPoint("Cơ chế Phản Xạ 'Perfect Re-Hook': Khi cá nhảy lên không trung, hệ thống hiện chỉ báo '▼ TIẾP NƯỚC! [SPACE] ▼'. Nhấp Space đúng khoảnh khắc chạm nước sẽ kích hoạt 'PERFECT RE-HOOK!', gây x2 sát thương kéo và triệt tiêu toàn bộ lực giật. Nếu vẫn đè giữ Space khi cá chạm nước sẽ bị sốc lực +35% Tension và trừ thể lực!")
+            .addPoint("14 Kỹ năng mới từ Epic trở xuống: Trơ lực kéo (25% tỷ lệ miễn nhiễm kéo Space), Răng nanh cắt dây (-10% Max Tension), Gai độc san hô (-1.5 Stamina/s), Đổi hướng đột ngột (dao động Tension ±10%), Nương hải lưu (+18% pull khi Tension > 55%), Thân đao xé gió (+35% pull speed), Gai đuôi phóng điện (-12 Stamina nếu giữ Space > 2.5s), Xoáy nước đại dương (chao đảo sin & giảm 40% xả dây), Vũ điệu cờ buồm (2 nhịp phóng lướt), Thân hộ cổ thạch (-15 sát thương phẳng), Vực đá nuốt chửng (+35% Tension & -8 Stamina/s), Thính mùi máu (+20% pull khi thể lực < 50%), Cắn xé điên cuồng (-25% Max Tension).")
+        );
+
+        patchNotesItems.add(new UpdateItem("BOSS TRÙM", "Bộ 3 Kỹ Năng Độc Bản Của Boss Cá Cờ Xanh Khổng Lồ (Blue Marlin)", new Color(1f, 0.35f, 0.35f, 1f))
+            .addPoint("Passive Độc Bản 'Mũi kiếm xé biển': Miễn nhiễm trói/băng; đè giữ phím kéo > 1.5s làm Tension dâng nhanh thêm +20%/s; nhấp nhả <= 1.2s được thưởng +15% sát thương kéo.")
+            .addPoint("Active 1 'Vũ điệu lướt sóng': Tần suất định kỳ 8.0s một lần, phóng vút lên không trung 0.9s chớp nhoáng thử thách phản xạ Re-Hook của cần thủ.")
+            .addPoint("Active 2 'Cuồng phóng ngư kiếm' (Dưới 30% HP): Kích hoạt chế độ Soft Enrage; mỗi đợt bứt tốc tăng +10% lực kéo (tối đa +50%); mỗi 1 giây trôi qua tăng +1% tốc độ tụt thể lực của cần thủ (tự động reset sạch sẽ ngay khi kết thúc trận đấu).")
+        );
+
+        patchNotesItems.add(new UpdateItem("ĐỒ HỌA", "Vector Artwork Độc Quyền Cho Boss Cá Cờ Xanh Khổng Lồ", new Color(0.35f, 0.95f, 0.6f, 1f))
+            .addPoint("Thiết kế vector nguyên bản: Thân hình ngư lôi bắp thịt cuồn cuộn màu xanh coban hoàng gia, vây lưng cánh buồm cao ngạo nghễ, hoa văn sọc phản quang Neon Cyan rực rỡ và mũi kiếm đao thép dài sắc lẹm xé toạc sóng gió đại dương.")
+        );
+
+        // ===== PHIÊN BẢN v0.5.1.2 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.1.2 (NERF CÁ PULLING, SỬA AUTO-UPDATER, GIỚI HẠN SÁCH CỬA HÀNG & CHỐNG LÃNG PHÍ BUFF)"));
+
+        patchNotesItems.add(new UpdateItem("CÂN BẰNG", "Nerf Sức Kéo Của Cá Khi Buông Cần & Giảm Rung Màn Hình", new Color(1f, 0.55f, 0.25f, 1f))
+            .addPoint("Khi cá đang vùng vẫy (PULLING): Nếu người chơi buông phím kéo (Space), sát thương / lực kéo nhận vào giảm từ 0.8x xuống 0.4x (giảm 50%), tạo cơ hội xả bớt lực căng dây an toàn.")
+            .addPoint("Giảm độ rung màn hình (Screen Shake Trauma) khi Tension cao: Giảm tốc độ tích tụ rung từ 0.04/frame xuống 0.01/frame (chỉ kích hoạt khi Tension > 88% và khống chế tối đa 0.16), chống mỏi mắt và rung giật quá mức.")
+            .addPoint("Chuẩn hóa thông báo đứt dây: Tinh giản bỏ cụm 'CĂNG DÂY TỐI ĐA!', chỉ hiển thị rõ ràng 'DÂY CƯỚC BỊ ĐỨT, CÁ ĐÃ CHẠY MẤT!' và chữ nổi 'ĐỨT DÂY CÂU!'.")
+            .addPoint("Bổ sung chữ nổi khi cắn câu (!): Tự động hiển thị nổi 'BOSS!' nếu đớp mồi là cá Boss, và 'NEW!' nếu là loài cá lần đầu tiên câu được.")
+            .addPoint("Sửa lỗi chữ nổi khi hụt cá: Khắc phục lỗi nhảy cả câu dài khi hết thời gian chờ giật cần, tinh giản gọn gàng thành chữ nổi 'CHẬM TAY!'.")
+        );
+
+        patchNotesItems.add(new UpdateItem("CỬA HÀNG", "Giới Hạn Mua Sách Kỹ Năng & Loại Bỏ Sách Đã Đạt Cấp Khỏi Sự Kiện Giảm Giá", new Color(0.25f, 0.85f, 0.50f, 1f))
+            .addPoint("Số lượng sách kỹ năng tối đa có thể mua = Cấp tối đa - Cấp hiện tại - Số sách đang có trong túi đồ.")
+            .addPoint("Những quyển sách đã mua đủ hoặc kỹ năng đã max cấp sẽ hiển thị 'ĐÃ BÁN HẾT' và tự động loại khỏi sự kiện giảm giá ngẫu nhiên của tiệm tạp hóa.")
+        );
+
+        patchNotesItems.add(new UpdateItem("VẬT PHẨM", "Nút BUFF Tích Hợp Trên Thanh Trạng Thái & Khóa Dùng Trùng Lặp", new Color(0.35f, 0.80f, 1f, 1f))
+            .addPoint("Dời vị trí và chuyển đổi hiển thị: Thay thế nút Mồi Thơm cũ thành nút 'BUFF (N)' đặt thoáng đãng tại x=438px trên thanh trạng thái.")
+            .addPoint("Tích hợp Tooltip Hover: Rê chuột vào nút BUFF sẽ hiển thị bảng danh sách đầy đủ tất cả các buff vật phẩm đang có hiệu lực (Mồi Thơm, Đá Mài, Bùa Vàng, Sách, Nam Châm, Sonar, Lưới...).")
+            .addPoint("Khóa tính năng sử dụng lặp lại các vật phẩm đang còn hiệu lực nhiều lượt, tránh lãng phí vật phẩm của cần thủ.")
+            .addPoint("Đổi tên vật phẩm: 'Trà Thảo Mộc Định Thần' được tinh gọn thành 'Trà Thảo Mộc' (vẫn duy trì tương thích toàn diện với dữ liệu cũ).")
+        );
+
+        patchNotesItems.add(new UpdateItem("GIAO DIỆN", "Sửa Lỗi Auto-Updater & Cân Đối Bố Cục Thẻ Quay Gacha", fixBadgeColor)
+            .addPoint("Sửa lỗi cửa sổ Trình Cập Nhật Tự Động (Auto-Updater) bật lên bị tắt ngay lập tức do nuốt sự kiện click từ giao diện chính.")
+            .addPoint("Thiết kế lại bố cục cửa sổ cập nhật: Bỏ chữ '(AUTO-UPDATER)' trên tiêu đề tránh tràn viền và cân đối khoảng cách đều đặn cho 3 nút chức năng.")
+            .addPoint("Mở rộng thẻ hiển thị kết quả quay Gacha đơn lẻ: Giãn cách hợp lý tên trang bị và các dòng chỉ số khỏi vòng tròn icon, loại bỏ hoàn toàn tình trạng đè chữ.")
+            .addPoint("Sửa lỗi thanh tiến trình bản đồ (MapScreen): Căn chỉnh lại tiến độ câu cá hiển thị đúng trên từng thẻ bản đồ riêng biệt.")
+            .addPoint("Cân chỉnh độ khó & mô tả bản đồ: Ao Làng (0 sao - Rất Dễ), Bãi Biển (1 sao - Dễ), Đảo Xa (2 sao - Vừa, vùng biển khơi thực tế).")
+        );
+
+        // ===== PHIÊN BẢN v0.5.1.1 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.1.1 (CÂN BẰNG TENSION IDLE, ĐẠI TU 54 ICON & QUICKSLOT)"));
 
         patchNotesItems.add(new UpdateItem("GIAO DIỆN", "Phóng To Kích Thước Ô Phím Tắt Nhanh (Quickslot Action Bar)", new Color(0.35f, 0.85f, 1f, 1f))
             .addPoint("Tăng kích thước ô Quickslot từ 58px lên 68px (+17% kích thước), mở rộng khung viền 236x264px tạo cảm giác bấm chuột rộng rãi và thoải mái.")
@@ -494,24 +621,29 @@ public class PatchNotesDialog {
             .addPoint("Chuẩn hóa biểu tượng 7 Sách Kỹ Năng bọc da kim loại & 8 món chiến lợi phẩm/rác đáy biển (Ủng rách, Bình cổ, Nhẫn vàng, Rương chìm...).")
         );
 
-        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 2", "Hiện Đại Hóa UI, Nút Bấm Xúc Giác & Combat Gauges (v0.5.2)", new Color(1f, 0.75f, 0.25f, 1f))
+        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 2", "Ngoại Hình 45 Loài Cá Vector 3 Bản Đồ (v0.5.2)", new Color(0.25f, 0.85f, 0.50f, 1f))
+            .addPoint("Bước 2.1: Hoàn thành chuẩn hóa 15 loài cá Ao Làng & Siêu Boss Thủy Quái Sông Trà (vảy rêu phù sa, mắt quỷ dung nham).")
+            .addPoint("Bước 2.2: Hoàn thành chuẩn hóa 15 loài cá Bãi Biển & Siêu Boss Bạch Tuộc Khổng Lồ (8 xúc tu xoáy mực, mắt tím ma mị, mỏ sừng chitin).")
+            .addPoint("Bước 2.3: Hoàn thành chuẩn hóa 15 loài cá Đảo Xa & Siêu Boss Cá Cờ Xanh Khổng Lồ 3K HP (mũi kiếm plasma, cánh buồm lam ngọc, hào quang thần thoại).")
+        );
+
+        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 3", "Môi Trường Nước 3 Bản Đồ & Khúc Xạ Ánh Sáng Biển (v0.5.3)", new Color(0.2f, 0.85f, 1f, 1f))
+            .addPoint("Hoàn thiện chuyển động sóng nước tự nhiên theo thời gian thực tại Ao Làng, Bãi Biển và Đảo Xa (ENV-02).")
+            .addPoint("Hiệu ứng rạn san hô, bóng nước khúc xạ ánh sáng (God Rays), bọt sóng ven bờ và đàn cá bơi lội bối cảnh sinh động.")
+        );
+
+        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 4", "Hiện Đại Hóa UI, Nút Bấm Xúc Giác & Combat Gauges (v0.5.4)", new Color(1f, 0.75f, 0.25f, 1f))
             .addPoint("Khung viền Dialog hiện đại bo góc, nút bấm 3 trạng thái rõ ràng phản hồi âm click cơ khí ZzFX.")
             .addPoint("Thanh máu cá Ghost HP bar tụt dần theo sát thương, Thanh lực căng Gradient rung lắc chớp nháy khi căng cao.")
             .addPoint("Thẻ bài trang bị hiển thị khung viền chuẩn hệ Rarity và so sánh chỉ số tức thì (Stat Diff) khi hover.")
         );
 
-        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 3", "Ngoại Hình 45 Loài Cá Vector & Môi Trường 3 Map (v0.5.3)", new Color(0.25f, 0.85f, 0.50f, 1f))
-            .addPoint("Đại tu 45 loài cá trong FishVisualRenderer với tạo khối mềm mại, bóng sáng và vây ngực chuyển động tự nhiên.")
-            .addPoint("3 Siêu Boss Thế Giới: Thủy Quái Sông Trà (vảy rêu phù sa), Bạch Tuộc Khổng Lồ (xúc tu gai nhọn, túi mực), Thần Biển Leviathan (thân rồng viễn cổ, sừng san hô).")
-            .addPoint("Hoàn thiện chuyển động sóng nước tự nhiên và khúc xạ ánh sáng đại dương trên cả 3 bản đồ.")
-        );
-
-        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 4", "Bộ Hiệu Ứng Kỹ Năng VFX Cần Thủ & Boss Thủy Quái (v0.5.4)", new Color(0.95f, 0.55f, 0.25f, 1f))
+        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 5", "Bộ Hiệu Ứng Kỹ Năng VFX Cần Thủ & Boss Thủy Quái (v0.5.5)", new Color(0.95f, 0.55f, 0.25f, 1f))
             .addPoint("VFX chiêu thức cần thủ: Dưỡng Sức (vòng hồi ngọc), Giật Kép (sóng chém đôi), Trói Buộc (xích nước), Thuần Hóa, Mắt Đại Bàng.")
             .addPoint("VFX kỹ năng cá & Boss: Quẫy Bùn (che phủ HUD), Bứt Tốc (bọt xoáy), Lặn Sâu (tăng tension), Cuồng Nộ (hào quang đỏ), Giật Điện, Mực Mù, Sóng Thần, Bão Tố.")
         );
 
-        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 5", "Hoạt Ảnh Vật Lý, Băng Chuyền CS:GO & Custom Skin Động (v0.5.5)", new Color(0.95f, 0.45f, 0.75f, 1f))
+        roadmapItems.add(new UpdateItem("GIAI ĐOẠN 6", "Hoạt Ảnh Vật Lý, Băng Chuyền CS:GO & Custom Skin Động (v0.5.6)", new Color(0.95f, 0.45f, 0.75f, 1f))
             .addPoint("Hệ thống Custom Skin Động Cần - Dây - Phao trên PlayScreen: Tùy theo trang bị đang mặc mà ngoại hình cần câu trên màn chơi thay đổi tương ứng (Cần câu cho Cần, Dây câu cho Dây, Phao câu cho Móc).")
             .addPoint("Cải tiến hoạt ảnh cá quẫy đuôi mềm mại hình sin, uốn mình đổi hướng khi giằng co kéo dây với cần thủ.")
             .addPoint("Cần câu uốn cong vật lý co giãn theo lực căng Tension, hiệu ứng rung chấn màn hình giật cần cắn câu.")

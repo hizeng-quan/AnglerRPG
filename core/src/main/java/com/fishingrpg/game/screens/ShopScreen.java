@@ -304,17 +304,9 @@ public class ShopScreen implements Screen {
             int discount = discounts.getOrDefault(item.name, 0);
 
             boolean isSoldOut = false;
-            if (item.name.startsWith("Sách: ")) {
-                String skillId = "";
-                if (item.name.equals("Sách: Dưỡng Sức")) skillId = "duong_suc";
-                else if (item.name.equals("Sách: Giật Kép")) skillId = "giat_kep";
-                else if (item.name.equals("Sách: Mắt Đại Bàng")) skillId = "mat_dai_bang";
-                else if (item.name.equals("Sách: Thuần Hóa")) skillId = "thuan_hoa";
-                else if (item.name.equals("Sách: Trói Buộc")) skillId = "loi_nguyen_troi_buoc";
-                else if (item.name.equals("Sách: Trái Tim ĐD")) skillId = "trai_tim_dai_duong";
-
-                com.fishingrpg.game.skills.Skill s = player.getSkillTree().getSkill(skillId);
-                if (s != null && s.isMaxed()) isSoldOut = true;
+            int remBooks = getRemainingSkillBooks(item);
+            if (remBooks == 0) {
+                isSoldOut = true;
             }
 
             boolean hoverCard = (m.x >= x && m.x <= x + itemW && m.y >= y && m.y <= y + itemH);
@@ -466,13 +458,9 @@ public class ShopScreen implements Screen {
             int currentPrice = item.buyPrice * (100 - discount) / 100;
 
             boolean isSoldOut = false;
-            if (item.name.startsWith("Sách: ")) {
-                String skillId = "";
-                if (item.name.equals("Sách: Dưỡng Sức")) skillId = "duong_suc";
-                else if (item.name.equals("Sách: Giật Kép")) skillId = "giat_kep";
-                else if (item.name.equals("Sách: Mắt Đại Bàng")) skillId = "mat_dai_bang";
-                com.fishingrpg.game.skills.Skill s = player.getSkillTree().getSkill(skillId);
-                if (s != null && s.getLevel() > 0) isSoldOut = true;
+            int remBooks = getRemainingSkillBooks(item);
+            if (remBooks == 0) {
+                isSoldOut = true;
             }
 
             // Item Name
@@ -490,7 +478,11 @@ public class ShopScreen implements Screen {
             int ownedCount = player.getItemCount(item.name);
             font.setColor(0.6f, 0.8f, 0.7f, 0.85f);
             font.getData().setScale(0.85f);
-            font.draw(game.batch, "Đang có: " + ownedCount, x + 105f, y + itemH - 42f);
+            String countTag = "Đang có: " + ownedCount;
+            if (remBooks >= 0) {
+                countTag += (remBooks == 0) ? " [TỐI ĐA]" : " [Còn: " + remBooks + "]";
+            }
+            font.draw(game.batch, countTag, x + 105f, y + itemH - 42f);
             font.getData().setScale(1f);
 
             // Buy Button Text
@@ -502,7 +494,7 @@ public class ShopScreen implements Screen {
             if (isSoldOut) {
                 font.setColor(0.6f, 0.6f, 0.6f, 1f);
                 font.getData().setScale(0.85f);
-                layout.setText(font, "ĐÃ HỌC");
+                layout.setText(font, "ĐÃ TỐI ĐA");
                 font.draw(game.batch, layout, buyBtnX + (buyBtnW - layout.width) / 2f, buyBtnY + (buyBtnH + layout.height) / 2f);
             } else {
                 font.setColor(Color.WHITE);
@@ -704,14 +696,9 @@ public class ShopScreen implements Screen {
                 boolean isSoldOut = false;
                 String skillId = "";
                 if (item.name.startsWith("Sách: ")) {
-                    if (item.name.equals("Sách: Dưỡng Sức")) skillId = "duong_suc";
-                    else if (item.name.equals("Sách: Giật Kép")) skillId = "giat_kep";
-                    else if (item.name.equals("Sách: Mắt Đại Bàng")) skillId = "mat_dai_bang";
-                    else if (item.name.equals("Sách: Thuần Hóa")) skillId = "thuan_hoa";
-                    else if (item.name.equals("Sách: Trói Buộc")) skillId = "loi_nguyen_troi_buoc";
-                    else if (item.name.equals("Sách: Trái Tim ĐD")) skillId = "trai_tim_dai_duong";
-                    com.fishingrpg.game.skills.Skill s = player.getSkillTree().getSkill(skillId);
-                    if (s != null && s.isMaxed()) isSoldOut = true;
+                    skillId = com.fishingrpg.game.entities.PlayerEconomy.getSkillIdFromBook(item.name);
+                    int rem = getRemainingSkillBooks(item);
+                    if (rem == 0) isSoldOut = true;
                 }
 
                 float buyBtnW = player.hasItem(item.name) ? 120f : 150f;
@@ -763,6 +750,16 @@ public class ShopScreen implements Screen {
                 }
             }
         }
+    }
+
+    private int getRemainingSkillBooks(ItemData item) {
+        if (item == null || !item.name.startsWith("Sách: ")) return -1;
+        String skillId = com.fishingrpg.game.entities.PlayerEconomy.getSkillIdFromBook(item.name);
+        if (skillId.isEmpty() || player.getSkillTree() == null) return -1;
+        com.fishingrpg.game.skills.Skill s = player.getSkillTree().getSkill(skillId);
+        if (s == null) return -1;
+        int inBag = player.getItemCount(item.name);
+        return Math.max(0, s.maxLevel - s.getLevel() - inBag);
     }
 
     private void showMessage(String msg) {

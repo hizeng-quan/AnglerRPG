@@ -53,7 +53,7 @@ public class Player {
         this.progression = new PlayerProgression();
         this.equipment = new PlayerEquipment();
         this.buffs = new PlayerBuffs();
-        this.economy = new PlayerEconomy();
+        this.economy = new PlayerEconomy(this);
         this.skillTree = new SkillTree();
         this.inventory = new Inventory();
         this.eventManager = new EventManager(this);

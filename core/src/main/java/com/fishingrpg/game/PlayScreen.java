@@ -119,8 +119,11 @@ public class PlayScreen implements Screen {
             fishingManager.bossSkillJustUsed = false;
             screenShake.shakeHeavy();
         }
-        if (fishingManager.state == FishingManager.State.COMBAT && player.getCurrentLineTension() / player.getMaxLineTension() > 0.85f) {
-            screenShake.addTrauma(0.04f);
+        if (fishingManager.state == FishingManager.State.COMBAT) {
+            float tensionRatio = player.getCurrentLineTension() / Math.max(1f, player.getMaxLineTension());
+            if (tensionRatio > 0.88f && screenShake.getTrauma() < 0.16f) {
+                screenShake.addTrauma(0.01f);
+            }
         }
 
         screenShake.update(delta, camera);
@@ -212,6 +215,17 @@ public class PlayScreen implements Screen {
 
         hud.updateHover(mousePos, fishingManager.state);
 
+        if (framesToSkip <= 0 && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            if (hud.isQuickslotPrevClicked(mousePos)) {
+                hud.prevQuickslotPage();
+                return;
+            }
+            if (hud.isQuickslotNextClicked(mousePos)) {
+                hud.nextQuickslotPage();
+                return;
+            }
+        }
+
         String clickedItem = hud.getClickedInventoryItem(mousePos, fishingManager.state);
         boolean itemClicked = false;
         if (framesToSkip <= 0 && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && clickedItem != null) {
@@ -237,17 +251,14 @@ public class PlayScreen implements Screen {
             actClicked = actClicked || mouseJustClicked;
         }
 
-        // Quick slots 1-9
-        int i = 0;
-        for (Map.Entry<String, Integer> entry : player.getInventory().entrySet()) {
-            String name = entry.getKey();
-            if (entry.getValue() <= 0 || name.equals("Vàng")) continue;
-            int keyCode = com.fishingrpg.game.systems.KeybindManager.getInstance().getQuickslotKey(i);
-            if (i < 9 && Gdx.input.isKeyJustPressed(keyCode)) {
-                useItem(name);
+        // Quick slots 1-9 for the currently active inventory page
+        java.util.List<String> pageItems = hud.getItemsOnCurrentPage();
+        for (int k = 0; k < pageItems.size() && k < 9; k++) {
+            int keyCode = com.fishingrpg.game.systems.KeybindManager.getInstance().getQuickslotKey(k);
+            if (Gdx.input.isKeyJustPressed(keyCode)) {
+                useItem(pageItems.get(k));
                 break;
             }
-            i++;
         }
 
         if (framesToSkip <= 0 && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
@@ -483,23 +494,43 @@ public class PlayScreen implements Screen {
                 break;
             }
             case "Lưới Đánh Cá":
+                if (player.isFishingNetActive()) {
+                    fishingManager.combatMessage = "Lưới Đánh Cá đang giăng sẵn cho lượt tới!";
+                    return false;
+                }
                 player.setFishingNetActive(true);
                 fishingManager.combatMessage = "Đã giăng Lưới Đánh Cá (Cơ hội x2-x4 lượt tới)!";
                 break;
             case "Bùa Hoàng Kim":
+                if (player.getGoldBuffCharges() > 0) {
+                    fishingManager.combatMessage = "Bùa Hoàng Kim vẫn đang có hiệu lực (" + player.getGoldBuffCharges() + " lượt)!";
+                    return false;
+                }
                 player.addGoldBuffCharges(5);
                 fishingManager.combatMessage = "Dùng Bùa Hoàng Kim (Buff 5 lượt)!";
                 break;
             case "Sách Thông Thái":
+                if (player.getExpBuffCharges() > 0) {
+                    fishingManager.combatMessage = "Sách Thông Thái vẫn đang có hiệu lực (" + player.getExpBuffCharges() + " lượt)!";
+                    return false;
+                }
                 player.addExpBuffCharges(5);
                 fishingManager.combatMessage = "Dùng Sách Thông Thái (Buff 5 lượt)!";
                 break;
             case "Mồi Rủi Ro":
+                if (player.isRiskyBaitActive()) {
+                    fishingManager.combatMessage = "Mồi Rủi Ro đang hoạt động rồi!";
+                    return false;
+                }
                 player.setRiskyBaitActive(true);
                 fishingManager.combatMessage = "Dùng Mồi Rủi Ro (Nguy hiểm lượt tới)!";
                 break;
             case "Nước Bức Phá":
             case "Nước Bứt Phá":
+                if (player.isOverclockPotionActive()) {
+                    fishingManager.combatMessage = "Nước Bứt Phá vẫn đang có hiệu lực!";
+                    return false;
+                }
                 player.consumeStamina(-player.getMaxStamina());
                 player.setOverclockPotionActive(true);
                 fishingManager.combatMessage = "Hồi đầy Thể lực, Giảm 30% Max Tension lượt tới!";
@@ -528,14 +559,26 @@ public class PlayScreen implements Screen {
                 break;
             }
             case "Đá Mài Lưỡi Câu":
+                if (player.getWhetstoneCharges() > 0) {
+                    fishingManager.combatMessage = "Đá Mài Lưỡi Câu vẫn đang có hiệu lực (" + player.getWhetstoneCharges() + " lượt)!";
+                    return false;
+                }
                 player.addWhetstoneCharges(5);
                 fishingManager.combatMessage = "Đá Mài: +25% sát thương kéo cá & cắn câu siêu tốc (5 lượt)!";
                 break;
             case "Nam Châm Kho Báu":
+                if (player.getTreasureMagnetCharges() > 0) {
+                    fishingManager.combatMessage = "Nam Châm Kho Báu vẫn đang có hiệu lực (" + player.getTreasureMagnetCharges() + " lượt)!";
+                    return false;
+                }
                 player.addTreasureMagnetCharges(3);
                 fishingManager.combatMessage = "Nam Châm Kho Báu: Tăng 400% cơ hội trúng Cổ Vật & Rương Báu (3 lượt)!";
                 break;
             case "Kính Nhìn Xuyên Nước":
+                if (player.getSonarCharges() > 0) {
+                    fishingManager.combatMessage = "Kính Nhìn Xuyên Nước vẫn đang có hiệu lực (" + player.getSonarCharges() + " lượt)!";
+                    return false;
+                }
                 player.addSonarCharges(3);
                 fishingManager.combatMessage = "Kính Nhìn Xuyên Nước: Kích hoạt Thấu thị mặt nước (3 lượt)!";
                 break;

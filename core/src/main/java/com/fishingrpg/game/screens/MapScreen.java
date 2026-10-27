@@ -337,16 +337,15 @@ public class MapScreen implements Screen {
                 drawRoundedRect(sr, barX + 1, barY1 + 1, (barW - 2) * lvlP, barH - 2, 3);
             }
 
-            // Fish Bar (if required)
-            if (map.requiredFishCount > 0 && map.prevMapId != null) {
-                sr.setColor(0.06f, 0.09f, 0.14f, 1f);
-                drawRoundedRect(sr, barX, barY2, barW, barH, 4);
-                int caught = getCaughtFishCountForMap(map.prevMapId);
-                float fishP = MathUtils.clamp((float)caught / map.requiredFishCount, 0f, 1f);
-                sr.setColor(fishP >= 1f ? FISH_BAR_DONE : FISH_BAR_PROG);
-                if (fishP > 0) {
-                    drawRoundedRect(sr, barX + 1, barY2 + 1, (barW - 2) * fishP, barH - 2, 3);
-                }
+            // Fish Bar for this map
+            sr.setColor(0.06f, 0.09f, 0.14f, 1f);
+            drawRoundedRect(sr, barX, barY2, barW, barH, 4);
+            int caught = getCaughtFishCountForMap(map.id);
+            int total = getTotalFishCountForMap(map.id);
+            float fishP = MathUtils.clamp((float)caught / Math.max(1, total), 0f, 1f);
+            sr.setColor(fishP >= 1f ? FISH_BAR_DONE : FISH_BAR_PROG);
+            if (fishP > 0) {
+                drawRoundedRect(sr, barX + 1, barY2 + 1, (barW - 2) * fishP, barH - 2, 3);
             }
 
             // Bottom Action Button Box
@@ -413,13 +412,15 @@ public class MapScreen implements Screen {
 
             // Difficulty / Rating & Specie info
             game.font.setColor(0.95f, 0.8f, 0.3f, unlocked ? 1f : 0.6f);
-            String stars = (i == 0) ? "★☆☆☆☆  Độ khó: Dễ" : (i == 1) ? "★★★☆☆  Độ khó: Vừa" : "★★★★★  Độ khó: Cực Khó";
+            String stars = (i == 0) ? "☆☆☆☆☆  Độ khó: Rất Dễ" : (i == 1) ? "★☆☆☆☆  Độ khó: Dễ" : "★★☆☆☆  Độ khó: Vừa";
             layout.setText(game.font, stars);
             game.font.draw(game.batch, layout, cx + cardWidth / 2f - layout.width / 2f, drawY + cardHeight - 265f);
 
             // Descriptive Subtitle
             game.font.setColor(0.6f, 0.75f, 0.85f, unlocked ? 0.9f : 0.5f);
-            String desc = (i == 0) ? "Ao hồ yên ả, nguồn nước trù phú" : (i == 1) ? "Sóng vỗ rì rào, đa dạng cá ven bờ" : "Vực sâu thăm thẳm, ngự trị thủy quái";
+            String desc = (i == 0) ? "Ao hồ yên ả, nguồn nước trù phú" 
+                        : (i == 1) ? "Sóng vỗ rì rào, đa dạng cá ven bờ" 
+                        : "Hòn đảo ngoài khơi xa, sóng gió và cá lớn";
             game.font.getData().setScale(0.85f);
             layout.setText(game.font, desc);
             game.font.draw(game.batch, layout, cx + cardWidth / 2f - layout.width / 2f, drawY + cardHeight - 290f);
@@ -444,17 +445,13 @@ public class MapScreen implements Screen {
             String lvlText = "Yêu cầu: Cấp " + map.requiredLevel + " (Hiện tại: Cấp " + player.getLevel() + ")";
             game.font.draw(game.batch, lvlText, tx, drawY + 140f);
 
-            // Fish requirement text
-            if (map.requiredFishCount > 0 && map.prevMapId != null) {
-                MapArea prev = MapArea.getMap(map.prevMapId);
-                int c = getCaughtFishCountForMap(map.prevMapId);
-                boolean fishOk = c >= map.requiredFishCount;
-                game.font.setColor(fishOk ? new Color(0.7f, 0.9f, 0.7f, 1f) : new Color(1f, 0.45f, 0.45f, 1f));
-                String fishReqText = "Đã bắt ở " + prev.name + ": " + c + "/" + map.requiredFishCount + " loài";
-                game.font.getData().setScale(0.9f);
-                game.font.draw(game.batch, fishReqText, tx, drawY + 95f);
-                game.font.getData().setScale(1f);
-            }
+            // Fish progress text for this map
+            boolean fishDone = caughtFish >= totalFish && totalFish > 0;
+            game.font.setColor(fishDone ? new Color(0.7f, 0.9f, 0.7f, 1f) : new Color(0.4f, 0.85f, 0.95f, 1f));
+            String fishReqText = "Đã bắt ở " + map.name + ": " + caughtFish + "/" + totalFish + " loài";
+            game.font.getData().setScale(0.9f);
+            game.font.draw(game.batch, fishReqText, tx, drawY + 95f);
+            game.font.getData().setScale(1f);
 
             // Bottom Action Button Text
             float btnX = cx + 24f;
