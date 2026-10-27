@@ -89,7 +89,7 @@
 | **FSH-02A** | Đồ họa   | Bước 2.1: 15 Loài Cá Ao Làng & Siêu Boss Thủy Quái Sông Trà trong FishVisualRenderer | **P1 (Đồ họa)**     | ✅ Đã hoàn thành (v0.5.2.2) |
 | **FSH-02B** | Đồ họa   | Bước 2.2: 15 Loài Cá Bãi Biển & Siêu Boss Bạch Tuộc Khổng Lồ trong FishVisualRenderer | **P1 (Đồ họa)**     | ✅ Đã hoàn thành (v0.5.2.3) |
 | **FSH-02C** | Đồ họa   | Bước 2.3: 15 Loài Cá Đảo Xa & Siêu Boss Cá Cờ Xanh Khổng Lồ trong FishVisualRenderer  | **P1 (Đồ họa)**     | ✅ Đã hoàn thành (v0.5.2.4) |
-| **ENV-02**  | Đồ họa   | Bước 3: Môi trường mặt nước gợn sóng sinh động, rạn san hô & khúc xạ ánh sáng 3 Map  | **P1 (Đồ họa)**     | 📋 Kế hoạch (Bước 3 - v0.5.3) |
+| **ENV-02**  | Đồ họa   | Bước 3: Môi trường mặt nước gợn sóng sinh động, rạn san hô & đại tu background 3 Map (Ao Làng, Bãi Biển, Đảo Xa) | **P1 (Đồ họa)**     | ✅ Đã hoàn thành (v0.5.5.2) |
 | **UI-05**   | Giao diện| Bước 4: Khung viền Dialog hiện đại bo góc & Bộ nút bấm phản hồi âm ZzFX               | **P1 (Giao diện)**  | 📋 Kế hoạch (Bước 4 - v0.5.4) |
 | **UI-06**   | Giao diện| Bước 4: Thanh trạng thái chiến đấu động (Ghost HP bar tụt dần, Gradient Tension bar)  | **P1 (Giao diện)**  | 📋 Kế hoạch (Bước 4 - v0.5.4) |
 | **UI-07**   | Giao diện| Bước 4: Thẻ bài trang bị hiển thị Rarity rõ nét & So sánh chỉ số tức thì (Stat Diff)  | **P1 (Giao diện)**  | 📋 Kế hoạch (Bước 4 - v0.5.4) |
@@ -375,7 +375,7 @@
 | **BƯỚC 2.1** | `v0.5.2` | **15 Loài Cá Ao Làng & Siêu Boss Thủy Quái** | FSH-02A (15 loài cá Ao Làng & Boss Thủy Quái Sông Trà) - ✅ Đã hoàn thành |
 | **BƯỚC 2.2** | `v0.5.2` | **15 Loài Cá Bãi Biển & Siêu Boss Bạch Tuộc** | FSH-02B (15 loài cá Bãi Biển & Boss Bạch Tuộc Khổng Lồ) |
 | **BƯỚC 2.3** | `v0.5.2` | **15 Loài Cá Đảo Xa & Siêu Boss Cá Cờ Xanh** | FSH-02C (15 loài cá Đảo Xa & Boss Cá Cờ Xanh Khổng Lồ) |
-| **BƯỚC 3** | `v0.5.3` | **Môi Trường Nước 3 Bản Đồ & Khúc Xạ Ánh Sáng** | ENV-02 (Sóng nước tự nhiên, rạn san hô, khúc xạ biển) |
+| **BƯỚC 3** | `v0.5.5.2` | **Môi Trường Nước 3 Bản Đồ & Khúc Xạ Ánh Sáng** | ENV-02 (Ao Làng, Bãi Biển, Đảo Xa - AoLang, BaiBien, DaoXaBackground) - ✅ Đã hoàn thành |
 | **BƯỚC 4** | `v0.5.4` | **Hiện Đại Hóa UI, Nút Bấm Xúc Giác & Gauges** | UI-05 (Khung viền/nút bấm), UI-06 (Ghost HP/Tension), UI-07 (Thẻ Rarity) |
 | **BƯỚC 5** | `v0.5.5` | **Hiệu Ứng Kỹ Năng VFX Cần Thủ & Boss** | VFX-04 (VFX chiêu cần thủ), VFX-05 (VFX chiêu Boss & kỹ năng cá) |
 | **BƯỚC 6** | `v0.5.6` | **Hoạt Ảnh Vật Lý, Băng Chuyền CS:GO & Custom Skin** | ANM-04 (Đuôi cá hữu cơ), ANM-05 (Uốn cong cần câu), ANM-06, GAC-02,03 |
@@ -528,9 +528,9 @@
 
 ---
 
-### 🌊 BƯỚC 3: Môi Trường Nước 3 Bản Đồ & Khúc Xạ Ánh Sáng Biển (Phiên bản v0.5.3)
-- Hoàn thiện chuyển động sóng nước tự nhiên theo thời gian thực tại `AoLangBackground`, `BaiBienBackground`, và `DaoXaBackground` (ENV-02).
-- Hiệu ứng rạn san hô, cá bơi nền, bóng nước khúc xạ God Rays và bọt sóng ven bờ.
+### 🌊 BƯỚC 3: Môi Trường Nước 3 Bản Đồ & Khúc Xạ Ánh Sáng Biển (Phiên bản v0.5.5.2)
+- Hoàn thiện chuyển động sóng nước tự nhiên theo thời gian thực tại `AoLangBackground`, `BaiBienBackground`, và `DaoXaBackground` (ENV-02) - **✅ Đã hoàn thành (v0.5.5.2)**.
+- Hiệu ứng rạn san hô bãi biển, đầm sen ao làng, tháp đá & hải đăng đảo xa, bóng cá bơi nền, bọt sóng xô bờ và sinh vật biển sâu phát quang sinh học.
 
 ---
 
@@ -1072,7 +1072,7 @@ gantt
     Bước 2.2 - 15 Cá Bãi Biển & Siêu Boss (FSH-02B)      :done, f2, 2026-10-27, 1d
     Bước 2.3 - 15 Cá Đảo Xa & Siêu Boss (FSH-02C)        :done, f3, 2026-10-27, 1d
     section Bước 3 - Môi Trường Nước 3 Map (v0.5.3)
-    Mặt Nước Gợn Sóng & Khúc Xạ God Rays (ENV-02)         :active, e1, 2026-10-28, 2d
+    Mặt Nước Gợn Sóng & Khúc Xạ God Rays (ENV-02)         :done, e1, 2026-10-28, 2d
     section Bước 4 - Giao Diện & UI Game Juice (v0.5.4)
     Khung Viền Bo Góc & Nút Bấm Xúc Giác (UI-05)          :u1, after e1, 2d
     Thanh Chiến Đấu Động Ghost HP & Gradient (UI-06)      :u2, after u1, 2d

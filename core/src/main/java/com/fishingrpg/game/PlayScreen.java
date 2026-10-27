@@ -157,19 +157,7 @@ public class PlayScreen implements Screen {
             } else if (mapId.equals("bai_bien")) {
                 com.fishingrpg.game.ui.BaiBienBackground.render(shapeRenderer, timer, WORLD_WIDTH, WORLD_HEIGHT);
             } else if (mapId.equals("dao_xa")) {
-                // Abyss: very dark blue, glowing particles
-                shapeRenderer.setColor(0.01f, 0.02f, 0.05f, 1f);
-                shapeRenderer.rect(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
-                
-                shapeRenderer.setColor(0.05f, 0.1f, 0.15f, 0.5f);
-                shapeRenderer.circle(WORLD_WIDTH/2, -100, 400);
-                
-                for(int i=0; i<40; i++) {
-                    shapeRenderer.setColor((i%3==0)?0f:0.2f, (i%2==0)?0.8f:0.2f, 1f, 0.6f);
-                    float bx = (i * 97 + timer * 5f) % WORLD_WIDTH;
-                    float by = ((i * 151 + timer * 25f) % (WORLD_HEIGHT + 100)) - 50;
-                    shapeRenderer.circle(bx + com.badlogic.gdx.math.MathUtils.sin(timer*0.5f + i)*30f, by, 1f + (i%3));
-                }
+                com.fishingrpg.game.ui.DaoXaBackground.render(shapeRenderer, timer, WORLD_WIDTH, WORLD_HEIGHT);
             }
 
             // HLW-05: Chuyen sac em ai 3.0s sang Bau Troi Huyet Nguyet
