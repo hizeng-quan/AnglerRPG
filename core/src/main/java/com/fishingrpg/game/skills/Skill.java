@@ -140,7 +140,7 @@ public class Skill {
             case "ngu_dan_tinh_anh": return String.format("Tăng tỷ lệ cá Sử Thi / Huyền Thoại: +%.0f%%", e1);
             case "tho_san_kho_bau": return String.format("Tỷ lệ xuất hiện Rương Kho Báu: +%.0f%%", e1);
             case "nem_xa": return "Cú quăng cần tiếp theo chắc chắn đạt mức Tuyệt Đối (Perfect)";
-            case "duong_suc": return String.format("Thời gian vận sức: %.1fs (Hồi phục 50 Thể lực)", e1);
+            case "duong_suc": return (e2 / Math.max(0.1f, e1) == (int)(e2 / Math.max(0.1f, e1))) ? String.format(java.util.Locale.US, "Vận sức %.1fs hồi +%.0f Thể lực (+%d/s)", e1, e2, (int)(e2 / Math.max(0.1f, e1))) : String.format(java.util.Locale.US, "Vận sức %.1fs hồi +%.0f Thể lực (+%.1f/s)", e1, e2, e2 / Math.max(0.1f, e1));
             case "giat_kep": return String.format("Hệ số sát thương: x%.1f (Tiêu hao 40 Thể lực)", e1);
             case "mat_dai_bang": return String.format("Mở rộng vùng Perfect khi quăng cần: x%.1f", e1);
             case "thuan_hoa": return String.format("Kéo dài thời gian cá nghỉ ngơi thêm +%.1fs", e1);

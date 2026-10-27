@@ -722,13 +722,35 @@ public class CatalogScreen implements Screen, InputProcessor {
 
     private void drawFishTooltip() {
         int skillCount = (hoveredFish.getSkills() != null) ? hoveredFish.getSkills().size() : 0;
-        float tw = 440f;
-        float th = 246f + Math.max(0, skillCount) * 20f;
+        float tw = 480f;
+
+        // Tinh toan truoc chieu cao dong cua Ky Nang va Lore de khung tooltip bao tron ven
+        font.getData().setScale(0.70f);
+        float skillsH = 0f;
+        if (skillCount == 0) {
+            skillsH = 22f;
+        } else {
+            for (com.fishingrpg.game.entities.FishSkill fs : hoveredFish.getSkills()) {
+                String sDesc = Fish.getSkillDescription(fs.id);
+                layout.setText(font, sDesc, Color.WHITE, tw - 38f, Align.left, true);
+                skillsH += 18f + layout.height + 7f;
+            }
+        }
+
+        // Do chieu cao Lore
+        String desc = getFishLore(hoveredFishName);
+        font.getData().setScale(0.68f);
+        layout.setText(font, "“" + desc + "”", Color.WHITE, tw - 28f, Align.left, true);
+        float loreH = layout.height;
+
+        float th = 142f + skillsH + 8f + loreH + 10f + 18f + 14f;
         float tx = mouseX + 18f;
         float ty = mouseY - 15f;
 
         if (tx + tw > W - 15f) tx = mouseX - tw - 15f;
-        if (ty - th < 20f) ty = 20f + th;
+        if (tx < 15f) tx = 15f;
+        if (ty - th < 15f) ty = 15f + th;
+        if (ty > H - 15f) ty = H - 15f;
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -808,41 +830,43 @@ public class CatalogScreen implements Screen, InputProcessor {
         font.getData().setScale(0.74f);
         font.draw(game.batch, "❖ Cơ chế Kỹ năng (" + skillCount + "):", infoX, ty - 108f);
 
-        // Skill list with detailed mechanics
-        float curY = ty - 148f;
+        // Skill list with detailed mechanics & text wrap
+        float curY = ty - 142f;
         if (skillCount == 0) {
             font.setColor(0.6f, 0.72f, 0.82f, 0.85f);
             font.getData().setScale(0.70f);
             font.draw(game.batch, "• Loài cá thuần hậu, không có kỹ năng đặc biệt.", tx + 14f, curY);
-            curY -= 20f;
+            curY -= 22f;
         } else {
             for (com.fishingrpg.game.entities.FishSkill fs : hoveredFish.getSkills()) {
                 String sName = Fish.getSkillDisplayName(fs.id);
                 String sDesc = Fish.getSkillDescription(fs.id);
 
                 font.setColor(1f, 0.85f, 0.35f, 1f);
-                font.getData().setScale(0.70f);
-                String prefix = "• " + sName + ": ";
-                font.draw(game.batch, prefix, tx + 14f, curY);
-                layout.setText(font, prefix);
-                float nameW = layout.width;
+                font.getData().setScale(0.72f);
+                font.draw(game.batch, "• " + sName + ":", tx + 14f, curY);
+                curY -= 17f;
 
                 font.setColor(0.88f, 0.94f, 1f, 0.95f);
-                font.draw(game.batch, sDesc, tx + 14f + nameW, curY, tw - 28f - nameW, Align.left, false);
-                curY -= 20f;
+                font.getData().setScale(0.70f);
+                layout.setText(font, sDesc, Color.WHITE, tw - 38f, Align.left, true);
+                font.draw(game.batch, sDesc, tx + 24f, curY, tw - 38f, Align.left, true);
+                curY -= (layout.height + 7f);
             }
         }
 
         // Description / Lore Line for each fish
-        String desc = getFishLore(hoveredFishName);
+        curY -= 4f;
         font.setColor(0.95f, 0.88f, 0.65f, 0.95f);
         font.getData().setScale(0.68f);
-        font.draw(game.batch, "“" + desc + "”", tx + 14f, ty - th + 52f, tw - 28f, Align.left, true);
+        layout.setText(font, "“" + desc + "”", Color.WHITE, tw - 28f, Align.left, true);
+        font.draw(game.batch, "“" + desc + "”", tx + 14f, curY, tw - 28f, Align.left, true);
+        curY -= (layout.height + 10f);
 
         // Flavor footer
         font.setColor(0.6f, 0.75f, 0.88f, 0.85f);
         font.getData().setScale(0.70f);
-        font.draw(game.batch, "Thưởng gốc: +" + hoveredFish.getBaseGold() + " Vàng  +" + hoveredFish.getBaseXp() + " XP", tx + 14f, ty - th + 24f);
+        font.draw(game.batch, "Thưởng gốc: +" + hoveredFish.getBaseGold() + " Vàng  +" + hoveredFish.getBaseXp() + " XP", tx + 14f, curY);
 
         font.getData().setScale(1f);
         game.batch.end();

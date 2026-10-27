@@ -32,8 +32,8 @@ public class EquipmentGenerator {
         new EqSet("Quang Minh", "Trượng Ánh Sáng", "Dây Chỉ Vàng", "Lưỡi Câu Thần", 7),
         new EqSet("Vệ Quốc Vang Danh", "Cần Câu Khởi Nghĩa", "Cước Vệ Quốc", "Lưỡi Sao Vàng", 4), // Same as RARE
         new EqSet("Thần Khí Lạc Hồng", "Trượng Lạc Hồng", "Dây Rồng Thiêng", "Móc Âu Cơ", 8), // Supreme 6★
-        new EqSet("Dạ Hội Bí Ngô", "Cần Bí Ngô", "Dây Tơ Nhện", "Móc Kẹo Ma", 4), // 4★ Limited Halloween
-        new EqSet("Huyết Nguyệt Thần Vương", "Trượng Lưỡi Hái Tử Thần", "Dây Huyết Ma Linh", "Móc Xương Quỷ", 8) // 6★ Limited Premium Halloween
+        new EqSet("Dạ Hội Bí Ngô", "Cần Dạ Hội Bí Ngô", "Dây Cước Tơ Nhện Quỷ", "Lưỡi Kẹo Ma Quái", 4), // 4★ Limited Halloween
+        new EqSet("Huyết Nguyệt Thần Vương", "Huyết Nguyệt Thần Trượng", "Dây Huyết Ma Cơ", "Lưỡi Huyết Nguyệt Ma Trảo", 8) // 6★ Limited Premium Halloween
     };
 
     public static int getSetPoints(String setName) {
@@ -173,10 +173,11 @@ public class EquipmentGenerator {
         EqSet set = null;
         
         if (rarity == Rarity.LIMITED_PREMIUM) {
-            // 50% Rate-up đúng Set Thần Khí Lạc Hồng, 50% còn lại là các Set 6★ khác (Quang Minh, Thời Không, Hoàng Gia)
+            String featuredSet = com.fishingrpg.game.systems.EventManager.isHalloweenActive() ? "Huyết Nguyệt Thần Vương" : "Thần Khí Lạc Hồng";
+            // 50% Rate-up đúng Set tiêu điểm (Huyết Nguyệt khi Halloween, Lạc Hồng khi sự kiện Lạc Hồng)
             if (MathUtils.randomBoolean(0.5f)) {
                 for (EqSet s : SETS) {
-                    if (s.setName.equals("Thần Khí Lạc Hồng")) {
+                    if (s.setName.equals(featuredSet)) {
                         set = s; break;
                     }
                 }
@@ -191,14 +192,16 @@ public class EquipmentGenerator {
             }
             if (set == null) {
                 for (EqSet s : SETS) {
-                    if (s.setName.equals("Thần Khí Lạc Hồng")) { set = s; break; }
+                    if (s.setName.equals(featuredSet)) { set = s; break; }
                 }
             }
         } else {
-            // normal set (exclude limited ones)
+            // normal set (exclude limited ones; Dạ Hội Bí Ngô only drops during Halloween when LIMITED_EVENT)
             do {
                 set = SETS[MathUtils.random(0, SETS.length - 1)];
-            } while (set.setName.equals("Thần Khí Lạc Hồng") || set.setName.equals("Vệ Quốc Vang Danh"));
+            } while (set.setName.equals("Thần Khí Lạc Hồng") || set.setName.equals("Vệ Quốc Vang Danh")
+                  || set.setName.equals("Huyết Nguyệt Thần Vương")
+                  || (!com.fishingrpg.game.systems.EventManager.isHalloweenActive() && set.setName.equals("Dạ Hội Bí Ngô")));
         }
         
         Equipment eq = new Equipment();
@@ -207,8 +210,8 @@ public class EquipmentGenerator {
         eq.setName = set.setName;
         eq.level = 1;
         
-        // Strict safety rule: Set Lạc Hồng ONLY exists with fixed rarity LIMITED_PREMIUM (6★ explosion)
-        if ("Thần Khí Lạc Hồng".equals(eq.setName)) {
+        // Strict safety rule: Set Lạc Hồng and Huyết Nguyệt Thần Vương ONLY exist with fixed rarity LIMITED_PREMIUM (6★ explosion)
+        if ("Thần Khí Lạc Hồng".equals(eq.setName) || "Huyết Nguyệt Thần Vương".equals(eq.setName)) {
             eq.rarity = Rarity.LIMITED_PREMIUM;
         }
         
@@ -353,6 +356,53 @@ public class EquipmentGenerator {
         }
     }
 
+    public static Equipment createHuyetNguyetEquipment(EquipmentType type) {
+        EqSet set = null;
+        for (EqSet s : SETS) {
+            if (s.setName.equals("Huyết Nguyệt Thần Vương")) {
+                set = s;
+                break;
+            }
+        }
+        if (set == null) return createPumpkinCarnivalEquipment(type);
+
+        Equipment eq = new Equipment();
+        eq.type = type;
+        eq.rarity = Rarity.LIMITED_PREMIUM;
+        eq.setName = set.setName;
+        eq.level = 1;
+
+        switch (type) {
+            case ROD:
+                eq.id = "rod_huyet_nguyet_" + MathUtils.random(10000);
+                eq.name = set.rodName;
+                eq.mainStat1 = 48.0f; // Sát thương cơ bản khủng (6★ Limited)
+                eq.mainStat2 = 280.0f; // Thể lực tối đa cực lớn
+                break;
+            case LINE:
+                eq.id = "line_huyet_nguyet_" + MathUtils.random(10000);
+                eq.name = set.lineName;
+                eq.mainStat1 = 520.0f; // Sức căng tối đa áp đảo
+                eq.mainStat2 = 8.5f; // Kháng đứt dây siêu việt
+                break;
+            case HOOK:
+                eq.id = "hook_huyet_nguyet_" + MathUtils.random(10000);
+                eq.name = set.hookName;
+                eq.mainStat1 = 28.0f; // Tỉ lệ cá hiếm (+28%)
+                eq.mainStat2 = 45.0f; // Tỉ lệ giữ mồi (+45%)
+                break;
+        }
+
+        int mult = set.points + getRarityPoints(eq.rarity);
+        for (int i = 0; i < eq.rarity.substatCount; i++) {
+            Substat.Type subType = Substat.Type.values()[MathUtils.random(0, Substat.Type.values().length - 1)];
+            float subVal = (MathUtils.random(2f, 4.0f) + (mult / 3.5f));
+            eq.substats.add(new Substat(subType, Math.max(2, Math.round(subVal))));
+        }
+
+        return eq;
+    }
+
     public static String getSetBonusDesc(String setName) {
         if (setName == null) return "";
         switch (setName) {
@@ -368,6 +418,8 @@ public class EquipmentGenerator {
             case "Thần Thoại": return "Set 3 món: +35% Mọi chỉ số phụ";
             case "Vệ Quốc Vang Danh": return "Set 3 món: +29% Cá Hiếm, Kháng đứt dây +10%";
             case "Thần Khí Lạc Hồng": return "Ý Chí Bất Diệt: Vô hiệu hóa kỹ năng Boss, hồi 25% Thể lực!";
+            case "Dạ Hội Bí Ngô": return "Lễ Hội Kẹo Ngọt: +35% EXP, +25% Vàng & 35% rơi thêm Kẹo Trick-or-Treat!";
+            case "Huyết Nguyệt Thần Vương": return "Bá Quyền Trăng Máu: Quăng Perfect x2 Sát thương (2s đầu). Kéo dây hút 3% HP cá (tối đa 12/s) thành Thể lực!";
             default: return "Set 3 món: Kích hoạt sức mạnh ẩn";
         }
     }

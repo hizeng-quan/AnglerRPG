@@ -23,7 +23,7 @@ public class DuongSucAbility extends GameplayAbility {
     @Override
     public boolean execute(AbilityContext ctx) {
         float channelTime = ctx.player.getSkillTree().getDuongSucChannelTime();
-        float totalHeal = 50f;
+        float totalHeal = ctx.player.getSkillTree().getDuongSucHeal();
         float regenPerSec = totalHeal / Math.max(0.1f, channelTime);
 
         // Áp dụng GameplayEffect hồi thể lực theo thời gian

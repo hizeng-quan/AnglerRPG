@@ -176,7 +176,7 @@ public class Fish implements Catchable {
             case "can_xe_dien_cuong": return "Cắn xé điên cuồng";
             case "mui_kiem_xe_bien": return "Mũi kiếm xé biển";
             case "vu_dieu_luot_song": return "Vũ điệu lướt sóng";
-            case "cuong_phong_ngu_kiem": return "Cuồng phóng ngư kiếm";
+            case "cuong_phong_ngu_kiem": return "Cuồng phong ngự kiếm";
             default:             return id.replace("_", " ");
         }
     }
@@ -209,17 +209,17 @@ public class Fish implements Catchable {
             case "doi_huong":       return "Nội tại: Bơi lượn đổi góc làm kim đo Tension dao động chao đảo ±10% (1.5s)";
             case "tro_luc":         return "Nội tại: Da lì lợm có 25% tỷ lệ miễn nhiễm hoàn toàn sát thương kéo từ phím Space";
             case "nuong_hai_luu":   return "Nội tại: Khi Tension trên 55%, lực kéo của cá tự động tăng thêm +18%";
-            case "than_dao":        return "Nội tại: Thân mỏng xé nước tăng 35% tốc độ bơi khi PULLING nhưng chu kỳ ngắn hơn";
+            case "than_dao":        return "Nội tại: Pha PULLING rút ngắn 40% thời gian nhưng lực kéo tăng +40% và giật +12% Tension khi bắt đầu bơi";
             case "phong_dien":      return "Nội tại: Giữ phím kéo Space liên tục quá 2.5s sẽ bị sốc điện trừ 12 Thể lực";
             case "xoay_nuoc":       return "Bơi xoáy làm Tension chao đảo ±15% và giảm 40% tốc độ xả chùng dây (3.5s)";
-            case "vu_dieu_co_buom": return "Phóng lướt 2 nhịp trên mặt sóng; tiếp nước tăng +20% Tension nếu không Re-Hook";
+            case "vu_dieu_co_buom": return "Phóng lướt 2 nhịp trên mặt sóng; mỗi nhịp nếu không Perfect Re-Hook sẽ giật +30 Tension";
             case "than_ho_co_thach": return "Nội tại: Vảy rạn ngầm ngàn năm giảm phẳng -15 sát thương mỗi đòn kéo dây";
-            case "vuc_da_nuot_chung": return "Hút xoáy đáy ngầm giật +35% Tension và rút 8 Thể lực/s nếu cố tình kéo (3.5s)";
+            case "vuc_da_nuot_chung": return "Hút xoáy đáy ngầm giật +20% Tension và giảm 30% hồi Thể lực người chơi từ mọi nguồn đến hết trận";
             case "thinh_mui_mau":   return "Nội tại: Khi Thể lực cần thủ dưới 50%, cá mập kích động tăng +20% lực kéo";
-            case "can_xe_dien_cuong": return "Ngoạm nghiến dây làm giảm 25% Max Tension an toàn (5s), phản chấn trừ 20 Thể lực";
-            case "mui_kiem_xe_bien": return "Nội tại: Ghìm kéo >1.5s làm Tension dâng nhanh +20%/s; nhấp nhả <=1.2s tăng +15% dmg. Kháng khống chế";
-            case "vu_dieu_luot_song": return "Cứ 8s phi thân lên không 0.9s; tiếp nước sốc +35% Tension & -15 Thể lực trừ khi Re-Hook chuẩn xác!";
-            case "cuong_phong_ngu_kiem": return "Dưới 30% HP: Mỗi đợt gầm tăng +10% lực kéo (max +50%); mỗi 1s trôi qua tăng +1% tốc độ tụt thể lực";
+            case "can_xe_dien_cuong": return "Ngoạm cước giảm 20% Max Tension (5s); nếu kích hoạt Thính Mùi Máu sẽ giảm 30% Max Tension và trừ 30 Thể lực";
+            case "mui_kiem_xe_bien": return "Nội tại: Ghìm kéo >1.2s làm Tension dâng nhanh +20%/s. Kháng khống chế";
+            case "vu_dieu_luot_song": return "Cứ 8s phi thân 0.9s; tiếp nước sốc +20% Tension, -15 Thể lực & hồi 8% máu boss trừ khi Perfect Re-Hook";
+            case "cuong_phong_ngu_kiem": return "Dưới 30% HP: Mỗi lần Vũ Điệu Lướt Sóng tăng +10% lực kéo; khi kích hoạt giúp boss bất tử khi ở trên không";
             default:                return "Kỹ năng đặc biệt của thủy tộc";
         }
     }
@@ -240,7 +240,11 @@ public class Fish implements Catchable {
         if (stateTimer <= 0) {
             if (state == State.IDLE) {
                 state = State.PULLING;
-                stateTimer = MathUtils.random(1.5f, 3.5f);
+                float dur = MathUtils.random(1.5f, 3.5f);
+                if (getPassiveSkill("than_dao") != null) {
+                    dur *= 0.60f; // Pha PULLING rut ngan 40% thoi gian
+                }
+                stateTimer = dur;
             } else {
                 state = State.IDLE;
                 float anMinhBonus = (getPassiveSkill("an_minh") != null) ? 1.5f : 0f;

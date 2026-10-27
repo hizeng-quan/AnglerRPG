@@ -99,6 +99,13 @@ public class EquipmentIconRenderer {
                 else drawGhostCandyHook(sr, cx, cy, r, mainCol);
                 break;
 
+            case "Huyết Nguyệt Thần Vương":
+            case "Huyết Nguyệt":
+                if (type == EquipmentType.ROD) drawHuyetNguyetRod(sr, cx, cy, r, mainCol);
+                else if (type == EquipmentType.LINE) drawHuyetNguyetLine(sr, cx, cy, r, mainCol);
+                else drawHuyetNguyetHook(sr, cx, cy, r, mainCol);
+                break;
+
             default:
                 // Generic fallback
                 drawGenericType(sr, type, cx, cy, r, mainCol);
@@ -4013,5 +4020,466 @@ public class EquipmentIconRenderer {
         // 4. Glossy Specular Highlight
         sr.setColor(1f, 1f, 1f, 0.90f);
         sr.circle(cx - cr * 0.30f, cy + cr * 0.35f, Math.max(1.2f, r * 0.06f));
+    }
+
+    // =========================================================================
+    // 17. HUYẾT NGUYỆT THẦN VƯƠNG SET (6★ LIMITED PREMIUM - HALLOWEEN EXCLUSIVE)
+    // =========================================================================
+    public static void drawHuyetNguyetRod(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        float s = r / 64f;
+
+        // 1. Cataclysmic Blood Moon Eclipse & Crimson Flame Halo
+        sr.setColor(0.60f, 0.11f, 0.11f, 0.28f);
+        fillCircle(sr, cx, cy, s, 86.0f, 40.0f, 46.0f);
+        sr.setColor(0.94f, 0.27f, 0.27f, 0.25f);
+        fillCircle(sr, cx, cy, s, 86.0f, 40.0f, 34.0f);
+        sr.setColor(0.35f, 0.11f, 0.53f, 0.20f);
+        fillCircle(sr, cx, cy, s, 50.0f, 76.0f, 38.0f);
+
+        // 2. Demonic Vertebrae War-Staff Blank (Diagonal Stance)
+        sr.setColor(0.04f, 0.01f, 0.01f, 1.0f);
+        drawLine(sr, cx, cy, s, 18.0f, 110.0f, 86.0f, 42.0f, 9.0f);
+        sr.setColor(0.27f, 0.04f, 0.04f, 1.0f);
+        drawLine(sr, cx, cy, s, 18.0f, 110.0f, 86.0f, 42.0f, 6.5f);
+        sr.setColor(0.60f, 0.11f, 0.11f, 1.0f);
+        drawLine(sr, cx, cy, s, 20.0f, 108.0f, 84.0f, 44.0f, 4.0f);
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.0f);
+        drawLine(sr, cx, cy, s, 20.0f, 108.0f, 84.0f, 44.0f, 1.6f);
+        sr.setColor(1.00f, 0.80f, 0.80f, 1.0f);
+        drawLine(sr, cx, cy, s, 21.0f, 107.0f, 83.0f, 45.0f, 0.8f);
+
+        // Dragon Vertebrae Rib Plates Along Staff
+        sr.setColor(0.97f, 0.44f, 0.44f, 1.0f);
+        fillTri(sr, cx, cy, s, 34.0f, 94.0f, 40.0f, 88.0f, 38.0f, 96.0f);
+        fillTri(sr, cx, cy, s, 46.0f, 82.0f, 52.0f, 76.0f, 50.0f, 84.0f);
+        fillTri(sr, cx, cy, s, 58.0f, 70.0f, 64.0f, 64.0f, 62.0f, 72.0f);
+        fillTri(sr, cx, cy, s, 70.0f, 58.0f, 76.0f, 52.0f, 74.0f, 60.0f);
+
+        // 3. Gigantic Crescent Blood Moon Reaper Scythe Blade
+        // Outer Blade Silhouette
+        sr.setColor(0.09f, 0.02f, 0.02f, 1.0f);
+        drawLine(sr, cx, cy, s, 76.0f, 50.0f, 72.0f, 30.0f, 6.0f);
+        drawLine(sr, cx, cy, s, 72.0f, 30.0f, 90.0f, 8.0f, 6.5f);
+        drawLine(sr, cx, cy, s, 90.0f, 8.0f, 118.0f, 6.0f, 5.5f);
+        drawLine(sr, cx, cy, s, 118.0f, 6.0f, 124.0f, 11.0f, 4.5f);
+        drawLine(sr, cx, cy, s, 124.0f, 11.0f, 114.0f, 24.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 114.0f, 24.0f, 102.0f, 36.0f, 5.5f);
+        drawLine(sr, cx, cy, s, 102.0f, 36.0f, 94.0f, 54.0f, 6.0f);
+        fillTri(sr, cx, cy, s, 76.0f, 50.0f, 90.0f, 8.0f, 118.0f, 6.0f);
+        fillTri(sr, cx, cy, s, 76.0f, 50.0f, 118.0f, 6.0f, 102.0f, 36.0f);
+        fillTri(sr, cx, cy, s, 76.0f, 50.0f, 102.0f, 36.0f, 94.0f, 54.0f);
+
+        // Radiant Blood Crimson Mid-Blade
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.0f);
+        drawLine(sr, cx, cy, s, 78.0f, 48.0f, 76.0f, 32.0f, 3.5f);
+        drawLine(sr, cx, cy, s, 76.0f, 32.0f, 92.0f, 12.0f, 3.5f);
+        drawLine(sr, cx, cy, s, 92.0f, 12.0f, 116.0f, 9.0f, 3.0f);
+        drawLine(sr, cx, cy, s, 116.0f, 9.0f, 113.0f, 21.0f, 3.0f);
+        drawLine(sr, cx, cy, s, 113.0f, 21.0f, 103.0f, 34.0f, 3.5f);
+        drawLine(sr, cx, cy, s, 103.0f, 34.0f, 94.0f, 50.0f, 3.5f);
+        fillTri(sr, cx, cy, s, 78.0f, 48.0f, 92.0f, 12.0f, 113.0f, 21.0f);
+        fillTri(sr, cx, cy, s, 78.0f, 48.0f, 113.0f, 21.0f, 94.0f, 50.0f);
+
+        // Razor Edge Line
+        sr.setColor(0.99f, 0.65f, 0.65f, 1.0f);
+        drawLine(sr, cx, cy, s, 80.0f, 46.0f, 94.0f, 15.0f, 1.8f);
+        drawLine(sr, cx, cy, s, 94.0f, 15.0f, 114.0f, 11.0f, 1.8f);
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 80.0f, 46.0f, 94.0f, 15.0f, 0.8f);
+        drawLine(sr, cx, cy, s, 94.0f, 15.0f, 114.0f, 11.0f, 0.8f);
+
+        // Serrated Teeth
+        sr.setColor(0.97f, 0.44f, 0.44f, 1.0f);
+        fillTri(sr, cx, cy, s, 98.0f, 40.0f, 102.0f, 42.0f, 96.0f, 46.0f);
+        fillTri(sr, cx, cy, s, 106.0f, 28.0f, 110.0f, 31.0f, 104.0f, 34.0f);
+        fillTri(sr, cx, cy, s, 113.0f, 17.0f, 116.0f, 20.0f, 111.0f, 23.0f);
+
+        // 4. Blood Moon Eclipse Core Orb at (86, 42)
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.0f);
+        fillTri(sr, cx, cy, s, 86.0f, 22.0f, 83.0f, 30.0f, 89.0f, 30.0f);
+        fillTri(sr, cx, cy, s, 106.0f, 42.0f, 98.0f, 39.0f, 98.0f, 45.0f);
+        fillTri(sr, cx, cy, s, 86.0f, 62.0f, 89.0f, 54.0f, 83.0f, 54.0f);
+        fillTri(sr, cx, cy, s, 66.0f, 42.0f, 74.0f, 45.0f, 74.0f, 39.0f);
+        sr.setColor(0.97f, 0.44f, 0.44f, 1.0f);
+        fillTri(sr, cx, cy, s, 100.0f, 28.0f, 92.0f, 34.0f, 96.0f, 38.0f);
+        fillTri(sr, cx, cy, s, 100.0f, 56.0f, 96.0f, 48.0f, 92.0f, 52.0f);
+        fillTri(sr, cx, cy, s, 72.0f, 56.0f, 80.0f, 52.0f, 76.0f, 48.0f);
+        fillTri(sr, cx, cy, s, 72.0f, 28.0f, 76.0f, 38.0f, 80.0f, 34.0f);
+
+        // Blood Moon Sphere
+        sr.setColor(0.50f, 0.11f, 0.11f, 1.0f);
+        fillCircle(sr, cx, cy, s, 86.0f, 42.0f, 14.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.0f);
+        fillCircle(sr, cx, cy, s, 86.0f, 42.0f, 11.0f);
+        sr.setColor(0.11f, 0.02f, 0.02f, 1.0f);
+        fillCircle(sr, cx, cy, s, 84.0f, 42.0f, 8.5f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.0f);
+        fillCircle(sr, cx, cy, s, 87.0f, 42.0f, 7.0f);
+
+        // 5. Demonic Spiked Butt Cap with Chains & Blood Drops
+        sr.setColor(0.11f, 0.02f, 0.02f, 1.0f);
+        fillCircle(sr, cx, cy, s, 16.0f, 112.0f, 6.0f);
+        sr.setColor(0.60f, 0.11f, 0.11f, 1.0f);
+        fillCircle(sr, cx, cy, s, 16.0f, 112.0f, 5.0f);
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.0f);
+        fillTri(sr, cx, cy, s, 16.0f, 112.0f, 10.0f, 124.0f, 15.0f, 121.0f);
+        fillTri(sr, cx, cy, s, 16.0f, 112.0f, 16.0f, 126.0f, 19.0f, 121.0f);
+        fillTri(sr, cx, cy, s, 16.0f, 112.0f, 19.0f, 121.0f, 24.0f, 124.0f);
+
+        // Falling Blood Drops
+        fillCircle(sr, cx, cy, s, 120.0f, 16.0f, 2.2f);
+        fillTri(sr, cx, cy, s, 120.0f, 13.0f, 118.0f, 17.0f, 122.0f, 17.0f);
+        fillCircle(sr, cx, cy, s, 112.0f, 28.0f, 1.6f);
+
+        // 6. Specular Highlights & Glints
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 124.0f, 9.0f, 2.0f);
+        fillCircle(sr, cx, cy, s, 86.0f, 40.0f, 2.2f);
+        fillCircle(sr, cx, cy, s, 80.0f, 46.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 16.0f, 110.0f, 1.5f);
+    }
+
+    public static void drawHuyetNguyetLine(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        float s = r / 64f;
+
+        // 1. Atmospheric Blood Moon Void & Miasma Aureole
+        sr.setColor(0.72f, 0.11f, 0.11f, 0.20f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 58.0f);
+        sr.setColor(0.35f, 0.11f, 0.53f, 0.22f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 46.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 0.24f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 34.0f);
+
+        // 2. Four Gothic Demon Lord Wings Spanning Diagonal Corners (Unique Silhouette)
+        // NW Wing
+        sr.setColor(0.09f, 0.01f, 0.02f, 1.0f);
+        fillTri(sr, cx, cy, s, 14.0f, 14.0f, 36.0f, 44.0f, 44.0f, 36.0f);
+        sr.setColor(0.60f, 0.11f, 0.11f, 1.0f);
+        fillTri(sr, cx, cy, s, 14.0f, 14.0f, 26.0f, 38.0f, 36.0f, 44.0f);
+        sr.setColor(0.27f, 0.04f, 0.04f, 1.0f);
+        fillTri(sr, cx, cy, s, 14.0f, 14.0f, 38.0f, 26.0f, 44.0f, 36.0f);
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.0f);
+        fillTri(sr, cx, cy, s, 8.0f, 26.0f, 18.0f, 24.0f, 24.0f, 32.0f);
+
+        // NE Wing
+        sr.setColor(0.09f, 0.01f, 0.02f, 1.0f);
+        fillTri(sr, cx, cy, s, 114.0f, 14.0f, 92.0f, 36.0f, 100.0f, 44.0f);
+        sr.setColor(0.60f, 0.11f, 0.11f, 1.0f);
+        fillTri(sr, cx, cy, s, 114.0f, 14.0f, 92.0f, 36.0f, 102.0f, 26.0f);
+        sr.setColor(0.27f, 0.04f, 0.04f, 1.0f);
+        fillTri(sr, cx, cy, s, 114.0f, 14.0f, 102.0f, 38.0f, 100.0f, 44.0f);
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.0f);
+        fillTri(sr, cx, cy, s, 120.0f, 26.0f, 104.0f, 32.0f, 110.0f, 24.0f);
+
+        // SE Wing
+        sr.setColor(0.09f, 0.01f, 0.02f, 1.0f);
+        fillTri(sr, cx, cy, s, 114.0f, 114.0f, 100.0f, 84.0f, 92.0f, 92.0f);
+        sr.setColor(0.60f, 0.11f, 0.11f, 1.0f);
+        fillTri(sr, cx, cy, s, 114.0f, 114.0f, 102.0f, 90.0f, 100.0f, 84.0f);
+        sr.setColor(0.27f, 0.04f, 0.04f, 1.0f);
+        fillTri(sr, cx, cy, s, 114.0f, 114.0f, 90.0f, 102.0f, 92.0f, 92.0f);
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.0f);
+        fillTri(sr, cx, cy, s, 120.0f, 102.0f, 110.0f, 104.0f, 104.0f, 96.0f);
+
+        // SW Wing
+        sr.setColor(0.09f, 0.01f, 0.02f, 1.0f);
+        fillTri(sr, cx, cy, s, 14.0f, 114.0f, 44.0f, 92.0f, 36.0f, 84.0f);
+        sr.setColor(0.60f, 0.11f, 0.11f, 1.0f);
+        fillTri(sr, cx, cy, s, 14.0f, 114.0f, 38.0f, 102.0f, 44.0f, 92.0f);
+        sr.setColor(0.27f, 0.04f, 0.04f, 1.0f);
+        fillTri(sr, cx, cy, s, 14.0f, 114.0f, 26.0f, 90.0f, 36.0f, 84.0f);
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.0f);
+        fillTri(sr, cx, cy, s, 8.0f, 102.0f, 24.0f, 96.0f, 18.0f, 104.0f);
+
+        // 3. Heavy Obsidian Dragon-Bone Spool Rim (Bát Giác Cấm Thuật)
+        sr.setColor(0.05f, 0.01f, 0.02f, 1.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 49.0f);
+        sr.setColor(0.14f, 0.02f, 0.03f, 1.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 45.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 41.0f);
+        sr.setColor(0.96f, 0.62f, 0.04f, 1.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 39.0f);
+        sr.setColor(0.04f, 0.01f, 0.01f, 1.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 37.0f);
+
+        // 8 Curved Demon Dragon Fangs Lining the Rim
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.0f);
+        fillTri(sr, cx, cy, s, 64.0f, 8.0f, 58.0f, 20.0f, 70.0f, 20.0f);
+        fillTri(sr, cx, cy, s, 106.0f, 22.0f, 96.0f, 28.0f, 102.0f, 36.0f);
+        fillTri(sr, cx, cy, s, 120.0f, 64.0f, 108.0f, 58.0f, 108.0f, 70.0f);
+        fillTri(sr, cx, cy, s, 106.0f, 106.0f, 102.0f, 92.0f, 96.0f, 100.0f);
+        fillTri(sr, cx, cy, s, 64.0f, 120.0f, 70.0f, 108.0f, 58.0f, 108.0f);
+        fillTri(sr, cx, cy, s, 22.0f, 106.0f, 26.0f, 92.0f, 32.0f, 100.0f);
+        fillTri(sr, cx, cy, s, 8.0f, 64.0f, 20.0f, 70.0f, 20.0f, 58.0f);
+        fillTri(sr, cx, cy, s, 22.0f, 22.0f, 32.0f, 28.0f, 26.0f, 36.0f);
+
+        // 4. Sacred Blood Geometry Star Weave (Tơ Huyết Ngôi Sao Bát Giác)
+        // Diamond 1
+        sr.setColor(0.60f, 0.11f, 0.11f, 1.0f);
+        drawLine(sr, cx, cy, s, 64.0f, 26.0f, 102.0f, 64.0f, 2.6f);
+        drawLine(sr, cx, cy, s, 102.0f, 64.0f, 64.0f, 102.0f, 2.6f);
+        drawLine(sr, cx, cy, s, 64.0f, 102.0f, 26.0f, 64.0f, 2.6f);
+        drawLine(sr, cx, cy, s, 26.0f, 64.0f, 64.0f, 26.0f, 2.6f);
+        // Diamond 2 (Rotated 45 deg)
+        drawLine(sr, cx, cy, s, 91.0f, 37.0f, 91.0f, 91.0f, 2.6f);
+        drawLine(sr, cx, cy, s, 91.0f, 91.0f, 37.0f, 91.0f, 2.6f);
+        drawLine(sr, cx, cy, s, 37.0f, 91.0f, 37.0f, 37.0f, 2.6f);
+        drawLine(sr, cx, cy, s, 37.0f, 37.0f, 91.0f, 37.0f, 2.6f);
+
+        // Radiant Crimson Star Highlights
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.0f);
+        drawLine(sr, cx, cy, s, 64.0f, 28.0f, 100.0f, 64.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 100.0f, 64.0f, 64.0f, 100.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 64.0f, 100.0f, 28.0f, 64.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 28.0f, 64.0f, 64.0f, 28.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 89.0f, 39.0f, 89.0f, 89.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 89.0f, 89.0f, 39.0f, 89.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 39.0f, 89.0f, 39.0f, 39.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 39.0f, 39.0f, 89.0f, 39.0f, 1.5f);
+
+        // Circular Arterial Coils
+        sr.setColor(0.27f, 0.04f, 0.04f, 1.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 28.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 26.0f);
+        sr.setColor(0.97f, 0.44f, 0.44f, 1.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 23.0f);
+        sr.setColor(0.09f, 0.02f, 0.02f, 1.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 21.0f);
+
+        // 5. Demonic Spool Core: The Faceted Eclipse Blood Heart
+        sr.setColor(0.96f, 0.62f, 0.04f, 1.0f);
+        fillTri(sr, cx, cy, s, 64.0f, 44.0f, 84.0f, 64.0f, 64.0f, 84.0f);
+        fillTri(sr, cx, cy, s, 64.0f, 44.0f, 44.0f, 64.0f, 64.0f, 84.0f);
+        // Top-Left Facet
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.0f);
+        fillTri(sr, cx, cy, s, 64.0f, 46.0f, 46.0f, 64.0f, 64.0f, 64.0f);
+        // Top-Right Facet
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.0f);
+        fillTri(sr, cx, cy, s, 64.0f, 46.0f, 82.0f, 64.0f, 64.0f, 64.0f);
+        // Bottom-Left Facet
+        sr.setColor(0.60f, 0.11f, 0.11f, 1.0f);
+        fillTri(sr, cx, cy, s, 46.0f, 64.0f, 64.0f, 82.0f, 64.0f, 64.0f);
+        // Bottom-Right Facet
+        sr.setColor(0.35f, 0.03f, 0.07f, 1.0f);
+        fillTri(sr, cx, cy, s, 82.0f, 64.0f, 64.0f, 82.0f, 64.0f, 64.0f);
+
+        // 4 Crimson Tendrils Grasping Heart
+        sr.setColor(0.99f, 0.65f, 0.65f, 1.0f);
+        drawLine(sr, cx, cy, s, 64.0f, 34.0f, 64.0f, 46.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 94.0f, 64.0f, 82.0f, 64.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 64.0f, 94.0f, 64.0f, 82.0f, 1.5f);
+        drawLine(sr, cx, cy, s, 34.0f, 64.0f, 46.0f, 64.0f, 1.5f);
+
+        // All-Seeing Demon Eye in Core
+        sr.setColor(0.05f, 0.01f, 0.01f, 1.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 9.5f);
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 8.2f);
+        sr.setColor(0.50f, 0.11f, 0.11f, 1.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 7.0f);
+        sr.setColor(0.03f, 0.00f, 0.01f, 1.0f);
+        fillTri(sr, cx, cy, s, 64.0f, 58.0f, 62.0f, 64.0f, 66.0f, 64.0f);
+        fillTri(sr, cx, cy, s, 64.0f, 70.0f, 62.0f, 64.0f, 66.0f, 64.0f);
+        // Burning Ember Slit Pupil Core
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.0f);
+        fillTri(sr, cx, cy, s, 64.0f, 60.2f, 63.1f, 64.0f, 64.9f, 64.0f);
+        fillTri(sr, cx, cy, s, 64.0f, 67.8f, 63.1f, 64.0f, 64.9f, 64.0f);
+
+        // 6. Floating Blood Crystal Shards
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.0f);
+        fillTri(sr, cx, cy, s, 64.0f, 3.0f, 67.0f, 8.0f, 61.0f, 8.0f);
+        fillTri(sr, cx, cy, s, 64.0f, 13.0f, 67.0f, 8.0f, 61.0f, 8.0f);
+        fillTri(sr, cx, cy, s, 125.0f, 64.0f, 120.0f, 67.0f, 120.0f, 61.0f);
+        fillTri(sr, cx, cy, s, 115.0f, 64.0f, 120.0f, 67.0f, 120.0f, 61.0f);
+        fillTri(sr, cx, cy, s, 64.0f, 125.0f, 61.0f, 120.0f, 67.0f, 120.0f);
+        fillTri(sr, cx, cy, s, 64.0f, 115.0f, 61.0f, 120.0f, 67.0f, 120.0f);
+        fillTri(sr, cx, cy, s, 3.0f, 64.0f, 8.0f, 61.0f, 8.0f, 67.0f);
+        fillTri(sr, cx, cy, s, 13.0f, 64.0f, 8.0f, 61.0f, 8.0f, 67.0f);
+
+        // 7. Diamond Specular Glints & Brilliant Razor Sparkles
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 14.0f, 14.0f, 2.0f);
+        fillCircle(sr, cx, cy, s, 114.0f, 14.0f, 2.0f);
+        fillCircle(sr, cx, cy, s, 114.0f, 114.0f, 2.0f);
+        fillCircle(sr, cx, cy, s, 14.0f, 114.0f, 2.0f);
+        fillCircle(sr, cx, cy, s, 64.0f, 46.0f, 1.6f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 1.2f);
+        fillCircle(sr, cx, cy, s, 46.0f, 64.0f, 1.2f);
+    }
+
+    public static void drawHuyetNguyetHook(ShapeRenderer sr, float cx, float cy, float r, Color col) {
+        float s = r / 64f;
+
+        // 1. Atmospheric Blood Moon Void & Miasma Aureole
+        sr.setColor(0.72f, 0.11f, 0.11f, 0.20f);
+        fillCircle(sr, cx, cy, s, 64.0f, 64.0f, 58.0f);
+        sr.setColor(0.35f, 0.11f, 0.53f, 0.22f);
+        fillCircle(sr, cx, cy, s, 48.0f, 40.0f, 38.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 0.24f);
+        fillCircle(sr, cx, cy, s, 96.0f, 80.0f, 32.0f);
+
+        // 2. Demonic Horned Skull Crown Top (Khoen Vương Miện Sừng Rồng Ma Vương)
+        // Left Horn Body
+        sr.setColor(0.09f, 0.02f, 0.02f, 1.0f);
+        fillTri(sr, cx, cy, s, 44.0f, 22.0f, 22.0f, 12.0f, 14.0f, 20.0f);
+        fillTri(sr, cx, cy, s, 44.0f, 22.0f, 14.0f, 20.0f, 28.0f, 26.0f);
+        fillTri(sr, cx, cy, s, 44.0f, 22.0f, 28.0f, 26.0f, 38.0f, 25.0f);
+        sr.setColor(0.60f, 0.11f, 0.11f, 1.0f);
+        fillTri(sr, cx, cy, s, 42.0f, 22.0f, 24.0f, 15.0f, 17.0f, 20.0f);
+        fillTri(sr, cx, cy, s, 42.0f, 22.0f, 17.0f, 20.0f, 30.0f, 24.0f);
+        // Left Horn Spines
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.0f);
+        fillTri(sr, cx, cy, s, 26.0f, 13.0f, 22.0f, 7.0f, 30.0f, 12.0f);
+        fillTri(sr, cx, cy, s, 36.0f, 17.0f, 33.0f, 10.0f, 40.0f, 16.0f);
+
+        // Right Horn Body
+        sr.setColor(0.09f, 0.02f, 0.02f, 1.0f);
+        fillTri(sr, cx, cy, s, 52.0f, 22.0f, 74.0f, 12.0f, 82.0f, 20.0f);
+        fillTri(sr, cx, cy, s, 52.0f, 22.0f, 82.0f, 20.0f, 68.0f, 26.0f);
+        fillTri(sr, cx, cy, s, 52.0f, 22.0f, 68.0f, 26.0f, 58.0f, 25.0f);
+        sr.setColor(0.27f, 0.04f, 0.04f, 1.0f);
+        fillTri(sr, cx, cy, s, 54.0f, 22.0f, 72.0f, 15.0f, 79.0f, 20.0f);
+        fillTri(sr, cx, cy, s, 54.0f, 22.0f, 79.0f, 20.0f, 66.0f, 24.0f);
+        // Right Horn Spines
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.0f);
+        fillTri(sr, cx, cy, s, 70.0f, 13.0f, 74.0f, 7.0f, 66.0f, 12.0f);
+        fillTri(sr, cx, cy, s, 60.0f, 17.0f, 63.0f, 10.0f, 56.0f, 16.0f);
+
+        // Central Demon Skull Crown Eyelet
+        sr.setColor(0.96f, 0.62f, 0.04f, 1.0f);
+        fillTri(sr, cx, cy, s, 48.0f, 13.0f, 54.0f, 18.0f, 42.0f, 18.0f);
+        fillTri(sr, cx, cy, s, 48.0f, 29.0f, 54.0f, 18.0f, 42.0f, 18.0f);
+        sr.setColor(0.04f, 0.01f, 0.01f, 1.0f);
+        fillCircle(sr, cx, cy, s, 48.0f, 22.0f, 8.5f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.0f);
+        fillCircle(sr, cx, cy, s, 48.0f, 22.0f, 6.8f);
+        sr.setColor(0.50f, 0.11f, 0.11f, 1.0f);
+        fillCircle(sr, cx, cy, s, 48.0f, 22.0f, 5.0f);
+        sr.setColor(0.03f, 0.00f, 0.01f, 1.0f);
+        fillCircle(sr, cx, cy, s, 48.0f, 22.0f, 2.8f);
+
+        // Demonic Chain Wrapping Skull Neck
+        sr.setColor(0.96f, 0.62f, 0.04f, 1.0f);
+        drawLine(sr, cx, cy, s, 42.0f, 29.0f, 54.0f, 29.0f, 3.5f);
+        sr.setColor(0.09f, 0.02f, 0.02f, 1.0f);
+        fillCircle(sr, cx, cy, s, 39.0f, 31.0f, 2.2f);
+        fillCircle(sr, cx, cy, s, 37.0f, 36.0f, 2.0f);
+
+        // 3. Segmented Dragon Vertebrae Spine Shank (Thân Đốt Sống Rồng)
+        // Dorsal Bone Spines
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.0f);
+        fillTri(sr, cx, cy, s, 42.0f, 42.0f, 32.0f, 46.0f, 43.0f, 50.0f);
+        fillTri(sr, cx, cy, s, 42.0f, 56.0f, 30.0f, 62.0f, 43.0f, 66.0f);
+        fillTri(sr, cx, cy, s, 43.0f, 70.0f, 32.0f, 77.0f, 44.0f, 81.0f);
+
+        // Layer 1: Obsidian Black Outline / Shadow
+        sr.setColor(0.03f, 0.005f, 0.01f, 1.0f);
+        drawLine(sr, cx, cy, s, 48.0f, 31.0f, 48.0f, 78.0f, 11.0f);
+        drawLine(sr, cx, cy, s, 48.0f, 78.0f, 52.0f, 96.0f, 11.0f);
+        drawLine(sr, cx, cy, s, 52.0f, 96.0f, 64.0f, 110.0f, 11.0f);
+        drawLine(sr, cx, cy, s, 64.0f, 110.0f, 78.0f, 114.0f, 11.0f);
+        drawLine(sr, cx, cy, s, 78.0f, 114.0f, 94.0f, 108.0f, 11.0f);
+        drawLine(sr, cx, cy, s, 94.0f, 108.0f, 104.0f, 92.0f, 11.0f);
+        drawLine(sr, cx, cy, s, 104.0f, 92.0f, 108.0f, 68.0f, 11.0f);
+
+        // Layer 2: Dark Ruby Spine
+        sr.setColor(0.27f, 0.04f, 0.04f, 1.0f);
+        drawLine(sr, cx, cy, s, 48.0f, 31.0f, 48.0f, 78.0f, 8.0f);
+        drawLine(sr, cx, cy, s, 48.0f, 78.0f, 52.0f, 96.0f, 8.0f);
+        drawLine(sr, cx, cy, s, 52.0f, 96.0f, 64.0f, 110.0f, 8.0f);
+        drawLine(sr, cx, cy, s, 64.0f, 110.0f, 78.0f, 114.0f, 8.0f);
+        drawLine(sr, cx, cy, s, 78.0f, 114.0f, 94.0f, 108.0f, 8.0f);
+        drawLine(sr, cx, cy, s, 94.0f, 108.0f, 104.0f, 92.0f, 8.0f);
+        drawLine(sr, cx, cy, s, 104.0f, 92.0f, 108.0f, 68.0f, 8.0f);
+
+        // Layer 3: Blood Crimson Vein Core
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.0f);
+        drawLine(sr, cx, cy, s, 48.0f, 31.0f, 48.0f, 78.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 48.0f, 78.0f, 52.0f, 96.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 52.0f, 96.0f, 64.0f, 110.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 64.0f, 110.0f, 78.0f, 114.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 78.0f, 114.0f, 94.0f, 108.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 94.0f, 108.0f, 104.0f, 92.0f, 5.0f);
+        drawLine(sr, cx, cy, s, 104.0f, 92.0f, 108.0f, 68.0f, 5.0f);
+
+        // Layer 4: Razor Sharp Highlights along Edge
+        sr.setColor(0.99f, 0.65f, 0.65f, 1.0f);
+        drawLine(sr, cx, cy, s, 50.0f, 33.0f, 50.0f, 76.0f, 1.8f);
+        drawLine(sr, cx, cy, s, 50.0f, 76.0f, 64.0f, 106.0f, 1.8f);
+        drawLine(sr, cx, cy, s, 64.0f, 106.0f, 78.0f, 110.0f, 1.8f);
+        drawLine(sr, cx, cy, s, 78.0f, 110.0f, 100.0f, 92.0f, 1.8f);
+        drawLine(sr, cx, cy, s, 100.0f, 92.0f, 106.0f, 70.0f, 1.8f);
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 50.0f, 33.0f, 50.0f, 76.0f, 0.8f);
+        drawLine(sr, cx, cy, s, 50.0f, 76.0f, 78.0f, 110.0f, 0.8f);
+        drawLine(sr, cx, cy, s, 78.0f, 110.0f, 106.0f, 70.0f, 0.8f);
+
+        // 4 Segmented Vertebrae Rib Plates along Shank
+        sr.setColor(0.96f, 0.62f, 0.04f, 1.0f);
+        drawLine(sr, cx, cy, s, 44.0f, 41.0f, 52.0f, 41.0f, 2.5f);
+        drawLine(sr, cx, cy, s, 44.0f, 51.0f, 52.0f, 51.0f, 2.5f);
+        drawLine(sr, cx, cy, s, 44.0f, 65.0f, 52.0f, 65.0f, 2.5f);
+        drawLine(sr, cx, cy, s, 44.0f, 77.0f, 52.0f, 77.0f, 2.5f);
+
+        // Blood Tear Soul Crystal at Shank Center (48, 56)
+        sr.setColor(0.96f, 0.62f, 0.04f, 1.0f);
+        fillTri(sr, cx, cy, s, 48.0f, 47.0f, 55.0f, 56.0f, 48.0f, 65.0f);
+        fillTri(sr, cx, cy, s, 48.0f, 47.0f, 41.0f, 56.0f, 48.0f, 65.0f);
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.0f);
+        fillTri(sr, cx, cy, s, 48.0f, 48.0f, 43.0f, 56.0f, 48.0f, 56.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.0f);
+        fillTri(sr, cx, cy, s, 48.0f, 48.0f, 53.0f, 56.0f, 48.0f, 56.0f);
+        sr.setColor(0.60f, 0.11f, 0.11f, 1.0f);
+        fillTri(sr, cx, cy, s, 43.0f, 56.0f, 48.0f, 64.0f, 48.0f, 56.0f);
+        sr.setColor(0.35f, 0.03f, 0.07f, 1.0f);
+        fillTri(sr, cx, cy, s, 53.0f, 56.0f, 48.0f, 64.0f, 48.0f, 56.0f);
+        sr.setColor(0.98f, 0.80f, 0.08f, 1.0f);
+        fillCircle(sr, cx, cy, s, 48.0f, 56.0f, 2.0f);
+
+        // 4. Demon Monarch Talon Point & Multi-Barb System
+        // Primary Vicious Inward Hook Barb (Mũi Vuốt Quỷ Chính)
+        sr.setColor(0.09f, 0.02f, 0.02f, 1.0f);
+        fillTri(sr, cx, cy, s, 108.0f, 60.0f, 90.0f, 75.0f, 98.0f, 82.0f);
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.0f);
+        fillTri(sr, cx, cy, s, 108.0f, 60.0f, 92.0f, 74.0f, 97.0f, 79.0f);
+        sr.setColor(Color.WHITE);
+        fillTri(sr, cx, cy, s, 108.0f, 60.0f, 95.0f, 73.0f, 98.0f, 76.0f);
+
+        // Secondary Outer Armor-Piercer Barb (Ngạnh Ngoài Phá Giáp)
+        sr.setColor(0.09f, 0.02f, 0.02f, 1.0f);
+        fillTri(sr, cx, cy, s, 110.0f, 70.0f, 119.0f, 79.0f, 109.0f, 83.0f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1.0f);
+        fillTri(sr, cx, cy, s, 110.0f, 70.0f, 117.0f, 78.0f, 110.0f, 81.0f);
+        sr.setColor(0.99f, 0.65f, 0.65f, 1.0f);
+        fillTri(sr, cx, cy, s, 110.0f, 70.0f, 115.0f, 77.0f, 111.0f, 79.0f);
+
+        // Tertiary Gut-Hook Barb in Bend (Ngạnh Trong Vòm Uốn)
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.0f);
+        fillTri(sr, cx, cy, s, 88.0f, 96.0f, 98.0f, 102.0f, 91.0f, 106.0f);
+
+        // Blood Fuller Groove along Talon
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.0f);
+        drawLine(sr, cx, cy, s, 104.0f, 65.0f, 92.0f, 94.0f, 1.6f);
+        sr.setColor(Color.WHITE);
+        drawLine(sr, cx, cy, s, 104.0f, 65.0f, 92.0f, 94.0f, 0.6f);
+
+        // 5. Bleeding Crimson Droplets Falling From Talon Point
+        sr.setColor(0.94f, 0.27f, 0.27f, 1.0f);
+        fillCircle(sr, cx, cy, s, 108.0f, 54.0f, 2.2f);
+        fillTri(sr, cx, cy, s, 108.0f, 50.0f, 105.0f, 55.0f, 111.0f, 55.0f);
+        fillCircle(sr, cx, cy, s, 108.0f, 44.0f, 1.6f);
+        fillCircle(sr, cx, cy, s, 108.0f, 35.0f, 1.2f);
+
+        // 6. Specular Glints & Diamond Sparkles
+        sr.setColor(Color.WHITE);
+        fillCircle(sr, cx, cy, s, 14.0f, 20.0f, 1.8f);
+        fillCircle(sr, cx, cy, s, 82.0f, 20.0f, 1.8f);
+        fillCircle(sr, cx, cy, s, 48.0f, 14.0f, 1.5f);
+        fillCircle(sr, cx, cy, s, 108.0f, 60.0f, 2.0f);
+        fillCircle(sr, cx, cy, s, 119.0f, 79.0f, 1.4f);
+        fillCircle(sr, cx, cy, s, 78.0f, 114.0f, 1.8f);
+        fillCircle(sr, cx, cy, s, 48.0f, 49.0f, 1.2f);
     }
 }

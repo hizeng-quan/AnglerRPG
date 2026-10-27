@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class PatchNotesDialog {
 
-    public static final String CURRENT_VERSION = "v0.5.3.0";
+    public static final String CURRENT_VERSION = "v0.5.3.4";
     private static final String PREF_LAST_SEEN_VERSION = "last_seen_patch_notes_version";
 
     private final FishingRPG game;
@@ -91,8 +91,54 @@ public class PatchNotesDialog {
         // --- TAB 0: BẢN TIN CẬP NHẬT THEO TỪNG PHIÊN BẢN ---
         // =====================================================================
 
-        // ===== PHIÊN BẢN v0.5.3.0 (MỚI NHẤT) =====
-        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.3.0 (MỚI NHẤT - HẠ TẦNG SỰ KIỆN HALLOWEEN 2026 & DYNAMIC UI AUTO-SWITCH)"));
+        // ===== PHIÊN BẢN v0.5.3.4 (MỚI NHẤT) =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.3.4 (MỚI NHẤT - SỬA LỖI DƯỠNG SỨC & TIÊU HAO THỂ LỰC ĐỘNG)"));
+
+        patchNotesItems.add(new UpdateItem("SỬA LỖI & CÂN BẰNG", "Khắc Phục Lỗi Kỹ Năng Dưỡng Sức & Tinh Chỉnh Thể Lực Động (BAL-STM-01)", new Color(0.25f, 0.85f, 0.50f, 1f))
+                .addPoint("Khắc phục triệt để lỗi hồi Thể lực kép ở chiêu Dưỡng Sức: Loại bỏ lượng hồi dồn +50 dư thừa ở thời điểm kết thúc vận sức, chuẩn hóa kỹ năng hồi đều đặn theo thời gian qua hệ thống GAS (+10 Thể lực/s trong 5 giây ở cấp 1).")
+                .addPoint("Chuẩn hóa thời gian vận sức theo cấp độ: Cấp 1: 5.0s (+10.0/s), Cấp 2: 4.0s (+12.5/s), Cấp 3: 3.0s (+16.7/s) với tổng hồi cố định 50 Thể lực; hiển thị trực quan thông số tốc độ hồi trên Cây Kỹ Năng.")
+                .addPoint("Cơ chế tiêu hao Thể lực động trong giao tranh: Thể lực người chơi tụt nhanh hơn một chút khi cá ở trạng thái PULLING (tăng từ 2.0/s lên 3.0/s).")
+                .addPoint("Hệ số tiêu hao biến thiên theo sát thương của cá: Tốc độ tụt thể lực gia tăng tỷ lệ thuận với lực kéo của cá (pullStrength * 0.015), khiến các loài cá lớn và hung hãn gây áp lực thể lực chân thực hơn.")
+        );
+
+        // ===== PHIÊN BẢN v0.5.3.3 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.3.3 (ĐẠI TU CÂN BẰNG KỸ NĂNG ĐẢO XA & THANH TENSION REALTIME)"));
+
+        patchNotesItems.add(new UpdateItem("CÂN BẰNG", "Đại Tu Kỹ Năng 15 Loài Cá Đảo Xa & Cơ Chế Re-Hook Kỹ Năng (BAL-FSH-02)", new Color(1f, 0.45f, 0.25f, 1f))
+            .addPoint("Hiển thị Max Tension thời gian thực trên thanh đo: Khi trúng chiêu giảm Max Tension, phần bị giảm được bao phủ bởi dải sọc đỏ cảnh báo và một vạch mốc đỏ neon nhấp nháy ở dưới mốc max kèm text chỉ báo % bị giảm (giữ nguyên số gốc Current/Max).")
+            .addPoint("Thân Đao Xé Gió (Cá Thu Ngàng): Rút ngắn 40% thời gian pha PULLING nhưng tăng +40% lực kéo và giật tức thì +12% Tension mỗi khi bắt đầu bơi.")
+            .addPoint("Vũ Điệu Cờ Buồm (Cá Cờ Gòn): Nhảy lướt 2 nhịp liên tiếp; mỗi nhịp nếu trượt Perfect Re-hook phạt +30 đơn vị Tension (tổng trượt 2 nhịp là +60 Tension).")
+            .addPoint("Vực Đá Nuốt Chửng (Cá Mú Nghệ Khơi): Nerf cú giật còn +20% Tension; đặt debuff giảm 30% lượng hồi Thể lực của người chơi từ mọi nguồn đến hết trận.")
+            .addPoint("Cắn Xé Điên Cuồng (Cá Mập Rạn Đen): Giảm 20% Max Tension (5s); nếu kích hoạt Thính Mùi Máu (Thể lực <50%) thì giảm 30% Max Tension và trừ 30 Thể lực.")
+            .addPoint("Tinh chỉnh Siêu Boss Cá Cờ Xanh: Ghìm kéo phạt hạ từ 1.5s xuống 1.2s; bỏ điểm thưởng sát thương; Vũ Điệu Lướt Sóng phạt +20% Tension, -15 Thể lực và hồi 8% máu Boss trừ khi Perfect Re-hook; Cuồng Phong Ngự Kiếm (+10% lực kéo mỗi lần lướt sóng & Boss bất tử khi ở trên không).")
+            .addPoint("Cơ chế Re-Hook Mới: Phạt +20% Tension nếu ghìm phím Space quá 50% thời gian bay; ngăn chặn hoàn toàn việc spam phím (chỉ nhận đúng 1 lần bấm duy nhất trong cửa sổ tiếp nước).")
+            .addPoint("Hệ thống Floating Text Tinh Gọn & Catalog: Chỉ hiển thị tên kỹ năng ngắn gọn, không ghi thông số thừa thãi; cập nhật toàn bộ chú thích chi tiết trong Bách Khoa Cá (Fish Catalog).")
+        );
+
+        // ===== PHIÊN BẢN v0.5.3.2 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.3.2 (TỐI ƯU GIAO DIỆN TOOLTIP & BÁO CÁO KỸ NĂNG ĐẢO XA)"));
+
+        patchNotesItems.add(new UpdateItem("GIAO DIỆN", "Tự Động Xuống Dòng (Text Wrap) & Co Giãn Chiều Cao Tooltip Động (UI-FIX-01)", new Color(0.35f, 0.85f, 1f, 1f))
+            .addPoint("Khắc phục hoàn toàn lỗi tràn chữ ngang ở Bách Khoa Cá (CatalogScreen): Mô tả kỹ năng dài tự động xuống dòng và tự động tính toán lại chiều cao hộp tooltip theo số dòng thực tế, không còn tình trạng chữ bay ra ngoài khung viền hay đè lên dòng Lore/Footer.")
+            .addPoint("Tự động ngắt dòng thông tin Vật phẩm & Sách kỹ năng (GameHUD): Tooltip vật phẩm tự co giãn chiều cao theo nội dung mô tả, không còn bị tràn chữ sang phải đè lên các ô phím tắt nhanh [1]-[9].")
+            .addPoint("Điều chỉnh vị trí Banner Radar Thấu Thị (Kính Nhìn Xuyên Nước): Chuyển vị trí hiển thị từ nửa trên màn hình (Y=550f) xuống nửa dưới màn hình (Y=200f), chấm dứt hoàn toàn hiện tượng bị Card thông báo hiệu ứng tỷ lệ câu đè lấp.")
+            .addPoint("Báo Cáo Cân Bằng Toàn Diện 15 Loài Cá Đảo Xa: Lập bảng phân tích chi tiết toàn bộ chỉ số HP, Lực kéo, Cơ chế nội tại & Kỹ năng chủ động của 15 loài cá Đảo Xa phục vụ tinh chỉnh cân bằng.")
+        );
+
+        // ===== PHIÊN BẢN v0.5.3.1 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.3.1 (SIÊU PHẨM 6★ HUYẾT NGUYỆT THẦN VƯƠNG & GACHA EVENT AUTO-SWITCH)"));
+
+        patchNotesItems.add(new UpdateItem("TRANG BỊ", "Siêu Phẩm 6★ Huyết Nguyệt Thần Vương & Set Dạ Hội Bí Ngô (HLW-02)", new Color(0.95f, 0.25f, 0.25f, 1f))
+            .addPoint("Trang bị 6★ Limited Premium 'Huyết Nguyệt Thần Vương': Huyết Nguyệt Thần Trượng, Dây Huyết Ma Cơ, Lưỡi Huyết Nguyệt Ma Trảo với 18 Cấp Điểm và chỉ số tối thượng.")
+            .addPoint("Nội tại [Bá Quyền Trăng Máu]: Quăng Perfect x2 Sát Thương kéo trong 2s đầu; Kéo dây SPACE hút 3% HP cá (tối đa 12 Thể lực/giây) chuyển thành Thể lực người chơi; +45% Tỷ lệ bắt Cá Hiếm & Boss.")
+            .addPoint("Cơ chế hút thể lực có trần: Giới hạn tối đa 12.0 Thể lực/giây đảm bảo cân bằng game khi đối đầu các Siêu Boss HP khủng (Thanatos 6,666 HP, Cá Cờ Xanh 3,000 HP).")
+            .addPoint("Set 4★ F2P 'Dạ Hội Bí Ngô' [Lễ Hội Kẹo Ngọt]: +35% EXP, +25% Vàng, +35% Cá Hiếm và 35% tỉ lệ rơi thêm 1 Kẹo Trick-or-Treat khi câu cá thành công!")
+            .addPoint("Banner Đài Gacha Sự Kiện Tự Động Chuyển Giao: Giữ nguyên 100% Lạc Hồng trước 30/10; Đúng ngày 30/10 tự động đổi sang Banner Huyết Nguyệt Thần Vương với nền Trăng Máu Eclipse ma mị, Rate-up 50% và bảo hiểm Pity 80 chắc chắn nổ 6★.")
+            .addPoint("Đại tu Độc Bản Vector 6★ Limited Premium cho Dây Huyết Ma Cơ (Khung Ma Vương Gothic 4 cánh, vành bát giác cấm thuật, tơ huyết ngôi sao bát giác, Trái Tim Trăng Máu 4 facet & Ma Nhãn đồng tử lửa vàng) và Lưỡi Huyết Nguyệt Ma Trảo (Vuốt Quỷ Ma Vương Đoạt Hồn, Vương Miện Cặp Sừng Rồng bọc vàng cổ, Cột Sống Cổ Long 4 đốt đai ngọc & hệ thống đa ngạnh tàn bạo).")
+        );
+
+        // ===== PHIÊN BẢN v0.5.3.0 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.3.0 (HẠ TẦNG SỰ KIỆN HALLOWEEN 2026 & DYNAMIC UI AUTO-SWITCH)"));
 
         patchNotesItems.add(new UpdateItem("SỰ KIỆN", "Hạ Tầng Sự Kiện Kép Lạc Hồng & Halloween 2026 Tự Động Chuyển Giao (HLW-01)", new Color(1.0f, 0.50f, 0.10f, 1f))
             .addPoint("Bảo toàn 100% giao diện, nhiệm vụ, chuỗi điểm danh và cửa hàng Hào Khí Lạc Hồng cho đến hết 23:59:59 ngày 28/10/2026.")

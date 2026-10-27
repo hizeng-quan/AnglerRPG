@@ -37,7 +37,8 @@ public class PlayerProgression {
         if (xp <= 0) return 0;
         
         float bonus = 1f + equipmentExpBonus / 100f;
-        if ("Tập Sự".equals(activeSetName) || "Dạ Hội Bí Ngô".equals(activeSetName)) bonus += 0.2f;
+        if ("Tập Sự".equals(activeSetName)) bonus += 0.2f;
+        if ("Dạ Hội Bí Ngô".equals(activeSetName)) bonus += 0.35f;
         int finalXp = (int)(xp * bonus);
         
         currentXp += finalXp;

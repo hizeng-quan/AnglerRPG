@@ -125,7 +125,7 @@ public class SkillTree {
         // 1. Duong Suc (3 cap) -- Active
         add(new Skill("duong_suc", "Dưỡng Sức", "Tập trung vận sức để hồi phục Thể lực. Trong lúc vận sức không thể kéo dây câu.", 
             Skill.SkillType.ACTIVE, 3, new int[]{0, 2, 3}, 
-            new float[]{ 2f, 1.5f, 1f }, new float[]{ 50f, 50f, 50f }, new String[]{}, true));
+            new float[]{ 5f, 4f, 3f }, new float[]{ 50f, 50f, 50f }, new String[]{}, true));
             
         // 2. Giat Kep (3 cap) -- Active
         add(new Skill("giat_kep", "Giật Kép", "Tung đòn giật kép cực mạnh với hệ số sát thương vượt trội nhưng tốn thêm Thể lực.", 
@@ -231,8 +231,8 @@ public class SkillTree {
     public boolean hasNemXa() { Skill s = skills.get("nem_xa"); return s != null && s.isUnlocked(); }
 
     // --- BÍ MẬT ---
-    public float getDuongSucChannelTime() { Skill s = skills.get("duong_suc"); return (s != null) ? s.getEffect() : 2f; }
-    public float getDuongSucHeal() { Skill s = skills.get("duong_suc"); return (s != null) ? s.getEffect2() : 100f; }
+    public float getDuongSucChannelTime() { Skill s = skills.get("duong_suc"); return (s != null && s.isUnlocked()) ? s.getEffect() : 5f; }
+    public float getDuongSucHeal() { Skill s = skills.get("duong_suc"); return (s != null && s.isUnlocked()) ? s.getEffect2() : 50f; }
     public float getGiatKepDamageMult() { Skill s = skills.get("giat_kep"); return (s != null && s.isUnlocked()) ? s.getEffect() : 1f; }
     public float getMatDaiBangBonus() { Skill s = skills.get("mat_dai_bang"); return (s != null && s.isUnlocked()) ? s.getEffect() : 1f; }
     public float getThuanHoaBonus() { Skill s = skills.get("thuan_hoa"); return (s != null) ? s.getEffect() : 0f; }

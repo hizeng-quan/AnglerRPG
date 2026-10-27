@@ -12,12 +12,16 @@
 | **SEC-02** | Bảo mật  | Mã hóa file save chống gian lận & can thiệp dữ liệu (AES-256 + SHA-256 Checksum) | **P0 (Bảo mật)**   | ✅ Đã hoàn thành (v0.4.24) |
 | **EVT-01** | Sự kiện  | Chốt hạn Sự kiện Lạc Hồng (28/10) & Khóa an toàn Shop, quy đổi Điểm SK tồn đọng | **P1 (Sự kiện)**  | ✅ Đã hoàn thành (v0.4.24) |
 | **HLW-01** | Sự kiện  | Giai Đoạn 1: Hạ Tầng Sự Kiện, Auto-Switch Lifecycle, Giao Diện Đêm Hội Halloween & Shop | **P1 (Sự kiện)**  | ✅ Đã hoàn thành (v0.5.3.0) |
-| **HLW-02** | Trang bị | Giai Đoạn 2: 2 Bộ Trang Bị (Set Cày Điểm "Dạ Hội Bí Ngô" vs Set 6★ "Huyết Nguyệt") & Gacha Banner | **P1 (Trang bị)**  | 📋 Kế hoạch chi tiết (Phase 2) |
+| **HLW-02** | Trang bị | Giai Đoạn 2: 2 Bộ Trang Bị (Set Cày Điểm "Dạ Hội Bí Ngô" vs Set 6★ "Huyết Nguyệt") & Gacha Banner | **P1 (Trang bị)**  | ✅ Đã hoàn thành (v0.5.3.1) |
 | **HLW-03** | Gameplay | Giai Đoạn 3: Bộ 7 Cá Halloween (Mọi bản đồ), Siêu Boss Thanatos 6,666 HP & Sổ Tay Sưu Tập | **P1 (Gameplay)**  | 📋 Kế hoạch chi tiết (Phase 3) |
 | **HLW-04** | Đồ họa   | Giai Đoạn 4: 13 Asset Đồ Họa Vector LibGDX (6 Icon Trang Bị + 7 Loài Cá Đa Tầng) | **P1 (Đồ họa)**     | 📋 Kế hoạch chi tiết (Phase 4) |
 | **HLW-05** | Trải nghiệm| Giai Đoạn 5: Vật Phẩm Tiêu Hao (Kẹo, Đèn), Bầu Trời Huyết Nguyệt & Âm Thanh ZzFX Spooky | **P1 (Trải nghiệm)**| 📋 Kế hoạch chi tiết (Phase 5) |
 | **HLW-06** | QA & Build| Giai Đoạn 6: Mô Phỏng Cân Bằng CLI, Kiểm Thử Tự Động, Bảo Mật Save & Đóng Gói v0.5.3 | **P1 (Hệ thống)** | 📋 Kế hoạch chi tiết (Phase 6) |
 | **FSH-04** | Gameplay | Revamp Toàn Bộ Skill Cá, Chuẩn Hóa Phân Tầng Kỹ Năng & Bổ Sung Hạng Cá Legendary (Mini-Boss) | **P1 (Quan trọng)** | 📋 Kế hoạch triển khai |
+| **BAL-STM-01** | Cân bằng & Sửa lỗi | Sửa Lỗi Hồi Kép Dưỡng Sức (+50 dồn) & Tinh Chỉnh Tiêu Hao Thể Lực Động Theo Trạng Thái Cá | **P1 (Cân bằng)** | ✅ Đã hoàn thành (v0.5.3.4) |
+| **BAL-FSH-02** | Cân bằng | Đại Tu Cân Bằng Kỹ Năng 15 Loài Cá Đảo Xa, Re-Hook Cải Tiến & Thanh Tension Realtime | **P1 (Cân bằng)** | ✅ Đã hoàn thành (v0.5.3.3) |
+| **UI-FIX-01** | Giao diện | Tự động xuống dòng (Text Wrap) & Chiều cao động Tooltip Cá/Vật phẩm, Hạ thấp Radar Banner | **P1 (Giao diện)** | ✅ Đã hoàn thành (v0.5.3.2) |
+| **BAL-FSH-01** | Cân bằng | Báo Cáo Phân Tích Chuyên Sâu Cơ Chế Kỹ Năng 15 Loài Cá Đảo Xa | **P1 (Cân bằng)** | ✅ Đã hoàn thành (v0.5.3.2) |
 | **BUG-01** | Sửa lỗi | Crash khi bấm Quay lại từ màn hình Trang bị (Use-After-Free) | **P0 (Khẩn cấp)** | ✅ Đã khắc phục triệt để |
 | **BUG-02** | Sửa lỗi | Chuẩn hóa hệ thống nút Quay lại Menu & khắc phục lỗi vòng lặp | **P0 (Khẩn cấp)** | ✅ Đã khắc phục triệt để |
 | **BUG-03** | Sửa lỗi | Phím kỹ năng QWER không nhận & thiếu phản hồi trên tài khoản mới | **P0 (Khẩn cấp)** | ✅ Đã khắc phục triệt để |
@@ -719,21 +723,32 @@
   * **Bạo Kích Cú Ném Hoàn Hảo (Perfect Strike):** Khi quăng cần đạt mốc `PERFECT`, đòn kéo dây đầu tiên gây sát thương nổ bạo kích nhân đôi (**x2.0 Damage**)!
 
 #### 📝 Danh mục tác vụ chi tiết (Checklist):
-- [ ] **HLW-02.1 - Khởi tạo dữ liệu trang bị trong `EquipmentGenerator.java`**:
-  - Thêm phương thức tạo trang bị Set Bí Ngô `createPumpkinSetItem(EquipmentType type)`.
-  - Thêm phương thức tạo trang bị Set Huyết Nguyệt `createBloodMoonSetItem(EquipmentType type)`.
-- [ ] **HLW-02.2 - Logic Nội Tại Kích Hoạt trong `PlayerEquipment.java` & `FishingManager.java`**:
-  - Thêm kiểm tra `isSetBonusActive() && "Dạ Hội Bí Ngô".equals(getActiveSetName())` $\rightarrow$ Tăng tỉ lệ gặp cá Halloween và boost EXP.
-  - Thêm logic rút HP cá hồi thể lực trong vòng lặp kéo dây `reeling` tại `FishingManager.java` khi mặc đủ set "Huyết Nguyệt Thần Vương".
-  - Thêm cờ `isFirstPullAfterPerfect` để kích hoạt x2 damage cho đòn giật đầu tiên.
-- [ ] **HLW-02.3 - Nâng cấp Banner Đài Gacha Sự Kiện trong `GachaScreen.java`**:
-  - Đổi tiêu đề banner sang: *"HUYẾT NGUYỆT GIÁNG TRẦN"*.
-  - Giữ cố định tỷ lệ nổ 6★ Thần Khí: **1.5%**.
-  - Rate-up 50% trúng Set Huyết Nguyệt (chia đều 33.33% cho Trượng, Dây, Móc). 50% còn lại là các Set 6★ khác (Lạc Hồng, Quang Minh, Thời Không).
-  - Duy trì chuẩn bảo hiểm Pity 80 roll chắc chắn trúng 6★.
-- [ ] **HLW-02.4 - Mô phỏng cân bằng số liệu qua CLI**:
-  - Chạy `python scripts/balance/balance_cli.py gacha --sims 10000` kiểm tra xác suất nổ và phân phối bảo hiểm.
-  - Chạy `python scripts/balance/balance_cli.py combat` kiểm định TTK khi đối đầu Boss với 2 bộ trang bị mới.
+- [x] **HLW-02.1 - Khởi tạo dữ liệu trang bị trong `EquipmentGenerator.java`** *(Đã hoàn thành - v0.5.3.1)*:
+  - Đồng bộ chuẩn tên: Set "Huyết Nguyệt Thần Vương" (*Huyết Nguyệt Thần Trượng*, *Dây Huyết Ma Cơ*, *Lưỡi Huyết Nguyệt Ma Trảo* - 8 điểm / 18 cấp điểm 6★) và Set "Dạ Hội Bí Ngô" (*Cần Dạ Hội Bí Ngô*, *Dây Cước Tơ Nhện Quỷ*, *Lưỡi Kẹo Ma Quái* - 4 điểm / 4★).
+  - Thêm phương thức `createHuyetNguyetEquipment(EquipmentType type)` với stats chuẩn 6★ Limited Premium (Damage 48.0, Max Stamina 280, Max Tension 520, Kháng đứt 8.5, Cá hiếm +28%, Giữ mồi +45%, 4 substats cấp cao).
+  - Cập nhật `getSetBonusDesc()` mô tả chi tiết hiệu ứng độc quyền cho cả 2 bộ.
+  - Bảo vệ chặt chẽ: Cả 2 set bị loại trừ hoàn toàn khỏi Gacha Thường (`rollGacha`).
+- [x] **HLW-02.2 - Logic Nội Tại Kích Hoạt trong `PlayerEquipment.java`, `Player.java`, `PlayerProgression.java` & `FishingManager.java`** *(Đã hoàn thành - v0.5.3.1)*:
+  - `PlayerEquipment.getRarityBoost()`: Set Dạ Hội Bí Ngô +35% Cá Hiếm; Set Huyết Nguyệt Thần Vương +45% Cá Hiếm.
+  - `Player.gainGold()`: Set Dạ Hội Bí Ngô tăng +25% Vàng khi câu cá.
+  - `PlayerProgression.gainXp()`: Set Dạ Hội Bí Ngô tăng +35% EXP từ mọi nguồn cá.
+  - `FishingManager.finishEncounter(true)`: Khi mang Set Dạ Hội Bí Ngô, có **35% tỉ lệ rơi thêm 1 Kẹo Trick-or-Treat** vào túi đồ.
+  - `FishingManager.startEncounter()` & `updateCombat()`: Set Huyết Nguyệt Thần Vương kích hoạt `perfectCastBuffTimer = 2.0f` khi quăng Perfect, nhân đôi sát thương kéo (**x2.0 Damage**) trong 2 giây đầu.
+  - `FishingManager.updateCombat()`: Khi kéo dây `isSpaceDown`, hút 3% HP hiện tại của cá chuyển thành Thể lực người chơi mỗi giây (`Math.min(currentFish.getCurrentHp() * 0.03f, 12.0f)`), áp trần tối đa **12.0 Thể lực/giây** để không làm vỡ game khi gặp Siêu Boss HP khủng (Thanatos 6,666 HP, Cá Cờ Xanh 3,000 HP).
+- [x] **HLW-02.3 - Nâng cấp Banner Đài Gacha Sự Kiện trong `GachaScreen.java`** *(Đã hoàn thành - v0.5.3.1)*:
+  - Tự động chuyển giao banner dựa trên `EventManager.isHalloweenActive()`: Trước ngày 30/10 hiển thị trọn vẹn Lạc Hồng; Đúng ngày 30/10 tự động chuyển sang Banner "BỘ HUYẾT NGUYỆT THẦN VƯƠNG" với nền Trăng Máu Huyết Nguyệt Eclipse và tàn ma lửa bay.
+  - Giữ cố định tỷ lệ nổ 6★: **1.5%**, bảo lưu tiến trình Pity 80 roll chắc chắn nhận 6★.
+  - Rate-up 50% trúng Set Huyết Nguyệt Thần Vương (chia đều 3 món).
+  - Modal Chi Tiết Set và Modal Tỉ Lệ / Danh Sách Trang Bị (Loot Table) chuyển đổi đồng bộ sang 2 set Halloween độc quyền.
+- [x] **HLW-02.4 - 6 Tuyệt Tác Vector SVG & LibGDX ShapeRenderer (`EquipmentIconRenderer.java`)** *(Đã hoàn thành - v0.5.3.1)*:
+  - 6 File SVG trong `assets/vectors/equipment/`: `rod_da_hoi_bi_ngo.svg`, `line_da_hoi_bi_ngo.svg`, `hook_da_hoi_bi_ngo.svg`, `rod_huyet_nguyet.svg`, `line_huyet_nguyet.svg`, `hook_huyet_nguyet.svg`.
+  - **Đại Tu Độc Bản Siêu Phẩm 6★ Limited Premium (`line_huyet_nguyet` & `hook_huyet_nguyet`)**:
+    * `drawHuyetNguyetLine`: Khung xương Ma Vương Gothic 4 cánh xòe nhọn 4 góc chéo, vành Bát Giác Cấm Thuật nạm 8 nanh rồng tà thần, tơ huyết đan chéo hình ngôi sao bát giác thiêng liêng, Trái Tim Trăng Máu 4 facet kim cương, Ma Nhãn Tà Thần đồng tử lửa vàng và 4 mảnh huyết thạch lơ lửng.
+    * `drawHuyetNguyetHook`: Bàn Tay Vuốt Quỷ Ma Vương Đoạt Hồn, Vương Miện Cặp Sừng Rồng khổng lồ xòe hai bên bọc vàng cổ, xích ma quỷ quấn cổ khoen, thân Cột Sống Cổ Long 4 đốt nạm Huyết Lệ Tinh Thể với 3 ngạnh gai ngược vây lưng, vòm uốn đa lớp sắc lẹm cùng hệ thống đa ngạnh tàn bạo (mũi vuốt quỷ, ngạnh xé thịt, ngạnh phá giáp và rãnh thoát máu kép).
+- [x] **HLW-02.5 - Kiểm thử cân bằng hệ thống CLI** *(Đã hoàn thành - v0.5.3.1)*:
+  - Chạy `python scripts/balance/balance_cli.py gacha`: Xác nhận phân phối Pity 80 và Monte Carlo đạt chuẩn.
+  - Chạy `python scripts/balance/balance_cli.py combat`: Kiểm định thông số giằng co ổn định.
+  - Chạy `python scripts/balance/balance_cli.py economy`: Đảm bảo cân bằng nguồn thu chi kinh tế.
 
 ---
 

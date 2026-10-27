@@ -13,12 +13,22 @@ public class PlayerCombat {
 
     private float staminaRegenAmount = 0f;
     private float staminaRegenRate = 0f;
+    private float staminaHealMultiplier = 1.0f;
 
     public boolean justFilledStamina = false;
 
     public PlayerCombat(float maxStamina) {
         this.maxStamina = maxStamina;
         this.currentStamina = maxStamina;
+        this.staminaHealMultiplier = 1.0f;
+    }
+
+    public void setStaminaHealMultiplier(float mult) {
+        this.staminaHealMultiplier = Math.max(0f, mult);
+    }
+
+    public float getStaminaHealMultiplier() {
+        return staminaHealMultiplier;
     }
 
     public void update(float delta, float passiveRegenBonus) {
@@ -53,6 +63,7 @@ public class PlayerCombat {
 
     public void resetForNewEncounter() {
         currentLineTension = 0f;
+        staminaHealMultiplier = 1.0f;
     }
 
     public void applyStatBonuses(float baseStamina, float theLucBonus, float rodStaminaBonus, float dayThepBonus, float lineTensionBonus) {
@@ -83,8 +94,9 @@ public class PlayerCombat {
      */
     public boolean consumeStamina(float amount) {
         if (amount < 0) {
-            // Heal
-            currentStamina = Math.min(maxStamina, currentStamina - amount);
+            // Heal (giam theo staminaHealMultiplier neu bi dinh debuff Vuc Da Nuot Chung)
+            float heal = -amount * staminaHealMultiplier;
+            currentStamina = Math.min(maxStamina, currentStamina + heal);
             return true;
         }
         if (currentStamina >= amount) {

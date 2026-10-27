@@ -104,6 +104,8 @@ public class Player {
     public void decreaseTension(float amount) { combat.decreaseTension(amount); }
     public boolean isLineBroken() { return combat.isLineBroken(); }
     public boolean consumeStamina(float amount) { return combat.consumeStamina(amount); }
+    public void setStaminaHealMultiplier(float mult) { combat.setStaminaHealMultiplier(mult); }
+    public float getStaminaHealMultiplier() { return combat.getStaminaHealMultiplier(); }
     
     public float getCurrentStamina()     { return combat.getCurrentStamina(); }
     public float getMaxStamina()         { return combat.getMaxStamina(); }
@@ -116,7 +118,14 @@ public class Player {
     public int gainXp(int xp) { 
         return progression.gainXp(xp, equipment.getTotalSubstat(Substat.Type.EXP_BONUS), equipment.getActiveSetName(), questManager, () -> applySkillBonuses()); 
     }
-    public void gainGold(int amount) { progression.gainGold(amount, equipment.getTotalSubstat(Substat.Type.GOLD_BONUS), questManager); }
+    public void gainGold(int amount) { 
+        float bonus = equipment.getTotalSubstat(Substat.Type.GOLD_BONUS);
+        if (equipment.isSetBonusActive()) {
+            if ("Hoàng Gia".equals(equipment.getActiveSetName())) bonus += 30f;
+            else if ("Dạ Hội Bí Ngô".equals(equipment.getActiveSetName())) bonus += 25f;
+        }
+        progression.gainGold(amount, bonus, questManager); 
+    }
     public boolean consumeGold(int amount) { 
         if (progression.getGold() >= amount) {
             progression.setGold(progression.getGold() - amount);
