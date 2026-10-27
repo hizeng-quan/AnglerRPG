@@ -82,6 +82,54 @@ public class AbilitySystemComponent {
             return false;
         }
 
+        // Kiểm tra Phong Ấn Kỹ Năng (do trượt Ultimate Thanatos)
+        if (ctx.fishingManager != null && ctx.fishingManager.playerSkillLockedTimer > 0f) {
+            if (ctx.ftm != null) {
+                ctx.ftm.addText("KỸ NĂNG BỊ PHONG ẤN!", 640f, 380f, Color.PURPLE);
+            }
+            ctx.audio.playSFX("sfx_fail");
+            return false;
+        }
+
+        // Kiểm tra Câm Lặng Kỹ Năng Tiếp Theo (Tiếng Hú Địa Ngục của Thanatos)
+        if (ctx.fishingManager != null && ctx.fishingManager.thanatosSilenceNextSkill) {
+            ctx.fishingManager.thanatosSilenceNextSkill = false;
+            float sCost = ability.getStaminaCost(ctx);
+            ctx.player.consumeStamina(sCost);
+            float finalCd = ability.getBaseCooldown(ctx) * cdMult;
+            cooldowns.put(abilityId, finalCd);
+            if (ctx.ftm != null) {
+                ctx.ftm.addText("CÂM LẶNG! KỸ NĂNG BỊ TRIỆT TIÊU!", 640f, 400f, Color.SCARLET);
+            }
+            ctx.fishingManager.combatMessage = "CÂM LẶNG ĐỊA NGỤC: " + ability.getName() + " bị triệt tiêu hoàn toàn!";
+            ctx.audio.playSFX("sfx_fail");
+            return false;
+        }
+
+        // Kiểm tra Phong Ấn Kỹ Năng (do trượt Ultimate Thanatos)
+        if (ctx.fishingManager != null && ctx.fishingManager.playerSkillLockedTimer > 0f) {
+            if (ctx.ftm != null) {
+                ctx.ftm.addText("KỸ NĂNG BỊ PHONG ẤN!", 640f, 380f, Color.PURPLE);
+            }
+            ctx.audio.playSFX("sfx_fail");
+            return false;
+        }
+
+        // Kiểm tra Câm Lặng Kỹ Năng Tiếp Theo (Tiếng Hú Địa Ngục của Thanatos)
+        if (ctx.fishingManager != null && ctx.fishingManager.thanatosSilenceNextSkill) {
+            ctx.fishingManager.thanatosSilenceNextSkill = false;
+            float sCost = ability.getStaminaCost(ctx);
+            ctx.player.consumeStamina(sCost);
+            float finalCd = ability.getBaseCooldown(ctx) * cdMult;
+            cooldowns.put(abilityId, finalCd);
+            if (ctx.ftm != null) {
+                ctx.ftm.addText("CÂM LẶNG! KỸ NĂNG BỊ TRIỆT TIÊU!", 640f, 400f, Color.SCARLET);
+            }
+            ctx.fishingManager.combatMessage = "CÂM LẶNG ĐỊA NGỤC: " + ability.getName() + " bị triệt tiêu hoàn toàn!";
+            ctx.audio.playSFX("sfx_fail");
+            return false;
+        }
+
         // Kiểm tra xem kỹ năng đã được mở khóa trong cây kỹ năng chưa
         if (ctx.player.getSkillTree().getSkill(abilityId) == null ||
             !ctx.player.getSkillTree().getSkill(abilityId).isUnlocked()) {

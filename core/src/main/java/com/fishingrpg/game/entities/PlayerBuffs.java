@@ -16,6 +16,58 @@ public class PlayerBuffs {
     private int     treasureMagnetCharges = 0;
     private int     sonarCharges          = 0;
 
+    // --- Halloween HLW-05 Exclusives ---
+    private int     halloweenCandyCharges   = 0;
+    private float   halloweenCandyTimer     = 0f; // 900s (15 phut)
+    private int     pumpkinLanternCharges   = 0;  // 3 lan Re-Hook +30% time
+    private int     freeStaminaSkillCharges = 0;  // 3 lan dung skill 0 the luc
+    private float   bloodMoonTalismanTimer  = 0f; // 15s +10% True damage in-combat
+    private boolean ghostCandleActive       = false; // Cuu 1 lan dut day
+    private float   manualBloodMoonTimer    = 0f; // 900s (15 phut) goi Blood Moon
+
+    public void update(float delta) {
+        if (halloweenCandyTimer > 0f) {
+            halloweenCandyTimer = Math.max(0f, halloweenCandyTimer - delta);
+        }
+        if (bloodMoonTalismanTimer > 0f) {
+            bloodMoonTalismanTimer = Math.max(0f, bloodMoonTalismanTimer - delta);
+        }
+        if (manualBloodMoonTimer > 0f) {
+            manualBloodMoonTimer = Math.max(0f, manualBloodMoonTimer - delta);
+        }
+    }
+
+    // --- Halloween Trick-or-Treat Candy ---
+    public int   getHalloweenCandyCharges()                 { return halloweenCandyCharges; }
+    public void  addHalloweenCandyCharges(int charges)      { halloweenCandyCharges += charges; }
+    public void  consumeHalloweenCandyCharge()              { if (halloweenCandyCharges > 0) halloweenCandyCharges--; }
+    public void  setHalloweenCandyCharges(int v)            { halloweenCandyCharges = Math.max(0, v); }
+    public float getHalloweenCandyTimer()                   { return halloweenCandyTimer; }
+    public void  setHalloweenCandyTimer(float v)            { halloweenCandyTimer = Math.max(0f, v); }
+    public void  addHalloweenCandyTimer(float sec)          { halloweenCandyTimer += sec; }
+
+    // --- Pumpkin Lantern (Quang minh trừ tà) ---
+    public int   getPumpkinLanternCharges()                 { return pumpkinLanternCharges; }
+    public void  addPumpkinLanternCharges(int charges)      { pumpkinLanternCharges += charges; }
+    public void  consumePumpkinLanternCharge()              { if (pumpkinLanternCharges > 0) pumpkinLanternCharges--; }
+    public void  setPumpkinLanternCharges(int v)            { pumpkinLanternCharges = Math.max(0, v); }
+
+    // --- Witch / Ghost Potion (Độc Dược Ma Quái) ---
+    public int   getFreeStaminaSkillCharges()               { return freeStaminaSkillCharges; }
+    public void  addFreeStaminaSkillCharges(int charges)    { freeStaminaSkillCharges += charges; }
+    public void  consumeFreeStaminaSkillCharge()            { if (freeStaminaSkillCharges > 0) freeStaminaSkillCharges--; }
+    public void  setFreeStaminaSkillCharges(int v)          { freeStaminaSkillCharges = Math.max(0, v); }
+
+    // --- Blood Moon Talisman (Bùa Huyết Nguyệt) ---
+    public float getBloodMoonTalismanTimer()                { return bloodMoonTalismanTimer; }
+    public void  setBloodMoonTalismanTimer(float v)         { bloodMoonTalismanTimer = Math.max(0f, v); }
+    public float getManualBloodMoonTimer()                  { return manualBloodMoonTimer; }
+    public void  setManualBloodMoonTimer(float v)           { manualBloodMoonTimer = Math.max(0f, v); }
+
+    // --- Ghost Candle (Nến Hồn Ma Bảo Hộ) ---
+    public boolean isGhostCandleActive()                    { return ghostCandleActive; }
+    public void    setGhostCandleActive(boolean v)          { ghostCandleActive = v; }
+
     // --- Sweet Bait ---
     public boolean isBaitBuffActive()           { return baitBuffActive; }
     public void    setBaitBuffActive(boolean v) { baitBuffActive = v; }

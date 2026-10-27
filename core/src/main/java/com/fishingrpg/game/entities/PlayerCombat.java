@@ -81,6 +81,9 @@ public class PlayerCombat {
         currentLineTension = Math.min(currentLineTension + amount, maxLineTension);
     }
 
+    public void setLineTension(float value) {
+        this.currentLineTension = Math.max(0, Math.min(maxLineTension, value));
+    }
     public void decreaseTension(float amount) {
         currentLineTension = Math.max(0, currentLineTension - amount);
     }

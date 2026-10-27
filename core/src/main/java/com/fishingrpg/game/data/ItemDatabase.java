@@ -41,6 +41,15 @@ public class ItemDatabase {
         registerItem(new ItemData("Sách: Thuần Hóa", "Học/Đột phá kỹ năng Thuần Hóa (+1 Lv hoặc +1 SP)", ItemUsageType.PRE_COMBAT, 1800), false);
         registerItem(new ItemData("Sách: Trói Buộc", "Học/Đột phá kỹ năng Trói Buộc (+1 Lv hoặc +1 SP)", ItemUsageType.PRE_COMBAT, 2200), false);
         registerItem(new ItemData("Sách: Trái Tim ĐD", "Học/Đột phá kỹ năng Trái Tim Đại Dương (+1 Lv hoặc +1 SP)", ItemUsageType.PRE_COMBAT, 2500), false);
+        // Halloween Exclusives (HLW-05 - Gia Vang chuan hoa x2 & Ban trong Shop Thuong)
+        registerItem(new ItemData("Kẹo Trick-or-Treat", "Kẹo ma thuật tăng x2 tỷ lệ gặp cá sự kiện Halloween & cá hiếm (15 phút)", ItemUsageType.BOTH, 300), true);
+        registerItem(new ItemData("Đèn Lồng Bí Ngô", "Quang minh trừ tà: +30% thời gian phản ứng Re-Hook khống chế cá nhảy (3 lần)", ItemUsageType.BOTH, 700), true);
+        registerItem(new ItemData("Độc Dược Ma Quái", "Độc dược hắc ám: 3 lần tung kỹ năng tiếp theo tiêu hao 0 Thể lực", ItemUsageType.BOTH, 900), true);
+        registerItem(new ItemData("Bùa Huyết Nguyệt", "Trong trận: +10% Sát thương Chuẩn (15s). Trước trận: Gọi Đêm Huyết Nguyệt 15 phút", ItemUsageType.BOTH, 1000), true);
+        registerItem(new ItemData("Nến Hồn Ma Bảo Hộ", "Hồn ma bảo hộ: Cứu 1 lần đứt cước khi Tension chạm 100%, kéo Tension về 50%", ItemUsageType.BOTH, 1200), true);
+        registerItem(new ItemData("Rương Ma Quái", "Chiến tích đánh bại Thanatos: Mở nhận 3-5 Vé Gacha, 30-80 KC & 20-30 Kẹo", ItemUsageType.BOTH, 0), false);
+
+        items.put("Nước Phù Thủy Ma Quái", getItem("Độc Dược Ma Quái"));
         items.put("Trà Thảo Mộc Định Thần", getItem("Trà Thảo Mộc"));
         items.put("Nước Bức Phá", getItem("Nước Bứt Phá"));
     }

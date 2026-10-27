@@ -57,6 +57,18 @@ public class LootVisualRenderer {
             drawGoldTalisman(sr, cx, cy, scale, timer);
         } else if (name.equals("Lưới Đánh Cá")) {
             drawFishingNet(sr, cx, cy, scale);
+        } else if (name.equals("Rương Ma Quái")) {
+            drawSunkenChest(sr, cx, cy, scale, timer);
+        } else if (name.equals("Kẹo Trick-or-Treat")) {
+            drawHalloweenCandy(sr, cx, cy, scale, timer);
+        } else if (name.equals("Đèn Lồng Bí Ngô")) {
+            drawPumpkinLantern(sr, cx, cy, scale, timer);
+        } else if (name.equals("Độc Dược Ma Quái") || name.equals("Nước Phù Thủy Ma Quái")) {
+            drawGhostPotion(sr, cx, cy, scale, timer);
+        } else if (name.equals("Bùa Huyết Nguyệt")) {
+            drawBloodMoonTalisman(sr, cx, cy, scale, timer);
+        } else if (name.equals("Nến Hồn Ma Bảo Hộ")) {
+            drawGhostCandle(sr, cx, cy, scale, timer);
         } else if (name.equals("Bình Xịt Đóng Băng")) {
             drawCryoSpray(sr, cx, cy, scale, timer);
         } else if (name.equals("Trà Thảo Mộc Định Thần") || name.equals("Trà Thảo Mộc")) {
@@ -1419,4 +1431,275 @@ public class LootVisualRenderer {
         fillCircle(sr, cx, cy, s, 63.0f, 71.0f, 1.2f);
         fillTri(sr, cx, cy, s, 64.0f, 28.0f, 66.0f, 32.0f, 62.0f, 32.0f);
     }
+
+    // =========================================================================
+    // HLW-05: 5 HALLOWEEN VECTOR PROPS
+    // =========================================================================
+
+    public static void drawHalloweenCandy(ShapeRenderer sr, float cx, float cy, float s, float timer) {
+        // --- LAYER 1: background_glow ---
+        sr.setColor(0.66f, 0.33f, 0.97f, 0.22f);
+        fillCircle(sr, cx, cy, s, 64f, 64f, 52f);
+        sr.setColor(0f, 0f, 0f, 0.32f);
+        fillEllipse(sr, cx, cy, s, 64f, 104f, 34f, 9f);
+
+        // --- LAYER 2: base_form ---
+        // Left Twisted Wrapper Fan
+        sr.setColor(0.58f, 0.20f, 0.92f, 1f);
+        fillQuad(sr, cx, cy, s, 44f, 64f, 16f, 42f, 22f, 64f, 16f, 86f);
+        sr.setColor(0.49f, 0.13f, 0.81f, 1f);
+        fillQuad(sr, cx, cy, s, 44f, 64f, 20f, 52f, 24f, 64f, 20f, 76f);
+
+        // Right Twisted Wrapper Fan
+        sr.setColor(0.58f, 0.20f, 0.92f, 1f);
+        fillQuad(sr, cx, cy, s, 84f, 64f, 112f, 42f, 106f, 64f, 112f, 86f);
+        sr.setColor(0.49f, 0.13f, 0.81f, 1f);
+        fillQuad(sr, cx, cy, s, 84f, 64f, 108f, 52f, 104f, 64f, 108f, 76f);
+
+        // Gold Ribbon Ties
+        sr.setColor(0.98f, 0.80f, 0.08f, 1f);
+        fillQuad(sr, cx, cy, s, 41f, 54f, 47f, 54f, 47f, 74f, 41f, 74f);
+        fillQuad(sr, cx, cy, s, 81f, 54f, 87f, 54f, 87f, 74f, 81f, 74f);
+
+        // Round Hard Candy Core
+        sr.setColor(0.98f, 0.45f, 0.09f, 1f);
+        fillCircle(sr, cx, cy, s, 64f, 64f, 28f);
+        sr.setColor(0.76f, 0.25f, 0.05f, 1f);
+        fillCircle(sr, cx, cy, s, 64f, 64f, 26f);
+        sr.setColor(0.99f, 0.58f, 0.14f, 1f);
+        fillCircle(sr, cx, cy, s, 63f, 63f, 25f);
+
+        // --- LAYER 3: details_and_relief ---
+        // Curved Violet Sugar Swirls
+        sr.setColor(0.49f, 0.13f, 0.81f, 1f);
+        drawLine(sr, cx, cy, s, 44f, 50f, 56f, 42f, 4.5f);
+        drawLine(sr, cx, cy, s, 56f, 42f, 70f, 44f, 4.5f);
+        drawLine(sr, cx, cy, s, 70f, 44f, 90f, 56f, 4.5f);
+        drawLine(sr, cx, cy, s, 40f, 68f, 52f, 78f, 4.5f);
+        drawLine(sr, cx, cy, s, 52f, 78f, 66f, 78f, 4.5f);
+        drawLine(sr, cx, cy, s, 66f, 78f, 88f, 70f, 4.5f);
+
+        // Gold Honey Streaks
+        sr.setColor(0.99f, 0.94f, 0.54f, 1f);
+        drawLine(sr, cx, cy, s, 46f, 58f, 62f, 64f, 2.5f);
+        drawLine(sr, cx, cy, s, 62f, 64f, 82f, 58f, 2.5f);
+
+        // Spectral Sparkle
+        sr.setColor(1f, 1f, 1f, 0.90f);
+        fillQuad(sr, cx, cy, s, 64f, 48f, 68f, 54f, 64f, 60f, 60f, 54f);
+
+        // --- LAYER 4: specular_highlights ---
+        sr.setColor(1f, 1f, 1f, 0.75f);
+        drawLine(sr, cx, cy, s, 48f, 50f, 62f, 44f, 3.0f);
+        drawLine(sr, cx, cy, s, 62f, 44f, 76f, 44f, 3.0f);
+        fillCircle(sr, cx, cy, s, 50f, 48f, 2.2f);
+    }
+
+    public static void drawPumpkinLantern(ShapeRenderer sr, float cx, float cy, float s, float timer) {
+        float pulse = 0.85f + 0.15f * MathUtils.sin(timer * 5f);
+
+        // --- LAYER 1: background_glow ---
+        sr.setColor(0.99f, 0.60f, 0.09f, 0.25f * pulse);
+        fillCircle(sr, cx, cy, s, 64f, 70f, 54f);
+        sr.setColor(0f, 0f, 0f, 0.40f);
+        fillEllipse(sr, cx, cy, s, 64f, 112f, 42f, 10f);
+
+        // --- LAYER 2: base_form ---
+        // Twisted Gnarled Vine Stem
+        sr.setColor(0.09f, 0.40f, 0.20f, 1f);
+        fillTri(sr, cx, cy, s, 60f, 22f, 74f, 10f, 66f, 32f);
+        // Small leaf curl
+        sr.setColor(0.29f, 0.87f, 0.50f, 1f);
+        fillTri(sr, cx, cy, s, 66f, 24f, 78f, 20f, 76f, 28f);
+
+        // Outer Pumpkin Lobes (Left & Right Ribs)
+        sr.setColor(0.76f, 0.25f, 0.05f, 1f);
+        fillEllipse(sr, cx, cy, s, 44f, 72f, 24f, 32f);
+        fillEllipse(sr, cx, cy, s, 84f, 72f, 24f, 32f);
+
+        // Central Main Pumpkin Lobe
+        sr.setColor(0.98f, 0.45f, 0.09f, 1f);
+        fillEllipse(sr, cx, cy, s, 64f, 73f, 26f, 34f);
+
+        // Grooves between Lobes
+        sr.setColor(0.49f, 0.20f, 0.07f, 0.60f);
+        drawLine(sr, cx, cy, s, 48f, 42f, 42f, 72f, 2.0f);
+        drawLine(sr, cx, cy, s, 42f, 72f, 50f, 104f, 2.0f);
+        drawLine(sr, cx, cy, s, 80f, 42f, 86f, 72f, 2.0f);
+        drawLine(sr, cx, cy, s, 86f, 72f, 78f, 104f, 2.0f);
+
+        // --- LAYER 3: details_and_relief (Jack-o' Face) ---
+        sr.setColor(0.99f, 0.94f, 0.54f, pulse);
+        // Triangle Eyes
+        fillTri(sr, cx, cy, s, 44f, 60f, 56f, 60f, 50f, 48f);
+        fillTri(sr, cx, cy, s, 72f, 60f, 84f, 60f, 78f, 48f);
+        // Nose
+        fillTri(sr, cx, cy, s, 60f, 68f, 68f, 68f, 64f, 62f);
+        // Jagged Grin Mouth
+        fillTri(sr, cx, cy, s, 40f, 76f, 88f, 76f, 64f, 92f);
+        fillTri(sr, cx, cy, s, 46f, 84f, 58f, 86f, 52f, 77f);
+        fillTri(sr, cx, cy, s, 70f, 86f, 82f, 84f, 76f, 77f);
+        fillTri(sr, cx, cy, s, 60f, 96f, 68f, 96f, 64f, 90f);
+
+        // White fiery inner core
+        sr.setColor(1f, 1f, 1f, 0.95f * pulse);
+        fillTri(sr, cx, cy, s, 47f, 59f, 53f, 59f, 50f, 50f);
+        fillTri(sr, cx, cy, s, 75f, 59f, 81f, 59f, 78f, 50f);
+        fillTri(sr, cx, cy, s, 61f, 67f, 67f, 67f, 64f, 63f);
+    }
+
+    public static void drawGhostPotion(ShapeRenderer sr, float cx, float cy, float s, float timer) {
+        // --- LAYER 1: background_glow ---
+        sr.setColor(0.29f, 0.87f, 0.50f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64f, 74f, 50f);
+        sr.setColor(0f, 0f, 0f, 0.40f);
+        fillEllipse(sr, cx, cy, s, 64f, 114f, 36f, 8f);
+
+        // --- LAYER 2: base_form ---
+        // Wood Cork Stopper
+        sr.setColor(0.57f, 0.25f, 0.05f, 1f);
+        fillQuad(sr, cx, cy, s, 56f, 12f, 72f, 12f, 70f, 24f, 58f, 24f);
+        sr.setColor(0.47f, 0.21f, 0.06f, 1f);
+        fillQuad(sr, cx, cy, s, 54f, 20f, 74f, 20f, 74f, 24f, 54f, 24f);
+
+        // Flask Neck Lip & Neck
+        sr.setColor(0.22f, 0.74f, 0.97f, 0.60f);
+        fillQuad(sr, cx, cy, s, 52f, 24f, 76f, 24f, 76f, 30f, 52f, 30f);
+        sr.setColor(0.22f, 0.74f, 0.97f, 0.35f);
+        fillQuad(sr, cx, cy, s, 56f, 30f, 72f, 30f, 72f, 48f, 56f, 48f);
+
+        // Round Flask Body (Glass)
+        sr.setColor(0.12f, 0.11f, 0.29f, 0.70f);
+        fillCircle(sr, cx, cy, s, 64f, 74f, 34f);
+        sr.setColor(0.38f, 0.65f, 0.98f, 0.50f);
+        drawLine(sr, cx, cy, s, 34f, 74f, 44f, 98f, 2.0f);
+
+        // Violet Ghost Liquid Inside
+        sr.setColor(0.49f, 0.13f, 0.81f, 0.92f);
+        fillCircle(sr, cx, cy, s, 64f, 77f, 30f);
+        sr.setColor(0.75f, 0.52f, 0.99f, 0.80f);
+        fillEllipse(sr, cx, cy, s, 64f, 74f, 30f, 6f);
+
+        // --- LAYER 3: details_and_relief (Bioluminescent Bubbles) ---
+        float b1 = (timer * 20f) % 24f;
+        float b2 = ((timer + 0.5f) * 20f) % 24f;
+        sr.setColor(0.29f, 0.87f, 0.50f, 0.95f);
+        fillCircle(sr, cx, cy, s, 54f, 96f - b1, 5f);
+        fillCircle(sr, cx, cy, s, 74f, 94f - b2, 4f);
+        fillCircle(sr, cx, cy, s, 62f, 98f - b2, 3f);
+        fillCircle(sr, cx, cy, s, 48f, 92f - b1, 3f);
+
+        // Center Rising Spirit Bubble
+        fillCircle(sr, cx, cy, s, 64f, 62f, 6f);
+
+        // Bubble white glints
+        sr.setColor(1f, 1f, 1f, 0.90f);
+        fillCircle(sr, cx, cy, s, 53f, 95f - b1, 1.8f);
+        fillCircle(sr, cx, cy, s, 73f, 93f - b2, 1.5f);
+        fillCircle(sr, cx, cy, s, 62f, 60f, 2.0f);
+
+        // --- LAYER 4: specular_highlights ---
+        sr.setColor(1f, 1f, 1f, 0.55f);
+        drawLine(sr, cx, cy, s, 42f, 60f, 36f, 78f, 2.5f);
+    }
+
+    public static void drawBloodMoonTalisman(ShapeRenderer sr, float cx, float cy, float s, float timer) {
+        // --- LAYER 1: background_glow ---
+        sr.setColor(0.94f, 0.27f, 0.27f, 0.25f);
+        fillCircle(sr, cx, cy, s, 64f, 62f, 54f);
+        sr.setColor(0f, 0f, 0f, 0.40f);
+        fillEllipse(sr, cx, cy, s, 64f, 116f, 32f, 7f);
+
+        // --- LAYER 2: base_form ---
+        // Obsidian Bead & Blood Cord
+        sr.setColor(0.10f, 0.10f, 0.12f, 1f);
+        fillCircle(sr, cx, cy, s, 64f, 14f, 5f);
+        sr.setColor(0.94f, 0.27f, 0.27f, 1f);
+        fillCircle(sr, cx, cy, s, 64f, 14f, 2.5f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1f);
+        drawLine(sr, cx, cy, s, 64f, 14f, 64f, 24f, 2.8f);
+
+        // Parchment Talisman Paper
+        sr.setColor(0.99f, 0.90f, 0.54f, 1f);
+        fillQuad(sr, cx, cy, s, 42f, 22f, 86f, 22f, 86f, 112f, 42f, 112f);
+        sr.setColor(0.47f, 0.21f, 0.06f, 1f);
+        drawLine(sr, cx, cy, s, 42f, 22f, 86f, 22f, 2.0f);
+        drawLine(sr, cx, cy, s, 86f, 22f, 86f, 112f, 2.0f);
+        drawLine(sr, cx, cy, s, 86f, 112f, 42f, 112f, 2.0f);
+        drawLine(sr, cx, cy, s, 42f, 112f, 42f, 22f, 2.0f);
+
+        // Vermilion Talisman Inner Borders
+        sr.setColor(0.73f, 0.11f, 0.11f, 1f);
+        drawLine(sr, cx, cy, s, 46f, 26f, 82f, 26f, 1.8f);
+        drawLine(sr, cx, cy, s, 82f, 26f, 82f, 108f, 1.8f);
+        drawLine(sr, cx, cy, s, 82f, 108f, 46f, 108f, 1.8f);
+        drawLine(sr, cx, cy, s, 46f, 108f, 46f, 26f, 1.8f);
+
+        // --- LAYER 3: details_and_relief (Blood Moon Seal & Runes) ---
+        sr.setColor(0.86f, 0.15f, 0.15f, 1f);
+        fillCircle(sr, cx, cy, s, 64f, 42f, 10f);
+        // Crescent Inner Shadow
+        sr.setColor(0.99f, 0.90f, 0.54f, 1f);
+        fillCircle(sr, cx, cy, s, 67f, 40f, 8f);
+
+        // Cinnabar Runes
+        sr.setColor(0.73f, 0.11f, 0.11f, 1f);
+        drawLine(sr, cx, cy, s, 54f, 58f, 64f, 54f, 2.5f);
+        drawLine(sr, cx, cy, s, 64f, 54f, 74f, 58f, 2.5f);
+        sr.setColor(0.86f, 0.15f, 0.15f, 1f);
+        drawLine(sr, cx, cy, s, 64f, 55f, 64f, 92f, 3.2f);
+        drawLine(sr, cx, cy, s, 54f, 66f, 74f, 66f, 2.2f);
+        drawLine(sr, cx, cy, s, 56f, 76f, 72f, 76f, 2.2f);
+        drawLine(sr, cx, cy, s, 52f, 86f, 76f, 86f, 2.2f);
+
+        // Blood Drops
+        fillCircle(sr, cx, cy, s, 64f, 98f, 3f);
+        fillTri(sr, cx, cy, s, 62f, 98f, 66f, 98f, 64f, 94f);
+    }
+
+    public static void drawGhostCandle(ShapeRenderer sr, float cx, float cy, float s, float timer) {
+        float flicker = 0.85f + 0.15f * MathUtils.sin(timer * 12f);
+
+        // --- LAYER 1: background_glow ---
+        sr.setColor(0.22f, 0.74f, 0.97f, 0.30f * flicker);
+        fillCircle(sr, cx, cy, s, 64f, 34f, 48f);
+        sr.setColor(0f, 0f, 0f, 0.45f);
+        fillEllipse(sr, cx, cy, s, 64f, 116f, 36f, 8f);
+
+        // --- LAYER 2: base_form ---
+        // White Wax Column
+        sr.setColor(0.94f, 0.96f, 0.98f, 1f);
+        fillQuad(sr, cx, cy, s, 50f, 48f, 78f, 48f, 78f, 112f, 50f, 112f);
+        sr.setColor(0.58f, 0.64f, 0.72f, 1f);
+        fillEllipse(sr, cx, cy, s, 64f, 112f, 14f, 4f);
+
+        // Melted Wax Basin Top
+        sr.setColor(0.95f, 0.96f, 0.98f, 1f);
+        fillEllipse(sr, cx, cy, s, 64f, 48f, 14f, 5f);
+        sr.setColor(0.79f, 0.84f, 0.88f, 1f);
+        fillEllipse(sr, cx, cy, s, 64f, 49f, 12f, 4f);
+
+        // Dripping Wax Tears along Sides
+        sr.setColor(0.95f, 0.96f, 0.98f, 1f);
+        fillTri(sr, cx, cy, s, 50f, 54f, 46f, 68f, 50f, 72f);
+        fillCircle(sr, cx, cy, s, 48f, 74f, 2.5f);
+        fillTri(sr, cx, cy, s, 78f, 58f, 82f, 72f, 78f, 76f);
+        fillCircle(sr, cx, cy, s, 80f, 80f, 2.2f);
+
+        // --- LAYER 3: details_and_relief (Wick & Cyan Soul Flame) ---
+        // Black Wick
+        sr.setColor(0.12f, 0.16f, 0.23f, 1f);
+        drawLine(sr, cx, cy, s, 64f, 48f, 66f, 38f, 2.5f);
+
+        // Tear-drop Ethereal Cyan Soul Flame
+        sr.setColor(0.22f, 0.74f, 0.97f, 0.90f * flicker);
+        fillTri(sr, cx, cy, s, 54f, 36f, 74f, 36f, 64f, (8f - flicker * 4f));
+        fillCircle(sr, cx, cy, s, 64f, 36f, 10f);
+
+        // Inner White Core Flame
+        sr.setColor(1f, 1f, 1f, 0.95f);
+        fillTri(sr, cx, cy, s, 58f, 36f, 70f, 36f, 64f, (16f - flicker * 3f));
+        fillCircle(sr, cx, cy, s, 64f, 36f, 6f);
+    }
+
 }

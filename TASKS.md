@@ -13,10 +13,10 @@
 | **EVT-01** | Sự kiện  | Chốt hạn Sự kiện Lạc Hồng (28/10) & Khóa an toàn Shop, quy đổi Điểm SK tồn đọng | **P1 (Sự kiện)**  | ✅ Đã hoàn thành (v0.4.24) |
 | **HLW-01** | Sự kiện  | Giai Đoạn 1: Hạ Tầng Sự Kiện, Auto-Switch Lifecycle, Giao Diện Đêm Hội Halloween & Shop | **P1 (Sự kiện)**  | ✅ Đã hoàn thành (v0.5.3.0) |
 | **HLW-02** | Trang bị | Giai Đoạn 2: 2 Bộ Trang Bị (Set Cày Điểm "Dạ Hội Bí Ngô" vs Set 6★ "Huyết Nguyệt") & Gacha Banner | **P1 (Trang bị)**  | ✅ Đã hoàn thành (v0.5.3.1) |
-| **HLW-03** | Gameplay | Giai Đoạn 3: Bộ 7 Cá Halloween (Mọi bản đồ), Siêu Boss Thanatos 6,666 HP & Sổ Tay Sưu Tập | **P1 (Gameplay)**  | 📋 Kế hoạch chi tiết (Phase 3) |
-| **HLW-04** | Đồ họa   | Giai Đoạn 4: 13 Asset Đồ Họa Vector LibGDX (6 Icon Trang Bị + 7 Loài Cá Đa Tầng) | **P1 (Đồ họa)**     | 📋 Kế hoạch chi tiết (Phase 4) |
-| **HLW-05** | Trải nghiệm| Giai Đoạn 5: Vật Phẩm Tiêu Hao (Kẹo, Đèn), Bầu Trời Huyết Nguyệt & Âm Thanh ZzFX Spooky | **P1 (Trải nghiệm)**| 📋 Kế hoạch chi tiết (Phase 5) |
-| **HLW-06** | QA & Build| Giai Đoạn 6: Mô Phỏng Cân Bằng CLI, Kiểm Thử Tự Động, Bảo Mật Save & Đóng Gói v0.5.3 | **P1 (Hệ thống)** | 📋 Kế hoạch chi tiết (Phase 6) |
+| **HLW-03** | Gameplay | Giai Đoạn 3: Bộ 7 Cá Halloween (Toàn Cầu), Siêu Boss Thanatos 6,666 HP, Hệ Thống Giáp & Sổ Tay Sưu Tập | **P1 (Gameplay)**  | ✅ Đã hoàn thành (v0.5.4.0) |
+| **HLW-04** | Đồ họa   | Giai Đoạn 4: 13 Asset Đồ Họa Vector LibGDX, UI Sổ Tay Độc Quyền & Redesign Cá Bí Ẩn | **P1 (Đồ họa)**     | ✅ Đã hoàn thành (v0.5.4.3) |
+| **HLW-05** | Trải nghiệm| Giai Đoạn 5: Vật Phẩm Tiêu Hao (Kẹo, Đèn), Bầu Trời Huyết Nguyệt & Âm Thanh ZzFX Spooky | **P1 (Trải nghiệm)**| ✅ Đã hoàn thành (v0.5.5.0) |
+| **HLW-06** | QA & Build| Giai Đoạn 6: Mô Phỏng Cân Bằng CLI, Kiểm Thử Tự Động, Bảo Mật Save & Đóng Gói v0.5.5.1 | **P1 (Hệ thống)** | ✅ Đã hoàn thành (v0.5.5.1) |
 | **FSH-04** | Gameplay | Revamp Toàn Bộ Skill Cá, Chuẩn Hóa Phân Tầng Kỹ Năng & Bổ Sung Hạng Cá Legendary (Mini-Boss) | **P1 (Quan trọng)** | 📋 Kế hoạch triển khai |
 | **VFX-SHK-01** | Trải nghiệm | Tối Ưu Rung Lắc Camera Khi Căng Dây: Giảm mốc xuống 80% & Tăng chấn động (+0.02f) | **P1 (Trải nghiệm)** | ✅ Đã hoàn thành (v0.5.3.5) |
 | **BAL-STM-01** | Cân bằng & Sửa lỗi | Sửa Lỗi Hồi Kép Dưỡng Sức (+50 dồn) & Tinh Chỉnh Tiêu Hao Thể Lực Động Theo Trạng Thái Cá | **P1 (Cân bằng)** | ✅ Đã hoàn thành (v0.5.3.4) |
@@ -765,24 +765,24 @@
 | **Cá Dạng Ma** *(Phantom)* | **Epic** | **2,000 HP** | **168.0f** | 28.0 kg | 125 cm | 1,800 Vàng | 750 XP | *Thể Xác Hư Vô (Nội tại)*: Mỗi 8s hóa khói tím bán trong suốt 2.5s miễn nhiễm 100% sát thương kéo & kỹ năng.<br/>*Tiếng Than U Ám (Active)*: Hút 15 Thể lực hồi 5% HP cho cá và giảm 50% hồi phục của người chơi kéo dài **5.0 giây**. |
 | **Thủy Quái Frankenstein** | Epic | 2,250 HP | 178.0f | 45.0 kg | 140 cm | 2,200 Vàng | 900 XP | *Quá Tải Điện Năng (Nội tại)*: Ghìm kéo dây liên tục >1.5s bị giật điện: **trừ 10 Thể lực và ngắt nhịp kéo 0.6 giây**.<br/>*Sấm Sét Hồi Sinh (Active)*: Sốc tim hồi sinh 20% HP (+450 HP) khi cạn máu lần đầu + giật +25% Tension! |
 | **Hải Xà Dạ Xoa** *(Shadow Serpent)* | **Legendary** | **4,000 HP** | **210.0f** | 95.0 kg | 260 cm | 5,500 Vàng | 2,000 XP | *(Thay thế Bạch Tuộc Phù Thủy - Rồng Biển Xương Đen Đáy Vực)*<br/>*Uốn Lượn Ma Quái (Nội tại)*: Giảm 30% tốc độ xả chùng Slack; quất đuôi bơi giật +10% Tension.<br/>*Mãng Xà Siết Cước (Active 1)*: Khóa cứng thanh Tension không thể giảm trong 3s (kéo lúc này tăng tension x2).<br/>*Độc Tố Âm Ty (Active 2)*: Nhiễm độc rút 5 Thể lực/giây trong 5s và phủ sương mù tím làm tối mờ màn hình. |
-| **Kình Ngư Tử Thần Thanatos** | **Siêu Boss Thế Giới** | **6,666 HP** | **235.0f** | 180.0 kg | 380 cm | 15,000 Vàng | 5,000 XP | **Đại Chiến Trùm 3 Pha (3-Phase Battle)**:<br/>• *Uy Áp Tử Thần (Nội tại)*: Camera rung lắc + Mọi kỹ năng người chơi bị tăng +20% tiêu hao Thể lực.<br/>• *Pha 1 (100-70% HP)*: **Tiếng Hú Địa Ngục** vô hiệu hóa hoàn toàn chiêu thức tiếp theo của người chơi.<br/>• *Pha 2 (70-30% HP)*: **Vực Xoáy Âm Ty** (+15 Tension/s tự động + hồi 3% HP cá) & **Âm Hồn Quấy Phá** (tạo Giáp Soul Shield 500 HP, bị phá hủy tức thì nếu trúng Phá Giáp).<br/>• *Pha 3 (<30% HP)*: **Tử Thần Bộc Phát** (Giảm 30% hồi chiêu tất cả skill thường) & Tuyệt kỹ **Liên Hoàn Trảm Đoạt Mệnh** (Re-Hook 2 nhịp 0.5s/0.6s: thành công choáng boss 3s nhận x2 dmg; thất bại phạt +50 Tension, bóp 25% max tension và 50% nguy cơ đứt dây tức thì nếu tension >80%). |
+| **Kình Ngư Tử Thần Thanatos** | **Siêu Boss Thế Giới** | **6,666 HP** | **235.0f** | 180.0 kg | 380 cm | 15,000 Vàng | 5,000 XP | **Đại Chiến Trùm 3 Pha (3-Phase Battle)**:<br/>• *Uy Áp Tử Thần (Nội tại)*: Camera rung lắc + Mọi kỹ năng người chơi bị tăng +20% tiêu hao Thể lực.<br/>• *Pha 1 (100-70% HP)*: **Tiếng Hú Địa Ngục** vô hiệu hóa (câm lặng) hoàn toàn chiêu thức tiếp theo của người chơi.<br/>• *Pha 2 (70-30% HP)*: **Vực Xoáy Âm Ty** (+15 Tension/s tự động + hồi 3% HP cá) & **Âm Hồn Quấy Phá** (tạo Giáp Soul Shield 500 HP hiển thị trên thanh HP cá; sát thương thường trừ vào giáp trước, chiêu Phá Giáp gây sát thương gốc XUYÊN MÁU THẬT và sát thương cộng thêm trừ vào giáp).<br/>• *Pha 3 (<30% HP)*: **Tử Thần Bộc Phát** (Giảm 30% hồi chiêu tất cả skill thường) & Tuyệt kỹ **Liên Hoàn Trảm Đoạt Mệnh** (Re-Hook 2 nhịp cộng dồn thành công: 2/2 choáng boss 3.5s nhận x2 dmg; 1/2 phạt nhẹ giảm 40% lực kéo 4s & trừ 15 TL; 0/2 phạt +30 Tension, khóa skill & phong ấn hồi TL trong 5s; nếu Tension > 90% thì chém ĐỨT DÂY LẬP TỨC). |
 
 #### 📝 Danh mục tác vụ chi tiết (Checklist):
-- [ ] **HLW-03.1 - Khai báo dữ liệu trong `assets/data/fishes.json`**:
-  - Thêm 7 định nghĩa cá Halloween với trường `"map": null` (Global spawn) và bộ chỉ số mới vượt Map Đảo Xa.
-- [ ] **HLW-03.2 - Thuật toán Global Event Spawn trong `FishDatabase.getRandomFish(Player)`**:
+- [x] **HLW-03.1 - Khai báo dữ liệu trong `assets/data/fishes.json`**: *(Đã hoàn thành - v0.5.4.0)*
+  - Thêm 7 định nghĩa cá Halloween với trường `"map": null` (Global spawn) và bộ chỉ số mới vượt Map Đảo Xa (Boss Đảo Xa cũng đã được buff lên 3,600 HP).
+- [x] **HLW-03.2 - Thuật toán Global Event Spawn trong `FishDatabase.getRandomFish(Player)`**: *(Đã hoàn thành - v0.5.4.0)*
   - Tỷ lệ cơ bản **15%** lượt cắn câu khi sự kiện hoạt động (`EventManager.isHalloweenActive()`).
-  - Cộng hưởng: Buff Kẹo Trick-or-Treat (+50% tỉ lệ), Set Dạ Hội Bí Ngô (+25% tỉ lệ), Set Huyết Nguyệt Thần Vương (x2 tỉ lệ nổ cá Epic, Legendary & Boss).
-- [ ] **HLW-03.3 - Hệ thống Hàng Đợi Kỹ Năng & Global Cooldown (`FishingManager.java`)**:
-  - Xây dựng Fish Skill Queue và bộ đếm Global Cooldown (`fishSkillGCD = 2.5s - 3.0s`) chống chồng đè kỹ năng của cá nhiều skill.
-- [ ] **HLW-03.4 - Hệ thống Giáp Hấp Thụ (Soul Shield) & Tương tác Phá Giáp (`FishingManager.java`)**:
-  - Cài đặt cơ chế Giáp linh hồn 500 HP hấp thụ 50% sát thương đòn kéo thường, tự vỡ vụn khi trúng kỹ năng Phá Giáp (`pha_giap`).
-- [ ] **HLW-03.5 - Cài đặt kịch bản 7 bộ Kỹ Năng Độc Bản (`FishingManager.java`)**:
-  - Script toàn bộ 7 loài: Cốt cách bất diệt (+50% skill dmg), ngọn lửa bốc hơi thể lực, hồi 1% HP/s, ngắt kéo 0.6s, mãng xà siết cước, tiếng hú câm lặng, vực xoáy hồi máu, và Liên Hoàn Trảm 2 nhịp.
-- [ ] **HLW-03.6 - Sổ Tay Thủy Tộc Sự Kiện (`CollectionDatabase.java` & `CatalogScreen.java`)**:
-  - Tạo bộ sưu tập mới `hlw_dem_ma_quai` ("Huyền Thoại Đêm Halloween") với 7 loài cá; thưởng: 5,000 Vàng, 2,500 XP, 50 Kim Cương và Danh hiệu *"Thợ Săn Linh Hồn"*.
-- [ ] **HLW-03.7 - Phần thưởng Trùm Thanatos (`ItemDatabase.java`, `PlayerProgression.java`)**:
-  - Trao tặng 100% `Rương Ma Quái` (mở ra nhận vé gacha, kim cương, kẹo) và Danh hiệu độc quyền màu đỏ máu `[Reaper Slayer]`.
+  - Tự động cộng hưởng buff Kẹo Trick-or-Treat (+15%), Set Dạ Hội Bí Ngô (+10%), Set Huyết Nguyệt Thần Vương (+15%) và buff cá hiếm.
+- [x] **HLW-03.3 - Hệ thống Hàng Đợi Kỹ Năng & Global Cooldown 5.0s - 6.0s (`FishingManager.java`)**: *(Đã hoàn thành - v0.5.4.0)*
+  - Xây dựng Fish Skill Queue và bộ đếm Global Cooldown (`fishSkillGCDTimer = 5.5s`) chống chồng đè kỹ năng của cá nhiều skill, tạo nhịp điệu thở và giằng co hợp lý.
+- [x] **HLW-03.4 - Hệ thống Giáp Hiển Thị Thanh HP & Phá Giáp Xuyên Máu (`FishingManager.java`, `GameHUD.java`)**: *(Đã hoàn thành - v0.5.4.0)*
+  - Cài đặt cơ chế Giáp linh hồn 500 HP hiển thị trực tiếp dải màu Cyan trên thanh HP cá của GameHUD. Đòn đánh thường trừ vào Giáp trước; kỹ năng Phá Giáp (`pha_giap`) gây sát thương gốc xuyên thẳng vào máu thật và sát thương cộng thêm trừ vào Giáp.
+- [x] **HLW-03.5 - Cài đặt kịch bản 7 bộ Kỹ Năng Độc Bản (`FishingManager.java`)**: *(Đã hoàn thành - v0.5.4.0)*
+  - Script toàn bộ 7 loài: Cốt cách bất diệt (+50% skill dmg), ngọn lửa bốc hơi thể lực, hồi 1% HP/s, ngắt kéo 0.6s, mãng xà siết cước, tiếng hú câm lặng, vực xoáy hồi máu, và Tuyệt kỹ Liên Hoàn Trảm 2 nhịp cộng dồn thành công (đứt dây tức thì nếu tension > 90%).
+- [x] **HLW-03.6 - Sổ Tay Thủy Tộc Sự Kiện (`CollectionDatabase.java` & `CatalogScreen.java`)**: *(Đã hoàn thành - v0.5.4.0)*
+  - Mở rộng Tab thứ 4 HALLOWEEN phong cách Gothic tím ma quái; tạo bộ sưu tập mới `hlw_dem_ma_quai` ("Huyền Thoại Đêm Halloween") với 7 loài cá; thưởng: 5,000 Vàng, 2,500 XP, 50 Kim Cương và Lore đầy đủ.
+- [x] **HLW-03.7 - Phần thưởng Trùm Thanatos (`ItemDatabase.java`, `PlayScreen.java`)**: *(Đã hoàn thành - v0.5.4.0)*
+  - Trao tặng 100% `Rương Ma Quái` khi bắt Thanatos thành công (mở ra nhận 3-5 vé gacha, 30-80 kim cương, 20-30 kẹo Trick-or-Treat).
 
 ---
 
@@ -790,23 +790,23 @@
 - **Mục tiêu:** Kiến tạo toàn bộ hình ảnh trang bị và cá bằng LibGDX `ShapeRenderer` đa lớp nguyên bản (Vector 4 Layers Standard), tuyệt đối không sử dụng ảnh bitmap bên ngoài, đạt điểm kiểm duyệt Visual Quality Gate 100/100.
 
 #### 🎨 6 Icon Trang Bị Mới (`EquipmentIconRenderer.java`):
-- [ ] **HLW-04.1 - 3 Icon Trang Bị Set "Dạ Hội Bí Ngô" (4★ Limited)**:
+- [x] **HLW-04.1 - 3 Icon Trang Bị Set "Dạ Hội Bí Ngô" (4★ Limited)**: *(Đã hoàn thành - v0.5.3.1)*
   1. *Cần Bí Ngô (Jack-o'-Rod):* Cán gậy gỗ đại ngàn nâu đậm sần sùi uốn cong tự nhiên; dây leo gai xanh quấn quanh thân cần; 2 quả bí ngô mini phát sáng vàng rực lơ lửng quanh cán; ngọn cần đính búp hoa bí ngô bung nở tia sáng vàng cam.
   2. *Dây Tơ Nhện (Spider Silk Line):* Cuộn tơ dệt hình mạng nhện đa giác 8 cạnh đối xứng tinh xảo; các sợi tơ bạc lấp lánh phản quang; trung tâm cuộn dây là một chú nhện biển tím ngọc lục bảo phát quang đính đá sương mai.
   3. *Móc Kẹo Ma (Ghost Candy Hook):* Thân móc câu xoắn ốc 2 màu tím huyền bí và cam bí ngô như viên kẹo gậy lễ hội; luồng khói ma quái mờ ảo bốc lên từ mắt xỏ dây; mũi ngạnh móc sắc nhọn bằng pha lê trong suốt.
-- [ ] **HLW-04.2 - 3 Icon Trang Bị Set 6★ "Huyết Nguyệt Thần Vương"**:
+- [x] **HLW-04.2 - 3 Icon Trang Bị Set 6★ "Huyết Nguyệt Thần Vương"**: *(Đã hoàn thành - v0.5.3.1)*
   1. *Trượng Lưỡi Hái Tử Thần (Grim Reaper Scythe Rod):* Cán trượng đúc từ xương sống rồng hắc ám màu đen obsidian; đầu trượng gắn lưỡi hái huyết sắc cong vút tạo từ plasma đỏ rực; mắt tử thần phát sáng đỏ rực chớp nháy ở cổ trượng.
   2. *Dây Huyết Ma Linh (Blood Spectre Line):* Ổ quay bát giác màu đen kim loại bọc viền vàng ma quỷ; cuộn tơ máu đỏ thẫm ruby phát ra 6 vòng sóng âm xung kích ma quái; viên ngọc huyết thạch tỏa sáng trung tâm.
   3. *Móc Xương Quỷ (Fiend Bone Hook):* Lưỡi móc đúc từ ngà quỷ biển sừng sững sắc lẹm khắc ký tự cổ Rune ma thuật; mắt móc ngậm viên hồng ngọc Ruby bốc khói đen tà khí.
 
 #### 🐟 7 Loài Cá Vector Đa Tầng (`FishVisualRenderer.java`):
-- [ ] **HLW-04.3 - Tạo hình 7 Loài Cá Halloween Độc Bản**:
+- [x] **HLW-04.3 - Tạo hình 7 Loài Cá Halloween Độc Bản**: *(Đã hoàn thành - v0.5.4.1)*
   1. *Cá Skeleton (Cá Xương):* Cột sống và hàng xương sườn trắng ngà lộ rõ; hộp sọ cá sắc cạnh với hốc mắt đen sâu hoắm phát ánh sáng lân tinh xanh cyan; vây đuôi tưa rách quẫy nhịp nhàng.
   2. *Cá Đèn Lồng Jack-o':* Thân hình quả bí ngô cam mập tròn trĩnh; trên thân khắc hoa văn khuôn mặt Jack-o'-Lantern ranh mãnh rực lửa vàng chói lọi; cuống vây lưng lá bí xanh gai uốn lượn.
   3. *Cá Đầu Lâu Huyết Nguyệt:* Thân hình cá săn mồi đen tuyền vệt sọc đỏ huyết mạch; đầu cá bọc chiếc sọ sừng nhọn uy hiếp; mắt đỏ ruby rực cháy; vây đuôi trăng khuyết chém sóng nước.
   4. *Cá Dạng Ma (Phantom Spectre):* Thiết kế bán trong suốt huyền ảo (`alpha = 0.55f`); thân cá uốn lượn bồng bềnh như dải lụa ma trơi; đuôi cá tan biến thành vệt khói tím hư ảo; đôi mắt u buồn phát sáng.
   5. *Thủy Quái Frankenstein:* Thân mình chắp vá từ các mảng da xanh rêu và xám tro sần sùi; hai chiếc bu-lông kim loại cắm xuyên qua mang; các đường chỉ khâu đen sắc nét; tia chớp điện màu vàng nhạt nổ lách tách quanh vây.
-  6. *Bạch Tuộc Phù Thủy:* Thân tròn tím sẫm đội chiếc nón phù thủy chóp nhọn đen quấn dải ruy-băng cam; 8 xúc tu gai nhọn quằn quại bọc giác mút phát quang xanh ma quái; một xúc tu cầm lọ thuốc độc nhỏ lấp lánh bọt khí.
+  6. *Hải Xà Dạ Xoa (Shadow Serpent):* Thân rồng biển hắc ám đen obsidian uốn lượn đa khúc bọc gai xương nhọn hoắt; mắt dạ xoa rực lửa tím tà ác, mang phát quang xanh lục độc địa; hàm răng nanh sắc lẹm phun khói độc âm ty; vây lưng dạng lưỡi cưa phát sáng u linh ma quái.
   7. *Kình Ngư Tử Thần Thanatos (Siêu Boss Thế Giới):* Kích thước vĩ đại choáng ngợp; toàn thân màu đen hắc ám bọc các phiến giáp xương gai nhọn chĩa ngược; vây lưng vươn cao sắc bén như lưỡi hái thần chết; 3 tầng hào quang ma quái (vòng tối vực thẳm ngoài cùng, hào quang tím u linh ở giữa, tia lửa huyết nguyệt crackling bên trong).
 
 ---
@@ -815,26 +815,26 @@
 - **Mục tiêu:** Thổi bùng bầu không khí rùng rợn, kỳ bí và hứng khởi xuyên suốt thời gian diễn ra sự kiện.
 
 #### 📝 Danh mục tác vụ chi tiết (Checklist):
-- [ ] **HLW-05.1 - Triển khai Đạo Cụ Tiêu Hao trong `ItemDatabase.java` & `Player.java`**:
+- [x] **HLW-05.1 - Triển khai Đạo Cụ Tiêu Hao trong `ItemDatabase.java` & `Player.java`**:
   * *Kẹo Ma Thuật Trick-or-Treat:* 
     - Cơ chế: Sử dụng từ Túi đồ hoặc Quick Slots, tồn tại trong **15 phút**.
     - Hiệu ứng: Tăng **+50%** cơ hội cắn câu của các loài Cá Halloween.
     - Lưu trữ: `player.getTrickOrTreatBuffRemainingTime()` được lưu vào file save an toàn.
   * *Đèn Lồng Bí Ngô (Pumpkin Lantern):*
     - Cơ chế: Kích hoạt bảo hộ trong **1 trận câu**.
-    - Hiệu ứng: Chiếu sáng đáy biển, giảm **25%** lực giằng co của cá và miễn nhiễm hoàn toàn hiệu ứng mực mù / lóa mắt của Bạch Tuộc Phù Thủy.
-- [ ] **HLW-05.2 - Hiện tượng Khí quyển "Bầu Trời Huyết Nguyệt" (Blood Moon Ambient)**:
+    - Hiệu ứng: Chiếu sáng đáy biển, giảm **25%** lực giằng co của cá và miễn nhiễm hoàn toàn hiệu ứng độc tố âm ty / sương mù tím của Hải Xà Dạ Xoa.
+- [x] **HLW-05.2 - Hiện tượng Khí quyển "Bầu Trời Huyết Nguyệt" (Blood Moon Ambient)**:
   * Trong `PlayScreen.java`: Khi thời gian trong game chuyển sang Ban Đêm (sau 18:00):
     - Tỷ lệ **20%** mỗi đêm kích hoạt hiện tượng *Huyết Nguyệt*.
     - Bầu trời chuyển sang tông đỏ rượu ma mị `Color(0.24f, 0.04f, 0.07f, 1f)`.
     - Mặt trăng tròn chuyển sang màu đỏ máu tỏa vầng hào quang rực rỡ.
     - Trong thời gian Huyết Nguyệt: Tỷ lệ xuất hiện của Cá Đầu Lâu và Siêu Boss Thanatos tự động **tăng gấp đôi (x2.0 Rate)**!
-- [ ] **HLW-05.3 - Bộ Âm Thanh Ma Quái Thủ Tục ZzFX (`SoundController.java` & `ZzFX.java`)**:
+- [x] **HLW-05.3 - Bộ Âm Thanh Ma Quái Thủ Tục ZzFX (`SoundController.java` & `ZzFX.java`)**:
   * Tích hợp 3 preset âm thanh thủ tục không cần file âm thanh ngoài:
     1. `sfx_halloween_cackle`: Tiếng cười khúc khích quỷ dị của phù thủy khi cá hiếm cắn câu.
     2. `sfx_thanatos_howl`: Tiếng rền vang trầm đục địa ngục rung chuyển đáy sâu khi Boss Thanatos xuất hiện.
     3. `sfx_candy_burst`: Tiếng kẹo nổ giòn tan vui tươi khi mở phần thưởng điểm danh và Rương Ma Quái.
-- [ ] **HLW-05.4 - Hiển Thị Buff & Trạng Thái Sự Kiện Trên HUD (`GameHUD.java`)**:
+- [x] **HLW-05.4 - Hiển Thị Buff & Trạng Thái Sự Kiện Trên HUD (`GameHUD.java`)**:
   * Bổ sung khay hiển thị Buff trên góc phải HUD:
     - Icon Kẹo Ma Thuật kèm đồng hồ đếm ngược thời gian dạng `[Kẹo: 14:32]`.
     - Icon Đèn Lồng Bí Ngô hiển thị trạng thái `[Đèn: SẴN SÀNG]`.
@@ -846,20 +846,20 @@
 - **Mục tiêu:** Đảm bảo tính ổn định tuyệt đối, an toàn bộ nhớ native, cân bằng tài nguyên và hoàn tất bộ 3 tài liệu cập nhật bắt buộc.
 
 #### 📝 Danh mục tác vụ chi tiết (Checklist):
-- [ ] **HLW-06.1 - Chạy Suite Kiểm Thử Cân Bằng Game CLI (`scripts/balance/balance_cli.py`)**:
+- [x] **HLW-06.1 - Chạy Suite Kiểm Thử Cân Bằng Game CLI (`scripts/balance/balance_cli.py`)**:
   * Chạy `python scripts/balance/balance_cli.py combat --fish "Kình Ngư Tử Thần Thanatos" --set "Huyết Nguyệt Thần Vương" --iter 500`:
     - Đảm bảo Win Rate đạt từ **70% - 85%** đối với trang bị 6★.
     - Thời gian kéo trung bình (Mean TTK) dao động từ **45s đến 75s** (chuẩn trải nghiệm Boss kịch tính).
   * Chạy `python scripts/balance/balance_cli.py economy --days 28 --agents 500`:
     - Đảm bảo tổng lượng Vàng và Kim Cương người chơi nhận qua sự kiện không gây lạm phát kinh tế.
-- [ ] **HLW-06.2 - Kiểm Tra An Toàn Dữ Liệu Save (AES-256 + SHA-256 Checksum)**:
+- [x] **HLW-06.2 - Kiểm Tra An Toàn Dữ Liệu Save (AES-256 + SHA-256 Checksum)**:
   * Thử nghiệm nạp file save từ các phiên bản v0.5.2.4: Đảm bảo tương thích 100%, không bị lỗi cấu trúc dữ liệu.
   * Thử nghiệm xuất save mùa Halloween và nạp lại: Đảm bảo các thuộc tính buff và điểm danh được bảo toàn vẹn toàn.
-- [ ] **HLW-06.3 - Hoàn Thành Bộ 3 Tài Liệu Bắt Buộc**:
+- [x] **HLW-06.3 - Hoàn Thành Bộ 3 Tài Liệu Bắt Buộc**:
   * `CHANGELOG.md`: Thêm mục phát hành phiên bản `v0.5.3.0` ghi nhận toàn bộ nội dung Halloween.
   * `TASKS.md`: Đánh dấu hoàn tất toàn bộ checklist của các mốc `HLW-01` đến `HLW-06`.
   * `PatchNotesDialog.java`: Bổ sung trang Bản tin cập nhật sự kiện Halloween trực quan cho người chơi.
-- [ ] **HLW-06.4 - Đóng Gói & Xuất Bản Bản Build Phát Hành**:
+- [x] **HLW-06.4 - Đóng Gói & Xuất Bản Bản Build Phát Hành**:
   * Biên dịch JAR độc lập: `gradlew lwjgl3:jar`.
   * Đóng gói bản nén `AnglerRPG-v0.5.3.0.zip` gồm `AnglerRPG.jar` và `Launcher.bat`.
 
@@ -868,18 +868,18 @@
 ### 10. MA TRẬN TIÊU CHUẨN NGHIỆM THU CHIẾN DỊCH HALLOWEEN (ACCEPTANCE CRITERIA)
 | ID Tiêu chí | Nội dung kiểm tra | Tiêu chuẩn đạt yêu cầu (Pass Criteria) | Trạng thái |
 | :--- | :--- | :--- | :---: |
-| **AC-HLW-01** | Chuyển giao tự động 30/10 | Đến 00:00 ngày 30/10, EventScreen tự động chuyển sang theme Tím/Cam, Header Bí Ngô, Shop và Bảng điểm danh Halloween mà không cần cập nhật file hay reset thủ công. | 📋 Chờ kiểm thử |
-| **AC-HLW-02** | Thu hồi & Đổi điểm Lạc Hồng | Người chơi còn Điểm Sự Kiện dư sau 28/10 được quy đổi tự động 1:1,000 Vàng, điểm reset về 0 an toàn. | 📋 Chờ kiểm thử |
-| **AC-HLW-03** | Hiệu năng & Rò rỉ bộ nhớ | Không khởi tạo `new ShapeRenderer()`, `new Vector2()`, `new Color()` trong vòng lặp `render()`. Tỷ lệ FPS ổn định 60 FPS. | 📋 Chờ kiểm thử |
-| **AC-HLW-04** | Nội tại Set Dạ Hội Bí Ngô | Mặc đủ 3 món tăng +25% tỉ lệ gặp cá Halloween, +20% EXP; chỉ số hiển thị chính xác trong màn hình Trang bị. | 📋 Chờ kiểm thử |
-| **AC-HLW-05** | Nội tại Set Huyết Nguyệt 6★ | Khi giữ SPACE kéo cá, thể lực người chơi hồi đều đặn theo 3% HP hiện tại của cá. Đòn đầu sau Perfect quăng cần gây x2.0 damage. | 📋 Chờ kiểm thử |
-| **AC-HLW-06** | Đài Gacha Huyết Nguyệt | Banner hiển thị 1.5% tỷ lệ 6★ với 50% Rate-up cho Set Huyết Nguyệt; đếm Pity 80 roll hoạt động chính xác. | 📋 Chờ kiểm thử |
-| **AC-HLW-07** | 7 Loài Cá Halloween | Cả 7 loài cá cắn câu được trên cả 3 bản đồ (Ao Làng, Bãi Biển, Đảo Xa); chỉ số HP, Lực kéo, Thưởng chuẩn xác. | 📋 Chờ kiểm thử |
-| **AC-HLW-08** | Siêu Boss Thanatos | Máu 6,666 HP, kỹ năng rung màn hình giật tension và tăng kháng cự dưới 30% HP hoạt động mượt mà; rơi Rương Ma Quái khi thắng. | 📋 Chờ kiểm thử |
-| **AC-HLW-09** | Đồ họa Vector 13 Asset | 6 Icon trang bị và 7 loài cá hiển thị sắc nét bằng ShapeRenderer đa tầng, không bể hình khi phóng to, đạt 100 điểm audit. | 📋 Chờ kiểm thử |
-| **AC-HLW-10** | Đạo cụ Kẹo & Đèn Lồng | Kẹo Trick-or-Treat tăng tỉ lệ cắn câu cá HLW và đếm ngược 15 phút trên HUD; Đèn lồng hóa giải mực mù thành công. | 📋 Chờ kiểm thử |
-| **AC-HLW-11** | Bầu Trời Huyết Nguyệt | Tỷ lệ 20% ban đêm kích hoạt nền đỏ máu, mặt trăng đỏ, nhân đôi tỷ lệ gặp Boss Thanatos và Cá Đầu Lâu. | 📋 Chờ kiểm thử |
-| **AC-HLW-12** | Tính toàn vẹn Save Data | Xuất và nạp file save `.sav` mã hóa AES-256 + SHA-256 chuẩn xác, không mất dữ liệu hay lỗi crash. | 📋 Chờ kiểm thử |
+| **AC-HLW-01** | Chuyển giao tự động 30/10 | Đến 00:00 ngày 30/10, EventScreen tự động chuyển sang theme Tím/Cam, Header Bí Ngô, Shop và Bảng điểm danh Halloween mà không cần cập nhật file hay reset thủ công. | ✅ Đã đạt (v0.5.3.0) |
+| **AC-HLW-02** | Thu hồi & Đổi điểm Lạc Hồng | Người chơi còn Điểm Sự Kiện dư sau 28/10 được quy đổi tự động 1:1,000 Vàng, điểm reset về 0 an toàn. | ✅ Đã đạt (v0.5.3.0) |
+| **AC-HLW-03** | Hiệu năng & Rò rỉ bộ nhớ | Không khởi tạo `new ShapeRenderer()`, `new Vector2()`, `new Color()` trong vòng lặp `render()`. Tỷ lệ FPS ổn định 60 FPS. | ✅ Đã đạt (v0.5.4.1) |
+| **AC-HLW-04** | Nội tại Set Dạ Hội Bí Ngô | Mặc đủ 3 món tăng +25% tỉ lệ gặp cá Halloween, +20% EXP; chỉ số hiển thị chính xác trong màn hình Trang bị. | ✅ Đã đạt (v0.5.3.1) |
+| **AC-HLW-05** | Nội tại Set Huyết Nguyệt 6★ | Khi giữ SPACE kéo cá, thể lực người chơi hồi đều đặn theo 3% HP hiện tại của cá. Đòn đầu sau Perfect quăng cần gây x2.0 damage. | ✅ Đã đạt (v0.5.3.1) |
+| **AC-HLW-06** | Đài Gacha Huyết Nguyệt | Banner hiển thị 1.5% tỷ lệ 6★ với 50% Rate-up cho Set Huyết Nguyệt; đếm Pity 80 roll hoạt động chính xác. | ✅ Đã đạt (v0.5.3.1) |
+| **AC-HLW-07** | 7 Loài Cá Halloween | Cả 7 loài cá cắn câu được trên cả 3 bản đồ (Ao Làng, Bãi Biển, Đảo Xa); chỉ số HP, Lực kéo, Thưởng chuẩn xác. | ✅ Đã đạt (v0.5.4.0) |
+| **AC-HLW-08** | Siêu Boss Thanatos | Máu 6,666 HP, kỹ năng rung màn hình giật tension và tăng kháng cự dưới 30% HP hoạt động mượt mà; rơi Rương Ma Quái khi thắng. | ✅ Đã đạt (v0.5.4.0) |
+| **AC-HLW-09** | Đồ họa Vector 13 Asset | 6 Icon trang bị và 7 loài cá hiển thị sắc nét bằng ShapeRenderer đa tầng, không bể hình khi phóng to, đạt 100 điểm audit. | ✅ Đã đạt (v0.5.4.1) |
+| **AC-HLW-10** | Đạo cụ Kẹo & Đèn Lồng | Kẹo Trick-or-Treat tăng tỉ lệ cắn câu cá HLW và đếm ngược 15 phút trên HUD; Đèn lồng hóa giải mực mù thành công. | ✅ Đã đạt (v0.5.5.0) |
+| **AC-HLW-11** | Bầu Trời Huyết Nguyệt | Tỷ lệ 20% ban đêm kích hoạt nền đỏ máu, mặt trăng đỏ, nhân đôi tỷ lệ gặp Boss Thanatos và Cá Đầu Lâu. | ✅ Đã đạt (v0.5.5.0) |
+| **AC-HLW-12** | Tính toàn vẹn Save Data | Xuất và nạp file save `.sav` mã hóa AES-256 + SHA-256 chuẩn xác, không mất dữ liệu hay lỗi crash. | ✅ Đã đạt (v0.5.5.1) |
 
 ---
 
@@ -994,6 +994,47 @@ Xóa bỏ hoàn toàn việc dùng chung kỹ năng thường; mỗi Boss thế 
   - `tro_luc` (25% tỷ lệ miễn nhiễm lực kéo Space), `can_day` (-10% Max Tension), `gai_doc_san_ho` (-1.5 Stamina/s), `doi_huong` (chao đảo Tension ±10%), `nuong_hai_luu` (+18% pull khi Tension > 55%), `than_dao` (+35% pull speed), `phong_dien` (-12 Stamina nếu giữ Space > 2.5s), `xoay_nuoc` (dao động sin & giảm 40% xả dây), `vu_dieu_co_buom` (2 nhịp phóng lướt), `than_ho_co_thach` (-15 sát thương phẳng), `vuc_da_nuot_chung` (+35% Tension & -8 Stamina/s), `thinh_mui_mau` (+20% pull khi thể lực < 50%), `can_xe_dien_cuong` (-25% Max Tension & phản chấn -20 Stamina).
 - **Cơ Chế Phản Xạ Perfect Re-Hook**: Hiệu ứng visual/audio báo hiệu khi cá nhảy chạm nước, thưởng x2 sát thương khi Re-Hook chuẩn xác.
 - **Đồ Họa Vector Blue Marlin**: Render hình học vector nguyên bản cho Boss Cá Cờ Xanh Khổng Lồ.
+
+---
+
+
+### 🎃 HLW-05: Giai Đoạn 5 - Đạo Cụ Tiêu Hao, Bầu Trời Huyết Nguyệt, 2 Cửa Hàng & Bộ 27 Âm Thanh ZzFX (v0.5.5.0)
+- [x] **HLW-05.1: 5 Đạo cụ tiêu hao Halloween độc quyền (ItemDatabase, PlayerBuffs, Player, GameplayAbility)**
+  - [x] Đăng ký 5 món đạo cụ: Kẹo Trick-or-Treat (300V), Đèn Lồng Bí Ngô (700V), Độc Dược Ma Quái (900V), Bùa Huyết Nguyệt (1000V), Nến Hồn Ma Bảo Hộ (1200V).
+  - [x] Vector art pixel-perfect đa tầng cho cả 5 món trong `LootVisualRenderer.java`.
+  - [x] Cơ chế logic:
+    - Kẹo Trick-or-Treat: +50% tỷ lệ gặp cá Halloween trong 15 phút (900s).
+    - Đèn Lồng Bí Ngô: +30% thời gian cửa sổ phản ứng Re-Hook khống chế cá nhảy tiếp nước (3 lần).
+    - Độc Dược Ma Quái: 3 lần dùng kỹ năng tiếp theo tiêu hao 0 Thể lực, tự giải trừ sau khi câu xong.
+    - Bùa Huyết Nguyệt: Trong trận gây thêm +10% Sát thương Chuẩn (True Damage) từ mọi nguồn (15s); Pre-combat kích hoạt tức thì Đêm Huyết Nguyệt 15 phút.
+    - Nến Hồn Ma Bảo Hộ: Cứu 1 lần đứt cước khi Tension chạm 100% hoặc trúng Lưỡi Hái Thanatos, kéo Tension về 50%.
+- [x] **HLW-05.2: Nâng cấp 2 Cửa hàng (ShopScreen.java & EventScreen.java + EventManager.java)**
+  - [x] Quầy Halloween trong Shop thường bán 5 món bằng Vàng với viền neon cam/tím bí ngô ma quái.
+  - [x] Cửa hàng Đổi Đồ Sự Kiện: Hoàn thành 4/6 nhiệm vụ ngày nhận ngay 100 Điểm SK (EP); đổi Set Cần Bí Ngô Limited (Cần 500, Dây 350, Móc 350), Vé Gacha Huyết Nguyệt 60 EP (vô hạn), Vé Tiêu Chuẩn 30 EP (vô hạn), Túi 15,000 Vàng 25 EP.
+- [x] **HLW-05.3: Bầu Trời Huyết Nguyệt chu kỳ 15 phút & chuyển sắc êm dịu (PlayScreen.java & FishingManager.java)**
+  - [x] Chu kỳ đối xứng 15m bật / 15m tắt từ 18:00 đêm đến 06:00 sáng.
+  - [x] Chuyển sắc êm đềm 3.0s (`Interpolation.fade`) không ngắt nhịp trận câu, notification banner thông báo thanh lịch.
+  - [x] Buff Huyết Nguyệt: x2.0 tỷ lệ toàn bộ 7 loài cá Halloween, +20% Vàng & +20% EXP, tỷ lệ vầng hào quang (100% cá HLW, 25% cá thường), rơi rương & kẹo cân bằng.
+- [x] **HLW-05.4: Bộ 27 âm thanh thủ tục ZzFX trực tiếp trong RAM (ZzFX.java & AudioManager.java)**
+  - [x] Tự động tổng hợp sóng PCM 16-bit trong RAM, không tốn dung lượng file WAV ngoài.
+  - [x] Đầy đủ âm thanh 5 đạo cụ, bắt cá Halloween, âm thanh môi trường Huyết Nguyệt, âm thanh 7 loài cá Halloween và 4 kỹ năng ma quái.
+- [x] **HLW-05.5: Tích hợp Buffs vào HUD (GameHUD.java)**
+  - [x] Hiển thị trọn vẹn trong `getActiveBuffs` với đồng hồ đếm ngược `mm:ss`, số lượt dùng còn lại và trạng thái bảo vệ.
+
+
+### 🚀 HLW-06: Giai Đoạn 6 - Kiểm Thử Cân Bằng CLI, An Toàn Save Data & Đóng Gói Build (v0.5.5.1)
+- [x] **HLW-06.1 - Mô phỏng cân bằng chiến đấu & kinh tế CLI (balance_cli.py)**:
+  - [x] Mô phỏng 500 trận Monte Carlo Boss Thanatos vs Set Huyết Nguyệt 6★: Win Rate đạt **85.2%** (ngưỡng 70-85%), Mean TTK đạt **73.16s** (ngưỡng 45-75s), Line Snap tối ưu 0.6%.
+  - [x] Mô phỏng kinh tế Mesa Framework 28 ngày: Cả 3 phân khúc (Casual, Grinder, Hardcore) đạt mức tích lũy cân đối, không lạm phát kinh tế.
+- [x] **HLW-06.2 - Sửa lỗi & bảo toàn dữ liệu file save (SaveManager.java)**:
+  - [x] Bổ sung phục hồi 10 trường Buff mở rộng trong `SaveManager.loadPlayer()`, giữ nguyên thời gian Kẹo Trick-or-Treat, Đèn Lồng Bí Ngô, Bùa Huyết Nguyệt, Nến Hồn Ma.
+  - [x] Bảo mật AES-256 + SHA-256 Checksum chống can thiệp file save.
+- [x] **HLW-06.3 - Hoàn thành bộ 3 tài liệu bắt buộc**:
+  - [x] `CHANGELOG.md`: Thêm mục phát hành `v0.5.5.1`.
+  - [x] `TASKS.md`: Đánh dấu hoàn tất toàn bộ checklist HLW-01 đến HLW-06.
+  - [x] `PatchNotesDialog.java`: Cập nhật `CURRENT_VERSION = "v0.5.5.1"` và trang bản tin chi tiết trong game.
+- [x] **HLW-06.4 - Biên dịch độc lập & đóng gói release**:
+  - [x] Build thành công `gradlew lwjgl3:jar` (AnglerRPG.jar).
 
 ---
 

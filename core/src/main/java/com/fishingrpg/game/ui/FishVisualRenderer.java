@@ -173,6 +173,27 @@ public class FishVisualRenderer {
             case "Cá Cờ Xanh Khổng Lồ":
                 drawCaCoXanhKhongLo(sr, cx, cy, scale, wag, timer);
                 break;
+            case "Cá Skeleton":
+                drawCaSkeleton(sr, cx, cy, scale, wag, timer);
+                break;
+            case "Cá Đèn Lồng Jack-o'":
+                drawCaDenLongJackO(sr, cx, cy, scale, wag, timer);
+                break;
+            case "Cá Đầu Lâu Huyết Nguyệt":
+                drawCaDauLauHuyetNguyet(sr, cx, cy, scale, wag, timer);
+                break;
+            case "Cá Dạng Ma":
+                drawCaDangMa(sr, cx, cy, scale, wag, timer);
+                break;
+            case "Thủy Quái Frankenstein":
+                drawThuyQuaiFrankenstein(sr, cx, cy, scale, wag, timer);
+                break;
+            case "Hải Xà Dạ Xoa":
+                drawHaiXaDaXoa(sr, cx, cy, scale, wag, timer);
+                break;
+            case "Kình Ngư Tử Thần Thanatos":
+                drawKinhNguTuThanThanatos(sr, cx, cy, scale, wag, timer);
+                break;
             default:
                 drawGenericFish(sr, cx, cy, scale, wag, rarityColor);
                 break;
@@ -4372,4 +4393,616 @@ public class FishVisualRenderer {
         sr.setColor(0.30f, 0.90f, 1.0f, 0.9f);
         sr.circle(cx + 35.5f * s, cy + 2.0f * s, 1.0f * s);
     }
+
+    // =========================================================================
+    // GIAI ĐOẠN 4 (HLW-04.3): 7 LOÀI CÁ VECTOR HALLOWEEN ĐỘC BẢN TOÀN CẦU
+    // =========================================================================
+
+    // =========================================================================
+    // 46. CÁ SKELETON (Common: Undead Skeletal Fish, Exposed Ribs & Cyan Phosphor)
+    // =========================================================================
+    public static void drawCaSkeleton(ShapeRenderer sr, float cx, float cy, float s, float wag, float timer) {
+        float pulse = 0.82f + 0.18f * MathUtils.sin(timer * 5f);
+
+        // 0. Ghostly cyan mist aura
+        sr.setColor(0.12f, 0.42f, 0.48f, 0.16f * pulse);
+        sr.ellipse(cx - 8f * s, cy - 14f * s, 80f * s, 34f * s);
+
+        // 1. Tattered Bone Tail Fin
+        float tailBaseX = cx - 42f * s;
+        float tailTipX = cx - 74f * s + wag * 4.2f * s;
+        // Tattered gray webbing
+        sr.setColor(0.20f, 0.28f, 0.32f, 0.45f);
+        sr.triangle(tailBaseX, cy, tailTipX, cy + 22f * s, tailTipX + 8f * s, cy + 6f * s);
+        sr.triangle(tailBaseX, cy, tailTipX, cy - 22f * s, tailTipX + 8f * s, cy - 6f * s);
+        // Broken bone fin rays
+        sr.setColor(0.88f, 0.88f, 0.82f, 1f);
+        sr.rectLine(tailBaseX, cy, tailTipX, cy + 22f * s, 1.8f * s);
+        sr.rectLine(tailBaseX, cy, tailTipX - 2f * s, cy + 10f * s, 1.6f * s);
+        sr.rectLine(tailBaseX, cy, tailTipX - 2f * s, cy - 10f * s, 1.6f * s);
+        sr.rectLine(tailBaseX, cy, tailTipX, cy - 22f * s, 1.8f * s);
+
+        // 2. Bare Bone Needle Dorsal Fin
+        sr.setColor(0.85f, 0.85f, 0.80f, 1f);
+        for (int i = 0; i < 4; i++) {
+            float fx = cx - 18f * s + i * 8.5f * s;
+            float fh = 14f + (3 - i) * 3.5f;
+            sr.triangle(fx, cy + 2f * s, fx + 3f * s, cy + 2f * s, fx - 4f * s, cy + (2f + fh) * s);
+            // Sharp ivory bone tips
+            sr.setColor(0.96f, 0.96f, 0.92f, 1f);
+            sr.circle(fx - 4f * s, cy + (2f + fh) * s, 1.2f * s);
+            sr.setColor(0.85f, 0.85f, 0.80f, 1f);
+        }
+
+        // 3. Spinal Column (Vertebral Cord)
+        sr.setColor(0.76f, 0.76f, 0.70f, 1f);
+        sr.rectLine(tailBaseX, cy, cx + 18f * s, cy + 1f * s, 3.4f * s);
+        // Vertebrae knots
+        sr.setColor(0.92f, 0.92f, 0.86f, 1f);
+        for (int v = 0; v < 7; v++) {
+            sr.circle(cx - 36f * s + v * 8.2f * s, cy + 1f * s, 2.4f * s);
+        }
+
+        // 4. Exposed Curved Ribs (Cốt cách bất diệt - cot_cach_bat_diet)
+        for (int r = 0; r < 6; r++) {
+            float rx = cx - 30f * s + r * 7.5f * s;
+            float dorsalH = 12f + r * 1.5f;
+            float ventralH = 10f + r * 1.8f;
+            // Dorsal rib curving upward
+            sr.setColor(0.88f, 0.88f, 0.82f, 1f);
+            sr.rectLine(rx, cy + 1f * s, rx - 3f * s, cy + dorsalH * s, 1.6f * s);
+            // Ventral rib curving downward
+            sr.setColor(0.82f, 0.82f, 0.76f, 1f);
+            sr.rectLine(rx, cy + 1f * s, rx - 4f * s, cy - ventralH * s, 1.6f * s);
+            // Bone tips
+            sr.setColor(1f, 1f, 0.95f, 1f);
+            sr.circle(rx - 3f * s, cy + dorsalH * s, 1.1f * s);
+            sr.circle(rx - 4f * s, cy - ventralH * s, 1.1f * s);
+        }
+
+        // 5. Angular Skeletal Skull (Hộp sọ sắc cạnh)
+        // Cranium dome
+        sr.setColor(0.82f, 0.82f, 0.76f, 1f);
+        sr.triangle(cx + 12f * s, cy + 16f * s, cx + 12f * s, cy - 10f * s, cx + 44f * s, cy + 2f * s);
+        // Snout ridge
+        sr.setColor(0.90f, 0.90f, 0.84f, 1f);
+        sr.triangle(cx + 16f * s, cy + 16f * s, cx + 46f * s, cy + 2f * s, cx + 38f * s, cy + 12f * s);
+        // Lower jaw mandible
+        sr.setColor(0.75f, 0.75f, 0.70f, 1f);
+        sr.triangle(cx + 14f * s, cy - 8f * s, cx + 44f * s, cy + 1f * s, cx + 32f * s, cy - 12f * s);
+
+        // Razor bone needle fangs
+        sr.setColor(0.96f, 0.96f, 0.92f, 1f);
+        for (int t = 0; t < 5; t++) {
+            float tx = cx + 22f * s + t * 4.2f * s;
+            sr.rectLine(tx, cy + 1f * s, tx + 0.8f * s, cy - 3.5f * s, 1.2f * s);
+        }
+
+        // 6. Deep Eye Socket & Glowing Cyan Soul Flame
+        sr.setColor(0.04f, 0.05f, 0.08f, 1f);
+        sr.circle(cx + 26f * s, cy + 6f * s, 5.5f * s);
+        // Cyan phosphorus soul fire
+        sr.setColor(0.18f, 0.92f, 0.98f, 0.92f * pulse);
+        sr.circle(cx + 26.5f * s, cy + 6.2f * s, 3.2f * s);
+        // Brilliant soul spark glint
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(cx + 27.5f * s, cy + 7.2f * s, 1.3f * s);
+    }
+
+    // =========================================================================
+    // 47. CÁ ĐÈN LỒNG JACK-O' (Uncommon: Plump Pumpkin Fish, Carved Flaming Grin)
+    // =========================================================================
+    public static void drawCaDenLongJackO(ShapeRenderer sr, float cx, float cy, float s, float wag, float timer) {
+        float pulse = 0.84f + 0.16f * MathUtils.sin(timer * 5.5f);
+
+        // 0. Warm Pumpkin Fire Ambient Glow
+        sr.setColor(1.0f, 0.42f, 0.04f, 0.18f * pulse);
+        sr.ellipse(cx - 2f * s, cy - 2f * s, 84f * s, 52f * s);
+
+        // 1. Curly Vine Tail with Foliage Fins
+        float tailBaseX = cx - 30f * s;
+        float tailTipX = cx - 62f * s + wag * 4.0f * s;
+        sr.setColor(0.18f, 0.48f, 0.14f, 1f);
+        sr.triangle(tailBaseX, cy + 6f * s, tailBaseX, cy - 6f * s, tailTipX, cy + 14f * s);
+        sr.triangle(tailBaseX, cy + 3f * s, tailBaseX, cy - 5f * s, tailTipX - 2f * s, cy - 10f * s);
+        // Little leaf tip
+        sr.setColor(0.32f, 0.68f, 0.22f, 1f);
+        sr.circle(tailTipX, cy + 14f * s, 3.5f * s);
+
+        // 2. Twisted Pumpkin Stem & Leaf Dorsal Fin
+        sr.setColor(0.22f, 0.52f, 0.16f, 1f);
+        sr.triangle(cx - 6f * s, cy + 22f * s, cx + 8f * s, cy + 22f * s, cx - 14f * s, cy + 40f * s);
+        // Stem knob & leaf
+        sr.setColor(0.35f, 0.72f, 0.25f, 1f);
+        sr.circle(cx - 14f * s, cy + 40f * s, 3.0f * s);
+        sr.triangle(cx + 2f * s, cy + 22f * s, cx + 18f * s, cy + 22f * s, cx + 12f * s, cy + 34f * s);
+
+        // 3. Plump Segmented Pumpkin Body (3 Overlapping Vertical Lobes)
+        // Rear lobe
+        sr.setColor(0.85f, 0.35f, 0.02f, 1f);
+        sr.ellipse(cx - 16f * s, cy - 20f * s, 42f * s, 44f * s);
+        // Front lobe
+        sr.setColor(0.92f, 0.42f, 0.04f, 1f);
+        sr.ellipse(cx + 14f * s, cy - 21f * s, 44f * s, 46f * s);
+        // Center main plump lobe
+        sr.setColor(1.0f, 0.50f, 0.08f, 1f);
+        sr.ellipse(cx - 2f * s, cy - 23f * s, 48f * s, 50f * s);
+
+        // Vertical rib groove shadow lines
+        sr.setColor(0.68f, 0.24f, 0.02f, 0.75f);
+        sr.rectLine(cx - 12f * s, cy + 22f * s, cx - 12f * s, cy - 22f * s, 2.0f * s);
+        sr.rectLine(cx + 10f * s, cy + 23f * s, cx + 10f * s, cy - 23f * s, 2.0f * s);
+
+        // 4. Carved Jack-o'-Lantern Face (Lửa thiêu đốt - hoa_nguc_ruc_sang)
+        // Outer carved dark cavity bevel
+        sr.setColor(0.25f, 0.08f, 0.02f, 1f);
+        sr.triangle(cx + 3f * s, cy + 13f * s, cx + 15f * s, cy + 15f * s, cx + 10f * s, cy + 4f * s);
+        sr.triangle(cx + 19f * s, cy + 15f * s, cx + 30f * s, cy + 12f * s, cx + 24f * s, cy + 4f * s);
+        // Glowing fiery eyes
+        sr.setColor(1f, 0.90f, 0.18f, 0.95f * pulse);
+        sr.triangle(cx + 4f * s, cy + 12f * s, cx + 14f * s, cy + 14f * s, cx + 10f * s, cy + 5f * s);
+        sr.triangle(cx + 20f * s, cy + 14f * s, cx + 29f * s, cy + 11f * s, cx + 24f * s, cy + 5f * s);
+        sr.setColor(1f, 1f, 0.85f, 1f);
+        sr.circle(cx + 10f * s, cy + 9f * s, 1.8f * s);
+        sr.circle(cx + 24f * s, cy + 9f * s, 1.8f * s);
+
+        // Wicked carved zigzag grin
+        sr.setColor(0.20f, 0.05f, 0.01f, 1f);
+        sr.triangle(cx + 4f * s, cy - 2f * s, cx + 34f * s, cy - 1f * s, cx + 20f * s, cy - 16f * s);
+        // Burning fire inside mouth
+        sr.setColor(1.0f, 0.78f, 0.08f, 1f);
+        sr.triangle(cx + 6f * s, cy - 3f * s, cx + 32f * s, cy - 2f * s, cx + 20f * s, cy - 14f * s);
+        // Zigzag pumpkin teeth
+        sr.setColor(0.95f, 0.45f, 0.05f, 1f);
+        sr.triangle(cx + 10f * s, cy - 3f * s, cx + 15f * s, cy - 3f * s, cx + 12.5f * s, cy - 8f * s);
+        sr.triangle(cx + 18f * s, cy - 3f * s, cx + 23f * s, cy - 3f * s, cx + 20.5f * s, cy - 9f * s);
+        sr.triangle(cx + 25f * s, cy - 3f * s, cx + 29f * s, cy - 3f * s, cx + 27.0f * s, cy - 7f * s);
+        // Bottom teeth
+        sr.triangle(cx + 14f * s, cy - 12f * s, cx + 18f * s, cy - 12f * s, cx + 16f * s, cy - 7f * s);
+        sr.triangle(cx + 21f * s, cy - 12f * s, cx + 26f * s, cy - 12f * s, cx + 23.5f * s, cy - 6f * s);
+
+        // 5. Pumpkin Snout & Leaf Pectoral Fin
+        sr.setColor(0.95f, 0.44f, 0.06f, 1f);
+        sr.ellipse(cx + 34f * s, cy - 10f * s, 12f * s, 18f * s);
+        // Pectoral vine
+        sr.setColor(0.22f, 0.52f, 0.16f, 1f);
+        sr.triangle(cx - 2f * s, cy - 6f * s, cx - 18f * s, cy - 22f * s, cx - 5f * s, cy - 10f * s);
+
+        // Specular highlight on pumpkin dome
+        sr.setColor(1f, 0.9f, 0.7f, 0.85f);
+        sr.circle(cx - 5f * s, cy + 18f * s, 2.5f * s);
+    }
+
+    // =========================================================================
+    // 48. CÁ ĐẦU LÂU HUYẾT NGUYỆT (Rare: Blood Moon Skull Hunter, Horned Helmet)
+    // =========================================================================
+    public static void drawCaDauLauHuyetNguyet(ShapeRenderer sr, float cx, float cy, float s, float wag, float timer) {
+        float pulse = 0.85f + 0.15f * MathUtils.sin(timer * 6.5f);
+
+        // 0. Blood Moon Crimson Aura
+        sr.setColor(0.85f, 0.05f, 0.12f, 0.18f * pulse);
+        sr.ellipse(cx - 2f * s, cy - 18f * s, 94f * s, 38f * s);
+
+        // 1. Crescent Scythe Tail
+        float tailBaseX = cx - 44f * s;
+        float tailTipX = cx - 78f * s + wag * 3.8f * s;
+        // Upper crescent lobe
+        sr.setColor(0.68f, 0.08f, 0.12f, 1f);
+        sr.triangle(tailBaseX, cy, tailTipX, cy + 28f * s, tailTipX + 16f * s, cy + 6f * s);
+        // Lower crescent lobe
+        sr.setColor(0.48f, 0.05f, 0.08f, 1f);
+        sr.triangle(tailBaseX, cy, tailTipX, cy - 26f * s, tailTipX + 16f * s, cy - 6f * s);
+        // Glowing razor crescent edge
+        sr.setColor(0.95f, 0.12f, 0.18f, 0.90f * pulse);
+        sr.rectLine(tailBaseX, cy, tailTipX, cy + 28f * s, 1.8f * s);
+        sr.rectLine(tailBaseX, cy, tailTipX, cy - 26f * s, 1.8f * s);
+
+        // 2. Streamlined Jet-Black Obsidian Predator Torso
+        sr.setColor(0.08f, 0.06f, 0.10f, 1f);
+        sr.ellipse(cx - 46f * s, cy - 14f * s, 96f * s, 28f * s);
+        // Dark crimson ventral flank
+        sr.setColor(0.24f, 0.05f, 0.08f, 1f);
+        sr.ellipse(cx - 42f * s, cy - 14f * s, 86f * s, 18f * s);
+
+        // Pulsing Crimson Arterial Veins (Huyết mạch săn mồi - huyet_nguyet_cuong_sat)
+        sr.setColor(0.95f, 0.08f, 0.14f, 0.85f * pulse);
+        sr.rectLine(cx - 30f * s, cy + 4f * s, cx - 6f * s, cy + 6f * s, 1.8f * s);
+        sr.rectLine(cx - 16f * s, cy + 5f * s, cx - 18f * s, cy - 7f * s, 1.4f * s);
+        sr.rectLine(cx - 6f * s, cy + 6f * s, cx + 8f * s, cy - 4f * s, 1.6f * s);
+
+        // 3. Horned Bone Skull Armor Helmet (Chiếc sọ sừng nhọn uy hiếp)
+        sr.setColor(0.78f, 0.74f, 0.68f, 1f);
+        sr.triangle(cx + 8f * s, cy + 18f * s, cx + 8f * s, cy - 10f * s, cx + 46f * s, cy + 2f * s);
+        // Cranial brow armor
+        sr.setColor(0.88f, 0.84f, 0.78f, 1f);
+        sr.triangle(cx + 12f * s, cy + 18f * s, cx + 38f * s, cy + 14f * s, cx + 48f * s, cy + 4f * s);
+
+        // Swept-back Demonic Skull Horns
+        // Near Horn
+        sr.setColor(0.35f, 0.05f, 0.08f, 1f);
+        sr.triangle(cx + 14f * s, cy + 16f * s, cx + 22f * s, cy + 18f * s, cx + 2f * s, cy + 34f * s);
+        sr.setColor(0.95f, 0.90f, 0.85f, 1f);
+        sr.triangle(cx + 5f * s, cy + 29f * s, cx + 8f * s, cy + 27f * s, cx + 2f * s, cy + 34f * s);
+        // Far Horn
+        sr.setColor(0.22f, 0.03f, 0.05f, 1f);
+        sr.triangle(cx + 22f * s, cy + 17f * s, cx + 28f * s, cy + 17f * s, cx + 15f * s, cy + 32f * s);
+
+        // Lower bone jaw & razor crimson fangs
+        sr.setColor(0.72f, 0.68f, 0.62f, 1f);
+        sr.triangle(cx + 12f * s, cy - 8f * s, cx + 44f * s, cy + 1f * s, cx + 34f * s, cy - 11f * s);
+        sr.setColor(0.95f, 0.10f, 0.15f, 1f);
+        for (int f = 0; f < 4; f++) {
+            float fx = cx + 26f * s + f * 4.5f * s;
+            sr.triangle(fx, cy - 1f * s, fx + 2.5f * s, cy - 1f * s, fx + 1.2f * s, cy - 6f * s);
+        }
+
+        // 4. Burning Ruby Eye (Mắt đỏ ruby rực cháy)
+        sr.setColor(0.02f, 0.02f, 0.03f, 1f);
+        sr.circle(cx + 28f * s, cy + 6f * s, 6.0f * s);
+        sr.setColor(0.95f, 0.05f, 0.15f, 1f);
+        sr.circle(cx + 28.5f * s, cy + 6.2f * s, 4.2f * s);
+        // Golden pupil slit
+        sr.setColor(1.0f, 0.85f, 0.20f, 1f);
+        sr.ellipse(cx + 28.5f * s, cy + 6.2f * s, 1.6f * s, 3.4f * s);
+        // Diamond specular point
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(cx + 29.5f * s, cy + 7.5f * s, 1.4f * s);
+    }
+
+    // =========================================================================
+    // 49. CÁ DẠNG MA (Epic: Phantom Spectre, Ethereal Translucent Ribbon Smoke)
+    // =========================================================================
+    public static void drawCaDangMa(ShapeRenderer sr, float cx, float cy, float s, float wag, float timer) {
+        float pulse = 0.82f + 0.18f * MathUtils.sin(timer * 4.8f);
+
+        // 0. Misty Violet Ghostly Miasma Aura
+        sr.setColor(0.55f, 0.22f, 0.85f, 0.22f * pulse);
+        sr.ellipse(cx - 4f * s, cy - 20f * s, 98f * s, 46f * s);
+        sr.circle(cx - 24f * s, cy, 26f * s * (0.9f + 0.1f * MathUtils.sin(timer * 3f)));
+
+        // 1. Wispy Smoky Ghost Tail (Undulating ghostly ribbons)
+        float tailBaseX = cx - 28f * s;
+        // Ribbon 1 (top trail)
+        sr.setColor(0.65f, 0.35f, 0.90f, 0.45f);
+        sr.triangle(tailBaseX, cy + 8f * s, tailBaseX, cy, cx - 76f * s + wag * 5.5f * s, cy + 18f * s);
+        // Ribbon 2 (middle trail)
+        sr.setColor(0.50f, 0.25f, 0.80f, 0.50f);
+        sr.triangle(tailBaseX, cy + 3f * s, tailBaseX, cy - 4f * s, cx - 84f * s + wag * 4.5f * s, cy - 2f * s);
+        // Ribbon 3 (bottom trail)
+        sr.setColor(0.40f, 0.18f, 0.70f, 0.40f);
+        sr.triangle(tailBaseX, cy - 1f * s, tailBaseX, cy - 8f * s, cx - 72f * s + wag * 5.5f * s, cy - 20f * s);
+        // Fading smoke motes
+        sr.setColor(0.70f, 0.40f, 0.95f, 0.35f * pulse);
+        sr.circle(cx - 86f * s + wag * 3.5f * s, cy + 8f * s, 5.0f * s);
+        sr.circle(cx - 94f * s + wag * 2.5f * s, cy - 6f * s, 3.8f * s);
+
+        // 2. Translucent Flowing Phantom Mantle (alpha = 0.55f)
+        sr.setColor(0.72f, 0.55f, 0.95f, 0.55f);
+        sr.ellipse(cx - 36f * s, cy - 16f * s, 86f * s, 32f * s);
+        sr.setColor(0.58f, 0.38f, 0.88f, 0.48f);
+        sr.ellipse(cx - 30f * s, cy - 14f * s, 76f * s, 24f * s);
+
+        // 3. Inner Spectral Soul Flame Core (Tiếng than u ám - the_xac_hu_vo)
+        sr.setColor(0.45f, 0.88f, 1.0f, 0.70f * pulse);
+        sr.circle(cx - 4f * s, cy, 14f * s);
+        sr.setColor(0.85f, 0.95f, 1.0f, 0.85f * pulse);
+        sr.circle(cx - 4f * s, cy, 7.5f * s);
+
+        // 4. Floating Tattered Veil Fins
+        sr.setColor(0.68f, 0.45f, 0.92f, 0.45f);
+        sr.triangle(cx - 15f * s, cy + 14f * s, cx + 12f * s, cy + 14f * s, cx - 6f * s, cy + 32f * s + wag * 2f * s);
+        sr.triangle(cx + 8f * s, cy - 2f * s, cx - 8f * s, cy - 22f * s, cx + 2f * s, cy - 6f * s);
+
+        // 5. Ethereal Ghost Head & Sorrowful Soul Eye (Đôi mắt u buồn)
+        sr.setColor(0.75f, 0.60f, 0.98f, 0.60f);
+        sr.triangle(cx + 15f * s, cy + 15f * s, cx + 15f * s, cy - 12f * s, cx + 44f * s, cy);
+
+        // Sorrowful glowing cyan eye
+        sr.setColor(0.20f, 0.95f, 1.0f, 0.95f * pulse);
+        sr.circle(cx + 26f * s, cy + 4f * s, 4.8f * s);
+        sr.setColor(0.10f, 0.10f, 0.25f, 0.90f);
+        sr.circle(cx + 26.5f * s, cy + 3.8f * s, 2.6f * s);
+        // Tear spark glint
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(cx + 27.5f * s, cy + 5.2f * s, 1.3f * s);
+        sr.rectLine(cx + 26f * s, cy + 1f * s, cx + 24f * s, cy - 6f * s, 1.1f * s);
+    }
+
+    // =========================================================================
+    // 50. THỦY QUÁI FRANKENSTEIN (Epic: Stitched Reanimation, Electrodes & Sparks)
+    // =========================================================================
+    public static void drawThuyQuaiFrankenstein(ShapeRenderer sr, float cx, float cy, float s, float wag, float timer) {
+        float pulse = 0.85f + 0.15f * MathUtils.sin(timer * 6f);
+        float fastPulse = MathUtils.sin(timer * 20f);
+
+        // 0. Bio-Electric Field Aura
+        sr.setColor(0.35f, 0.85f, 0.22f, 0.14f * pulse);
+        sr.ellipse(cx - 2f * s, cy - 22f * s, 98f * s, 48f * s);
+
+        // 1. Heavy Bolted Square Tail
+        float tailBaseX = cx - 44f * s;
+        float tailTipX = cx - 74f * s + wag * 3.4f * s;
+        // Upper moss segment
+        sr.setColor(0.28f, 0.44f, 0.22f, 1f);
+        sr.triangle(tailBaseX, cy, tailTipX, cy + 24f * s, tailTipX + 14f * s, cy + 4f * s);
+        // Lower dead gray segment
+        sr.setColor(0.35f, 0.38f, 0.38f, 1f);
+        sr.triangle(tailBaseX, cy, tailTipX, cy - 22f * s, tailTipX + 14f * s, cy - 4f * s);
+        // Metal staple clamping tail
+        sr.setColor(0.72f, 0.74f, 0.78f, 1f);
+        sr.rectLine(cx - 62f * s, cy + 6f * s, cx - 60f * s, cy - 6f * s, 2.2f * s);
+
+        // 2. Mismatched Patchwork Torso (Thân chắp vá từ các mảng da)
+        // Dorsal moss green patch
+        sr.setColor(0.28f, 0.44f, 0.22f, 1f);
+        sr.ellipse(cx - 46f * s, cy - 10f * s, 94f * s, 28f * s);
+        // Middle ashen flesh patch
+        sr.setColor(0.42f, 0.44f, 0.40f, 1f);
+        sr.ellipse(cx - 36f * s, cy - 16f * s, 80f * s, 24f * s);
+        // Ventral sickly pale green
+        sr.setColor(0.36f, 0.50f, 0.28f, 1f);
+        sr.ellipse(cx - 42f * s, cy - 18f * s, 84f * s, 16f * s);
+
+        // 3. Black Surgical Stitches (Các đường chỉ khâu đen sắc nét)
+        sr.setColor(0.08f, 0.10f, 0.08f, 1f);
+        sr.rectLine(cx - 16f * s, cy + 18f * s, cx - 10f * s, cy - 18f * s, 2.0f * s);
+        sr.rectLine(cx + 12f * s, cy + 15f * s, cx + 18f * s, cy - 16f * s, 2.0f * s);
+        // Stitch cross ties
+        sr.setColor(0.85f, 0.88f, 0.85f, 1f);
+        for (int k = 0; k < 4; k++) {
+            float sy = cy - 12f * s + k * 8f * s;
+            sr.rectLine(cx - 15f * s, sy, cx - 10f * s, sy, 1.6f * s);
+            sr.rectLine(cx + 12f * s + k * 1.5f * s, sy, cx + 18f * s + k * 1.5f * s, sy, 1.6f * s);
+        }
+
+        // 4. Heavy Metal Electrode Bolts (Bu-lông cắm xuyên qua mang)
+        sr.setColor(0.58f, 0.62f, 0.66f, 1f);
+        // Top bolt shaft & head
+        sr.rect(cx + 8f * s, cy + 15f * s, 6f * s, 12f * s);
+        sr.setColor(0.78f, 0.82f, 0.85f, 1f);
+        sr.rect(cx + 6f * s, cy + 24f * s, 10f * s, 5f * s);
+        // Bottom bolt shaft & head
+        sr.setColor(0.58f, 0.62f, 0.66f, 1f);
+        sr.rect(cx + 8f * s, cy - 25f * s, 6f * s, 12f * s);
+        sr.setColor(0.78f, 0.82f, 0.85f, 1f);
+        sr.rect(cx + 6f * s, cy - 28f * s, 10f * s, 5f * s);
+
+        // Electric sparks crackling (Sấm sét hồi sinh - qua_tai_dien_nang)
+        if (fastPulse > 0.15f) {
+            sr.setColor(0.85f, 1.0f, 0.35f, 0.95f);
+            sr.rectLine(cx + 11f * s, cy + 29f * s, cx + 18f * s, cy + 37f * s, 1.8f * s);
+            sr.rectLine(cx + 18f * s, cy + 37f * s, cx + 14f * s, cy + 43f * s, 1.4f * s);
+            sr.rectLine(cx + 11f * s, cy - 28f * s, cx + 17f * s, cy - 36f * s, 1.8f * s);
+        }
+
+        // 5. Heavy Brutish Head & Exposed Dental Braces
+        sr.setColor(0.32f, 0.48f, 0.25f, 1f);
+        sr.triangle(cx + 18f * s, cy + 18f * s, cx + 18f * s, cy - 16f * s, cx + 50f * s, cy);
+        // Protruding heavy lower jaw
+        sr.setColor(0.24f, 0.38f, 0.18f, 1f);
+        sr.triangle(cx + 20f * s, cy - 14f * s, cx + 54f * s, cy + 2f * s, cx + 42f * s, cy - 16f * s);
+        // Steel dental clamp across teeth
+        sr.setColor(0.75f, 0.78f, 0.82f, 1f);
+        sr.rectLine(cx + 34f * s, cy - 2f * s, cx + 52f * s, cy + 1f * s, 2.0f * s);
+
+        // 6. Mismatched Monster Eyes
+        // Scarred dead left eye
+        sr.setColor(0.18f, 0.18f, 0.16f, 1f);
+        sr.circle(cx + 28f * s, cy + 8f * s, 4.0f * s);
+        sr.setColor(0.40f, 0.15f, 0.15f, 1f);
+        sr.rectLine(cx + 25f * s, cy + 14f * s, cx + 31f * s, cy + 2f * s, 1.6f * s);
+        // Crazed electric yellow right eye
+        sr.setColor(0.95f, 0.90f, 0.15f, 1f * pulse);
+        sr.circle(cx + 36f * s, cy + 6f * s, 5.2f * s);
+        sr.setColor(0.08f, 0.08f, 0.06f, 1f);
+        sr.circle(cx + 36.5f * s, cy + 6.2f * s, 2.0f * s);
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(cx + 37.2f * s, cy + 7.0f * s, 1.1f * s);
+    }
+
+    // =========================================================================
+    // 51. HẢI XÀ DẠ XOA (Legendary: Night Yaksha Shadow Serpent, Sawblade Spine)
+    // =========================================================================
+    public static void drawHaiXaDaXoa(ShapeRenderer sr, float cx, float cy, float s, float wag, float timer) {
+        float pulse = 0.85f + 0.15f * MathUtils.sin(timer * 6f);
+
+        // 0. Abyssal Dark Purple & Toxic Emerald Noxious Miasma Aura
+        sr.setColor(0.42f, 0.08f, 0.58f, 0.22f * pulse);
+        sr.ellipse(cx - 2f * s, cy - 20f * s, 110f * s, 44f * s);
+        // Noxious venom clouds
+        sr.setColor(0.12f, 0.85f, 0.35f, 0.14f * pulse);
+        sr.circle(cx - 30f * s, cy + 12f * s, 18f * s);
+        sr.circle(cx + 20f * s, cy - 10f * s, 20f * s);
+
+        // 1. Elongated Sinusoidal Serpentine Multi-Segment Body (Uốn lượn ma quái)
+        // 7 overlapping curved muscular segments
+        for (int seg = 6; seg >= 0; seg--) {
+            float tOff = seg * 0.45f;
+            float segWag = MathUtils.sin(timer * 4.5f - tOff) * 8.5f * s;
+            float segX = cx - 62f * s + seg * 14.5f * s;
+            float segY = cy + segWag;
+            float segR = 14f * s + seg * 1.8f * s;
+
+            // Obsidian jet black scales
+            sr.setColor(0.06f, 0.05f, 0.09f, 1f);
+            sr.circle(segX, segY, segR);
+            // Deep violet shadow facet
+            sr.setColor(0.16f, 0.10f, 0.24f, 1f);
+            sr.circle(segX + 1.5f * s, segY + 2f * s, segR * 0.75f);
+            // Ventral belly plates
+            sr.setColor(0.24f, 0.14f, 0.32f, 1f);
+            sr.circle(segX - 1.5f * s, segY - 3f * s, segR * 0.55f);
+        }
+
+        // Tail barb (Mã xà quất đuôi)
+        float tailX = cx - 74f * s + wag * 6.5f * s;
+        float tailY = cy + MathUtils.sin(timer * 4.5f - 3.0f) * 8.5f * s;
+        sr.setColor(0.35f, 0.10f, 0.45f, 1f);
+        sr.triangle(cx - 62f * s, cy, tailX, tailY + 12f * s, tailX - 6f * s, tailY - 6f * s);
+        sr.setColor(0.15f, 0.95f, 0.40f, 0.90f * pulse);
+        sr.circle(tailX, tailY + 12f * s, 2.4f * s);
+
+        // 2. Sawblade Spiny Dorsal Ridge (Vây lưng dạng lưỡi cưa phát sáng u linh)
+        for (int i = 0; i < 7; i++) {
+            float sx = cx - 52f * s + i * 12.5f * s;
+            float segWag = MathUtils.sin(timer * 4.5f - (i * 0.45f)) * 8.5f * s;
+            float sy = cy + segWag + 10f * s;
+            sr.setColor(0.28f, 0.12f, 0.38f, 1f);
+            sr.triangle(sx - 4f * s, sy, sx + 5f * s, sy, sx - 2f * s, sy + 18f * s);
+            // Toxic venom glowing needle tips
+            sr.setColor(0.15f, 0.95f, 0.40f, 0.92f * pulse);
+            sr.circle(sx - 2f * s, sy + 18f * s, 2.0f * s);
+        }
+
+        // 3. Draconic Yaksha Head & Demonic Swept-back Horns
+        sr.setColor(0.08f, 0.06f, 0.12f, 1f);
+        sr.triangle(cx + 26f * s, cy + 18f * s, cx + 26f * s, cy - 14f * s, cx + 60f * s, cy + 2f * s);
+        // Swept-back Yaksha Horns
+        sr.setColor(0.35f, 0.10f, 0.45f, 1f);
+        sr.triangle(cx + 28f * s, cy + 15f * s, cx + 36f * s, cy + 16f * s, cx + 12f * s, cy + 36f * s);
+        sr.setColor(0.20f, 0.95f, 0.45f, 1f);
+        sr.circle(cx + 12f * s, cy + 36f * s, 2.4f * s);
+
+        // 4. Gaping Maw & Venomous Dripping Fangs (Độc tố âm ty - doc_to_am_ty)
+        sr.setColor(0.18f, 0.04f, 0.22f, 1f);
+        sr.triangle(cx + 34f * s, cy + 2f * s, cx + 54f * s, cy + 2f * s, cx + 44f * s, cy - 8f * s);
+        // Lower jaw
+        sr.setColor(0.10f, 0.07f, 0.14f, 1f);
+        sr.triangle(cx + 28f * s, cy - 12f * s, cx + 58f * s, cy + 1f * s, cx + 46f * s, cy - 15f * s);
+        // Venom fangs
+        sr.setColor(0.92f, 0.95f, 0.90f, 1f);
+        sr.triangle(cx + 43f * s, cy + 2f * s, cx + 47f * s, cy + 2f * s, cx + 45f * s, cy - 8f * s);
+        sr.triangle(cx + 49f * s, cy + 2f * s, cx + 53f * s, cy + 2f * s, cx + 51f * s, cy - 7f * s);
+        // Toxic droplet
+        sr.setColor(0.20f, 0.98f, 0.45f, 0.95f * pulse);
+        sr.circle(cx + 45f * s, cy - 10f * s, 2.0f * s);
+
+        // 5. Blazing Demonic Yaksha Eyes (Mắt dạ xoa rực lửa tím tà ác)
+        sr.setColor(0.02f, 0.01f, 0.03f, 1f);
+        sr.circle(cx + 39f * s, cy + 7f * s, 5.8f * s);
+        sr.setColor(0.95f, 0.12f, 0.85f, 1f);
+        sr.circle(cx + 39.5f * s, cy + 7.2f * s, 4.0f * s);
+        // Dragon slit pupil
+        sr.setColor(0.10f, 0.95f, 0.40f, 1f);
+        sr.ellipse(cx + 39.5f * s, cy + 7.2f * s, 1.4f * s, 3.4f * s);
+        // Specular gleam
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(cx + 40.5f * s, cy + 8.5f * s, 1.4f * s);
+    }
+
+    // =========================================================================
+    // 52. KÌNH NGƯ TỬ THẦN THANATOS (World Boss: 6666 HP, Scythe Dorsal, Triple Aura)
+    // =========================================================================
+    public static void drawKinhNguTuThanThanatos(ShapeRenderer sr, float cx, float cy, float s, float wag, float timer) {
+        float pulse = 0.85f + 0.15f * MathUtils.sin(timer * 5f);
+        float fastPulse = 0.80f + 0.20f * MathUtils.sin(timer * 9f);
+
+        // 0. TRIPLE ABYSSAL AURA (3 Tầng Hào Quang Ma Quái)
+        // Layer A: Outer Abyssal Void ring
+        sr.setColor(0.04f, 0.02f, 0.06f, 0.35f * pulse);
+        sr.ellipse(cx - 2f * s, cy - 20f * s, 130f * s, 68f * s);
+        // Layer B: Middle Spectral Violet Miasma
+        sr.setColor(0.45f, 0.08f, 0.65f, 0.25f * pulse);
+        sr.ellipse(cx - 2f * s, cy - 20f * s, 114f * s, 54f * s);
+        // Layer C: Inner Blood Moon Crimson Flame Sparks
+        sr.setColor(0.95f, 0.08f, 0.15f, 0.28f * fastPulse);
+        sr.ellipse(cx - 2f * s, cy - 20f * s, 98f * s, 44f * s);
+
+        // 1. Colossal Split Sickle Bone Tail
+        float tailBaseX = cx - 54f * s;
+        float tailTipX = cx - 94f * s + wag * 4.0f * s;
+        // Upper massive scythe lobe
+        sr.setColor(0.10f, 0.08f, 0.14f, 1f);
+        sr.triangle(tailBaseX, cy, tailTipX, cy + 44f * s, tailTipX + 22f * s, cy + 10f * s);
+        // Lower scythe lobe
+        sr.setColor(0.08f, 0.06f, 0.11f, 1f);
+        sr.triangle(tailBaseX, cy, tailTipX, cy - 40f * s, tailTipX + 22f * s, cy - 8f * s);
+        // Razor scythe bone edges
+        sr.setColor(0.85f, 0.82f, 0.75f, 1f);
+        sr.rectLine(tailBaseX, cy, tailTipX, cy + 44f * s, 2.4f * s);
+        sr.rectLine(tailBaseX, cy, tailTipX, cy - 40f * s, 2.2f * s);
+        // Crimson plasma energy line
+        sr.setColor(0.95f, 0.10f, 0.18f, 0.95f * fastPulse);
+        sr.rectLine(tailBaseX, cy, tailTipX, cy + 44f * s, 1.4f * s);
+
+        // 2. Colossal Monolithic Whale Hull (Thân kình ngư vĩ đại choáng ngợp)
+        sr.setColor(0.05f, 0.04f, 0.07f, 1f);
+        sr.ellipse(cx - 56f * s, cy - 20f * s, 120f * s, 40f * s);
+        // Abyssal purple lower flank
+        sr.setColor(0.14f, 0.07f, 0.18f, 1f);
+        sr.ellipse(cx - 50f * s, cy - 20f * s, 110f * s, 30f * s);
+        // Glowing soul belly grooves
+        sr.setColor(0.55f, 0.14f, 0.70f, 0.65f * pulse);
+        for (int b = 0; b < 6; b++) {
+            float bx = cx - 35f * s + b * 11.5f * s;
+            sr.rectLine(bx, cy - 10f * s, bx - 4f * s, cy - 28f * s, 2.0f * s);
+        }
+
+        // 3. TOWERING REAPER DORSAL SCYTHE (Lưỡi hái thần chết vươn cao - doat_menh_lien_hoan_tram)
+        sr.setColor(0.12f, 0.09f, 0.16f, 1f);
+        sr.triangle(cx - 15f * s, cy + 18f * s, cx + 24f * s, cy + 18f * s, cx - 20f * s, cy + 58f * s);
+        // Forward curving scythe blade flare
+        sr.setColor(0.85f, 0.82f, 0.78f, 1f);
+        sr.triangle(cx + 8f * s, cy + 18f * s, cx - 20f * s, cy + 58f * s, cx + 6f * s, cy + 46f * s);
+        // Razor-sharp crimson plasma blade edge
+        sr.setColor(1.0f, 0.08f, 0.15f, 0.95f * fastPulse);
+        sr.rectLine(cx + 24f * s, cy + 18f * s, cx - 20f * s, cy + 58f * s, 2.6f * s);
+        // Pure white specular tip glint
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(cx - 20f * s, cy + 58f * s, 3.0f * s);
+
+        // 4. Skeletal Armor Plating (Phiến giáp xương gai nhọn chĩa ngược)
+        for (int p = 0; p < 5; p++) {
+            float px = cx - 38f * s + p * 12.5f * s;
+            sr.setColor(0.80f, 0.78f, 0.72f, 1f);
+            sr.triangle(px, cy + 14f * s, px + 8f * s, cy + 14f * s, px - 3f * s, cy + 25f * s);
+            sr.setColor(0.95f, 0.92f, 0.88f, 1f);
+            sr.circle(px - 3f * s, cy + 25f * s, 1.4f * s);
+        }
+
+        // 5. Scythe Pectoral Wing-Fins
+        sr.setColor(0.10f, 0.08f, 0.14f, 1f);
+        sr.triangle(cx + 16f * s, cy - 4f * s, cx - 10f * s, cy - 36f * s, cx + 8f * s, cy - 8f * s);
+        sr.setColor(0.82f, 0.80f, 0.74f, 1f);
+        sr.rectLine(cx + 16f * s, cy - 4f * s, cx - 10f * s, cy - 36f * s, 2.2f * s);
+
+        // 6. Monolithic Leviathan Head & Devouring Jaws
+        sr.setColor(0.07f, 0.05f, 0.09f, 1f);
+        sr.triangle(cx + 34f * s, cy + 22f * s, cx + 34f * s, cy - 18f * s, cx + 68f * s, cy + 2f * s);
+        // Cavernous inner abyss
+        sr.setColor(0.02f, 0.01f, 0.03f, 1f);
+        sr.triangle(cx + 40f * s, cy + 2f * s, cx + 64f * s, cy + 2f * s, cx + 50f * s, cy - 12f * s);
+        // Armored lower jaw
+        sr.setColor(0.78f, 0.75f, 0.68f, 1f);
+        sr.triangle(cx + 36f * s, cy - 15f * s, cx + 69f * s, cy + 1f * s, cx + 54f * s, cy - 16f * s);
+        // Mammoth bone fangs
+        sr.setColor(0.95f, 0.95f, 0.90f, 1f);
+        for (int t = 0; t < 5; t++) {
+            float tx = cx + 42f * s + t * 4.8f * s;
+            sr.triangle(tx, cy + 2f * s, tx + 3.2f * s, cy + 2f * s, tx + 1.6f * s, cy - 5f * s);
+        }
+
+        // 7. Death's Eye (Mắt Tử Thần)
+        sr.setColor(0.01f, 0.01f, 0.02f, 1f);
+        sr.circle(cx + 44f * s, cy + 10f * s, 7.0f * s);
+        // Crimson ruby outer ring
+        sr.setColor(1.0f, 0.08f, 0.15f, 1f);
+        sr.circle(cx + 44.5f * s, cy + 10.2f * s, 5.0f * s);
+        // Cross-shaped death pupil
+        sr.setColor(0.05f, 0.02f, 0.05f, 1f);
+        sr.rectLine(cx + 41f * s, cy + 10.2f * s, cx + 48f * s, cy + 10.2f * s, 2.0f * s);
+        sr.rectLine(cx + 44.5f * s, cy + 6.8f * s, cx + 44.5f * s, cy + 13.6f * s, 2.0f * s);
+        // Specular glint
+        sr.setColor(1f, 1f, 1f, 1f);
+        sr.circle(cx + 46f * s, cy + 12f * s, 1.6f * s);
+
+        // 8. Orbiting Soul Wisps (Linh hồn quấy phá - am_hon_quay_pha)
+        sr.setColor(0.35f, 0.90f, 1.0f, 0.85f * pulse);
+        sr.circle(cx + MathUtils.cos(timer * 3f) * 48f * s, cy + MathUtils.sin(timer * 3f) * 26f * s + 15f * s, 3.4f * s);
+        sr.setColor(0.85f, 0.20f, 0.95f, 0.85f * pulse);
+        sr.circle(cx + MathUtils.cos(timer * 3f + 2.1f) * 58f * s, cy + MathUtils.sin(timer * 3f + 2.1f) * 32f * s - 10f * s, 3.0f * s);
+        sr.setColor(1.0f, 0.25f, 0.20f, 0.85f * fastPulse);
+        sr.circle(cx + MathUtils.cos(timer * 3f + 4.2f) * 68f * s, cy + MathUtils.sin(timer * 3f + 4.2f) * 22f * s + 6f * s, 3.2f * s);
+    }
+
 }

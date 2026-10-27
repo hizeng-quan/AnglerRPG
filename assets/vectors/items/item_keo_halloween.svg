@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="candyAura" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#a855f7" stop-opacity="0.45"/>
+      <stop offset="60%" stop-color="#f97316" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#3b0764" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="candyOrange" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fdba74"/>
+      <stop offset="40%" stop-color="#f97316"/>
+      <stop offset="100%" stop-color="#c2410c"/>
+    </linearGradient>
+    <linearGradient id="candyPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c084fc"/>
+      <stop offset="50%" stop-color="#9333ea"/>
+      <stop offset="100%" stop-color="#581c87"/>
+    </linearGradient>
+  </defs>
+
+  <!-- LAYER 1: Background Glow -->
+  <g id="background_glow">
+    <circle cx="64" cy="64" r="52" fill="url(#candyAura)"/>
+    <ellipse cx="64" cy="104" rx="34" ry="9" fill="#000000" opacity="0.32"/>
+  </g>
+
+  <!-- LAYER 2: Base Form (Candy Wrapper Twists & Spherical Core) -->
+  <g id="base_form">
+    <!-- Left Twisted Wrapper Fan -->
+    <polygon points="44,64 16,42 22,64 16,86" fill="url(#candyPurple)"/>
+    <polygon points="44,64 20,52 24,64 20,76" fill="#7e22ce"/>
+    <!-- Right Twisted Wrapper Fan -->
+    <polygon points="84,64 112,42 106,64 112,86" fill="url(#candyPurple)"/>
+    <polygon points="84,64 108,52 104,64 108,76" fill="#7e22ce"/>
+
+    <!-- Wrapper Ribbon Ties -->
+    <rect x="41" y="54" width="6" height="20" rx="3" fill="#facc15"/>
+    <rect x="81" y="54" width="6" height="20" rx="3" fill="#facc15"/>
+
+    <!-- Round Hard Candy Core -->
+    <circle cx="64" cy="64" r="28" fill="url(#candyOrange)"/>
+    <!-- Outer Deep Rim -->
+    <circle cx="64" cy="64" r="28" fill="none" stroke="#9a3412" stroke-width="1.8"/>
+  </g>
+
+  <!-- LAYER 3: Details & Relief (Haunted Spiral Swirls & Magic Runes) -->
+  <g id="details_and_relief">
+    <!-- Curved Violet Sugar Swirls -->
+    <path d="M 44 50 Q 56 42 70 44 Q 84 46 90 56" fill="none" stroke="#7e22ce" stroke-width="4.5" stroke-linecap="round"/>
+    <path d="M 40 68 Q 52 78 66 78 Q 80 78 88 70" fill="none" stroke="#7e22ce" stroke-width="4.5" stroke-linecap="round"/>
+    <!-- Gold Honey Streaks -->
+    <path d="M 46 58 Q 62 64 82 58" fill="none" stroke="#fef08a" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Little Spectral Sparkles -->
+    <polygon points="64,48 66,54 72,56 66,58 64,64 62,58 56,56 62,54" fill="#ffffff" opacity="0.9"/>
+  </g>
+
+  <!-- LAYER 4: Specular Highlights & Contrast -->
+  <g id="specular_highlights">
+    <!-- Top-Left Gloss Arc -->
+    <path d="M 48 50 A 20 20 0 0 1 76 44" fill="none" stroke="#ffffff" stroke-width="3.0" stroke-linecap="round" opacity="0.75"/>
+    <circle cx="50" cy="48" r="2.2" fill="#ffffff" opacity="0.9"/>
+  </g>
+</svg>
+

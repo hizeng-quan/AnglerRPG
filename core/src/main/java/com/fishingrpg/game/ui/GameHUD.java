@@ -1769,6 +1769,16 @@ public class GameHUD {
                 sr.rect(hpBarX + 3f, hpBarY + HP_H - 8f, (HP_W - 6f) * ratio, 3f);
             }
 
+            // SOUL SHIELD / ARMOR OVERLAY (HLW-03.4)
+            if (fish.hasShield() && fish.getMaxShieldHp() > 0f) {
+                float sRatio = MathUtils.clamp(fish.getShieldHp() / fish.getMaxShieldHp(), 0f, 1f);
+                sr.setColor(0.12f, 0.85f, 1.0f, 0.82f); // Neon Cyan Shield
+                sr.rect(hpBarX + 3f, hpBarY + 3f, (HP_W - 6f) * sRatio, HP_H - 6f);
+                // Specular line on top of shield
+                sr.setColor(0.70f, 0.95f, 1.0f, 0.90f);
+                sr.rect(hpBarX + 3f, hpBarY + HP_H - 7f, (HP_W - 6f) * sRatio, 2.5f);
+            }
+
             // Tick marks at 25%, 50%, 75%
             sr.setColor(0.08f, 0.10f, 0.16f, 0.75f);
             float innerW = HP_W - 6f;
@@ -2371,7 +2381,9 @@ public class GameHUD {
 
             // Fish Name with drop shadow
             String fishTitle = item.getName();
-            if (item instanceof Fish && ((Fish) item).getRarity() == Fish.Rarity.BOSS) {
+            if (item instanceof Fish && ((Fish) item).getRarity() == Fish.Rarity.LEGENDARY) {
+                fishTitle = "[LEGENDARY] " + fishTitle;
+            } else if (item instanceof Fish && ((Fish) item).getRarity() == Fish.Rarity.BOSS) {
                 fishTitle = "[BOSS] " + fishTitle;
             }
 
@@ -2379,8 +2391,12 @@ public class GameHUD {
             String hpString = "";
             if (item instanceof Fish) {
                 Fish f = (Fish) item;
-                hpString = (int) f.getCurrentHp() + " / " + (int) f.getMaxHp() + " HP (" +
-                                  (int) (MathUtils.clamp(f.getCurrentHp() / f.getMaxHp(), 0f, 1f) * 100) + "%)";
+                if (f.hasShield()) {
+                    hpString = (int) f.getCurrentHp() + " / " + (int) f.getMaxHp() + " HP [GIÁP: " + (int) f.getShieldHp() + "]";
+                } else {
+                    hpString = (int) f.getCurrentHp() + " / " + (int) f.getMaxHp() + " HP (" +
+                                      (int) (MathUtils.clamp(f.getCurrentHp() / f.getMaxHp(), 0f, 1f) * 100) + "%)";
+                }
             }
             layout.setText(font, hpString);
             float hpTextW = layout.width;
@@ -3607,6 +3623,38 @@ public class GameHUD {
         }
         if (player.isOverclockPotionActive()) {
             list.add(new ActiveBuffDisplay("Nước Bứt Phá", "+150% Tốc độ cuộn máy câu & -30% Max Tension", new Color(0.95f, 0.35f, 0.90f, 1f), new Color(0.26f, 0.06f, 0.24f, 0.95f)));
+        }
+
+        // --- Halloween HLW-05 Buffs Display ---
+        if (player.getHalloweenCandyTimer() > 0f) {
+            int mins = (int)(player.getHalloweenCandyTimer() / 60);
+            int secs = (int)(player.getHalloweenCandyTimer() % 60);
+            String tStr = String.format(java.util.Locale.US, "%02d:%02d", mins, secs);
+            list.add(new ActiveBuffDisplay("Kẹo Trick-or-Treat", "+50% Tỷ lệ cá Halloween & cá hiếm (Còn " + tStr + ")", new Color(1f, 0.65f, 0.15f, 1f), new Color(0.25f, 0.12f, 0.04f, 0.95f)));
+        }
+        if (player.getPumpkinLanternCharges() > 0) {
+            list.add(new ActiveBuffDisplay("Đèn Lồng Bí Ngô", "+30% Cửa sổ phản ứng Re-Hook cá nhảy (Còn " + player.getPumpkinLanternCharges() + " lần)", new Color(1f, 0.85f, 0.25f, 1f), new Color(0.24f, 0.16f, 0.05f, 0.95f)));
+        }
+        if (player.getFreeStaminaSkillCharges() > 0) {
+            list.add(new ActiveBuffDisplay("Độc Dược Ma Quái", "Miễn phí 0 Thể lực khi tung kỹ năng (Còn " + player.getFreeStaminaSkillCharges() + " lần)", new Color(0.85f, 0.45f, 1f, 1f), new Color(0.22f, 0.08f, 0.26f, 0.95f)));
+        }
+        if (player.getBloodMoonTalismanTimer() > 0f) {
+            String sStr = String.format(java.util.Locale.US, "%.1fs", player.getBloodMoonTalismanTimer());
+            list.add(new ActiveBuffDisplay("Bùa Huyết Nguyệt", "+10% Sát thương Chuẩn từ mọi nguồn (Còn " + sStr + ")", new Color(1f, 0.35f, 0.35f, 1f), new Color(0.28f, 0.06f, 0.08f, 0.95f)));
+        }
+        if (player.isGhostCandleActive()) {
+            list.add(new ActiveBuffDisplay("Nến Hồn Ma Bảo Hộ", "Bảo vệ đứt cước 1 lần! Hồi 50% Tension khi chạm đỉnh", new Color(0.35f, 0.95f, 0.95f, 1f), new Color(0.06f, 0.22f, 0.24f, 0.95f)));
+        }
+        boolean isBloodMoon = (player.getManualBloodMoonTimer() > 0f);
+        if (!isBloodMoon) {
+            java.time.LocalTime now = java.time.LocalTime.now();
+            int hour = now.getHour();
+            if (hour >= 18 || hour < 6) {
+                isBloodMoon = ((now.getMinute() / 15) % 2) == 0;
+            }
+        }
+        if (isBloodMoon) {
+            list.add(new ActiveBuffDisplay("Đêm Huyết Nguyệt", "x2 Tỷ lệ cá Halloween, +20% Vàng & +20% EXP", new Color(1f, 0.25f, 0.25f, 1f), new Color(0.30f, 0.04f, 0.06f, 0.95f)));
         }
         return list;
     }

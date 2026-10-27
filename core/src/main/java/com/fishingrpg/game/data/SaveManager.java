@@ -582,6 +582,16 @@ public class SaveManager {
                     buffs.setFishingNetActive(savedBuffs.isFishingNetActive());
                     buffs.setRiskyBaitActive(savedBuffs.isRiskyBaitActive());
                     buffs.setOverclockPotionActive(savedBuffs.isOverclockPotionActive());
+                    buffs.setWhetstoneCharges(savedBuffs.getWhetstoneCharges());
+                    buffs.setTreasureMagnetCharges(savedBuffs.getTreasureMagnetCharges());
+                    buffs.setSonarCharges(savedBuffs.getSonarCharges());
+                    buffs.setHalloweenCandyCharges(savedBuffs.getHalloweenCandyCharges());
+                    buffs.setHalloweenCandyTimer(savedBuffs.getHalloweenCandyTimer());
+                    buffs.setPumpkinLanternCharges(savedBuffs.getPumpkinLanternCharges());
+                    buffs.setFreeStaminaSkillCharges(savedBuffs.getFreeStaminaSkillCharges());
+                    buffs.setBloodMoonTalismanTimer(savedBuffs.getBloodMoonTalismanTimer());
+                    buffs.setGhostCandleActive(savedBuffs.isGhostCandleActive());
+                    buffs.setManualBloodMoonTimer(savedBuffs.getManualBloodMoonTimer());
                 }
             }
         } catch (Exception e) {

@@ -13,8 +13,11 @@ public class KeoManhAbility extends GameplayAbility {
 
     @Override
     public float getStaminaCost(AbilityContext ctx) {
-        if (ctx.player == null) return 20f;
-        return ctx.player.getSkillTree().getKeoManhStaminaCost();
+        float cost = (ctx == null || ctx.player == null) ? 20f : ctx.player.getSkillTree().getKeoManhStaminaCost();
+        if (ctx != null && ctx.currentFish != null && ctx.currentFish.getPassiveSkill("uy_ap_tu_than") != null) {
+            cost *= 1.20f;
+        }
+        return cost;
     }
 
     @Override
@@ -25,32 +28,31 @@ public class KeoManhAbility extends GameplayAbility {
     @Override
     public boolean execute(AbilityContext ctx) {
         float cost = getStaminaCost(ctx);
-        if (!ctx.player.consumeStamina(cost)) {
-            if (ctx.ftm != null) ctx.ftm.addText("Không đủ Thể lực (-" + (int) cost + ")!", 640f, 380f, new Color(1f, 0.45f, 0.4f, 1f));
+        if (!consumeStaminaOrFreeCharge(ctx)) {
             return false;
         }
 
-        float dmg = ctx.player.getSkillTree().getKeoManhDamage();
+        float rawDmg = ctx.player.getSkillTree().getKeoManhDamage();
         boolean crit = false;
         if (ctx.player.isSkillEquipped("bao_kich")) {
             if (MathUtils.random(100f) < ctx.player.getSkillTree().getBaoKichChance()) {
                 crit = true;
-                dmg *= 2f;
+                rawDmg *= 2f;
             }
         }
 
-        float dmgMult = ctx.fishingManager.getAbilitySystem().getDamageMultiplier();
-        float fishDef = 1f;
+        float finalDmg = calculateSkillDamage(rawDmg, ctx);
         if (ctx.currentFish != null) {
-            if (ctx.currentFish.getPassiveSkill("vo_cung") != null) fishDef -= 0.3f;
-            if (ctx.currentFish.getPassiveSkill("vay_cung") != null) fishDef -= 0.5f;
-            float finalDmg = dmg * dmgMult * Math.max(0.2f, fishDef);
-            ctx.currentFish.takeDamage(finalDmg);
-
-            if (ctx.ftm != null) {
-                ctx.ftm.addText(crit ? "BẠO KÍCH! -" + (int) finalDmg : "KÉO MẠNH! -" + (int) finalDmg,
-                        640f + MathUtils.random(-30, 30), 400f + MathUtils.random(-20, 20),
-                        crit ? Color.GOLD : new Color(1f, 0.45f, 0.2f, 1f));
+            if (ctx.fishingManager != null && ctx.fishingManager.fishPhantomInvulnTimer > 0f) {
+                if (ctx.ftm != null) ctx.ftm.addText("HƯ VÔ! (MIỄN NHIỄM)", 640f, 400f, Color.PURPLE);
+            } else {
+                ctx.currentFish.takeDamage(finalDmg);
+                applyTrueDamageBonusIfActive(finalDmg, ctx);
+                if (ctx.ftm != null) {
+                    ctx.ftm.addText(crit ? "BẠO KÍCH! -" + (int) finalDmg : "KÉO MẠNH! -" + (int) finalDmg,
+                            640f + MathUtils.random(-30, 30), 400f + MathUtils.random(-20, 20),
+                            crit ? Color.GOLD : new Color(1f, 0.45f, 0.2f, 1f));
+                }
             }
         }
 
@@ -58,13 +60,9 @@ public class KeoManhAbility extends GameplayAbility {
         ctx.fishingManager.combatMessage = crit
                 ? "BẠO KÍCH KÉO MẠNH! Xung lực bộc phá (-" + (int) cost + " Thể lực)"
                 : "KÉO MẠNH! Giật cần xung lực cực đại! (-" + (int) cost + " Thể lực)";
-
         ctx.audio.playSFX("sfx_skill");
-        ctx.vfx.triggerPlayerSkillVFX("keo_manh", 640f, 340f);
-        if (ctx.screenShake != null) {
-            if (crit) ctx.screenShake.shakeHeavy();
-            else ctx.screenShake.shakeMedium();
-        }
+        ctx.vfx.triggerPlayerSkillVFX("keo_manh", 640f, 360f);
+        if (ctx.screenShake != null) ctx.screenShake.shakeMedium();
 
         return true;
     }

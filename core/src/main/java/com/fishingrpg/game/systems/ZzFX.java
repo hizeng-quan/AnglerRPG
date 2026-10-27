@@ -93,7 +93,27 @@ public class ZzFX {
         LEVEL_UP,     // Thăng cấp nhân vật, mở khóa bản đồ
         REEL_CLICK,   // Bánh răng máy câu quay rè rè
         ALERT,        // Báo động cá boss, cảnh báo dây sắp đứt
-        EXPLOSION     // Tiếng nổ trầm sâu, rồng biển gầm
+        EXPLOSION,    // Tiếng nổ trầm sâu, rồng biển gầm
+
+        // --- Halloween HLW-05 Presets ---
+        HALLOWEEN_CANDY,       // Ăn kẹo ma thuật (Crunchy bell chime)
+        PUMPKIN_LANTERN,       // Thắp đèn lồng bí ngô (Fire whoosh)
+        GHOST_POTION,          // Uống độc dược ma quái (Bubbling potion)
+        BLOOD_MOON_TALISMAN,   // Đốt bùa huyết nguyệt (Resonant burn)
+        GHOST_CANDLE,          // Nến hồn ma cứu đứt cước (Ethereal shield)
+        HALLOWEEN_CATCH,       // Bắt được cá Halloween (Gothic victory chime)
+        BLOOD_MOON_ROAR,       // Bầu trời Huyết Nguyệt giáng trần (Thunder roar)
+        FISH_SKELETON,         // Cá Skeleton kêu (Bone clatter)
+        FISH_JACK_O,           // Lửa bí ngô bùng (Fiery chuckle)
+        FISH_DAU_LAU,          // Tiếng hú đầu lâu (Cursed screech)
+        FISH_DANG_MA,          // Bóng ma u hồn (Ghostly wisp)
+        FISH_FRANKEN,          // Frankenstein phóng sét (Electric zap)
+        FISH_HAI_XA,           // Hải xà rít nọc độc (Venom hiss)
+        FISH_THANATOS,         // Chuông Thần Chết vang vọng (Death knell bell)
+        SKILL_SAM_SET,         // Sấm sét hồi sinh (Mega thunder)
+        SKILL_TIENG_HU,        // Tiếng hú địa ngục câm lặng (Silence roar)
+        SKILL_VUC_XOAY,        // Vực xoáy âm ty cuộn sóng (Whirlpool vortex)
+        SKILL_AM_HON           // Triệu hồn tạo Soul Shield (Soul barrier)
     }
 
     /**
@@ -273,6 +293,224 @@ public class ZzFX {
                 p.shape = 5;
                 p.noise = 1.0f;
                 p.slide = -4f;
+                break;
+
+            // --- HLW-05 Halloween Presets ---
+            case HALLOWEEN_CANDY:
+                p.volume = 0.9f;
+                p.frequency = 880f;
+                p.attack = 0.005f;
+                p.decay = 0.04f;
+                p.sustain = 0.08f;
+                p.release = 0.22f;
+                p.shape = 0; // Sine
+                p.pitchJump = 16f;
+                p.pitchJumpTime = 0.04f;
+                p.bitCrush = 0.12f;
+                break;
+
+            case PUMPKIN_LANTERN:
+                p.volume = 0.95f;
+                p.frequency = 320f;
+                p.attack = 0.02f;
+                p.decay = 0.08f;
+                p.sustain = 0.12f;
+                p.release = 0.35f;
+                p.shape = 5; // Noise flame whoosh
+                p.noise = 0.75f;
+                p.slide = 6f;
+                break;
+
+            case GHOST_POTION:
+                p.volume = 0.9f;
+                p.frequency = 460f;
+                p.attack = 0.01f;
+                p.decay = 0.05f;
+                p.sustain = 0.15f;
+                p.release = 0.30f;
+                p.shape = 3; // Tan bubble
+                p.modulation = 40f;
+                p.tremolo = 0.5f;
+                p.slide = -8f;
+                break;
+
+            case BLOOD_MOON_TALISMAN:
+                p.volume = 1.0f;
+                p.frequency = 210f;
+                p.attack = 0.03f;
+                p.decay = 0.12f;
+                p.sustain = 0.20f;
+                p.release = 0.50f;
+                p.shape = 2; // Sawtooth
+                p.slide = -5f;
+                p.noise = 0.4f;
+                break;
+
+            case GHOST_CANDLE:
+                p.volume = 1.0f;
+                p.frequency = 650f;
+                p.attack = 0.01f;
+                p.decay = 0.10f;
+                p.sustain = 0.25f;
+                p.release = 0.60f;
+                p.shape = 0; // Sine resonance
+                p.modulation = 35f;
+                p.sustainVolume = 0.9f;
+                break;
+
+            case HALLOWEEN_CATCH:
+                p.volume = 1.0f;
+                p.frequency = 440f;
+                p.attack = 0.01f;
+                p.decay = 0.08f;
+                p.sustain = 0.30f;
+                p.release = 0.65f;
+                p.shape = 0;
+                p.pitchJump = 19f;
+                p.pitchJumpTime = 0.10f;
+                p.slide = 3f;
+                break;
+
+            case BLOOD_MOON_ROAR:
+                p.volume = 1.0f;
+                p.frequency = 55f;
+                p.attack = 0.05f;
+                p.decay = 0.30f;
+                p.sustain = 0.40f;
+                p.release = 0.90f;
+                p.shape = 5; // Thunder roar
+                p.noise = 0.95f;
+                p.slide = -8f;
+                break;
+
+            case FISH_SKELETON:
+                p.volume = 0.85f;
+                p.frequency = 600f;
+                p.attack = 0.002f;
+                p.decay = 0.02f;
+                p.sustain = 0f;
+                p.release = 0.06f;
+                p.shape = 4; // Bitnoise clatter
+                p.bitCrush = 0.4f;
+                p.repeatTime = 0.05f;
+                break;
+
+            case FISH_JACK_O:
+                p.volume = 0.85f;
+                p.frequency = 280f;
+                p.attack = 0.01f;
+                p.decay = 0.06f;
+                p.sustain = 0.08f;
+                p.release = 0.25f;
+                p.shape = 1;
+                p.tremolo = 0.3f;
+                p.slide = 5f;
+                break;
+
+            case FISH_DAU_LAU:
+                p.volume = 0.9f;
+                p.frequency = 350f;
+                p.attack = 0.01f;
+                p.decay = 0.08f;
+                p.sustain = 0.12f;
+                p.release = 0.35f;
+                p.shape = 2; // Sawtooth screech
+                p.slide = -12f;
+                p.modulation = 50f;
+                break;
+
+            case FISH_DANG_MA:
+                p.volume = 0.8f;
+                p.frequency = 520f;
+                p.attack = 0.08f;
+                p.decay = 0.15f;
+                p.sustain = 0.20f;
+                p.release = 0.45f;
+                p.shape = 0; // Sine wisp
+                p.tremolo = 0.6f;
+                break;
+
+            case FISH_FRANKEN:
+                p.volume = 0.95f;
+                p.frequency = 400f;
+                p.attack = 0.005f;
+                p.decay = 0.04f;
+                p.sustain = 0.06f;
+                p.release = 0.20f;
+                p.shape = 4; // Bitnoise zap
+                p.noise = 0.6f;
+                break;
+
+            case FISH_HAI_XA:
+                p.volume = 0.85f;
+                p.frequency = 750f;
+                p.attack = 0.02f;
+                p.decay = 0.06f;
+                p.sustain = 0.10f;
+                p.release = 0.30f;
+                p.shape = 5; // Hiss noise
+                p.noise = 0.85f;
+                p.slide = -10f;
+                break;
+
+            case FISH_THANATOS:
+                p.volume = 1.0f;
+                p.frequency = 110f; // Low A2 bell
+                p.attack = 0.01f;
+                p.decay = 0.25f;
+                p.sustain = 0.35f;
+                p.release = 0.95f;
+                p.shape = 0; // Deep bell chime
+                p.sustainVolume = 0.8f;
+                p.tremolo = 0.2f;
+                break;
+
+            case SKILL_SAM_SET:
+                p.volume = 1.0f;
+                p.frequency = 75f;
+                p.attack = 0.01f;
+                p.decay = 0.18f;
+                p.sustain = 0.25f;
+                p.release = 0.70f;
+                p.shape = 5;
+                p.noise = 0.9f;
+                p.slide = -6f;
+                break;
+
+            case SKILL_TIENG_HU:
+                p.volume = 1.0f;
+                p.frequency = 160f;
+                p.attack = 0.03f;
+                p.decay = 0.15f;
+                p.sustain = 0.30f;
+                p.release = 0.60f;
+                p.shape = 2;
+                p.modulation = 60f;
+                p.slide = -8f;
+                break;
+
+            case SKILL_VUC_XOAY:
+                p.volume = 0.95f;
+                p.frequency = 140f;
+                p.attack = 0.05f;
+                p.decay = 0.20f;
+                p.sustain = 0.35f;
+                p.release = 0.65f;
+                p.shape = 5;
+                p.noise = 0.8f;
+                p.tremolo = 0.5f;
+                break;
+
+            case SKILL_AM_HON:
+                p.volume = 0.95f;
+                p.frequency = 480f;
+                p.attack = 0.02f;
+                p.decay = 0.12f;
+                p.sustain = 0.28f;
+                p.release = 0.55f;
+                p.shape = 0;
+                p.modulation = 45f;
+                p.slide = 4f;
                 break;
         }
         return p;
@@ -509,6 +747,42 @@ public class ZzFX {
             return createPresetSound(Preset.ALERT);
         } else if (name.contains("explosion") || name.contains("boom") || name.contains("boss")) {
             return createPresetSound(Preset.EXPLOSION);
+        } else if (name.contains("candy")) {
+            return createPresetSound(Preset.HALLOWEEN_CANDY);
+        } else if (name.contains("pumpkin_lantern") || name.contains("den_long")) {
+            return createPresetSound(Preset.PUMPKIN_LANTERN);
+        } else if (name.contains("ghost_potion") || name.contains("doc_duoc")) {
+            return createPresetSound(Preset.GHOST_POTION);
+        } else if (name.contains("blood_moon_talisman") || name.contains("bua_huyet_nguyet")) {
+            return createPresetSound(Preset.BLOOD_MOON_TALISMAN);
+        } else if (name.contains("ghost_candle") || name.contains("nen_hon_ma")) {
+            return createPresetSound(Preset.GHOST_CANDLE);
+        } else if (name.contains("halloween_catch")) {
+            return createPresetSound(Preset.HALLOWEEN_CATCH);
+        } else if (name.contains("blood_moon_roar")) {
+            return createPresetSound(Preset.BLOOD_MOON_ROAR);
+        } else if (name.contains("skeleton")) {
+            return createPresetSound(Preset.FISH_SKELETON);
+        } else if (name.contains("jack_o")) {
+            return createPresetSound(Preset.FISH_JACK_O);
+        } else if (name.contains("dau_lau")) {
+            return createPresetSound(Preset.FISH_DAU_LAU);
+        } else if (name.contains("dang_ma")) {
+            return createPresetSound(Preset.FISH_DANG_MA);
+        } else if (name.contains("franken")) {
+            return createPresetSound(Preset.FISH_FRANKEN);
+        } else if (name.contains("hai_xa")) {
+            return createPresetSound(Preset.FISH_HAI_XA);
+        } else if (name.contains("thanatos")) {
+            return createPresetSound(Preset.FISH_THANATOS);
+        } else if (name.contains("sam_set")) {
+            return createPresetSound(Preset.SKILL_SAM_SET);
+        } else if (name.contains("tieng_hu")) {
+            return createPresetSound(Preset.SKILL_TIENG_HU);
+        } else if (name.contains("vuc_xoay")) {
+            return createPresetSound(Preset.SKILL_VUC_XOAY);
+        } else if (name.contains("am_hon")) {
+            return createPresetSound(Preset.SKILL_AM_HON);
         }
 
         // Mặc định tạo tiếng click nhẹ nếu không trùng khớp tên

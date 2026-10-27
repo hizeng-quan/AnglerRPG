@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class PatchNotesDialog {
 
-    public static final String CURRENT_VERSION = "v0.5.3.5";
+    public static final String CURRENT_VERSION = "v0.5.5.1";
     private static final String PREF_LAST_SEEN_VERSION = "last_seen_patch_notes_version";
 
     private final FishingRPG game;
@@ -91,8 +91,96 @@ public class PatchNotesDialog {
         // --- TAB 0: BẢN TIN CẬP NHẬT THEO TỪNG PHIÊN BẢN ---
         // =====================================================================
 
-        // ===== PHIÊN BẢN v0.5.3.5 (MỚI NHẤT) =====
-        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.3.5 (MỚI NHẤT - RUNG LẮC CĂNG DÂY REALTIME & KẾ HOẠCH GIAI ĐOẠN 3)"));
+        // ===== PHIÊN BẢN v0.5.5.1 (MỚI NHẤT) =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.5.1 (MỚI NHẤT - GIAI ĐOẠN 6: KIỂM THỬ CÂN BẰNG CLI, AN TOÀN SAVE DATA & ĐÓNG GÓI CHIẾN DỊCH HALLOWEEN)"));
+
+        patchNotesItems.add(new UpdateItem("CÂN BẰNG COMBAT", "Kiểm Thử Cân Bằng CLI Monte Carlo 500 Lượt & Đại Chiến Thanatos", new Color(1.0f, 0.45f, 0.25f, 1f))
+                .addPoint("Mô Phỏng 500 Lượt Boss Thanatos: Win Rate đạt chuẩn 85.2% đối với trang bị 6★ Huyết Nguyệt Thần Vương; Mean TTK đạt 73.16s chuẩn trải nghiệm boss kịch tính.")
+                .addPoint("Mô Phỏng Kinh Tế 28 Ngày (Mesa Framework 500 agents): Đảm bảo thu nhập Vàng & Kim Cương cân đối vững chắc trên cả 3 nhóm người chơi (Casual, Grinder, Hardcore), triệt tiêu lạm phát.")
+        );
+
+        patchNotesItems.add(new UpdateItem("AN TOÀN FILE SAVE", "Bảo Toàn Trọn Vẹn Dữ Liệu Buff & Mã Hóa AES-256 + Checksum SHA-256", new Color(0.35f, 0.85f, 1f, 1f))
+                .addPoint("Sửa Lỗi Đồng Bộ Buff Khi Nạp Game: Khắc phục triệt để việc thiếu 10 trường buff trong SaveManager.java, bảo toàn 100% thời gian đếm ngược Kẹo Trick-or-Treat, số lần Đèn Lồng Bí Ngô, Độc Dược Ma Quái, Bùa Huyết Nguyệt và Nến Hồn Ma.")
+                .addPoint("Bảo Mật & Chống Can Thiệp: Toàn bộ dữ liệu xuất/nạp .sav được mã hóa AES-256 chuẩn quân sự với chữ ký số SHA-256 bảo đảm tính toàn vẹn 100%.")
+        );
+
+        patchNotesItems.add(new UpdateItem("ĐÓNG GÓI PHÁT HÀNH", "Biên Dịch Độc Lập & Đóng Gói Trọn Bộ Chiến Dịch Halloween", new Color(0.45f, 0.95f, 0.45f, 1f))
+                .addPoint("Build JAR Độc Lập: Đóng gói toàn bộ tài nguyên, 27 âm thanh ZzFX RAM và 13 đồ họa vector vào tệp AnglerRPG.jar độc lập.")
+                .addPoint("Bộ 3 Tài Liệu Chuẩn Hóa: Cập nhật đầy đủ CHANGELOG.md, TASKS.md và Bản tin cập nhật PatchNotesDialog trong game.")
+        );
+
+        // ===== PHIÊN BẢN v0.5.5.0 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.5.0 (GIAI ĐOẠN 5: ĐẠO CỤ TIÊU HAO, BẦU TRỜI HUYẾT NGUYỆT & ÂM THANH ZZFX)"));
+
+        patchNotesItems.add(new UpdateItem("ĐẠO CỤ HALLOWEEN", "Bộ 5 Đạo Cụ Tiêu Hao Độc Quyền (ItemDatabase & PlayerBuffs)", new Color(1.0f, 0.65f, 0.15f, 1f))
+                .addPoint("Kẹo Trick-or-Treat (300V): Tăng +50% tỷ lệ bắt gặp cá Halloween và cá hiếm trong 15 phút (900s).")
+                .addPoint("Đèn Lồng Bí Ngô (700V): Hiệu ứng Quang Minh Trừ Tà tăng +30% thời gian phản ứng Re-Hook khi cá tiếp nước (3 lần).")
+                .addPoint("Độc Dược Ma Quái (900V): 3 lần dùng kỹ năng tiếp theo miễn phí 0 Thể lực, tự động reset sau khi câu xong.")
+                .addPoint("Bùa Huyết Nguyệt (1000V): Trong trận gây thêm +10% Sát thương Chuẩn từ mọi nguồn (15s); Pre-combat kích hoạt tức thì Đêm Huyết Nguyệt 15 phút.")
+                .addPoint("Nến Hồn Ma Bảo Hộ (1200V): Bảo hiểm đứt cước 1 lần/trận; khi Tension chạm 100% hoặc trúng Lưỡi Hái Thanatos, nến sẽ cứu đứt dây và kéo Tension về 50%.")
+                .addPoint("Vector Art Chuyên Nghiệp: Vẽ vector LibGDX đa tầng riêng biệt cho cả 5 món đồ trong LootVisualRenderer.")
+        );
+
+        patchNotesItems.add(new UpdateItem("KHÍ QUYỂN HUYẾT NGUYỆT", "Bầu Trời Huyết Nguyệt Chu Kỳ 15 Phút & Chuyển Sắc Êm Đềm (PlayScreen.java)", new Color(0.95f, 0.25f, 0.25f, 1f))
+                .addPoint("Chu kỳ đối xứng 15m/15m: Tự động kích hoạt luân phiên từ 18:00 đêm đến 06:00 sáng hôm sau.")
+                .addPoint("Chuyển sắc êm dịu 3.0s: Chuyển màu nền đỏ rượu Gothic và hiển thị trăng máu mượt mà không làm ngắt nhịp hay gián đoạn trận câu.")
+                .addPoint("Buff Đêm Huyết Nguyệt: x2.0 Tỷ lệ xuất hiện của toàn bộ 7 loài cá Halloween, +20% Vàng & +20% EXP nhận được, 100% cá HLW và 25% cá thường tỏa hào quang đỏ rực, cân bằng tỷ lệ rơi Rương và Kẹo.")
+        );
+
+        patchNotesItems.add(new UpdateItem("NÂNG CẤP SHOP", "Quầy Halloween Trong Shop Thường & Shop Sự Kiện 100 EP/Ngày", new Color(0.35f, 0.85f, 1f, 1f))
+                .addPoint("Quầy Halloween Shop Thường: Mở tab 'HALLOWEEN' bán 5 món đạo cụ bằng Vàng với khung viền neon cam bí ngô rực rỡ.")
+                .addPoint("Shop Sự Kiện: Hoàn thành 4/6 nhiệm vụ ngày nhận ngay 100 Điểm SK (EP); đổi Set Cần Bí Ngô Limited (Cần 500, Dây 350, Móc 350), Vé Gacha Huyết Nguyệt 60 EP (vô hạn), Vé Gacha Tiêu Chuẩn 30 EP (vô hạn), Túi 15,000 Vàng 25 EP.")
+        );
+
+        patchNotesItems.add(new UpdateItem("ÂM THANH THỦ TỤC", "Bộ 27 Âm Thanh ZzFX Nạp Trực Tiếp Trong RAM (ZzFX.java)", new Color(0.75f, 0.45f, 1.0f, 1f))
+                .addPoint("Không tốn dung lượng file bên ngoài: Tự động tổng hợp dạng sóng PCM 16-bit trong bộ nhớ RAM, bảo đảm không bao giờ gặp lỗi thiếu file âm thanh.")
+                .addPoint("Đầy đủ 27 hiệu ứng: 5 âm thanh đạo cụ, bắt cá Halloween, tiếng sấm Huyết Nguyệt, âm thanh kéo/idle 7 loài cá và 4 kỹ năng ma quái.")
+        );
+
+        // ===== PHIÊN BẢN v0.5.4.3 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.4.3 (TINH CHỈNH GIAO DIỆN SỔ TAY & TẠO HÌNH CÁ BÍ ẨN ???)"));
+
+        patchNotesItems.add(new UpdateItem("TỐI ƯU GIAO DIỆN", "Khắc Phục Lỗi Ký Tự Vuông & Căn Chỉnh Bố Cục Sổ Tay (CatalogScreen.java)", new Color(0.35f, 0.85f, 1f, 1f))
+                .addPoint("Xóa bỏ hoàn toàn ký tự vuông: Loại bỏ các emoji không hỗ trợ font bitmap, chuẩn hóa chuỗi phần thưởng thành văn bản rõ nét (+50 KC • +5,000 Vàng • +2,500 XP) và nút nhận Kim Cương (+15 KC NHẬN).")
+                .addPoint("Loại bỏ widget tiền tệ góc trên: Tối ưu không gian hàng Tab, đưa 4 Tab bản đồ về trung tâm cân đối.")
+                .addPoint("Hạ thấp khung thẻ Halloween (Y=520f): Hiển thị trọn vẹn viền trên (Top Border) cùng 4 góc Gothic bo tròn, không còn bị cắt xén bởi ScissorStack.")
+                .addPoint("Nâng cấp thanh tiến trình: Phóng to kích thước lên 280px x 16px, rút gọn nhãn '0/7 Loài' đặt phía trên thanh, tách biệt 3 cột không còn bị đè chữ.")
+        );
+
+        patchNotesItems.add(new UpdateItem("MỸ THUẬT VECTOR", "Thiết Kế Lại Toàn Diện Tạo Hình Cá Bí Ẩn '???' (drawSilhouetteFish)", new Color(0.95f, 0.40f, 0.85f, 1f))
+                .addPoint("Lột xác từ khối tròn đơn điệu thành mô hình bóng đen cá săn mồi hydrodynamic thể thao: Vây đuôi xẻ hình trăng khuyết, vây lưng cong vút, vây ngực vuốt nhọn, đường viền phản quang và mắt bí ẩn huyền bí áp dụng trên toàn bộ 4 bản đồ Sổ tay.")
+        );
+
+        // ===== PHIÊN BẢN v0.5.4.2 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.4.2 (BACKGROUND & BỐ CỤC ĐỘC QUYỀN SỔ TAY HALLOWEEN)"));
+
+        patchNotesItems.add(new UpdateItem("GIAO DIỆN & MỸ THUẬT", "Background Riêng & Bố Cục Bệ Thờ 2 Tầng Cho Tab Halloween (CatalogScreen.java)", new Color(0.95f, 0.40f, 0.85f, 1f))
+                .addPoint("Background Huyết Nguyệt & Khí Quyển Ma Quái: Bầu trời đêm tím thẫm Gothic, Mặt Trăng Huyết Nguyệt tỏa 3 tầng hào quang nguyệt thực đỏ rực, các lớp sương mù u linh dập dềnh cùng tàn lửa bí ngô và linh hồn tím bay lượn thay thế bọt biển thông thường.")
+                .addPoint("Khắc Phục Triệt Để Tràn & Đè Chữ: Bỏ hoàn toàn bố cục 2 cột chật chội; thay thế bằng Khung Thờ Ma Quái trung tâm rộng 1160px với thanh tiến độ và phần thưởng (+50 KC, +5000V, +2500XP) hiển thị thông thoáng, không còn chồng lấn.")
+                .addPoint("Bố Cục Bệ Thờ 2 Tầng (2-Tier Altar): Tầng 1 gồm 4 loài cơ bản & hiếm rộng 268px x 175px; Tầng 2 gồm 3 loài Tinh Anh & Siêu Boss (Frankenstein, Hải Xà Dạ Xoa, Thanatos) rộng 360px x 195px với viền plasma đỏ và nhãn huy chương đặc quyền.")
+                .addPoint("Trải Nghiệm Toàn Diện: Toàn bộ 7 loài hiển thị trọn vẹn trong một khung nhìn không cần cuộn trang; tương tác xem kỹ năng và nhận Kim Cương mở khóa cực kỳ mượt mà.")
+        );
+
+        // ===== PHIÊN BẢN v0.5.4.1 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.4.1 (SỬA LỖI SỔ TAY & TẠO HÌNH VECTOR 7 LOÀI CÁ HALLOWEEN)"));
+
+        patchNotesItems.add(new UpdateItem("SỬA LỖI", "Khắc Phục Lỗi Crash Khi Mở Sổ Tay Thủy Tộc (CatalogScreen)", new Color(0.25f, 0.85f, 0.50f, 1f))
+                .addPoint("Khắc phục triệt để ngoại lệ ArrayIndexOutOfBoundsException: Khắc phục lỗi mảng bộ nhớ đệm thống kê bộ sưu tập khai báo độ dài 3 trong khi hệ thống đã mở rộng Tab thứ 4 (HALLOWEEN).")
+                .addPoint("Sổ Tay Thủy Tộc hiện mở mượt mà, chuyển đổi hoàn hảo giữa cả 4 bản đồ: Ao Làng, Bãi Biển, Đảo Xa và Halloween.")
+        );
+
+        patchNotesItems.add(new UpdateItem("ĐỒ HỌA VECTOR", "Giai Đoạn 4 (HLW-04.3): Tạo Hình Vector 7 Loài Cá Halloween Độc Bản", new Color(0.95f, 0.35f, 0.85f, 1f))
+                .addPoint("Cá Skeleton (Common): Cột sống và hàng xương sườn trắng ngà lộ rõ, hốc mắt đen sâu hoắm phát ánh sáng lân tinh xanh cyan huyền bí.")
+                .addPoint("Cá Đèn Lồng Jack-o' (Uncommon): Thân hình quả bí ngô cam mập tròn trĩnh, nụ cười ranh mãnh Jack-o'-Lantern rực lửa vàng chói lọi, cuống vây lưng lá bí xanh gai uốn lượn.")
+                .addPoint("Cá Đầu Lâu Huyết Nguyệt (Rare): Thân hình cá săn mồi đen tuyền vệt sọc đỏ huyết mạch, đầu cá bọc chiếc sọ sừng nhọn uy hiếp, mắt đỏ ruby rực cháy và vây đuôi trăng khuyết chém sóng.")
+                .addPoint("Cá Dạng Ma (Epic): Thiết kế bán trong suốt huyền ảo (alpha = 0.55f), thân cá bồng bềnh như dải lụa ma trơi tan biến thành vệt khói tím u linh, đôi mắt u buồn phát sáng.")
+                .addPoint("Thủy Quái Frankenstein (Epic): Thân mình chắp vá từ các mảng da xanh rêu và xám tro sần sùi, 2 bu-lông kim loại cắm xuyên mang, đường chỉ khâu đen sắc nét và tia chớp điện nổ lách tách.")
+                .addPoint("Hải Xà Dạ Xoa (Legendary): Thân rồng biển hắc ám uốn lượn đa khúc bọc gai xương nhọn hoắt, mắt dạ xoa rực lửa tím tà ác, hàm răng nanh sắc lẹm phun khói độc âm ty và vây lưng dạng lưỡi cưa phát sáng.")
+                .addPoint("Kình Ngư Tử Thần Thanatos (World Boss): Kích thước vĩ đại choáng ngợp, toàn thân đen hắc ám bọc phiến giáp xương gai nhọn chĩa ngược, vây lưng lưỡi hái thần chết vươn cao với lưỡi plasma huyết sắc, 3 tầng hào quang ma quái và linh hồn bay lơ lửng.")
+        );
+
+        // ===== PHIÊN BẢN v0.5.3.5 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.3.5 (RUNG LẮC CĂNG DÂY REALTIME & KẾ HOẠCH GIAI ĐOẠN 3)"));
 
         patchNotesItems.add(new UpdateItem("TRẢI NGHIỆM CHIẾN ĐẤU", "Tối Ưu Hiệu Ứng Rung Lắc Camera Khi Căng Dây (VFX-SHK-01)", new Color(1f, 0.55f, 0.20f, 1f))
                 .addPoint("Hạ thấp ngưỡng bắt đầu rung lắc: Camera bắt đầu rung nhẹ ngay từ mốc 80% Tension (thay vì 88% như trước), giúp người chơi sớm cảm nhận độ căng thẳng khi giằng co.")
@@ -101,10 +189,11 @@ public class PatchNotesDialog {
         );
 
         patchNotesItems.add(new UpdateItem("LỘ TRÌNH SỰ KIỆN", "Kế Hoạch Giai Đoạn 3: Bộ 7 Cá Halloween Cân Bằng Cao Cấp (HLW-03)", new Color(0.95f, 0.35f, 0.85f, 1f))
-                .addPoint("Chuẩn độ khó vượt trội Map Đảo Xa: Cân bằng toàn diện HP và Damage cho 7 loài cá Halloween: Cá Skeleton (400 HP), Cá Đèn Lồng Jack-o' (720 HP), Cá Đầu Lâu Huyết Nguyệt (1,300 HP), Cá Dạng Ma (2,000 HP), Frankenstein (2,250 HP), Hải Xà Dạ Xoa (4,000 HP - thay thế Bạch Tuộc) và Siêu Boss Thanatos (6,666 HP, 235 dmg/s).")
+                .addPoint("Chuẩn độ khó vượt trội Map Đảo Xa: Cân bằng toàn diện HP và Damage cho 7 loài cá Halloween: Cá Skeleton (400 HP), Cá Đèn Lồng Jack-o' (720 HP), Cá Đầu Lâu Huyết Nguyệt (1,300 HP), Cá Dạng Ma (2,000 HP), Frankenstein (2,250 HP), Hải Xà Dạ Xoa (4,000 HP - thay thế Bạch Tuộc) và Siêu Boss Thanatos (6,666 HP, 235 dmg/s). Đồng thời buff máu Siêu Boss Cá Cờ Xanh Đảo Xa lên 3,600 HP.")
                 .addPoint("Bộ kỹ năng độc nhất vô nhị: Thân xương giảm 20% kéo thường nhưng nhận +50% sát thương từ MỌI KỸ NĂNG; Đèn ma thiêu đốt bốc hơi 3 Thể lực/s; Cá đầu lâu hồi 1% HP/s khi cần thủ kiệt sức; Frankenstein phóng điện ngắt kéo 0.6s & trừ 10 Thể lực; Hải Xà Dạ Xoa siết cứng dây và phun độc âm ty.")
-                .addPoint("Đại chiến Trùm Thanatos 3 Pha: Uy Áp Thần Chết tăng +20% thể lực tiêu hao kỹ năng người chơi; Tiếng Hú Địa Ngục vô hiệu hóa chiêu thức tiếp theo; Vực Xoáy Âm Ty hồi máu; Âm Hồn Quấy Phá tạo Giáp Soul Shield 500 HP (khắc chế bằng Phá Giáp); Pha cuối giảm 30% hồi chiêu các skill và Tuyệt kỹ Liên Hoàn Trảm 2 Nhịp Re-Hook nghẹt thở.")
-                .addPoint("Hệ thống Hàng Đợi Kỹ Năng & Global Cooldown (Skill Queue & GCD): Giãn cách 2.5s - 3.0s an toàn giữa các chiêu thức của cá nhiều skill, loại bỏ hoàn toàn tình trạng kỹ năng bị kích hoạt đè lấp lẫn nhau.")
+                .addPoint("Hệ Thống Giáp & Phá Giáp Xuyên Máu: Lớp Giáp linh hồn (Soul Shield 500 HP) hiển thị dải Cyan trên thanh HP cá; sát thương thường trừ vào giáp trước, kỹ năng Phá Giáp có sát thương gốc XUYÊN THẲNG VÀO MÁU THẬT và sát thương cộng thêm trừ vào Lớp Giáp.")
+                .addPoint("Đại chiến Trùm Thanatos 3 Pha & Tuyệt kỹ 2 Nhịp Cộng Dồn: Tiếng Hú câm lặng chiêu tiếp theo; Vực Xoáy hồi 3% HP; Pha cuối giảm 30% hồi chiêu; Tuyệt kỹ Liên Hoàn Trảm 2 nhịp cộng dồn thành công: 2/2 choáng boss 3.5s nhận x2 dmg; 1/2 phạt nhẹ giảm 40% lực kéo 4s & trừ 15 TL (không tăng tension); 0/2 phạt +30 Tension và khóa skill/hồi TL trong 5s; đứt dây tức thì nếu Tension > 90%!")
+                .addPoint("Hệ thống Hàng Đợi Kỹ Năng & Giãn Global Cooldown (5.0s - 6.0s): Giãn cách an toàn 5-6s giữa các chiêu thức của cá nhiều skill, loại bỏ hoàn toàn tình trạng kỹ năng bị kích hoạt đè lấp lẫn nhau.")
         );
 
         // ===== PHIÊN BẢN v0.5.3.4 =====

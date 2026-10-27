@@ -78,6 +78,11 @@ public class CollectionDatabase {
             
         collections.add(new Collection("dx_huyen_thoai_bien_sau", "Huyền Thoại Biển Sâu", 25000, 12000, 120,
             "Cá Cờ Xanh Khổng Lồ"));
+
+        // --- HALLOWEEN TOÀN CẦU (HLW-03.6) ---
+        collections.add(new Collection("hlw_dem_ma_quai", "Huyền Thoại Đêm Halloween", 50000, 25000, 500,
+            "Cá Skeleton", "Cá Đèn Lồng Jack-o'", "Cá Đầu Lâu Huyết Nguyệt",
+            "Cá Dạng Ma", "Thủy Quái Frankenstein", "Hải Xà Dạ Xoa", "Kình Ngư Tử Thần Thanatos"));
     }
 
     public static List<Collection> getAllCollections() {

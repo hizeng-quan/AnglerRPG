@@ -93,6 +93,7 @@ public class Player {
     public void update(float delta) {
         float passiveRegenBonus = isSkillEquipped("hoi_phuc_nhanh") ? skillTree.getSkill("hoi_phuc_nhanh").getEffect() : 0f;
         combat.update(delta, passiveRegenBonus);
+        buffs.update(delta);
         if (combat.justFilledStamina) {
             this.justFilledStamina = true;
             combat.justFilledStamina = false;
@@ -101,6 +102,7 @@ public class Player {
     public void addStaminaRegen(float totalAmount, float ratePerSecond) { combat.addStaminaRegen(totalAmount, ratePerSecond); }
     public void resetForNewEncounter() { combat.resetForNewEncounter(); }
     public void increaseTension(float amount) { combat.increaseTension(amount); }
+    public void setLineTension(float value)   { combat.setLineTension(value); }
     public void decreaseTension(float amount) { combat.decreaseTension(amount); }
     public boolean isLineBroken() { return combat.isLineBroken(); }
     public boolean consumeStamina(float amount) { return combat.consumeStamina(amount); }
@@ -223,6 +225,30 @@ public class Player {
     public int getSonarCharges() { return buffs.getSonarCharges(); }
     public void addSonarCharges(int charges) { buffs.addSonarCharges(charges); }
     public void consumeSonarCharge() { buffs.consumeSonarCharge(); }
+    public int getHalloweenCandyCharges() { return buffs.getHalloweenCandyCharges(); }
+    public void addHalloweenCandyCharges(int amount) { buffs.addHalloweenCandyCharges(amount); }
+    public void consumeHalloweenCandyCharge() { buffs.consumeHalloweenCandyCharge(); }
+    public float getHalloweenCandyTimer() { return buffs.getHalloweenCandyTimer(); }
+    public void setHalloweenCandyTimer(float v) { buffs.setHalloweenCandyTimer(v); }
+    public void addHalloweenCandyTimer(float sec) { buffs.addHalloweenCandyTimer(sec); }
+
+    public int getPumpkinLanternCharges() { return buffs.getPumpkinLanternCharges(); }
+    public void addPumpkinLanternCharges(int amount) { buffs.addPumpkinLanternCharges(amount); }
+    public void consumePumpkinLanternCharge() { buffs.consumePumpkinLanternCharge(); }
+
+    public int getFreeStaminaSkillCharges() { return buffs.getFreeStaminaSkillCharges(); }
+    public void addFreeStaminaSkillCharges(int amount) { buffs.addFreeStaminaSkillCharges(amount); }
+    public void consumeFreeStaminaSkillCharge() { buffs.consumeFreeStaminaSkillCharge(); }
+    public void resetFreeStaminaSkillCharges() { buffs.setFreeStaminaSkillCharges(0); }
+
+    public float getBloodMoonTalismanTimer() { return buffs.getBloodMoonTalismanTimer(); }
+    public void setBloodMoonTalismanTimer(float v) { buffs.setBloodMoonTalismanTimer(v); }
+
+    public boolean isGhostCandleActive() { return buffs.isGhostCandleActive(); }
+    public void setGhostCandleActive(boolean v) { buffs.setGhostCandleActive(v); }
+
+    public float getManualBloodMoonTimer() { return buffs.getManualBloodMoonTimer(); }
+    public void setManualBloodMoonTimer(float v) { buffs.setManualBloodMoonTimer(v); }
 
     // =========================================================================
     // PlayerEconomy Delegation

@@ -14,6 +14,18 @@ import com.badlogic.gdx.graphics.Color;
 import com.fishingrpg.game.systems.AudioManager;
 
 public class FishingManager {
+    public boolean isBloodMoonActive() {
+        if (!com.fishingrpg.game.systems.EventManager.isHalloweenActive()) return false;
+        if (player != null && player.getManualBloodMoonTimer() > 0f) return true;
+        java.time.LocalTime now = java.time.LocalTime.now();
+        int hour = now.getHour();
+        if (hour >= 18 || hour < 6) {
+            int minute = now.getMinute();
+            return ((minute / 15) % 2) == 0;
+        }
+        return false;
+    }
+
 
     public enum State {
         IDLE, PRE_CAST, CASTING, WAITING, BITE, COMBAT, RESULT
@@ -62,6 +74,37 @@ public class FishingManager {
     public float marlinSurgeTimer = 0f;
     public int marlinPullStacks = 0;
     public float marlinStackTimer = 0f;
+
+    // --- Halloween & Thanatos Mechanics (HLW-03) ---
+    public float fishSkillGCDTimer = 0f;
+    public float fishPhantomInvulnTimer = 0f;
+    public float frankHoldSpaceDuration = 0f;
+    public float frankStunTimer = 0f;
+    public boolean frankRevived = false;
+    public float haiXaSietCuocTimer = 0f;
+    public float haiXaDocTimer = 0f;
+    public boolean thanatosSilenceNextSkill = false;
+    public float thanatosVucXoayTimer = 0f;
+    public float thanatosVulnerableTimer = 0f;
+    public float playerWeaknessTimer = 0f;
+    public float playerSkillLockedTimer = 0f;
+    public float playerSealStaminaRegenTimer = 0f;
+    public int thanatosReHookStep = 0;
+    public int thanatosReHookSuccessCount = 0;
+    public boolean thanatosReHookActive = false;
+    public boolean dauLauReHookActive = false;
+
+    public float jackOCooldown = 8.0f;
+    public float dauLauCooldown = 9.0f;
+    public float phantomSkillCooldown = 10.0f;
+    public float phantomInvulnCooldown = 8.0f;
+    public float haiXaSietCooldown = 12.0f;
+    public float haiXaDocCooldown = 16.0f;
+    public float thanatosTienghuCooldown = 12.0f;
+    public float thanatosVucXoayCooldown = 14.0f;
+    public float thanatosAmHonCooldown = 18.0f;
+    public boolean thanatosPhase3Active = false;
+    public boolean thanatosUltTriggered = false;
 
     public float fishCanDayTimer = 0f;
     public float fishCanDayCooldown = 0f;
@@ -402,6 +445,34 @@ public class FishingManager {
         muiKiemHoldWarned = false;
         prevFishState = com.fishingrpg.game.entities.Fish.State.IDLE;
         player.setStaminaHealMultiplier(1.0f);
+        fishSkillGCDTimer = 0f;
+        fishPhantomInvulnTimer = 0f;
+        frankHoldSpaceDuration = 0f;
+        frankStunTimer = 0f;
+        frankRevived = false;
+        haiXaSietCuocTimer = 0f;
+        haiXaDocTimer = 0f;
+        thanatosSilenceNextSkill = false;
+        thanatosVucXoayTimer = 0f;
+        thanatosVulnerableTimer = 0f;
+        playerWeaknessTimer = 0f;
+        playerSkillLockedTimer = 0f;
+        playerSealStaminaRegenTimer = 0f;
+        thanatosReHookStep = 0;
+        thanatosReHookSuccessCount = 0;
+        thanatosReHookActive = false;
+        dauLauReHookActive = false;
+        jackOCooldown = 8.0f;
+        dauLauCooldown = 9.0f;
+        phantomSkillCooldown = 10.0f;
+        phantomInvulnCooldown = 8.0f;
+        haiXaSietCooldown = 12.0f;
+        haiXaDocCooldown = 16.0f;
+        thanatosTienghuCooldown = 12.0f;
+        thanatosVucXoayCooldown = 14.0f;
+        thanatosAmHonCooldown = 18.0f;
+        thanatosPhase3Active = false;
+        thanatosUltTriggered = false;
 
         accumDamage = 0f;
         accumTimer = 0f;
@@ -479,6 +550,7 @@ public class FishingManager {
             }
             
             // Clear one-time buffs
+            player.resetFreeStaminaSkillCharges();
             player.setRiskyBaitActive(false);
             player.setBaitBuffActive(false); // Mồi thơm mất khi cá cắn câu mà bỏ lỡ / hoàn thành câu
             player.setOverclockPotionActive(false);
@@ -543,6 +615,11 @@ public class FishingManager {
                     }
                 }
                 
+                // HLW-05: +20% Vang & +20% EXP trong Bau Troi Huyet Nguyet
+                if (isBloodMoonActive()) {
+                    gold = (int)(gold * 1.20f);
+                    xp = (int)(xp * 1.20f);
+                }
                 int lvUp = player.gainXp(xp);
 
                 if (currentCatch.getType() == CatchableType.CONSUMABLE) {
@@ -594,6 +671,42 @@ public class FishingManager {
                         combatMessage += " [+1 Kẹo Trick-or-Treat]";
                         if (ftm != null) ftm.addText("+1 KẸO TRICK-OR-TREAT!", 640f, 420f, Color.ORANGE);
                     }
+                }
+
+                // HLW-05: Ty le roi Ruong & Keo trong Dem Huyet Nguyet
+                if (currentCatch instanceof Fish) {
+                    String fn = currentCatch.getName();
+                    boolean isHlwFish = fn.equals("Cá Skeleton") || fn.equals("Cá Đèn Lồng Jack-o'") ||
+                                        fn.equals("Cá Đầu Lâu Huyết Nguyệt") || fn.equals("Cá Dạng Ma") ||
+                                        fn.equals("Thủy Quái Frankenstein") || fn.equals("Hải Xà Dạ Xoa") ||
+                                        fn.equals("Kình Ngư Tử Thần Thanatos");
+                    if (isHlwFish) {
+                        AudioManager.getInstance().playSFX("sfx_halloween_catch");
+                    }
+                    if (isBloodMoonActive()) {
+                        if (!"Kình Ngư Tử Thần Thanatos".equals(fn) && isHlwFish) {
+                            if (MathUtils.randomBoolean(0.20f)) {
+                                player.addItem("Kẹo Trick-or-Treat", 1);
+                                combatMessage += " [+1 Kẹo]";
+                            }
+                            if (MathUtils.randomBoolean(0.08f)) {
+                                player.addItem("Rương Ma Quái", 1);
+                                combatMessage += " [+1 Rương Ma Quái]";
+                            }
+                        } else if (!isHlwFish) {
+                            if (MathUtils.randomBoolean(0.10f)) {
+                                player.addItem("Kẹo Trick-or-Treat", 1);
+                                combatMessage += " [+1 Kẹo]";
+                            }
+                        }
+                    }
+                }
+
+                // --- 100% roi Ruong Ma Quai khi bat duoc Sieu Boss Thanatos ---
+                if (currentCatch instanceof Fish && "Kình Ngư Tử Thần Thanatos".equals(currentCatch.getName())) {
+                    player.addItem("Rương Ma Quái", 1);
+                    combatMessage += " [+1 Rương Ma Quái]";
+                    if (ftm != null) ftm.addText("★ CHIẾN TÍCH: +1 RƯƠNG MA QUÁI! ★", 640f, 440f, Color.GOLD);
                 }
 
                 // --- Kỹ năng: Nhặt Mót ---
@@ -932,6 +1045,136 @@ public class FishingManager {
             }
         }
         
+        // --- Halloween Periodic Active Skills with GCD 5.5s ---
+        if (currentFish != null && fishSkillGCDTimer <= 0f && fishNhayVotTimer <= 0f) {
+            float hpPct = currentFish.getCurrentHp() / currentFish.getMaxHp();
+            float thanatosCdMulti = thanatosPhase3Active ? 0.70f : 1.0f;
+
+            // Thanatos Phase 3 Kich Hoat (< 30% HP)
+            if (currentFish.getSkill("lien_hoan_tram_doat_menh") != null && hpPct <= 0.30f && !thanatosPhase3Active) {
+                thanatosPhase3Active = true;
+                combatMessage = "TỬ THẦN BỘC PHÁT! Thanatos giảm 30% hồi chiêu tất cả kỹ năng!";
+                if (ftm != null) ftm.addText("TỬ THẦN BỘC PHÁT! (-30% HỒI CHIÊU)", 640f, 450f, Color.RED);
+                AudioManager.getInstance().playSFX("sfx_skill");
+                if (screenShake != null) screenShake.shakeHeavy();
+            }
+
+            // Thanatos Tuyet Ky: Lien Hoan Tram Doat Menh (Uu tien so 1)
+            if (currentFish.getSkill("lien_hoan_tram_doat_menh") != null && hpPct <= 0.30f && !thanatosUltTriggered) {
+                thanatosUltTriggered = true;
+                fishSkillGCDTimer = 6.0f;
+                thanatosReHookActive = true;
+                thanatosReHookStep = 1;
+                thanatosReHookSuccessCount = 0;
+                fishNhayVotTimer = 0.5f;
+                totalJumpDuration = 0.5f;
+                jumpHoldSpaceDuration = 0f;
+                jumpFailedEarly = false;
+                jumpSpacePressCount = 0;
+                jumpLandingCueShown = false;
+                jumpRehookHandled = false;
+                combatMessage = "LIÊN HOÀN TRẢM ĐOẠT MỆNH! Nhịp 1: Trảm Ngang Biển (0.5s)!";
+                if (ftm != null) ftm.addText("LIÊN HOÀN TRẢM: NHỊP 1 (0.5s)!", 640f, 450f, Color.RED);
+                AudioManager.getInstance().playSFX("sfx_skill");
+                if (screenShake != null) screenShake.shakeHeavy();
+            }
+            // Thanatos Am Hon Quay Pha (Phase 2, <= 70% HP, 18s)
+            else if (currentFish.getSkill("am_hon_quay_pha") != null && hpPct <= 0.70f && thanatosAmHonCooldown <= 0f) {
+                thanatosAmHonCooldown = 18.0f * thanatosCdMulti;
+                fishSkillGCDTimer = 5.5f;
+                currentFish.setShield(500f);
+                combatMessage = "ÂM HỒN QUẤY PHÁ! Thanatos tạo Soul Shield 500 HP!";
+                if (ftm != null) ftm.addText("SOUL SHIELD: 500 GIÁP!", 640f, 450f, Color.CYAN);
+                AudioManager.getInstance().playSFX("sfx_skill");
+            }
+            // Thanatos Vuc Xoay Am Ty (Phase 2, <= 70% HP, 14s)
+            else if (currentFish.getSkill("vuc_xoay_am_ty") != null && hpPct <= 0.70f && thanatosVucXoayCooldown <= 0f) {
+                thanatosVucXoayCooldown = 14.0f * thanatosCdMulti;
+                fishSkillGCDTimer = 5.5f;
+                thanatosVucXoayTimer = 3.0f;
+                currentFish.heal(currentFish.getMaxHp() * 0.03f);
+                combatMessage = "VỰC XOÁY ÂM TY! +15 Tension/s (3s) & Thanatos hồi 3% HP!";
+                if (ftm != null) ftm.addText("VỰC XOÁY ÂM TY!", 640f, 450f, Color.DARK_GRAY);
+                AudioManager.getInstance().playSFX("sfx_skill");
+            }
+            // Thanatos Tieng Hu Dia Nguc (Phase 1, 12s)
+            else if (currentFish.getSkill("tieng_hu_dia_nguc") != null && thanatosTienghuCooldown <= 0f) {
+                thanatosTienghuCooldown = 12.0f * thanatosCdMulti;
+                fishSkillGCDTimer = 5.5f;
+                thanatosSilenceNextSkill = true;
+                combatMessage = "TIẾNG HÚ ĐỊA NGỤC! Vô hiệu hóa chiêu tiếp theo của bạn!";
+                if (ftm != null) ftm.addText("TIẾNG HÚ ĐỊA NGỤC! (CÂM LẶNG)", 640f, 450f, Color.SCARLET);
+                AudioManager.getInstance().playSFX("sfx_skill");
+                if (screenShake != null) screenShake.shakeMedium();
+            }
+            // Hai Xa Doc To Am Ty (16s)
+            else if (currentFish.getSkill("doc_to_am_ty") != null && haiXaDocCooldown <= 0f) {
+                haiXaDocCooldown = 16.0f;
+                fishSkillGCDTimer = 5.5f;
+                haiXaDocTimer = 5.0f;
+                combatMessage = "ĐỘC TỐ ÂM TY! Rút 5 Thể lực/s trong 5s!";
+                if (ftm != null) ftm.addText("ĐỘC TỐ ÂM TY!", 640f, 450f, new Color(0.6f, 0.2f, 0.9f, 1f));
+                AudioManager.getInstance().playSFX("sfx_skill");
+            }
+            // Hai Xa Mang Xa Siet Cuoc (12s)
+            else if (currentFish.getSkill("mang_xa_siet_cuoc") != null && haiXaSietCooldown <= 0f) {
+                haiXaSietCooldown = 12.0f;
+                fishSkillGCDTimer = 5.5f;
+                haiXaSietCuocTimer = 3.0f;
+                combatMessage = "MÃNG XÀ SIẾT CƯỚC! Khóa cứng Tension trong 3s!";
+                if (ftm != null) ftm.addText("MÃNG XÀ SIẾT CƯỚC (3s)!", 640f, 450f, Color.PURPLE);
+                AudioManager.getInstance().playSFX("sfx_skill");
+            }
+            // Phantom Tieng Than U Am (10s)
+            else if (currentFish.getSkill("tieng_than_u_am") != null && phantomSkillCooldown <= 0f) {
+                phantomSkillCooldown = 10.0f;
+                fishSkillGCDTimer = 5.5f;
+                player.consumeStamina(15f);
+                currentFish.heal(currentFish.getMaxHp() * 0.05f);
+                playerSealStaminaRegenTimer = 5.0f;
+                combatMessage = "TIẾNG THAN U ÁM! Hút 15 TL hồi 5% HP & Giảm hồi phục (5s)!";
+                if (ftm != null) ftm.addText("TIẾNG THAN U ÁM!", 640f, 450f, Color.PURPLE);
+                AudioManager.getInstance().playSFX("sfx_skill");
+            }
+            // Dau Lau Xung Kich Doat Hon (9s)
+            else if (currentFish.getSkill("xung_kich_doat_hon") != null && dauLauCooldown <= 0f) {
+                dauLauCooldown = 9.0f;
+                fishSkillGCDTimer = 5.5f;
+                dauLauReHookActive = true;
+                fishNhayVotTimer = 0.6f;
+                totalJumpDuration = 0.6f;
+                jumpHoldSpaceDuration = 0f;
+                jumpFailedEarly = false;
+                jumpSpacePressCount = 0;
+                jumpLandingCueShown = false;
+                jumpRehookHandled = false;
+                combatMessage = "CÁ ĐẦU LÂU XUNG KÍCH ĐOẠT HỒN! Re-Hook 0.6s!";
+                if (ftm != null) ftm.addText("XUNG KÍCH ĐOẠT HỒN!", 640f, 450f, Color.SCARLET);
+                AudioManager.getInstance().playSFX("sfx_skill");
+            }
+            // Jack-o Hoa Dang Jack-o (8s)
+            else if (currentFish.getSkill("hoa_dang_jack_o") != null && jackOCooldown <= 0f) {
+                jackOCooldown = 8.0f;
+                fishSkillGCDTimer = 5.5f;
+                player.increaseTension(player.getMaxLineTension() * 0.15f);
+                player.consumeStamina(10f);
+                combatMessage = "HỎA ĐĂNG JACK-O'! Sốc +15% Tension & -10 Thể lực!";
+                if (ftm != null) ftm.addText("HỎA ĐĂNG JACK-O'!", 640f, 450f, Color.ORANGE);
+                AudioManager.getInstance().playSFX("sfx_skill");
+                if (screenShake != null) screenShake.shakeMedium();
+            }
+        }
+
+        // Ticking cooldowns
+        if (jackOCooldown > 0) jackOCooldown -= delta;
+        if (dauLauCooldown > 0) dauLauCooldown -= delta;
+        if (phantomSkillCooldown > 0) phantomSkillCooldown -= delta;
+        if (haiXaSietCooldown > 0) haiXaSietCooldown -= delta;
+        if (haiXaDocCooldown > 0) haiXaDocCooldown -= delta;
+        if (thanatosTienghuCooldown > 0) thanatosTienghuCooldown -= delta;
+        if (thanatosVucXoayCooldown > 0) thanatosVucXoayCooldown -= delta;
+        if (thanatosAmHonCooldown > 0) thanatosAmHonCooldown -= delta;
+
         // Boss Cá Cờ Active 1: Vũ điệu lướt sóng định kỳ 8.0s
         if (currentFish.getSkill("vu_dieu_luot_song") != null) {
             marlinJumpCooldown -= delta;
@@ -990,11 +1233,18 @@ public class FishingManager {
                 }
             }
 
-            // Dau hieu sap cham nuoc (Landing cue)
-            if (fishNhayVotTimer <= 0.35f && !jumpLandingCueShown) {
+            // Dau hieu sap cham nuoc (Landing cue) - Ho tro Den Long Bi Ngo +30% cua so phan ung
+            float landingWindow = 0.35f;
+            if (player.getPumpkinLanternCharges() > 0) {
+                landingWindow = 0.35f * 1.30f;
+            }
+            if (fishNhayVotTimer <= landingWindow && !jumpLandingCueShown) {
                 jumpLandingCueShown = true;
                 if (!jumpFailedEarly) {
-                    if (ftm != null) ftm.addText("▼ TIẾP NƯỚC! NHẤP [SPACE] ▼", 640f, 440f, Color.CYAN);
+                    String cueMsg = (player.getPumpkinLanternCharges() > 0)
+                            ? "▼ TIẾP NƯỚC (+30% PHẢN ỨNG)! NHẤP [SPACE] ▼"
+                            : "▼ TIẾP NƯỚC! NHẤP [SPACE] ▼";
+                    if (ftm != null) ftm.addText(cueMsg, 640f, 440f, Color.CYAN);
                     combatMessage = "CÁ SẮP TIẾP NƯỚC! Nhấp đúng 1 lần SPACE để Re-Hook!";
                 }
             }
@@ -1002,7 +1252,7 @@ public class FishingManager {
             // Quy tac 2: Ngan spam de lay perfect rehook (chi nhan 1 lan bam duy nhat trong cua so tiep nuoc)
             if (isSpaceJust) {
                 jumpSpacePressCount++;
-                if (fishNhayVotTimer > 0.35f) {
+                if (fishNhayVotTimer > landingWindow) {
                     // Nhan qua som truoc khi toi cua so tiep nuoc
                     if (!jumpFailedEarly) {
                         jumpFailedEarly = true;
@@ -1032,9 +1282,86 @@ public class FishingManager {
 
             // Khi ca cham mat nuoc
             if (fishNhayVotTimer <= 0) {
+                if (player.getPumpkinLanternCharges() > 0) {
+                    player.consumePumpkinLanternCharge();
+                }
                 boolean isBoss = "Cá Cờ Xanh Khổng Lồ".equals(currentFish.getName());
 
-                if (fishCoBuomActive) {
+                if (dauLauReHookActive) {
+                    dauLauReHookActive = false;
+                    if (jumpRehookHandled) {
+                        combatMessage = "PERFECT RE-HOOK! Khống chế Xung Kích Đoạt Hồn thành công!";
+                        if (ftm != null) ftm.addText("PERFECT RE-HOOK!", 640f, 460f, Color.GOLD);
+                        AudioManager.getInstance().playSFX("sfx_success");
+                    } else {
+                        player.increaseTension(25f);
+                        float lostHp = currentFish.getMaxHp() - currentFish.getCurrentHp();
+                        if (lostHp > 0f) currentFish.heal(lostHp * 0.15f);
+                        combatMessage = "TRƯỢT RE-HOOK! Phạt +25 Tension & Cá hồi 15% máu đã mất!";
+                        if (ftm != null) ftm.addText("TRƯỢT RE-HOOK! (+25 TEN & HỒI MÁU)", 640f, 460f, Color.RED);
+                        AudioManager.getInstance().playSFX("sfx_fail");
+                        if (screenShake != null) screenShake.shakeMedium();
+                    }
+                    com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerFishSkillVFX("nhay_vot", 640f, 360f);
+                } else if (thanatosReHookActive) {
+                    if (jumpRehookHandled) {
+                        thanatosReHookSuccessCount++;
+                    }
+                    if (thanatosReHookStep == 1) {
+                        // Nhip 1 xong -> Chuyen sang nhip 2
+                        thanatosReHookStep = 2;
+                        fishNhayVotTimer = 0.6f;
+                        totalJumpDuration = 0.6f;
+                        jumpHoldSpaceDuration = 0f;
+                        jumpFailedEarly = false;
+                        jumpSpacePressCount = 0;
+                        jumpLandingCueShown = false;
+                        jumpRehookHandled = false;
+                        combatMessage = "LIÊN HOÀN TRẢM! Nhịp 2: Trảm Bổ Tử Thần (0.6s)!";
+                        if (ftm != null) ftm.addText("LIÊN HOÀN TRẢM: NHỊP 2 (0.6s)!", 640f, 450f, Color.RED);
+                        AudioManager.getInstance().playSFX("sfx_skill");
+                        if (screenShake != null) screenShake.shakeHeavy();
+                    } else {
+                        // Nhip 2 xong -> Ket luan
+                        thanatosReHookActive = false;
+                        thanatosReHookStep = 0;
+                        if (thanatosReHookSuccessCount == 2) {
+                            thanatosVulnerableTimer = 3.5f;
+                            combatMessage = "PHẢN ĐÒN TỐI THƯỢNG (2/2)! Thanatos suy yếu x2 Sát Thương (3.5s)!";
+                            if (ftm != null) ftm.addText("PHẢN ĐÒN (2/2)! x2 SÁT THƯƠNG (3.5s)", 640f, 460f, Color.GOLD);
+                            AudioManager.getInstance().playSFX("sfx_success");
+                            if (screenShake != null) screenShake.shakeMedium();
+                            currentFish.takeDamage(player.getBasePullDamage() * 3.0f);
+                        } else if (thanatosReHookSuccessCount == 1) {
+                            playerWeaknessTimer = 4.0f;
+                            player.consumeStamina(15f);
+                            combatMessage = "TRƯỢT 1 NHỊP (1/2)! Tê liệt cánh tay: -40% lực kéo (4s) & -15 Thể lực!";
+                            if (ftm != null) ftm.addText("TÊ LIỆT CÁNH TAY (-40% LỰC KÉO, -15 TL)!", 640f, 460f, Color.ORANGE);
+                            AudioManager.getInstance().playSFX("sfx_fail");
+                            if (screenShake != null) screenShake.shakeMedium();
+                        } else {
+                            // Truot 2 nhip (0/2)
+                            float effectiveRatio = player.getCurrentLineTension() / getEffectiveMaxTension();
+                            if (effectiveRatio >= 0.90f) {
+                                finishEncounter(false, "LƯỠI HÁI TỬ THẦN CHÉM ĐỨT PHĂNG DÂY CÂU!");
+                                isLineBroken = true;
+                                if (ftm != null) ftm.addText("LƯỠI HÁI CHÉM ĐỨT DÂY (TENSION > 90%)!", 640f, 460f, Color.RED);
+                                AudioManager.getInstance().playSFX("sfx_fail");
+                                if (screenShake != null) screenShake.shakeHeavy();
+                                return;
+                            }
+                            player.increaseTension(30f);
+                            playerSkillLockedTimer = 5.0f;
+                            playerSealStaminaRegenTimer = 5.0f;
+                            currentFish.heal(currentFish.getMaxHp() * 0.05f);
+                            combatMessage = "TRƯỢT CẢ 2 NHỊP (0/2)! +30 Tension, Khóa Skill & Phong Ấn Hồi TL (5s)!";
+                            if (ftm != null) ftm.addText("PHONG ẤN LINH HỒN (0/2)! +30 TEN, KHÓA SKILL 5s", 640f, 460f, Color.RED);
+                            AudioManager.getInstance().playSFX("sfx_fail");
+                            if (screenShake != null) screenShake.shakeHeavy();
+                        }
+                    }
+                    com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerFishSkillVFX("nhay_vot", 640f, 360f);
+                } else if (fishCoBuomActive) {
                     // Vu dieu co buom: khong Perfect Re-hook phat +30% Tension moi nhip
                     if (jumpRehookHandled) {
                         combatMessage = "PERFECT RE-HOOK! Triệt tiêu hoàn toàn lực sốc!";
@@ -1100,6 +1427,29 @@ public class FishingManager {
             player.increaseTension((com.badlogic.gdx.math.MathUtils.randomBoolean() ? 10f : -10f) * delta);
         }
         if (fishPhunMucMuTimer > 0) fishPhunMucMuTimer -= delta;
+        if (fishSkillGCDTimer > 0) fishSkillGCDTimer -= delta;
+        if (fishPhantomInvulnTimer > 0) fishPhantomInvulnTimer -= delta;
+        if (frankStunTimer > 0) frankStunTimer -= delta;
+        if (haiXaSietCuocTimer > 0) haiXaSietCuocTimer -= delta;
+        if (thanatosVucXoayTimer > 0) {
+            thanatosVucXoayTimer -= delta;
+            player.increaseTension(15.0f * delta);
+        }
+        if (thanatosVulnerableTimer > 0) thanatosVulnerableTimer -= delta;
+        if (playerWeaknessTimer > 0) playerWeaknessTimer -= delta;
+        if (playerSkillLockedTimer > 0) playerSkillLockedTimer -= delta;
+        if (playerSealStaminaRegenTimer > 0) {
+            playerSealStaminaRegenTimer -= delta;
+            player.setStaminaHealMultiplier(0f);
+        } else if (vucDaDebuffActive) {
+            player.setStaminaHealMultiplier(0.70f);
+        } else {
+            player.setStaminaHealMultiplier(1.0f);
+        }
+        if (haiXaDocTimer > 0) {
+            haiXaDocTimer -= delta;
+            player.consumeStamina(5.0f * delta);
+        }
         if (fishHutMauTimer > 0) {
             fishHutMauTimer -= delta;
             player.consumeStamina(20f * delta);
@@ -1111,6 +1461,54 @@ public class FishingManager {
         }
 
         combatDuration += delta;
+
+        // --- Halloween Passives ---
+        if (currentFish != null) {
+            // Frankenstein hoi sinh 1 lan
+            if (currentFish.getCurrentHp() <= 0f && !frankRevived && currentFish.getSkill("sam_set_hoi_sinh") != null) {
+                frankRevived = true;
+                currentFish.heal(currentFish.getMaxHp() * 0.20f);
+                player.increaseTension(player.getMaxLineTension() * 0.25f);
+                combatMessage = "SẤM SÉT HỒI SINH! Frankenstein hồi sinh 20% HP & Giật +25% Tension!";
+                if (ftm != null) ftm.addText("SẤM SÉT HỒI SINH! (+450 HP)", 640f, 450f, Color.YELLOW);
+                AudioManager.getInstance().playSFX("sfx_skill");
+                if (screenShake != null) screenShake.shakeHeavy();
+            }
+
+            // Hoa Nguc Lan Tinh: Thieu dot the luc neu tension > 70%
+            if (currentFish.getPassiveSkill("hoa_nguc_lan_tinh") != null) {
+                if (player.getCurrentLineTension() / player.getMaxLineTension() > 0.70f) {
+                    player.consumeStamina(3.0f * delta);
+                }
+            }
+
+            // Khat Mau Dem Ram: Hoi 1% HP/s khi player < 50% the luc
+            if (currentFish.getPassiveSkill("khat_mau_dem_ram") != null) {
+                if ((player.getCurrentStamina() / Math.max(1f, player.getMaxStamina())) < 0.50f) {
+                    currentFish.heal(currentFish.getMaxHp() * 0.01f * delta);
+                }
+            }
+
+            // The Xac Hu Vo: Moi 8s hoa khói 2.5s mien nhiem
+            if (currentFish.getPassiveSkill("the_xac_hu_vo") != null) {
+                phantomInvulnCooldown -= delta;
+                if (phantomInvulnCooldown <= 0f) {
+                    phantomInvulnCooldown = 10.5f;
+                    fishPhantomInvulnTimer = 2.5f;
+                    combatMessage = "THỂ XÁC HƯ VÔ! Miễn nhiễm toàn bộ sát thương 2.5s!";
+                    if (ftm != null) ftm.addText("THỂ XÁC HƯ VÔ!", 640f, 440f, Color.PURPLE);
+                    AudioManager.getInstance().playSFX("sfx_skill");
+                }
+            }
+
+            // Uon Luon Ma Quai: Quat duoi +10 tension khi sang PULLING
+            if (prevFishState == com.fishingrpg.game.entities.Fish.State.IDLE && currentFish.getState() == com.fishingrpg.game.entities.Fish.State.PULLING) {
+                if (currentFish.getPassiveSkill("uon_luon_ma_quai") != null) {
+                    player.increaseTension(10f);
+                    if (ftm != null) ftm.addText("QUẤT ĐUÔI! +10 TENSION", 640f, 430f, Color.VIOLET);
+                }
+            }
+        }
 
         // Thân đao xé gió: Giật +12% Tension ngay khi chuyển sang PULLING
         if (currentFish != null) {
@@ -1234,6 +1632,14 @@ public class FishingManager {
                     return; // Wait for next tick to finishEncounter(true)
                 }
             }
+            if (player.isGhostCandleActive()) {
+                player.setGhostCandleActive(false);
+                player.setLineTension(player.getMaxLineTension() * 0.50f);
+                combatMessage = "NẾN HỒN MA BẢO HỘ! Cứu đứt cước thành công, Tension giảm về 50%!";
+                if (ftm != null) ftm.addText("NẾN HỒN MA CỨU ĐỨT DÂY!", 640f, 450f, Color.CYAN);
+                AudioManager.getInstance().playSFX("sfx_ghost_candle");
+                return;
+            }
             finishEncounter(false, "ĐỨT DÂY CÂU!");
             return;
         }
@@ -1310,6 +1716,12 @@ public class FishingManager {
         if (player.isRiskyBaitActive()) {
             pull *= 2f;
         }
+        if (currentFish != null && currentFish.getPassiveSkill("hoa_nguc_lan_tinh") != null && currentFish.getState() == com.fishingrpg.game.entities.Fish.State.PULLING) {
+            pull *= 1.25f; // +25% sinh tension
+        }
+        if (haiXaSietCuocTimer > 0f && isSpaceDown) {
+            pull *= 2.0f; // Mang xa siet cuoc: keo luc nay sinh tension x2
+        }
         tensionIncrease += pull * delta;
 
         // Băng Giá set bonus: đóng băng Tension tăng từ cá kéo
@@ -1321,7 +1733,22 @@ public class FishingManager {
         boolean isDuongSuc = duongSucChannelTimer > 0 || abilitySystem.hasEffect("effect_duong_suc");
 
         // Player Action
-        if (isSpaceDown && !isDuongSuc) {
+        if (isSpaceDown && !isDuongSuc && frankStunTimer <= 0f) {
+            // Frankenstein: Qua tai dien nang neu keo > 1.5s
+            if (currentFish != null && currentFish.getPassiveSkill("qua_tai_dien_nang") != null) {
+                frankHoldSpaceDuration += delta;
+                if (frankHoldSpaceDuration >= 1.5f) {
+                    frankHoldSpaceDuration = 0f;
+                    frankStunTimer = 0.6f;
+                    player.consumeStamina(10f);
+                    combatMessage = "QUÁ TẢI ĐIỆN NĂNG! Sốc điện -10 Thể lực & Ngắt kéo dây 0.6s!";
+                    if (ftm != null) ftm.addText("QUÁ TẢI ĐIỆN NĂNG! (-10 TL)", 640f, 430f, Color.CYAN);
+                    AudioManager.getInstance().playSFX("sfx_fail");
+                    if (screenShake != null) screenShake.shakeMedium();
+                }
+            } else {
+                frankHoldSpaceDuration = 0f;
+            }
             playerHoldSpaceDuration += delta;
             if (currentFish.getPassiveSkill("mui_kiem_xe_bien") != null && playerHoldSpaceDuration > 1.2f) {
                 float extraTension = player.getMaxLineTension() * 0.20f * (playerHoldSpaceDuration - 1.2f) * delta;
@@ -1347,14 +1774,22 @@ public class FishingManager {
             if (phaGiapTimer > 0) dmgMult += phaGiapDebuff;
             if (player.getWhetstoneCharges() > 0) dmgMult += 0.25f; // Đá mài tăng +25% sát thương kéo
             float dmg = player.getBasePullDamage() * dmgMult * delta;
+            if (playerWeaknessTimer > 0f) dmg *= 0.60f; // -40% luc keo
+            if (thanatosVulnerableTimer > 0f) dmg *= 2.0f; // x2 sat thuong khi choang
+            if (currentFish != null && currentFish.getPassiveSkill("cot_cach_bat_diet") != null) {
+                dmg *= 0.80f; // Giam 20% sat thuong keo thuong
+            }
             // Set Huyết Nguyệt Thần Vương: Quăng Perfect x2 Sát thương trong 2s đầu
             if (perfectCastBuffTimer > 0f && player.getEquipment() != null
                     && player.getEquipment().isSetBonusActive()
                     && "Huyết Nguyệt Thần Vương".equals(player.getEquipment().getActiveSetName())) {
                 dmg *= 2.0f;
             }
-            if (fishCuongNoTimer > 0) {
+            if (fishCuongNoTimer > 0 || fishPhantomInvulnTimer > 0f) {
                 dmg = 0f;
+                if (fishPhantomInvulnTimer > 0f && ftm != null && MathUtils.randomBoolean(0.08f)) {
+                    ftm.addText("HƯ VÔ!", 640f, 380f, Color.PURPLE);
+                }
             } else {
                 if (currentFish.getPassiveSkill("tron_truot") != null) dmg *= 0.80f;
                 if (currentFish.getPassiveSkill("ben_bi") != null)     dmg *= 0.85f;
@@ -1384,6 +1819,9 @@ public class FishingManager {
                 }
             }
             currentFish.takeDamage(dmg);
+            if (player.getBloodMoonTalismanTimer() > 0f) {
+                currentFish.takeTrueDamage(dmg * 0.10f);
+            }
             accumDamage += dmg;
 
             // Set Huyết Nguyệt Thần Vương: Kéo dây hút 3% HP cá (tối đa 12.0 Thể lực/giây) chuyển thành Thể lực người chơi
@@ -1403,6 +1841,12 @@ public class FishingManager {
             playerHoldSpaceDuration = 0f;
             // Slack: không giữ dây hoặc đang vận sức Dưỡng Sức → tension tự giảm an toàn (đã giảm mạnh tốc độ xả tự nhiên)
             float tensionDec = (6f + player.getMaxLineTension() * 0.04f) * delta;
+            if (haiXaSietCuocTimer > 0f) {
+                tensionDec = 0f; // Khoa cung tension khong the giam
+            }
+            if (currentFish != null && currentFish.getPassiveSkill("uon_luon_ma_quai") != null) {
+                tensionDec *= 0.70f; // Giam 30% toc do xa chung
+            }
             if (currentFish.getPassiveSkill("xuc_tu") != null) {
                 tensionDec *= 0.7f; // Xúc tu quấn chặt làm dây chùng chậm hơn 30%
             }

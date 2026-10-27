@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <radialGradient id="potionGlow" cx="50%" cy="65%" r="50%">
+      <stop offset="0%" stop-color="#4ade80" stop-opacity="0.8"/>
+      <stop offset="40%" stop-color="#c084fc" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#3b0764" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="ghostLiquid" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#a855f7"/>
+      <stop offset="50%" stop-color="#7e22ce"/>
+      <stop offset="100%" stop-color="#3b0764"/>
+    </linearGradient>
+    <linearGradient id="potionGlass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.4"/>
+      <stop offset="50%" stop-color="#818cf8" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#1e1b4b" stop-opacity="0.6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- LAYER 1: Background Glow -->
+  <g id="background_glow">
+    <circle cx="64" cy="74" r="50" fill="url(#potionGlow)"/>
+    <ellipse cx="64" cy="114" rx="36" ry="8" fill="#000000" opacity="0.4"/>
+  </g>
+
+  <!-- LAYER 2: Base Form (Wood Cork, Glass Neck & Spherical Flask) -->
+  <g id="base_form">
+    <!-- Ornate Wood Cork Stopper -->
+    <polygon points="56,12 72,12 70,24 58,24" fill="#92400e"/>
+    <polygon points="54,20 74,20 74,24 54,24" fill="#78350f"/>
+
+    <!-- Flask Neck Lip & Neck -->
+    <rect x="52" y="24" width="24" height="6" rx="3" fill="#38bdf8" opacity="0.6"/>
+    <rect x="56" y="30" width="16" height="18" fill="#38bdf8" opacity="0.3"/>
+
+    <!-- Round Flask Body -->
+    <circle cx="64" cy="74" r="34" fill="url(#potionGlass)"/>
+    <circle cx="64" cy="74" r="34" fill="none" stroke="#60a5fa" stroke-width="2.0" opacity="0.5"/>
+
+    <!-- Violet Ghost Liquid Meniscus -->
+    <path d="M 32 74 A 32 32 0 0 0 96 74 Q 64 78 32 74 Z" fill="url(#ghostLiquid)"/>
+    <!-- Liquid Surface Wave -->
+    <ellipse cx="64" cy="74" rx="32" ry="6" fill="#c084fc" opacity="0.75"/>
+  </g>
+
+  <!-- LAYER 3: Details & Relief (Neon Green Bubbles, Spectral Skull Vapor) -->
+  <g id="details_and_relief">
+    <!-- Bioluminescent Neon Green Poison Bubbles -->
+    <circle cx="54" cy="88" r="5" fill="#4ade80"/>
+    <circle cx="53" cy="87" r="1.8" fill="#ffffff"/>
+    <circle cx="74" cy="82" r="4" fill="#4ade80"/>
+    <circle cx="73" cy="81" r="1.5" fill="#ffffff"/>
+    <circle cx="62" cy="94" r="3" fill="#22c55e"/>
+    <circle cx="48" cy="78" r="2.5" fill="#4ade80"/>
+
+    <!-- Rising Mystic Ghost Vapor Bubble -->
+    <circle cx="64" cy="62" r="6" fill="#4ade80" opacity="0.85"/>
+    <circle cx="62" cy="60" r="2" fill="#ffffff"/>
+    <!-- Tiny Spectral Skull Silhouette inside big bubble -->
+    <circle cx="63" cy="61" r="1" fill="#14532d"/>
+    <circle cx="66" cy="61" r="1" fill="#14532d"/>
+  </g>
+
+  <!-- LAYER 4: Specular Highlights & Contrast -->
+  <g id="specular_highlights">
+    <!-- Curved Specular Glass Glare Rim -->
+    <path d="M 40 54 A 30 30 0 0 1 54 46" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" opacity="0.85"/>
+    <circle cx="39" cy="58" r="2" fill="#ffffff" opacity="0.8"/>
+    <!-- Bottom Secondary Reflection -->
+    <path d="M 80 94 A 30 30 0 0 1 88 84" fill="none" stroke="#67e8f9" stroke-width="2.0" stroke-linecap="round" opacity="0.6"/>
+  </g>
+</svg>
+

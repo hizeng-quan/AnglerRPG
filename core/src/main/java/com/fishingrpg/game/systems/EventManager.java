@@ -236,10 +236,10 @@ public class EventManager {
     public String claimMilestone() {
         if (!canClaimMilestone()) return null;
         milestoneClaimedToday = true;
-        player.addEventPoints(1);
+        player.addEventPoints(100);
         player.gainGold(500);
         player.addDiamonds(10);
-        return "Nhận Mốc 4/6: +1 Điểm Sự Kiện, +500 Vàng, +10 KC!";
+        return "Nhận Mốc 4/6: +100 Điểm Sự Kiện, +500 Vàng, +10 KC!";
     }
 
     public String claimQuestReward(Quest q) {

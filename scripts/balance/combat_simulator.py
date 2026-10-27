@@ -48,34 +48,162 @@ class CombatSimulator:
         if "ben_bi" in skills:     dmg_mult *= 0.85
         if "vo_cung" in skills:    dmg_mult *= 0.80
 
+        # Set Bonuses & Consumables
+        set_name = eq_stats.get("set_name", "")
+        is_huyet_nguyet = (set_name == "Huyết Nguyệt Thần Vương")
+        is_bang_gia = (set_name == "Băng Giá")
+        perfect_cast_timer = 2.0 if is_huyet_nguyet else 0.0
+        candle_charges = 1 if is_huyet_nguyet else 0  # Nến Hồn Ma Bảo Hộ
+
+        # Player skills & stats scaling
+        has_abilities = (eq_stats.get("mult", 0) >= 4)  # Experienced gear uses GAS abilities
+        cd_keo_manh = 0.0
+        cd_giat_kep = 0.0
+        cd_pha_giap = 0.0
+        cd_troi_buoc = 0.0
+        cd_duong_suc = 0.0
+        cd_luot_day = 0.0
+        pha_giap_timer = 0.0
+        luot_day_timer = 0.0
+        stun_timer = 0.0
+        frozen_timer = 0.0
+
+        # Substats & Passive skills (Dây Thép +20% Max Tension, Giảm Lực Kéo 15%)
+        if has_abilities:
+            max_tension *= 1.20  # Dây Thép Lv.2
+            pull_reduction *= 0.85  # Substats FISH_PULL_REDUCE
+
+        # Thanatos specific mechanics
+        is_thanatos = ("Thanatos" in fish_data.get("name", ""))
+        thanatos_rehook_cd = 12.0
+        thanatos_vuc_xoay_cd = 18.0
+
+        is_boss = (fish_data.get("rarity") == "BOSS" or fish_pull_base >= 100.0)
+
         while time < max_time and fish_hp > 0:
             time += dt
             fish_timer -= dt
+            if perfect_cast_timer > 0:
+                perfect_cast_timer -= dt
+            if stun_timer > 0:
+                stun_timer -= dt
+            if frozen_timer > 0:
+                frozen_timer -= dt
+            if pha_giap_timer > 0:
+                pha_giap_timer -= dt
+            if luot_day_timer > 0:
+                luot_day_timer -= dt
+            if cd_keo_manh > 0:
+                cd_keo_manh -= dt
+            if cd_giat_kep > 0:
+                cd_giat_kep -= dt
+            if cd_pha_giap > 0:
+                cd_pha_giap -= dt
+            if cd_troi_buoc > 0:
+                cd_troi_buoc -= dt
+            if cd_duong_suc > 0:
+                cd_duong_suc -= dt
+            if cd_luot_day > 0:
+                cd_luot_day -= dt
+
+            # Thanatos Re-Hook Event (Liên Hoàn Trảm)
+            if is_thanatos:
+                thanatos_rehook_cd -= dt
+                if thanatos_rehook_cd <= 0:
+                    thanatos_rehook_cd = random.uniform(12.0, 16.0)
+                    roll = random.random()
+                    if roll < 0.68:
+                        # 2/2 Perfect Re-Hook: Thanatos stunned 3.5s and takes x2 dmg
+                        stun_timer = 3.5
+                        fish_hp -= base_dmg * 2.5
+                    elif roll < 0.85:
+                        # 1/2 Miss: -20 Stamina, moderate tension
+                        current_stamina = max(0.0, current_stamina - 20.0)
+                        current_tension += 20.0
+                    else:
+                        # 0/2 Full Miss: +40 Tension, Boss heals 5% HP
+                        current_tension += 40.0
+                        fish_hp = min(fish_max_hp, fish_hp + fish_max_hp * 0.05)
+
+                thanatos_vuc_xoay_cd -= dt
+                if thanatos_vuc_xoay_cd <= 0:
+                    thanatos_vuc_xoay_cd = random.uniform(18.0, 24.0)
+                    fish_hp = min(fish_max_hp, fish_hp + fish_max_hp * 0.03)
+                    current_tension += 25.0
+
             if fish_timer <= 0:
                 fish_state = "PULLING" if fish_state == "IDLE" else "IDLE"
                 fish_timer = random.uniform(1.5, 3.5) if fish_state == "PULLING" else random.uniform(1.5, 3.5)
 
+            # GAS Abilities usage by player
+            if has_abilities and player_strategy == "optimal":
+                # Trói buộc: freeze fish when it pulls or tension is getting high
+                if cd_troi_buoc <= 0 and current_stamina >= 25.0 and (fish_state == "PULLING" or current_tension > max_tension * 0.50):
+                    cd_troi_buoc = 16.0
+                    frozen_timer = 3.0
+                    current_stamina -= 25.0
+
+                # Lướt dây: soften pull when pulling
+                if cd_luot_day <= 0 and current_stamina >= 15.0 and fish_state == "PULLING" and frozen_timer <= 0:
+                    cd_luot_day = 12.0
+                    luot_day_timer = 3.5
+                    current_stamina -= 15.0
+
+                # Phá giáp: +30% damage debuff
+                if cd_pha_giap <= 0 and current_stamina >= 20.0 and (fish_state == "IDLE" or stun_timer > 0):
+                    cd_pha_giap = 14.0
+                    pha_giap_timer = 4.0
+                    current_stamina -= 20.0
+
+                # Dưỡng sức: when tension dangerously high or stamina low
+                if cd_duong_suc <= 0 and (current_stamina < 30.0 or current_tension > max_tension * 0.70):
+                    cd_duong_suc = 14.0
+                    current_stamina = min(max_stamina, current_stamina + 45.0)
+                    current_tension = max(0.0, current_tension - max_tension * 0.25)
+
+                # Giật kép: heavy burst damage
+                if cd_giat_kep <= 0 and current_stamina >= 30.0 and (fish_state == "IDLE" or stun_timer > 0) and current_tension < max_tension * 0.50:
+                    cd_giat_kep = 8.0
+                    current_stamina -= 30.0
+                    g_dmg = (base_dmg * 4.0 + 150.0) * (2.0 if stun_timer > 0 else 1.0)
+                    fish_hp -= g_dmg
+                    current_tension += 16.0
+
+                # Kéo mạnh: burst damage during IDLE or STUN
+                if cd_keo_manh <= 0 and current_stamina >= 20.0 and (fish_state == "IDLE" or stun_timer > 0) and current_tension < max_tension * 0.55:
+                    cd_keo_manh = 3.5
+                    current_stamina -= 20.0
+                    burst_dmg = (base_dmg * 2.5 + 100.0) * (2.0 if stun_timer > 0 else 1.0)
+                    if random.random() < 0.20:
+                        burst_dmg *= 2.0  # Bạo kích
+                    fish_hp -= burst_dmg
+                    current_tension += 14.0
+
             # Player decision based on strategy
-            is_space_down = False
+            effective_fish_pulling = (fish_state == "PULLING" and stun_timer <= 0 and frozen_timer <= 0)
+
             if player_strategy == "optimal":
-                # Reel during IDLE as long as tension has safety margin (<85%)
-                # Only reel during PULLING if tension is very low (<25%)
-                is_space_down = (fish_state == "IDLE" and current_tension < max_tension * 0.85) or (fish_state == "PULLING" and current_tension < max_tension * 0.25)
+                if is_boss:
+                    # Against Bosses:
+                    if effective_fish_pulling:
+                        # Human latency / reaction delay: occasional 0.15s late release when fish suddenly starts pulling
+                        is_space_down = (random.random() < 0.05 and current_tension < max_tension * 0.50)
+                    else:
+                        is_space_down = (current_tension < max_tension * 0.52)
+                else:
+                    is_space_down = (not effective_fish_pulling and current_tension < max_tension * 0.85) or (effective_fish_pulling and current_tension < max_tension * 0.20)
             elif player_strategy == "aggressive":
-                # Spam reel almost constantly up to 90% tension
                 is_space_down = current_tension < max_tension * 0.90
             elif player_strategy == "casual":
-                # Casual player: reels during IDLE, occasionally panic reels during PULLING
-                if fish_state == "IDLE":
-                    is_space_down = current_tension < max_tension * 0.80
+                if not effective_fish_pulling:
+                    is_space_down = current_tension < max_tension * 0.75
                 else:
-                    is_space_down = random.random() < 0.20 and current_tension < max_tension * 0.50
+                    is_space_down = random.random() < 0.20 and current_tension < max_tension * 0.40
 
             # Tension & Damage calculations
             tension_increase = 0.0
 
-            # Fish pull: 1.5x / 0.4x in PULLING, 0.03x / 0.0x in IDLE
-            if fish_state == "PULLING":
+            if effective_fish_pulling:
                 pull_mult = 1.5 if is_space_down else 0.4
             else:
                 pull_mult = 0.03 if is_space_down else 0.0
@@ -84,28 +212,50 @@ class CombatSimulator:
             if "xuc_tu" in skills:
                 pull *= (1.0 + (time / 10.0) * 0.1)
             pull *= pull_reduction
-            tension_increase += pull * dt
+            if luot_day_timer > 0:
+                pull *= 0.40  # Lướt dây giảm 60% lực kéo
 
-            # Stamina drain: 2.0/s in game
-            current_stamina -= 2.0 * dt
+            if not is_bang_gia and frozen_timer <= 0 and stun_timer <= 0:
+                tension_increase += pull * dt
+
+            # Stamina drain & passive regen
+            drain_rate = 3.0 if effective_fish_pulling else 2.0
+            if has_abilities:
+                drain_rate *= 0.55
+                if not effective_fish_pulling:
+                    current_stamina = min(max_stamina, current_stamina + 3.0 * dt)
+
+            current_stamina -= drain_rate * dt
+
+            # Vampirism of Set Huyết Nguyệt: restores stamina and deals damage
+            if is_huyet_nguyet and is_space_down:
+                drain_per_sec = min(fish_hp * 0.03, 12.0)
+                stamina_heal = drain_per_sec * dt
+                current_stamina = min(max_stamina, current_stamina + stamina_heal)
+                fish_hp -= stamina_heal
+
             if current_stamina <= 0:
                 return {"success": False, "duration": time, "reason": "HẾT THỂ LỰC!", "final_hp": fish_hp, "max_tension_reached": max_tension_reached}
 
             if is_space_down:
-                if fish_state == "PULLING":
+                if effective_fish_pulling:
                     tension_increase += (26.0 + max_tension * 0.055) * dt
                 else:
                     tension_increase += (10.0 + max_tension * 0.020) * dt
 
                 # Apply damage
                 eff_dmg = base_dmg * dmg_mult
-                # 15% base crit chance for 1.5x dmg
+                if pha_giap_timer > 0:
+                    eff_dmg *= 1.30
+                if perfect_cast_timer > 0:
+                    eff_dmg *= 2.0
+                if stun_timer > 0:
+                    eff_dmg *= 2.0
                 if random.random() < 0.15:
                     eff_dmg *= 1.5
                 fish_hp -= eff_dmg * dt
                 current_tension += tension_increase
             else:
-                # Slack: natural decay reduced heavily to 6.0 + max_tension * 0.04
                 tension_dec = (6.0 + max_tension * 0.04) * dt
                 if "xuc_tu" in skills:
                     tension_dec *= 0.7
@@ -113,9 +263,13 @@ class CombatSimulator:
 
             max_tension_reached = max(max_tension_reached, current_tension)
 
-            # Check line break
+            # Check line break with candle safety net
             if current_tension >= max_tension:
-                return {"success": False, "duration": time, "reason": "ĐỨT DÂY CÂU!", "final_hp": fish_hp, "max_tension_reached": max_tension_reached}
+                if candle_charges > 0:
+                    candle_charges -= 1
+                    current_tension = max_tension * 0.50
+                else:
+                    return {"success": False, "duration": time, "reason": "ĐỨT DÂY CÂU!", "final_hp": fish_hp, "max_tension_reached": max_tension_reached}
 
         if fish_hp <= 0:
             return {"success": True, "duration": time, "reason": "THÀNH CÔNG!", "final_hp": 0.0, "max_tension_reached": max_tension_reached}
@@ -156,8 +310,8 @@ class CombatSimulator:
             "fish_name": fish["name"],
             "fish_rarity": fish["rarity"],
             "fish_hp": fish["maxHp"],
-            "set_name": set_name,
-            "rarity": rarity,
+            "set_name": eq_stats["set_name"],
+            "rarity": eq_stats["rarity"],
             "iterations": iterations,
             "strategy": strategy,
             "win_rate_pct": round((successes / iterations) * 100.0, 1),

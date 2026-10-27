@@ -758,7 +758,7 @@
   },
   {
     "name": "Cá Cờ Xanh Khổng Lồ",
-    "maxHp": 3000.0,
+    "maxHp": 3600.0,
     "pullStrength": 195.0,
     "rarity": "BOSS",
     "baseWeightKg": 260.0,
@@ -777,6 +777,165 @@
       },
       {
         "id": "cuong_phong_ngu_kiem",
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "name": "Cá Skeleton",
+    "maxHp": 400.0,
+    "pullStrength": 58.0,
+    "rarity": "COMMON",
+    "baseWeightKg": 1.8,
+    "baseLengthCm": 35.0,
+    "baseXp": 75,
+    "baseGold": 180,
+    "map": null,
+    "skills": [
+      {
+        "id": "cot_cach_bat_diet",
+        "isActive": false
+      }
+    ]
+  },
+  {
+    "name": "Cá Đèn Lồng Jack-o'",
+    "maxHp": 720.0,
+    "pullStrength": 90.0,
+    "rarity": "UNCOMMON",
+    "baseWeightKg": 4.2,
+    "baseLengthCm": 52.0,
+    "baseXp": 160,
+    "baseGold": 380,
+    "map": null,
+    "skills": [
+      {
+        "id": "hoa_nguc_lan_tinh",
+        "isActive": false
+      },
+      {
+        "id": "hoa_dang_jack_o",
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "name": "Cá Đầu Lâu Huyết Nguyệt",
+    "maxHp": 1300.0,
+    "pullStrength": 132.0,
+    "rarity": "RARE",
+    "baseWeightKg": 12.5,
+    "baseLengthCm": 85.0,
+    "baseXp": 380,
+    "baseGold": 850,
+    "map": null,
+    "skills": [
+      {
+        "id": "khat_mau_dem_ram",
+        "isActive": false
+      },
+      {
+        "id": "xung_kich_doat_hon",
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "name": "Cá Dạng Ma",
+    "maxHp": 2000.0,
+    "pullStrength": 168.0,
+    "rarity": "EPIC",
+    "baseWeightKg": 28.0,
+    "baseLengthCm": 125.0,
+    "baseXp": 750,
+    "baseGold": 1800,
+    "map": null,
+    "skills": [
+      {
+        "id": "the_xac_hu_vo",
+        "isActive": false
+      },
+      {
+        "id": "tieng_than_u_am",
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "name": "Thủy Quái Frankenstein",
+    "maxHp": 2250.0,
+    "pullStrength": 178.0,
+    "rarity": "EPIC",
+    "baseWeightKg": 45.0,
+    "baseLengthCm": 140.0,
+    "baseXp": 900,
+    "baseGold": 2200,
+    "map": null,
+    "skills": [
+      {
+        "id": "qua_tai_dien_nang",
+        "isActive": false
+      },
+      {
+        "id": "sam_set_hoi_sinh",
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "name": "Hải Xà Dạ Xoa",
+    "maxHp": 4000.0,
+    "pullStrength": 210.0,
+    "rarity": "LEGENDARY",
+    "baseWeightKg": 95.0,
+    "baseLengthCm": 260.0,
+    "baseXp": 2000,
+    "baseGold": 5500,
+    "map": null,
+    "skills": [
+      {
+        "id": "uon_luon_ma_quai",
+        "isActive": false
+      },
+      {
+        "id": "mang_xa_siet_cuoc",
+        "isActive": true
+      },
+      {
+        "id": "doc_to_am_ty",
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "name": "Kình Ngư Tử Thần Thanatos",
+    "maxHp": 6666.0,
+    "pullStrength": 235.0,
+    "rarity": "BOSS",
+    "baseWeightKg": 180.0,
+    "baseLengthCm": 380.0,
+    "baseXp": 5000,
+    "baseGold": 15000,
+    "map": null,
+    "skills": [
+      {
+        "id": "uy_ap_tu_than",
+        "isActive": false
+      },
+      {
+        "id": "tieng_hu_dia_nguc",
+        "isActive": true
+      },
+      {
+        "id": "vuc_xoay_am_ty",
+        "isActive": true
+      },
+      {
+        "id": "am_hon_quay_pha",
+        "isActive": true
+      },
+      {
+        "id": "lien_hoan_tram_doat_menh",
         "isActive": true
       }
     ]
