@@ -1613,14 +1613,21 @@ public class GameHUD {
             com.fishingrpg.game.entities.ItemData itemData = com.fishingrpg.game.data.ItemDatabase.getItem(hoveredInventoryItem);
             if (itemData != null) {
                 boolean isBook = hoveredInventoryItem.startsWith("Sách: ");
-                float tipW = isBook ? 320f : 260f;
-                float tipH = isBook ? 120f : 95f;
+                float tipW = isBook ? 340f : 300f;
+
+                // Tinh chieu cao mo ta va tong chieu cao hop tooltip dong
+                font.getData().setScale(0.8f);
+                layout.setText(font, itemData.description, Color.WHITE, tipW - 24f, Align.left, true);
+                float descH = layout.height;
+                float tipH = isBook ? (28f + descH + 12f + 20f + 20f + 16f) : (28f + descH + 12f + 20f + 16f);
+
                 Vector3 mouse = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
                 screen.getViewport().unproject(mouse);
-                float tipX = mouse.x - tipW - 12f;
-                if (tipX < 0) tipX = mouse.x + 12f;
-                float tipY = mouse.y;
-                if (tipY + tipH > H) tipY = H - tipH - 10f;
+                float tipX = mouse.x - tipW - 14f;
+                if (tipX < 10f) tipX = mouse.x + 14f;
+                float tipY = mouse.y - 10f;
+                if (tipY + tipH > H - 10f) tipY = H - tipH - 10f;
+                if (tipY < 10f) tipY = 10f;
 
                 batch.end();
                 Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -1633,43 +1640,44 @@ public class GameHUD {
                 Gdx.gl.glDisable(GL20.GL_BLEND);
                 batch.begin();
 
+                float curY = tipY + tipH - 16f;
+                font.setColor(1f, 0.88f, 0.3f, 1f);
+                font.getData().setScale(0.95f);
+                font.draw(batch, itemData.name, tipX + 12f, curY);
+                curY -= 22f;
+
+                font.setColor(0.85f, 0.88f, 0.95f, 1f);
+                font.getData().setScale(0.8f);
+                font.draw(batch, itemData.description, tipX + 12f, curY, tipW - 24f, Align.left, true);
+                curY -= (descH + 10f);
+
                 if (isBook) {
                     String skillId = getSkillIdFromBookName(hoveredInventoryItem);
                     com.fishingrpg.game.skills.Skill s = skillId != null ? player.getSkillTree().getSkill(skillId) : null;
 
-                    font.setColor(1f, 0.88f, 0.3f, 1f);
-                    font.draw(batch, itemData.name, tipX + 12, tipY + tipH - 16f);
-                    font.setColor(0.85f, 0.88f, 0.95f, 1f);
-                    font.getData().setScale(0.8f);
-                    font.draw(batch, itemData.description, tipX + 12, tipY + tipH - 40f);
-
                     if (s == null || s.getLevel() == 0) {
                         font.setColor(0.4f, 1f, 0.5f, 1f);
-                        font.draw(batch, "• Bấm phím / Nhấp: Học kỹ năng (Cấp 1)", tipX + 12, tipY + tipH - 66f);
+                        font.draw(batch, "• Bấm phím / Nhấp: Học kỹ năng (Cấp 1)", tipX + 12f, curY, tipW - 24f, Align.left, true);
                     } else if (!s.isMaxed()) {
                         font.setColor(1f, 0.85f, 0.25f, 1f);
-                        font.draw(batch, "• Bấm phím / Nhấp: ĐỘT PHÁ Cấp " + (s.getLevel() + 1) + " (0 SP)", tipX + 12, tipY + tipH - 66f);
+                        font.draw(batch, "• Bấm phím / Nhấp: ĐỘT PHÁ Cấp " + (s.getLevel() + 1) + " (0 SP)", tipX + 12f, curY, tipW - 24f, Align.left, true);
                     } else {
                         font.setColor(0.4f, 0.9f, 1f, 1f);
-                        font.draw(batch, "• Bấm phím / Nhấp: QUY ĐỔI thành +1 Điểm Kỹ Năng (SP)", tipX + 12, tipY + tipH - 66f);
+                        font.draw(batch, "• Bấm phím / Nhấp: QUY ĐỔI thành +1 Điểm Kỹ Năng (SP)", tipX + 12f, curY, tipW - 24f, Align.left, true);
                     }
+                    curY -= 20f;
+
                     font.setColor(0.9f, 0.75f, 0.45f, 1f);
-                    font.draw(batch, "• Hoặc đem bán tại Cửa Hàng để nhận " + itemData.sellPrice + " Vàng", tipX + 12, tipY + tipH - 92f);
+                    font.draw(batch, "• Hoặc đem bán tại Cửa Hàng để nhận " + itemData.sellPrice + " Vàng", tipX + 12f, curY, tipW - 24f, Align.left, true);
                     font.getData().setScale(1f);
                 } else {
-                    font.setColor(1f, 0.88f, 0.3f, 1f);
-                    font.draw(batch, itemData.name, tipX + 12, tipY + 74);
-                    font.setColor(0.85f, 0.88f, 0.95f, 1f);
-                    font.getData().setScale(0.8f);
-                    font.draw(batch, itemData.description, tipX + 12, tipY + 50);
-
                     String usageText = "";
                     if (itemData.usageType == com.fishingrpg.game.entities.ItemUsageType.IN_COMBAT) usageText = "• Chỉ dùng lúc giằng co";
                     else if (itemData.usageType == com.fishingrpg.game.entities.ItemUsageType.PRE_COMBAT) usageText = "• Dùng trước khi quăng cần";
                     else usageText = "• Dùng bất kỳ lúc nào";
 
                     font.setColor(0.4f, 0.9f, 0.5f, 1f);
-                    font.draw(batch, usageText, tipX + 12, tipY + 24);
+                    font.draw(batch, usageText, tipX + 12f, curY, tipW - 24f, Align.left, true);
                     font.getData().setScale(1f);
                 }
             }
@@ -1685,12 +1693,12 @@ public class GameHUD {
         if (screen.fishingManager.state == State.WAITING || screen.fishingManager.state == State.BITE) {
             drawWaterBobberShapes();
 
-            // Sonar detection radar box backing (only when player has active sonar charges)
+            // Sonar detection radar box backing (chuyen xuong nua duoi man hinh Y=200f de khong bi che boi cast buff card o Y=500-550f)
             if (player != null && player.getSonarCharges() > 0 && screen.fishingManager.predictedCatch != null) {
                 float boxW = 500f;
                 float boxH = 36f;
                 float boxX = (W - boxW) / 2f;
-                float boxY = 550f;
+                float boxY = 200f;
                 sr.setColor(0.04f, 0.12f, 0.20f, 0.92f);
                 sr.rect(boxX, boxY, boxW, boxH);
                 sr.setColor(0.25f, 0.85f, 1f, 0.85f);
@@ -1840,29 +1848,67 @@ public class GameHUD {
             float barY = tensionY + BAR_INSET;
             float barW = tensionW - BAR_INSET * 2f;
 
+            // Ty le Max Tension huu dung theo thoi gian thuc (realtime)
+            float maxTensionRatio = screen.fishingManager.getEffectiveMaxTensionRatio();
+            float usableH = inH * maxTensionRatio;
+
             // Empty Track
             sr.setColor(0.06f, 0.08f, 0.12f, 1f);
             sr.rect(barX, barY, barW, inH);
 
-            // Colored Zone Stripes on Track (Safe, Warning, Danger)
-            sr.setColor(0.15f, 0.65f, 0.35f, 0.15f); sr.rect(barX, barY, barW, inH * 0.50f);
-            sr.setColor(0.95f, 0.75f, 0.15f, 0.15f); sr.rect(barX, barY + inH * 0.50f, barW, inH * 0.35f);
-            sr.setColor(0.95f, 0.20f, 0.20f, 0.22f); sr.rect(barX, barY + inH * 0.85f, barW, inH * 0.15f);
+            // Colored Zone Stripes on Usable Track (Safe, Warning, Danger)
+            sr.setColor(0.15f, 0.65f, 0.35f, 0.15f); sr.rect(barX, barY, barW, usableH * 0.50f);
+            sr.setColor(0.95f, 0.75f, 0.15f, 0.15f); sr.rect(barX, barY + usableH * 0.50f, barW, usableH * 0.35f);
+            sr.setColor(0.95f, 0.20f, 0.20f, 0.22f); sr.rect(barX, barY + usableH * 0.85f, barW, usableH * 0.15f);
 
-            // Graduation Tick marks at 25%, 50%, 75%, 85%
+            // Graduation Tick marks
             sr.setColor(0.4f, 0.5f, 0.65f, 0.7f);
-            sr.rect(barX, barY + inH * 0.25f, 6f, 1.5f);
-            sr.rect(barX, barY + inH * 0.50f, 9f, 2f);
-            sr.rect(barX, barY + inH * 0.75f, 6f, 1.5f);
+            sr.rect(barX, barY + usableH * 0.25f, 6f, 1.5f);
+            sr.rect(barX, barY + usableH * 0.50f, 9f, 2f);
+            sr.rect(barX, barY + usableH * 0.75f, 6f, 1.5f);
             sr.setColor(1f, 0.3f, 0.3f, 0.8f);
-            sr.rect(barX, barY + inH * 0.85f, 12f, 2f);
+            sr.rect(barX, barY + usableH * 0.85f, 12f, 2f);
+
+            // Thanh nho bao phan tension da bi giam & Dat moc o duoi moc max
+            if (maxTensionRatio < 0.999f) {
+                float reducedH = inH - usableH;
+                float reducedY = barY + usableH;
+
+                // 1. Thanh nho bao phan tension da bi giam (Hazard Striped Cap)
+                sr.setColor(0.45f, 0.06f, 0.10f, 0.88f);
+                sr.rect(barX, reducedY, barW, reducedH);
+
+                // 2. Cac vach cheo soc do canh bao bi can mon
+                sr.setColor(0.95f, 0.20f, 0.25f, 0.80f);
+                int stripes = Math.max(2, (int) (reducedH / 8f));
+                for (int s = 0; s < stripes; s++) {
+                    float sy = reducedY + (s * 8f);
+                    if (sy + 5f <= barY + inH) {
+                        sr.rectLine(barX + 2f, sy, barX + barW - 2f, sy + 5f, 1.8f);
+                    }
+                }
+
+                // 3. Dat moc o duoi moc max (Vach moc do neon nhap nhay tai nguong no day moi)
+                float pulse = 0.85f + 0.15f * MathUtils.sin(timer * 12f);
+                sr.setColor(1f, 0.22f, 0.25f, pulse);
+                sr.rect(barX - 4f, reducedY - 1.5f, barW + 8f, 3f);
+
+                // Mui ten canh bao tam giac chi vao moc
+                sr.triangle(barX + barW + 4f, reducedY,
+                            barX + barW + 11f, reducedY + 4.5f,
+                            barX + barW + 11f, reducedY - 4.5f);
+                sr.setColor(1f, 0.90f, 0.30f, 1f);
+                sr.circle(barX - 3f, reducedY, 2.2f, 8);
+            }
 
             // Tension Fill (Energy Liquid)
             float tRatio = MathUtils.clamp(player.getCurrentLineTension() / Math.max(1f, player.getMaxLineTension()), 0f, 1f);
-            if (tRatio > 0.85f) {
+            float tUsableRatio = MathUtils.clamp(player.getCurrentLineTension() / Math.max(1f, screen.fishingManager.getEffectiveMaxTension()), 0f, 1f);
+
+            if (tUsableRatio > 0.85f) {
                 float pulse = 0.8f + 0.2f * MathUtils.sin(timer * 12f);
                 sr.setColor(1f, 0.18f * pulse, 0.18f * pulse, 1f); // Danger Red
-            } else if (tRatio > 0.50f) {
+            } else if (tUsableRatio > 0.50f) {
                 sr.setColor(1f, 0.78f, 0.18f, 0.95f); // Amber
             } else {
                 sr.setColor(0.18f, 0.88f, 0.55f, 0.95f); // Emerald
@@ -2305,7 +2351,7 @@ public class GameHUD {
             float boxW = 500f;
             float boxH = 36f;
             float boxX = (W - boxW) / 2f;
-            float boxY = 550f;
+            float boxY = 200f; // Chuyen xuong nua duoi man hinh Y=200f dong bo voi drawShapes
             Catchable pc = screen.fishingManager.predictedCatch;
             font.setColor(0.35f, 0.95f, 1f, 1f);
             font.getData().setScale(0.85f);
@@ -2402,10 +2448,21 @@ public class GameHUD {
             // Shadow
             font.setColor(0f, 0f, 0f, 0.9f);
             font.draw(batch, tStr, tx + 1f, ty - 1f);
-            // Main text
+            // Main text (So giu nguyen khong doi theo yeu cau nguoi dung)
             font.setColor(tRatio > 0.85f ? new Color(1f, 0.3f, 0.3f, 1f) : Color.WHITE);
             font.draw(batch, tStr, tx, ty);
             font.getData().setScale(1f);
+
+            // Text chi bao gioi han bi giam canh vach moc
+            float effRatio = screen.fishingManager.getEffectiveMaxTensionRatio();
+            if (effRatio < 0.999f) {
+                float inH = tensionH - BAR_INSET * 2f;
+                float mY = (tensionY + BAR_INSET) + inH * effRatio;
+                font.setColor(1f, 0.3f, 0.3f, 1f);
+                font.getData().setScale(0.60f);
+                font.draw(batch, "GIỚI HẠN: -" + (int) Math.round((1f - effRatio) * 100) + "%", tensionX + tensionW + 14f, mY + 4f);
+                font.getData().setScale(1f);
+            }
 
             if (tRatio > 0.85f) {
                 font.setColor(1f, 0.95f, 0.4f, 1f);

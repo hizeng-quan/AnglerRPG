@@ -26,6 +26,7 @@ import com.fishingrpg.game.entities.equipment.EquipmentGenerator;
 import com.fishingrpg.game.entities.equipment.EquipmentType;
 import com.fishingrpg.game.entities.equipment.Rarity;
 import com.fishingrpg.game.systems.AudioManager;
+import com.fishingrpg.game.systems.EventManager;
 import com.fishingrpg.game.ui.EquipmentIconRenderer;
 import com.fishingrpg.game.ui.NotificationUI;
 
@@ -312,33 +313,60 @@ public class GachaScreen implements Screen {
                 sr.circle(starX[i], starY[i], starSize[i]);
             }
         } else {
-            // Lạc Hồng Ruby / Imperial Bronze theme
-            sr.rect(0, 0, W, H, BG_EVT_BOT, BG_EVT_BOT, BG_EVT_TOP, BG_EVT_TOP);
+            boolean isHlw = EventManager.isHalloweenActive();
+            if (isHlw) {
+                // Halloween Crimson Blood Moon Eclipse theme
+                Color bgHlwBot = new Color(0.10f, 0.02f, 0.04f, 1f);
+                Color bgHlwTop = new Color(0.28f, 0.05f, 0.08f, 1f);
+                sr.rect(0, 0, W, H, bgHlwBot, bgHlwBot, bgHlwTop, bgHlwTop);
 
-            // Watermark rotating Dong Son drum sunburst in center background
-            float drumCX = W / 2f;
-            float drumCY = H / 2f;
-            sr.setColor(0.95f, 0.65f, 0.2f, 0.05f);
-            sr.circle(drumCX, drumCY, 240f);
-            sr.circle(drumCX, drumCY, 170f);
-            sr.circle(drumCX, drumCY, 100f);
-            for (int s = 0; s < 12; s++) {
-                float sAng = animTimer * 8f + s * 30f;
-                float sx1 = drumCX + MathUtils.cosDeg(sAng - 5f) * 160f;
-                float sy1 = drumCY + MathUtils.sinDeg(sAng - 5f) * 160f;
-                float sx2 = drumCX + MathUtils.cosDeg(sAng + 5f) * 160f;
-                float sy2 = drumCY + MathUtils.sinDeg(sAng + 5f) * 160f;
-                float sx3 = drumCX + MathUtils.cosDeg(sAng) * 230f;
-                float sy3 = drumCY + MathUtils.sinDeg(sAng) * 230f;
-                sr.triangle(sx1, sy1, sx2, sy2, sx3, sy3);
+                // Blood Moon Aura in upper sky
+                float moonCX = W * 0.48f;
+                float moonCY = H * 0.62f;
+                sr.setColor(0.85f, 0.12f, 0.12f, 0.12f);
+                sr.circle(moonCX, moonCY, 220f);
+                sr.setColor(0.95f, 0.20f, 0.20f, 0.18f);
+                sr.circle(moonCX, moonCY, 150f);
+                sr.setColor(0.50f, 0.05f, 0.08f, 0.25f);
+                sr.circle(moonCX, moonCY, 90f);
+
+                // Floating pumpkin/bat flame motes
+                for (int s = 0; s < 10; s++) {
+                    float sAng = animTimer * 12f + s * 36f;
+                    float sx = moonCX + MathUtils.cosDeg(sAng) * (110f + (s % 3) * 25f);
+                    float sy = moonCY + MathUtils.sinDeg(sAng) * (70f + (s % 2) * 30f);
+                    sr.setColor(1.0f, 0.45f, 0.15f, 0.25f);
+                    sr.circle(sx, sy, 3.5f + (s % 3));
+                }
+            } else {
+                // Lạc Hồng Ruby / Imperial Bronze theme
+                sr.rect(0, 0, W, H, BG_EVT_BOT, BG_EVT_BOT, BG_EVT_TOP, BG_EVT_TOP);
+
+                // Watermark rotating Dong Son drum sunburst in center background
+                float drumCX = W / 2f;
+                float drumCY = H / 2f;
+                sr.setColor(0.95f, 0.65f, 0.2f, 0.05f);
+                sr.circle(drumCX, drumCY, 240f);
+                sr.circle(drumCX, drumCY, 170f);
+                sr.circle(drumCX, drumCY, 100f);
+                for (int s = 0; s < 12; s++) {
+                    float sAng = animTimer * 8f + s * 30f;
+                    float sx1 = drumCX + MathUtils.cosDeg(sAng - 5f) * 160f;
+                    float sy1 = drumCY + MathUtils.sinDeg(sAng - 5f) * 160f;
+                    float sx2 = drumCX + MathUtils.cosDeg(sAng + 5f) * 160f;
+                    float sy2 = drumCY + MathUtils.sinDeg(sAng + 5f) * 160f;
+                    float sx3 = drumCX + MathUtils.cosDeg(sAng) * 230f;
+                    float sy3 = drumCY + MathUtils.sinDeg(sAng) * 230f;
+                    sr.triangle(sx1, sy1, sx2, sy2, sx3, sy3);
+                }
+
+                // Flying Chim Lac silhouette in sky
+                float birdX = (animTimer * 40f) % (W + 200f) - 100f;
+                float birdY = H - 95f + MathUtils.sin(animTimer * 1.5f) * 12f;
+                sr.setColor(0.95f, 0.75f, 0.3f, 0.18f);
+                sr.triangle(birdX, birdY, birdX + 26f, birdY + 6f, birdX + 8f, birdY + 12f);
+                sr.triangle(birdX + 8f, birdY + 12f, birdX - 8f, birdY + 28f, birdX + 16f, birdY + 8f);
             }
-
-            // Flying Chim Lac silhouette in sky
-            float birdX = (animTimer * 40f) % (W + 200f) - 100f;
-            float birdY = H - 95f + MathUtils.sin(animTimer * 1.5f) * 12f;
-            sr.setColor(0.95f, 0.75f, 0.3f, 0.18f);
-            sr.triangle(birdX, birdY, birdX + 26f, birdY + 6f, birdX + 8f, birdY + 12f);
-            sr.triangle(birdX + 8f, birdY + 12f, birdX - 8f, birdY + 28f, birdX + 16f, birdY + 8f);
 
             // Floating festive embers
             for (int i = 0; i < STAR_COUNT; i++) {
@@ -483,8 +511,9 @@ public class GachaScreen implements Screen {
             }
 
             // 3 Equipment Slots (Rod, Line, Hook) with Full Vector Art Display
-            String curSetName = isEventBanner ? "Thần Khí Lạc Hồng" : curTheme.setName;
-            Color curSetCol = isEventBanner ? new Color(1f, 0.85f, 0.35f, 1f) : curTheme.primaryColor;
+            boolean isHlw = EventManager.isHalloweenActive();
+            String curSetName = isEventBanner ? (isHlw ? "Huyết Nguyệt Thần Vương" : "Thần Khí Lạc Hồng") : curTheme.setName;
+            Color curSetCol = isEventBanner ? (isHlw ? new Color(1f, 0.28f, 0.28f, 1f) : new Color(1f, 0.85f, 0.35f, 1f)) : curTheme.primaryColor;
 
             float slotW = 92f;
             float slotH = 88f;
@@ -892,28 +921,32 @@ public class GachaScreen implements Screen {
                 font.draw(game.batch, "Bảo hiểm Legendary: Còn " + remLeg + " lượt (" + player.pityLegendary + "/100)", infoX + 25f, infoY + 52f);
             } else {
                 // Event Banner Info
-                titleFont.setColor(new Color(1f, 0.45f, 0.35f, 1f));
-                String setName = "BỘ THẦN KHÍ LẠC HỒNG";
+                boolean isHlw = EventManager.isHalloweenActive();
+                titleFont.setColor(isHlw ? new Color(1f, 0.30f, 0.30f, 1f) : new Color(1f, 0.45f, 0.35f, 1f));
+                String setName = isHlw ? "BỘ HUYẾT NGUYỆT THẦN VƯƠNG" : "BỘ THẦN KHÍ LẠC HỒNG";
                 layout.setText(titleFont, setName);
                 titleFont.draw(game.batch, layout, infoX + 25f, infoY + 340f);
 
                 // Rarity Tag
-                font.setColor(new Color(1f, 0.85f, 0.35f, 1f));
+                font.setColor(isHlw ? new Color(1f, 0.45f, 0.45f, 1f) : new Color(1f, 0.85f, 0.35f, 1f));
                 font.getData().setScale(0.82f);
-                String rarTag = "✦ PHẨM CHẤT: THẦN THOẠI (GIỚI HẠN) • 15 CẤP ĐIỂM";
+                String rarTag = isHlw ? "✦ PHẨM CHẤT: 6★ LIMITED PREMIUM • 18 CẤP ĐIỂM" : "✦ PHẨM CHẤT: THẦN THOẠI (GIỚI HẠN) • 15 CẤP ĐIỂM";
                 font.draw(game.batch, rarTag, infoX + 25f, infoY + 308f);
 
                 // Items list
-                font.setColor(0.95f, 0.85f, 0.65f, 1f);
+                font.setColor(isHlw ? new Color(1f, 0.80f, 0.80f, 1f) : new Color(0.95f, 0.85f, 0.65f, 1f));
                 font.getData().setScale(0.78f);
-                String itemsStr = "• Gồm: Trượng Lạc Hồng  |  Dây Rồng Thiêng  |  Móc Âu Cơ";
+                String itemsStr = isHlw ? "• Gồm: Huyết Nguyệt Thần Trượng  |  Dây Huyết Ma Cơ  |  Lưỡi Huyết Nguyệt Ma Trảo"
+                                        : "• Gồm: Trượng Lạc Hồng  |  Dây Rồng Thiêng  |  Móc Âu Cơ";
                 font.draw(game.batch, itemsStr, infoX + 25f, infoY + 280f);
 
                 // Set Perks
                 font.setColor(Color.WHITE);
                 font.getData().setScale(0.80f);
-                String perk1 = "• Hiệu ứng 3 Món: [Ý Chí Bất Diệt] Vô hiệu hóa Kỹ Năng Boss";
-                String perk2 = "• Tăng 50% Lực kéo đối với Boss Thủy Quái & Cá Khổng Lồ";
+                String perk1 = isHlw ? "• Hiệu ứng 3 Món: [Bá Quyền Trăng Máu] Quăng Perfect x2 Sát Thương (2s đầu)"
+                                     : "• Hiệu ứng 3 Món: [Ý Chí Bất Diệt] Vô hiệu hóa Kỹ Năng Boss";
+                String perk2 = isHlw ? "• Kéo dây hút 3% HP cá (tối đa 12/s) thành Thể Lực. +45% Tỷ Lệ Cá Hiếm"
+                                     : "• Tăng 50% Lực kéo đối với Boss Thủy Quái & Cá Khổng Lồ";
                 font.draw(game.batch, perk1, infoX + 25f, infoY + 252f);
                 font.draw(game.batch, perk2, infoX + 25f, infoY + 224f);
 
@@ -923,8 +956,9 @@ public class GachaScreen implements Screen {
                 font.draw(game.batch, "TIẾN TRÌNH BẢO HIỂM MAY MẮN (PITY):", infoX + 25f, infoY + 185f);
 
                 int remLim = Math.max(0, 80 - player.pityLimited);
-                font.setColor(1f, 0.45f, 0.35f, 1f);
-                font.draw(game.batch, "Bảo hiểm Thần Khí Lạc Hồng: Còn " + remLim + " lượt (" + player.pityLimited + "/80)", infoX + 25f, infoY + 152f);
+                font.setColor(isHlw ? new Color(1f, 0.35f, 0.35f, 1f) : new Color(1f, 0.45f, 0.35f, 1f));
+                String pityLabel = isHlw ? "Bảo hiểm Huyết Nguyệt Thần Vương: Còn " : "Bảo hiểm Thần Khí Lạc Hồng: Còn ";
+                font.draw(game.batch, pityLabel + remLim + " lượt (" + player.pityLimited + "/80)", infoX + 25f, infoY + 152f);
 
                 String eventTime = player.getEventManager().getEventTimeRemaining();
                 font.setColor(0.95f, 0.85f, 0.4f, 1f);
@@ -1222,8 +1256,9 @@ public class GachaScreen implements Screen {
         drawRoundedRect(sr, tipX, tipY, tipW, tipH, 12);
 
         StandardSetTheme curSet = isEventBanner ? null : STANDARD_SETS[currentStandardSetIndex];
-        String setName = isEventBanner ? "Thần Khí Lạc Hồng" : curSet.setName;
-        Color borderCol = isEventBanner ? new Color(1f, 0.65f, 0.3f, 1f) : curSet.primaryColor;
+        boolean isHlw = EventManager.isHalloweenActive();
+        String setName = isEventBanner ? (isHlw ? "Huyết Nguyệt Thần Vương" : "Thần Khí Lạc Hồng") : curSet.setName;
+        Color borderCol = isEventBanner ? (isHlw ? new Color(1f, 0.28f, 0.28f, 1f) : new Color(1f, 0.65f, 0.3f, 1f)) : curSet.primaryColor;
 
         // 4. Header strip
         sr.setColor(borderCol.r * 0.25f, borderCol.g * 0.25f, borderCol.b * 0.25f, 0.95f);
@@ -1304,7 +1339,8 @@ public class GachaScreen implements Screen {
 
         // Inside the 3 boxes:
         String[] pNames = isEventBanner ?
-            new String[]{"Trượng Lạc Hồng", "Dây Rồng Thiêng", "Móc Âu Cơ"} :
+            (isHlw ? new String[]{"Huyết Nguyệt Thần Trượng", "Dây Huyết Ma Cơ", "Lưỡi Huyết Nguyệt Ma Trảo"}
+                   : new String[]{"Trượng Lạc Hồng", "Dây Rồng Thiêng", "Móc Âu Cơ"}) :
             new String[]{curSet.rodName, curSet.lineName, curSet.hookName};
         String[] pTypes = {"CẦN CÂU", "DÂY CƯỚC", "LƯỠI CÂU"};
 
@@ -1389,10 +1425,17 @@ public class GachaScreen implements Screen {
         // Gather all sets to display
         List<StandardSetTheme> displaySets = new ArrayList<>();
         if (isEventBanner) {
-            displaySets.add(new StandardSetTheme("Thần Khí Lạc Hồng", "Trượng Lạc Hồng", "Dây Rồng Thiêng", "Móc Âu Cơ", 15,
-                new Color(1f, 0.45f, 0.35f, 1f), new Color(0.85f, 0.25f, 0.2f, 1f), new Color(1f, 0.6f, 0.4f, 0.5f), "LIMITED"));
-            displaySets.add(new StandardSetTheme("Vệ Quốc Vang Danh", "Cần Khởi Nghĩa", "Cước Vệ Quốc", "Lưỡi Sao Vàng", 5,
-                new Color(1f, 0.85f, 0.35f, 1f), new Color(0.85f, 0.4f, 0.1f, 1f), new Color(1f, 0.8f, 0.3f, 0.5f), "EVENT"));
+            if (EventManager.isHalloweenActive()) {
+                displaySets.add(new StandardSetTheme("Huyết Nguyệt Thần Vương", "Huyết Nguyệt Thần Trượng", "Dây Huyết Ma Cơ", "Lưỡi Huyết Nguyệt Ma Trảo", 18,
+                    new Color(1f, 0.25f, 0.25f, 1f), new Color(0.85f, 0.15f, 0.15f, 1f), new Color(1f, 0.4f, 0.4f, 0.5f), "6★ LIMITED"));
+                displaySets.add(new StandardSetTheme("Dạ Hội Bí Ngô", "Cần Dạ Hội Bí Ngô", "Dây Cước Tơ Nhện Quỷ", "Lưỡi Kẹo Ma Quái", 4,
+                    new Color(1f, 0.65f, 0.15f, 1f), new Color(0.85f, 0.4f, 0.1f, 1f), new Color(1f, 0.8f, 0.3f, 0.5f), "4★ EVENT"));
+            } else {
+                displaySets.add(new StandardSetTheme("Thần Khí Lạc Hồng", "Trượng Lạc Hồng", "Dây Rồng Thiêng", "Móc Âu Cơ", 15,
+                    new Color(1f, 0.45f, 0.35f, 1f), new Color(0.85f, 0.25f, 0.2f, 1f), new Color(1f, 0.6f, 0.4f, 0.5f), "LIMITED"));
+                displaySets.add(new StandardSetTheme("Vệ Quốc Vang Danh", "Cần Khởi Nghĩa", "Cước Vệ Quốc", "Lưỡi Sao Vàng", 5,
+                    new Color(1f, 0.85f, 0.35f, 1f), new Color(0.85f, 0.4f, 0.1f, 1f), new Color(1f, 0.8f, 0.3f, 0.5f), "EVENT"));
+            }
         }
         for (StandardSetTheme st : STANDARD_SETS) {
             displaySets.add(st);
@@ -1534,8 +1577,9 @@ public class GachaScreen implements Screen {
             font.draw(game.batch, "• Rare (3★): 30.0%", col1X + 16f, rLineY - 50f);
             font.setColor(Rarity.EPIC.color);
             font.draw(game.batch, "• Epic (4★): 8.5%", col1X + 16f, rLineY - 75f);
-            font.setColor(new Color(1f, 0.45f, 0.35f, 1f));
-            font.draw(game.batch, "• Thần Khí Lạc Hồng (6★): 1.5%", col1X + 16f, rLineY - 100f);
+            boolean isHlw = EventManager.isHalloweenActive();
+            font.setColor(isHlw ? new Color(1f, 0.30f, 0.30f, 1f) : new Color(1f, 0.45f, 0.35f, 1f));
+            font.draw(game.batch, isHlw ? "• Huyết Nguyệt Thần Vương (6★): 1.5%" : "• Thần Khí Lạc Hồng (6★): 1.5%", col1X + 16f, rLineY - 100f);
 
             // Limited Pity Rules
             font.setColor(0.95f, 0.85f, 0.35f, 1f);
@@ -1543,7 +1587,7 @@ public class GachaScreen implements Screen {
             font.draw(game.batch, "QUY TẮC BẢO HIỂM GIỚI HẠN:", col1X + 16f, rLineY - 150f);
             font.getData().setScale(0.68f);
             font.setColor(0.80f, 0.88f, 0.98f, 0.92f);
-            font.draw(game.batch, "• Chắc chắn nhận Thần Khí ở lượt 80", col1X + 16f, rLineY - 176f);
+            font.draw(game.batch, isHlw ? "• Chắc chắn nhận Huyết Nguyệt ở lượt 80" : "• Chắc chắn nhận Thần Khí ở lượt 80", col1X + 16f, rLineY - 176f);
             font.draw(game.batch, "• Quay 10 lượt luôn có tối thiểu 1 món 4★+", col1X + 16f, rLineY - 200f);
             font.draw(game.batch, "• Tiến độ bảo hiểm được bảo lưu qua các đợt", col1X + 16f, rLineY - 224f);
             font.draw(game.batch, "• Sau sự kiện, trang bị giới hạn sẽ tạm đóng", col1X + 16f, rLineY - 248f);

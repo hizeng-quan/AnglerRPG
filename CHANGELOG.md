@@ -4,6 +4,105 @@
 
 ---
 
+## 📅 [2026-10-27] - Phiên bản v0.5.3.4 (Khắc Phục Lỗi Kỹ Năng Dưỡng Sức & Tinh Chỉnh Tiêu Hao Thể Lực Động Theo Trạng Thái Cá)
+
+### 🐛 Sửa Lỗi Kỹ Năng & Cân Bằng Gameplay (BAL-STM-01)
+- **Sửa Lỗi Kỹ Năng Dưỡng Sức (`duong_suc`) - Khắc Phục Lỗi Hồi Kép**:
+  - **Nguyên nhân bug:** Hệ thống GAS (`DuongSucAbility` -> `effect_duong_suc`) đã kích hoạt hiệu ứng hồi phục Thể lực đều đặn theo thời gian (`staminaRegenPerSec = 10.0f/s`), nhưng tại phương thức kết thúc `duongSucChannelTimer <= 0` trong `FishingManager.java` lại tồn đọng logic cũ gọi `player.consumeStamina(-recovery)` với `recovery = 50f`. Điều này dẫn đến việc người chơi vừa được hồi đều đặn +10/s vừa bị cộng dồn thêm một lượng đột biến +50 Thể lực ở cuối kênh dẫn.
+  - **Khắc phục:** Loại bỏ hoàn toàn dòng lệnh cộng dồn +50 Thể lực khi hết thời gian vận sức; đồng bộ chuẩn hóa để toàn bộ lượng hồi phục 50 Thể lực được phân bổ đều đặn và mượt mà qua hệ thống GAS trong suốt thời gian vận sức.
+  - **Chuẩn hóa thời gian vận sức & Cây Kỹ Năng (`SkillTree.java`, `Skill.java`):**
+    - **Cấp 1:** Vận sức 5.0 giây, hồi tổng cộng 50 Thể lực (`+10.0 Thể lực/giây`).
+    - **Cấp 2:** Vận sức 4.0 giây, hồi tổng cộng 50 Thể lực (`+12.5 Thể lực/giây`).
+    - **Cấp 3:** Vận sức 3.0 giây, hồi tổng cộng 50 Thể lực (`+16.7 Thể lực/giây`).
+    - Cập nhật định dạng hiển thị thông số chiêu thức trong Cây Kỹ Năng trực quan: `Vận sức X.Xs hồi +50 Thể lực (+Y/s)`.
+
+- **Cơ Chế Tiêu Hao Thể Lực Động Trong Giao Tranh (Dynamic Combat Stamina Drain)**:
+  - **Tiêu hao nhanh hơn khi cá PULLING:** Tăng mức tiêu hao thể lực cơ bản từ `2.0/s` khi cá nghỉ ngơi (`IDLE`) lên `3.0/s` khi cá đang ra sức kéo dây (`PULLING`).
+  - **Biến thiên theo sát thương/lực kéo của cá (`pullStrength`):** Bổ sung hệ số biến thiên `pullStrength * 0.015f` vào công thức tiêu hao thể lực theo giây. Cá càng lớn và hung hãn (như các loài cá Săn Mồi Đảo Xa, Boss Cá Cờ Xanh 195 dmg/s) sẽ khiến người chơi mất nhiều thể lực hơn để duy trì việc ghìm giữ cần câu.
+  - **Công thức tính toán:** `totalDrainPerSec = (baseDrain + pullStrength * 0.015f) * drainMult`, trong đó `drainMult` tiếp tục chịu ảnh hưởng tương tác từ các kỹ năng bị động (Cơ Bắp Thép, Phản Xạ) và cơ chế cuồng nộ Boss.
+
+---
+
+## 📅 [2026-10-27] - Phiên bản v0.5.3.3 (Đại Tu Cân Bằng Kỹ Năng 15 Loài Cá Đảo Xa, Re-Hook Cải Tiến & Thanh Tension Realtime)
+
+### ⚖️ Đại Tu Cân Bằng Kỹ Năng Cá Đảo Xa & Nâng Cấp Gameplay (BAL-FSH-02)
+- **Hiển Thị Giới Hạn Max Tension Thời Gian Thực (Visual Realtime Gauge)**:
+  - Giữ nguyên số hiển thị gốc (`Current / Max`) trên Header Card để người chơi nắm được thông số trang bị.
+  - Vẽ dải sọc đỏ chéo cảnh báo (Hazard Red Cap) bao phủ phần Max Tension bị giảm ở đỉnh thanh đo.
+  - Đặt một vạch mốc đỏ neon nhấp nháy kèm mũi tên tam giác và text chỉ báo `% bị giảm` (`-10%`, `-20%`, `-30%`) chính xác tại ngưỡng Max Tension khả dụng mới.
+- **Thân Đao Xé Gió (Cá Thu Ngàng - 600 HP, 85 dmg/s)**:
+  - Tái cấu trúc cơ chế: Rút ngắn 40% thời lượng pha PULLING (còn 0.9s - 2.1s) nhưng tăng +40% lực kéo và giật tức thì +12% Tension vào dây cước ngay khi bắt đầu bơi.
+- **Vũ Điệu Cờ Buồm (Cá Cờ Gòn - 1,150 HP, 125 dmg/s)**:
+  - Cơ chế phạt kép: Cá nhảy 2 nhịp liên tiếp (mỗi nhịp 0.8s). Mỗi nhịp nếu trượt Perfect Re-hook phạt thẳng +30 đơn vị Tension (tổng trượt 2 nhịp nhận trọn +60 Tension).
+- **Vực Đá Nuốt Chửng (Cá Mú Nghệ Khơi - 1,750 HP, 150 dmg/s)**:
+  - Cú giật Tension ban đầu được nerf từ +35% xuống +20% Tension.
+  - Kích hoạt debuff vĩnh viễn trong trận: Giảm 30% lượng hồi Thể lực của người chơi từ mọi nguồn (Bình Thể Lực, Bánh Mì, Dưỡng Sức, Hút máu) cho đến hết trận đấu.
+- **Cắn Xé Điên Cuồng (Cá Mập Rạn Đen - 1,900 HP, 160 dmg/s)**:
+  - Nerf cơ bản: Giảm 20% Max Tension an toàn trong 5 giây.
+  - Tương tác nội tại Thính Mùi Máu: Nếu Thể lực người chơi < 50%, chuyển thành Cắn Xé Cuồng Huyết, bóp nghẹt 30% Max Tension và trừ ngay 30 Thể lực.
+- **Siêu Boss Cá Cờ Xanh Khổng Lồ (3,000 HP, 195 dmg/s)**:
+  - Mũi kiếm xé biển: Giảm ngưỡng phạt ghìm kéo từ 1.5s xuống 1.2s; bỏ hoàn toàn điểm thưởng sát thương người chơi.
+  - Vũ điệu lướt sóng: Tiếp nước sốc giảm từ +35% xuống +20% Tension, trừ -15 Thể lực và hồi 8% máu Boss trừ khi Perfect Re-hook.
+  - Cuồng phong ngự kiếm: Dưới 30% HP, mỗi lần lướt sóng tăng +10% lực kéo Boss cộng dồn; Boss bất tử khi ở trên không trong thời gian nộ.
+- **Cơ Chế Re-Hook Chống Spam & Chống Ghìm Phím**:
+  - Phạt +20% Tension nếu đè giữ phím Space quá 50% thời gian bay của cá.
+  - Ngăn chặn hoàn toàn việc spam phím Space: Chỉ chấp nhận đúng 1 lần bấm duy nhất trong cửa sổ tiếp nước (0 < timer <= 0.35s). Bấm sớm hoặc spam sẽ bị phạt sốc lực.
+- **Hệ Thống Floating Text Toàn Diện Cho Mọi Kỹ Năng & Nội Tại**:
+  - Bổ sung chữ nổi thông báo ngắn gọn chỉ gồm Tên Kỹ Năng (không ghi thông số) và đồng bộ toàn bộ chú thích kỹ năng trong Bách Khoa Cá (CatalogScreen).
+
+---
+
+## 📅 [2026-10-27] - Phiên bản v0.5.3.2 (Tối Ưu Hóa Giao Diện Tooltip & Báo Cáo Kỹ Năng Đảo Xa)
+
+### 🎨 Tối Ưu Hóa Giao Diện Tooltip & Cân Bằng Gameplay (UI-FIX-01)
+- **Mục tiêu**: Loại bỏ triệt để hiện tượng tràn chữ (overflow) ra ngoài khung viền trên màn hình Bách Khoa Cá và HUD Túi đồ nhanh; tối ưu bố cục hiển thị thanh trạng thái Radar Sonar của Kính Nhìn Xuyên Nước; cung cấp báo cáo chi tiết kỹ năng 15 loài cá Đảo Xa.
+- **Tự động xuống dòng (Text Wrap) & Chiều cao động (CatalogScreen.java)**:
+  - Tăng độ rộng tooltip lên `480f` và tính toán trước chiều cao thực tế của danh sách kỹ năng cùng dòng Lore mô tả (`GlyphLayout.setText` với `targetWidth = tw - 38f`, `wrap = true`).
+  - Phân tách rõ ràng Tên kỹ năng (vàng ánh kim `1f, 0.85f, 0.35f`) và Mô tả cơ chế (trắng lam `0.88f, 0.94f, 1f`) thụt lề 10px tinh tế.
+  - Sắp xếp thứ tự các thành phần theo dòng chảy tự nhiên (Flow layout), loại bỏ toàn bộ tọa độ tuyệt đối hardcoded gây đè chữ lên Lore và Thưởng gốc Footer.
+- **Tự động xuống dòng & Co giãn hộp vật phẩm (GameHUD.java)**:
+  - Thiết lập chiều rộng `300f` cho vật phẩm thường và `340f` cho sách kỹ năng.
+  - Tự động đo chiều cao mô tả bằng `GlyphLayout` (`wrap = true`), co giãn chiều cao `tipH` ôm khít nội dung, không còn bị tràn chữ sang phải đè lên các ô phím tắt Quickslot `[1]-[9]`.
+- **Hạ thấp Banner Radar Sonar Thấu Thị (GameHUD.java)**:
+  - Chuyển tọa độ hiển thị của Radar Thấu Thị từ nửa trên màn hình (`Y=550f`) xuống nửa dưới màn hình (`Y=200f`), nằm ở vị trí thoáng đãng ngay dưới phao câu cá.
+  - Chấm dứt hoàn toàn sự cố đè lấp giữa Banner tỷ lệ câu mồi (`castBuffBanner`) và Banner Radar Thấu Thị.
+- **Báo Cáo Phân Tích Cơ Chế Kỹ Năng 15 Loài Cá Đảo Xa**:
+  - Hoàn tất bản báo cáo chi tiết toàn bộ chỉ số HP, lực kéo, điều kiện kích hoạt và tác động giằng co của 15 loài cá Đảo Xa phục vụ cân bằng game.
+
+---
+
+## 📅 [2026-10-27] - Phiên bản v0.5.3.1 (Giai Đoạn 2: Siêu Phẩm Limited 6★ Huyết Nguyệt Thần Vương, Set Bí Ngô & Banner Gacha Chuyển Động)
+
+### 🩸 Giai Đoạn 2: 2 Bộ Trang Bị Halloween Độc Quyền & Banner Gacha Tự Động Chuyển Giao (HLW-02)
+- **Mục tiêu**: Hiện thực hóa trọn vẹn 2 bộ trang bị chủ đề Lễ Hội Halloween: Bộ Cày Cuốc F2P "Dạ Hội Bí Ngô" (4★) và Siêu Phẩm Giới Hạn Tối Thượng "Huyết Nguyệt Thần Vương" (6★ Limited Premium), kèm cơ chế chuyển giao banner gacha động mà không làm ảnh hưởng sự kiện Lạc Hồng đang chạy.
+- **Set 1: "Dạ Hội Bí Ngô" (4★ Limited Event - Độc Đáo Mới)**:
+  - *Bộ ba trang bị*: Cần Dạ Hội Bí Ngô (Damage 34.0, Stamina 210), Dây Cước Tơ Nhện Quỷ (Tension 400, Kháng đứt 6.4), Lưỡi Kẹo Ma Quái (Cá hiếm +17%, Giữ mồi +34%).
+  - *Nội tại Bộ 3 món [Lễ Hội Kẹo Ngọt]*:
+    * +35% Kinh nghiệm (EXP) nhận được từ mọi nguồn bắt cá.
+    * +25% Vàng thưởng nhận được khi bắt cá thành công.
+    * +35% Tỷ lệ xuất hiện Cá Hiếm & Cá Halloween độc quyền.
+    * **Đặc quyền Lễ Hội**: Khi câu cá thành công, có **35% tỉ lệ rơi thêm 1 Kẹo Trick-or-Treat** trực tiếp vào túi đồ!
+- **Set 2: "Huyết Nguyệt Thần Vương" (6★ Limited Premium - Siêu Phẩm Tối Thượng)**:
+  - *Bộ ba trang bị*: Huyết Nguyệt Thần Trượng (Damage 48.0, Stamina 280), Dây Huyết Ma Cơ (Tension 520, Kháng đứt 8.5), Lưỡi Huyết Nguyệt Ma Trảo (Cá hiếm +28%, Giữ mồi +45%).
+  - *Nội tại Bộ 3 món [Bá Quyền Trăng Máu]*:
+    * **Hút Máu Thời Gian Thực Cân Bằng (Balanced Vampirism)**: Khi nhấn giữ kéo dây `SPACE`, hút 3% HP hiện tại của cá chuyển thành Thể lực người chơi mỗi giây (`drainPerSec * delta`). Thiết lập trần hồi phục an toàn **tối đa 12.0 Thể lực/giây** để không làm phá vỡ cơ chế thể lực khi giằng co với các Siêu Boss HP khủng (Thanatos 6,666 HP, Cá Cờ Xanh 3,000 HP).
+    * **Bộc Phá Quăng Hoàn Hảo (Perfect Cast Burst)**: Khi quăng cần đạt mốc `PERFECT!`, người chơi nhận hiệu ứng nhân đôi sát thương kéo cá (**x2.0 Damage**) duy trì trong **2 giây đầu tiên** của trận đấu.
+    * +45% Tỷ lệ xuất hiện Cá Hiếm & Boss.
+- **6 Tuyệt Tác Đồ Họa Vector SVG & LibGDX ShapeRenderer Chuyên Nghiệp**:
+  - `assets/vectors/equipment/rod_da_hoi_bi_ngo.svg` & `drawPumpkinRod`: Cần Bí Ngô hắc diện thạch, quấn dây leo cam, đèn Jack-o'-Lantern rực lửa.
+  - `assets/vectors/equipment/line_da_hoi_bi_ngo.svg` & `drawSpiderSilkLine`: Cước Tơ Nhện Quỷ tím thẫm, mạng nhện 8 nan, đầu lâu ma quái.
+  - `assets/vectors/equipment/hook_da_hoi_bi_ngo.svg` & `drawGhostCandyHook`: Lưỡi Kẹo Ma Quái sọc kẹo bí ngô, charm bóng ma bồng bềnh.
+  - `assets/vectors/equipment/rod_huyet_nguyet.svg` & `drawHuyetNguyetRod`: Huyết Nguyệt Thần Trượng với lưỡi hái Trăng Máu uốn cong xé toạc màn đêm, đốt sống rồng gai nhọn, quả cầu Nguyệt Thực rực lửa và giọt huyết lệ rơi từ đầu trượng.
+  - `assets/vectors/equipment/line_huyet_nguyet.svg` & `drawHuyetNguyetLine`: **Đại Tu Độc Bản 6★ Limited Premium**: Dây Huyết Ma Cơ thiết kế khung xương Ma Vương Gothic 4 cánh xòe nhọn hoắt 4 góc chéo, vành Bát Giác Cấm Thuật nạm 8 nanh rồng tà thần, mạng lưới tơ huyết đan chéo hình ngôi sao bát giác thiêng liêng (Sacred Octagram Blood Weave), Trái Tim Trăng Máu 4 mặt facet giác cạnh kim cương với Ma Nhãn Tà Thần có đồng tử rồng quỷ rực lửa hoàng kim và 4 mảnh huyết thạch lơ lửng.
+  - `assets/vectors/equipment/hook_huyet_nguyet.svg` & `drawHuyetNguyetHook`: **Đại Tu Độc Bản 6★ Limited Premium**: Lưỡi Huyết Nguyệt Ma Trảo hình thái Bàn Tay Vuốt Quỷ Ma Vương Đoạt Hồn (Demon Monarch Soul-Reaping Talon), khoen câu tạc Vương Miện Cặp Sừng Rồng Ma Vương khổng lồ xòe hai bên bọc vàng cổ, xích ma quỷ quấn cổ khoen, thân móc là Cột Sống Cổ Long Ma Quái 4 đốt đai vàng nạm Huyết Lệ Tinh Thể với 3 ngạnh vây gai lưng ngược, vòm uốn đa lớp sắc lẹm cùng hệ thống đa ngạnh tàn bạo (mũi vuốt quỷ chính, ngạnh xé thịt bên trong, ngạnh phá giáp bên ngoài và rãnh thoát máu kép).
+- **Hệ Thống Gacha Banner Chuyển Giao Tự Động (Dynamic Gacha Lifecycle)**:
+  - Trước 30/10/2026: Banner Giới Hạn giữ nguyên 100% Thần Khí Lạc Hồng và Chiến Binh Lạc Hồng, Trống Đồng Đông Sơn và Chim Lạc.
+  - Tuyệt đối khóa 2 Set Halloween khỏi Đài Gacha Thường (Standard Gacha) và Banner Thường vĩnh viễn.
+  - Từ 30/10/2026 00:00:00 GMT+7: Tự động chuyển giao toàn diện sang Banner "BỘ HUYẾT NGUYỆT THẦN VƯƠNG" với nền Huyết Nguyệt Eclipse ma mị, Rate-up 50% 6★ Huyết Nguyệt Thần Vương, bảo lưu trọn vẹn tiến trình Pity 80 roll.
+  - Modal Chi Tiết & Modal Tỉ Lệ (Loot Table) chuyển đổi nhịp nhàng sang hiển thị 2 set Halloween độc quyền.
+
+---
+
 ## 📅 [2026-10-27] - Phiên bản v0.5.3.0 (Giai Đoạn 1: Hạ Tầng Sự Kiện Halloween, Auto-Switch Lifecycle & Dynamic UI/Shop/Attendance)
 
 ### 🎃 Giai Đoạn 1: Hạ Tầng Sự Kiện Halloween & Tự Động Chuyển Giao (HLW-01)

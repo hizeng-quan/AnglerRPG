@@ -123,6 +123,8 @@ public class PlayerEquipment {
         if (isSetBonusActive()) {
             if ("Hải Tặc".equals(getActiveSetName())) b += 15f;
             else if ("Vệ Quốc Vang Danh".equals(getActiveSetName())) b += 29f;
+            else if ("Dạ Hội Bí Ngô".equals(getActiveSetName())) b += 35f;
+            else if ("Huyết Nguyệt Thần Vương".equals(getActiveSetName())) b += 45f;
         }
         return b;
     }
