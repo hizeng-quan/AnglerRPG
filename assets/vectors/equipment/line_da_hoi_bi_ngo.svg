@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- 1. Ambient Cobweb & Phantom Violet Glow -->
+  <circle cx="64" cy="64" r="54" fill="rgba(168, 85, 247, 0.20)" />
+  <circle cx="64" cy="64" r="42" fill="rgba(6, 182, 212, 0.15)" />
+
+  <!-- 2. Midnight Obsidian Spool Structure -->
+  <!-- Outer Rim -->
+  <circle cx="64" cy="64" r="52" fill="#0f0717" stroke="#7e22ce" stroke-width="3.2" />
+  <!-- Metallic Violet Bevel -->
+  <circle cx="64" cy="64" r="45" fill="#1e102d" stroke="#a855f7" stroke-width="1.8" />
+  <!-- Dark Groove Recess -->
+  <circle cx="64" cy="64" r="38" fill="#09030e" stroke="#581c87" stroke-width="1.0" />
+
+  <!-- 3. Geometric 8-Spoke Spider Web -->
+  <!-- Radiating Silk Spokes -->
+  <line x1="64" y1="26" x2="64" y2="102" stroke="#e9d5ff" stroke-width="1.6" opacity="0.85" />
+  <line x1="26" y1="64" x2="102" y2="64" stroke="#e9d5ff" stroke-width="1.6" opacity="0.85" />
+  <line x1="37" y1="37" x2="91" y2="91" stroke="#e9d5ff" stroke-width="1.6" opacity="0.85" />
+  <line x1="37" y1="91" x2="91" y2="37" stroke="#e9d5ff" stroke-width="1.6" opacity="0.85" />
+
+  <!-- Inner Web Ring (Radius ~16) -->
+  <polygon points="64,48 75,53 80,64 75,75 64,80 53,75 48,64 53,53" fill="none" stroke="#d8b4fe" stroke-width="1.4" opacity="0.8" />
+
+  <!-- Middle Web Ring (Radius ~28) -->
+  <polygon points="64,36 84,44 92,64 84,84 64,92 44,84 36,64 44,44" fill="none" stroke="#d8b4fe" stroke-width="1.4" opacity="0.85" />
+
+  <!-- Outer Web Silk Filament Ring -->
+  <circle cx="64" cy="64" r="34" fill="none" stroke="#c084fc" stroke-width="0.8" stroke-dasharray="3,3" opacity="0.7" />
+
+  <!-- 4. Center Demonic Spider Skull Gem -->
+  <circle cx="64" cy="64" r="13" fill="#9333ea" stroke="#f43f5e" stroke-width="1.6" />
+  <circle cx="64" cy="64" r="10" fill="#581c87" />
+  <!-- Skull Cranium & Jaw -->
+  <ellipse cx="64" cy="63" rx="7.5" ry="6.5" fill="#f5d0fe" />
+  <rect x="61.5" y="66" width="5" height="4" rx="1" fill="#f5d0fe" />
+  <!-- Glowing Amber Eye Sockets -->
+  <circle cx="61.5" cy="63" r="1.8" fill="#facc15" stroke="#78350f" stroke-width="0.5" />
+  <circle cx="66.5" cy="63" r="1.8" fill="#facc15" stroke="#78350f" stroke-width="0.5" />
+  <!-- Nose cavity -->
+  <polygon points="64,65 63,67 65,67" fill="#4a044e" />
+
+  <!-- Mini Spiders Silhouettes Crawling on Spool Rim -->
+  <circle cx="86" cy="42" r="3" fill="#2e1065" stroke="#a855f7" stroke-width="0.8" />
+  <line x1="83" y1="39" x2="89" y2="45" stroke="#c084fc" stroke-width="0.8" />
+  <line x1="83" y1="45" x2="89" y2="39" stroke="#c084fc" stroke-width="0.8" />
+
+  <!-- 5. Specular Dewdrops & Glints -->
+  <circle cx="64" cy="36" r="1.8" fill="#ffffff" />
+  <circle cx="84" cy="44" r="1.6" fill="#ffffff" />
+  <circle cx="92" cy="64" r="1.6" fill="#ffffff" />
+  <circle cx="44" cy="44" r="1.5" fill="#ffffff" />
+  <circle cx="62" cy="61" r="0.8" fill="#ffffff" />
+</svg>

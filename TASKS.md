@@ -18,6 +18,7 @@
 | **HLW-05** | Trải nghiệm| Giai Đoạn 5: Vật Phẩm Tiêu Hao (Kẹo, Đèn), Bầu Trời Huyết Nguyệt & Âm Thanh ZzFX Spooky | **P1 (Trải nghiệm)**| 📋 Kế hoạch chi tiết (Phase 5) |
 | **HLW-06** | QA & Build| Giai Đoạn 6: Mô Phỏng Cân Bằng CLI, Kiểm Thử Tự Động, Bảo Mật Save & Đóng Gói v0.5.3 | **P1 (Hệ thống)** | 📋 Kế hoạch chi tiết (Phase 6) |
 | **FSH-04** | Gameplay | Revamp Toàn Bộ Skill Cá, Chuẩn Hóa Phân Tầng Kỹ Năng & Bổ Sung Hạng Cá Legendary (Mini-Boss) | **P1 (Quan trọng)** | 📋 Kế hoạch triển khai |
+| **VFX-SHK-01** | Trải nghiệm | Tối Ưu Rung Lắc Camera Khi Căng Dây: Giảm mốc xuống 80% & Tăng chấn động (+0.02f) | **P1 (Trải nghiệm)** | ✅ Đã hoàn thành (v0.5.3.5) |
 | **BAL-STM-01** | Cân bằng & Sửa lỗi | Sửa Lỗi Hồi Kép Dưỡng Sức (+50 dồn) & Tinh Chỉnh Tiêu Hao Thể Lực Động Theo Trạng Thái Cá | **P1 (Cân bằng)** | ✅ Đã hoàn thành (v0.5.3.4) |
 | **BAL-FSH-02** | Cân bằng | Đại Tu Cân Bằng Kỹ Năng 15 Loài Cá Đảo Xa, Re-Hook Cải Tiến & Thanh Tension Realtime | **P1 (Cân bằng)** | ✅ Đã hoàn thành (v0.5.3.3) |
 | **UI-FIX-01** | Giao diện | Tự động xuống dòng (Text Wrap) & Chiều cao động Tooltip Cá/Vật phẩm, Hạ thấp Radar Banner | **P1 (Giao diện)** | ✅ Đã hoàn thành (v0.5.3.2) |
@@ -753,38 +754,35 @@
 ---
 
 ### 6. HLW-03: Giai Đoạn 3 - Bộ 7 Cá Halloween Toàn Cầu & Siêu Boss Thanatos
-- **Mục tiêu:** Bổ sung hệ sinh thái cá mùa Halloween độc đáo xuất hiện trên toàn bộ các bản đồ (Ao Làng, Bãi Biển, Đảo Xa), mang lại động lực cày cuốc cho mọi cấp độ người chơi.
+- **Mục tiêu:** Bổ sung hệ sinh thái 7 loài cá mùa Halloween độc bản xuất hiện trên toàn bộ các bản đồ (Ao Làng, Bãi Biển, Đảo Xa). Độ khó (HP & Pull Strength) được cân chỉnh vượt Map Đảo Xa, mang lại thử thách đỉnh cao cho các cần thủ cấp cao.
 
-#### 🐟 Bảng Cân Bằng Chỉ Số 7 Loài Cá Halloween:
+#### 🐟 Bảng Cân Bằng Chỉ Số 7 Loài Cá Halloween (Đã tinh chỉnh vượt Map Đảo Xa):
 | Tên loài cá | Phẩm cấp | Máu (HP) | Lực kéo | Trọng lượng | Kích thước | Thưởng Vàng | Thưởng EXP | Kỹ năng đặc biệt & Hiệu ứng chiến đấu |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
-| **Cá Skeleton** *(Cá Xương)* | **Common** | **65 HP** | **12.0f** | **0.9 kg** | **22 cm** | **70 Vàng** | **25 XP** | *Bộ Xương Khô*: Thân xương cản trở dòng nước nhẹ, phát ra âm thanh lách cách rột rẹt khi kéo. |
-| **Cá Đèn Lồng Jack-o'** | Uncommon | 95 HP | 18.0f | 1.8 kg | 28 cm | 120 Vàng | 45 XP | *Lập Lòe Ma Quái*: Chớp đèn bí ngô làm nhấp nháy làm mờ thanh Tension trong 2.0 giây. |
-| **Cá Đầu Lâu Huyết Nguyệt** | Rare | 220 HP | 34.0f | 4.5 kg | 42 cm | 320 Vàng | 110 XP | *Cắn Xé Bứt Tốc*: Bứt tốc x1.8 lực kéo trong 3.0 giây khi máu giảm xuống dưới 50%. |
-| **Cá Dạng Ma** *(Phantom)* | **Epic** | **580 HP** | **55.0f** | **12.0 kg** | **68 cm** | **850 Vàng** | **300 XP** | *Hư Ảo Biến Mất*: Tàng hình né mọi sát thương kéo trong 2s & *Hút Thể Lực* trừ 12 thể lực người chơi. |
-| **Thủy Quái Frankenstein** | Epic | 680 HP | 62.0f | 18.0 kg | 75 cm | 950 Vàng | 350 XP | *Phóng Điện Ma Cà Rồng*: Sốc điện giật giật thanh kéo và trừ ngay 15 Thể lực cần thủ. |
-| **Bạch Tuộc Phù Thủy** | Legendary | 1,450 HP | 95.0f | 45.0 kg | 110 cm | 2,500 Vàng | 850 XP | *Mực Mù U Ám & Xúc Tu Quét*: Bắn mực đen che khuất 50% màn hình và đảo ngược hướng kéo cá. |
-| **Kình Ngư Tử Thần Thanatos** | **Siêu Boss Thế Giới** | **6,666 HP** | **140.0f** | **120.0 kg** | **185 cm** | **10,000 Vàng** | **3,000 XP** | *Tiếng Hú Địa Ngục & Cuồng Nộ Ma Hóa*: Rung chấn màn hình, tăng tension đột ngột; khi máu dưới 30% tăng 50% kháng sát thương kéo. Rơi **Rương Ma Quái** độc quyền. |
+| **Cá Skeleton** *(Cá Xương)* | **Common** | **400 HP** | **58.0f** | 1.8 kg | 35 cm | 180 Vàng | 75 XP | *Cốt Cách Bất Diệt (Nội tại thuần)*: Giảm 20% sát thương đòn kéo thường (SPACE), nhưng nhận thêm **+50% sát thương từ mọi kỹ năng** người chơi. Đã xóa active skill. |
+| **Cá Đèn Lồng Jack-o'** | Uncommon | 720 HP | 90.0f | 4.2 kg | 52 cm | 380 Vàng | 160 XP | *Hỏa Ngục Lân Tinh (Nội tại mới)*: Tăng +25% tốc độ sinh Tension khi cá PULLING; nếu Tension >70% sẽ thiêu đốt bốc hơi 3 Thể lực/giây.<br/>*Hỏa Đăng Jack-o' (Active)*: Tụ lửa 1.2s nổ +15% Tension & -10 Thể lực (ngắt được bằng Trói Buộc). |
+| **Cá Đầu Lâu Huyết Nguyệt** | Rare | 1,300 HP | 132.0f | 12.5 kg | 85 cm | 850 Vàng | 380 XP | *Khát Máu Đêm Rằm (Nội tại)*: Hồi phục +1% Max HP/s (+13 HP/s) khi cần thủ <50% Thể lực.<br/>*Xung Kích Đoạt Hồn (Active)*: Cửa sổ Re-Hook 0.6s; trượt Re-hook bị phạt +25 Tension và **cá hồi 15% máu đã mất** (bỏ giảm max tension). |
+| **Cá Dạng Ma** *(Phantom)* | **Epic** | **2,000 HP** | **168.0f** | 28.0 kg | 125 cm | 1,800 Vàng | 750 XP | *Thể Xác Hư Vô (Nội tại)*: Mỗi 8s hóa khói tím bán trong suốt 2.5s miễn nhiễm 100% sát thương kéo & kỹ năng.<br/>*Tiếng Than U Ám (Active)*: Hút 15 Thể lực hồi 5% HP cho cá và giảm 50% hồi phục của người chơi kéo dài **5.0 giây**. |
+| **Thủy Quái Frankenstein** | Epic | 2,250 HP | 178.0f | 45.0 kg | 140 cm | 2,200 Vàng | 900 XP | *Quá Tải Điện Năng (Nội tại)*: Ghìm kéo dây liên tục >1.5s bị giật điện: **trừ 10 Thể lực và ngắt nhịp kéo 0.6 giây**.<br/>*Sấm Sét Hồi Sinh (Active)*: Sốc tim hồi sinh 20% HP (+450 HP) khi cạn máu lần đầu + giật +25% Tension! |
+| **Hải Xà Dạ Xoa** *(Shadow Serpent)* | **Legendary** | **4,000 HP** | **210.0f** | 95.0 kg | 260 cm | 5,500 Vàng | 2,000 XP | *(Thay thế Bạch Tuộc Phù Thủy - Rồng Biển Xương Đen Đáy Vực)*<br/>*Uốn Lượn Ma Quái (Nội tại)*: Giảm 30% tốc độ xả chùng Slack; quất đuôi bơi giật +10% Tension.<br/>*Mãng Xà Siết Cước (Active 1)*: Khóa cứng thanh Tension không thể giảm trong 3s (kéo lúc này tăng tension x2).<br/>*Độc Tố Âm Ty (Active 2)*: Nhiễm độc rút 5 Thể lực/giây trong 5s và phủ sương mù tím làm tối mờ màn hình. |
+| **Kình Ngư Tử Thần Thanatos** | **Siêu Boss Thế Giới** | **6,666 HP** | **235.0f** | 180.0 kg | 380 cm | 15,000 Vàng | 5,000 XP | **Đại Chiến Trùm 3 Pha (3-Phase Battle)**:<br/>• *Uy Áp Tử Thần (Nội tại)*: Camera rung lắc + Mọi kỹ năng người chơi bị tăng +20% tiêu hao Thể lực.<br/>• *Pha 1 (100-70% HP)*: **Tiếng Hú Địa Ngục** vô hiệu hóa hoàn toàn chiêu thức tiếp theo của người chơi.<br/>• *Pha 2 (70-30% HP)*: **Vực Xoáy Âm Ty** (+15 Tension/s tự động + hồi 3% HP cá) & **Âm Hồn Quấy Phá** (tạo Giáp Soul Shield 500 HP, bị phá hủy tức thì nếu trúng Phá Giáp).<br/>• *Pha 3 (<30% HP)*: **Tử Thần Bộc Phát** (Giảm 30% hồi chiêu tất cả skill thường) & Tuyệt kỹ **Liên Hoàn Trảm Đoạt Mệnh** (Re-Hook 2 nhịp 0.5s/0.6s: thành công choáng boss 3s nhận x2 dmg; thất bại phạt +50 Tension, bóp 25% max tension và 50% nguy cơ đứt dây tức thì nếu tension >80%). |
 
 #### 📝 Danh mục tác vụ chi tiết (Checklist):
 - [ ] **HLW-03.1 - Khai báo dữ liệu trong `assets/data/fishes.json`**:
-  - Thêm 7 định nghĩa cá Halloween với trường `"map": null` (cho phép spawn ở bất kỳ map nào).
-  - Khai báo bộ kỹ năng cá tương ứng trong mảng `"skills"`.
+  - Thêm 7 định nghĩa cá Halloween với trường `"map": null` (Global spawn) và bộ chỉ số mới vượt Map Đảo Xa.
 - [ ] **HLW-03.2 - Thuật toán Global Event Spawn trong `FishDatabase.getRandomFish(Player)`**:
-  - Khi sự kiện Halloween đang hoạt động (`EventManager.isHalloweenActive()`):
-    * Tỷ lệ cơ bản **15%** lượt cắn câu sẽ kích hoạt pool cá Halloween.
-    * Nếu người chơi có buff `Kẹo Trick-or-Treat`: Tăng thêm **+50%** tỷ lệ (đạt ~22.5%).
-    * Nếu người chơi mặc đủ set `Dạ Hội Bí Ngô`: Tăng thêm **+25%** tỷ lệ.
-    * Chọn ngẫu nhiên cá Halloween phù hợp với roll Rarity của người chơi.
-- [ ] **HLW-03.3 - Kịch bản chiến đấu Trùm Thanatos trong `FishingManager.java`**:
-  - Khi câu trúng Boss Thanatos: Bầu trời tự động sấm chớp, kích hoạt rung giật màn hình (`ScreenShakeController.shake(0.8f, 15f)`).
-  - Hiệu ứng *Tiếng Hú Địa Ngục* kích hoạt mỗi 12-15s: Làm giật tăng nhanh lực căng Tension, người chơi buộc phải nhả SPACE ngay để tránh đứt dây.
-  - Khi máu Thanatos dưới 30%: Kích hoạt *Cuồng Nộ Ma Hóa*, phủ hào quang đỏ rực, giảm 50% sát thương nhận vào.
-  - Khi câu thành công: Trao tặng vật phẩm độc quyền `Rương Ma Quái` (Mở ra nhận 3-5 Vé Gacha, 20-50 Kim Cương và Danh hiệu đặc biệt).
-- [ ] **HLW-03.4 - Bổ sung Bộ Sưu Tập Halloween vào Sổ Tay Thủy Tộc (`CollectionDatabase.java` & `CatalogScreen.java`)**:
-  - Tạo bộ sưu tập mới: `hlw_dem_ma_quai` ("Bí Mật Đêm Halloween").
-  - Điều kiện hoàn thành: Bắt đủ 7 loài cá Halloween.
-  - Phần thưởng trọn bộ: **5,000 Vàng**, **2,500 XP**, **50 Kim Cương**, và Danh hiệu hiển thị *"Thợ Săn Linh Hồn"*.
+  - Tỷ lệ cơ bản **15%** lượt cắn câu khi sự kiện hoạt động (`EventManager.isHalloweenActive()`).
+  - Cộng hưởng: Buff Kẹo Trick-or-Treat (+50% tỉ lệ), Set Dạ Hội Bí Ngô (+25% tỉ lệ), Set Huyết Nguyệt Thần Vương (x2 tỉ lệ nổ cá Epic, Legendary & Boss).
+- [ ] **HLW-03.3 - Hệ thống Hàng Đợi Kỹ Năng & Global Cooldown (`FishingManager.java`)**:
+  - Xây dựng Fish Skill Queue và bộ đếm Global Cooldown (`fishSkillGCD = 2.5s - 3.0s`) chống chồng đè kỹ năng của cá nhiều skill.
+- [ ] **HLW-03.4 - Hệ thống Giáp Hấp Thụ (Soul Shield) & Tương tác Phá Giáp (`FishingManager.java`)**:
+  - Cài đặt cơ chế Giáp linh hồn 500 HP hấp thụ 50% sát thương đòn kéo thường, tự vỡ vụn khi trúng kỹ năng Phá Giáp (`pha_giap`).
+- [ ] **HLW-03.5 - Cài đặt kịch bản 7 bộ Kỹ Năng Độc Bản (`FishingManager.java`)**:
+  - Script toàn bộ 7 loài: Cốt cách bất diệt (+50% skill dmg), ngọn lửa bốc hơi thể lực, hồi 1% HP/s, ngắt kéo 0.6s, mãng xà siết cước, tiếng hú câm lặng, vực xoáy hồi máu, và Liên Hoàn Trảm 2 nhịp.
+- [ ] **HLW-03.6 - Sổ Tay Thủy Tộc Sự Kiện (`CollectionDatabase.java` & `CatalogScreen.java`)**:
+  - Tạo bộ sưu tập mới `hlw_dem_ma_quai` ("Huyền Thoại Đêm Halloween") với 7 loài cá; thưởng: 5,000 Vàng, 2,500 XP, 50 Kim Cương và Danh hiệu *"Thợ Săn Linh Hồn"*.
+- [ ] **HLW-03.7 - Phần thưởng Trùm Thanatos (`ItemDatabase.java`, `PlayerProgression.java`)**:
+  - Trao tặng 100% `Rương Ma Quái` (mở ra nhận vé gacha, kim cương, kẹo) và Danh hiệu độc quyền màu đỏ máu `[Reaper Slayer]`.
 
 ---
 

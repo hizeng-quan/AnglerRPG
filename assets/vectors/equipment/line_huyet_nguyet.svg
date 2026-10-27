@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <filter id="bloodGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- 1. Atmospheric Blood Moon Void & Miasma Aureole -->
+  <circle cx="64" cy="64" r="58" fill="rgba(185, 28, 28, 0.20)" />
+  <circle cx="64" cy="64" r="46" fill="rgba(88, 28, 135, 0.22)" />
+  <circle cx="64" cy="64" r="34" fill="rgba(220, 38, 38, 0.24)" />
+
+  <!-- 2. Four Gothic Demon Lord Wings Spanning Diagonal Corners -->
+  <!-- NW Wing -->
+  <polygon points="14,14 36,44 44,36" fill="#180306" stroke="#7f1d1d" stroke-width="1.2" stroke-linejoin="round" />
+  <polygon points="14,14 26,38 36,44" fill="#991b1b" />
+  <polygon points="14,14 38,26 44,36" fill="#450a0a" />
+  <polygon points="8,26 18,24 24,32" fill="#ef4444" stroke="#450a0a" stroke-width="0.8" />
+  <!-- NE Wing -->
+  <polygon points="114,14 92,36 100,44" fill="#180306" stroke="#7f1d1d" stroke-width="1.2" stroke-linejoin="round" />
+  <polygon points="114,14 92,36 102,26" fill="#991b1b" />
+  <polygon points="114,14 102,38 100,44" fill="#450a0a" />
+  <polygon points="120,26 104,32 110,24" fill="#ef4444" stroke="#450a0a" stroke-width="0.8" />
+  <!-- SE Wing -->
+  <polygon points="114,114 100,84 92,92" fill="#180306" stroke="#7f1d1d" stroke-width="1.2" stroke-linejoin="round" />
+  <polygon points="114,114 102,90 100,84" fill="#991b1b" />
+  <polygon points="114,114 90,102 92,92" fill="#450a0a" />
+  <polygon points="120,102 110,104 104,96" fill="#ef4444" stroke="#450a0a" stroke-width="0.8" />
+  <!-- SW Wing -->
+  <polygon points="14,114 44,92 36,84" fill="#180306" stroke="#7f1d1d" stroke-width="1.2" stroke-linejoin="round" />
+  <polygon points="14,114 38,102 44,92" fill="#991b1b" />
+  <polygon points="14,114 26,90 36,84" fill="#450a0a" />
+  <polygon points="8,102 24,96 18,104" fill="#ef4444" stroke="#450a0a" stroke-width="0.8" />
+
+  <!-- 3. Heavy Obsidian Dragon-Bone Spool Rim (Bát Giác Cấm Thuật) -->
+  <polygon points="64,16 98,30 112,64 98,98 64,112 30,98 16,64 30,30" fill="#0d0204" stroke="#7f1d1d" stroke-width="2.8" stroke-linejoin="round" />
+  <polygon points="64,20 95,33 108,64 95,95 64,108 33,95 20,64 33,33" fill="#240408" stroke="#dc2626" stroke-width="1.5" stroke-linejoin="round" />
+  <polygon points="64,24 92,36 104,64 92,92 64,104 36,92 24,64 36,36" fill="#0b0103" stroke="#f59e0b" stroke-width="0.9" stroke-linejoin="round" />
+
+  <!-- 8 Curved Demon Dragon Fangs Lining the Rim -->
+  <polygon points="64,8 58,20 70,20" fill="#ef4444" stroke="#450a0a" stroke-width="0.8" />
+  <polygon points="106,22 96,28 102,36" fill="#ef4444" stroke="#450a0a" stroke-width="0.8" />
+  <polygon points="120,64 108,58 108,70" fill="#ef4444" stroke="#450a0a" stroke-width="0.8" />
+  <polygon points="106,106 102,92 96,100" fill="#ef4444" stroke="#450a0a" stroke-width="0.8" />
+  <polygon points="64,120 70,108 58,108" fill="#ef4444" stroke="#450a0a" stroke-width="0.8" />
+  <polygon points="22,106 26,92 32,100" fill="#ef4444" stroke="#450a0a" stroke-width="0.8" />
+  <polygon points="8,64 20,70 20,58" fill="#ef4444" stroke="#450a0a" stroke-width="0.8" />
+  <polygon points="22,22 32,28 26,36" fill="#ef4444" stroke="#450a0a" stroke-width="0.8" />
+
+  <!-- 4. Sacred Blood Geometry Star Weave (Tơ Huyết Ngôi Sao Bát Giác) -->
+  <!-- Layer 1: Blood Weave Star Lines -->
+  <polygon points="64,26 102,64 64,102 26,64" fill="none" stroke="#991b1b" stroke-width="2.6" stroke-linejoin="round" />
+  <polygon points="91,37 91,91 37,91 37,37" fill="none" stroke="#991b1b" stroke-width="2.6" stroke-linejoin="round" />
+  <polygon points="64,28 100,64 64,100 28,64" fill="none" stroke="#ef4444" stroke-width="1.6" stroke-linejoin="round" />
+  <polygon points="89,39 89,89 39,89 39,39" fill="none" stroke="#ef4444" stroke-width="1.6" stroke-linejoin="round" />
+  <polygon points="64,30 98,64 64,98 30,64" fill="none" stroke="#fca5a5" stroke-width="0.8" stroke-linejoin="round" />
+
+  <!-- Circular Arterial Coils Underlay -->
+  <circle cx="64" cy="64" r="28" fill="none" stroke="#450a0a" stroke-width="3.0" />
+  <circle cx="64" cy="64" r="26" fill="none" stroke="#dc2626" stroke-width="1.8" />
+  <circle cx="64" cy="64" r="23" fill="none" stroke="#f87171" stroke-width="1.0" />
+
+  <!-- 5. Demonic Spool Core: The Faceted Eclipse Blood Heart -->
+  <polygon points="64,44 84,64 64,84 44,64" fill="#180406" stroke="#f59e0b" stroke-width="1.4" stroke-linejoin="round" />
+  <!-- Top-Left Facet (Brightest Blood Crimson) -->
+  <polygon points="64,46 46,64 64,64" fill="#ef4444" />
+  <!-- Top-Right Facet (Deep Ruby Radiant) -->
+  <polygon points="64,46 82,64 64,64" fill="#dc2626" />
+  <!-- Bottom-Left Facet (Dark Crimson Shade) -->
+  <polygon points="46,64 64,82 64,64" fill="#991b1b" />
+  <!-- Bottom-Right Facet (Abyssal Blood Shadow) -->
+  <polygon points="82,64 64,82 64,64" fill="#580812" />
+
+  <!-- 4 Crimson Tendrils / Tendon Claws Grasping Heart -->
+  <path d="M 64,34 Q 68,42 64,46" fill="none" stroke="#fca5a5" stroke-width="1.5" stroke-linecap="round" />
+  <path d="M 94,64 Q 86,68 82,64" fill="none" stroke="#fca5a5" stroke-width="1.5" stroke-linecap="round" />
+  <path d="M 64,94 Q 60,86 64,82" fill="none" stroke="#fca5a5" stroke-width="1.5" stroke-linecap="round" />
+  <path d="M 34,64 Q 42,60 46,64" fill="none" stroke="#fca5a5" stroke-width="1.5" stroke-linecap="round" />
+
+  <!-- All-Seeing Demon Eye in Core -->
+  <circle cx="64" cy="64" r="9.5" fill="#0d0102" stroke="#ef4444" stroke-width="1.2" />
+  <circle cx="64" cy="64" r="7.0" fill="#7f1d1d" />
+  <ellipse cx="64" cy="64" rx="2.0" ry="6.0" fill="#080001" />
+  <!-- Burning Ember Slit Pupil Core -->
+  <ellipse cx="64" cy="64" rx="0.9" ry="3.8" fill="#facc15" />
+
+  <!-- 6. Floating Blood Crystal Shards -->
+  <polygon points="64,3 67,8 64,13 61,8" fill="#ef4444" stroke="#fca5a5" stroke-width="0.6" />
+  <polygon points="125,64 120,67 115,64 120,61" fill="#ef4444" stroke="#fca5a5" stroke-width="0.6" />
+  <polygon points="64,125 61,120 64,115 67,120" fill="#ef4444" stroke="#fca5a5" stroke-width="0.6" />
+  <polygon points="3,64 8,61 13,64 8,67" fill="#ef4444" stroke="#fca5a5" stroke-width="0.6" />
+
+  <!-- 7. Diamond Specular Glints & Brilliant Razor Sparkles -->
+  <circle cx="14" cy="14" r="2.0" fill="#ffffff" />
+  <circle cx="114" cy="14" r="2.0" fill="#ffffff" />
+  <circle cx="114" cy="114" r="2.0" fill="#ffffff" />
+  <circle cx="14" cy="114" r="2.0" fill="#ffffff" />
+  <circle cx="64" cy="46" r="1.6" fill="#ffffff" />
+  <circle cx="64" cy="64" r="1.2" fill="#ffffff" />
+  <circle cx="46" cy="64" r="1.2" fill="#ffffff" />
+</svg>

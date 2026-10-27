@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- 1. Spectral Mint & Candy Pink Mist Aura -->
+  <circle cx="64" cy="64" r="54" fill="rgba(52, 211, 153, 0.18)" />
+  <circle cx="64" cy="64" r="42" fill="rgba(244, 63, 94, 0.18)" />
+
+  <!-- 2. Top Golden Eyelet with Bone Ring -->
+  <circle cx="48" cy="24" r="9" fill="#f59e0b" stroke="#78350f" stroke-width="1.5" />
+  <circle cx="48" cy="24" r="5" fill="#fef08a" />
+  <circle cx="48" cy="24" r="2.8" fill="#090514" />
+
+  <!-- 3. Candy Cane Striped Hook Shank & Bend -->
+  <!-- Dark Shadow Core -->
+  <path d="M 48,32 L 48,78 Q 48,106 74,106 Q 98,106 98,72 L 86,82" fill="none" stroke="#18181b" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round" />
+  <!-- Radiant Orange Candy Body -->
+  <path d="M 48,32 L 48,78 Q 48,106 74,106 Q 98,106 98,72 L 86,82" fill="none" stroke="#ea580c" stroke-width="6.0" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Bone White Spiral Candy Cane Stripes -->
+  <!-- Stripe 1 -->
+  <line x1="44" y1="38" x2="52" y2="44" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" />
+  <!-- Stripe 2 -->
+  <line x1="44" y1="52" x2="52" y2="58" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" />
+  <!-- Stripe 3 -->
+  <line x1="44" y1="66" x2="52" y2="72" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" />
+  <!-- Stripe 4 (on bend) -->
+  <line x1="56" y1="96" x2="64" y2="104" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" />
+  <!-- Stripe 5 (on bend) -->
+  <line x1="78" y1="105" x2="86" y2="99" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" />
+  <!-- Stripe 6 (on tip upward) -->
+  <line x1="94" y1="84" x2="102" y2="76" stroke="#ffffff" stroke-width="3.0" stroke-linecap="round" />
+
+  <!-- Sharp Golden Barb Point -->
+  <polygon points="98,72 86,82 92,86" fill="#facc15" stroke="#78350f" stroke-width="1.0" />
+  <polygon points="98,72 90,81 94,84" fill="#fef08a" />
+
+  <!-- 4. Cute Hanging Mini Ghost Charm at (72, 38) -->
+  <!-- Tether string from eyelet -->
+  <path d="M 48,24 Q 60,26 70,36" fill="none" stroke="#c084fc" stroke-width="1.2" stroke-dasharray="2,2" />
+  <!-- Ghost Body -->
+  <path d="M 72,32 C 65,32 63,40 64,48 C 65,52 68,54 70,52 C 72,50 74,54 76,52 C 78,50 81,54 82,48 C 83,40 80,32 72,32 Z" fill="#f8fafc" stroke="#c084fc" stroke-width="1.2" />
+  <path d="M 72,34 C 67,34 65,41 66,47 C 67,50 69,51 71,49 C 72,48 74,51 76,49 C 77,48 79,51 80,47 C 81,41 78,34 72,34 Z" fill="#ffffff" />
+  <!-- Ghost Eyes & Blush -->
+  <ellipse cx="68.5" cy="41" rx="1.6" ry="2.2" fill="#1e1b4b" />
+  <ellipse cx="75.5" cy="41" rx="1.6" ry="2.2" fill="#1e1b4b" />
+  <circle cx="69" cy="40.5" r="0.6" fill="#ffffff" />
+  <circle cx="76" cy="40.5" r="0.6" fill="#ffffff" />
+  <!-- Cute Rosy Pink Cheek Blushes -->
+  <ellipse cx="66" cy="44" rx="1.5" ry="1.0" fill="#f43f5e" opacity="0.6" />
+  <ellipse cx="78" cy="44" rx="1.5" ry="1.0" fill="#f43f5e" opacity="0.6" />
+
+  <!-- 5. Specular Highlights & Glints -->
+  <circle cx="48" cy="22" r="1.5" fill="#ffffff" />
+  <circle cx="98" cy="72" r="1.6" fill="#ffffff" />
+  <circle cx="68" cy="106" r="1.5" fill="#ffffff" />
+</svg>

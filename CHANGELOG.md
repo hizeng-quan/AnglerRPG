@@ -4,6 +4,43 @@
 
 ---
 
+## 📅 [2026-10-27] - Phiên bản v0.5.3.5 (Tối Ưu Hiệu Ứng Rung Lắc Camera Căng Dây & Kế Hoạch Giai Đoạn 3: Bộ 7 Cá Halloween & Boss Thanatos)
+
+### 🌊 Nâng Cấp Trải Nghiệm Chiến Đấu & Hiệu Ứng Rung Lắc (VFX-SHK-01)
+- **Hạ thấp ngưỡng bắt đầu rung chấn:** Camera bắt đầu rung lắc nhẹ nhàng ngay từ mốc **80% Tension** (giảm từ 88% trước đây) trong [`PlayScreen.java`](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/PlayScreen.java#L122-L130), giúp người chơi sớm cảm nhận độ căng và sức nặng của cuộc giằng co.
+- **Tăng tiến cường độ rung chấn (+0.02f):** Tăng mức chấn động lên `+0.02f` trauma mỗi tick ở vùng nguy hiểm (`> 80% Tension`).
+- **Cường độ rung chấn cực hạn sát ngưỡng đứt dây:**
+  - Khi Tension vượt ngưỡng **94%** (nguy cơ đứt cước cận kề), trần trauma tối đa được nâng từ `0.16f` lên **`0.45f`** và lượng trauma gia tăng mỗi tick là `+0.035f`.
+  - Hiệu ứng rung giật màn hình phi tuyến (`shake = trauma^2`) dữ dội, cảnh báo nghẹt thở cho người chơi lập tức buông phím Space hoặc xả dây trước khi quá tải đứt cước.
+
+### 🎃 Kế Hoạch Chi Tiết Giai Đoạn 3 Sự Kiện Halloween (HLW-03 - Cân Bằng Nâng Cao)
+- **Chuẩn độ khó vượt trội Map Đảo Xa:** Toàn bộ 7 loài cá Halloween được buff mạnh chỉ số HP và Lực kéo (Pull Strength) để tạo thử thách xứng tầm cho người chơi sở hữu Set Dạ Hội Bí Ngô và Set 6★ Huyết Nguyệt Thần Vương:
+  - *Cá Skeleton (Common):* 400 HP, 58 dmg/s.
+  - *Cá Đèn Lồng Jack-o' (Uncommon):* 720 HP, 90 dmg/s.
+  - *Cá Đầu Lâu Huyết Nguyệt (Rare):* 1,300 HP, 132 dmg/s.
+  - *Cá Dạng Ma - Phantom (Epic):* 2,000 HP, 168 dmg/s.
+  - *Thủy Quái Frankenstein (Epic):* 2,250 HP, 178 dmg/s.
+  - *Hải Xà Dạ Xoa (Legendary - Thay thế Bạch Tuộc):* 4,000 HP, 210 dmg/s.
+  - *Siêu Boss Thanatos (Boss):* Giữ nguyên 6,666 HP, buff sát thương kéo lên 235 dmg/s (Pha cuối bộc phát 290+ dmg/s).
+- **Đại tu toàn diện bộ kỹ năng độc nhất vô nhị:**
+  - *Cá Skeleton:* Xóa bỏ active skill; nội tại Cốt Cách Bất Diệt giảm 20% đòn kéo thường nhưng chịu thêm **+50% sát thương từ MỌI KỸ NĂNG** người chơi.
+  - *Cá Đèn Lồng Jack-o':* Nội tại mới Hỏa Ngục Lân Tinh (+25% tốc độ tăng Tension khi cá PULLING, thiêu đốt 3 Thể lực/s nếu Tension >70%).
+  - *Cá Đầu Lâu Huyết Nguyệt:* Nội tại đổi thành hồi +1% Max HP/s khi cần thủ <50% Thể lực; trượt Re-hook cá lập tức hồi 15% máu đã mất.
+  - *Cá Dạng Ma (Phantom):* Tăng thời gian debuff giảm 50% hồi phục thể lực lên 5.0 giây.
+  - *Thủy Quái Frankenstein:* Quá tải điện năng trừ 10 Thể lực và ngắt nhịp kéo dây 0.6 giây.
+  - *Hải Xà Dạ Xoa (Legendary):* Rồng Biển Xương Đen Đáy Vực sở hữu nội tại giảm 30% xả chùng Slack; quất đuôi giật +10% Tension; Mãng Xà Siết Cước khóa cứng Tension trong 3s; Độc Tố Âm Ty rút 5 Thể lực/s (5s) và phủ sương mù tím ma quái.
+  - *Đại chiến Trùm Thanatos 3 Pha:*
+    * Nội tại Uy Áp Tử Thần tăng +20% tiêu hao Thể lực của mọi kỹ năng người chơi.
+    * Tiếng Hú Địa Ngục: Vô hiệu hóa (câm lặng) chiêu thức tiếp theo của người chơi.
+    * Vực Xoáy Âm Ty: Tự động kéo căng dây +15 Tension/s kèm hồi 3% HP cá (+200 HP).
+    * Âm Hồn Quấy Phá: Tạo lớp Giáp Ma Ám (Soul Shield) 500 HP hấp thụ 50% đòn đánh thường, bị phá nát ngay lập tức nếu trúng chiêu Phá Giáp.
+    * Pha cuối: Bỏ giáp tử thần, thay bằng giảm 30% hồi chiêu tất cả kỹ năng thường; Tuyệt kỹ Liên Hoàn Trảm Đoạt Mệnh 2 nhịp Re-Hook liên tiếp (0.5s & 0.6s) với cơ chế phản đòn choáng 3s hoặc nguy cơ đứt dây cực hạn.
+- **Hệ Thống Hàng Đợi Kỹ Năng & Global Cooldown (Skill Queue & GCD):**
+  - Xây dựng cơ chế Global Cooldown (2.5s - 3.0s) và hàng đợi kỹ năng độc lập cho cá nhiều chiêu, ngăn chặn hoàn toàn việc kỹ năng bị kích hoạt đồng thời đè lấp lẫn nhau.
+
+
+---
+
 ## 📅 [2026-10-27] - Phiên bản v0.5.3.4 (Khắc Phục Lỗi Kỹ Năng Dưỡng Sức & Tinh Chỉnh Tiêu Hao Thể Lực Động Theo Trạng Thái Cá)
 
 ### 🐛 Sửa Lỗi Kỹ Năng & Cân Bằng Gameplay (BAL-STM-01)
