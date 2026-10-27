@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class PatchNotesDialog {
 
-    public static final String CURRENT_VERSION = "v0.5.2.0";
+    public static final String CURRENT_VERSION = "v0.5.3.0";
     private static final String PREF_LAST_SEEN_VERSION = "last_seen_patch_notes_version";
 
     private final FishingRPG game;
@@ -91,8 +91,19 @@ public class PatchNotesDialog {
         // --- TAB 0: BẢN TIN CẬP NHẬT THEO TỪNG PHIÊN BẢN ---
         // =====================================================================
 
-        // ===== PHIÊN BẢN v0.5.2.4 (MỚI NHẤT) =====
-        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.2.4 (MỚI NHẤT - HOÀN THÀNH BƯỚC 2.3: 15 LOÀI CÁ ĐẢO XA & TUYỆT TÁC SIÊU BOSS CÁ CỜ XANH)"));
+        // ===== PHIÊN BẢN v0.5.3.0 (MỚI NHẤT) =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.3.0 (MỚI NHẤT - HẠ TẦNG SỰ KIỆN HALLOWEEN 2026 & DYNAMIC UI AUTO-SWITCH)"));
+
+        patchNotesItems.add(new UpdateItem("SỰ KIỆN", "Hạ Tầng Sự Kiện Kép Lạc Hồng & Halloween 2026 Tự Động Chuyển Giao (HLW-01)", new Color(1.0f, 0.50f, 0.10f, 1f))
+            .addPoint("Bảo toàn 100% giao diện, nhiệm vụ, chuỗi điểm danh và cửa hàng Hào Khí Lạc Hồng cho đến hết 23:59:59 ngày 28/10/2026.")
+            .addPoint("Thời gian chuyển giao (Intermission - 29/10): Tự động hiển thị đồng hồ đếm ngược mở Đêm Hội Halloween và thu hồi, quy đổi Điểm SK tồn dư sang Vàng an toàn (1 Điểm SK = 1,000 Vàng).")
+            .addPoint("Tự động kích hoạt Halloween lúc 00:00:00 ngày 30/10: Giao diện chuyển mượt mà sang phong cách Dark Gothic Fantasy với hình mờ Jack-o'-Lantern rực lửa, đàn dơi lượn sóng và hạt ma trơi phát quang.")
+            .addPoint("Hệ thống Cửa Hàng & Điểm Danh Halloween: Tự động chuyển vật phẩm sang Set Dạ Hội Bí Ngô 4★ (Cần Dạ Hội Bí Ngô, Dây Cước Tơ Nhện Quỷ, Lưỡi Kẹo Ma Quái) cùng 25 ngày quà điểm danh mới (tự động reset an toàn 1 lần duy nhất qua cờ lưu trữ).")
+            .addPoint("12 Nhiệm vụ Sự Kiện Mùa Lễ Hội ma quái hằng ngày làm mới lúc 00:00.")
+        );
+
+        // ===== PHIÊN BẢN v0.5.2.4 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.2.4 (HOÀN THÀNH BƯỚC 2.3: 15 LOÀI CÁ ĐẢO XA & TUYỆT TÁC SIÊU BOSS CÁ CỜ XANH)"));
 
         patchNotesItems.add(new UpdateItem("ĐỒ HỌA", "Bước 2.3: 15 Loài Cá Vector Đảo Xa & Siêu Boss Cá Cờ Xanh Khổng Lồ (FSH-02C)", new Color(0.25f, 0.85f, 0.50f, 1f))
             .addPoint("Đại tu toàn diện đồ họa vector LibGDX ShapeRenderer đa lớp, ánh sáng biển sâu và hoạt ảnh cho toàn bộ 15 loài cá Đảo Xa hoàn toàn mới.")

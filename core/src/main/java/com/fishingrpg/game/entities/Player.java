@@ -164,6 +164,9 @@ public class Player {
     public long getLastEventMissionResetTimestamp() { return progression.getLastEventMissionResetTimestamp(); }
     public void setLastEventMissionResetTimestamp(long ts) { progression.setLastEventMissionResetTimestamp(ts); }
 
+    public boolean isHalloweenResetDone() { return progression.isHalloweenResetDone(); }
+    public void setHalloweenResetDone(boolean done) { progression.setHalloweenResetDone(done); }
+
     public int getXpToNextLevel()      { return progression.getXpToNextLevel(); }
     public int getXpForCurrentLevel()  { return progression.getXpForCurrentLevel(); }
 

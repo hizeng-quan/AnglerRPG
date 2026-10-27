@@ -20,6 +20,7 @@ public class PlayerProgression {
     private int totalLoginDaysThisMonth = 0;
     private long lastLoginTimestamp = 0;
     private long lastEventMissionResetTimestamp = 0;
+    private boolean halloweenResetDone = false;
 
     public static final int MAX_LEVEL = 100;
 
@@ -36,7 +37,7 @@ public class PlayerProgression {
         if (xp <= 0) return 0;
         
         float bonus = 1f + equipmentExpBonus / 100f;
-        if ("Tập Sự".equals(activeSetName)) bonus += 0.2f;
+        if ("Tập Sự".equals(activeSetName) || "Dạ Hội Bí Ngô".equals(activeSetName)) bonus += 0.2f;
         int finalXp = (int)(xp * bonus);
         
         currentXp += finalXp;
@@ -133,6 +134,9 @@ public class PlayerProgression {
 
     public long getLastEventMissionResetTimestamp() { return lastEventMissionResetTimestamp; }
     public void setLastEventMissionResetTimestamp(long ts) { this.lastEventMissionResetTimestamp = ts; }
+
+    public boolean isHalloweenResetDone() { return halloweenResetDone; }
+    public void setHalloweenResetDone(boolean done) { this.halloweenResetDone = done; }
 
     public int getXpToNextLevel()      { return xpRequired(level) - currentXp; }
     public int getXpForCurrentLevel()  { return xpRequired(level); }

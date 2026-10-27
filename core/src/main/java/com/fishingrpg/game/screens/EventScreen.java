@@ -67,6 +67,9 @@ public class EventScreen implements Screen {
     private static final Color BORDER_PURPLE = new Color(0.75f, 0.45f, 0.95f, 1f);
     private static final Color BORDER_GOLD = new Color(1f, 0.82f, 0.3f, 1f);
     private static final Color BORDER_YELLOW = new Color(0.95f, 0.8f, 0.25f, 1f);
+    private static final Color BG_TOP_HLW = new Color(0.18f, 0.06f, 0.25f, 1f);
+    private static final Color BG_BOT_HLW = new Color(0.06f, 0.02f, 0.09f, 1f);
+    private static final Color BORDER_PUMPKIN = new Color(0.96f, 0.50f, 0.12f, 1f);
 
     public EventScreen(FishingRPG game, Screen previousScreen) {
         this.game = game;
@@ -171,10 +174,66 @@ public class EventScreen implements Screen {
     // =========================================================================
 
     private void drawBackgroundShapes() {
-        // Deep imperial festive gradient: Midnight crimson ruby to royal indigo
-        sr.rect(0, 0, W, H, BG_BOT, BG_BOT, BG_TOP, BG_TOP);
+        boolean isHalloween = EventManager.isHalloweenActive();
+        if (isHalloween) {
+            // Deep spooky gradient: Midnight obsidian to dark witch violet
+            sr.rect(0, 0, W, H, BG_BOT_HLW, BG_BOT_HLW, BG_TOP_HLW, BG_TOP_HLW);
 
-        // Majestic Dong Son Bronze Drum Watermark in background center
+            // Spooky Jack-o'-Lantern silhouette watermark & ghostly aura
+            float jackCX = W / 2f;
+            float jackCY = H / 2f - 25f;
+
+            // Concentric Jack-o'-Lantern aura rings
+            sr.setColor(1.0f, 0.48f, 0.08f, 0.045f);
+            sr.circle(jackCX, jackCY, 320f);
+            sr.setColor(0.06f, 0.02f, 0.09f, 1f);
+            sr.circle(jackCX, jackCY, 314f);
+
+            sr.setColor(0.65f, 0.25f, 0.85f, 0.055f);
+            sr.circle(jackCX, jackCY, 240f);
+            sr.setColor(0.06f, 0.02f, 0.09f, 1f);
+            sr.circle(jackCX, jackCY, 235f);
+
+            // Jack-o'-Lantern Carved Silhouette at center
+            sr.setColor(1.0f, 0.55f, 0.10f, 0.07f);
+            // Left sinister triangular eye
+            sr.triangle(jackCX - 120f, jackCY + 20f, jackCX - 40f, jackCY + 20f, jackCX - 80f, jackCY + 85f);
+            // Right sinister triangular eye
+            sr.triangle(jackCX + 40f, jackCY + 20f, jackCX + 120f, jackCY + 20f, jackCX + 80f, jackCY + 85f);
+            // Center triangle nose
+            sr.triangle(jackCX - 25f, jackCY - 15f, jackCX + 25f, jackCY - 15f, jackCX, jackCY + 25f);
+            // Wide wicked jagged grin
+            sr.triangle(jackCX - 150f, jackCY - 40f, jackCX - 75f, jackCY - 110f, jackCX - 35f, jackCY - 40f);
+            sr.triangle(jackCX - 35f, jackCY - 40f, jackCX, jackCY - 130f, jackCX + 35f, jackCY - 40f);
+            sr.triangle(jackCX + 35f, jackCY - 40f, jackCX + 75f, jackCY - 110f, jackCX + 150f, jackCY - 40f);
+
+            // Bats circling along middle ring
+            for (int b = 0; b < 5; b++) {
+                float bAngle = (b * 72f + animTimer * 4.5f) * MathUtils.degreesToRadians;
+                float bx = jackCX + MathUtils.cos(bAngle) * 205f;
+                float by = jackCY + MathUtils.sin(bAngle) * 165f;
+                sr.setColor(0.75f, 0.35f, 0.95f, 0.09f);
+                sr.triangle(bx, by, bx - 16f, by + 8f, bx - 5f, by - 4f);
+                sr.triangle(bx, by, bx + 16f, by + 8f, bx + 5f, by - 4f);
+            }
+
+            // Floating wisp particles (Pumpkin Orange, Phantom Violet, Spectral Cyan)
+            for (int i = 0; i < PARTICLE_COUNT; i++) {
+                float alpha = 0.35f + 0.35f * MathUtils.sin(animTimer * 2f + particlePhase[i]);
+                if (i % 3 == 0) {
+                    sr.setColor(1.0f, 0.52f, 0.10f, alpha); // Pumpkin fire
+                } else if (i % 3 == 1) {
+                    sr.setColor(0.72f, 0.30f, 0.95f, alpha); // Violet wisp
+                } else {
+                    sr.setColor(0.20f, 0.85f, 0.85f, alpha); // Cyan phantom
+                }
+                sr.circle(particleX[i], particleY[i], particleSize[i]);
+            }
+        } else {
+            // Deep imperial festive gradient: Midnight crimson ruby to royal indigo
+            sr.rect(0, 0, W, H, BG_BOT, BG_BOT, BG_TOP, BG_TOP);
+
+            // Majestic Dong Son Bronze Drum Watermark in background center
         float drumCX = W / 2f;
         float drumCY = H / 2f - 25f;
 
@@ -220,15 +279,16 @@ public class EventScreen implements Screen {
             sr.triangle(bx, by, bx - 14f, by + 12f, bx + 6f, by + 4f);
         }
 
-        // Floating ember particles
-        for (int i = 0; i < PARTICLE_COUNT; i++) {
-            float alpha = 0.35f + 0.35f * MathUtils.sin(animTimer * 2f + particlePhase[i]);
-            if (i % 3 == 0) {
-                sr.setColor(1f, 0.82f, 0.3f, alpha); // Gold ember
-            } else {
-                sr.setColor(0.95f, 0.3f, 0.25f, alpha); // Ruby ember
+            // Floating ember particles
+            for (int i = 0; i < PARTICLE_COUNT; i++) {
+                float alpha = 0.35f + 0.35f * MathUtils.sin(animTimer * 2f + particlePhase[i]);
+                if (i % 3 == 0) {
+                    sr.setColor(1f, 0.82f, 0.3f, alpha); // Gold ember
+                } else {
+                    sr.setColor(0.95f, 0.3f, 0.25f, alpha); // Ruby ember
+                }
+                sr.circle(particleX[i], particleY[i], particleSize[i]);
             }
-            sr.circle(particleX[i], particleY[i], particleSize[i]);
         }
 
         // Top Navigation Bar Header background
@@ -297,16 +357,28 @@ public class EventScreen implements Screen {
 
             if (isSelected) {
                 // Festive active tab gradient
-                sr.rect(tx, tabY, tabW, tabH,
-                        new Color(0.72f, 0.18f, 0.2f, 1f),
-                        new Color(0.72f, 0.18f, 0.2f, 1f),
-                        new Color(0.92f, 0.45f, 0.18f, 1f),
-                        new Color(0.92f, 0.45f, 0.18f, 1f));
-                // Bright golden underline
-                sr.setColor(1f, 0.9f, 0.35f, 1f);
-                sr.rect(tx, tabY, tabW, 4f);
-                sr.setColor(1f, 0.85f, 0.4f, 0.7f);
-                drawBoxBorder(tx, tabY, tabW, tabH, 1.5f);
+                if (EventManager.isHalloweenActive()) {
+                    sr.rect(tx, tabY, tabW, tabH,
+                            new Color(0.48f, 0.14f, 0.68f, 1f),
+                            new Color(0.48f, 0.14f, 0.68f, 1f),
+                            new Color(0.96f, 0.48f, 0.10f, 1f),
+                            new Color(0.96f, 0.48f, 0.10f, 1f));
+                    sr.setColor(1f, 0.65f, 0.15f, 1f);
+                    sr.rect(tx, tabY, tabW, 4f);
+                    sr.setColor(1f, 0.75f, 0.25f, 0.7f);
+                    drawBoxBorder(tx, tabY, tabW, tabH, 1.5f);
+                } else {
+                    sr.rect(tx, tabY, tabW, tabH,
+                            new Color(0.72f, 0.18f, 0.2f, 1f),
+                            new Color(0.72f, 0.18f, 0.2f, 1f),
+                            new Color(0.92f, 0.45f, 0.18f, 1f),
+                            new Color(0.92f, 0.45f, 0.18f, 1f));
+                    // Bright golden underline
+                    sr.setColor(1f, 0.9f, 0.35f, 1f);
+                    sr.rect(tx, tabY, tabW, 4f);
+                    sr.setColor(1f, 0.85f, 0.4f, 0.7f);
+                    drawBoxBorder(tx, tabY, tabW, tabH, 1.5f);
+                }
             } else {
                 sr.setColor(isHovered ? new Color(0.2f, 0.24f, 0.35f, 0.95f) : new Color(0.13f, 0.17f, 0.25f, 0.9f));
                 sr.rect(tx, tabY, tabW, tabH);
@@ -689,28 +761,44 @@ public class EventScreen implements Screen {
     }
 
     private void drawShopItemIcon(int index, float cx, float cy) {
+        boolean isHalloween = EventManager.isHalloweenActive();
         if (index == 0) {
-            // Cần Câu Vệ Quốc: Use glorious vector illustration
-            EquipmentIconRenderer.drawVeQuocRod(sr, cx, cy, 26f, Color.GOLD);
+            if (isHalloween) {
+                EquipmentIconRenderer.drawPumpkinRod(sr, cx, cy, 26f, Color.ORANGE);
+            } else {
+                EquipmentIconRenderer.drawVeQuocRod(sr, cx, cy, 26f, Color.GOLD);
+            }
         } else if (index == 1) {
-            // Dây Cước Vệ Quốc: Use glorious vector illustration
-            EquipmentIconRenderer.drawVeQuocLine(sr, cx, cy, 26f, Color.GOLD);
+            if (isHalloween) {
+                EquipmentIconRenderer.drawSpiderSilkLine(sr, cx, cy, 26f, Color.VIOLET);
+            } else {
+                EquipmentIconRenderer.drawVeQuocLine(sr, cx, cy, 26f, Color.GOLD);
+            }
         } else if (index == 2) {
-            // Lưỡi Câu Vệ Quốc: Use glorious vector illustration
-            EquipmentIconRenderer.drawVeQuocHook(sr, cx, cy, 26f, Color.GOLD);
+            if (isHalloween) {
+                EquipmentIconRenderer.drawGhostCandyHook(sr, cx, cy, 26f, Color.CHARTREUSE);
+            } else {
+                EquipmentIconRenderer.drawVeQuocHook(sr, cx, cy, 26f, Color.GOLD);
+            }
         } else if (index == 3) {
-            // Premium Ticket (Purple ticket)
             EquipmentIconRenderer.drawPremiumTicketIcon(sr, cx, cy, 36f, 24f);
         } else if (index == 4) {
-            // Standard Ticket (Golden ticket)
             EquipmentIconRenderer.drawNormalTicketIcon(sr, cx, cy, 36f, 24f);
         } else if (index == 5) {
-            // Gold coin pouch
-            sr.setColor(0.85f, 0.65f, 0.15f, 1f);
-            sr.circle(cx, cy - 3f, 14f);
-            sr.triangle(cx - 10f, cy + 6f, cx + 10f, cy + 6f, cx, cy + 18f);
-            sr.setColor(0.95f, 0.2f, 0.25f, 1f);
-            sr.rect(cx - 8f, cy + 3f, 16f, 3.5f);
+            if (isHalloween) {
+                // Spooky Halloween Gold pouch / Trick-or-Treat treat bag
+                sr.setColor(0.95f, 0.48f, 0.10f, 1f);
+                sr.circle(cx, cy - 3f, 14f);
+                sr.triangle(cx - 10f, cy + 6f, cx + 10f, cy + 6f, cx, cy + 18f);
+                sr.setColor(0.55f, 0.18f, 0.75f, 1f);
+                sr.rect(cx - 8f, cy + 3f, 16f, 3.5f);
+            } else {
+                sr.setColor(0.85f, 0.65f, 0.15f, 1f);
+                sr.circle(cx, cy - 3f, 14f);
+                sr.triangle(cx - 10f, cy + 6f, cx + 10f, cy + 6f, cx, cy + 18f);
+                sr.setColor(0.95f, 0.2f, 0.25f, 1f);
+                sr.rect(cx - 8f, cy + 3f, 16f, 3.5f);
+            }
         }
     }
 
@@ -729,10 +817,12 @@ public class EventScreen implements Screen {
         float centerAreaX = 145f;
         float centerAreaW = (W - 225f - 175f - 40f) - centerAreaX - 10f;
 
+        boolean isHalloween = EventManager.isHalloweenActive();
+        String eventTitle = isHalloween ? "ĐÊM HỘI HALLOWEEN 2026" : "HÀO KHÍ LẠC HỒNG";
         titleFont.setColor(0f, 0f, 0f, 0.6f);
-        drawCenteredText(titleFont, "HÀO KHÍ LẠC HỒNG", centerAreaX + 2f, H - 76f, centerAreaW, 74f); // shadow
-        titleFont.setColor(1f, 0.88f, 0.35f, 1f);
-        drawCenteredText(titleFont, "HÀO KHÍ LẠC HỒNG", centerAreaX, H - 74f, centerAreaW, 74f);
+        drawCenteredText(titleFont, eventTitle, centerAreaX + 2f, H - 76f, centerAreaW, 74f); // shadow
+        titleFont.setColor(isHalloween ? new Color(1f, 0.65f, 0.15f, 1f) : new Color(1f, 0.88f, 0.35f, 1f));
+        drawCenteredText(titleFont, eventTitle, centerAreaX, H - 74f, centerAreaW, 74f);
 
         // Top Right Pills:
         float ptsPillW = 175f;
@@ -903,8 +993,10 @@ public class EventScreen implements Screen {
         titleFont.draw(game.batch, "ĐÃ ĐIỂM DANH: " + daysLogged + " / 25 NGÀY THÁNG NÀY", startX + 25f, headerY + headerH - 12f);
         titleFont.getData().setScale(1f);
 
+        boolean isHalloween = EventManager.isHalloweenActive();
         font.setColor(0.85f, 0.88f, 0.95f, 0.85f);
-        font.draw(game.batch, "Điểm danh đều đặn để nhận trọn bộ quà & Cần Câu Vệ Quốc tại ngày 25!", startX + 25f, headerY + 18f);
+        String attDesc = isHalloween ? "Điểm danh đều đặn để nhận trọn bộ quà & Cần Dạ Hội Bí Ngô tại ngày 25!" : "Điểm danh đều đặn để nhận trọn bộ quà & Cần Câu Vệ Quốc tại ngày 25!";
+        font.draw(game.batch, attDesc, startX + 25f, headerY + 18f);
 
         // Claim Button on Right
         float claimBtnX = startX + cardW - 270f;
@@ -969,16 +1061,20 @@ public class EventScreen implements Screen {
         float bannerY = H - 222f;
         float bannerH = 58f;
 
+        boolean isHalloween = EventManager.isHalloweenActive();
+
         // Top Banner Title
-        titleFont.setColor(1f, 0.88f, 0.35f, 1f);
+        titleFont.setColor(isHalloween ? new Color(1f, 0.65f, 0.15f, 1f) : new Color(1f, 0.88f, 0.35f, 1f));
         titleFont.getData().setScale(0.68f);
-        titleFont.draw(game.batch, "BỘ TRANG BỊ GIỚI HẠN: VỆ QUỐC VANG DANH (LIMITED EVENT)", startX + 20f, bannerY + bannerH - 12f);
+        String bannerTitle = isHalloween ? "BỘ TRANG BỊ GIỚI HẠN: DẠ HỘI BÍ NGÔ (HALLOWEEN 2026)" : "BỘ TRANG BỊ GIỚI HẠN: VỆ QUỐC VANG DANH (LIMITED EVENT)";
+        titleFont.draw(game.batch, bannerTitle, startX + 20f, bannerY + bannerH - 12f);
         titleFont.getData().setScale(1f);
 
         // Top Banner Subtitle
         font.setColor(1f, 0.92f, 0.75f, 0.95f);
         font.getData().setScale(0.82f);
-        font.draw(game.batch, "Kích hoạt hiệu ứng (3 món): +29% Tỉ lệ cá hiếm, Kháng đứt dây +10%!", startX + 20f, bannerY + 22f);
+        String bannerSub = isHalloween ? "Kích hoạt hiệu ứng (3 món): +20% EXP nhận được, +17% Cá hiếm, +34% Giữ mồi!" : "Kích hoạt hiệu ứng (3 món): +29% Tỉ lệ cá hiếm, Kháng đứt dây +10%!";
+        font.draw(game.batch, bannerSub, startX + 20f, bannerY + 22f);
 
         // Player current points indicator
         font.setColor(1f, 0.85f, 0.35f, 1f);
@@ -996,7 +1092,14 @@ public class EventScreen implements Screen {
         float gridStartX = startX;
         float gridStartY = H - 435f;
 
-        String[] itemNames = {
+        String[] itemNames = isHalloween ? new String[] {
+            "Cần Dạ Hội Bí Ngô",
+            "Dây Cước Tơ Nhện",
+            "Lưỡi Kẹo Ma Quái",
+            "Vé Quay Cao Cấp x3",
+            "Vé Quay Thường x5",
+            "Túi Vàng Ma Quái"
+        } : new String[] {
             "Cần Câu Vệ Quốc",
             "Dây Cước Vệ Quốc",
             "Lưỡi Câu Vệ Quốc",
@@ -1005,7 +1108,14 @@ public class EventScreen implements Screen {
             "Túi Vàng Đại Phú"
         };
 
-        String[] itemSubtitles = {
+        String[] itemSubtitles = isHalloween ? new String[] {
+            "Cần Câu Limited 4★",
+            "Dây Cước Limited 4★",
+            "Lưỡi Câu Limited 4★",
+            "Vé Gacha Banner Sự Kiện",
+            "Vé Gacha Banner Tiêu Chuẩn",
+            "Nhận ngay 10,000 Vàng"
+        } : new String[] {
             "Cần Câu Limited Event",
             "Dây Cước Limited Event",
             "Lưỡi Câu Limited Event",
@@ -1014,7 +1124,14 @@ public class EventScreen implements Screen {
             "Nhận ngay 10,000 Vàng"
         };
 
-        String[] itemStats = {
+        String[] itemStats = isHalloween ? new String[] {
+            "Sát thương +34 • Thể lực +210",
+            "Sức căng +400 • Kháng đứt +6.4%",
+            "Cá hiếm +17% • Giữ mồi +34%",
+            "Chiêu mộ trang bị siêu phẩm",
+            "Chiêu mộ trang bị tiêu chuẩn",
+            "Tài nguyên nâng cấp trang bị"
+        } : new String[] {
             "Sát thương +20 • Thể lực +125",
             "Sức căng +225 • Kháng đứt +4%",
             "Cá hiếm +10% • Giữ mồi +20%",
@@ -1090,23 +1207,43 @@ public class EventScreen implements Screen {
         float maxTipTextW = tipW - 30f;
         String tipTitle = "";
         String line1 = "", line2 = "", line3 = "";
-        String setBonus = "Set Vệ Quốc: +29% Cá hiếm, Kháng đứt +10%";
+        boolean isHalloween = EventManager.isHalloweenActive();
+        String setBonus = isHalloween ? "Set Dạ Hội Bí Ngô: +20% EXP, +17% Cá hiếm, +34% Giữ mồi" : "Set Vệ Quốc: +29% Cá hiếm, Kháng đứt +10%";
 
-        if (itemIndex == 0) {
-            tipTitle = "Cần Câu Vệ Quốc (LIMITED EVENT)";
-            line1 = "• Loại: Cần Câu (Rod) | Cấp độ: Lv.1";
-            line2 = "• Sát thương kéo: +20 Sức kéo";
-            line3 = "• Thể lực tăng thêm: +125 Điểm";
-        } else if (itemIndex == 1) {
-            tipTitle = "Dây Cước Vệ Quốc (LIMITED EVENT)";
-            line1 = "• Loại: Dây Cước (Line) | Cấp độ: Lv.1";
-            line2 = "• Sức căng dây: +225 Điểm";
-            line3 = "• Kháng đứt dây: +4.0%";
-        } else if (itemIndex == 2) {
-            tipTitle = "Lưỡi Câu Vệ Quốc (LIMITED EVENT)";
-            line1 = "• Loại: Lưỡi Câu (Hook) | Cấp độ: Lv.1";
-            line2 = "• Tỉ lệ cá hiếm: +10.0%";
-            line3 = "• Tỉ lệ giữ mồi: +20.0%";
+        if (isHalloween) {
+            if (itemIndex == 0) {
+                tipTitle = "Cần Dạ Hội Bí Ngô (LIMITED 4★)";
+                line1 = "• Loại: Cần Câu (Rod) | Cấp độ: Lv.1";
+                line2 = "• Sát thương kéo: +34 Sức kéo";
+                line3 = "• Thể lực tăng thêm: +210 Điểm";
+            } else if (itemIndex == 1) {
+                tipTitle = "Dây Cước Tơ Nhện Quỷ (LIMITED 4★)";
+                line1 = "• Loại: Dây Cước (Line) | Cấp độ: Lv.1";
+                line2 = "• Sức căng dây: +400 Điểm";
+                line3 = "• Kháng đứt dây: +6.4%";
+            } else if (itemIndex == 2) {
+                tipTitle = "Lưỡi Kẹo Ma Quái (LIMITED 4★)";
+                line1 = "• Loại: Lưỡi Câu (Hook) | Cấp độ: Lv.1";
+                line2 = "• Tỉ lệ cá hiếm: +17.0%";
+                line3 = "• Tỉ lệ giữ mồi: +34.0%";
+            }
+        } else {
+            if (itemIndex == 0) {
+                tipTitle = "Cần Câu Vệ Quốc (LIMITED EVENT)";
+                line1 = "• Loại: Cần Câu (Rod) | Cấp độ: Lv.1";
+                line2 = "• Sát thương kéo: +20 Sức kéo";
+                line3 = "• Thể lực tăng thêm: +125 Điểm";
+            } else if (itemIndex == 1) {
+                tipTitle = "Dây Cước Vệ Quốc (LIMITED EVENT)";
+                line1 = "• Loại: Dây Cước (Line) | Cấp độ: Lv.1";
+                line2 = "• Sức căng dây: +225 Điểm";
+                line3 = "• Kháng đứt dây: +4.0%";
+            } else if (itemIndex == 2) {
+                tipTitle = "Lưỡi Câu Vệ Quốc (LIMITED EVENT)";
+                line1 = "• Loại: Lưỡi Câu (Hook) | Cấp độ: Lv.1";
+                line2 = "• Tỉ lệ cá hiếm: +10.0%";
+                line3 = "• Tỉ lệ giữ mồi: +20.0%";
+            }
         }
 
         font.setColor(0.95f, 0.35f, 0.38f, 1f);
@@ -1271,9 +1408,10 @@ public class EventScreen implements Screen {
     }
 
     private void buyShopItem(int index) {
+        boolean isHalloween = EventManager.isHalloweenActive();
         if (!EventManager.isEventActive()) {
             AudioManager.getInstance().playSFX("sfx_button");
-            showMessage("Sự kiện Lạc Hồng đã kết thúc! Cửa hàng đã đóng cửa.");
+            showMessage(isHalloween ? "Sự kiện Halloween đã kết thúc! Cửa hàng đã đóng cửa." : "Sự kiện Lạc Hồng đã kết thúc! Cửa hàng đã đóng cửa.");
             return;
         }
         int price = getShopItemPrice(index);
@@ -1289,15 +1427,15 @@ public class EventScreen implements Screen {
         switch (index) {
             case 0:
                 player.addEquipment(EquipmentGenerator.createFreeEventEquipment(EquipmentType.ROD));
-                showMessage("Đổi thành công: Cần Câu Vệ Quốc (Limited Event)!");
+                showMessage("Đổi thành công: " + (isHalloween ? "Cần Dạ Hội Bí Ngô" : "Cần Câu Vệ Quốc") + " (Limited Event)!");
                 break;
             case 1:
                 player.addEquipment(EquipmentGenerator.createFreeEventEquipment(EquipmentType.LINE));
-                showMessage("Đổi thành công: Dây Cước Vệ Quốc (Limited Event)!");
+                showMessage("Đổi thành công: " + (isHalloween ? "Dây Cước Tơ Nhện" : "Dây Cước Vệ Quốc") + " (Limited Event)!");
                 break;
             case 2:
                 player.addEquipment(EquipmentGenerator.createFreeEventEquipment(EquipmentType.HOOK));
-                showMessage("Đổi thành công: Lưỡi Câu Vệ Quốc (Limited Event)!");
+                showMessage("Đổi thành công: " + (isHalloween ? "Lưỡi Kẹo Ma Quái" : "Lưỡi Câu Vệ Quốc") + " (Limited Event)!");
                 break;
             case 3:
                 player.addPremiumTickets(3);
@@ -1328,7 +1466,7 @@ public class EventScreen implements Screen {
 
     private Color getShopItemBorderColor(int index) {
         if (index <= 2) {
-            return BORDER_CRIMSON;
+            return EventManager.isHalloweenActive() ? BORDER_PUMPKIN : BORDER_CRIMSON;
         } else if (index == 3) {
             return BORDER_PURPLE;
         } else if (index == 4) {

@@ -4,6 +4,30 @@
 
 ---
 
+## 📅 [2026-10-27] - Phiên bản v0.5.3.0 (Giai Đoạn 1: Hạ Tầng Sự Kiện Halloween, Auto-Switch Lifecycle & Dynamic UI/Shop/Attendance)
+
+### 🎃 Giai Đoạn 1: Hạ Tầng Sự Kiện Halloween & Tự Động Chuyển Giao (HLW-01)
+- **Mục tiêu**: Thiết lập cỗ máy trạng thái tự động (`EventManager.java`) quản lý vòng đời chuyển tiếp sự kiện thời gian thực giữa Sự kiện Lạc Hồng và Sự kiện Halloween 2026, bảo toàn 100% dữ liệu và giao diện Lạc Hồng cho đến đúng thời điểm kết thúc.
+- **Vòng Đời Sự Kiện Thời Gian Thực (State Machine)**:
+  - `LAC_HONG_ACTIVE` (Đến hết 23:59:59 ngày 28/10/2026 GMT+7): Giữ nguyên trọn vẹn chủ đề Hào Khí Lạc Hồng, Trống đồng Đông Sơn, Chim Lạc, Nhiệm vụ sự kiện, Tiệm đổi quà và Chuỗi điểm danh.
+  - `PRE_HALLOWEEN_INTERMISSION` (00:00:00 đến 23:59:59 ngày 29/10/2026 GMT+7): Khóa nhiệm vụ Lạc Hồng, tự động quy đổi Điểm Sự Kiện tồn đọng sang Vàng theo tỷ lệ 1 Điểm = 1,000 Vàng, hiển thị đồng hồ đếm ngược mở Đêm Hội Halloween.
+  - `HALLOWEEN_ACTIVE` (00:00:00 ngày 30/10/2026 đến 23:59:59 ngày 26/11/2026 GMT+7): Tự động chuyển đổi giao diện sang phong cách Dark Gothic Fantasy với hình mờ Jack-o'-Lantern rực lửa, đàn dơi lượn sóng và hạt ma trơi phát quang. Reset chuỗi điểm danh 25 ngày Halloween và điểm sự kiện đúng 1 lần duy nhất qua cờ lưu trữ `halloweenResetDone`.
+  - `POST_EVENT_GRACE`: Đóng sự kiện và thu hồi tài nguyên an toàn.
+- **Giao Diện Động & Tiệm Đổi Quà (Dynamic UI & Shop)**:
+  - Header linh hoạt: "HÀO KHÍ LẠC HỒNG" vs "ĐÊM HỘI HALLOWEEN 2026".
+  - Cửa Hàng Sự Kiện: Tự động đổi vật phẩm sang Bộ Trang Bị Giới Hạn "Dạ Hội Bí Ngô" (Cần Dạ Hội Bí Ngô 4★, Dây Cước Tơ Nhện Quỷ 4★, Lưỡi Kẹo Ma Quái 4★) kèm Túi Vàng Ma Quái và Vé Gacha.
+  - Chuỗi Điểm Danh 25 Ngày: Phần thưởng theo từng ngày linh hoạt theo sự kiện đang diễn ra, với Đại mốc Ngày 25 trao tặng Cần Dạ Hội Bí Ngô (Limited 4★).
+- **Đồ Họa Vector Mới (EquipmentIconRenderer.java)**:
+  - `drawPumpkinRod`: Cần Dạ Hội Bí Ngô với thân gai hắc diện thạch quấn dây leo cam, đầu cần gắn đèn bí ngô Jack-o'-Lantern mini phát quang, khuyên vàng đính ngọc.
+  - `drawSpiderSilkLine`: Cước Tơ Nhện Quỷ với ổ cước tím thẫm, mạng nhện hình học 8 nan bạc và phù hiệu đầu lâu ma quái.
+  - `drawGhostCandyHook`: Lưỡi Kẹo Ma Quái sọc kẹo Halloween uốn cong sắc lẹm, charm bóng ma mini bay bổng.
+  - `drawPumpkinLantern`: Đèn Lồng Bí Ngô Jack-o'-Lantern 3 lớp múi tròn, cuống xanh, mặt chạm khắc rực lửa vàng.
+  - `drawTrickOrTreatCandy`: Kẹo Halloween gói hai đầu cánh bướm tím-vàng, thân xoắn ốc cam ma mị.
+- **An Toàn Bộ Nhớ & Tối Ưu LibGDX**:
+  - Không phân bổ đối tượng trên Heap trong vòng lặp `render()`. Tái sử dụng `Color`, `Vector3`, `ShapeRenderer` dùng chung.
+
+---
+
 ## 📅 [2026-10-27] - Phiên bản v0.5.2.4 (Hoàn Thành Bước 2.3 - 15 Loài Cá Vector Đảo Xa & Tuyệt Tác Siêu Boss Cá Cờ Xanh Khổng Lồ)
 
 ### 🌊 Bước 2.3: Chuẩn Hóa 15 Loài Cá Vector Đảo Xa & Tuyệt Tác Siêu Boss Cá Cờ Xanh ([FishVisualRenderer.java](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/core/src/main/java/com/fishingrpg/game/ui/FishVisualRenderer.java))

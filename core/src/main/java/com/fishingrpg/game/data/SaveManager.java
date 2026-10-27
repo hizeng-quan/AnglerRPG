@@ -39,6 +39,7 @@ public class SaveManager {
         prefs.putInteger("premiumTickets", player.getPremiumTickets());
         prefs.putInteger("eventPoints",  player.getEventPoints());
         prefs.putInteger("totalLoginDaysThisMonth", player.getTotalLoginDaysThisMonth());
+        prefs.putBoolean("halloweenResetDone", player.isHalloweenResetDone());
         prefs.putLong("lastLoginTimestamp", player.getLastLoginTimestamp());
         prefs.putLong("lastEventMissionResetTimestamp", player.getLastEventMissionResetTimestamp());
         prefs.putInteger("fishCaught",   player.getFishCaught());
@@ -404,6 +405,7 @@ public class SaveManager {
         player.setPremiumTickets(prefs.getInteger("premiumTickets", 0));
         player.setEventPoints(prefs.getInteger("eventPoints", 0));
         player.setTotalLoginDaysThisMonth(prefs.getInteger("totalLoginDaysThisMonth", 0));
+        player.setHalloweenResetDone(prefs.getBoolean("halloweenResetDone", false));
         player.setLastLoginTimestamp(prefs.getLong("lastLoginTimestamp", 0L));
         player.setLastEventMissionResetTimestamp(prefs.getLong("lastEventMissionResetTimestamp", 0L));
 
