@@ -30,9 +30,9 @@ def get_equipment_sets():
         {"setName": "Hoàng Gia", "rodName": "Cần Câu Bạch Kim", "lineName": "Tơ Tằm Thượng Hạng", "hookName": "Móc Cẩm Thạch", "points": 6},
         {"setName": "Thời Không", "rodName": "Trượng Thời Gian", "lineName": "Sợi Dây Xuyên Thấu", "hookName": "Lưỡi Câu Hư Không", "points": 6},
         {"setName": "Quang Minh", "rodName": "Trượng Ánh Sáng", "lineName": "Dây Chỉ Vàng", "hookName": "Lưỡi Câu Thần", "points": 7},
-        {"setName": "Vệ Quốc Vang Danh", "rodName": "Cần Câu Khởi Nghĩa", "lineName": "Cước Vệ Quốc", "hookName": "Lưỡi Sao Vàng", "points": 4},
+        {"setName": "Vệ Quốc Vang Danh", "rodName": "Cần Câu Khởi Nghĩa", "lineName": "Cước Vệ Quốc", "hookName": "Lưỡi Sao Vàng", "points": 5},
         {"setName": "Thần Khí Lạc Hồng", "rodName": "Trượng Lạc Hồng", "lineName": "Dây Rồng Thiêng", "hookName": "Móc Âu Cơ", "points": 8},
-        {"setName": "Dạ Hội Bí Ngô", "rodName": "Cần Dạ Hội Bí Ngô", "lineName": "Dây Cước Tơ Nhện Quỷ", "hookName": "Lưỡi Kẹo Ma Quái", "points": 4},
+        {"setName": "Dạ Hội Bí Ngô", "rodName": "Cần Dạ Hội Bí Ngô", "lineName": "Dây Cước Tơ Nhện Quỷ", "hookName": "Lưỡi Kẹo Ma Quái", "points": 5},
         {"setName": "Huyết Nguyệt Thần Vương", "rodName": "Huyết Nguyệt Thần Trượng", "lineName": "Dây Huyết Ma Cơ", "hookName": "Lưỡi Huyết Nguyệt Ma Trảo", "points": 8}
     ]
     return sets
@@ -40,11 +40,11 @@ def get_equipment_sets():
 RARITY_POINTS = {
     "COMMON": 0,
     "UNCOMMON": 2,
-    "RARE": 4,
-    "EPIC": 7,
-    "LEGENDARY": 10,
-    "LIMITED_EVENT": 4,
-    "LIMITED_PREMIUM": 10
+    "RARE": 5,
+    "EPIC": 9,
+    "LEGENDARY": 12,
+    "LIMITED_EVENT": 9,
+    "LIMITED_PREMIUM": 15
 }
 
 def calculate_equipment_stats(set_name, rarity="COMMON"):
@@ -62,6 +62,34 @@ def calculate_equipment_stats(set_name, rarity="COMMON"):
         elif matched["setName"] in ("Dạ Hội Bí Ngô", "Vệ Quốc Vang Danh"):
             rarity = "LIMITED_EVENT"
 
+    if matched["setName"] == "Huyết Nguyệt Thần Vương":
+        return {
+            "set_name": matched["setName"],
+            "rarity": "LIMITED_PREMIUM",
+            "mult": 23,
+            "rod": {"name": matched["rodName"], "base_pull_damage": 60.0, "max_stamina": 375.0},
+            "line": {"name": matched["lineName"], "max_tension": 645.0, "khang_dut": 10.6},
+            "hook": {"name": matched["hookName"], "bite_rarity_pct": 31.0, "bait_retention_pct": 52.0}
+        }
+    if matched["setName"] == "Thần Khí Lạc Hồng":
+        return {
+            "set_name": matched["setName"],
+            "rarity": "LIMITED_PREMIUM",
+            "mult": 23,
+            "rod": {"name": matched["rodName"], "base_pull_damage": 54.0, "max_stamina": 425.0},
+            "line": {"name": matched["lineName"], "max_tension": 705.0, "khang_dut": 11.8},
+            "hook": {"name": matched["hookName"], "bite_rarity_pct": 27.0, "bait_retention_pct": 60.0}
+        }
+    if matched["setName"] == "Dạ Hội Bí Ngô":
+        return {
+            "set_name": matched["setName"],
+            "rarity": "LIMITED_EVENT",
+            "mult": 14,
+            "rod": {"name": matched["rodName"], "base_pull_damage": 38.0, "max_stamina": 260.0},
+            "line": {"name": matched["lineName"], "max_tension": 450.0, "khang_dut": 7.6},
+            "hook": {"name": matched["hookName"], "bite_rarity_pct": 19.0, "bait_retention_pct": 38.0}
+        }
+
     set_points = matched["points"]
     r_points = RARITY_POINTS.get(rarity.upper(), 0)
     mult = set_points + r_points
@@ -72,18 +100,18 @@ def calculate_equipment_stats(set_name, rarity="COMMON"):
         "mult": mult,
         "rod": {
             "name": matched["rodName"],
-            "base_pull_damage": 10.0 + mult * 1.2,
-            "max_stamina": 50.0 + mult * 8.0
+            "base_pull_damage": 10.0 + mult * 2.0,
+            "max_stamina": 50.0 + mult * 15.0
         },
         "line": {
             "name": matched["lineName"],
-            "max_tension": 100.0 + mult * 15.0,
-            "khang_dut": 2.0 + mult * 0.22
+            "max_tension": 100.0 + mult * 25.0,
+            "khang_dut": 2.0 + mult * 0.4
         },
         "hook": {
             "name": matched["hookName"],
-            "bite_rarity_pct": 5.0 + mult * 0.6,
-            "bait_retention_pct": 10.0 + mult * 1.2
+            "bite_rarity_pct": 5.0 + mult * 1.0,
+            "bait_retention_pct": 10.0 + mult * 2.0
         }
     }
 

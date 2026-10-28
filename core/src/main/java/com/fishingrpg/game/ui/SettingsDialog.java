@@ -640,6 +640,13 @@ public class SettingsDialog {
                 }
             }
             if (jsonContent == null) {
+                File rstSav = new File("angler_save_before_reset.sav");
+                if (rstSav.exists() && SaveManager.importFromFile(rstSav, game.player)) {
+                    sourceName = "angler_save_before_reset.sav";
+                    jsonContent = "OK";
+                }
+            }
+            if (jsonContent == null) {
                 File std = new File("angler_save.json");
                 if (std.exists() && SaveManager.importFromFile(std, game.player)) {
                     sourceName = "angler_save.json";
@@ -689,16 +696,30 @@ public class SettingsDialog {
         try {
             try {
                 SaveManager.savePlayer(game.player);
-                File backup = new File("angler_save_before_reset.json");
-                SaveManager.exportToFile(backup);
-            } catch (Throwable ignored) {}
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+                String ts = sdf.format(new Date());
+
+                // 1. Sao lưu mã hóa chuẩn .sav có gắn timestamp trước khi xóa
+                File backupTs = new File("angler_save_before_reset_" + ts + ".sav");
+                SaveManager.exportToFile(backupTs);
+
+                // 2. Sao lưu mã hóa chuẩn .sav cố định
+                File backupStd = new File("angler_save_before_reset.sav");
+                SaveManager.exportToFile(backupStd);
+
+                // 3. Đồng bộ sao lưu mã hóa vào file legacy .json để tương thích ngược
+                File backupLegacy = new File("angler_save_before_reset.json");
+                SaveManager.exportToFile(backupLegacy);
+            } catch (Throwable t) {
+                Gdx.app.error("Settings", "Lỗi sao lưu trước khi đặt lại", t);
+            }
 
             SaveManager.clearSave();
             game.player = new Player();
             SaveManager.savePlayer(game.player);
             if (listener != null) listener.onDataReloaded();
 
-            statusMessage = "ĐÃ ĐẶT LẠI DỮ LIỆU! Người chơi trở về Cấp 1 (Đã tự động sao lưu).";
+            statusMessage = "ĐÃ ĐẶT LẠI DỮ LIỆU! Người chơi trở về Cấp 1 (Đã tự động sao lưu mã hóa .sav).";
             statusTimer = 6.0f;
             statusIsSuccess = true;
             AudioManager.getInstance().playSFX("sfx_success");
@@ -1619,7 +1640,7 @@ public class SettingsDialog {
         font.draw(batch, "ĐẶT LẠI DỮ LIỆU TRÒ CHƠI (RESET GAME)", btnDataX + 110f, bResetY + 46f);
         smallFont.getData().setScale(0.74f);
         smallFont.setColor(0.95f, 0.65f, 0.65f, 0.85f);
-        smallFont.draw(batch, "Khởi tạo lại tiến trình về Cấp 1 (Hệ thống tự động sao lưu trước khi xóa)", btnDataX + 110f, bResetY + 24f);
+        smallFont.draw(batch, "Khởi tạo lại tiến trình về Cấp 1 (Hệ thống tự động sao lưu mã hóa .sav)", btnDataX + 110f, bResetY + 24f);
 
         // Status Notification Message if any
         if (statusMessage != null && statusTimer > 0f) {
@@ -1685,7 +1706,7 @@ public class SettingsDialog {
 
         font.getData().setScale(0.82f);
         font.setColor(1f, 0.9f, 0.9f, 0.95f);
-        font.draw(batch, "Hành động này sẽ xóa toàn bộ cấp độ, vàng, trang bị, cần câu\nvà kỷ lục cá của bạn. Game sẽ tự động sao lưu 1 bản trước khi xóa.", modalX + 45f, modalY + modalH - 75f);
+        font.draw(batch, "Hành động này sẽ xóa toàn bộ cấp độ, vàng, trang bị, cần câu\nvà kỷ lục cá của bạn. Game sẽ tự động sao lưu mã hóa (.sav) trước khi xóa.", modalX + 45f, modalY + modalH - 75f);
 
         if (resetCountdown > 0f) {
             int sec = (int) Math.ceil(resetCountdown);
