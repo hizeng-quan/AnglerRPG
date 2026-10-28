@@ -39,6 +39,7 @@ public class GiatKepAbility extends GameplayAbility {
                 if (ctx.ftm != null) ctx.ftm.addText("HƯ VÔ! (MIỄN NHIỄM)", 640f, 360f, Color.PURPLE);
             } else {
                 ctx.currentFish.takeDamage(finalDmg);
+                applyTrueDamageBonusIfActive(finalDmg, ctx);
                 if (ctx.ftm != null) {
                     ctx.ftm.addText("GIẬT KÉP! -" + (int) finalDmg, 640f + MathUtils.random(-50, 50),
                             360f + MathUtils.random(-50, 50), Color.RED);

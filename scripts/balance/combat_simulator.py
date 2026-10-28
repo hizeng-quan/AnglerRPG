@@ -52,7 +52,9 @@ class CombatSimulator:
         set_name = eq_stats.get("set_name", "")
         is_huyet_nguyet = (set_name == "Huyết Nguyệt Thần Vương")
         is_bang_gia = (set_name == "Băng Giá")
-        perfect_cast_timer = 2.0 if is_huyet_nguyet else 0.0
+        blood_moon_tier = 3 if is_huyet_nguyet else 0
+        blood_moon_timer = 5.0 if is_huyet_nguyet else 0.0
+        blood_moon_cd = 0.0
         candle_charges = 1 if is_huyet_nguyet else 0  # Nến Hồn Ma Bảo Hộ
 
         # Player skills & stats scaling
@@ -83,8 +85,17 @@ class CombatSimulator:
         while time < max_time and fish_hp > 0:
             time += dt
             fish_timer -= dt
-            if perfect_cast_timer > 0:
-                perfect_cast_timer -= dt
+            if is_huyet_nguyet:
+                if blood_moon_timer > 0:
+                    blood_moon_timer -= dt
+                    if blood_moon_timer <= 0:
+                        blood_moon_timer = 0
+                        blood_moon_cd = 10.0
+                elif blood_moon_cd > 0:
+                    blood_moon_cd -= dt
+                    if blood_moon_cd <= 0:
+                        blood_moon_cd = 0
+                        blood_moon_timer = 5.0
             if stun_timer > 0:
                 stun_timer -= dt
             if frozen_timer > 0:
@@ -229,7 +240,11 @@ class CombatSimulator:
 
             # Vampirism of Set Huyết Nguyệt: restores stamina and deals damage
             if is_huyet_nguyet and is_space_down:
-                drain_per_sec = min(fish_hp * 0.03, 12.0)
+                max_drain = 18.0 if (blood_moon_timer > 0 and blood_moon_tier >= 1) else 12.0
+                drain_pct = 0.045 if (blood_moon_timer > 0 and blood_moon_tier >= 1) else 0.03
+                if blood_moon_timer > 0 and blood_moon_tier >= 1:
+                    current_stamina = min(max_stamina, current_stamina + 6.0 * dt)
+                drain_per_sec = min(fish_hp * drain_pct, max_drain)
                 stamina_heal = drain_per_sec * dt
                 current_stamina = min(max_stamina, current_stamina + stamina_heal)
                 fish_hp -= stamina_heal
@@ -247,8 +262,8 @@ class CombatSimulator:
                 eff_dmg = base_dmg * dmg_mult
                 if pha_giap_timer > 0:
                     eff_dmg *= 1.30
-                if perfect_cast_timer > 0:
-                    eff_dmg *= 2.0
+                if is_huyet_nguyet and blood_moon_timer > 0 and blood_moon_tier >= 3:
+                    fish_hp -= (eff_dmg * 0.25) * dt
                 if stun_timer > 0:
                     eff_dmg *= 2.0
                 if random.random() < 0.15:

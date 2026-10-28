@@ -41,7 +41,11 @@ public abstract class GameplayAbility {
     public boolean canActivate(AbilityContext ctx) {
         if (ctx.player == null) return false;
         if (ctx.player.getFreeStaminaSkillCharges() > 0) return true;
-        if (ctx.player.getCurrentStamina() < getStaminaCost(ctx)) return false;
+        float cost = getStaminaCost(ctx);
+        if (ctx.fishingManager != null && ctx.fishingManager.isBloodMoonSkillStaminaDiscountActive()) {
+            cost *= 0.70f;
+        }
+        if (ctx.player.getCurrentStamina() < cost) return false;
         return true;
     }
 
@@ -58,6 +62,9 @@ public abstract class GameplayAbility {
             return true;
         }
         float cost = getStaminaCost(ctx);
+        if (ctx.fishingManager != null && ctx.fishingManager.isBloodMoonSkillStaminaDiscountActive()) {
+            cost *= 0.70f;
+        }
         if (!ctx.player.consumeStamina(cost)) {
             if (ctx.ftm != null) ctx.ftm.addText("Không đủ Thể lực (-" + (int) cost + ")!", 640f, 380f, new Color(1f, 0.45f, 0.4f, 1f));
             return false;
@@ -70,11 +77,17 @@ public abstract class GameplayAbility {
      */
     public void applyTrueDamageBonusIfActive(float damageDealt, AbilityContext ctx) {
         if (ctx == null || ctx.currentFish == null || damageDealt <= 0f) return;
+        float trueBonus = 0f;
         if (ctx.player != null && ctx.player.getBloodMoonTalismanTimer() > 0f) {
-            float trueBonus = damageDealt * 0.10f;
+            trueBonus += damageDealt * 0.10f;
+        }
+        if (ctx.fishingManager != null && ctx.fishingManager.isBloodMoonTrueDamageActive()) {
+            trueBonus += damageDealt * 0.25f;
+        }
+        if (trueBonus > 0f) {
             ctx.currentFish.takeTrueDamage(trueBonus);
             if (ctx.ftm != null) {
-                ctx.ftm.addText("BÙA HUYẾT NGUYỆT: +" + (int)trueBonus + " CHUẨN!", 640f + MathUtils.random(-30, 30), 400f, Color.SCARLET);
+                ctx.ftm.addText("SÁT THƯƠNG CHUẨN: +" + (int)trueBonus + "!", 640f + MathUtils.random(-30, 30), 400f, Color.SCARLET);
             }
         }
     }

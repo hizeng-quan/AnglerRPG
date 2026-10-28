@@ -103,6 +103,7 @@ public class EventScreen implements Screen {
 
     @Override
     public void show() {
+        eventManager.checkAndResetDailyMissions();
         AudioManager.getInstance().playBGM("bgm_menu");
     }
 
@@ -878,7 +879,7 @@ public class EventScreen implements Screen {
         int completedCount = eventManager.getCompletedMissionsCount();
         font.setColor(1f, 0.85f, 0.35f, 1f);
         font.getData().setScale(0.88f);
-        font.draw(game.batch, "NHIỆM VỤ SỰ KIỆN HẰNG NGÀY • LÀM MỚI LÚC 00:00", startX + 18f, bannerY + 44f);
+        font.draw(game.batch, "NHIỆM VỤ SỰ KIỆN HẰNG NGÀY • LÀM MỚI LÚC 00:00 (CÒN " + eventManager.getTimeUntilMidnight() + ")", startX + 18f, bannerY + 44f);
 
         // Milestone Button Text
         float mBtnW = 180f;

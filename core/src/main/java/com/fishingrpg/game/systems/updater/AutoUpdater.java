@@ -98,16 +98,29 @@ public class AutoUpdater {
                         latestVersion = tag;
                         releaseNotes = body;
 
-                        // Tìm file .jar trong danh sách assets đính kèm của release
+                        // Tìm file cập nhật trong danh sách assets đính kèm của release
                         downloadUrl = "";
+                        downloadFileName = "";
                         JsonValue assets = root.get("assets");
                         if (assets != null) {
+                            // Ưu tiên 1: File .jar chạy trực tiếp
                             for (JsonValue asset = assets.child; asset != null; asset = asset.next) {
                                 String name = asset.getString("name", "");
-                                if (name.endsWith(".jar") || name.endsWith(".exe") || name.endsWith(".zip")) {
+                                if (name.toLowerCase().endsWith(".jar")) {
                                     downloadUrl = asset.getString("browser_download_url", "");
                                     downloadFileName = name;
                                     break;
+                                }
+                            }
+                            // Ưu tiên 2: Gói nén .zip (chứa .jar) hoặc file chạy .exe
+                            if (downloadUrl.isEmpty()) {
+                                for (JsonValue asset = assets.child; asset != null; asset = asset.next) {
+                                    String name = asset.getString("name", "");
+                                    if (name.toLowerCase().endsWith(".zip") || name.toLowerCase().endsWith(".exe")) {
+                                        downloadUrl = asset.getString("browser_download_url", "");
+                                        downloadFileName = name;
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -171,13 +184,22 @@ public class AutoUpdater {
                 conn.setReadTimeout(15000);
                 conn.setInstanceFollowRedirects(true);
 
-                // Hỗ trợ HTTP 302/301 redirects tự động của GitHub Releases -> AWS S3 CDN
-                int status = conn.getResponseCode();
-                if (status == HttpURLConnection.HTTP_MOVED_TEMP || status == HttpURLConnection.HTTP_MOVED_PERM || status == 307 || status == 308) {
-                    String newUrl = conn.getHeaderField("Location");
-                    conn.disconnect();
-                    conn = (HttpURLConnection) new URL(newUrl).openConnection();
-                    conn.setRequestProperty("User-Agent", "AnglerRPG-Updater/" + GameVersion.CURRENT_VERSION);
+                // Hỗ trợ đa tầng HTTP 302/301/307/308 redirects tự động của GitHub Releases -> AWS S3 CDN
+                int redirectCount = 0;
+                while (redirectCount < 5) {
+                    int resp = conn.getResponseCode();
+                    if (resp == HttpURLConnection.HTTP_MOVED_TEMP || resp == HttpURLConnection.HTTP_MOVED_PERM || resp == 307 || resp == 308) {
+                        String newUrl = conn.getHeaderField("Location");
+                        conn.disconnect();
+                        conn = (HttpURLConnection) new URL(newUrl).openConnection();
+                        conn.setRequestProperty("User-Agent", "AnglerRPG-Updater/" + GameVersion.CURRENT_VERSION);
+                        conn.setConnectTimeout(8000);
+                        conn.setReadTimeout(15000);
+                        conn.setInstanceFollowRedirects(true);
+                        redirectCount++;
+                    } else {
+                        break;
+                    }
                 }
 
                 long totalBytes = conn.getContentLengthLong();
@@ -207,6 +229,20 @@ public class AutoUpdater {
 
                 this.status = Status.READY_TO_RESTART;
                 downloadProgress = 1f;
+
+                // Nếu file tải về là gói nén ZIP thì tự động giải nén file .jar bên trong
+                File fileToApply = tempTarget;
+                if ((downloadFileName != null && downloadFileName.toLowerCase().endsWith(".zip")) || isZipArchive(tempTarget)) {
+                    statusMessage = "Đang giải nén gói cập nhật...";
+                    File extractedJar = extractJarFromZip(tempTarget);
+                    if (extractedJar != null && extractedJar.exists()) {
+                        tempTarget.delete();
+                        fileToApply = extractedJar;
+                    } else {
+                        throw new IOException("Không tìm thấy tệp game (.jar) bên trong gói cập nhật .zip!");
+                    }
+                }
+
                 statusMessage = "Tải thành công! Đang chuẩn bị khởi động lại...";
 
                 if (progressCallback != null) {
@@ -214,7 +250,7 @@ public class AutoUpdater {
                 }
 
                 // Thực hiện thay thế và khởi động lại
-                executeRestartScript(tempTarget);
+                executeRestartScript(fileToApply);
 
             } catch (Exception e) {
                 this.status = Status.ERROR;
@@ -234,35 +270,111 @@ public class AutoUpdater {
     /**
      * Tạo script thay thế file và khởi động lại game tự động.
      */
+    private static boolean isZipArchive(File file) {
+        if (file == null || !file.exists() || file.length() < 4) return false;
+        try (FileInputStream fis = new FileInputStream(file)) {
+            byte[] header = new byte[4];
+            if (fis.read(header) == 4) {
+                return header[0] == 0x50 && header[1] == 0x4B && header[2] == 0x03 && header[3] == 0x04;
+            }
+        } catch (Exception ignored) {}
+        return false;
+    }
+
+    private static File extractJarFromZip(File zipFile) throws IOException {
+        File extractedJar = new File("AnglerRPG-extracted.tmp");
+        if (extractedJar.exists()) extractedJar.delete();
+
+        boolean found = false;
+        try (java.util.zip.ZipInputStream zis = new java.util.zip.ZipInputStream(new BufferedInputStream(new FileInputStream(zipFile)))) {
+            java.util.zip.ZipEntry entry;
+            byte[] buf = new byte[8192];
+
+            while ((entry = zis.getNextEntry()) != null) {
+                String name = entry.getName();
+                if (entry.isDirectory() || name.startsWith("__MACOSX")) {
+                    zis.closeEntry();
+                    continue;
+                }
+
+                if (name.toLowerCase().endsWith(".jar")) {
+                    try (OutputStream out = new BufferedOutputStream(new FileOutputStream(extractedJar))) {
+                        int len;
+                        while ((len = zis.read(buf)) != -1) {
+                            out.write(buf, 0, len);
+                        }
+                        out.flush();
+                    }
+                    found = true;
+                    zis.closeEntry();
+                    break;
+                } else {
+                    File outFile = new File(name);
+                    String canonicalDest = new File(".").getCanonicalPath();
+                    if (outFile.getCanonicalPath().startsWith(canonicalDest)) {
+                        File parent = outFile.getParentFile();
+                        if (parent != null) parent.mkdirs();
+                        try (OutputStream out = new BufferedOutputStream(new FileOutputStream(outFile))) {
+                            int len;
+                            while ((len = zis.read(buf)) != -1) {
+                                out.write(buf, 0, len);
+                            }
+                            out.flush();
+                        }
+                    }
+                    zis.closeEntry();
+                }
+            }
+        }
+
+        return found ? extractedJar : null;
+    }
+
+    /**
+     * Tạo script thay thế file và khởi động lại game tự động.
+     */
     private void executeRestartScript(File tempFile) {
         try {
+            // Xác định chính xác tên file JAR đang chạy của ứng dụng (mặc định là AnglerRPG.jar)
+            String targetJarName = "AnglerRPG.jar";
+            try {
+                File runningLocation = new File(AutoUpdater.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+                if (runningLocation.isFile() && runningLocation.getName().toLowerCase().endsWith(".jar")) {
+                    targetJarName = runningLocation.getName();
+                }
+            } catch (Exception ignored) {}
+
             boolean isWindows = System.getProperty("os.name").toLowerCase().contains("win");
             if (isWindows) {
                 File bat = new File("update_apply.bat");
-                String targetJarName = (downloadFileName != null && !downloadFileName.isEmpty()) ? downloadFileName : "AnglerRPG.jar";
-                
-                FileWriter fw = new FileWriter(bat);
-                fw.write("@echo off\r\n");
-                fw.write("chcp 65001 > nul\r\n");
-                fw.write("timeout /t 1 /nobreak > nul\r\n");
-                fw.write("echo [AnglerRPG Updater] Đang cập nhật phiên bản mới...\r\n");
-                fw.write("move /y \"" + tempFile.getName() + "\" \"" + targetJarName + "\" > nul\r\n");
-                fw.write("echo [AnglerRPG Updater] Khởi chạy game...\r\n");
-                fw.write("start \"\" javaw -jar \"" + targetJarName + "\" || start \"\" java -jar \"" + targetJarName + "\"\r\n");
-                fw.write("del \"%~f0\" > nul 2>&1\r\n");
-                fw.write("exit\r\n");
-                fw.close();
+                try (OutputStreamWriter fw = new OutputStreamWriter(new FileOutputStream(bat), java.nio.charset.StandardCharsets.UTF_8)) {
+                    fw.write("@echo off\r\n");
+                    fw.write("chcp 65001 > nul\r\n");
+                    fw.write("echo [AnglerRPG Updater] Đang chờ tiến trình game cũ đóng hoàn toàn...\r\n");
+                    fw.write("for /L %%i in (1,1,10) do (\r\n");
+                    fw.write("    move /y \"" + tempFile.getName() + "\" \"" + targetJarName + "\" > nul 2>&1 && goto move_done\r\n");
+                    fw.write("    timeout /t 1 /nobreak > nul\r\n");
+                    fw.write(")\r\n");
+                    fw.write(":move_done\r\n");
+                    fw.write("echo [AnglerRPG Updater] Khởi chạy game phiên bản mới...\r\n");
+                    fw.write("start \"\" javaw -jar \"" + targetJarName + "\" || start \"\" java -jar \"" + targetJarName + "\"\r\n");
+                    fw.write("if exist \"AnglerRPG-update.tmp\" del /f /q \"AnglerRPG-update.tmp\" > nul 2>&1\r\n");
+                    fw.write("start /b \"\" cmd /c \"del update_apply.bat\" > nul 2>&1\r\n");
+                    fw.write("exit\r\n");
+                }
 
                 Runtime.getRuntime().exec("cmd /c start \"\" \"" + bat.getAbsolutePath() + "\"");
             } else {
                 File sh = new File("update_apply.sh");
-                FileWriter fw = new FileWriter(sh);
-                fw.write("#!/bin/sh\n");
-                fw.write("sleep 1\n");
-                fw.write("mv -f \"" + tempFile.getName() + "\" \"AnglerRPG.jar\"\n");
-                fw.write("java -jar \"AnglerRPG.jar\" &\n");
-                fw.write("rm -f \"$0\"\n");
-                fw.close();
+                try (OutputStreamWriter fw = new OutputStreamWriter(new FileOutputStream(sh), java.nio.charset.StandardCharsets.UTF_8)) {
+                    fw.write("#!/bin/sh\n");
+                    fw.write("for i in $(seq 1 10); do\n");
+                    fw.write("    mv -f \"" + tempFile.getName() + "\" \"" + targetJarName + "\" 2>/dev/null && break\n");
+                    fw.write("    sleep 1\n");
+                    fw.write("done\n");
+                    fw.write("java -jar \"" + targetJarName + "\" &\n");
+                    fw.write("rm -f \"$0\"\n");
+                }
                 sh.setExecutable(true);
                 Runtime.getRuntime().exec(new String[]{"/bin/sh", sh.getAbsolutePath()});
             }

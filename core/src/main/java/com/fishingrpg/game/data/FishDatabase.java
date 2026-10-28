@@ -61,8 +61,6 @@ public class FishDatabase {
                 String activeSet = (player.getEquipment() != null) ? player.getEquipment().getActiveSetName() : "";
                 if ("Dạ Hội Bí Ngô".equals(activeSet)) {
                     halloweenChance += 0.10f; // +10%
-                } else if ("Huyết Nguyệt Thần Vương".equals(activeSet)) {
-                    halloweenChance += 0.15f; // +15%
                 }
                 // HLW-05: Nhan doi ty le toan bo ca Halloween trong Dem Huyet Nguyet
                 boolean isBloodMoon = (player.getManualBloodMoonTimer() > 0f);
@@ -98,7 +96,6 @@ public class FishDatabase {
                     }
                     String activeSet = (player.getEquipment() != null) ? player.getEquipment().getActiveSetName() : "";
                     if ("Dạ Hội Bí Ngô".equals(activeSet)) rareMulti += 0.35f;
-                    if ("Huyết Nguyệt Thần Vương".equals(activeSet)) rareMulti += 0.60f;
 
                     wDauLau *= rareMulti;
                     wDangMa *= rareMulti;

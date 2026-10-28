@@ -1,6 +1,6 @@
 # KẾ HOẠCH PHÁT TRIỂN & THEO DÕI TÁC VỤ (ROADMAP & TASK TRACKER)
 > **Dự án:** AnglerRPG  
-> **Cập nhật:** 26/10/2026  
+> **Cập nhật:** 29/10/2026  
 > **Trạng thái tài liệu:** Đang hoạt động (Active Tracker)
 
 ---
@@ -9,6 +9,24 @@
 
 | ID | Nhóm công việc | Hạng mục | Mức độ ưu tiên | Trạng thái |
 | :--- | :--- | :--- | :---: | :---: |
+| **BAL-EQ-05** | Cân bằng | Nerf điểm phẩm cấp Legendary (12) & Limited Premium (15), đồng bộ chỉ số toàn bộ trang bị | **P0 (Khẩn cấp)** | ✅ Đã hoàn thành (v0.5.5.7) |
+| **BAL-HN-01** | Cân bằng | Đại tu Set Bonus Huyết Nguyệt Thần Vương: Bỏ thiên vị cá HLW, Huyết Nhãn Tinh Chuẩn (5s/10s) & Huyết Ma Thôn Phệ | **P0 (Cân bằng)** | ✅ Đã hoàn thành (v0.5.5.7) |
+| **MIG-SAV-07** | Hệ thống | Nâng cấp SAVE_VERSION = 7 tự động đồng bộ kho đồ người chơi lên bảng chỉ số v0.5.5.7 | **P0 (Dữ liệu)** | ✅ Đã hoàn thành (v0.5.5.7) |
+| **BAL-EQ-04** | Cân bằng | Đại tu chỉ số 2 Set 6★ Thần Khí (Lạc Hồng & Huyết Nguyệt) đạt chuẩn hệ số mult 26 | **P0 (Khẩn cấp)** | ✅ Đã hoàn thành (v0.5.5.6) |
+| **BAL-LH-02** | Cân bằng | Rework Set Lạc Hồng: Xóa Âm Vang Trống Đồng & Long Thần Hộ Thể giảm 50% TL trong 12s | **P0 (Cân bằng)** | ✅ Đã hoàn thành (v0.5.5.6) |
+| **BUG-SKY-01** | Gameplay | Sửa lỗi kích hoạt sớm Bầu Trời Huyết Nguyệt & Đại tu chuyển sắc thiên tượng IDLE + Combat | **P0 (Hình ảnh)** | ✅ Đã hoàn thành (v0.5.5.6) |
+| **MIG-SAV-06** | Hệ thống | Nâng cấp SAVE_VERSION = 6 tự động nâng cấp kho đồ người chơi lên chỉ số mult 26 | **P0 (Dữ liệu)** | ✅ Đã hoàn thành (v0.5.5.6) |
+| **BAL-LH-01** | Cân bằng | Nerf nội tại Set Thần Khí Lạc Hồng (40% Khắc chế skill Boss, hồi 10% TL, -25% Tension, Long Thần Hộ Thể) | **P0 (Cân bằng)** | ✅ Đã hoàn thành (v0.5.5.5) |
+| **BUG-STM-02** | Gameplay | Sửa lỗi không cạn thể lực & Kích hoạt cơ chế kiệt sức thoát cá kèm banner thông báo + SFX | **P0 (Khẩn cấp)** | ✅ Đã hoàn thành (v0.5.5.5) |
+| **BUG-EVT-02** | Sự kiện | Sửa triệt để lỗi không reset nhiệm vụ sự kiện hằng ngày (Chuẩn hóa DAY_OF_YEAR & đếm ngược 00:00) | **P0 (Sự kiện)** | ✅ Đã hoàn thành (v0.5.5.5) |
+| **UPD-02** | Hệ thống | Sửa triệt để AutoUpdater: Trích xuất JAR từ ZIP release, tối ưu batch script & di chuyển SAVE_VERSION = 5 | **P0 (Hệ thống)** | ✅ Đã hoàn thành (v0.5.5.5) |
+| **BAL-EQ-01** | Cân bằng & Sửa lỗi | Sửa lỗi phẩm cấp Set Quang Minh (LIMITED_PREMIUM -> 5★ LEGENDARY) & khôi phục multiplier chuẩn | **P0 (Khẩn cấp)** | ✅ Đã hoàn thành (v0.5.5.4) |
+| **BAL-EQ-02** | Cân bằng | Nerf chỉ số Set Dạ Hội Bí Ngô ngang hàng Set Epic Tier 5 Vực Thẳm (mult = 14) | **P1 (Cân bằng)** | ✅ Đã hoàn thành (v0.5.5.4) |
+| **BAL-EQ-03** | Cân bằng | Nerf chỉ số Set Huyết Nguyệt Thần Vương đối trọng Lạc Hồng (Tension 450 < 520, DMG 48 > 44) | **P1 (Cân bằng)** | ✅ Đã hoàn thành (v0.5.5.4) |
+| **MIG-SAV-04** | Hệ thống | Nâng cấp SAVE_VERSION = 4 tự động chuẩn hóa phẩm cấp & đồng bộ lại toàn bộ kho đồ người chơi | **P0 (Dữ liệu)** | ✅ Đã hoàn thành (v0.5.5.4) |
+| **VER-01** | Hệ thống | Đồng bộ hiển thị phiên bản hệ thống lên v0.5.5.3 (Sửa lỗi kẹt v0.5.2.4 & AutoUpdater check sai) | **P0 (Hiển thị)** | ✅ Đã hoàn thành (v0.5.5.3) |
+| **UPD-01** | Hệ thống | Sửa lỗi AutoUpdater: Tự giải nén .zip, ưu tiên .jar, retry giải phóng file lock & batch self-delete | **P0 (Cập nhật)** | ✅ Đã hoàn thành (v0.5.5.3) |
+| **SEC-03** | Bảo mật | Chuẩn hóa sao lưu khi Reset Game sang file mã hóa .sav (AES-256 + SHA-256) & chặn xuất file thô | **P0 (Bảo mật)** | ✅ Đã hoàn thành (v0.5.5.3) |
 | **SEC-02** | Bảo mật  | Mã hóa file save chống gian lận & can thiệp dữ liệu (AES-256 + SHA-256 Checksum) | **P0 (Bảo mật)**   | ✅ Đã hoàn thành (v0.4.24) |
 | **EVT-01** | Sự kiện  | Chốt hạn Sự kiện Lạc Hồng (28/10) & Khóa an toàn Shop, quy đổi Điểm SK tồn đọng | **P1 (Sự kiện)**  | ✅ Đã hoàn thành (v0.4.24) |
 | **HLW-01** | Sự kiện  | Giai Đoạn 1: Hạ Tầng Sự Kiện, Auto-Switch Lifecycle, Giao Diện Đêm Hội Halloween & Shop | **P1 (Sự kiện)**  | ✅ Đã hoàn thành (v0.5.3.0) |
