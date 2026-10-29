@@ -9,6 +9,8 @@
 
 | ID | Nhóm công việc | Hạng mục | Mức độ ưu tiên | Trạng thái |
 | :--- | :--- | :--- | :---: | :---: |
+| **UI-GCH-01** | Giao diện | Cập nhật tên đài Gacha thành HALLOWEEN & sửa thông tin Set Bonus Huyết Nguyệt chống tràn box | **P0 (Giao diện)** | ✅ Đã hoàn thành (v0.5.5.9) |
+| **BUG-EVT-04** | Sự kiện | Khắc phục triệt để lỗi không reset nhiệm vụ sự kiện (phát hiện và chuyển đổi sai lệch pool nhiệm vụ) | **P0 (Sự kiện)** | ✅ Đã hoàn thành (v0.5.5.9) |
 | **BUG-EVT-03** | Hệ thống & Sửa lỗi | Sửa lỗi StackOverflowError làm game tự tắt khi khởi động (chặn đệ quy vô hạn giữa EventManager và QuestManager) | **P0 (Khẩn cấp)** | ✅ Đã khắc phục triệt để (v0.5.5.8) |
 | **BAL-SKL-01** | Gameplay & Cân bằng | Tinh chỉnh Sách Kỹ Năng: Khóa quy đổi SP khi skill đã MAX, chỉ có thể bán tại Cửa Hàng | **P1 (Cân bằng)** | ✅ Đã hoàn thành (v0.5.5.7) |
 | **BUG-UI-01** | Giao diện | Khắc phục lệch hitbox các tab Bí Kíp Kỹ Năng, Đạo Cụ Đặc Biệt & Halloween trong Cửa Hàng | **P0 (Khẩn cấp)** | ✅ Đã khắc phục triệt để (v0.5.5.7) |

@@ -44,25 +44,28 @@ public class GachaScreen implements Screen {
     private final BitmapFont font;
     private final BitmapFont titleFont;
     private final GlyphLayout layout;
-    
+
     private static final float W = 1280f;
     private static final float H = 720f;
 
     private String message = null;
     private float messageTimer = 0f;
-    
+
     private List<Equipment> lastPull = new ArrayList<>();
-    
+
     // Animation States
-    private enum State { IDLE, SPINNING, RESULT }
+    private enum State {
+        IDLE, SPINNING, RESULT
+    }
+
     private State state = State.IDLE;
     private boolean isEventBanner = false;
-    
+
     private float spinTimer = 0f;
     private final float totalSpinTime = 3.0f;
     private List<Equipment> spinItems = new ArrayList<>();
     private Equipment bestItem = null;
-    
+
     // Visual effects
     private float animTimer = 0f;
     private static final int STAR_COUNT = 45;
@@ -117,7 +120,7 @@ public class GachaScreen implements Screen {
         public String designType;
 
         public StandardSetTheme(String setName, String rodName, String lineName, String hookName, int points,
-                                Color primaryColor, Color secondaryColor, Color glowColor, String designType) {
+                Color primaryColor, Color secondaryColor, Color glowColor, String designType) {
             this.setName = setName;
             this.rodName = rodName;
             this.lineName = lineName;
@@ -131,30 +134,40 @@ public class GachaScreen implements Screen {
     }
 
     private static final StandardSetTheme[] STANDARD_SETS = {
-        new StandardSetTheme("Quang Minh", "Trượng Ánh Sáng", "Dây Chỉ Vàng", "Lưỡi Câu Thần", 7,
-            new Color(1f, 0.92f, 0.45f, 1f), new Color(0.95f, 0.65f, 0.15f, 1f), new Color(1f, 0.85f, 0.3f, 0.5f), "MYTHIC"),
-        new StandardSetTheme("Hoàng Gia", "Cần Câu Bạch Kim", "Tơ Tằm Thượng Hạng", "Móc Cẩm Thạch", 6,
-            new Color(1f, 0.85f, 0.3f, 1f), new Color(0.55f, 0.25f, 0.75f, 1f), new Color(1f, 0.9f, 0.4f, 0.4f), "ROYAL"),
-        new StandardSetTheme("Thời Không", "Trượng Thời Gian", "Sợi Dây Xuyên Thấu", "Lưỡi Câu Hư Không", 6,
-            new Color(0.3f, 0.95f, 0.85f, 1f), new Color(0.5f, 0.2f, 0.85f, 1f), new Color(0.4f, 0.9f, 1f, 0.4f), "CHRONO"),
-        new StandardSetTheme("Vực Thẳm", "Trượng Hắc Ám", "Sợi Hắc Mạch", "Móng Vuốt Vực Sâu", 5,
-            new Color(0.75f, 0.35f, 0.95f, 1f), new Color(0.18f, 0.08f, 0.28f, 1f), new Color(0.6f, 0.2f, 0.8f, 0.4f), "ABYSS"),
-        new StandardSetTheme("Hải Tặc", "Trụ Cột Buồm", "Xích Neo Nhỏ", "Lưỡi Hái Thép", 4,
-            new Color(0.95f, 0.45f, 0.2f, 1f), new Color(0.65f, 0.22f, 0.15f, 1f), new Color(1f, 0.55f, 0.2f, 0.4f), "PIRATE"),
-        new StandardSetTheme("Đại Dương", "Trượng Biển Khơi", "Sợi Thủy Tinh", "Nanh Thủy Quái", 3,
-            new Color(0.25f, 0.75f, 1f, 1f), new Color(0.08f, 0.35f, 0.65f, 1f), new Color(0.3f, 0.9f, 1f, 0.4f), "OCEAN"),
-        new StandardSetTheme("Băng Giá", "Cần Câu Băng", "Dây Lạnh Cóng", "Móc Câu Tuyết", 2,
-            new Color(0.6f, 0.95f, 1f, 1f), new Color(0.2f, 0.5f, 0.85f, 1f), new Color(0.7f, 1f, 1f, 0.4f), "FROST"),
-        new StandardSetTheme("Thợ Săn", "Gậy Phục Kích", "Sợi Tơ Kẽm", "Móng Vuốt Biển", 1,
-            new Color(0.4f, 0.9f, 0.45f, 1f), new Color(0.2f, 0.5f, 0.25f, 1f), new Color(0.4f, 1f, 0.5f, 0.35f), "HUNTER"),
-        new StandardSetTheme("Tập Sự", "Cần Câu Tre", "Dây Cước Thường", "Lưỡi Câu Chì", 0,
-            new Color(0.85f, 0.72f, 0.45f, 1f), new Color(0.45f, 0.65f, 0.3f, 1f), new Color(0.9f, 0.8f, 0.5f, 0.35f), "APPRENTICE")
+            new StandardSetTheme("Quang Minh", "Trượng Ánh Sáng", "Dây Chỉ Vàng", "Lưỡi Câu Thần", 7,
+                    new Color(1f, 0.92f, 0.45f, 1f), new Color(0.95f, 0.65f, 0.15f, 1f),
+                    new Color(1f, 0.85f, 0.3f, 0.5f), "MYTHIC"),
+            new StandardSetTheme("Hoàng Gia", "Cần Câu Bạch Kim", "Tơ Tằm Thượng Hạng", "Móc Cẩm Thạch", 6,
+                    new Color(1f, 0.85f, 0.3f, 1f), new Color(0.55f, 0.25f, 0.75f, 1f), new Color(1f, 0.9f, 0.4f, 0.4f),
+                    "ROYAL"),
+            new StandardSetTheme("Thời Không", "Trượng Thời Gian", "Sợi Dây Xuyên Thấu", "Lưỡi Câu Hư Không", 6,
+                    new Color(0.3f, 0.95f, 0.85f, 1f), new Color(0.5f, 0.2f, 0.85f, 1f),
+                    new Color(0.4f, 0.9f, 1f, 0.4f), "CHRONO"),
+            new StandardSetTheme("Vực Thẳm", "Trượng Hắc Ám", "Sợi Hắc Mạch", "Móng Vuốt Vực Sâu", 5,
+                    new Color(0.75f, 0.35f, 0.95f, 1f), new Color(0.18f, 0.08f, 0.28f, 1f),
+                    new Color(0.6f, 0.2f, 0.8f, 0.4f), "ABYSS"),
+            new StandardSetTheme("Hải Tặc", "Trụ Cột Buồm", "Xích Neo Nhỏ", "Lưỡi Hái Thép", 4,
+                    new Color(0.95f, 0.45f, 0.2f, 1f), new Color(0.65f, 0.22f, 0.15f, 1f),
+                    new Color(1f, 0.55f, 0.2f, 0.4f), "PIRATE"),
+            new StandardSetTheme("Đại Dương", "Trượng Biển Khơi", "Sợi Thủy Tinh", "Nanh Thủy Quái", 3,
+                    new Color(0.25f, 0.75f, 1f, 1f), new Color(0.08f, 0.35f, 0.65f, 1f),
+                    new Color(0.3f, 0.9f, 1f, 0.4f), "OCEAN"),
+            new StandardSetTheme("Băng Giá", "Cần Câu Băng", "Dây Lạnh Cóng", "Móc Câu Tuyết", 2,
+                    new Color(0.6f, 0.95f, 1f, 1f), new Color(0.2f, 0.5f, 0.85f, 1f), new Color(0.7f, 1f, 1f, 0.4f),
+                    "FROST"),
+            new StandardSetTheme("Thợ Săn", "Gậy Phục Kích", "Sợi Tơ Kẽm", "Móng Vuốt Biển", 1,
+                    new Color(0.4f, 0.9f, 0.45f, 1f), new Color(0.2f, 0.5f, 0.25f, 1f),
+                    new Color(0.4f, 1f, 0.5f, 0.35f), "HUNTER"),
+            new StandardSetTheme("Tập Sự", "Cần Câu Tre", "Dây Cước Thường", "Lưỡi Câu Chì", 0,
+                    new Color(0.85f, 0.72f, 0.45f, 1f), new Color(0.45f, 0.65f, 0.3f, 1f),
+                    new Color(0.9f, 0.8f, 0.5f, 0.35f), "APPRENTICE")
     };
 
     private int currentStandardSetIndex = 0;
 
     public void randomizeStandardSet() {
-        if (STANDARD_SETS.length <= 1) return;
+        if (STANDARD_SETS.length <= 1)
+            return;
         int next;
         do {
             next = MathUtils.random(0, STANDARD_SETS.length - 1);
@@ -195,10 +208,12 @@ public class GachaScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        if (Gdx.graphics.getWidth() <= 0 || Gdx.graphics.getHeight() <= 0) return;
+        if (Gdx.graphics.getWidth() <= 0 || Gdx.graphics.getHeight() <= 0)
+            return;
         animTimer += delta;
-        if (messageTimer > 0) messageTimer -= delta;
-        
+        if (messageTimer > 0)
+            messageTimer -= delta;
+
         // Update stars
         for (int i = 0; i < STAR_COUNT; i++) {
             starY[i] += starSpeed[i] * delta;
@@ -218,7 +233,8 @@ public class GachaScreen implements Screen {
         }
 
         handleInput();
-        if (game.getScreen() != this) return;
+        if (game.getScreen() != this)
+            return;
 
         ScreenUtils.clear(0.04f, 0.05f, 0.09f, 1f);
 
@@ -298,7 +314,7 @@ public class GachaScreen implements Screen {
         // Draw notification toast if active
         NotificationUI.drawNotification(sr, game.batch, font, message, messageTimer, 2.5f, W, H);
     }
-    
+
     private void drawShapes() {
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
@@ -398,7 +414,8 @@ public class GachaScreen implements Screen {
         sr.setColor(hoverHelp ? new Color(0.6f, 0.85f, 1f, 1f) : new Color(0.3f, 0.5f, 0.7f, 0.7f));
         drawRectOutline(sr, 155f, H - 62f, 130f, 42f, 1.5f);
 
-        // Top Right Resource Dock (Diamonds, Normal Tickets, Premium Tickets) with dedicated Vector Icons
+        // Top Right Resource Dock (Diamonds, Normal Tickets, Premium Tickets) with
+        // dedicated Vector Icons
         float resW = 345f;
         float resH = 46f;
         float resX = W - resW - 25f;
@@ -431,14 +448,16 @@ public class GachaScreen implements Screen {
 
         // Tab 1: Normal Banner
         boolean tab1Active = !isEventBanner;
-        sr.setColor(tab1Active ? new Color(0.15f, 0.35f, 0.65f, 0.95f) : (hoverTabNormal ? new Color(0.12f, 0.22f, 0.35f, 0.9f) : new Color(0.08f, 0.12f, 0.18f, 0.85f)));
+        sr.setColor(tab1Active ? new Color(0.15f, 0.35f, 0.65f, 0.95f)
+                : (hoverTabNormal ? new Color(0.12f, 0.22f, 0.35f, 0.9f) : new Color(0.08f, 0.12f, 0.18f, 0.85f)));
         drawRoundedRect(sr, tab1X, tabY, tabW, tabH, 8);
         sr.setColor(tab1Active ? new Color(0.4f, 0.8f, 1f, 1f) : new Color(0.2f, 0.35f, 0.5f, 0.7f));
         drawRectOutline(sr, tab1X, tabY, tabW, tabH, tab1Active ? 2.5f : 1.5f);
 
         // Tab 2: Event Banner
         boolean tab2Active = isEventBanner;
-        sr.setColor(tab2Active ? new Color(0.55f, 0.18f, 0.18f, 0.95f) : (hoverTabEvent ? new Color(0.30f, 0.12f, 0.14f, 0.9f) : new Color(0.08f, 0.12f, 0.18f, 0.85f)));
+        sr.setColor(tab2Active ? new Color(0.55f, 0.18f, 0.18f, 0.95f)
+                : (hoverTabEvent ? new Color(0.30f, 0.12f, 0.14f, 0.9f) : new Color(0.08f, 0.12f, 0.18f, 0.85f)));
         drawRoundedRect(sr, tab2X, tabY, tabW, tabH, 8);
         sr.setColor(tab2Active ? new Color(1f, 0.6f, 0.3f, 1f) : new Color(0.4f, 0.25f, 0.25f, 0.7f));
         drawRectOutline(sr, tab2X, tabY, tabW, tabH, tab2Active ? 2.5f : 1.5f);
@@ -457,14 +476,12 @@ public class GachaScreen implements Screen {
             // Card Background
             if (!isEventBanner) {
                 sr.rect(cardX, cardY, cardW, cardH,
-                    new Color(0.08f, 0.12f, 0.20f, 0.96f), new Color(0.08f, 0.12f, 0.20f, 0.96f),
-                    new Color(0.12f, 0.18f, 0.30f, 0.96f), new Color(0.12f, 0.18f, 0.30f, 0.96f)
-                );
+                        new Color(0.08f, 0.12f, 0.20f, 0.96f), new Color(0.08f, 0.12f, 0.20f, 0.96f),
+                        new Color(0.12f, 0.18f, 0.30f, 0.96f), new Color(0.12f, 0.18f, 0.30f, 0.96f));
             } else {
                 sr.rect(cardX, cardY, cardW, cardH,
-                    new Color(0.16f, 0.06f, 0.08f, 0.96f), new Color(0.16f, 0.06f, 0.08f, 0.96f),
-                    new Color(0.26f, 0.09f, 0.12f, 0.96f), new Color(0.26f, 0.09f, 0.12f, 0.96f)
-                );
+                        new Color(0.16f, 0.06f, 0.08f, 0.96f), new Color(0.16f, 0.06f, 0.08f, 0.96f),
+                        new Color(0.26f, 0.09f, 0.12f, 0.96f), new Color(0.26f, 0.09f, 0.12f, 0.96f));
             }
 
             // Card Border
@@ -478,8 +495,8 @@ public class GachaScreen implements Screen {
 
             // Rotating Light rays behind wheel
             StandardSetTheme curTheme = STANDARD_SETS[currentStandardSetIndex];
-            Color rayCol = isEventBanner ? new Color(1f, 0.8f, 0.3f, 0.12f) :
-                new Color(curTheme.primaryColor.r, curTheme.primaryColor.g, curTheme.primaryColor.b, 0.14f);
+            Color rayCol = isEventBanner ? new Color(1f, 0.8f, 0.3f, 0.12f)
+                    : new Color(curTheme.primaryColor.r, curTheme.primaryColor.g, curTheme.primaryColor.b, 0.14f);
             for (int r = 0; r < 8; r++) {
                 float angle = animTimer * 20f + r * 45f;
                 float rad = angle * MathUtils.degreesToRadians;
@@ -512,8 +529,11 @@ public class GachaScreen implements Screen {
 
             // 3 Equipment Slots (Rod, Line, Hook) with Full Vector Art Display
             boolean isHlw = EventManager.isHalloweenActive();
-            String curSetName = isEventBanner ? (isHlw ? "Huyết Nguyệt Thần Vương" : "Thần Khí Lạc Hồng") : curTheme.setName;
-            Color curSetCol = isEventBanner ? (isHlw ? new Color(1f, 0.28f, 0.28f, 1f) : new Color(1f, 0.85f, 0.35f, 1f)) : curTheme.primaryColor;
+            String curSetName = isEventBanner ? (isHlw ? "Huyết Nguyệt Thần Vương" : "Thần Khí Lạc Hồng")
+                    : curTheme.setName;
+            Color curSetCol = isEventBanner
+                    ? (isHlw ? new Color(1f, 0.28f, 0.28f, 1f) : new Color(1f, 0.85f, 0.35f, 1f))
+                    : curTheme.primaryColor;
 
             float slotW = 92f;
             float slotH = 88f;
@@ -529,7 +549,8 @@ public class GachaScreen implements Screen {
             drawRectOutline(sr, slot1X, slotY, slotW, slotH, 1.2f);
             sr.setColor(curSetCol.r, curSetCol.g, curSetCol.b, 0.18f);
             sr.circle(slot1X + slotW / 2f, slotY + slotH / 2f, 40f);
-            EquipmentIconRenderer.drawSetPiece(sr, curSetName, EquipmentType.ROD, slot1X + slotW / 2f, slotY + slotH / 2f, 36f, curSetCol);
+            EquipmentIconRenderer.drawSetPiece(sr, curSetName, EquipmentType.ROD, slot1X + slotW / 2f,
+                    slotY + slotH / 2f, 36f, curSetCol);
 
             // Slot 2: Line
             sr.setColor(0.06f, 0.08f, 0.13f, 0.95f);
@@ -538,7 +559,8 @@ public class GachaScreen implements Screen {
             drawRectOutline(sr, slot2X, slotY, slotW, slotH, 1.2f);
             sr.setColor(curSetCol.r, curSetCol.g, curSetCol.b, 0.18f);
             sr.circle(slot2X + slotW / 2f, slotY + slotH / 2f, 40f);
-            EquipmentIconRenderer.drawSetPiece(sr, curSetName, EquipmentType.LINE, slot2X + slotW / 2f, slotY + slotH / 2f, 36f, curSetCol);
+            EquipmentIconRenderer.drawSetPiece(sr, curSetName, EquipmentType.LINE, slot2X + slotW / 2f,
+                    slotY + slotH / 2f, 36f, curSetCol);
 
             // Slot 3: Hook
             sr.setColor(0.06f, 0.08f, 0.13f, 0.95f);
@@ -547,7 +569,8 @@ public class GachaScreen implements Screen {
             drawRectOutline(sr, slot3X, slotY, slotW, slotH, 1.2f);
             sr.setColor(curSetCol.r, curSetCol.g, curSetCol.b, 0.18f);
             sr.circle(slot3X + slotW / 2f, slotY + slotH / 2f, 40f);
-            EquipmentIconRenderer.drawSetPiece(sr, curSetName, EquipmentType.HOOK, slot3X + slotW / 2f, slotY + slotH / 2f, 36f, curSetCol);
+            EquipmentIconRenderer.drawSetPiece(sr, curSetName, EquipmentType.HOOK, slot3X + slotW / 2f,
+                    slotY + slotH / 2f, 36f, curSetCol);
 
             // Right Info Section Background Box
             float infoX = cardX + 460f;
@@ -567,32 +590,36 @@ public class GachaScreen implements Screen {
 
             if (!isEventBanner) {
                 // Rare Pity Bar (10)
-                float rP = MathUtils.clamp((float)player.pityRare / 10f, 0f, 1f);
+                float rP = MathUtils.clamp((float) player.pityRare / 10f, 0f, 1f);
                 sr.setColor(0.08f, 0.12f, 0.18f, 1f);
                 drawRoundedRect(sr, barX, infoY + 115f, barW, barH, 4);
                 sr.setColor(0.3f, 0.7f, 1f, 1f);
-                if (rP > 0) drawRoundedRect(sr, barX + 1, infoY + 116f, (barW - 2) * rP, barH - 2, 3);
+                if (rP > 0)
+                    drawRoundedRect(sr, barX + 1, infoY + 116f, (barW - 2) * rP, barH - 2, 3);
 
                 // Epic Pity Bar (50)
-                float eP = MathUtils.clamp((float)player.pityEpic / 50f, 0f, 1f);
+                float eP = MathUtils.clamp((float) player.pityEpic / 50f, 0f, 1f);
                 sr.setColor(0.08f, 0.12f, 0.18f, 1f);
                 drawRoundedRect(sr, barX, infoY + 72f, barW, barH, 4);
                 sr.setColor(0.7f, 0.4f, 1f, 1f);
-                if (eP > 0) drawRoundedRect(sr, barX + 1, infoY + 73f, (barW - 2) * eP, barH - 2, 3);
+                if (eP > 0)
+                    drawRoundedRect(sr, barX + 1, infoY + 73f, (barW - 2) * eP, barH - 2, 3);
 
                 // Legendary Pity Bar (100)
-                float lP = MathUtils.clamp((float)player.pityLegendary / 100f, 0f, 1f);
+                float lP = MathUtils.clamp((float) player.pityLegendary / 100f, 0f, 1f);
                 sr.setColor(0.08f, 0.12f, 0.18f, 1f);
                 drawRoundedRect(sr, barX, infoY + 28f, barW, barH, 4);
                 sr.setColor(0.95f, 0.75f, 0.25f, 1f);
-                if (lP > 0) drawRoundedRect(sr, barX + 1, infoY + 29f, (barW - 2) * lP, barH - 2, 3);
+                if (lP > 0)
+                    drawRoundedRect(sr, barX + 1, infoY + 29f, (barW - 2) * lP, barH - 2, 3);
             } else {
-                // Limited Pity Bar (80) - MOVED UP to eliminate awkward empty space!
-                float limP = MathUtils.clamp((float)player.pityLimited / 80f, 0f, 1f);
+                // Limited Pity Bar (80)
+                float limP = MathUtils.clamp((float) player.pityLimited / 80f, 0f, 1f);
                 sr.setColor(0.08f, 0.12f, 0.18f, 1f);
-                drawRoundedRect(sr, barX, infoY + 120f, barW, barH, 4);
+                drawRoundedRect(sr, barX, infoY + 110f, barW, barH, 4);
                 sr.setColor(1f, 0.35f, 0.25f, 1f);
-                if (limP > 0) drawRoundedRect(sr, barX + 1, infoY + 121f, (barW - 2) * limP, barH - 2, 3);
+                if (limP > 0)
+                    drawRoundedRect(sr, barX + 1, infoY + 111f, (barW - 2) * limP, barH - 2, 3);
             }
         }
 
@@ -613,7 +640,9 @@ public class GachaScreen implements Screen {
             sr.flush();
             Rectangle clipBounds = new Rectangle(spinX + 4f, spinY + 4f, spinW - 8f, spinH - 8f);
             Rectangle scissors = new Rectangle();
-            ScissorStack.calculateScissors(camera, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight(), sr.getTransformMatrix(), clipBounds, scissors);
+            ScissorStack.calculateScissors(camera, viewport.getScreenX(), viewport.getScreenY(),
+                    viewport.getScreenWidth(), viewport.getScreenHeight(), sr.getTransformMatrix(), clipBounds,
+                    scissors);
 
             if (ScissorStack.pushScissors(scissors)) {
                 float progress = spinTimer / totalSpinTime;
@@ -714,7 +743,8 @@ public class GachaScreen implements Screen {
                     sr.setColor(0.09f, 0.12f, 0.18f, 0.95f);
                     drawRoundedRect(sr, gx, gy, cW, cH, 8);
 
-                    boolean isTopRarity = (bestItem != null && eq.rarity == bestItem.rarity && eq.rarity.ordinal() >= Rarity.EPIC.ordinal());
+                    boolean isTopRarity = (bestItem != null && eq.rarity == bestItem.rarity
+                            && eq.rarity.ordinal() >= Rarity.EPIC.ordinal());
                     if (isTopRarity) {
                         float p = 0.7f + 0.3f * MathUtils.sin(animTimer * 4f);
                         sr.setColor(eq.rarity.color.r * p, eq.rarity.color.g * p, eq.rarity.color.b * p, 1f);
@@ -819,7 +849,9 @@ public class GachaScreen implements Screen {
         // 3. Centered Header Title
         titleFont.setColor(isEventBanner ? new Color(1f, 0.85f, 0.4f, 1f) : new Color(0.95f, 0.85f, 0.45f, 1f));
         titleFont.getData().setScale(0.85f);
-        String bannerTitle = isEventBanner ? "ĐÀI QUAY SỰ KIỆN: LẠC HỒNG" : "ĐÀI QUAY TRANG BỊ THƯỜNG";
+        boolean isHlw = EventManager.isHalloweenActive();
+        String eventNameUpper = isHlw ? "HALLOWEEN" : "LẠC HỒNG";
+        String bannerTitle = isEventBanner ? ("ĐÀI QUAY SỰ KIỆN: " + eventNameUpper) : "ĐÀI QUAY TRANG BỊ THƯỜNG";
         layout.setText(titleFont, bannerTitle);
         titleFont.draw(game.batch, bannerTitle, (W - layout.width) / 2f, H - 35f);
         titleFont.getData().setScale(1f);
@@ -837,16 +869,18 @@ public class GachaScreen implements Screen {
         font.draw(game.batch, layout, tab1X + (tabW - layout.width) / 2f, tabY + 28f);
 
         font.setColor(isEventBanner ? Color.WHITE : new Color(0.9f, 0.65f, 0.65f, 0.75f));
-        layout.setText(font, "★ SỰ KIỆN LẠC HỒNG ★");
+        layout.setText(font, "★ SỰ KIỆN " + eventNameUpper + " ★");
         font.draw(game.batch, layout, tab2X + (tabW - layout.width) / 2f, tabY + 28f);
 
         // 5. Main Showcase Info (IDLE STATE)
         if (state == State.IDLE) {
             float cardX = 140f;
             float cardY = 120f;
+            float cardW = W - 280f;
             float showcaseCX = cardX + 235f;
             float infoX = cardX + 460f;
             float infoY = cardY + 30f;
+            float infoW = cardW - 490f;
 
             // Pedestal equipment slot labels - Perfectly aligned under each 92px slot!
             float pedW = 320f;
@@ -895,7 +929,8 @@ public class GachaScreen implements Screen {
                 // Multiplier / Set Points
                 font.setColor(1f, 0.85f, 0.35f, 1f);
                 float multVal = 1f + curSet.points * 0.15f;
-                String multDesc = "• Hệ số Bộ (Multiplier): +" + curSet.points + " Cấp Điểm (x" + String.format(java.util.Locale.US, "%.2f", multVal) + " Sức mạnh cơ bản)";
+                String multDesc = "• Hệ số Bộ (Multiplier): +" + curSet.points + " Cấp Điểm (x"
+                        + String.format(java.util.Locale.US, "%.2f", multVal) + " Sức mạnh cơ bản)";
                 font.draw(game.batch, multDesc, infoX + 25f, infoY + 224f);
 
                 // (Line "(Phẩm chất trang bị khi quay là ngẫu nhiên...)" is fully removed!)
@@ -908,20 +943,22 @@ public class GachaScreen implements Screen {
                 // Rare Pity
                 int remRare = Math.max(0, 10 - player.pityRare);
                 font.setColor(0.3f, 0.7f, 1f, 1f);
-                font.draw(game.batch, "Bảo hiểm Rare+: Còn " + remRare + " lượt (" + player.pityRare + "/10)", infoX + 25f, infoY + 138f);
+                font.draw(game.batch, "Bảo hiểm Rare+: Còn " + remRare + " lượt (" + player.pityRare + "/10)",
+                        infoX + 25f, infoY + 138f);
 
                 // Epic Pity
                 int remEpic = Math.max(0, 50 - player.pityEpic);
                 font.setColor(0.7f, 0.4f, 1f, 1f);
-                font.draw(game.batch, "Bảo hiểm Epic+: Còn " + remEpic + " lượt (" + player.pityEpic + "/50)", infoX + 25f, infoY + 95f);
+                font.draw(game.batch, "Bảo hiểm Epic+: Còn " + remEpic + " lượt (" + player.pityEpic + "/50)",
+                        infoX + 25f, infoY + 95f);
 
                 // Legendary Pity
                 int remLeg = Math.max(0, 100 - player.pityLegendary);
                 font.setColor(0.95f, 0.75f, 0.25f, 1f);
-                font.draw(game.batch, "Bảo hiểm Legendary: Còn " + remLeg + " lượt (" + player.pityLegendary + "/100)", infoX + 25f, infoY + 52f);
+                font.draw(game.batch, "Bảo hiểm Legendary: Còn " + remLeg + " lượt (" + player.pityLegendary + "/100)",
+                        infoX + 25f, infoY + 52f);
             } else {
                 // Event Banner Info
-                boolean isHlw = EventManager.isHalloweenActive();
                 titleFont.setColor(isHlw ? new Color(1f, 0.30f, 0.30f, 1f) : new Color(1f, 0.45f, 0.35f, 1f));
                 String setName = isHlw ? "BỘ HUYẾT NGUYỆT THẦN VƯƠNG" : "BỘ THẦN KHÍ LẠC HỒNG";
                 layout.setText(titleFont, setName);
@@ -930,43 +967,56 @@ public class GachaScreen implements Screen {
                 // Rarity Tag
                 font.setColor(isHlw ? new Color(1f, 0.45f, 0.45f, 1f) : new Color(1f, 0.85f, 0.35f, 1f));
                 font.getData().setScale(0.82f);
-                String rarTag = isHlw ? "✦ PHẨM CHẤT: 6★ LIMITED PREMIUM • 18 CẤP ĐIỂM" : "✦ PHẨM CHẤT: THẦN THOẠI (GIỚI HẠN) • 15 CẤP ĐIỂM";
+                String rarTag = isHlw ? "✦ PHẨM CHẤT: 6★ LIMITED PREMIUM • 15 CẤP ĐIỂM"
+                        : "✦ PHẨM CHẤT: THẦN THOẠI (GIỚI HẠN) • 15 CẤP ĐIỂM";
                 font.draw(game.batch, rarTag, infoX + 25f, infoY + 308f);
 
                 // Items list
                 font.setColor(isHlw ? new Color(1f, 0.80f, 0.80f, 1f) : new Color(0.95f, 0.85f, 0.65f, 1f));
                 font.getData().setScale(0.78f);
-                String itemsStr = isHlw ? "• Gồm: Huyết Nguyệt Thần Trượng  |  Dây Huyết Ma Cơ  |  Lưỡi Huyết Nguyệt Ma Trảo"
-                                        : "• Gồm: Trượng Lạc Hồng  |  Dây Rồng Thiêng  |  Móc Âu Cơ";
+                String itemsStr = isHlw
+                        ? "• Gồm: Huyết Nguyệt Thần Trượng  |  Dây Huyết Ma Cơ  |  Lưỡi Huyết Nguyệt Ma Trảo"
+                        : "• Gồm: Trượng Lạc Hồng  |  Dây Rồng Thiêng  |  Móc Âu Cơ";
                 font.draw(game.batch, itemsStr, infoX + 25f, infoY + 280f);
 
-                // Set Perks
+                // Set Perks (Proper wrap and scaled to prevent box overflow)
+                float maxPerkW = infoW - 50f;
                 font.setColor(Color.WHITE);
-                font.getData().setScale(0.80f);
-                String perk1 = isHlw ? "• Hiệu ứng 3 Món: [Bá Quyền Trăng Máu] Quăng Perfect x2 Sát Thương (2s đầu)"
-                                     : "• Hiệu ứng 3 Món: [Ý Chí Bất Diệt] Vô hiệu hóa Kỹ Năng Boss";
-                String perk2 = isHlw ? "• Kéo dây hút 3% HP cá (tối đa 12/s) thành Thể Lực. +45% Tỷ Lệ Cá Hiếm"
-                                     : "• Tăng 50% Lực kéo đối với Boss Thủy Quái & Cá Khổng Lồ";
-                font.draw(game.batch, perk1, infoX + 25f, infoY + 252f);
-                font.draw(game.batch, perk2, infoX + 25f, infoY + 224f);
+                font.getData().setScale(0.72f);
+                if (isHlw) {
+                    String p1 = "• [Huyết Ma Thôn Phệ] Kéo dây hút 3% HP cá (tối đa 12/s) thành Thể Lực.";
+                    String p2 = "• [Huyết Nhãn Tinh Chuẩn] Căn cứ độ chuẩn khi quăng cần nhận Buff (5s, CD 10s):";
+                    String p3 = "  - Normal: Tăng hồi phục.  - Good: -30% Thể lực Skill.  - Perfect: +25% ST Chuẩn!";
+                    font.draw(game.batch, p1, infoX + 25f, infoY + 256f, maxPerkW, Align.left, true);
+                    font.draw(game.batch, p2, infoX + 25f, infoY + 234f, maxPerkW, Align.left, true);
+                    font.draw(game.batch, p3, infoX + 25f, infoY + 212f, maxPerkW, Align.left, true);
+                } else {
+                    String perk1 = "• Hiệu ứng 3 Món: [Khí Phách Lạc Hồng] 40% Vô hiệu hóa skill Boss (Hồi 10% TL).";
+                    String perk2 = "• Khi dây >= 85% hoặc Thể lực <= 25%: Kích hoạt Long Thần Hộ Thể khóa Tension 2s & Giảm 50% tiêu hao Thể lực trong 12s!";
+                    font.draw(game.batch, perk1, infoX + 25f, infoY + 256f, maxPerkW, Align.left, true);
+                    font.draw(game.batch, perk2, infoX + 25f, infoY + 228f, maxPerkW, Align.left, true);
+                }
 
-                // Pity Header (MOVED UP to prevent empty space!)
+                // Pity Header
                 font.setColor(0.7f, 0.85f, 1f, 0.9f);
                 font.getData().setScale(0.85f);
-                font.draw(game.batch, "TIẾN TRÌNH BẢO HIỂM MAY MẮN (PITY):", infoX + 25f, infoY + 185f);
+                font.draw(game.batch, "TIẾN TRÌNH BẢO HIỂM MAY MẮN (PITY):", infoX + 25f, infoY + 172f);
 
                 int remLim = Math.max(0, 80 - player.pityLimited);
                 font.setColor(isHlw ? new Color(1f, 0.35f, 0.35f, 1f) : new Color(1f, 0.45f, 0.35f, 1f));
-                String pityLabel = isHlw ? "Bảo hiểm Huyết Nguyệt Thần Vương: Còn " : "Bảo hiểm Thần Khí Lạc Hồng: Còn ";
-                font.draw(game.batch, pityLabel + remLim + " lượt (" + player.pityLimited + "/80)", infoX + 25f, infoY + 152f);
+                String pityLabel = isHlw ? "Bảo hiểm Huyết Nguyệt Thần Vương: Còn "
+                        : "Bảo hiểm Thần Khí Lạc Hồng: Còn ";
+                font.draw(game.batch, pityLabel + remLim + " lượt (" + player.pityLimited + "/80)", infoX + 25f,
+                        infoY + 140f);
 
                 String eventTime = player.getEventManager().getEventTimeRemaining();
                 font.setColor(0.95f, 0.85f, 0.4f, 1f);
-                font.draw(game.batch, "Thời gian sự kiện còn lại: " + eventTime, infoX + 25f, infoY + 80f);
+                font.draw(game.batch, "Thời gian sự kiện còn lại: " + eventTime, infoX + 25f, infoY + 75f);
 
                 font.setColor(0.6f, 0.8f, 1f, 0.75f);
                 font.getData().setScale(0.72f);
-                font.draw(game.batch, "★ Tiến độ bảo hiểm được bảo lưu cho các đợt sự kiện tiếp theo ★", infoX + 25f, infoY + 52f);
+                font.draw(game.batch, "★ Tiến độ bảo hiểm được bảo lưu cho các đợt sự kiện tiếp theo ★", infoX + 25f,
+                        infoY + 48f);
             }
             font.getData().setScale(1f);
         }
@@ -990,7 +1040,8 @@ public class GachaScreen implements Screen {
                 titleFont.draw(game.batch, layout, cardX + (cardW - layout.width) / 2f, cardY + cardH - 26f);
 
                 font.setColor(0.8f, 0.9f, 1f, 1f);
-                String typeStr = "Loại: " + (eq.type == EquipmentType.ROD ? "Cần Câu" : eq.type == EquipmentType.LINE ? "Dây Cước" : "Lưỡi Câu");
+                String typeStr = "Loại: " + (eq.type == EquipmentType.ROD ? "Cần Câu"
+                        : eq.type == EquipmentType.LINE ? "Dây Cước" : "Lưỡi Câu");
                 layout.setText(font, typeStr);
                 font.draw(game.batch, layout, cardX + (cardW - layout.width) / 2f, cardY + cardH - 188f);
 
@@ -1000,7 +1051,8 @@ public class GachaScreen implements Screen {
 
                 // Stats
                 font.setColor(0.4f, 1f, 0.6f, 1f);
-                String s1 = (eq.type == EquipmentType.ROD ? "Lực Kéo" : eq.type == EquipmentType.LINE ? "Độ Bền" : "Độ Sắc") + ": +" + (int)eq.mainStat1;
+                String s1 = (eq.type == EquipmentType.ROD ? "Lực Kéo"
+                        : eq.type == EquipmentType.LINE ? "Độ Bền" : "Độ Sắc") + ": +" + (int) eq.mainStat1;
                 layout.setText(font, s1);
                 font.draw(game.batch, layout, cardX + (cardW - layout.width) / 2f, cardY + cardH - 248f);
 
@@ -1034,8 +1086,10 @@ public class GachaScreen implements Screen {
 
                     // Type & Rarity
                     font.setColor(0.8f, 0.9f, 1f, 0.85f);
-                    String typeStr = (eq.type == EquipmentType.ROD ? "Cần" : eq.type == EquipmentType.LINE ? "Cước" : "Lưỡi");
-                    font.draw(game.batch, typeStr + " • " + eq.rarity.name(), gx + 8f, gy + cH - 98f, cW - 16f, Align.center, false);
+                    String typeStr = (eq.type == EquipmentType.ROD ? "Cần"
+                            : eq.type == EquipmentType.LINE ? "Cước" : "Lưỡi");
+                    font.draw(game.batch, typeStr + " • " + eq.rarity.name(), gx + 8f, gy + cH - 98f, cW - 16f,
+                            Align.center, false);
 
                     // Set Name
                     font.setColor(0.7f, 0.75f, 0.85f, 0.75f);
@@ -1043,7 +1097,7 @@ public class GachaScreen implements Screen {
 
                     // Main Stat
                     font.setColor(0.4f, 1f, 0.6f, 1f);
-                    String s1 = "+" + (int)eq.mainStat1;
+                    String s1 = "+" + (int) eq.mainStat1;
                     font.draw(game.batch, s1, gx + 8f, gy + 22f, cW - 16f, Align.center, false);
                 }
             }
@@ -1104,7 +1158,9 @@ public class GachaScreen implements Screen {
 
             Rectangle clipBounds = new Rectangle(spinX + 4f, spinY + 4f, spinW - 8f, spinH - 8f);
             Rectangle scissors = new Rectangle();
-            ScissorStack.calculateScissors(camera, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight(), game.batch.getTransformMatrix(), clipBounds, scissors);
+            ScissorStack.calculateScissors(camera, viewport.getScreenX(), viewport.getScreenY(),
+                    viewport.getScreenWidth(), viewport.getScreenHeight(), game.batch.getTransformMatrix(), clipBounds,
+                    scissors);
 
             if (ScissorStack.pushScissors(scissors)) {
                 float progress = spinTimer / totalSpinTime;
@@ -1133,9 +1189,11 @@ public class GachaScreen implements Screen {
                         // Equipment Type & Rarity tag
                         font.setColor(0.8f, 0.9f, 1f, 0.85f);
                         font.getData().setScale(0.64f);
-                        String typeLabel = (eq.type == EquipmentType.ROD ? "Cần" : eq.type == EquipmentType.LINE ? "Cước" : "Lưỡi");
+                        String typeLabel = (eq.type == EquipmentType.ROD ? "Cần"
+                                : eq.type == EquipmentType.LINE ? "Cước" : "Lưỡi");
                         String rarName = (eq.rarity != null ? eq.rarity.name() : "");
-                        font.draw(game.batch, typeLabel + " • " + rarName, ix + 6f, cardY + 22f, itemWidth - 12f, Align.center, false);
+                        font.draw(game.batch, typeLabel + " • " + rarName, ix + 6f, cardY + 22f, itemWidth - 12f,
+                                Align.center, false);
                         font.getData().setScale(1f);
                     }
                 }
@@ -1153,9 +1211,8 @@ public class GachaScreen implements Screen {
     }
 
     private void drawGachaWheel(ShapeRenderer sr, float cx, float cy, float r, boolean isEvent) {
-        float rot = (state == State.SPINNING) ? 
-            (animTimer * 900f * (1f - spinTimer / totalSpinTime)) : 
-            (animTimer * 16f);
+        float rot = (state == State.SPINNING) ? (animTimer * 900f * (1f - spinTimer / totalSpinTime))
+                : (animTimer * 16f);
 
         // Outer glow
         sr.setColor(isEvent ? new Color(1f, 0.4f, 0.2f, 0.15f) : new Color(0.3f, 0.7f, 1f, 0.15f));
@@ -1258,7 +1315,8 @@ public class GachaScreen implements Screen {
         StandardSetTheme curSet = isEventBanner ? null : STANDARD_SETS[currentStandardSetIndex];
         boolean isHlw = EventManager.isHalloweenActive();
         String setName = isEventBanner ? (isHlw ? "Huyết Nguyệt Thần Vương" : "Thần Khí Lạc Hồng") : curSet.setName;
-        Color borderCol = isEventBanner ? (isHlw ? new Color(1f, 0.28f, 0.28f, 1f) : new Color(1f, 0.65f, 0.3f, 1f)) : curSet.primaryColor;
+        Color borderCol = isEventBanner ? (isHlw ? new Color(1f, 0.28f, 0.28f, 1f) : new Color(1f, 0.65f, 0.3f, 1f))
+                : curSet.primaryColor;
 
         // 4. Header strip
         sr.setColor(borderCol.r * 0.25f, borderCol.g * 0.25f, borderCol.b * 0.25f, 0.95f);
@@ -1278,7 +1336,8 @@ public class GachaScreen implements Screen {
         sr.rectLine(closeX + 7f, closeY + 7f, closeX + closeSize - 7f, closeY + closeSize - 7f, 2.2f);
         sr.rectLine(closeX + 7f, closeY + closeSize - 7f, closeX + closeSize - 7f, closeY + 7f, 2.2f);
 
-        // 6. Centered 3 Item Boxes (width 200, height 205, gap 22 -> perfectly centered with 28px margins!)
+        // 6. Centered 3 Item Boxes (width 200, height 205, gap 22 -> perfectly centered
+        // with 28px margins!)
         float boxW = 200f;
         float boxH = 205f;
         float boxY = tipY + 20f;
@@ -1325,24 +1384,24 @@ public class GachaScreen implements Screen {
         float multVal = 1f + points * 0.15f;
         font.setColor(1f, 0.85f, 0.35f, 1f);
         font.getData().setScale(0.74f);
-        String pointsStr = "✦ CẤP ĐIỂM BỘ: +" + points + " Cấp Điểm  (Hệ số Multiplier: x" + String.format(java.util.Locale.US, "%.2f", multVal) + " Sức mạnh cơ bản)";
+        String pointsStr = "✦ CẤP ĐIỂM BỘ: +" + points + " Cấp Điểm  (Hệ số Multiplier: x"
+                + String.format(java.util.Locale.US, "%.2f", multVal) + " Sức mạnh cơ bản)";
         font.draw(game.batch, pointsStr, tipX + 22f, tipY + tipH - 52f);
 
         // Sub-header 2: Set Bonus description
-        String perkDesc = isEventBanner ? 
-            "[Ý Chí Bất Diệt] Vô hiệu hóa Kỹ Năng Boss, +50% Sát thương Boss" : 
-            EquipmentGenerator.getSetBonusDesc(setName);
+        String perkDesc = isEventBanner ? "[Ý Chí Bất Diệt] Vô hiệu hóa Kỹ Năng Boss, +50% Sát thương Boss"
+                : EquipmentGenerator.getSetBonusDesc(setName);
         font.setColor(0.45f, 0.95f, 0.65f, 1f);
         font.getData().setScale(0.74f);
         String bonusStr = "★ Hiệu ứng 3 món: " + perkDesc;
         font.draw(game.batch, bonusStr, tipX + 22f, tipY + tipH - 74f);
 
         // Inside the 3 boxes:
-        String[] pNames = isEventBanner ?
-            (isHlw ? new String[]{"Huyết Nguyệt Thần Trượng", "Dây Huyết Ma Cơ", "Lưỡi Huyết Nguyệt Ma Trảo"}
-                   : new String[]{"Trượng Lạc Hồng", "Dây Rồng Thiêng", "Móc Âu Cơ"}) :
-            new String[]{curSet.rodName, curSet.lineName, curSet.hookName};
-        String[] pTypes = {"CẦN CÂU", "DÂY CƯỚC", "LƯỠI CÂU"};
+        String[] pNames = isEventBanner
+                ? (isHlw ? new String[] { "Huyết Nguyệt Thần Trượng", "Dây Huyết Ma Cơ", "Lưỡi Huyết Nguyệt Ma Trảo" }
+                        : new String[] { "Trượng Lạc Hồng", "Dây Rồng Thiêng", "Móc Âu Cơ" })
+                : new String[] { curSet.rodName, curSet.lineName, curSet.hookName };
+        String[] pTypes = { "CẦN CÂU", "DÂY CƯỚC", "LƯỠI CÂU" };
 
         for (int i = 0; i < 3; i++) {
             float bx = startX + i * (boxW + gap);
@@ -1426,15 +1485,23 @@ public class GachaScreen implements Screen {
         List<StandardSetTheme> displaySets = new ArrayList<>();
         if (isEventBanner) {
             if (EventManager.isHalloweenActive()) {
-                displaySets.add(new StandardSetTheme("Huyết Nguyệt Thần Vương", "Huyết Nguyệt Thần Trượng", "Dây Huyết Ma Cơ", "Lưỡi Huyết Nguyệt Ma Trảo", 18,
-                    new Color(1f, 0.25f, 0.25f, 1f), new Color(0.85f, 0.15f, 0.15f, 1f), new Color(1f, 0.4f, 0.4f, 0.5f), "6★ LIMITED"));
-                displaySets.add(new StandardSetTheme("Dạ Hội Bí Ngô", "Cần Dạ Hội Bí Ngô", "Dây Cước Tơ Nhện Quỷ", "Lưỡi Kẹo Ma Quái", 4,
-                    new Color(1f, 0.65f, 0.15f, 1f), new Color(0.85f, 0.4f, 0.1f, 1f), new Color(1f, 0.8f, 0.3f, 0.5f), "4★ EVENT"));
+                displaySets.add(new StandardSetTheme("Huyết Nguyệt Thần Vương", "Huyết Nguyệt Thần Trượng",
+                        "Dây Huyết Ma Cơ", "Lưỡi Huyết Nguyệt Ma Trảo", 18,
+                        new Color(1f, 0.25f, 0.25f, 1f), new Color(0.85f, 0.15f, 0.15f, 1f),
+                        new Color(1f, 0.4f, 0.4f, 0.5f), "6★ LIMITED"));
+                displaySets.add(new StandardSetTheme("Dạ Hội Bí Ngô", "Cần Dạ Hội Bí Ngô", "Dây Cước Tơ Nhện Quỷ",
+                        "Lưỡi Kẹo Ma Quái", 4,
+                        new Color(1f, 0.65f, 0.15f, 1f), new Color(0.85f, 0.4f, 0.1f, 1f),
+                        new Color(1f, 0.8f, 0.3f, 0.5f), "4★ EVENT"));
             } else {
-                displaySets.add(new StandardSetTheme("Thần Khí Lạc Hồng", "Trượng Lạc Hồng", "Dây Rồng Thiêng", "Móc Âu Cơ", 15,
-                    new Color(1f, 0.45f, 0.35f, 1f), new Color(0.85f, 0.25f, 0.2f, 1f), new Color(1f, 0.6f, 0.4f, 0.5f), "LIMITED"));
-                displaySets.add(new StandardSetTheme("Vệ Quốc Vang Danh", "Cần Khởi Nghĩa", "Cước Vệ Quốc", "Lưỡi Sao Vàng", 5,
-                    new Color(1f, 0.85f, 0.35f, 1f), new Color(0.85f, 0.4f, 0.1f, 1f), new Color(1f, 0.8f, 0.3f, 0.5f), "EVENT"));
+                displaySets.add(
+                        new StandardSetTheme("Thần Khí Lạc Hồng", "Trượng Lạc Hồng", "Dây Rồng Thiêng", "Móc Âu Cơ", 15,
+                                new Color(1f, 0.45f, 0.35f, 1f), new Color(0.85f, 0.25f, 0.2f, 1f),
+                                new Color(1f, 0.6f, 0.4f, 0.5f), "LIMITED"));
+                displaySets.add(
+                        new StandardSetTheme("Vệ Quốc Vang Danh", "Cần Khởi Nghĩa", "Cước Vệ Quốc", "Lưỡi Sao Vàng", 5,
+                                new Color(1f, 0.85f, 0.35f, 1f), new Color(0.85f, 0.4f, 0.1f, 1f),
+                                new Color(1f, 0.8f, 0.3f, 0.5f), "EVENT"));
             }
         }
         for (StandardSetTheme st : STANDARD_SETS) {
@@ -1471,7 +1538,8 @@ public class GachaScreen implements Screen {
         // Clip the cards inside right column
         Rectangle clipBounds = new Rectangle(col2X + 4f, colY + 4f, col2W - 8f, visibleListH);
         Rectangle scissors = new Rectangle();
-        ScissorStack.calculateScissors(camera, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight(), sr.getTransformMatrix(), clipBounds, scissors);
+        ScissorStack.calculateScissors(camera, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(),
+                viewport.getScreenHeight(), sr.getTransformMatrix(), clipBounds, scissors);
         boolean hasScissors = ScissorStack.pushScissors(scissors);
 
         if (hasScissors) {
@@ -1485,7 +1553,8 @@ public class GachaScreen implements Screen {
                 float cY = startCardY - i * (cardH + cardSpacing);
                 float cX = col2X + 12f;
 
-                if (cY + cardH < colY || cY > colY + colH) continue;
+                if (cY + cardH < colY || cY > colY + colH)
+                    continue;
 
                 // Card background
                 sr.setColor(0.08f, 0.11f, 0.17f, 0.95f);
@@ -1514,7 +1583,8 @@ public class GachaScreen implements Screen {
                     sr.setColor(st.primaryColor.r, st.primaryColor.g, st.primaryColor.b, 0.20f);
                     sr.circle(iconCX, iconCY, 42f);
 
-                    EquipmentIconRenderer.drawSetPiece(sr, st.setName, eqTypes[s], iconCX, iconCY, 34f, st.primaryColor);
+                    EquipmentIconRenderer.drawSetPiece(sr, st.setName, eqTypes[s], iconCX, iconCY, 34f,
+                            st.primaryColor);
                 }
             }
             sr.flush(); // FLUSH BEFORE POPPING SCISSORS!
@@ -1529,7 +1599,10 @@ public class GachaScreen implements Screen {
         // Header Title
         titleFont.setColor(isEventBanner ? new Color(1f, 0.85f, 0.4f, 1f) : new Color(0.95f, 0.85f, 0.45f, 1f));
         titleFont.getData().setScale(0.85f);
-        String mTitle = isEventBanner ? "XÁC SUẤT & KHO TRANG BỊ: SỰ KIỆN LẠC HỒNG" : "XÁC SUẤT & KHO TRANG BỊ: TIÊU CHUẨN";
+        boolean isHlwModal = EventManager.isHalloweenActive();
+        String mEventName = isHlwModal ? "HALLOWEEN" : "LẠC HỒNG";
+        String mTitle = isEventBanner ? ("XÁC SUẤT & KHO TRANG BỊ: SỰ KIỆN " + mEventName)
+                : "XÁC SUẤT & KHO TRANG BỊ: TIÊU CHUẨN";
         layout.setText(titleFont, mTitle);
         titleFont.draw(game.batch, layout, modalX + 22f, modalY + modalH - 18f);
         titleFont.getData().setScale(1f);
@@ -1579,7 +1652,8 @@ public class GachaScreen implements Screen {
             font.draw(game.batch, "• Epic (4★): 8.5%", col1X + 16f, rLineY - 75f);
             boolean isHlw = EventManager.isHalloweenActive();
             font.setColor(isHlw ? new Color(1f, 0.30f, 0.30f, 1f) : new Color(1f, 0.45f, 0.35f, 1f));
-            font.draw(game.batch, isHlw ? "• Huyết Nguyệt Thần Vương (6★): 1.5%" : "• Thần Khí Lạc Hồng (6★): 1.5%", col1X + 16f, rLineY - 100f);
+            font.draw(game.batch, isHlw ? "• Huyết Nguyệt Thần Vương (6★): 1.5%" : "• Thần Khí Lạc Hồng (6★): 1.5%",
+                    col1X + 16f, rLineY - 100f);
 
             // Limited Pity Rules
             font.setColor(0.95f, 0.85f, 0.35f, 1f);
@@ -1587,7 +1661,9 @@ public class GachaScreen implements Screen {
             font.draw(game.batch, "QUY TẮC BẢO HIỂM GIỚI HẠN:", col1X + 16f, rLineY - 150f);
             font.getData().setScale(0.68f);
             font.setColor(0.80f, 0.88f, 0.98f, 0.92f);
-            font.draw(game.batch, isHlw ? "• Chắc chắn nhận Huyết Nguyệt ở lượt 80" : "• Chắc chắn nhận Thần Khí ở lượt 80", col1X + 16f, rLineY - 176f);
+            font.draw(game.batch,
+                    isHlw ? "• Chắc chắn nhận Huyết Nguyệt ở lượt 80" : "• Chắc chắn nhận Thần Khí ở lượt 80",
+                    col1X + 16f, rLineY - 176f);
             font.draw(game.batch, "• Quay 10 lượt luôn có tối thiểu 1 món 4★+", col1X + 16f, rLineY - 200f);
             font.draw(game.batch, "• Tiến độ bảo hiểm được bảo lưu qua các đợt", col1X + 16f, rLineY - 224f);
             font.draw(game.batch, "• Sau sự kiện, trang bị giới hạn sẽ tạm đóng", col1X + 16f, rLineY - 248f);
@@ -1611,7 +1687,8 @@ public class GachaScreen implements Screen {
         game.batch.flush();
 
         // Text cards pass with Scissor clipping
-        ScissorStack.calculateScissors(camera, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight(), game.batch.getTransformMatrix(), clipBounds, scissors);
+        ScissorStack.calculateScissors(camera, viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(),
+                viewport.getScreenHeight(), game.batch.getTransformMatrix(), clipBounds, scissors);
         boolean hasBatchScissors = ScissorStack.pushScissors(scissors);
 
         if (hasBatchScissors) {
@@ -1625,7 +1702,8 @@ public class GachaScreen implements Screen {
                 float cY = startCardY - i * (cardH + cardSpacing);
                 float cX = col2X + 12f;
 
-                if (cY + cardH < colY || cY > colY + colH) continue;
+                if (cY + cardH < colY || cY > colY + colH)
+                    continue;
 
                 float multVal = 1f + st.points * 0.15f;
 
@@ -1636,7 +1714,8 @@ public class GachaScreen implements Screen {
 
                 font.setColor(1f, 0.85f, 0.35f, 1f);
                 font.getData().setScale(0.72f);
-                String badge = "[+" + st.points + " Cấp Điểm • Hệ số: x" + String.format(java.util.Locale.US, "%.2f", multVal) + "]";
+                String badge = "[+" + st.points + " Cấp Điểm • Hệ số: x"
+                        + String.format(java.util.Locale.US, "%.2f", multVal) + "]";
                 font.draw(game.batch, badge, cX + 220f, cY + cardH - 10f);
 
                 font.setColor(0.45f, 0.95f, 0.65f, 1f);
@@ -1698,10 +1777,10 @@ public class GachaScreen implements Screen {
         float infoH = 430f - 60f;
         float showcaseCX = cardX + 235f;
 
-        hoverSet = !showRateLootModal && (
-            (mouseX >= infoX && mouseX <= infoX + infoW && mouseY >= infoY && mouseY <= infoY + infoH) ||
-            (mouseX >= showcaseCX - 160f && mouseX <= showcaseCX + 160f && mouseY >= cardY + 20f && mouseY <= cardY + 144f)
-        );
+        hoverSet = !showRateLootModal
+                && ((mouseX >= infoX && mouseX <= infoX + infoW && mouseY >= infoY && mouseY <= infoY + infoH) ||
+                        (mouseX >= showcaseCX - 160f && mouseX <= showcaseCX + 160f && mouseY >= cardY + 20f
+                                && mouseY <= cardY + 144f));
 
         // Set Detail Modal Close Button Hover
         float setDetailW = 700f;
@@ -1711,7 +1790,9 @@ public class GachaScreen implements Screen {
         float setDetailCloseX = setDetailX + setDetailW - 38f;
         float setDetailCloseY = setDetailY + setDetailH - 36f;
         float setDetailCloseSize = 28f;
-        hoverCloseDetailModal = showSetDetailModal && (mouseX >= setDetailCloseX && mouseX <= setDetailCloseX + setDetailCloseSize && mouseY >= setDetailCloseY && mouseY <= setDetailCloseY + setDetailCloseSize);
+        hoverCloseDetailModal = showSetDetailModal
+                && (mouseX >= setDetailCloseX && mouseX <= setDetailCloseX + setDetailCloseSize
+                        && mouseY >= setDetailCloseY && mouseY <= setDetailCloseY + setDetailCloseSize);
 
         // Modal Close Button Hover
         float modalW = 1080f;
@@ -1720,7 +1801,8 @@ public class GachaScreen implements Screen {
         float modalY = (H - modalH) / 2f;
         float closeX = modalX + modalW - 46f;
         float closeY = modalY + modalH - 44f;
-        hoverCloseModal = showRateLootModal && (mouseX >= closeX && mouseX <= closeX + 34f && mouseY >= closeY && mouseY <= closeY + 34f);
+        hoverCloseModal = showRateLootModal
+                && (mouseX >= closeX && mouseX <= closeX + 34f && mouseY >= closeY && mouseY <= closeY + 34f);
 
         float col2X = modalX + 342f;
         float col2W = modalW - 360f;
@@ -1729,8 +1811,10 @@ public class GachaScreen implements Screen {
         float btnUpX = col2X + col2W - 68f;
         float btnDownX = col2X + col2W - 36f;
         float btnY = colY + colH - 34f;
-        hoverModalScrollUp = showRateLootModal && (mouseX >= btnUpX && mouseX <= btnUpX + 28f && mouseY >= btnY && mouseY <= btnY + 22f);
-        hoverModalScrollDown = showRateLootModal && (mouseX >= btnDownX && mouseX <= btnDownX + 28f && mouseY >= btnY && mouseY <= btnY + 22f);
+        hoverModalScrollUp = showRateLootModal
+                && (mouseX >= btnUpX && mouseX <= btnUpX + 28f && mouseY >= btnY && mouseY <= btnY + 22f);
+        hoverModalScrollDown = showRateLootModal
+                && (mouseX >= btnDownX && mouseX <= btnDownX + 28f && mouseY >= btnY && mouseY <= btnY + 22f);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             if (showSetDetailModal) {
@@ -1761,7 +1845,8 @@ public class GachaScreen implements Screen {
 
         if (Gdx.input.justTouched()) {
             if (showSetDetailModal) {
-                if (hoverCloseDetailModal || mouseX < setDetailX || mouseX > setDetailX + setDetailW || mouseY < setDetailY || mouseY > setDetailY + setDetailH) {
+                if (hoverCloseDetailModal || mouseX < setDetailX || mouseX > setDetailX + setDetailW
+                        || mouseY < setDetailY || mouseY > setDetailY + setDetailH) {
                     showSetDetailModal = false;
                     AudioManager.getInstance().playSFX("sfx_button");
                     return;
@@ -1770,7 +1855,8 @@ public class GachaScreen implements Screen {
             }
 
             if (showRateLootModal) {
-                if (hoverCloseModal || mouseX < modalX || mouseX > modalX + modalW || mouseY < modalY || mouseY > modalY + modalH) {
+                if (hoverCloseModal || mouseX < modalX || mouseX > modalX + modalW || mouseY < modalY
+                        || mouseY > modalY + modalH) {
                     showRateLootModal = false;
                     AudioManager.getInstance().playSFX("sfx_button");
                     return;
@@ -1887,11 +1973,11 @@ public class GachaScreen implements Screen {
             AudioManager.getInstance().playSFX("sfx_button");
             player.addPremiumTickets(-amount);
         }
-        
+
         player.getQuestManager().addProgress("gacha", amount);
         lastPull.clear();
         bestItem = null;
-        
+
         for (int i = 0; i < amount; i++) {
             boolean guarantee = (amount == 10 && i == 9);
             Equipment eq;
@@ -1902,17 +1988,17 @@ public class GachaScreen implements Screen {
             }
             player.addEquipment(eq);
             lastPull.add(eq);
-            
+
             if (bestItem == null || eq.rarity.ordinal() > bestItem.rarity.ordinal()) {
                 bestItem = eq;
             }
         }
-        
+
         generateSpinItems();
         state = State.SPINNING;
         spinTimer = 0f;
     }
-    
+
     private void generateSpinItems() {
         spinItems.clear();
         for (int i = 0; i < 70; i++) {
@@ -1924,9 +2010,12 @@ public class GachaScreen implements Screen {
                 fake.rarity = Rarity.values()[MathUtils.random(0, Rarity.EPIC.ordinal())];
                 StandardSetTheme theme = STANDARD_SETS[MathUtils.random(0, STANDARD_SETS.length - 1)];
                 fake.setName = theme.setName;
-                if (fake.type == EquipmentType.ROD) fake.name = theme.rodName;
-                else if (fake.type == EquipmentType.LINE) fake.name = theme.lineName;
-                else fake.name = theme.hookName;
+                if (fake.type == EquipmentType.ROD)
+                    fake.name = theme.rodName;
+                else if (fake.type == EquipmentType.LINE)
+                    fake.name = theme.lineName;
+                else
+                    fake.name = theme.hookName;
                 fake.level = player.getLevel();
                 spinItems.add(fake);
             }
@@ -1972,13 +2061,20 @@ public class GachaScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        if (width <= 0 || height <= 0) return;
+        if (width <= 0 || height <= 0)
+            return;
         viewport.update(width, height, true);
     }
 
-    @Override public void pause() {}
-    @Override public void resume() {}
-    @Override 
+    @Override
+    public void pause() {
+    }
+
+    @Override
+    public void resume() {
+    }
+
+    @Override
     public void hide() {
         Gdx.input.setInputProcessor(null);
     }
