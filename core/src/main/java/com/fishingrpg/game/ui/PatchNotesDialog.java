@@ -17,16 +17,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 
+ *
  * Hop thoai thong bao chi tiet cac ban cap nhat moi va lo trinh phat trien
  * (In-Game Patch Notes & Roadmap).
- * 
+ *
  * Co the mo tu MainMenuScreen hoac truc tiep tu GameHUD.
- * 
+ *
  */
 
 public class PatchNotesDialog {
-    public static final String CURRENT_VERSION = "v0.5.5.9";
+    public static final String CURRENT_VERSION = "v0.5.5.10";
     private static final String PREF_LAST_SEEN_VERSION = "last_seen_patch_notes_version";
     private final FishingRPG game;
     private final GlyphLayout layout = new GlyphLayout();
