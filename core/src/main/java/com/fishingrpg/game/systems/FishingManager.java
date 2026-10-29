@@ -1825,12 +1825,12 @@ public class FishingManager {
         if (currentFish != null) {
             // Frankenstein hoi sinh 1 lan
 
-            if (currentFish.getCurrentHp() <= 0f && !frankRevived && currentFish.getSkill("sam_set_hoi_sinh") != null) {
+            if (currentFish.getCurrentHp() <= 50.0f && !frankRevived && currentFish.getSkill("sam_set_hoi_sinh") != null) {
                 frankRevived = true;
-                currentFish.heal(currentFish.getMaxHp() * 0.20f);
+                currentFish.heal(currentFish.getMaxHp() * 0.50f);
                 player.increaseTension(player.getMaxLineTension() * 0.25f);
-                combatMessage = "SẤM SÉT HỒI SINH! Frankenstein hồi sinh 20% HP & Giật +25% Tension!";
-                if (ftm != null) ftm.addText("SẤM SÉT HỒI SINH! (+450 HP)", 640f, 450f, Color.YELLOW);
+                combatMessage = "SẤM SÉT HỒI SINH! Frankenstein hồi sinh!";
+                if (ftm != null) ftm.addText("SẤM SÉT HỒI SINH!", 640f, 450f, Color.YELLOW);
                 AudioManager.getInstance().playSFX("sfx_skill");
                 if (screenShake != null) screenShake.shakeHeavy();
             }
