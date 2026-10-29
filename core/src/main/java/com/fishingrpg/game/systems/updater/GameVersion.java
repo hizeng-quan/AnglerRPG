@@ -1,7 +1,5 @@
 package com.fishingrpg.game.systems.updater;
 
-
-
 public class GameVersion {
 
     public static final String CURRENT_VERSION = "0.5.5.7";
@@ -16,8 +14,6 @@ public class GameVersion {
 
             + "/releases/latest";
 
-
-
     public static String getDisplayVersion() {
 
         return "v" + CURRENT_VERSION;
@@ -25,4 +21,3 @@ public class GameVersion {
     }
 
 }
-

@@ -130,7 +130,7 @@ public class FishDatabase {
         // --- MAP STANDARD FISH ROLL ---
         int rarityIdx = weightedRandom(player);
         Rarity targetRarity = Rarity.values()[Math.min(rarityIdx, Rarity.values().length - 1)];
-        
+
         java.util.ArrayList<FishTemplate> filtered = new java.util.ArrayList<>();
         String currentMap = player != null ? player.getCurrentMap() : "ao_lang";
         for (FishTemplate t : templates) {
@@ -139,13 +139,13 @@ public class FishDatabase {
                 filtered.add(t);
             }
         }
-        
+
         if (filtered.isEmpty()) {
             for (FishTemplate t : templates) {
                 if (currentMap.equals(t.map)) filtered.add(t);
             }
         }
-        
+
         if (filtered.isEmpty()) return buildFish(templates.get(MathUtils.random(templates.size() - 1)));
         return buildFish(filtered.get(MathUtils.random(filtered.size() - 1)));
     }
@@ -170,7 +170,7 @@ public class FishDatabase {
                 copiedSkills.add(copy);
             }
         }
-        
+
         return new Fish(
             t.name, t.maxHp, t.pullStrength,
             t.rarity, t.baseWeightKg, t.baseLengthCm,
@@ -193,7 +193,7 @@ public class FishDatabase {
                 // index 3 (EPIC), 4 (LEGENDARY), 5 (MYTHIC)
                 for (int i = 3; i < weights.length; i++) weights[i] *= (1f + bonus);
             }
-            
+
             float hookBoost = player.getRarityBoost() / 100f;
             if (hookBoost > 0) {
                 for (int i = 2; i < weights.length; i++) weights[i] *= (1f + hookBoost);

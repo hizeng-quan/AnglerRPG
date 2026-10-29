@@ -54,7 +54,7 @@ def calculate_equipment_stats(set_name, rarity="COMMON"):
     """
     eq_sets = get_equipment_sets()
     matched = next((s for s in eq_sets if s["setName"].lower() == set_name.lower()), eq_sets[0])
-    
+
     # Auto-adjust rarity for limited supreme sets if default COMMON was passed
     if rarity in ("COMMON", None, ""):
         if matched["setName"] in ("Thần Khí Lạc Hồng", "Huyết Nguyệt Thần Vương"):
