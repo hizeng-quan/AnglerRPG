@@ -7,111 +7,77 @@ package com.fishingrpg.game.entities;
  */
 
 public class PlayerCombat {
-
     private float maxStamina;
-
     private float currentStamina;
-
     private float maxLineTension   = 100f;
-
     private float currentLineTension = 0f;
-
     private float staminaRegenAmount = 0f;
-
     private float staminaRegenRate = 0f;
-
     private float staminaHealMultiplier = 1.0f;
-
     public boolean justFilledStamina = false;
 
     public PlayerCombat(float maxStamina) {
-
         this.maxStamina = maxStamina;
-
         this.currentStamina = maxStamina;
-
         this.staminaHealMultiplier = 1.0f;
 
     }
 
     public void setStaminaHealMultiplier(float mult) {
-
         this.staminaHealMultiplier = Math.max(0f, mult);
 
     }
 
     public float getStaminaHealMultiplier() {
-
         return staminaHealMultiplier;
 
     }
 
     public void update(float delta, float passiveRegenBonus) {
-
         float oldStamina = currentStamina;
 
         // Passive regen: 0.5% max stamina per second (1% per 2s) + Fast Recovery bonus
 
         if (currentStamina < maxStamina) {
-
             consumeStamina(-(maxStamina * 0.005f * delta) - (passiveRegenBonus * delta));
-
         }
 
         if (staminaRegenAmount > 0) {
-
             float heal = staminaRegenRate * delta;
-
             if (heal > staminaRegenAmount) heal = staminaRegenAmount;
-
             consumeStamina(-heal); // Negative to heal
-
             staminaRegenAmount -= heal;
 
             if (staminaRegenAmount <= 0) {
-
                 staminaRegenAmount = 0;
-
             }
-
         }
 
         if (oldStamina < maxStamina && currentStamina >= maxStamina) {
-
             justFilledStamina = true;
-
         }
 
     }
 
     public void addStaminaRegen(float totalAmount, float ratePerSecond) {
-
         this.staminaRegenAmount += totalAmount;
-
         this.staminaRegenRate = ratePerSecond;
 
     }
 
     public void resetForNewEncounter() {
-
         currentLineTension = 0f;
-
         staminaHealMultiplier = 1.0f;
 
     }
 
     public void applyStatBonuses(float baseStamina, float theLucBonus, float rodStaminaBonus, float dayThepBonus, float lineTensionBonus) {
-
         maxLineTension = 100f + dayThepBonus + lineTensionBonus;
-
         float oldMax = maxStamina;
-
         maxStamina = baseStamina + theLucBonus + rodStaminaBonus;
 
         if (maxStamina > oldMax) {
-
             currentStamina += (maxStamina - oldMax);
-
         }
 
         currentStamina = Math.min(currentStamina, maxStamina);
@@ -119,19 +85,16 @@ public class PlayerCombat {
     }
 
     public void increaseTension(float amount) {
-
         currentLineTension = Math.min(currentLineTension + amount, maxLineTension);
 
     }
 
     public void setLineTension(float value) {
-
         this.currentLineTension = Math.max(0, Math.min(maxLineTension, value));
 
     }
 
     public void decreaseTension(float amount) {
-
         currentLineTension = Math.max(0, currentLineTension - amount);
 
     }
@@ -149,25 +112,17 @@ public class PlayerCombat {
      */
 
     public boolean consumeStamina(float amount) {
-
         if (amount < 0) {
-
             // Heal (giam theo staminaHealMultiplier neu bi dinh debuff Vuc Da Nuot Chung)
 
             float heal = -amount * staminaHealMultiplier;
-
             currentStamina = Math.min(maxStamina, currentStamina + heal);
-
             return true;
-
         }
 
         if (currentStamina >= amount) {
-
             currentStamina -= amount;
-
             return true;
-
         }
 
         return false;
@@ -181,21 +136,15 @@ public class PlayerCombat {
      */
 
     public void drainStamina(float amount) {
-
         if (amount <= 0f) return;
-
         currentStamina = Math.max(0f, currentStamina - amount);
 
     }
 
     public float getCurrentStamina()     { return currentStamina; }
-
     public void setCurrentStamina(float val) { this.currentStamina = Math.max(0f, Math.min(maxStamina, val)); }
-
     public float getMaxStamina()         { return maxStamina; }
-
     public float getCurrentLineTension() { return currentLineTension; }
-
     public float getMaxLineTension()     { return maxLineTension; }
 
 }

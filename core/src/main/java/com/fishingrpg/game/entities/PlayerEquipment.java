@@ -11,7 +11,6 @@ import java.util.List;
  * Manages equip/unequip, set bonuses, and substat aggregation.
  */
 public class PlayerEquipment {
-
     private final List<Equipment> inventory = new ArrayList<>();
     private Equipment equippedRod  = null;
     private Equipment equippedLine = null;

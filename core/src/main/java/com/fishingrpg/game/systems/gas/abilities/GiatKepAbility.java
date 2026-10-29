@@ -6,7 +6,6 @@ import com.fishingrpg.game.systems.gas.AbilityContext;
 import com.fishingrpg.game.systems.gas.GameplayAbility;
 
 public class GiatKepAbility extends GameplayAbility {
-
     public GiatKepAbility() {
         super("giat_kep", "Giật Kép", "Tung hai cú giật cần liên hoàn uy lực cực đại gây sát thương bộc phá.");
     }
@@ -52,7 +51,6 @@ public class GiatKepAbility extends GameplayAbility {
         ctx.audio.playSFX("sfx_skill");
         ctx.vfx.triggerPlayerSkillVFX("giat_kep", 640f, 360f);
         if (ctx.screenShake != null) ctx.screenShake.shakeHeavy();
-
         return true;
     }
 }

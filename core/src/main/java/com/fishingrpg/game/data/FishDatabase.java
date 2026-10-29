@@ -12,7 +12,6 @@ import java.util.ArrayList;
  * Danh sach tat ca loai ca trong game duoc doc tu file json.
  */
 public class FishDatabase {
-
     public static class FishTemplate {
         public String name;
         public float maxHp;
@@ -96,7 +95,6 @@ public class FishDatabase {
                     }
                     String activeSet = (player.getEquipment() != null) ? player.getEquipment().getActiveSetName() : "";
                     if ("Dạ Hội Bí Ngô".equals(activeSet)) rareMulti += 0.35f;
-
                     wDauLau *= rareMulti;
                     wDangMa *= rareMulti;
                     wFrank *= rareMulti;
@@ -130,7 +128,6 @@ public class FishDatabase {
         // --- MAP STANDARD FISH ROLL ---
         int rarityIdx = weightedRandom(player);
         Rarity targetRarity = Rarity.values()[Math.min(rarityIdx, Rarity.values().length - 1)];
-
         java.util.ArrayList<FishTemplate> filtered = new java.util.ArrayList<>();
         String currentMap = player != null ? player.getCurrentMap() : "ao_lang";
         for (FishTemplate t : templates) {
@@ -214,7 +211,6 @@ public class FishDatabase {
 
         float total = 0;
         for (float w : weights) total += w;
-
         float roll = MathUtils.random(total), cum = 0;
         for (int i = 0; i < weights.length; i++) {
             cum += weights[i];

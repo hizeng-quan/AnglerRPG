@@ -3,7 +3,6 @@ package com.fishingrpg.game.systems.updater;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -15,7 +14,6 @@ import java.net.URL;
  * - Hoạt động hoàn toàn trên luồng nền (asynchronous background thread), không làm đơ giao diện game.
  */
 public class AutoUpdater {
-
     private static final String TAG = "AutoUpdater";
     private static AutoUpdater instance;
 
@@ -62,7 +60,6 @@ public class AutoUpdater {
      */
     public void checkForUpdates(UpdateCheckCallback callback) {
         if (status == Status.CHECKING || status == Status.DOWNLOADING) return;
-
         status = Status.CHECKING;
         statusMessage = "Đang kiểm tra bản cập nhật mới...";
 
@@ -75,7 +72,6 @@ public class AutoUpdater {
                 conn.setRequestProperty("Accept", "application/vnd.github.v3+json");
                 conn.setConnectTimeout(4000);
                 conn.setReadTimeout(4000);
-
                 int responseCode = conn.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
@@ -86,11 +82,9 @@ public class AutoUpdater {
                     }
                     in.close();
                     conn.disconnect();
-
                     JsonValue root = new JsonReader().parse(response.toString());
                     String tag = root.getString("tag_name", "").trim();
                     String body = root.getString("body", "Không có thông tin ghi chú phiên bản.");
-
                     String cleanRemote = tag.replace("v", "").replace("V", "").trim();
                     String cleanCurrent = GameVersion.CURRENT_VERSION.trim();
 
@@ -205,7 +199,6 @@ public class AutoUpdater {
                 long totalBytes = conn.getContentLengthLong();
                 InputStream in = new BufferedInputStream(conn.getInputStream());
                 OutputStream out = new FileOutputStream(tempTarget);
-
                 byte[] buffer = new byte[8192];
                 long downloadedBytes = 0;
                 int bytesRead;
@@ -226,7 +219,6 @@ public class AutoUpdater {
                 out.close();
                 in.close();
                 conn.disconnect();
-
                 this.status = Status.READY_TO_RESTART;
                 downloadProgress = 1f;
 
@@ -251,7 +243,6 @@ public class AutoUpdater {
 
                 // Thực hiện thay thế và khởi động lại
                 executeRestartScript(fileToApply);
-
             } catch (Exception e) {
                 this.status = Status.ERROR;
                 statusMessage = "Lỗi tải cập nhật: " + e.getMessage();
@@ -284,7 +275,6 @@ public class AutoUpdater {
     private static File extractJarFromZip(File zipFile) throws IOException {
         File extractedJar = new File("AnglerRPG-extracted.tmp");
         if (extractedJar.exists()) extractedJar.delete();
-
         boolean found = false;
         try (java.util.zip.ZipInputStream zis = new java.util.zip.ZipInputStream(new BufferedInputStream(new FileInputStream(zipFile)))) {
             java.util.zip.ZipEntry entry;
@@ -394,7 +384,6 @@ public class AutoUpdater {
     public static boolean isNewerVersion(String remoteVer, String localVer) {
         if (remoteVer == null || remoteVer.isEmpty()) return false;
         if (localVer == null || localVer.isEmpty()) return true;
-
         String[] rParts = remoteVer.split("\\.");
         String[] lParts = localVer.split("\\.");
         int maxLen = Math.max(rParts.length, lParts.length);
