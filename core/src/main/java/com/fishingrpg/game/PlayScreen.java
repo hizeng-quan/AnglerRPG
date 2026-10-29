@@ -45,6 +45,8 @@ public class PlayScreen implements Screen {
     private final com.fishingrpg.game.systems.vfx.ScreenShakeController screenShake = new com.fishingrpg.game.systems.vfx.ScreenShakeController(WORLD_WIDTH / 2f, WORLD_HEIGHT / 2f);
     private final com.fishingrpg.game.ui.PatchNotesDialog patchNotesDialog;
     private final com.fishingrpg.game.ui.SettingsDialog settingsDialog;
+    // Tracks keys pressed this frame via InputAdapter.keyDown() to avoid IME interference
+    private final java.util.Set<Integer> justPressedKeys = new java.util.HashSet<>();
 
     public PlayScreen(FishingRPG game) {
         this.game = game;
@@ -90,18 +92,24 @@ public class PlayScreen implements Screen {
 
         Gdx.input.setInputProcessor(new com.badlogic.gdx.InputAdapter() {
             @Override
+            public boolean keyDown(int keycode) {
+                // Capture key events via InputAdapter to bypass IME interference on Windows.
+                // isKeyJustPressed() polling can miss Q/W/E/R/1-9 when IME (e.g. Unikey) is active,
+                // but keyDown() fires from the native LWJGL window event before IME intercepts it.
+                justPressedKeys.add(keycode);
+                return false; // don't consume — let polling continue as fallback
+            }
 
+            @Override
             public boolean scrolled(float amountX, float amountY) {
                 if (settingsDialog != null && settingsDialog.isOpen()) {
                     settingsDialog.handleScroll(amountY);
                     return true;
                 }
-
                 if (patchNotesDialog != null && patchNotesDialog.isOpen()) {
                     patchNotesDialog.handleScroll(amountY);
                     return true;
                 }
-
                 return false;
             }
         });
@@ -235,11 +243,16 @@ public class PlayScreen implements Screen {
 
     }
 
+    /** True if key was pressed this frame — uses InputAdapter.keyDown() to bypass IME. */
+    private boolean isJustPressed(int keycode) {
+        return justPressedKeys.contains(keycode) || Gdx.input.isKeyJustPressed(keycode);
+    }
+
     private void update(float delta) {
         com.fishingrpg.game.ui.CombatVFXManager.getInstance().update(delta);
+        justPressedKeys.clear(); // consumed once per frame; keyDown() re-populates next frame
         if (messageTimer > 0) messageTimer -= delta;
         player.update(delta);
-
         if (player.justFilledStamina) {
             player.justFilledStamina = false;
             message = "Thể lực đã hồi đầy!";
@@ -301,13 +314,10 @@ public class PlayScreen implements Screen {
         }
 
         // Quick slots 1-9 for the currently active inventory page
-
         java.util.List<String> pageItems = hud.getItemsOnCurrentPage();
-
         for (int k = 0; k < pageItems.size() && k < 9; k++) {
             int keyCode = com.fishingrpg.game.systems.KeybindManager.getInstance().getQuickslotKey(k);
-
-            if (Gdx.input.isKeyJustPressed(keyCode)) {
+            if (framesToSkip <= 0 && isJustPressed(keyCode)) {
                 useItem(pageItems.get(k));
                 break;
             }
@@ -371,10 +381,10 @@ public class PlayScreen implements Screen {
             int k1 = km.getSkillKey(1);
             int k2 = km.getSkillKey(2);
             int k3 = km.getSkillKey(3);
-            activeSkillInputs[0] = (k0 > 0 && Gdx.input.isKeyJustPressed(k0)) || (k0 != Input.Keys.Q && Gdx.input.isKeyJustPressed(Input.Keys.Q)) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(0));
-            activeSkillInputs[1] = (k1 > 0 && Gdx.input.isKeyJustPressed(k1)) || (k1 != Input.Keys.W && Gdx.input.isKeyJustPressed(Input.Keys.W)) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(1));
-            activeSkillInputs[2] = (k2 > 0 && Gdx.input.isKeyJustPressed(k2)) || (k2 != Input.Keys.E && Gdx.input.isKeyJustPressed(Input.Keys.E)) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(2));
-            activeSkillInputs[3] = (k3 > 0 && Gdx.input.isKeyJustPressed(k3)) || (k3 != Input.Keys.R && Gdx.input.isKeyJustPressed(Input.Keys.R)) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(3));
+            activeSkillInputs[0] = isJustPressed(k0) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(0));
+            activeSkillInputs[1] = isJustPressed(k1) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(1));
+            activeSkillInputs[2] = isJustPressed(k2) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(2));
+            activeSkillInputs[3] = isJustPressed(k3) || (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isActiveSlotHovered(3));
         }
 
         boolean settingClicked = framesToSkip <= 0 && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && hud.isSettingClicked(mousePos, fishingManager.state);
