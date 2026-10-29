@@ -9,6 +9,7 @@
 
 | ID | Nhóm công việc | Hạng mục | Mức độ ưu tiên | Trạng thái |
 | :--- | :--- | :--- | :---: | :---: |
+| **BUG-EVT-03** | Hệ thống & Sửa lỗi | Sửa lỗi StackOverflowError làm game tự tắt khi khởi động (chặn đệ quy vô hạn giữa EventManager và QuestManager) | **P0 (Khẩn cấp)** | ✅ Đã khắc phục triệt để (v0.5.5.8) |
 | **BAL-SKL-01** | Gameplay & Cân bằng | Tinh chỉnh Sách Kỹ Năng: Khóa quy đổi SP khi skill đã MAX, chỉ có thể bán tại Cửa Hàng | **P1 (Cân bằng)** | ✅ Đã hoàn thành (v0.5.5.7) |
 | **BUG-UI-01** | Giao diện | Khắc phục lệch hitbox các tab Bí Kíp Kỹ Năng, Đạo Cụ Đặc Biệt & Halloween trong Cửa Hàng | **P0 (Khẩn cấp)** | ✅ Đã khắc phục triệt để (v0.5.5.7) |
 | **BAL-EQ-05** | Cân bằng | Nerf điểm phẩm cấp Legendary (12) & Limited Premium (15), đồng bộ chỉ số toàn bộ trang bị | **P0 (Khẩn cấp)** | ✅ Đã hoàn thành (v0.5.5.7) |

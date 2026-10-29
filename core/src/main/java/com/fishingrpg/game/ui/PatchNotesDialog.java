@@ -99,7 +99,11 @@ public class PatchNotesDialog {
         // =====================================================================
 
         // ===== PHIÊN BẢN v0.5.5.8 (MỚI NHẤT) =====
-        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.5.8 (MỚI NHẤT - SỬA LỖI IME, HITBOX CỬA HÀNG, DỌN DẸP CODE)"));
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.5.8 (MỚI NHẤT - SỬA LỖI KHỞI ĐỘNG, IME, HITBOX CỬA HÀNG)"));
+        patchNotesItems.add(new UpdateItem("SỬA LỖI KHỞI ĐỘNG", "Khắc Phục Lỗi Tự Tắt Game Khi Khởi Động (Tràn Ngăn Xếp Sự Kiện)", new Color(0.95f, 0.35f, 0.35f, 1f))
+                .addPoint("Chẩn Đoán Lỗi: Khi sự kiện Halloween kích hoạt lúc 00:00 ngày 30/10, hàm chuyển giao mùa quy đổi điểm SK sang Vàng tạo ra vòng lặp gọi chéo liên tục giữa EventManager và QuestManager, dẫn tới lỗi StackOverflowError làm game tự thoát ngay khi mở.")
+                .addPoint("Giải Pháp Triệt Để: Thiết lập chốt bảo vệ chống gọi lặp (reentrancy guard) và cập nhật cờ dữ liệu trước khi phát thưởng Vàng, đảm bảo khởi động game trơn tru 100% cho mọi mùa sự kiện.")
+        );
         patchNotesItems.add(new UpdateItem("SỬA LỖI INPUT", "Khắc Phục Phím Kỹ Năng & Quick Slot Không Phản Hồi (IME / Non-Latin Keyboard)", new Color(0.25f, 0.85f, 0.50f, 1f))
                 .addPoint("Chẩn Đoán Nguyên Nhân: Khi hệ thống nhập liệu IME (bàn phím tiếng Việt, tiếng Nhật, v.v.) hoặc layout non-Latin can thiệp, Gdx.input.isKeyPressed() ghi nhận phím Space nhưng bỏ qua toàn bộ phím chữ/số, khiến kỹ năng Q/W/E/R và ô nhanh 1-9 không hoạt động.")
                 .addPoint("Giải Pháp keyDown() Hook: Bổ sung InputAdapter.keyDown() vào PlayScreen, ghi nhận mọi lần bấm phím tại thời điểm sự kiện phát sinh (event-driven) thay vì polling liên tục, đảm bảo 100% phím được nhận dù layout bàn phím bất kỳ.")
