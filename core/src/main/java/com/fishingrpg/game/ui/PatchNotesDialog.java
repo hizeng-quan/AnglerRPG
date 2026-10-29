@@ -100,6 +100,11 @@ public class PatchNotesDialog {
 
         // ===== PHIÊN BẢN v0.5.5.7 (MỚI NHẤT) =====
         patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.5.7 (MỚI NHẤT - CÂN BẰNG PHẨM CẤP LEGENDARY & LIMITED PREMIUM, ĐỒNG BỘ CHỈ SỐ)"));
+        patchNotesItems.add(new UpdateItem("SÁCH KỸ NĂNG", "Khóa Quy Đổi SP Khi Kỹ Năng Đã Đạt Cấp Tối Đa (MAX)", new Color(0.95f, 0.65f, 0.25f, 1f))
+                .addPoint("Khóa Tính Năng Cộng SP: Sách kỹ năng của các bí kíp đã đạt Cấp Tối Đa không còn có thể sử dụng để quy đổi thành +1 Điểm Kỹ Năng (SP).")
+                .addPoint("Tối Ưu Kinh Tế Cửa Hàng: Các cuốn sách kỹ năng dư thừa câu được nay trở thành nguồn thu nhập Vàng dồi dào (1,000 - 2,500 Vàng) thông qua tính năng Bán Đồ tại Cửa Hàng.")
+                .addPoint("Giao Diện Trực Quan: Cập nhật huy hiệu ô đồ 'MAX' và dòng cảnh báo đỏ trong tooltip vật phẩm nhắc nhở người chơi đem bán tại Cửa Hàng.")
+        );
         patchNotesItems.add(new UpdateItem("SỬA LỖI GIAO DIỆN", "Khắc Phục Lệch Hitbox Các Tab Phân Loại Trong Cửa Hàng", new Color(0.25f, 0.85f, 0.50f, 1f))
                 .addPoint("Đồng Bộ Tọa Độ Hitbox Tab Cửa Hàng: Khắc phục triệt để lỗi lệch hitbox giữa hiển thị (5 tab rộng 210px) và xử lý click (công thức cũ 4 tab rộng 260px).")
                 .addPoint("Chuẩn Hóa Phản Hồi: Các nút Bí Kíp Kỹ Năng, Đạo Cụ Đặc Biệt và Halloween nay nhận click chuột chính xác 100% tại đúng khung hình chữ nhật hiển thị.")

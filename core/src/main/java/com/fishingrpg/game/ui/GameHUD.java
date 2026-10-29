@@ -1493,10 +1493,9 @@ public class GameHUD {
                         sr.setColor(0.55f, 0.38f, 0.08f, 0.95f);
                         sr.rect(x + INV_SLOT_SIZE - 29f, y + INV_SLOT_SIZE - 17f, 27f, 15f);
                     } else {
-                        float pulse = 0.5f + 0.5f * MathUtils.sin(timer * 5f);
-                        sr.setColor(0.4f, 0.85f, 1f, 0.8f + 0.2f * pulse);
-                        drawBoxBorder(x, y, INV_SLOT_SIZE, INV_SLOT_SIZE, 2f);
-                        sr.setColor(0.12f, 0.35f, 0.52f, 0.95f);
+                        sr.setColor(0.4f, 0.45f, 0.55f, 0.6f);
+                        drawBoxBorder(x, y, INV_SLOT_SIZE, INV_SLOT_SIZE, 1.2f);
+                        sr.setColor(0.25f, 0.28f, 0.35f, 0.95f);
                         sr.rect(x + INV_SLOT_SIZE - 29f, y + INV_SLOT_SIZE - 17f, 27f, 15f);
                     }
                 }
@@ -1580,8 +1579,8 @@ public class GameHUD {
                         layout.setText(font, "★UP");
                         font.draw(batch, layout, x + INV_SLOT_SIZE - 29f + (27f - layout.width) / 2f, y + INV_SLOT_SIZE - 17f + (15f + layout.height) / 2f);
                     } else {
-                        font.setColor(0.45f, 0.95f, 1f, 1f);
-                        layout.setText(font, "+SP");
+                        font.setColor(0.75f, 0.8f, 0.9f, 0.9f);
+                        layout.setText(font, "MAX");
                         font.draw(batch, layout, x + INV_SLOT_SIZE - 29f + (27f - layout.width) / 2f, y + INV_SLOT_SIZE - 17f + (15f + layout.height) / 2f);
                     }
                     font.getData().setScale(1f);
@@ -1662,8 +1661,8 @@ public class GameHUD {
                         font.setColor(1f, 0.85f, 0.25f, 1f);
                         font.draw(batch, "• Bấm phím / Nhấp: ĐỘT PHÁ Cấp " + (s.getLevel() + 1) + " (0 SP)", tipX + 12f, curY, tipW - 24f, Align.left, true);
                     } else {
-                        font.setColor(0.4f, 0.9f, 1f, 1f);
-                        font.draw(batch, "• Bấm phím / Nhấp: QUY ĐỔI thành +1 Điểm Kỹ Năng (SP)", tipX + 12f, curY, tipW - 24f, Align.left, true);
+                        font.setColor(0.95f, 0.45f, 0.45f, 1f);
+                        font.draw(batch, "• ĐÃ MAX CẤP: Không thể dùng để cộng SP", tipX + 12f, curY, tipW - 24f, Align.left, true);
                     }
                     curY -= 20f;
 

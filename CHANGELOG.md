@@ -24,6 +24,18 @@
 
 ## 📅 [2026-10-29] - Phiên bản v0.5.5.7 (Cân Bằng Phẩm Cấp Legendary & Limited Premium, Đồng Bộ Chỉ Số Trang Bị)
 
+### 📖 Tinh Chỉnh Sách Kỹ Năng: Khóa Quy Đổi SP Khi Kỹ Năng Đạt Cấp Tối Đa (PlayScreen.java & GameHUD.java)
+- **Cơ chế điều chỉnh:**
+  - Trước đây, khi câu được hoặc sở hữu Sách Kỹ Năng mà kỹ năng tương ứng đã đạt Cấp Tối Đa (MAX), người chơi có thể bấm dùng trực tiếp từ Túi Đồ để quy đổi thành +1 Điểm Kỹ Năng (SP).
+  - Điều này vô tình làm dư thừa điểm SP tự do trong cây kỹ năng và giảm giá trị giao thương của Sách.
+- **Quy tắc mới:**
+  - Nếu kỹ năng tương ứng đã đạt cấp MAX, sách **KHÔNG THỂ** sử dụng để cộng SP nữa.
+  - Khi người chơi cố gắng nhấp hoặc bấm phím tắt dùng sách đã MAX, hệ thống sẽ phát âm thanh cảnh báo `sfx_fail` và hiển thị thông báo: *"Kỹ năng đã đạt Cấp Tối Đa! Hãy bán sách tại Cửa Hàng."*
+  - Sách lúc này chỉ có mục đích sử dụng duy nhất là **đem bán tại Cửa Hàng** để thu về lượng Vàng lớn (từ 1,000 đến 2,500 Vàng tùy loại sách).
+- **Cập nhật Giao diện (GameHUD & ItemDatabase):**
+  - Huy hiệu góc trên sách đã Max chuyển từ `+SP` (xanh dương sáng) sang `MAX` (xám bạc tinh tế, không chớp nháy gây xao nhãng).
+  - Tooltip mô tả hiển thị rõ cảnh báo đỏ: *"• ĐÃ MAX CẤP: Không thể dùng để cộng SP"* và hướng dẫn bán tại Cửa Hàng.
+
 ### 🐛 Sửa Lỗi Hitbox Nút Cửa Hàng (ShopScreen.java)
 - **Hiện tượng & Báo cáo:** Người chơi phản ánh khi vào Cửa Hàng, các nút chuyển tab "Bí Kíp Kỹ Năng", "Đạo Cụ Đặc Biệt" và "Halloween" bị lệch hitbox nghiêm trọng; bấm vào một tab này lại nhảy sang tab khác hoặc không nhận click.
 - **Nguyên nhân kỹ thuật (Root Cause):**
