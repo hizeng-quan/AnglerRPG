@@ -54,14 +54,13 @@ def calculate_equipment_stats(set_name, rarity="COMMON"):
     """
     eq_sets = get_equipment_sets()
     matched = next((s for s in eq_sets if s["setName"].lower() == set_name.lower()), eq_sets[0])
-    
+
     # Auto-adjust rarity for limited supreme sets if default COMMON was passed
     if rarity in ("COMMON", None, ""):
         if matched["setName"] in ("Thần Khí Lạc Hồng", "Huyết Nguyệt Thần Vương"):
             rarity = "LIMITED_PREMIUM"
         elif matched["setName"] in ("Dạ Hội Bí Ngô", "Vệ Quốc Vang Danh"):
             rarity = "LIMITED_EVENT"
-
     if matched["setName"] == "Huyết Nguyệt Thần Vương":
         return {
             "set_name": matched["setName"],
@@ -89,11 +88,9 @@ def calculate_equipment_stats(set_name, rarity="COMMON"):
             "line": {"name": matched["lineName"], "max_tension": 450.0, "khang_dut": 7.6},
             "hook": {"name": matched["hookName"], "bite_rarity_pct": 19.0, "bait_retention_pct": 38.0}
         }
-
     set_points = matched["points"]
     r_points = RARITY_POINTS.get(rarity.upper(), 0)
     mult = set_points + r_points
-
     return {
         "set_name": matched["setName"],
         "rarity": rarity.upper(),

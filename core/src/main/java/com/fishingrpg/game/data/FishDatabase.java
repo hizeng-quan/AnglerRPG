@@ -12,7 +12,6 @@ import java.util.ArrayList;
  * Danh sach tat ca loai ca trong game duoc doc tu file json.
  */
 public class FishDatabase {
-
     public static class FishTemplate {
         public String name;
         public float maxHp;
@@ -96,7 +95,6 @@ public class FishDatabase {
                     }
                     String activeSet = (player.getEquipment() != null) ? player.getEquipment().getActiveSetName() : "";
                     if ("Dạ Hội Bí Ngô".equals(activeSet)) rareMulti += 0.35f;
-
                     wDauLau *= rareMulti;
                     wDangMa *= rareMulti;
                     wFrank *= rareMulti;
@@ -130,7 +128,6 @@ public class FishDatabase {
         // --- MAP STANDARD FISH ROLL ---
         int rarityIdx = weightedRandom(player);
         Rarity targetRarity = Rarity.values()[Math.min(rarityIdx, Rarity.values().length - 1)];
-        
         java.util.ArrayList<FishTemplate> filtered = new java.util.ArrayList<>();
         String currentMap = player != null ? player.getCurrentMap() : "ao_lang";
         for (FishTemplate t : templates) {
@@ -139,13 +136,13 @@ public class FishDatabase {
                 filtered.add(t);
             }
         }
-        
+
         if (filtered.isEmpty()) {
             for (FishTemplate t : templates) {
                 if (currentMap.equals(t.map)) filtered.add(t);
             }
         }
-        
+
         if (filtered.isEmpty()) return buildFish(templates.get(MathUtils.random(templates.size() - 1)));
         return buildFish(filtered.get(MathUtils.random(filtered.size() - 1)));
     }
@@ -170,7 +167,7 @@ public class FishDatabase {
                 copiedSkills.add(copy);
             }
         }
-        
+
         return new Fish(
             t.name, t.maxHp, t.pullStrength,
             t.rarity, t.baseWeightKg, t.baseLengthCm,
@@ -193,7 +190,7 @@ public class FishDatabase {
                 // index 3 (EPIC), 4 (LEGENDARY), 5 (MYTHIC)
                 for (int i = 3; i < weights.length; i++) weights[i] *= (1f + bonus);
             }
-            
+
             float hookBoost = player.getRarityBoost() / 100f;
             if (hookBoost > 0) {
                 for (int i = 2; i < weights.length; i++) weights[i] *= (1f + hookBoost);
@@ -214,7 +211,6 @@ public class FishDatabase {
 
         float total = 0;
         for (float w : weights) total += w;
-
         float roll = MathUtils.random(total), cum = 0;
         for (int i = 0; i < weights.length; i++) {
             cum += weights[i];

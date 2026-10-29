@@ -25,7 +25,6 @@ import com.fishingrpg.game.ui.EquipmentIconRenderer;
 import com.fishingrpg.game.ui.NotificationUI;
 
 public class EventScreen implements Screen {
-
     private final FishingRPG game;
     private final Player player;
     private final EventManager eventManager;
@@ -35,11 +34,9 @@ public class EventScreen implements Screen {
     private final BitmapFont font;
     private final BitmapFont titleFont;
     private final GlyphLayout layout;
-
     private static final float W = 1280f;
     private static final float H = 720f;
     private final Screen previousScreen;
-
     private int selectedTab = 0; // 0: Nhiệm vụ Sự Kiện, 1: Điểm Danh Tháng, 2: Shop Đổi Quà
     private float animTimer = 0f;
 
@@ -60,7 +57,6 @@ public class EventScreen implements Screen {
 
     // Vector3 cache for mouse coordinate conversion
     private final Vector3 mousePos = new Vector3();
-
     private static final Color BG_TOP = new Color(0.12f, 0.07f, 0.16f, 1f);
     private static final Color BG_BOT = new Color(0.08f, 0.03f, 0.05f, 1f);
     private static final Color BORDER_CRIMSON = new Color(0.95f, 0.35f, 0.38f, 1f);
@@ -125,14 +121,11 @@ public class EventScreen implements Screen {
 
         handleInput();
         if (game.getScreen() != this) return;
-
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
         sr.setProjectionMatrix(camera.combined);
-
         Gdx.gl.glClearColor(0.06f, 0.08f, 0.12f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -145,7 +138,6 @@ public class EventScreen implements Screen {
         else if (selectedTab == 1) drawAttendanceShapes();
         else if (selectedTab == 2) drawShopShapes();
         sr.end();
-
         Gdx.gl.glDisable(GL20.GL_BLEND);
 
         // 2. Draw text and sprites
@@ -189,7 +181,6 @@ public class EventScreen implements Screen {
             sr.circle(jackCX, jackCY, 320f);
             sr.setColor(0.06f, 0.02f, 0.09f, 1f);
             sr.circle(jackCX, jackCY, 314f);
-
             sr.setColor(0.65f, 0.25f, 0.85f, 0.055f);
             sr.circle(jackCX, jackCY, 240f);
             sr.setColor(0.06f, 0.02f, 0.09f, 1f);
@@ -243,12 +234,10 @@ public class EventScreen implements Screen {
         sr.circle(drumCX, drumCY, 320f);
         sr.setColor(0.08f, 0.03f, 0.05f, 1f);
         sr.circle(drumCX, drumCY, 314f);
-
         sr.setColor(0.95f, 0.75f, 0.25f, 0.06f);
         sr.circle(drumCX, drumCY, 240f);
         sr.setColor(0.08f, 0.03f, 0.05f, 1f);
         sr.circle(drumCX, drumCY, 235f);
-
         sr.setColor(0.95f, 0.75f, 0.25f, 0.07f);
         sr.circle(drumCX, drumCY, 160f);
         sr.setColor(0.08f, 0.03f, 0.05f, 1f);
@@ -311,7 +300,6 @@ public class EventScreen implements Screen {
         float ptsPillH = 38f;
         float ptsPillX = W - ptsPillW - 25f; // 1080f
         float ptsPillY = H - 56f;
-
         sr.setColor(0.22f, 0.16f, 0.08f, 0.95f);
         sr.rect(ptsPillX, ptsPillY, ptsPillW, ptsPillH);
         sr.setColor(1f, 0.85f, 0.3f, 0.9f);
@@ -327,7 +315,6 @@ public class EventScreen implements Screen {
         float timePillH = 38f;
         float timePillX = ptsPillX - timePillW - 18f; // 837f
         float timePillY = H - 56f;
-
         sr.setColor(0.14f, 0.12f, 0.22f, 0.92f);
         sr.rect(timePillX, timePillY, timePillW, timePillH);
         sr.setColor(0.85f, 0.65f, 0.25f, 0.7f);
@@ -470,10 +457,8 @@ public class EventScreen implements Screen {
         float pbY = bannerY + 12f;
         float pbW = containerW - 390f;
         float pbH = 12f;
-
         sr.setColor(0.06f, 0.08f, 0.13f, 0.95f);
         sr.rect(pbX, pbY, pbW, pbH);
-
         int completedCount = eventManager.getCompletedMissionsCount();
         float mRatio = MathUtils.clamp(completedCount / 4f, 0f, 1f);
         if (mRatio > 0f) {
@@ -525,7 +510,6 @@ public class EventScreen implements Screen {
             int row = i / 2;
             float qx = startX + col * (cardW + cardGapX);
             float qy = gridStartY - row * (cardH + cardGapY) - cardH;
-
             boolean hoverCard = isMouseOver(qx, qy, cardW, cardH);
 
             // Card background
@@ -557,10 +541,8 @@ public class EventScreen implements Screen {
             float qpbY = qy + 14f;
             float qpbW = cardW - 155f;
             float qpbH = 12f;
-
             sr.setColor(0.06f, 0.08f, 0.12f, 0.95f);
             sr.rect(qpbX, qpbY, qpbW, qpbH);
-
             float pRatio = MathUtils.clamp((float) q.progress / q.target, 0f, 1f);
             if (pRatio > 0) {
                 sr.setColor(q.isCompleted() ? new Color(0.25f, 0.85f, 0.45f, 1f) : new Color(0.25f, 0.65f, 1f, 1f));
@@ -600,7 +582,6 @@ public class EventScreen implements Screen {
         // Top Summary & Claim Bar (Height 50px)
         float headerY = H - 212f;
         float headerH = 50f;
-
         sr.setColor(0.13f, 0.17f, 0.26f, 0.95f);
         sr.rect(startX, headerY, cardW, headerH);
         sr.setColor(0.85f, 0.65f, 0.25f, 0.6f);
@@ -611,7 +592,6 @@ public class EventScreen implements Screen {
         float claimBtnY = headerY + 6f;
         float claimBtnW = 255f;
         float claimBtnH = 38f;
-
         boolean claimedToday = eventManager.hasClaimedLoginToday();
         int daysLogged = player.getTotalLoginDaysThisMonth();
 
@@ -645,7 +625,6 @@ public class EventScreen implements Screen {
             int row = i / 5;
             float bx = gridStartX + col * (boxW + gapX);
             float by = gridStartY - row * (boxH + gapY);
-
             boolean isClaimed = dayNum <= daysLogged;
             boolean isToday = !claimedToday && (dayNum == daysLogged + 1);
             boolean hoverBox = isMouseOver(bx, by, boxW, boxH);
@@ -688,7 +667,6 @@ public class EventScreen implements Screen {
         // Top Set Bonus Banner
         float bannerY = H - 222f;
         float bannerH = 58f;
-
         sr.rect(startX, bannerY, cardW, bannerH,
                 new Color(0.28f, 0.08f, 0.12f, 0.98f),
                 new Color(0.28f, 0.08f, 0.12f, 0.98f),
@@ -704,7 +682,6 @@ public class EventScreen implements Screen {
         float gapY = 16f;
         float gridStartX = startX;
         float gridStartY = H - 435f;
-
         hoveredShopItem = -1;
 
         for (int i = 0; i < 6; i++) {
@@ -712,17 +689,14 @@ public class EventScreen implements Screen {
             int row = i / 3;
             float ix = gridStartX + col * (itemW + gapX);
             float iy = gridStartY - row * (itemH + gapY);
-
             boolean hoverItem = isMouseOver(ix, iy, itemW, itemH);
             if (hoverItem) hoveredShopItem = i;
-
             int price = getShopItemPrice(i);
             boolean canAfford = EventManager.isEventActive() && player.getEventPoints() >= price;
 
             // Card background
             sr.setColor(hoverItem ? new Color(0.15f, 0.19f, 0.28f, 0.98f) : new Color(0.11f, 0.14f, 0.21f, 0.92f));
             sr.rect(ix, iy, itemW, itemH);
-
             Color borderColor = getShopItemBorderColor(i);
             sr.setColor(borderColor.r, borderColor.g, borderColor.b, hoverItem ? 0.95f : 0.65f);
             drawBoxBorder(ix, iy, itemW, itemH, hoverItem ? 2f : 1.2f);
@@ -744,7 +718,6 @@ public class EventScreen implements Screen {
             float btnY = iy + 14f;
             float btnW = itemW - 28f;
             float btnH = 38f;
-
             boolean hoverBtn = isMouseOver(btnX, btnY, btnW, btnH);
 
             if (canAfford) {
@@ -817,7 +790,6 @@ public class EventScreen implements Screen {
         // Center Title (Clean, prominent, no subtitle)
         float centerAreaX = 145f;
         float centerAreaW = (W - 225f - 175f - 40f) - centerAreaX - 10f;
-
         boolean isHalloween = EventManager.isHalloweenActive();
         String eventTitle = isHalloween ? "ĐÊM HỘI HALLOWEEN 2026" : "HÀO KHÍ LẠC HỒNG";
         titleFont.setColor(0f, 0f, 0f, 0.6f);
@@ -830,7 +802,6 @@ public class EventScreen implements Screen {
         float ptsPillH = 38f;
         float ptsPillX = W - ptsPillW - 25f;
         float ptsPillY = H - 56f;
-
         float timePillW = 225f;
         float timePillH = 38f;
         float timePillX = ptsPillX - timePillW - 18f;
@@ -886,7 +857,6 @@ public class EventScreen implements Screen {
         float mBtnH = 40f;
         float mBtnX = startX + containerW - mBtnW - 14f;
         float mBtnY = bannerY + 9f;
-
         font.getData().setScale(0.82f);
         if (eventManager.milestoneClaimedToday) {
             font.setColor(0.4f, 0.85f, 0.55f, 1f);
@@ -929,11 +899,9 @@ public class EventScreen implements Screen {
             int row = i / 2;
             float qx = startX + col * (cardW + cardGapX);
             float qy = gridStartY - row * (cardH + cardGapY) - cardH;
-
             float qpbX = qx + 18f;
             float qpbY = qy + 14f;
             float qpbW = cardW - 155f;
-
             float btnW = 115f;
             float btnH = 36f;
             float btnX = qx + cardW - btnW - 14f;
@@ -984,7 +952,6 @@ public class EventScreen implements Screen {
         float cardW = W - 144f;
         float headerY = H - 212f;
         float headerH = 50f;
-
         int daysLogged = player.getTotalLoginDaysThisMonth();
         boolean claimedToday = eventManager.hasClaimedLoginToday();
 
@@ -993,7 +960,6 @@ public class EventScreen implements Screen {
         titleFont.setColor(1f, 0.85f, 0.3f, 1f);
         titleFont.draw(game.batch, "ĐÃ ĐIỂM DANH: " + daysLogged + " / 25 NGÀY THÁNG NÀY", startX + 25f, headerY + headerH - 12f);
         titleFont.getData().setScale(1f);
-
         boolean isHalloween = EventManager.isHalloweenActive();
         font.setColor(0.85f, 0.88f, 0.95f, 0.85f);
         String attDesc = isHalloween ? "Điểm danh đều đặn để nhận trọn bộ quà & Cần Dạ Hội Bí Ngô tại ngày 25!" : "Điểm danh đều đặn để nhận trọn bộ quà & Cần Câu Vệ Quốc tại ngày 25!";
@@ -1027,7 +993,6 @@ public class EventScreen implements Screen {
             int row = i / 5;
             float bx = gridStartX + col * (boxW + gapX);
             float by = gridStartY - row * (boxH + gapY);
-
             boolean isClaimed = dayNum <= daysLogged;
             boolean isToday = !claimedToday && (dayNum == daysLogged + 1);
             DailyReward reward = eventManager.getDailyReward(dayNum);
@@ -1061,7 +1026,6 @@ public class EventScreen implements Screen {
         float cardW = W - 144f;
         float bannerY = H - 222f;
         float bannerH = 58f;
-
         boolean isHalloween = EventManager.isHalloweenActive();
 
         // Top Banner Title
@@ -1146,7 +1110,6 @@ public class EventScreen implements Screen {
             int row = i / 3;
             float ix = gridStartX + col * (itemW + gapX);
             float iy = gridStartY - row * (itemH + gapY);
-
             int price = getShopItemPrice(i);
             boolean canAfford = player.getEventPoints() >= price;
 
@@ -1170,7 +1133,6 @@ public class EventScreen implements Screen {
             float btnY = iy + 14f;
             float btnW = itemW - 28f;
             float btnH = 38f;
-
             font.getData().setScale(0.82f);
             if (!EventManager.isEventActive()) {
                 font.setColor(0.65f, 0.55f, 0.55f, 0.8f);
@@ -1191,10 +1153,8 @@ public class EventScreen implements Screen {
         float tipH = 145f;
         float tipX = mousePos.x + 15f;
         float tipY = mousePos.y - tipH - 10f;
-
         if (tipX + tipW > W - 20f) tipX = W - tipW - 20f;
         if (tipY < 20f) tipY = 20f;
-
         Gdx.gl.glEnable(GL20.GL_BLEND);
         sr.begin(ShapeRenderer.ShapeType.Filled);
         sr.setColor(0.06f, 0.09f, 0.15f, 0.98f);
@@ -1203,7 +1163,6 @@ public class EventScreen implements Screen {
         drawBoxBorder(tipX, tipY, tipW, tipH, 1.8f);
         sr.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
-
         game.batch.begin();
         float maxTipTextW = tipW - 30f;
         String tipTitle = "";
@@ -1254,13 +1213,11 @@ public class EventScreen implements Screen {
             font.getData().setScale(0.88f * (maxTipTextW / layout.width));
         }
         font.draw(game.batch, tipTitle, tipX + 15f, tipY + tipH - 18f);
-
         font.setColor(Color.WHITE);
         font.getData().setScale(0.80f);
         font.draw(game.batch, line1, tipX + 15f, tipY + tipH - 44f);
         font.draw(game.batch, line2, tipX + 15f, tipY + tipH - 68f);
         font.draw(game.batch, line3, tipX + 15f, tipY + tipH - 92f);
-
         font.setColor(1f, 0.88f, 0.35f, 1f);
         font.getData().setScale(0.80f);
         layout.setText(font, setBonus);
@@ -1268,7 +1225,6 @@ public class EventScreen implements Screen {
             font.getData().setScale(0.80f * (maxTipTextW / layout.width));
         }
         font.draw(game.batch, setBonus, tipX + 15f, tipY + 28f);
-
         font.getData().setScale(1f);
         game.batch.end();
     }
@@ -1317,7 +1273,6 @@ public class EventScreen implements Screen {
                 float mStartX = 65f;
                 float containerW = W - 130f;
                 float bannerY = H - 225f;
-
                 float mBtnW = 180f;
                 float mBtnH = 40f;
                 float mBtnX = mStartX + containerW - mBtnW - 14f;
@@ -1348,9 +1303,7 @@ public class EventScreen implements Screen {
                 float claimBtnY = headerY + 6f;
                 float claimBtnW = 255f;
                 float claimBtnH = 38f;
-
                 boolean clickedClaim = isMouseOver(claimBtnX, claimBtnY, claimBtnW, claimBtnH);
-
                 int daysLogged = player.getTotalLoginDaysThisMonth();
                 if (!clickedClaim && !eventManager.hasClaimedLoginToday() && daysLogged < 25) {
                     int todayIdx = daysLogged;
@@ -1393,7 +1346,6 @@ public class EventScreen implements Screen {
                     int row = i / 3;
                     float ix = gridStartX + col * (itemW + gapX);
                     float iy = gridStartY - row * (itemH + gapY);
-
                     float btnX = ix + 14f;
                     float btnY = iy + 14f;
                     float btnW = itemW - 28f;

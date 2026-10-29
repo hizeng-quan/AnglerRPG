@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.MathUtils;
  * tự quản lý chi phí thể lực, thời gian hồi chiêu, hoạt ảnh VFX và rung chấn màn hình.
  */
 public abstract class GameplayAbility {
-
     protected final String id;
     protected final String name;
     protected final String description;

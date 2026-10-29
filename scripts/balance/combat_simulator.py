@@ -21,23 +21,18 @@ class CombatSimulator:
         fish_hp = fish_max_hp
         fish_pull_base = float(fish_data.get("pullStrength", 10.0))
         skills = [s.get("id") if isinstance(s, dict) else s for s in fish_data.get("skills", [])]
-
         rod = eq_stats["rod"]
         line = eq_stats["line"]
-
         max_tension = line["max_tension"]
         if "ap_luc_sau" in skills:
             max_tension *= 0.75
-
         khang_dut = line["khang_dut"]
         pull_reduction = max(0.25, 1.0 - (khang_dut * 1.5) / 100.0)
-
         base_dmg = 20.0 + rod["base_pull_damage"] # Player base 20 + Rod bonus
         max_stamina = 100.0 + rod["max_stamina"]   # Player base 100 + Rod bonus
         current_stamina = max_stamina
         current_tension = 0.0
         max_tension_reached = 0.0
-
         time = 0.0
         fish_state = "IDLE" # IDLE or PULLING
         fish_timer = random.uniform(1.2, 2.5)
@@ -79,9 +74,7 @@ class CombatSimulator:
         is_thanatos = ("Thanatos" in fish_data.get("name", ""))
         thanatos_rehook_cd = 12.0
         thanatos_vuc_xoay_cd = 18.0
-
         is_boss = (fish_data.get("rarity") == "BOSS" or fish_pull_base >= 100.0)
-
         while time < max_time and fish_hp > 0:
             time += dt
             fish_timer -= dt
@@ -135,13 +128,11 @@ class CombatSimulator:
                         # 0/2 Full Miss: +40 Tension, Boss heals 5% HP
                         current_tension += 40.0
                         fish_hp = min(fish_max_hp, fish_hp + fish_max_hp * 0.05)
-
                 thanatos_vuc_xoay_cd -= dt
                 if thanatos_vuc_xoay_cd <= 0:
                     thanatos_vuc_xoay_cd = random.uniform(18.0, 24.0)
                     fish_hp = min(fish_max_hp, fish_hp + fish_max_hp * 0.03)
                     current_tension += 25.0
-
             if fish_timer <= 0:
                 fish_state = "PULLING" if fish_state == "IDLE" else "IDLE"
                 fish_timer = random.uniform(1.5, 3.5) if fish_state == "PULLING" else random.uniform(1.5, 3.5)
@@ -192,7 +183,6 @@ class CombatSimulator:
 
             # Player decision based on strategy
             effective_fish_pulling = (fish_state == "PULLING" and stun_timer <= 0 and frozen_timer <= 0)
-
             if player_strategy == "optimal":
                 if is_boss:
                     # Against Bosses:
@@ -213,19 +203,16 @@ class CombatSimulator:
 
             # Tension & Damage calculations
             tension_increase = 0.0
-
             if effective_fish_pulling:
                 pull_mult = 1.5 if is_space_down else 0.4
             else:
                 pull_mult = 0.03 if is_space_down else 0.0
-
             pull = fish_pull_base * pull_mult
             if "xuc_tu" in skills:
                 pull *= (1.0 + (time / 10.0) * 0.1)
             pull *= pull_reduction
             if luot_day_timer > 0:
                 pull *= 0.40  # Lướt dây giảm 60% lực kéo
-
             if not is_bang_gia and frozen_timer <= 0 and stun_timer <= 0:
                 tension_increase += pull * dt
 
@@ -235,7 +222,6 @@ class CombatSimulator:
                 drain_rate *= 0.55
                 if not effective_fish_pulling:
                     current_stamina = min(max_stamina, current_stamina + 3.0 * dt)
-
             current_stamina -= drain_rate * dt
 
             # Vampirism of Set Huyết Nguyệt: restores stamina and deals damage
@@ -248,10 +234,8 @@ class CombatSimulator:
                 stamina_heal = drain_per_sec * dt
                 current_stamina = min(max_stamina, current_stamina + stamina_heal)
                 fish_hp -= stamina_heal
-
             if current_stamina <= 0:
                 return {"success": False, "duration": time, "reason": "HẾT THỂ LỰC!", "final_hp": fish_hp, "max_tension_reached": max_tension_reached}
-
             if is_space_down:
                 if effective_fish_pulling:
                     tension_increase += (26.0 + max_tension * 0.055) * dt
@@ -275,7 +259,6 @@ class CombatSimulator:
                 if "xuc_tu" in skills:
                     tension_dec *= 0.7
                 current_tension = max(0.0, current_tension - tension_dec) + tension_increase
-
             max_tension_reached = max(max_tension_reached, current_tension)
 
             # Check line break with candle safety net
@@ -285,12 +268,10 @@ class CombatSimulator:
                     current_tension = max_tension * 0.50
                 else:
                     return {"success": False, "duration": time, "reason": "ĐỨT DÂY CÂU!", "final_hp": fish_hp, "max_tension_reached": max_tension_reached}
-
         if fish_hp <= 0:
             return {"success": True, "duration": time, "reason": "THÀNH CÔNG!", "final_hp": 0.0, "max_tension_reached": max_tension_reached}
         else:
             return {"success": False, "duration": time, "reason": "HẾT GIỜ (CÁ THOÁT)!", "final_hp": fish_hp, "max_tension_reached": max_tension_reached}
-
     @staticmethod
     def simulate_matchup(fish_name, set_name="Tập Sự", rarity="COMMON", iterations=500, strategy="optimal"):
         """
@@ -300,14 +281,11 @@ class CombatSimulator:
         fish = next((f for f in fishes if f["name"].lower() == fish_name.lower()), None)
         if not fish:
             raise ValueError(f"Fish '{fish_name}' not found.")
-
         eq_stats = calculate_equipment_stats(set_name, rarity)
-
         durations = []
         successes = 0
         snaps = 0
         stamina_outs = 0
-
         for _ in range(iterations):
             res = CombatSimulator.simulate_single_encounter(fish, eq_stats, player_strategy=strategy)
             durations.append(res["duration"])
@@ -317,10 +295,8 @@ class CombatSimulator:
                 snaps += 1
             elif "THỂ LỰC" in res["reason"]:
                 stamina_outs += 1
-
         durations = np.array(durations)
         succ_durations = durations[:successes] if successes > 0 else durations
-
         return {
             "fish_name": fish["name"],
             "fish_rarity": fish["rarity"],

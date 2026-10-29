@@ -11,7 +11,6 @@ import java.util.List;
  * Manages equip/unequip, set bonuses, and substat aggregation.
  */
 public class PlayerEquipment {
-
     private final List<Equipment> inventory = new ArrayList<>();
     private Equipment equippedRod  = null;
     private Equipment equippedLine = null;
@@ -105,7 +104,7 @@ public class PlayerEquipment {
     /** Line mainStat1: Max Tension bonus */
     public float getLineTensionBonus()  { return equippedLine != null ? equippedLine.mainStat1 : 0f; }
     /** Line mainStat2: Line break resistance */
-    public float getLineBreakResist()   { 
+    public float getLineBreakResist()   {
         float resist = equippedLine != null ? equippedLine.mainStat2 : 0f;
         if (isSetBonusActive() && "Vệ Quốc Vang Danh".equals(getActiveSetName())) resist += 10f;
         return resist;

@@ -22,28 +22,23 @@ import com.fishingrpg.game.data.SaveManager;
 import com.fishingrpg.game.entities.Player;
 import com.fishingrpg.game.systems.AudioManager;
 import com.fishingrpg.game.systems.KeybindManager;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class SettingsDialog {
-
     public interface SettingsListener {
         void onDataReloaded();
     }
     private SettingsListener listener;
     public void setListener(SettingsListener listener) { this.listener = listener; }
-
     private final FishingRPG game;
     private boolean visible = false;
     private int currentTab = 0; // 0: Audio, 1: Display, 2: Controls, 3: Data
-
     private static final float W = 880f;
     private static final float H = 540f;
     private final float dlgX = (1280f - W) / 2f; // 200f
     private final float dlgY = (720f - H) / 2f;  // 90f
-
     private final GlyphLayout layout = new GlyphLayout();
 
     // Hover states for tabs
@@ -218,18 +213,15 @@ public class SettingsDialog {
             float modalH = 340f;
             float modalX = (1280f - modalW) / 2f;
             float modalY = (720f - modalH) / 2f;
-
             float btnModalW = 220f;
             float btnModalH = 46f;
             float btnModalY = modalY + 24f;
             float btnCancelX = modalX + 45f;
             float btnConfirmX = modalX + modalW - 45f - btnModalW;
-
             boolean hoverCancel = mouse.x >= btnCancelX && mouse.x <= btnCancelX + btnModalW &&
                                   mouse.y >= btnModalY && mouse.y <= btnModalY + btnModalH;
             boolean hoverConfirm = mouse.x >= btnConfirmX && mouse.x <= btnConfirmX + btnModalW &&
                                    mouse.y >= btnModalY && mouse.y <= btnModalY + btnModalH;
-
             modalHoveredButton = hoverCancel ? 0 : (hoverConfirm && resetCountdown <= 0f ? 1 : -1);
 
             if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
@@ -287,7 +279,6 @@ public class SettingsDialog {
         float t1X = t0X + tabW;
         float t2X = t1X + tabW;
         float t3X = t2X + tabW;
-
         hoverTab0 = (mouse.x >= t0X && mouse.x <= t0X + tabW && mouse.y >= tabY && mouse.y <= tabY + tabH);
         hoverTab1 = (mouse.x >= t1X && mouse.x <= t1X + tabW && mouse.y >= tabY && mouse.y <= tabY + tabH);
         hoverTab2 = (mouse.x >= t2X && mouse.x <= t2X + tabW && mouse.y >= tabY && mouse.y <= tabY + tabH);
@@ -321,7 +312,6 @@ public class SettingsDialog {
             float barH = 18f;
             float bgmBarY = card1Y + 31f;
             float sfxBarY = card2Y + 31f;
-
             boolean inBgmBar = (mouse.x >= barX - 10f && mouse.x <= barX + barW + 10f && mouse.y >= bgmBarY - 8f && mouse.y <= bgmBarY + barH + 8f);
             boolean inSfxBar = (mouse.x >= barX - 10f && mouse.x <= barX + barW + 10f && mouse.y >= sfxBarY - 8f && mouse.y <= sfxBarY + barH + 8f);
 
@@ -357,13 +347,11 @@ public class SettingsDialog {
             float cardY = contY + contH - 220f;
             float btnFullX = contX + 35f;
             float btnWinX = contX + 435f;
-
             hoverFullscreen = (mouse.x >= btnFullX && mouse.x <= btnFullX + cardW && mouse.y >= cardY && mouse.y <= cardY + cardH);
             hoverWindowed   = (mouse.x >= btnWinX && mouse.x <= btnWinX + cardW && mouse.y >= cardY && mouse.y <= cardY + cardH);
         } else if (currentTab == 2) {
             // Controls Tab Interactions (Single Column Scrollable List)
             hoverKeyAction = -1;
-
             float listX = contX + 20f;
             float listY = contY + 48f;
             float listW = contW - 40f;
@@ -405,7 +393,6 @@ public class SettingsDialog {
                 float btnKeyW = 145f;
                 float btnKeyH = 32f;
                 float btnKeyX = rowX + rowW - btnKeyW - 12f;
-
                 float curY = listY + listH - 36f + scrollY;
 
                 // 1. Group Header 1: Fishing & Skills (height: 32f)
@@ -454,7 +441,6 @@ public class SettingsDialog {
             float bExportY = contY + contH - 95f;
             float bImportY = contY + contH - 175f;
             float bResetY  = contY + contH - 255f;
-
             hoverExport = (mouse.x >= btnDataX && mouse.x <= btnDataX + btnDataW && mouse.y >= bExportY && mouse.y <= bExportY + btnDataH);
             hoverImport = (mouse.x >= btnDataX && mouse.x <= btnDataX + btnDataW && mouse.y >= bImportY && mouse.y <= bImportY + btnDataH);
             hoverReset  = (mouse.x >= btnDataX && mouse.x <= btnDataX + btnDataW && mouse.y >= bResetY && mouse.y <= bResetY + btnDataH);
@@ -569,7 +555,6 @@ public class SettingsDialog {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
             String ts = sdf.format(new Date());
             String filename = "angler_save_" + ts + ".sav";
-
             File fileTs = new File(filename);
             SaveManager.exportToFile(fileTs);
 
@@ -607,7 +592,6 @@ public class SettingsDialog {
         Thread importThread = new Thread(() -> {
             String jsonContent = null;
             String sourceName = "";
-
             java.awt.FileDialog fd = null;
             try {
                 fd = new java.awt.FileDialog((java.awt.Frame) null, "Chọn file lưu trữ AnglerRPG (*.sav, *.json, *.bak)", java.awt.FileDialog.LOAD);
@@ -718,7 +702,6 @@ public class SettingsDialog {
             game.player = new Player();
             SaveManager.savePlayer(game.player);
             if (listener != null) listener.onDataReloaded();
-
             statusMessage = "ĐÃ ĐẶT LẠI DỮ LIỆU! Người chơi trở về Cấp 1 (Đã tự động sao lưu mã hóa .sav).";
             statusTimer = 6.0f;
             statusIsSuccess = true;
@@ -738,7 +721,6 @@ public class SettingsDialog {
 
     public void render(ShapeRenderer sr, SpriteBatch batch, BitmapFont font, BitmapFont titleFont, BitmapFont smallFont, float animTimer, Camera camera) {
         if (!visible) return;
-
         Camera cam = camera;
         if (cam == null) {
             if (game.getScreen() instanceof com.fishingrpg.game.PlayScreen) {
@@ -751,7 +733,6 @@ public class SettingsDialog {
         // 1. DIM BACKDROP
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
         sr.begin(ShapeRenderer.ShapeType.Filled);
         sr.setColor(0.01f, 0.02f, 0.05f, 0.88f);
         sr.rect(0, 0, 1280f, 720f);
@@ -817,7 +798,6 @@ public class SettingsDialog {
         float contY = dlgY + 75f;
         float contW = W - 50f;
         float contH = H - 190f;
-
         sr.setColor(0.03f, 0.05f, 0.10f, 0.95f);
         sr.rect(contX, contY, contW, contH);
         sr.setColor(0.18f, 0.28f, 0.42f, 0.8f);
@@ -839,7 +819,6 @@ public class SettingsDialog {
         float closeBtnH = 42f;
         float closeBtnX = dlgX + (W - closeBtnW) / 2f;
         float closeBtnY = dlgY + 20f;
-
         sr.setColor(hoverClose ? new Color(0.18f, 0.58f, 0.35f, 1f) : new Color(0.10f, 0.38f, 0.22f, 0.95f));
         sr.rect(closeBtnX, closeBtnY, closeBtnW, closeBtnH);
         // Top highlight
@@ -955,7 +934,6 @@ public class SettingsDialog {
         sr.setColor(hoverBgmDown ? new Color(0.25f, 0.48f, 0.75f, 1f) : new Color(0.12f, 0.22f, 0.38f, 0.95f));
         sr.rect(cx + 465f, card1Y + 22f, 40f, 36f);
         drawBoxBorder(sr, cx + 465f, card1Y + 22f, 40f, 36f, 1.2f);
-
         sr.setColor(hoverBgmUp ? new Color(0.25f, 0.48f, 0.75f, 1f) : new Color(0.12f, 0.22f, 0.38f, 0.95f));
         sr.rect(cx + 685f, card1Y + 22f, 40f, 36f);
         drawBoxBorder(sr, cx + 685f, card1Y + 22f, 40f, 36f, 1.2f);
@@ -965,7 +943,6 @@ public class SettingsDialog {
         float barW = 160f;
         float barH = 18f;
         float barY = card1Y + 31f;
-
         sr.setColor(0.04f, 0.07f, 0.12f, 1f);
         sr.rect(barX, barY, barW, barH);
         // Notches at 25%, 50%, 75%
@@ -973,7 +950,6 @@ public class SettingsDialog {
         sr.rect(barX + barW * 0.25f, barY, 1f, barH);
         sr.rect(barX + barW * 0.50f, barY, 1f, barH);
         sr.rect(barX + barW * 0.75f, barY, 1f, barH);
-
         float fillW = barW * (am.isBgmMuted() ? 0f : am.getBgmVolume());
         sr.setColor(0.25f, 0.85f, 0.55f, 1f);
         sr.rect(barX, barY, fillW, barH);
@@ -1005,7 +981,6 @@ public class SettingsDialog {
         sr.setColor(hoverSfxDown ? new Color(0.25f, 0.48f, 0.75f, 1f) : new Color(0.12f, 0.22f, 0.38f, 0.95f));
         sr.rect(cx + 465f, card2Y + 22f, 40f, 36f);
         drawBoxBorder(sr, cx + 465f, card2Y + 22f, 40f, 36f, 1.2f);
-
         sr.setColor(hoverSfxUp ? new Color(0.25f, 0.48f, 0.75f, 1f) : new Color(0.12f, 0.22f, 0.38f, 0.95f));
         sr.rect(cx + 685f, card2Y + 22f, 40f, 36f);
         drawBoxBorder(sr, cx + 685f, card2Y + 22f, 40f, 36f, 1.2f);
@@ -1018,7 +993,6 @@ public class SettingsDialog {
         sr.rect(barX + barW * 0.25f, sbarY, 1f, barH);
         sr.rect(barX + barW * 0.50f, sbarY, 1f, barH);
         sr.rect(barX + barW * 0.75f, sbarY, 1f, barH);
-
         float sfillW = barW * (am.isSfxMuted() ? 0f : am.getSfxVolume());
         sr.setColor(0.30f, 0.85f, 1f, 1f);
         sr.rect(barX, sbarY, sfillW, barH);
@@ -1129,7 +1103,6 @@ public class SettingsDialog {
         float cardY = cy + ch - 220f;
         float btnFullX = cx + 35f;
         float btnWinX = cx + 435f;
-
         font.getData().setScale(0.95f);
         font.setColor(1f, 0.90f, 0.45f, 1f);
         layout.setText(font, "✦ CHỌN CHẾ ĐỘ HIỂN THỊ MÀN HÌNH ✦");
@@ -1195,7 +1168,6 @@ public class SettingsDialog {
         float btnDefH = 34f;
         float btnDefX = cx + 25f;
         float btnDefY = cy + 8f;
-
         sr.setColor(hoverResetKeys ? new Color(0.35f, 0.25f, 0.15f, 1f) : new Color(0.18f, 0.14f, 0.08f, 0.95f));
         sr.rect(btnDefX, btnDefY, btnDefW, btnDefH);
         sr.setColor(hoverResetKeys ? new Color(1f, 0.9f, 0.45f, 1f) : new Color(0.75f, 0.65f, 0.30f, 0.8f));
@@ -1213,7 +1185,6 @@ public class SettingsDialog {
 
         // Scissor clipping for the scrollable list
         sr.flush(); // FLUSH all prior shapes (chassis, tabs, container, recessed box) before enabling scissors!
-
         Viewport vp = null;
         if (game.getScreen() instanceof com.fishingrpg.game.PlayScreen) {
             vp = ((com.fishingrpg.game.PlayScreen) game.getScreen()).getViewport();
@@ -1242,10 +1213,8 @@ public class SettingsDialog {
         float btnKeyW = 145f;
         float btnKeyH = 32f;
         float btnKeyX = rowX + rowW - btnKeyW - 12f;
-
         float boxTop = listY + listH;
         float boxBottom = listY;
-
         float curY = listY + listH - 36f + scrollY;
 
         // Group 1 Header banner background
@@ -1399,7 +1368,6 @@ public class SettingsDialog {
 
     private void drawControlsTabTexts(SpriteBatch batch, BitmapFont font, BitmapFont smallFont, float cx, float cy, float cw, float ch, Camera cam) {
         KeybindManager km = KeybindManager.getInstance();
-
         float listX = cx + 20f;
         float listY = cy + 48f;
         float listW = cw - 40f;
@@ -1409,7 +1377,6 @@ public class SettingsDialog {
         float btnDefW = 190f;
         float btnDefX = cx + 25f;
         float btnDefY = cy + 8f;
-
         font.getData().setScale(0.78f);
         font.setColor(hoverResetKeys ? Color.WHITE : new Color(1f, 0.92f, 0.6f, 1f));
         layout.setText(font, "ĐẶT LẠI MẶC ĐỊNH");
@@ -1425,7 +1392,6 @@ public class SettingsDialog {
 
         // Flush batch before enabling scissor
         batch.flush();
-
         Viewport vp = null;
         if (game.getScreen() instanceof com.fishingrpg.game.PlayScreen) {
             vp = ((com.fishingrpg.game.PlayScreen) game.getScreen()).getViewport();
@@ -1453,10 +1419,8 @@ public class SettingsDialog {
         float rowX = listX + 8f;
         float btnKeyW = 145f;
         float btnKeyX = rowX + rowW - btnKeyW - 12f;
-
         float boxTop = listY + listH;
         float boxBottom = listY;
-
         float curY = listY + listH - 36f + scrollY;
 
         // 1. Group Header 1
@@ -1608,7 +1572,6 @@ public class SettingsDialog {
         font.setColor(0.40f, 0.85f, 1f, 1f);
         layout.setText(font, "XUẤT");
         font.draw(batch, layout, btnDataX + 16f + (76f - layout.width) / 2f, bExportY + 38f);
-
         font.getData().setScale(0.88f);
         font.setColor(hoverExport ? Color.WHITE : new Color(0.90f, 0.96f, 1f, 1f));
         font.draw(batch, "XUẤT DỮ LIỆU TIẾN TRÌNH (TẠO FILE .JSON)", btnDataX + 110f, bExportY + 46f);
@@ -1621,7 +1584,6 @@ public class SettingsDialog {
         font.setColor(1f, 0.85f, 0.35f, 1f);
         layout.setText(font, "NẠP");
         font.draw(batch, layout, btnDataX + 16f + (76f - layout.width) / 2f, bImportY + 38f);
-
         font.getData().setScale(0.88f);
         font.setColor(hoverImport ? Color.WHITE : new Color(1f, 0.96f, 0.85f, 1f));
         font.draw(batch, "NẠP DỮ LIỆU TIẾN TRÌNH (CHỌN FILE LƯU TRỮ)", btnDataX + 110f, bImportY + 46f);
@@ -1634,7 +1596,6 @@ public class SettingsDialog {
         font.setColor(1f, 0.40f, 0.40f, 1f);
         layout.setText(font, "XÓA");
         font.draw(batch, layout, btnDataX + 16f + (76f - layout.width) / 2f, bResetY + 38f);
-
         font.getData().setScale(0.88f);
         font.setColor(hoverReset ? Color.WHITE : new Color(1f, 0.85f, 0.85f, 1f));
         font.draw(batch, "ĐẶT LẠI DỮ LIỆU TRÒ CHƠI (RESET GAME)", btnDataX + 110f, bResetY + 46f);
@@ -1668,7 +1629,6 @@ public class SettingsDialog {
         // Modal border
         sr.setColor(0.95f, 0.25f, 0.25f, 1f);
         drawBoxBorder(sr, modalX, modalY, modalW, modalH, 2.5f);
-
         float btnModalW = 220f;
         float btnModalH = 46f;
         float btnModalY = modalY + 24f;
@@ -1698,12 +1658,10 @@ public class SettingsDialog {
         float modalH = 340f;
         float modalX = (1280f - modalW) / 2f;
         float modalY = (720f - modalH) / 2f;
-
         titleFont.getData().setScale(0.75f);
         titleFont.setColor(1f, 0.3f, 0.3f, 1f);
         layout.setText(titleFont, "CẢNH BÁO: XÓA DỮ LIỆU!");
         titleFont.draw(batch, layout, modalX + (modalW - layout.width) / 2f, modalY + modalH - 25f);
-
         font.getData().setScale(0.82f);
         font.setColor(1f, 0.9f, 0.9f, 0.95f);
         font.draw(batch, "Hành động này sẽ xóa toàn bộ cấp độ, vàng, trang bị, cần câu\nvà kỷ lục cá của bạn. Game sẽ tự động sao lưu mã hóa (.sav) trước khi xóa.", modalX + 45f, modalY + modalH - 75f);
@@ -1722,7 +1680,6 @@ public class SettingsDialog {
         float btnModalY = modalY + 24f;
         float btnCancelX = modalX + 45f;
         float btnConfirmX = modalX + modalW - 45f - btnModalW;
-
         font.setColor(Color.WHITE);
         layout.setText(font, "HỦY BỎ (ESC)");
         font.draw(batch, layout, btnCancelX + (btnModalW - layout.width) / 2f, btnModalY + 30f);
