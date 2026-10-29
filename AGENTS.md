@@ -165,3 +165,14 @@ Every code change (bug fixes, balance, UI, features) **MUST** update all 3 locat
 3. In-game Patch Notes (`com.fishingrpg.game.ui.PatchNotesDialog.java`): Add user-facing notes under the new version header.
 See [.agents/rules/documentation_workflow.md](file:///c:/Users/Quan/IdeaProjects/AnglerRPG/.agents/rules/documentation_workflow.md) for full details.
 
+## 5. Game-Patch Style Git Commit Messages
+Sau mỗi lần cập nhật/commit, commit message phải được tự động soạn theo định dạng **Thông Báo Bản Cập Nhật Game** (Game Patch Notes format), rõ ràng, thân thiện với người chơi và phân loại theo hạng mục:
+- **Dòng tiêu đề:** `Phiên bản vX.X.X.X: [Tóm tắt thay đổi chính ngắn gọn]`
+- **Phần thân:** Phân nhóm theo các mục cập nhật (bằng tiếng Việt):
+  - `[Sửa Lỗi / Bug Fixes]`: Liệt kê lỗi được khắc phục và ảnh hưởng (nguyên nhân ngắn gọn).
+  - `[Cân Bằng / Balance]`: Thay đổi chỉ số, phẩm cấp trang bị, tỉ lệ drop/gacha.
+  - `[Tính Năng & Gameplay / Features]`: Kỹ năng mới, cơ chế chơi, set bonus mới.
+  - `[Tối Ưu & Giao Diện / Polish & UI]`: Tối ưu code, giãn cách, trải nghiệm người dùng.
+- Tránh commit message cụt ngủn hoặc chung chung; luôn để người đọc hiểu ngay bản cập nhật mang lại gì giống như một thông báo bảo trì/cập nhật game thực thụ.
+
+

@@ -35,3 +35,26 @@
   );
   ```
 - Đảm bảo người chơi khi khởi động game và mở Bảng Cài đặt / Bản Tin sẽ nắm bắt được ngay các thay đổi mới nhất mà không cần đọc mã nguồn.
+
+---
+
+## 4. Quy Chuẩn Commit Message (Game-Patch Style)
+Sau mỗi lần cập nhật, Git commit message **BẮT BUỘC** phải được tạo tự động dưới dạng **Thông Báo Cập Nhật Game**:
+- **Format:**
+  ```text
+  Phiên bản vX.X.X.X: [Tiêu đề cập nhật chính ngắn gọn]
+
+  [Sửa Lỗi / Bug Fixes]
+  - Khắc phục lỗi...
+  
+  [Cân Bằng / Balance]
+  - Điều chỉnh...
+
+  [Tính Năng & Cơ Chế / Features]
+  - Cập nhật...
+
+  [Tối Ưu & Giao Diện / Polish & UX]
+  - Cải thiện...
+  ```
+- Không dùng commit message sơ sài (`update code`, `fix bug`), luôn thể hiện đầy đủ nội dung bản vá để theo dõi tiến độ như lịch sử phát hành game.
+
