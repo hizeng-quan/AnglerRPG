@@ -205,52 +205,55 @@ public class EventManager {
 
     }
 
+    private boolean isTransitioning = false;
+
     public void checkEventTransition() {
-        EventPhase phase = getCurrentPhase();
+        if (isTransitioning) return;
+        isTransitioning = true;
+        try {
+            EventPhase phase = getCurrentPhase();
 
-        // 1. Khi Lạc Hồng kết thúc bước vào Intermission: quy đổi điểm dư
-
-        if (phase == EventPhase.PRE_HALLOWEEN_INTERMISSION) {
-            if (player.getEventPoints() > 0) {
-                int leftover = player.getEventPoints();
-                int compensation = leftover * 1000;
-                player.setEventPoints(0);
-                player.gainGold(compensation);
-                com.badlogic.gdx.Gdx.app.log("EventManager", "Sự kiện Lạc Hồng kết thúc: Đã quy đổi " + leftover + " Điểm SK thành " + compensation + " Vàng!");
-            }
-        }
-
-        // 2. Khi bước sang mùa Halloween: tự động reset điểm danh & điểm SK cho mùa mới 1 lần duy nhất
-
-        if (phase == EventPhase.HALLOWEEN_ACTIVE) {
-            if (!player.isHalloweenResetDone()) {
+            // 1. Khi Lạc Hồng kết thúc bước vào Intermission: quy đổi điểm dư
+            if (phase == EventPhase.PRE_HALLOWEEN_INTERMISSION) {
                 if (player.getEventPoints() > 0) {
                     int leftover = player.getEventPoints();
                     int compensation = leftover * 1000;
+                    player.setEventPoints(0);
                     player.gainGold(compensation);
-                    com.badlogic.gdx.Gdx.app.log("EventManager", "Tự động quy đổi " + leftover + " Điểm SK tồn đọng thành " + compensation + " Vàng!");
+                    com.badlogic.gdx.Gdx.app.log("EventManager", "Sự kiện Lạc Hồng kết thúc: Đã quy đổi " + leftover + " Điểm SK thành " + compensation + " Vàng!");
                 }
-
-                player.setEventPoints(0);
-                player.setTotalLoginDaysThisMonth(0);
-                player.setHalloweenResetDone(true);
-                resetEventQuests();
-                com.badlogic.gdx.Gdx.app.log("EventManager", "Khởi động Sự Kiện Halloween 2026: Đã kích hoạt mùa mới!");
             }
-        }
 
-        // 3. Khi bế mạc sau Halloween:
-
-        if (phase == EventPhase.POST_EVENT_GRACE) {
-            if (player.getEventPoints() > 0) {
-                int leftover = player.getEventPoints();
-                int compensation = leftover * 1000;
-                player.setEventPoints(0);
-                player.gainGold(compensation);
-                com.badlogic.gdx.Gdx.app.log("EventManager", "Sự kiện Halloween kết thúc: Đã quy đổi " + leftover + " Điểm SK thành " + compensation + " Vàng!");
+            // 2. Khi bước sang mùa Halloween: tự động reset điểm danh & điểm SK cho mùa mới 1 lần duy nhất
+            if (phase == EventPhase.HALLOWEEN_ACTIVE) {
+                if (!player.isHalloweenResetDone()) {
+                    int leftover = player.getEventPoints();
+                    player.setEventPoints(0);
+                    player.setTotalLoginDaysThisMonth(0);
+                    player.setHalloweenResetDone(true);
+                    resetEventQuests();
+                    if (leftover > 0) {
+                        int compensation = leftover * 1000;
+                        player.gainGold(compensation);
+                        com.badlogic.gdx.Gdx.app.log("EventManager", "Tự động quy đổi " + leftover + " Điểm SK tồn đọng thành " + compensation + " Vàng!");
+                    }
+                    com.badlogic.gdx.Gdx.app.log("EventManager", "Khởi động Sự Kiện Halloween 2026: Đã kích hoạt mùa mới!");
+                }
             }
-        }
 
+            // 3. Khi bế mạc sau Halloween:
+            if (phase == EventPhase.POST_EVENT_GRACE) {
+                if (player.getEventPoints() > 0) {
+                    int leftover = player.getEventPoints();
+                    int compensation = leftover * 1000;
+                    player.setEventPoints(0);
+                    player.gainGold(compensation);
+                    com.badlogic.gdx.Gdx.app.log("EventManager", "Sự kiện Halloween kết thúc: Đã quy đổi " + leftover + " Điểm SK thành " + compensation + " Vàng!");
+                }
+            }
+        } finally {
+            isTransitioning = false;
+        }
     }
 
     public void resetEventQuests() {
