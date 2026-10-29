@@ -18,12 +18,12 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class SaveManager {
-    private static final String PREF_NAME    = "AnglerRPG_Save";
-    private static final String TAG          = "SaveManager";
+    private static final String PREF_NAME = "AnglerRPG_Save";
+    private static final String TAG = "SaveManager";
 
     /** Increment when adding new fields that are backwards incompatible. */
 
-    private static final int    SAVE_VERSION = 7;
+    private static final int SAVE_VERSION = 7;
 
     // =========================================================================
 
@@ -33,20 +33,20 @@ public class SaveManager {
 
     public static void savePlayer(Player player) {
         Preferences prefs = Gdx.app.getPreferences(PREF_NAME);
-        prefs.putInteger("saveVersion",  SAVE_VERSION);
-        prefs.putInteger("level",        player.getLevel());
-        prefs.putInteger("currentXp",    player.getCurrentXp());
-        prefs.putInteger("gold",         player.getGold());
-        prefs.putInteger("diamonds",     player.getDiamonds());
+        prefs.putInteger("saveVersion", SAVE_VERSION);
+        prefs.putInteger("level", player.getLevel());
+        prefs.putInteger("currentXp", player.getCurrentXp());
+        prefs.putInteger("gold", player.getGold());
+        prefs.putInteger("diamonds", player.getDiamonds());
         prefs.putInteger("gachaTickets", player.getGachaTickets());
         prefs.putInteger("premiumTickets", player.getPremiumTickets());
-        prefs.putInteger("eventPoints",  player.getEventPoints());
+        prefs.putInteger("eventPoints", player.getEventPoints());
         prefs.putInteger("totalLoginDaysThisMonth", player.getTotalLoginDaysThisMonth());
         prefs.putBoolean("halloweenResetDone", player.isHalloweenResetDone());
         prefs.putLong("lastLoginTimestamp", player.getLastLoginTimestamp());
         prefs.putLong("lastEventMissionResetTimestamp", player.getLastEventMissionResetTimestamp());
-        prefs.putInteger("fishCaught",   player.getFishCaught());
-        prefs.putInteger("skillPoints",  player.getSkillPoints());
+        prefs.putInteger("fishCaught", player.getFishCaught());
+        prefs.putInteger("skillPoints", player.getSkillPoints());
         Json json = new Json();
         json.setOutputType(JsonWriter.OutputType.json);
 
@@ -55,12 +55,12 @@ public class SaveManager {
             prefs.putBoolean("eventMilestoneClaimed", player.getEventManager().milestoneClaimedToday);
         }
 
-        prefs.putString("inventory",         json.toJson(player.getInventory()));
-        prefs.putString("claimedCollections",json.toJson(player.getClaimedCollections()));
-        prefs.putString("claimedFishCatalog",json.toJson(player.getClaimedFishCatalog()));
-        prefs.putString("equippedActives",   json.toJson(player.getEquippedActives()));
-        prefs.putString("equippedPassives",  json.toJson(player.getEquippedPassives()));
-        prefs.putString("currentMap",        player.getCurrentMap());
+        prefs.putString("inventory", json.toJson(player.getInventory()));
+        prefs.putString("claimedCollections", json.toJson(player.getClaimedCollections()));
+        prefs.putString("claimedFishCatalog", json.toJson(player.getClaimedFishCatalog()));
+        prefs.putString("equippedActives", json.toJson(player.getEquippedActives()));
+        prefs.putString("equippedPassives", json.toJson(player.getEquippedPassives()));
+        prefs.putString("currentMap", player.getCurrentMap());
 
         // Skills
 
@@ -81,13 +81,13 @@ public class SaveManager {
         // Equipment
 
         prefs.putString("equipmentInventory", json.toJson(player.getEquipmentInventory()));
-        prefs.putString("equippedRod",  json.toJson(player.getEquippedRod(),  Equipment.class));
+        prefs.putString("equippedRod", json.toJson(player.getEquippedRod(), Equipment.class));
         prefs.putString("equippedLine", json.toJson(player.getEquippedLine(), Equipment.class));
         prefs.putString("equippedHook", json.toJson(player.getEquippedHook(), Equipment.class));
-        prefs.putInteger("pityRare",      player.pityRare);
-        prefs.putInteger("pityEpic",      player.pityEpic);
+        prefs.putInteger("pityRare", player.pityRare);
+        prefs.putInteger("pityEpic", player.pityEpic);
         prefs.putInteger("pityLegendary", player.pityLegendary);
-        prefs.putInteger("pityLimited",   player.pityLimited);
+        prefs.putInteger("pityLimited", player.pityLimited);
 
         // Buffs
 
@@ -130,15 +130,18 @@ public class SaveManager {
     private static final String SECRET_SALT = "AnglerRPG_MasterSecretKey_2026#TamperProof!@X9";
 
     /**
-
-     * Mã hóa chuỗi JSON dữ liệu bằng AES/CBC/PKCS5Padding kết hợp mã kiểm tra băm SHA-256
-
-     * để chống gian lận và ngăn chặn người chơi can thiệp chỉnh sửa file save thủ công.
-
+     * 
+     * Mã hóa chuỗi JSON dữ liệu bằng AES/CBC/PKCS5Padding kết hợp mã kiểm tra băm
+     * SHA-256
+     * 
+     * để chống gian lận và ngăn chặn người chơi can thiệp chỉnh sửa file save thủ
+     * công.
+     * 
      */
 
     public static String encryptData(String plainText) {
-        if (plainText == null || plainText.isEmpty()) return plainText;
+        if (plainText == null || plainText.isEmpty())
+            return plainText;
 
         try {
             byte[] plainBytes = plainText.getBytes(java.nio.charset.StandardCharsets.UTF_8);
@@ -186,27 +189,34 @@ public class SaveManager {
     private static void logError(String msg, Throwable t) {
         try {
             if (Gdx.app != null) {
-                if (t != null) Gdx.app.error(TAG, msg, t);
-                else Gdx.app.error(TAG, msg);
+                if (t != null)
+                    Gdx.app.error(TAG, msg, t);
+                else
+                    Gdx.app.error(TAG, msg);
                 return;
             }
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
 
         System.err.println("[" + TAG + "] " + msg);
-        if (t != null) t.printStackTrace();
+        if (t != null)
+            t.printStackTrace();
 
     }
 
     /**
-
-     * Giải mã dữ liệu save đã được mã hóa. Nếu dữ liệu bị chỉnh sửa (sai checksum hoặc lỗi giải mã),
-
-     * phương thức sẽ trả về null và ghi cảnh báo phát hiện can thiệp (Tamper Detection).
-
+     * 
+     * Giải mã dữ liệu save đã được mã hóa. Nếu dữ liệu bị chỉnh sửa (sai checksum
+     * hoặc lỗi giải mã),
+     * 
+     * phương thức sẽ trả về null và ghi cảnh báo phát hiện can thiệp (Tamper
+     * Detection).
+     * 
      */
 
     public static String decryptData(String input) {
-        if (input == null) return null;
+        if (input == null)
+            return null;
         String trimmed = input.trim();
 
         if (!trimmed.startsWith(ENCRYPTION_HEADER)) {
@@ -315,7 +325,8 @@ public class SaveManager {
         String encryptedData = exportDataToString();
 
         if (encryptedData == null || !encryptedData.startsWith(ENCRYPTION_HEADER)) {
-            throw new java.io.IOException("Mã hóa dữ liệu lưu trữ thất bại! Không cho phép xuất file chưa được mã hóa.");
+            throw new java.io.IOException(
+                    "Mã hóa dữ liệu lưu trữ thất bại! Không cho phép xuất file chưa được mã hóa.");
         }
 
         java.nio.file.Files.writeString(targetFile.toPath(), encryptedData, java.nio.charset.StandardCharsets.UTF_8);
@@ -324,7 +335,8 @@ public class SaveManager {
     }
 
     public static boolean importDataFromString(String inputStr, Player player) {
-        if (inputStr == null || inputStr.trim().isEmpty()) return false;
+        if (inputStr == null || inputStr.trim().isEmpty())
+            return false;
         String jsonStr = decryptData(inputStr);
 
         if (jsonStr == null) {
@@ -358,7 +370,8 @@ public class SaveManager {
                 recPrefs.clear();
 
                 for (com.badlogic.gdx.utils.JsonValue entry = recordData.child; entry != null; entry = entry.next) {
-                    String valStr = (entry.isObject() && entry.has("value")) ? entry.getString("value") : entry.asString();
+                    String valStr = (entry.isObject() && entry.has("value")) ? entry.getString("value")
+                            : entry.asString();
                     recPrefs.putString(entry.name, valStr);
                 }
 
@@ -381,7 +394,8 @@ public class SaveManager {
     }
 
     public static boolean importFromFile(java.io.File file, Player player) {
-        if (file == null || !file.exists()) return false;
+        if (file == null || !file.exists())
+            return false;
 
         try {
             String content = java.nio.file.Files.readString(file.toPath(), java.nio.charset.StandardCharsets.UTF_8);
@@ -465,7 +479,8 @@ public class SaveManager {
 
     public static void loadPlayer(Player player) {
         Preferences prefs = Gdx.app.getPreferences(PREF_NAME);
-        if (!prefs.contains("level")) return; // No save data
+        if (!prefs.contains("level"))
+            return; // No save data
 
         // Check save version
 
@@ -503,7 +518,8 @@ public class SaveManager {
                 player.getInventory().clear();
 
                 for (Map.Entry<String, Integer> e : inv.entrySet()) {
-                    if (e.getValue() > 0) player.addItem(e.getKey(), e.getValue());
+                    if (e.getValue() > 0)
+                        player.addItem(e.getKey(), e.getValue());
                 }
             }
         } catch (Exception e) {
@@ -518,7 +534,8 @@ public class SaveManager {
             if (skillLevels != null) {
                 for (Map.Entry<String, Integer> e : skillLevels.entrySet()) {
                     Skill s = player.getSkillTree().getSkill(e.getKey());
-                    if (s != null) s.setCurrentLevel(e.getValue());
+                    if (s != null)
+                        s.setCurrentLevel(e.getValue());
                 }
             }
         } catch (Exception e) {
@@ -553,7 +570,8 @@ public class SaveManager {
 
         try {
             HashSet claimed = json.fromJson(HashSet.class, prefs.getString("claimedCollections", "[]"));
-            if (claimed != null) player.setClaimedCollections(claimed);
+            if (claimed != null)
+                player.setClaimedCollections(claimed);
         } catch (Exception e) {
             Gdx.app.error(TAG, "Error parsing claimedCollections.", e);
         }
@@ -562,7 +580,8 @@ public class SaveManager {
 
         try {
             HashSet claimedFish = json.fromJson(HashSet.class, prefs.getString("claimedFishCatalog", "[]"));
-            if (claimedFish != null) player.setClaimedFishCatalog(claimedFish);
+            if (claimedFish != null)
+                player.setClaimedFishCatalog(claimedFish);
         } catch (Exception e) {
             Gdx.app.error(TAG, "Error parsing claimedFishCatalog.", e);
         }
@@ -612,6 +631,10 @@ public class SaveManager {
 
             player.getEventManager().milestoneClaimedToday = prefs.getBoolean("eventMilestoneClaimed", false);
             player.getEventManager().checkAndResetDailyMissions();
+            if (player.getEventManager().isHalloweenActive() && !player.isHalloweenResetDone()) {
+                player.getEventManager().resetEventQuests();
+                player.setHalloweenResetDone(true);
+            }
         }
 
         // --- Equipment ---
@@ -639,12 +662,14 @@ public class SaveManager {
 
             if (savedVersion < 7) {
                 for (Equipment eq : player.getEquipmentInventory()) {
-                    if (eq == null) continue;
+                    if (eq == null)
+                        continue;
 
                     // Fix 1: Standard sets incorrectly tagged as LIMITED_PREMIUM must be LEGENDARY
 
                     if (eq.rarity == com.fishingrpg.game.entities.equipment.Rarity.LIMITED_PREMIUM) {
-                        if ("Quang Minh".equals(eq.setName) || "Thời Không".equals(eq.setName) || "Hoàng Gia".equals(eq.setName)) {
+                        if ("Quang Minh".equals(eq.setName) || "Thời Không".equals(eq.setName)
+                                || "Hoàng Gia".equals(eq.setName)) {
                             eq.rarity = com.fishingrpg.game.entities.equipment.Rarity.LEGENDARY;
                         }
                     }
@@ -692,16 +717,16 @@ public class SaveManager {
                         }
                     } else {
                         int mult = EquipmentGenerator.getSetPoints(eq.setName)
-                                 + EquipmentGenerator.getRarityPoints(eq.rarity);
+                                + EquipmentGenerator.getRarityPoints(eq.rarity);
 
                         if (eq.type == EquipmentType.ROD) {
                             eq.mainStat1 = 10f + mult * 2.0f;
                             eq.mainStat2 = 50f + mult * 15.0f;
                         } else if (eq.type == EquipmentType.LINE) {
                             eq.mainStat1 = 100f + mult * 25.0f;
-                            eq.mainStat2 = 2f  + mult * 0.4f;
+                            eq.mainStat2 = 2f + mult * 0.4f;
                         } else if (eq.type == EquipmentType.HOOK) {
-                            eq.mainStat1 = 5f  + mult * 1.0f;
+                            eq.mainStat1 = 5f + mult * 1.0f;
                             eq.mainStat2 = 10f + mult * 2.0f;
                         }
                     }
@@ -710,23 +735,26 @@ public class SaveManager {
 
             // Re-equip exact instance from inventory
 
-            Equipment rod  = json.fromJson(Equipment.class, prefs.getString("equippedRod",  "null"));
+            Equipment rod = json.fromJson(Equipment.class, prefs.getString("equippedRod", "null"));
             Equipment line = json.fromJson(Equipment.class, prefs.getString("equippedLine", "null"));
             Equipment hook = json.fromJson(Equipment.class, prefs.getString("equippedHook", "null"));
 
             for (Equipment eq : player.getEquipmentInventory()) {
-                if (rod  != null && eq.instanceId.equals(rod.instanceId))  player.equip(eq);
-                if (line != null && eq.instanceId.equals(line.instanceId)) player.equip(eq);
-                if (hook != null && eq.instanceId.equals(hook.instanceId)) player.equip(eq);
+                if (rod != null && eq.instanceId.equals(rod.instanceId))
+                    player.equip(eq);
+                if (line != null && eq.instanceId.equals(line.instanceId))
+                    player.equip(eq);
+                if (hook != null && eq.instanceId.equals(hook.instanceId))
+                    player.equip(eq);
             }
         } catch (Exception e) {
             Gdx.app.error(TAG, "Error parsing equipment — keeping empty.", e);
         }
 
-        player.pityRare      = prefs.getInteger("pityRare", 0);
-        player.pityEpic      = prefs.getInteger("pityEpic", 0);
+        player.pityRare = prefs.getInteger("pityRare", 0);
+        player.pityEpic = prefs.getInteger("pityEpic", 0);
         player.pityLegendary = prefs.getInteger("pityLegendary", 0);
-        player.pityLimited   = prefs.getInteger("pityLimited", 0);
+        player.pityLimited = prefs.getInteger("pityLimited", 0);
 
         // --- Buffs ---
 
@@ -734,7 +762,8 @@ public class SaveManager {
             String buffsJson = prefs.getString("playerBuffs", null);
 
             if (buffsJson != null && !buffsJson.isEmpty()) {
-                com.fishingrpg.game.entities.PlayerBuffs savedBuffs = json.fromJson(com.fishingrpg.game.entities.PlayerBuffs.class, buffsJson);
+                com.fishingrpg.game.entities.PlayerBuffs savedBuffs = json
+                        .fromJson(com.fishingrpg.game.entities.PlayerBuffs.class, buffsJson);
 
                 if (savedBuffs != null) {
                     com.fishingrpg.game.entities.PlayerBuffs buffs = player.getBuffs();

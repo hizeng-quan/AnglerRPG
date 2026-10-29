@@ -4,6 +4,27 @@
 
 ---
 
+## 📅 [2026-10-30] - Phiên bản v0.5.5.9 (Giao Diện Gacha Halloween, Rework Set Bonus & Reset Nhiệm Vụ Sự Kiện)
+
+### 🎃 Cập Nhật Tiêu Đề Đài Gacha Sự Kiện Sang HALLOWEEN (GachaScreen.java)
+- **Tự động thích ứng mùa sự kiện:** Đổi tiêu đề banner chính từ `ĐÀI QUAY SỰ KIỆN: LẠC HỒNG` sang `ĐÀI QUAY SỰ KIỆN: HALLOWEEN` và tab chuyển đổi từ `★ SỰ KIỆN LẠC HỒNG ★` sang `★ SỰ KIỆN HALLOWEEN ★` khi mùa Halloween 2026 kích hoạt.
+- **Đồng bộ Modal Loot Table & Rates:** Cập nhật tiêu đề popup tra cứu xác suất thành `XÁC SUẤT & KHO TRANG BỊ: SỰ KIỆN HALLOWEEN`.
+
+### ⚔️ Sửa Thông Tin Set Bonus Huyết Nguyệt Thần Vương & Chống Tràn Box (GachaScreen.java)
+- **Chuẩn hóa thông tin Set Bonus:** Cập nhật đúng cơ chế thực chiến đã rework của bộ 6★ Limited Premium:
+  - `[Huyết Ma Thôn Phệ]`: Kéo dây hút 3% HP cá (tối đa 12/s) thành Thể Lực.
+  - `[Huyết Nhãn Tinh Chuẩn]`: Nhận buff theo chất lượng quăng cần (5s, CD 10s) — Normal: tăng hồi phục; Good: -30% Thể lực Skill; Perfect: +25% Sát Thương Chuẩn.
+  - Cập nhật đúng điểm phẩm cấp 15 Cấp Điểm (mult = 23).
+- **Tối ưu Typography & Bố cục chống tràn chữ:**
+  - Tinh chỉnh kích cỡ font chữ xuống `0.72f`, hỗ trợ tự động ngắt dòng theo chiều rộng thẻ (`maxPerkW = infoW - 50f`, `Align.left`).
+  - Dịch chuyển nhẹ thanh tiến trình Bảo hiểm Pity (`infoY + 110f`) và các dòng văn bản, ngăn ngừa hoàn toàn tình trạng chữ đè lên thanh tiến trình hoặc tràn ra ngoài khung thẻ.
+
+### 🐛 Sửa Triệt Để Lỗi Không Reset Nhiệm Vụ Sự Kiện (EventManager.java & SaveManager.java)
+- **Nguyên nhân:** Dữ liệu save cũ nạp 6 nhiệm vụ Lạc Hồng trước đó vào `eventQuests` từ file save. Nếu thời điểm lưu trùng ngày với ngày kích hoạt mới, phép kiểm tra `isNewDay` bỏ qua reset khiến người chơi bị giữ nguyên danh sách nhiệm vụ đã hoàn thành từ mùa cũ.
+- **Giải pháp:** Bổ sung cơ chế kiểm tra tính tương thích pool (`wrongPool` check) trong `EventManager.checkAndResetDailyMissions()` và cơ chế tự động chuyển giao trong `SaveManager`. Nếu phát hiện danh sách nhiệm vụ không khớp với mùa sự kiện hiện tại, hệ thống lập tức làm mới sang 6 nhiệm vụ Halloween mới.
+
+---
+
 ## 📅 [2026-10-29] - Phiên bản v0.5.5.8 (Sửa Lỗi IME, Hitbox Cửa Hàng & Dọn Dẹp Code)
 
 ### 🐛 Sửa Lỗi Tự Tắt Game Khi Khởi Động (StackOverflowError trong EventManager)
