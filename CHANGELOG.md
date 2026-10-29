@@ -1,7 +1,23 @@
 # 📜 NHẬT KÝ CẬP NHẬT (CHANGELOG) - ANGLER RPG
 
+> File này được dùng để ghi nhận chi tiết toàn bộ các tính năng, nâng cấp giao diện, sửa lỗi và cân bằng game của **Angler RPG**.
 
+---
 
+## 📅 [2026-10-29] - Phiên bản v0.5.5.8 (Sửa Lỗi IME, Hitbox Cửa Hàng & Dọn Dẹp Code)
+
+### 🐛 Sửa Lỗi Input IME / Non-Latin Keyboard (PlayScreen.java)
+- **Nguyên nhân:** Trên máy tính dùng bộ gõ IME (tiếng Việt, tiếng Nhật, v.v.) hoặc layout bàn phím non-Latin, `Gdx.input.isKeyPressed()` chỉ ghi nhận phím Space nhưng bỏ qua phím chữ/số, khiến phím kỹ năng Q/W/E/R và ô nhanh 1-9 hoàn toàn không phản hồi.
+- **Giải pháp:** Bổ sung `InputAdapter.keyDown()` vào `PlayScreen` — ghi nhận sự kiện phím tại thời điểm bấm (event-driven) vào `justPressedKeys` Set; helper `isJustPressed()` thay thế polling cho skill keys và quickslot keys, hoạt động ổn định trên mọi cấu hình bàn phím.
+
+### 🐛 Sửa Lỗi Hitbox Nút Tab Cửa Hàng (ShopScreen.java)
+- **Nguyên nhân:** Render 5 tab dùng `TAB_W=210f` nhưng click handler dùng công thức 4-tab cũ `tabW=260f`, gây lệch hitbox nghiêm trọng cho các tab Bí Kíp Kỹ Năng, Đạo Cụ Đặc Biệt và Halloween.
+- **Giải pháp:** Định nghĩa `TAB_W=210f`, `TAB_H=36f`, `TAB_GAP=15f` là `static final` constants, áp dụng thống nhất cho render, vẽ text và click handler.
+
+### 🧹 Dọn Dẹp Khoảng Trắng Toàn Bộ Mã Nguồn
+- Loại bỏ dòng trắng thừa (3+ dòng liên tiếp, đầu/cuối block ngắn) trên toàn bộ file Java; mã nguồn gọn gàng, dễ đọc hơn.
+
+---
 
 
 

@@ -25,7 +25,7 @@ import java.util.List;
  */
 
 public class PatchNotesDialog {
-    public static final String CURRENT_VERSION = "v0.5.5.7";
+    public static final String CURRENT_VERSION = "v0.5.5.8";
     private static final String PREF_LAST_SEEN_VERSION = "last_seen_patch_notes_version";
     private final FishingRPG game;
     private final GlyphLayout layout = new GlyphLayout();
@@ -98,8 +98,23 @@ public class PatchNotesDialog {
 
         // =====================================================================
 
-        // ===== PHIÊN BẢN v0.5.5.7 (MỚI NHẤT) =====
-        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.5.7 (MỚI NHẤT - CÂN BẰNG PHẨM CẤP LEGENDARY & LIMITED PREMIUM, ĐỒNG BỘ CHỈ SỐ)"));
+        // ===== PHIÊN BẢN v0.5.5.8 (MỚI NHẤT) =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.5.8 (MỚI NHẤT - SỬA LỖI IME, HITBOX CỬA HÀNG, DỌN DẸP CODE)"));
+        patchNotesItems.add(new UpdateItem("SỬA LỖI INPUT", "Khắc Phục Phím Kỹ Năng & Quick Slot Không Phản Hồi (IME / Non-Latin Keyboard)", new Color(0.25f, 0.85f, 0.50f, 1f))
+                .addPoint("Chẩn Đoán Nguyên Nhân: Khi hệ thống nhập liệu IME (bàn phím tiếng Việt, tiếng Nhật, v.v.) hoặc layout non-Latin can thiệp, Gdx.input.isKeyPressed() ghi nhận phím Space nhưng bỏ qua toàn bộ phím chữ/số, khiến kỹ năng Q/W/E/R và ô nhanh 1-9 không hoạt động.")
+                .addPoint("Giải Pháp keyDown() Hook: Bổ sung InputAdapter.keyDown() vào PlayScreen, ghi nhận mọi lần bấm phím tại thời điểm sự kiện phát sinh (event-driven) thay vì polling liên tục, đảm bảo 100% phím được nhận dù layout bàn phím bất kỳ.")
+                .addPoint("Phạm Vi Sửa: Phím kỹ năng Q (kỹ năng 1), W (kỹ năng 2), E (kỹ năng 3), R (kỹ năng 4) và ô nhanh 1-9 đều hoạt động ổn định trên mọi cấu hình bàn phím.")
+        );
+        patchNotesItems.add(new UpdateItem("SỬA LỖI GIAO DIỆN", "Khắc Phục Lệch Hitbox Nút Bí Kíp Kỹ Năng, Đạo Cụ Đặc Biệt & Halloween", new Color(0.25f, 0.85f, 0.50f, 1f))
+                .addPoint("Đồng Bộ Tọa Độ Hitbox Tab Cửa Hàng: Khắc phục triệt để lỗi lệch hitbox giữa hiển thị (5 tab rộng 210px) và xử lý click (công thức cũ 4 tab rộng 260px).")
+                .addPoint("Chuẩn Hóa Hằng Số: Định nghĩa TAB_W=210f, TAB_H=36f, TAB_GAP=15f thống nhất cho cả render lẫn click handler — các nút Bí Kíp Kỹ Năng, Đạo Cụ Đặc Biệt và Halloween nay nhận click chính xác 100%.")
+        );
+        patchNotesItems.add(new UpdateItem("TỐI ƯU CODE", "Dọn Dẹp Khoảng Trắng Thừa Toàn Bộ Mã Nguồn", new Color(0.35f, 0.80f, 1f, 1f))
+                .addPoint("Chuẩn Hóa Định Dạng: Loại bỏ toàn bộ dòng trắng thừa (3+ dòng liên tiếp, dòng trắng đầu/cuối block ngắn) trên toàn bộ file Java, giúp mã nguồn gọn gàng và dễ đọc hơn.")
+        );
+
+        // ===== PHIÊN BẢN v0.5.5.7 =====
+        patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.5.7 (CÂN BẰNG PHẨM CẤP LEGENDARY & LIMITED PREMIUM, ĐỒNG BỘ CHỈ SỐ)"));
         patchNotesItems.add(new UpdateItem("SÁCH KỸ NĂNG", "Khóa Quy Đổi SP Khi Kỹ Năng Đã Đạt Cấp Tối Đa (MAX)", new Color(0.95f, 0.65f, 0.25f, 1f))
                 .addPoint("Khóa Tính Năng Cộng SP: Sách kỹ năng của các bí kíp đã đạt Cấp Tối Đa không còn có thể sử dụng để quy đổi thành +1 Điểm Kỹ Năng (SP).")
                 .addPoint("Tối Ưu Kinh Tế Cửa Hàng: Các cuốn sách kỹ năng dư thừa câu được nay trở thành nguồn thu nhập Vàng dồi dào (1,000 - 2,500 Vàng) thông qua tính năng Bán Đồ tại Cửa Hàng.")
