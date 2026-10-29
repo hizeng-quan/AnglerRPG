@@ -100,6 +100,15 @@ public class PatchNotesDialog {
 
         // ===== PHIÊN BẢN v0.5.5.7 (MỚI NHẤT) =====
         patchNotesItems.add(UpdateItem.versionHeader("PHIÊN BẢN v0.5.5.7 (MỚI NHẤT - CÂN BẰNG PHẨM CẤP LEGENDARY & LIMITED PREMIUM, ĐỒNG BỘ CHỈ SỐ)"));
+        patchNotesItems.add(new UpdateItem("SÁCH KỸ NĂNG", "Khóa Quy Đổi SP Khi Kỹ Năng Đã Đạt Cấp Tối Đa (MAX)", new Color(0.95f, 0.65f, 0.25f, 1f))
+                .addPoint("Khóa Tính Năng Cộng SP: Sách kỹ năng của các bí kíp đã đạt Cấp Tối Đa không còn có thể sử dụng để quy đổi thành +1 Điểm Kỹ Năng (SP).")
+                .addPoint("Tối Ưu Kinh Tế Cửa Hàng: Các cuốn sách kỹ năng dư thừa câu được nay trở thành nguồn thu nhập Vàng dồi dào (1,000 - 2,500 Vàng) thông qua tính năng Bán Đồ tại Cửa Hàng.")
+                .addPoint("Giao Diện Trực Quan: Cập nhật huy hiệu ô đồ 'MAX' và dòng cảnh báo đỏ trong tooltip vật phẩm nhắc nhở người chơi đem bán tại Cửa Hàng.")
+        );
+        patchNotesItems.add(new UpdateItem("SỬA LỖI GIAO DIỆN", "Khắc Phục Lệch Hitbox Các Tab Phân Loại Trong Cửa Hàng", new Color(0.25f, 0.85f, 0.50f, 1f))
+                .addPoint("Đồng Bộ Tọa Độ Hitbox Tab Cửa Hàng: Khắc phục triệt để lỗi lệch hitbox giữa hiển thị (5 tab rộng 210px) và xử lý click (công thức cũ 4 tab rộng 260px).")
+                .addPoint("Chuẩn Hóa Phản Hồi: Các nút Bí Kíp Kỹ Năng, Đạo Cụ Đặc Biệt và Halloween nay nhận click chuột chính xác 100% tại đúng khung hình chữ nhật hiển thị.")
+        );
         patchNotesItems.add(new UpdateItem("CÂN BẰNG PHẨM CẤP", "Nerf Điểm Phẩm Cấp Legendary (12) & Limited Premium (15)", new Color(1f, 0.85f, 0.25f, 1f))
                 .addPoint("Nerf Điểm Phẩm Cấp: Giảm điểm phẩm cấp của 5★ Legendary từ 15 xuống 12 điểm (-3 điểm), và 6★ Limited Premium từ 18 xuống 15 điểm (-3 điểm) nhằm tái lập độ giằng co chiến đấu chuẩn mực và cân bằng gameplay.")
                 .addPoint("Đồng Bộ Chỉ Số 5★ Legendary: Hệ số nhân phẩm cấp chuẩn mult giảm từ 22 xuống 19 (Quang Minh) và 21 xuống 18 (Thời Không, Hoàng Gia). Cần Quang Minh: 48.0 DMG, 335.0 Thể lực; Dây: 575.0 Sức căng, 9.6 Kháng đứt; Lưỡi: +24.0% Cá hiếm, +48.0% Giữ mồi.")

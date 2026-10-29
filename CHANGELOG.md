@@ -24,6 +24,28 @@
 
 ## 📅 [2026-10-29] - Phiên bản v0.5.5.7 (Cân Bằng Phẩm Cấp Legendary & Limited Premium, Đồng Bộ Chỉ Số Trang Bị)
 
+### 📖 Tinh Chỉnh Sách Kỹ Năng: Khóa Quy Đổi SP Khi Kỹ Năng Đạt Cấp Tối Đa (PlayScreen.java & GameHUD.java)
+- **Cơ chế điều chỉnh:**
+  - Trước đây, khi câu được hoặc sở hữu Sách Kỹ Năng mà kỹ năng tương ứng đã đạt Cấp Tối Đa (MAX), người chơi có thể bấm dùng trực tiếp từ Túi Đồ để quy đổi thành +1 Điểm Kỹ Năng (SP).
+  - Điều này vô tình làm dư thừa điểm SP tự do trong cây kỹ năng và giảm giá trị giao thương của Sách.
+- **Quy tắc mới:**
+  - Nếu kỹ năng tương ứng đã đạt cấp MAX, sách **KHÔNG THỂ** sử dụng để cộng SP nữa.
+  - Khi người chơi cố gắng nhấp hoặc bấm phím tắt dùng sách đã MAX, hệ thống sẽ phát âm thanh cảnh báo `sfx_fail` và hiển thị thông báo: *"Kỹ năng đã đạt Cấp Tối Đa! Hãy bán sách tại Cửa Hàng."*
+  - Sách lúc này chỉ có mục đích sử dụng duy nhất là **đem bán tại Cửa Hàng** để thu về lượng Vàng lớn (từ 1,000 đến 2,500 Vàng tùy loại sách).
+- **Cập nhật Giao diện (GameHUD & ItemDatabase):**
+  - Huy hiệu góc trên sách đã Max chuyển từ `+SP` (xanh dương sáng) sang `MAX` (xám bạc tinh tế, không chớp nháy gây xao nhãng).
+  - Tooltip mô tả hiển thị rõ cảnh báo đỏ: *"• ĐÃ MAX CẤP: Không thể dùng để cộng SP"* và hướng dẫn bán tại Cửa Hàng.
+
+### 🐛 Sửa Lỗi Hitbox Nút Cửa Hàng (ShopScreen.java)
+- **Hiện tượng & Báo cáo:** Người chơi phản ánh khi vào Cửa Hàng, các nút chuyển tab "Bí Kíp Kỹ Năng", "Đạo Cụ Đặc Biệt" và "Halloween" bị lệch hitbox nghiêm trọng; bấm vào một tab này lại nhảy sang tab khác hoặc không nhận click.
+- **Nguyên nhân kỹ thuật (Root Cause):**
+  - Trong `ShopScreen.java`, phần vẽ giao diện (Render) và xử lý hover tính toán tọa độ cho 5 tab với chiều rộng `tabW = 210f`, khoảng cách `15f`, `tabStartX = (1280 - (5*210 + 4*15)) / 2 = 85f`.
+  - Tuy nhiên, phần xử lý click chuột `Gdx.input.isButtonJustPressed` lại bị kẹt công thức cũ thời điểm chỉ có 4 tab: `tabW = 260f`, `tabStartX = (1280 - (4*260 + 3*15)) / 2 = 97.5f`.
+  - Sự sai lệch lớn giữa tọa độ hiển thị và tọa độ bắt click khiến tab 2 ("Bí Kíp Kỹ Năng"), tab 3 ("Đạo Cụ Đặc Biệt") và tab 4 ("Halloween") bị lệch hitbox từ 50px đến hơn 200px.
+- **Giải pháp xử lý:**
+  - Định nghĩa tập hằng số chuẩn hóa toàn cục ở cấp độ class: `TAB_W = 210f`, `TAB_H = 36f`, `TAB_GAP = 15f`, `TAB_START_X`, `TAB_Y`.
+  - Dùng chung toàn bộ hằng số này cho cả 3 pha: Render hình khối, Render chữ và Bắt sự kiện click chuột, đảm bảo hitbox khớp pixel 100% với hiển thị thực tế.
+
 ### ⚖️ Cân Bằng Phẩm Cấp: Nerf Điểm Phẩm Cấp 5★ Legendary & 6★ Limited Premium (EquipmentGenerator.java)
 - **Nguyên nhân điều chỉnh:**
   - Hệ số điểm phẩm cấp cũ của 5★ Legendary (15 điểm) và 6★ Limited Premium (18 điểm) khiến các chỉ số sát thương, thể lực và sức căng dây tăng vọt, gây lạm phát chỉ số và làm giảm sự gay cấn trong các trận đấu câu Boss.

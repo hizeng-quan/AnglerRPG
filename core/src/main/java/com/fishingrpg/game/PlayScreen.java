@@ -537,11 +537,11 @@ public class PlayScreen implements Screen {
             AudioManager.getInstance().playSFX("sfx_success");
             com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerItemUseVFX(itemName, 640f, 360f);
         } else {
-            player.getProgression().setSkillPoints(player.getSkillPoints() + 1);
-            player.consumeItem(itemName);
-            fishingManager.combatMessage = "KỸ NĂNG ĐÃ TỐI ĐA: Quy đổi " + itemName + " thành +1 Điểm Kỹ Năng (SP)!";
-            AudioManager.getInstance().playSFX("sfx_success");
-            com.fishingrpg.game.ui.CombatVFXManager.getInstance().triggerItemUseVFX(itemName, 640f, 360f);
+            // Kỹ năng đã full cấp: Không thể sử dụng để cộng SP, chỉ có thể bán tại Cửa Hàng
+            fishingManager.combatMessage = s.name + " đã đạt Cấp Tối Đa (MAX)! Hãy bán sách tại Cửa Hàng.";
+            message = "Kỹ năng đã đạt Cấp Tối Đa! Hãy bán sách tại Cửa Hàng.";
+            messageTimer = 2.5f;
+            AudioManager.getInstance().playSFX("sfx_fail");
         }
 
     }

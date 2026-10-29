@@ -44,6 +44,12 @@ public class ShopScreen implements Screen {
     private static final float W = 1280f;
     private static final float H = 720f;
 
+    private static final float TAB_W = 210f;
+    private static final float TAB_H = 36f;
+    private static final float TAB_GAP = 15f;
+    private static final float TAB_START_X = (W - (5 * TAB_W + 4 * TAB_GAP)) / 2f;
+    private static final float TAB_Y = H - 122f;
+
     // Filter categories: 0: ALL, 1: BAIT & RESTORE, 2: SKILL BOOKS, 3: SPECIAL GEAR
     private int currentCategory = 0;
     private final String[] CATEGORY_NAMES = {"TẤT CẢ", "MỒI & HỒI PHỤC", "BÍ KÍP KỸ NĂNG", "ĐẠO CỤ ĐẶC BIỆT", "HALLOWEEN"};
@@ -273,20 +279,15 @@ public class ShopScreen implements Screen {
         EquipmentIconRenderer.drawDiamondIcon(sr, dcx, dcy, 9f);
 
         // Category Filter Tabs (5 tabs căn đối xứng màn hình)
-        float tabW = 210f;
-        float tabH = 36f;
-        float tabStartX = (W - (5 * tabW + 4 * 15f)) / 2f;
-        float tabY = H - 122f;
-
         for (int c = 0; c < CATEGORY_NAMES.length; c++) {
-            float tx = tabStartX + c * (tabW + 15f);
+            float tx = TAB_START_X + c * (TAB_W + TAB_GAP);
             boolean isCur = (currentCategory == c);
-            boolean hoverTab = (m.x >= tx && m.x <= tx + tabW && m.y >= tabY && m.y <= tabY + tabH);
+            boolean hoverTab = (m.x >= tx && m.x <= tx + TAB_W && m.y >= TAB_Y && m.y <= TAB_Y + TAB_H);
 
             sr.setColor(isCur ? new Color(0.45f, 0.28f, 0.12f, 0.95f) : (hoverTab ? new Color(0.28f, 0.18f, 0.10f, 0.9f) : new Color(0.16f, 0.10f, 0.06f, 0.85f)));
-            drawRoundedRect(sr, tx, tabY, tabW, tabH, 6);
+            drawRoundedRect(sr, tx, TAB_Y, TAB_W, TAB_H, 6);
             sr.setColor(isCur ? new Color(1f, 0.82f, 0.35f, 1f) : (hoverTab ? new Color(0.7f, 0.5f, 0.25f, 0.8f) : new Color(0.4f, 0.28f, 0.16f, 0.6f)));
-            drawRectOutline(sr, tx, tabY, tabW, tabH, isCur ? 2f : 1f);
+            drawRectOutline(sr, tx, TAB_Y, TAB_W, TAB_H, isCur ? 2f : 1f);
         }
 
         // Shop items dynamic rendering
@@ -464,11 +465,11 @@ public class ShopScreen implements Screen {
 
         // Category filter tab texts
         for (int c = 0; c < CATEGORY_NAMES.length; c++) {
-            float tx = tabStartX + c * (tabW + 15f);
+            float tx = TAB_START_X + c * (TAB_W + TAB_GAP);
             boolean isCur = (currentCategory == c);
             font.setColor(isCur ? new Color(1f, 0.95f, 0.8f, 1f) : new Color(0.8f, 0.7f, 0.55f, 0.8f));
             layout.setText(font, CATEGORY_NAMES[c]);
-            font.draw(game.batch, layout, tx + (tabW - layout.width) / 2f, tabY + 24f);
+            font.draw(game.batch, layout, tx + (TAB_W - layout.width) / 2f, TAB_Y + 24f);
         }
 
         // Item Cards Text
@@ -652,16 +653,11 @@ public class ShopScreen implements Screen {
             return;
         }
 
-        // Category Filter Tabs Click
-        float tabW = 260f;
-        float tabH = 36f;
-        float tabStartX = (W - (4 * tabW + 3 * 15f)) / 2f;
-        float tabY = H - 122f;
-
+        // Category Filter Tabs Click (Đồng bộ hằng số TAB_* với render)
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             for (int c = 0; c < CATEGORY_NAMES.length; c++) {
-                float tx = tabStartX + c * (tabW + 15f);
-                if (m.x >= tx && m.x <= tx + tabW && m.y >= tabY && m.y <= tabY + tabH) {
+                float tx = TAB_START_X + c * (TAB_W + TAB_GAP);
+                if (m.x >= tx && m.x <= tx + TAB_W && m.y >= TAB_Y && m.y <= TAB_Y + TAB_H) {
                     if (currentCategory != c) {
                         AudioManager.getInstance().playSFX("sfx_button");
                         currentCategory = c;

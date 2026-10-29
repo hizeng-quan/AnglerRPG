@@ -34,13 +34,13 @@ public class ItemDatabase {
         registerItem(new ItemData("Nam Châm Kho Báu", "Tăng 400% cơ hội câu trúng Rương Báu & Cổ Vật cổ xưa (3 lượt)", ItemUsageType.PRE_COMBAT, 800), true);
         registerItem(new ItemData("Kính Nhìn Xuyên Nước", "Thấu thị mặt nước: Dự báo trước loài cá & độ hiếm sắp cắn câu (3 lượt)", ItemUsageType.BOTH, 400), true);
         
-        // Skill Books (Học mới, Đột phá +1 cấp hoặc Quy đổi +1 SP)
-        registerItem(new ItemData("Sách: Dưỡng Sức", "Học/Đột phá kỹ năng Dưỡng Sức (+1 Lv hoặc +1 SP)", ItemUsageType.PRE_COMBAT, 1000), true);
-        registerItem(new ItemData("Sách: Giật Kép", "Học/Đột phá kỹ năng Giật Kép (+1 Lv hoặc +1 SP)", ItemUsageType.PRE_COMBAT, 1500), true);
-        registerItem(new ItemData("Sách: Mắt Đại Bàng", "Học/Đột phá kỹ năng Mắt Đại Bàng (+1 Lv hoặc +1 SP)", ItemUsageType.PRE_COMBAT, 2000), true);
-        registerItem(new ItemData("Sách: Thuần Hóa", "Học/Đột phá kỹ năng Thuần Hóa (+1 Lv hoặc +1 SP)", ItemUsageType.PRE_COMBAT, 1800), false);
-        registerItem(new ItemData("Sách: Trói Buộc", "Học/Đột phá kỹ năng Trói Buộc (+1 Lv hoặc +1 SP)", ItemUsageType.PRE_COMBAT, 2200), false);
-        registerItem(new ItemData("Sách: Trái Tim ĐD", "Học/Đột phá kỹ năng Trái Tim Đại Dương (+1 Lv hoặc +1 SP)", ItemUsageType.PRE_COMBAT, 2500), false);
+        // Skill Books (Học mới, Đột phá +1 cấp hoặc Bán khi đã Max cấp)
+        registerItem(new ItemData("Sách: Dưỡng Sức", "Học/Đột phá kỹ năng Dưỡng Sức (+1 Lv, bán khi đã Max)", ItemUsageType.PRE_COMBAT, 1000), true);
+        registerItem(new ItemData("Sách: Giật Kép", "Học/Đột phá kỹ năng Giật Kép (+1 Lv, bán khi đã Max)", ItemUsageType.PRE_COMBAT, 1500), true);
+        registerItem(new ItemData("Sách: Mắt Đại Bàng", "Học/Đột phá kỹ năng Mắt Đại Bàng (+1 Lv, bán khi đã Max)", ItemUsageType.PRE_COMBAT, 2000), true);
+        registerItem(new ItemData("Sách: Thuần Hóa", "Học/Đột phá kỹ năng Thuần Hóa (+1 Lv, bán khi đã Max)", ItemUsageType.PRE_COMBAT, 1800), false);
+        registerItem(new ItemData("Sách: Trói Buộc", "Học/Đột phá kỹ năng Trói Buộc (+1 Lv, bán khi đã Max)", ItemUsageType.PRE_COMBAT, 2200), false);
+        registerItem(new ItemData("Sách: Trái Tim ĐD", "Học/Đột phá kỹ năng Trái Tim Đại Dương (+1 Lv, bán khi đã Max)", ItemUsageType.PRE_COMBAT, 2500), false);
         // Halloween Exclusives (HLW-05 - Gia Vang chuan hoa x2 & Ban trong Shop Thuong)
         registerItem(new ItemData("Kẹo Trick-or-Treat", "Kẹo ma thuật tăng x2 tỷ lệ gặp cá sự kiện Halloween & cá hiếm (15 phút)", ItemUsageType.BOTH, 300), true);
         registerItem(new ItemData("Đèn Lồng Bí Ngô", "Quang minh trừ tà: +30% thời gian phản ứng Re-Hook khống chế cá nhảy (3 lần)", ItemUsageType.BOTH, 700), true);

@@ -9,6 +9,8 @@
 
 | ID | Nhóm công việc | Hạng mục | Mức độ ưu tiên | Trạng thái |
 | :--- | :--- | :--- | :---: | :---: |
+| **BAL-SKL-01** | Gameplay & Cân bằng | Tinh chỉnh Sách Kỹ Năng: Khóa quy đổi SP khi skill đã MAX, chỉ có thể bán tại Cửa Hàng | **P1 (Cân bằng)** | ✅ Đã hoàn thành (v0.5.5.7) |
+| **BUG-UI-01** | Giao diện | Khắc phục lệch hitbox các tab Bí Kíp Kỹ Năng, Đạo Cụ Đặc Biệt & Halloween trong Cửa Hàng | **P0 (Khẩn cấp)** | ✅ Đã khắc phục triệt để (v0.5.5.7) |
 | **BAL-EQ-05** | Cân bằng | Nerf điểm phẩm cấp Legendary (12) & Limited Premium (15), đồng bộ chỉ số toàn bộ trang bị | **P0 (Khẩn cấp)** | ✅ Đã hoàn thành (v0.5.5.7) |
 | **BAL-HN-01** | Cân bằng | Đại tu Set Bonus Huyết Nguyệt Thần Vương: Bỏ thiên vị cá HLW, Huyết Nhãn Tinh Chuẩn (5s/10s) & Huyết Ma Thôn Phệ | **P0 (Cân bằng)** | ✅ Đã hoàn thành (v0.5.5.7) |
 | **MIG-SAV-07** | Hệ thống | Nâng cấp SAVE_VERSION = 7 tự động đồng bộ kho đồ người chơi lên bảng chỉ số v0.5.5.7 | **P0 (Dữ liệu)** | ✅ Đã hoàn thành (v0.5.5.7) |
