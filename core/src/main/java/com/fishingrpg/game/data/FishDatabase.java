@@ -79,13 +79,13 @@ public class FishDatabase {
             }
 
             if (MathUtils.randomBoolean(Math.min(halloweenChance, 0.85f))) {
-                float wSkeleton = 45.0f;
+                float wSkeleton = 40.0f;
                 float wJackO = 30.0f;
                 float wDauLau = 15.0f;
                 float wDangMa = 6.0f;
-                float wFrank = 3.0f;
-                float wHaiXa = 0.9f;
-                float wThanatos = 0.1f;
+                float wFrank = 4.0f;
+                float wHaiXa = 3.0f;
+                float wThanatos = 2.0f;
 
                 if (player != null) {
                     float rareMulti = 1.0f;
